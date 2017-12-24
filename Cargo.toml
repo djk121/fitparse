@@ -1,0 +1,7 @@
+[package]
+name = "fitparse"
+version = "0.1.0"
+authors = ["dan kelley <djk121@gmail.com>"]
+
+[dependencies]
+nom = "^3.2"
