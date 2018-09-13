@@ -2,6 +2,15 @@
 name = "fitparse"
 version = "0.1.0"
 authors = ["dan kelley <djk121@gmail.com>"]
+include = [
+  "Cargo.toml",
+  "src/*.rs",
+]
+
+
 
 [dependencies]
 nom = "^3.2"
+chrono = "0.3"
+clap = "2.30.0"
+failure = "0.1.2"
