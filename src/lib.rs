@@ -131,7 +131,8 @@ pub enum FitMessage<'a> {
     Definition(Rc<FitDefinitionMessage>),
 }
 
-pub fn parse_fit_message_internal<'a>(input: &'a [u8], parsing_state: &'a mut FitParsingState<'a>) -> Result<(FitMessage<'a>, &'a [u8])> {
+
+pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingState<'a>) -> Result<(FitMessage<'a>, &'a [u8])> {
     // get the header first
     let (header, o) = parse_record_header(input)?;
 
@@ -152,79 +153,6 @@ pub fn parse_fit_message_internal<'a>(input: &'a [u8], parsing_state: &'a mut Fi
         },
         _ => return Err(Error::unknown_error())
     };
-    println!("{:#?}", fit_message);
-    Ok((fit_message, o))
-}
-
-pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &'a mut FitParsingState<'a>) -> Result<(FitMessage<'a>, &'a [u8])> {
-    // get the header first
-    let (header, o) = parse_record_header(input)?;
-
-    let (fit_message, out) = match header {
-        FitRecordHeader::Normal(normal_header) => {
-            match normal_header.message_type {
-                FitNormalRecordHeaderMessageType::Data => {
-                    let (data_message, o) = FitDataMessage::parse(o, FitRecordHeader::Normal(normal_header), parsing_state, None)?;
-                    (FitMessage::Data(data_message), o)
-                },
-                FitNormalRecordHeaderMessageType::Definition => {
-                    // let local_mesg_num = normal_header.local_mesg_num;
-                    let (definition_message, o) = FitDefinitionMessage::parse(o, normal_header)?;
-                    parsing_state.add(definition_message.header.local_mesg_num, definition_message.clone());
-                    (FitMessage::Definition(definition_message.clone()), o)
-                }
-            }
-        },
-        _ => return Err(Error::unknown_error())
-    };
-
-    /*
-    let fm = match &fit_message {
-        m @ FitMessage::Data(message) => {
-            if let FitDataMessage::DeviceSettings(dsm) = message {
-                // device_settings.time_zone_offset is 'in quarter hour increments',
-                // so a value of +15 = (15 increments * 15 minutes * 60 seconds) =
-                // = +13500 seconds
-                if let Some(tzo) = dsm.time_zone_offset {
-                    parsing_state.set_timezone_offset((tzo * 15 * 60).into());
-                }
-            }
-
-            Rc::new(m)
-        },
-        m @ FitMessage::Definition(message) => {
-            let mess = Rc::new(m);
-            parsing_state.add(message.header.local_mesg_num, mess.clone());
-
-            Rc::clone(&mess)
-        }
-    };
-    */
-
-    /*
-    match &fit_message {
-        FitMessage::Data(rc) => {
-            match **rc {
-                FitDataMessage::DeviceSettings(FitMessageDeviceSettings{time_zone_offset, ..}) => {
-                    // device_settings.time_zone_offset is 'in quarter hour increments',
-                    // so a value of +15 = (15 increments * 15 minutes * 60 seconds) =
-                    // = +13500 seconds
-                    if let Some(tzo) = time_zone_offset {
-                        parsing_state.set_timezone_offset((tzo * 15 * 60).into());
-                    }
-                },
-                FitDataMessage::FieldDescription(ref dm) => {
-                    let fd = rc.clone();
-                    if let Some(ddi) = dm.developer_data_index {
-                        parsing_state.set_developer_data_definition(ddi, fd);
-                    }
-                }
-                _ => {},
-            }
-        },
-        _ => {},
-    }
-    */
 
     match &fit_message {
         FitMessage::Data(m) => {
@@ -293,6 +221,7 @@ struct FitDeveloperFieldDefinition {
     field_size: usize,
     developer_data_index: u8,
 }
+
 
 
 // Definition message has two purposes:
@@ -412,10 +341,14 @@ named_args!(parse_definition_message_internal(header: FitNormalRecordHeader)<Fit
             endianness: endianness,
             global_mesg_num: FitFieldMesgNum::parse(global_message_number, endianness).unwrap().0,
             num_fields: num_fields[0],
-            message_size: field_definitions.iter().fold(0, |sum, val| sum + (val.field_size() as usize)),
+            message_size: (field_definitions.iter().fold(
+                0, |sum, val| sum + (val.field_size() as usize)) +
+                developer_field_definitions.iter().fold(0, |sum, val| sum + val.field_size)),
             field_definitions: field_definitions,
             num_developer_fields: num_developer_fields,
             developer_field_definitions: developer_field_definitions,
+
+
         })
     )
 );
@@ -458,7 +391,7 @@ impl<'a> FitDeveloperDataDefinition<'a> {
         }
     }
 
-    fn get_field_description(&self, field_number: u8) -> Result<Rc<FitMessageFieldDescription>> {
+    fn get_field_description(&self, field_number: u8) -> Result<Rc<FitMessageFieldDescription<'a>>> {
         match self.field_descriptions.get(&field_number) {
             Some(fd) => Ok(fd.clone()),
             None => Err(Error::developer_field_description_not_found(field_number))

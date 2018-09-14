@@ -5449,7 +5449,7 @@ pub struct FitMessageAccelerometerData<'a> {
     pub calibrated_accel_z: Option<f32>,  // Calibrated accel reading
 }
 impl<'a> FitMessageAccelerometerData<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAccelerometerData<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAccelerometerData<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAccelerometerData {
             header: header,
@@ -5584,7 +5584,7 @@ pub struct FitMessageActivity<'a> {
     pub event_group: Option<u8>,  // 
 }
 impl<'a> FitMessageActivity<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageActivity<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageActivity<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageActivity {
             header: header,
@@ -5709,7 +5709,7 @@ pub struct FitMessageAntChannelId<'a> {
     pub device_index: Option<FitFieldDeviceIndex>,  // 
 }
 impl<'a> FitMessageAntChannelId<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntChannelId<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntChannelId<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntChannelId {
             header: header,
@@ -5801,7 +5801,7 @@ pub struct FitMessageAntRx<'a> {
     pub data: Option<&'a [u8]>,  // 
 }
 impl<'a> FitMessageAntRx<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntRx<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntRx<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntRx {
             header: header,
@@ -5913,7 +5913,7 @@ pub struct FitMessageAntTx<'a> {
     pub data: Option<&'a [u8]>,  // 
 }
 impl<'a> FitMessageAntTx<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntTx<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntTx<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntTx {
             header: header,
@@ -6031,7 +6031,7 @@ pub struct FitMessageAviationAttitude<'a> {
     pub validity: Option<FitFieldAttitudeValidity>,  // 
 }
 impl<'a> FitMessageAviationAttitude<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAviationAttitude<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAviationAttitude<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAviationAttitude {
             header: header,
@@ -6211,7 +6211,7 @@ pub struct FitMessageBikeProfile<'a> {
     pub shimano_di2_enabled: Option<bool>,  // 
 }
 impl<'a> FitMessageBikeProfile<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageBikeProfile<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageBikeProfile<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBikeProfile {
             header: header,
@@ -6497,7 +6497,7 @@ pub struct FitMessageBloodPressure<'a> {
     pub user_profile_index: Option<FitFieldMessageIndex>,  // Associates this blood pressure message to a user.  This corresponds to the index of the user profile message in the blood pressure file.
 }
 impl<'a> FitMessageBloodPressure<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageBloodPressure<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageBloodPressure<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBloodPressure {
             header: header,
@@ -6641,7 +6641,7 @@ pub struct FitMessageCadenceZone<'a> {
     pub name: Option<String>,  // 
 }
 impl<'a> FitMessageCadenceZone<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCadenceZone<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCadenceZone<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCadenceZone {
             header: header,
@@ -6718,7 +6718,7 @@ pub struct FitMessageCameraEvent<'a> {
     pub camera_orientation: Option<FitFieldCameraOrientationType>,  // 
 }
 impl<'a> FitMessageCameraEvent<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCameraEvent<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCameraEvent<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCameraEvent {
             header: header,
@@ -6821,7 +6821,7 @@ pub struct FitMessageCapabilities<'a> {
     pub connectivity_supported: Option<FitFieldConnectivityCapabilities>,  // 
 }
 impl<'a> FitMessageCapabilities<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCapabilities<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCapabilities<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCapabilities {
             header: header,
@@ -6913,7 +6913,7 @@ pub struct FitMessageConnectivity<'a> {
     pub grouptrack_enabled: Option<bool>,  // 
 }
 impl<'a> FitMessageConnectivity<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageConnectivity<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageConnectivity<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageConnectivity {
             header: header,
@@ -7059,7 +7059,7 @@ pub struct FitMessageCourse<'a> {
     pub sub_sport: Option<FitFieldSubSport>,  // 
 }
 impl<'a> FitMessageCourse<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCourse<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCourse<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCourse {
             header: header,
@@ -7146,7 +7146,7 @@ pub struct FitMessageCoursePoint<'a> {
     pub favorite: Option<bool>,  // 
 }
 impl<'a> FitMessageCoursePoint<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCoursePoint<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCoursePoint<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCoursePoint {
             header: header,
@@ -7271,7 +7271,7 @@ pub struct FitMessageDeveloperDataId<'a> {
     pub application_version: Option<u32>,  // 
 }
 impl<'a> FitMessageDeveloperDataId<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeveloperDataId<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeveloperDataId<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeveloperDataId {
             header: header,
@@ -7375,7 +7375,7 @@ pub struct FitMessageDeviceInfo<'a> {
     pub product_name: Option<String>,  // Optional free form string to indicate the devices name or model
 }
 impl<'a> FitMessageDeviceInfo<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceInfo<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceInfo<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeviceInfo {
             header: header,
@@ -7587,7 +7587,7 @@ pub struct FitMessageDeviceSettings<'a> {
     pub smart_notification_display_orientation: Option<FitFieldDisplayOrientation>,  // Smart Notification display orientation
 }
 impl<'a> FitMessageDeviceSettings<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceSettings<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceSettings<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeviceSettings {
             header: header,
@@ -7805,7 +7805,7 @@ pub struct FitMessageEvent<'a> {
     pub device_index: Option<FitFieldDeviceIndex>,  // 
 }
 impl<'a> FitMessageEvent<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageEvent<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageEvent<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageEvent {
             header: header,
@@ -7971,7 +7971,7 @@ pub struct FitMessageExdDataConceptConfiguration<'a> {
     pub is_signed: Option<bool>,  // 
 }
 impl<'a> FitMessageExdDataConceptConfiguration<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataConceptConfiguration<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataConceptConfiguration<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataConceptConfiguration {
             header: header,
@@ -8105,7 +8105,7 @@ pub struct FitMessageExdDataFieldConfiguration<'a> {
     pub title: Option<String>,  // 
 }
 impl<'a> FitMessageExdDataFieldConfiguration<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataFieldConfiguration<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataFieldConfiguration<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataFieldConfiguration {
             header: header,
@@ -8202,7 +8202,7 @@ pub struct FitMessageExdScreenConfiguration<'a> {
     pub screen_enabled: Option<bool>,  // 
 }
 impl<'a> FitMessageExdScreenConfiguration<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdScreenConfiguration<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdScreenConfiguration<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdScreenConfiguration {
             header: header,
@@ -8286,7 +8286,7 @@ pub struct FitMessageFieldCapabilities<'a> {
     pub count: Option<u16>,  // 
 }
 impl<'a> FitMessageFieldCapabilities<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldCapabilities<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldCapabilities<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFieldCapabilities {
             header: header,
@@ -8386,7 +8386,7 @@ pub struct FitMessageFieldDescription<'a> {
     pub native_field_num: Option<u8>,  // 
 }
 impl<'a> FitMessageFieldDescription<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldDescription<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldDescription<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFieldDescription {
             header: header,
@@ -8541,7 +8541,7 @@ pub struct FitMessageFileCapabilities<'a> {
     pub max_size: Option<u32>,  // 
 }
 impl<'a> FitMessageFileCapabilities<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCapabilities<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCapabilities<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCapabilities {
             header: header,
@@ -8636,7 +8636,7 @@ pub struct FitMessageFileCreator<'a> {
     pub hardware_version: Option<u8>,  // 
 }
 impl<'a> FitMessageFileCreator<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCreator<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCreator<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCreator {
             header: header,
@@ -8708,7 +8708,7 @@ pub struct FitMessageFileId<'a> {
     pub product_name: Option<String>,  // Optional free form string to indicate the devices name or model
 }
 impl<'a> FitMessageFileId<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileId<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileId<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileId {
             header: header,
@@ -8821,7 +8821,7 @@ pub struct FitMessageGoal<'a> {
     pub source: Option<FitFieldGoalSource>,  // 
 }
 impl<'a> FitMessageGoal<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGoal<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGoal<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGoal {
             header: header,
@@ -8972,7 +8972,7 @@ pub struct FitMessageGpsMetadata<'a> {
     pub velocity: Option<i16>,  // velocity[0] is lon velocity.  Velocity[1] is lat velocity.  Velocity[2] is altitude velocity.
 }
 impl<'a> FitMessageGpsMetadata<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGpsMetadata<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGpsMetadata<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGpsMetadata {
             header: header,
@@ -9108,7 +9108,7 @@ pub struct FitMessageGyroscopeData<'a> {
     pub calibrated_gyro_z: Option<f32>,  // Calibrated gyro reading
 }
 impl<'a> FitMessageGyroscopeData<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGyroscopeData<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGyroscopeData<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGyroscopeData {
             header: header,
@@ -9241,7 +9241,7 @@ pub struct FitMessageHr<'a> {
     pub event_timestamp_12: Option<&'a [u8]>,  // 
 }
 impl<'a> FitMessageHr<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHr<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHr<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHr {
             header: header,
@@ -9350,7 +9350,7 @@ pub struct FitMessageHrZone<'a> {
     pub name: Option<String>,  // 
 }
 impl<'a> FitMessageHrZone<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrZone<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrZone<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrZone {
             header: header,
@@ -9427,7 +9427,7 @@ pub struct FitMessageHrmProfile<'a> {
     pub hrm_ant_id_trans_type: Option<u8>,  // 
 }
 impl<'a> FitMessageHrmProfile<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrmProfile<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrmProfile<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrmProfile {
             header: header,
@@ -9514,7 +9514,7 @@ pub struct FitMessageHrv<'a> {
     pub time: Option<u16>,  // Time between beats
 }
 impl<'a> FitMessageHrv<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrv<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrv<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrv {
             header: header,
@@ -9677,7 +9677,7 @@ pub struct FitMessageLap<'a> {
     pub avg_step_length: Option<u16>,  // 
 }
 impl<'a> FitMessageLap<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageLap<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageLap<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLap {
             header: header,
@@ -10494,7 +10494,7 @@ pub struct FitMessageLength<'a> {
     pub zone_count: Option<u16>,  // zone number used as the index
 }
 impl<'a> FitMessageLength<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageLength<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageLength<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLength {
             header: header,
@@ -10693,7 +10693,7 @@ pub struct FitMessageMagnetometerData<'a> {
     pub calibrated_mag_z: Option<f32>,  // Calibrated Magnetometer reading
 }
 impl<'a> FitMessageMagnetometerData<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMagnetometerData<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMagnetometerData<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMagnetometerData {
             header: header,
@@ -10824,7 +10824,7 @@ pub struct FitMessageMemoGlob<'a> {
     pub message_index: Option<FitFieldMessageIndex>,  // Index of external mesg
 }
 impl<'a> FitMessageMemoGlob<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMemoGlob<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMemoGlob<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMemoGlob {
             header: header,
@@ -10908,7 +10908,7 @@ pub struct FitMessageMesgCapabilities<'a> {
     pub count: Option<u16>,  // 
 }
 impl<'a> FitMessageMesgCapabilities<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMesgCapabilities<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMesgCapabilities<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMesgCapabilities {
             header: header,
@@ -10998,7 +10998,7 @@ pub struct FitMessageMetZone<'a> {
     pub fat_calories: Option<u8>,  // 
 }
 impl<'a> FitMessageMetZone<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMetZone<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMetZone<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMetZone {
             header: header,
@@ -11106,7 +11106,7 @@ pub struct FitMessageMonitoring<'a> {
     pub vigorous_activity_minutes: Option<u16>,  // 
 }
 impl<'a> FitMessageMonitoring<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoring<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoring<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoring {
             header: header,
@@ -11379,7 +11379,7 @@ pub struct FitMessageMonitoringInfo<'a> {
     pub resting_metabolic_rate: Option<u16>,  // 
 }
 impl<'a> FitMessageMonitoringInfo<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoringInfo<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoringInfo<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoringInfo {
             header: header,
@@ -11488,7 +11488,7 @@ pub struct FitMessageNmeaSentence<'a> {
     pub sentence: Option<String>,  // NMEA sentence
 }
 impl<'a> FitMessageNmeaSentence<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageNmeaSentence<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageNmeaSentence<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageNmeaSentence {
             header: header,
@@ -11582,7 +11582,7 @@ pub struct FitMessageObdiiData<'a> {
     pub start_timestamp_ms: Option<u16>,  // Fractional part of start_timestamp
 }
 impl<'a> FitMessageObdiiData<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageObdiiData<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageObdiiData<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageObdiiData {
             header: header,
@@ -11710,7 +11710,7 @@ pub struct FitMessageOhrSettings<'a> {
     pub enabled: Option<FitFieldSwitch>,  // 
 }
 impl<'a> FitMessageOhrSettings<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageOhrSettings<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageOhrSettings<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageOhrSettings {
             header: header,
@@ -11771,7 +11771,7 @@ pub struct FitMessagePowerZone<'a> {
     pub name: Option<String>,  // 
 }
 impl<'a> FitMessagePowerZone<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessagePowerZone<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessagePowerZone<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessagePowerZone {
             header: header,
@@ -11902,7 +11902,7 @@ pub struct FitMessageRecord<'a> {
     pub step_length: Option<u16>,  // 
 }
 impl<'a> FitMessageRecord<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageRecord<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageRecord<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageRecord {
             header: header,
@@ -11969,6 +11969,7 @@ impl<'a> FitMessageRecord<'a> {
             step_length: None,
         };
 
+        println!("len: {:?}", input.len());
         let inp = &input[..(message.definition_message.message_size)];
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageRecord::parse_internal(&mut message, input, tz_offset) {
@@ -11998,11 +11999,12 @@ impl<'a> FitMessageRecord<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
 
+        println!("len inp2: {:?}", inp2.len());
         Ok((Rc::new(message), inp2))
     }
     fn parse_internal(message: &mut FitMessageRecord<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
@@ -12386,7 +12388,7 @@ pub struct FitMessageSchedule<'a> {
     pub scheduled_time: Option<FitFieldLocalDateTime>,  // 
 }
 impl<'a> FitMessageSchedule<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSchedule<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSchedule<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSchedule {
             header: header,
@@ -12494,7 +12496,7 @@ pub struct FitMessageSdmProfile<'a> {
     pub odometer_rollover: Option<u8>,  // Rollover counter that can be used to extend the odometer
 }
 impl<'a> FitMessageSdmProfile<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSdmProfile<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSdmProfile<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSdmProfile {
             header: header,
@@ -12610,7 +12612,7 @@ pub struct FitMessageSegmentFile<'a> {
     pub default_race_leader: Option<u8>,  // Index for the Leader Board entry selected as the default race participant
 }
 impl<'a> FitMessageSegmentFile<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentFile<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentFile<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentFile {
             header: header,
@@ -12733,7 +12735,7 @@ pub struct FitMessageSegmentId<'a> {
     pub selection_type: Option<FitFieldSegmentSelectionType>,  // Indicates how the segment was selected to be sent to the device
 }
 impl<'a> FitMessageSegmentId<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentId<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentId<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentId {
             header: header,
@@ -12933,7 +12935,7 @@ pub struct FitMessageSegmentLap<'a> {
     pub manufacturer: Option<FitFieldManufacturer>,  // Manufacturer that produced the segment
 }
 impl<'a> FitMessageSegmentLap<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLap<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLap<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLap {
             header: header,
@@ -13606,7 +13608,7 @@ pub struct FitMessageSegmentLeaderboardEntry<'a> {
     pub activity_id_string: Option<String>,  // String version of the activity_id. 21 characters long, express in decimal
 }
 impl<'a> FitMessageSegmentLeaderboardEntry<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLeaderboardEntry {
             header: header,
@@ -13712,7 +13714,7 @@ pub struct FitMessageSegmentPoint<'a> {
     pub leader_time: Option<u32>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment. 
 }
 impl<'a> FitMessageSegmentPoint<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentPoint<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentPoint<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentPoint {
             header: header,
@@ -13923,7 +13925,7 @@ pub struct FitMessageSession<'a> {
     pub total_anaerobic_training_effect: Option<u8>,  // 
 }
 impl<'a> FitMessageSession<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSession<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSession<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSession {
             header: header,
@@ -14815,7 +14817,7 @@ pub struct FitMessageSlaveDevice<'a> {
     pub product: Option<u16>,  // 
 }
 impl<'a> FitMessageSlaveDevice<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSlaveDevice<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSlaveDevice<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSlaveDevice {
             header: header,
@@ -14883,7 +14885,7 @@ pub struct FitMessageSoftware<'a> {
     pub part_number: Option<String>,  // 
 }
 impl<'a> FitMessageSoftware<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSoftware<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSoftware<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSoftware {
             header: header,
@@ -14958,7 +14960,7 @@ pub struct FitMessageSpeedZone<'a> {
     pub name: Option<String>,  // 
 }
 impl<'a> FitMessageSpeedZone<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSpeedZone<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSpeedZone<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSpeedZone {
             header: header,
@@ -15033,7 +15035,7 @@ pub struct FitMessageSport<'a> {
     pub name: Option<String>,  // 
 }
 impl<'a> FitMessageSport<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSport<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSport<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSport {
             header: header,
@@ -15112,7 +15114,7 @@ pub struct FitMessageThreeDSensorCalibration<'a> {
     pub orientation_matrix: Option<i32>,  // 3 x 3 rotation matrix (row major)
 }
 impl<'a> FitMessageThreeDSensorCalibration<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageThreeDSensorCalibration<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageThreeDSensorCalibration<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageThreeDSensorCalibration {
             header: header,
@@ -15232,7 +15234,7 @@ pub struct FitMessageTimestampCorrelation<'a> {
     pub system_timestamp_ms: Option<u16>,  // Millisecond part of the system timestamp
 }
 impl<'a> FitMessageTimestampCorrelation<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTimestampCorrelation<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTimestampCorrelation<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTimestampCorrelation {
             header: header,
@@ -15355,7 +15357,7 @@ pub struct FitMessageTotals<'a> {
     pub sport_index: Option<u8>,  // 
 }
 impl<'a> FitMessageTotals<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTotals<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTotals<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTotals {
             header: header,
@@ -15495,7 +15497,7 @@ pub struct FitMessageTrainingFile<'a> {
     pub time_created: Option<FitFieldDateTime>,  // 
 }
 impl<'a> FitMessageTrainingFile<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTrainingFile<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTrainingFile<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTrainingFile {
             header: header,
@@ -15628,7 +15630,7 @@ pub struct FitMessageUserProfile<'a> {
     pub user_walking_step_length: Option<u16>,  // User defined walking step length set to 0 for auto length
 }
 impl<'a> FitMessageUserProfile<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageUserProfile<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageUserProfile<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageUserProfile {
             header: header,
@@ -15871,7 +15873,7 @@ pub struct FitMessageVideo<'a> {
     pub duration: Option<u32>,  // Playback time of video
 }
 impl<'a> FitMessageVideo<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideo<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideo<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideo {
             header: header,
@@ -15950,7 +15952,7 @@ pub struct FitMessageVideoClip<'a> {
     pub clip_end: Option<u32>,  // End of clip in video time
 }
 impl<'a> FitMessageVideoClip<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoClip<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoClip<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoClip {
             header: header,
@@ -16053,7 +16055,7 @@ pub struct FitMessageVideoDescription<'a> {
     pub text: Option<String>,  // 
 }
 impl<'a> FitMessageVideoDescription<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoDescription<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoDescription<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoDescription {
             header: header,
@@ -16128,7 +16130,7 @@ pub struct FitMessageVideoFrame<'a> {
     pub frame_number: Option<u32>,  // Number of the frame that the timestamp and timestamp_ms correlate to
 }
 impl<'a> FitMessageVideoFrame<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoFrame<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoFrame<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoFrame {
             header: header,
@@ -16216,7 +16218,7 @@ pub struct FitMessageVideoTitle<'a> {
     pub text: Option<String>,  // 
 }
 impl<'a> FitMessageVideoTitle<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoTitle<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoTitle<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoTitle {
             header: header,
@@ -16291,7 +16293,7 @@ pub struct FitMessageWatchfaceSettings<'a> {
     pub layout: Option<&'a [u8]>,  // 
 }
 impl<'a> FitMessageWatchfaceSettings<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWatchfaceSettings<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWatchfaceSettings<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWatchfaceSettings {
             header: header,
@@ -16369,7 +16371,7 @@ pub struct FitMessageWeatherAlert<'a> {
     pub ftype: Option<FitFieldWeatherSevereType>,  // Tornado, Severe Thunderstorm, etc.
 }
 impl<'a> FitMessageWeatherAlert<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherAlert<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherAlert<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeatherAlert {
             header: header,
@@ -16491,7 +16493,7 @@ pub struct FitMessageWeatherConditions<'a> {
     pub low_temperature: Option<i8>,  // 
 }
 impl<'a> FitMessageWeatherConditions<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherConditions<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherConditions<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeatherConditions {
             header: header,
@@ -16680,7 +16682,7 @@ pub struct FitMessageWeightScale<'a> {
     pub user_profile_index: Option<FitFieldMessageIndex>,  // Associates this weight scale message to a user.  This corresponds to the index of the user profile message in the weight scale file.
 }
 impl<'a> FitMessageWeightScale<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeightScale<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeightScale<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeightScale {
             header: header,
@@ -16839,7 +16841,7 @@ pub struct FitMessageWorkout<'a> {
     pub wkt_name: Option<String>,  // 
 }
 impl<'a> FitMessageWorkout<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkout<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkout<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkout {
             header: header,
@@ -16927,7 +16929,7 @@ pub struct FitMessageWorkoutStep<'a> {
     pub intensity: Option<FitFieldIntensity>,  // 
 }
 impl<'a> FitMessageWorkoutStep<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutStep<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutStep<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkoutStep {
             header: header,
@@ -17046,7 +17048,7 @@ pub struct FitMessageZonesTarget<'a> {
     pub pwr_calc_type: Option<FitFieldPwrZoneCalc>,  // 
 }
 impl<'a> FitMessageZonesTarget<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessageZonesTarget<'a>>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageZonesTarget<'a>>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageZonesTarget {
             header: header,
@@ -17204,8 +17206,9 @@ pub enum FitDataMessage<'a> {
     ZonesTarget(Rc<FitMessageZonesTarget<'a>>),
 }
 impl<'a> FitDataMessage<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(FitDataMessage<'a>, &'a [u8])> {
+    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(FitDataMessage<'a>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
+        println!("message size: {:?}", definition_message.message_size);
         match definition_message.global_mesg_num {
             FitFieldMesgNum::FileId => {
                 let (val, o) = FitMessageFileId::parse(input, header, parsing_state, offset_secs)?;

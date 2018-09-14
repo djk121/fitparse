@@ -310,7 +310,7 @@ def output_messages(messages, types):
                                                              rustify_name(this_message),
                                                              lifetime_spec))
 
-        sys.stdout.write("{}pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessage{}<'a>>, &'a [u8])> {{\n".format(" "*4, rustify_name(this_message), lifetime_spec))
+        sys.stdout.write("{}pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessage{}<'a>>, &'a [u8])> {{\n".format(" "*4, rustify_name(this_message), lifetime_spec))
         #if lifetime_spec != '':
         #    sys.stdout.write("{}pub fn parse<'b>(input: &'a [u8], header: FitRecordHeader, parsing_state: &'b mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<FitMessage{}<'a>>, &'a [u8])> {{\n".format(" "*4, rustify_name(this_message), lifetime_spec))
         #else:
@@ -457,7 +457,7 @@ def output_messages(messages, types):
     sys.stdout.write("}\n")
 
     sys.stdout.write("impl<'a> FitDataMessage<'a> {\n")
-    sys.stdout.write("{}pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &'a mut FitParsingState, offset_secs: Option<u8>) -> Result<(FitDataMessage<'a>, &'a [u8])> {{\n".format(" "*4))
+    sys.stdout.write("{}pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(FitDataMessage<'a>, &'a [u8])> {{\n".format(" "*4))
     sys.stdout.write("{}let definition_message = parsing_state.get(header.local_mesg_num())?;\n".format(" "*8))
     sys.stdout.write("{}match definition_message.global_mesg_num {{\n".format(" "*8))
 

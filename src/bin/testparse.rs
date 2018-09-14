@@ -40,14 +40,17 @@ fn main() {
     let mut inp = &o[..(o.len()-2)];
     println!("len: {:?}", inp.len());
     let mut num = 0;
+    let ps = &mut parsing_state;
+
     loop {
         println!("message #{}", num);
         num = num + 1;
 
-        match fitparse::parse_fit_message(inp, &mut parsing_state) {
+        match fitparse::parse_fit_message(inp, ps) {
             Ok((_fm, out)) => {
-                //println!("fm: {:#?}", fm);
+                println!("fm: {:#?}", _fm);
                 inp = out;
+                println!("len: {:?}", inp.len());
                 //println!("after: inp[0..5]: {:?}, out[0..5]: {:?}", &inp[0..5], &out[0..5]);
 
             },

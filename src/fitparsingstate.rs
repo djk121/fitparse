@@ -68,7 +68,7 @@ impl<'a> FitParsingState<'a> {
         p.add(dd);
     }
 
-    pub fn get_developer_data_definition(&self, developer_data_index: u8) -> Result<&FitDeveloperDataDefinition> {
+    pub fn get_developer_data_definition(&self, developer_data_index: u8) -> Result<&FitDeveloperDataDefinition<'a>> {
         match self.developer_data_definitions.get(&developer_data_index) {
             Some(ddd) => Ok(ddd),
             None => Err(Error::developer_data_definition_not_found(developer_data_index))
