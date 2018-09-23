@@ -37,12 +37,13 @@ fn main() {
     let mut parsing_state = FitParsingState::new();
 
     println!("WUT: {:?}", file_header);
-    let mut inp = &o[..(o.len()-2)];
+    //let mut inp = &o[..(o.len()-2)];
+    let mut inp = o;
     println!("len: {:?}", inp.len());
     let mut num = 0;
     let ps = &mut parsing_state;
 
-    loop {
+    while inp.len() > 2 {
         println!("message #{}", num);
         num = num + 1;
 
@@ -57,4 +58,7 @@ fn main() {
             Err(e) => { println!("{}", e); break; }
         }
     }
+    println!("inp.len() = {:?}", inp.len());
+    println!("ffh: {:?}", file_header);
+    println!("last 2 bytes: {:?}", inp);
 }

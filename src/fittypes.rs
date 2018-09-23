@@ -8,6 +8,7 @@ use chrono::{DateTime, UTC, FixedOffset, TimeZone, Duration};
 
 use FitRecordHeader;
 use FitDefinitionMessage;
+use FitFieldDefinition;
 use FitFieldDeveloperData;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
@@ -5495,7 +5496,7 @@ impl<'a> FitMessageAccelerometerData<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -5629,7 +5630,7 @@ impl<'a> FitMessageActivity<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -5738,7 +5739,7 @@ impl<'a> FitMessageAntChannelId<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -5844,7 +5845,7 @@ impl<'a> FitMessageAntRx<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -5956,7 +5957,7 @@ impl<'a> FitMessageAntTx<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6080,7 +6081,7 @@ impl<'a> FitMessageAviationAttitude<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6267,7 +6268,7 @@ impl<'a> FitMessageBikeProfile<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6545,7 +6546,7 @@ impl<'a> FitMessageBloodPressure<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6668,7 +6669,7 @@ impl<'a> FitMessageCadenceZone<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6760,7 +6761,7 @@ impl<'a> FitMessageCameraEvent<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6849,7 +6850,7 @@ impl<'a> FitMessageCapabilities<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -6950,7 +6951,7 @@ impl<'a> FitMessageConnectivity<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7087,7 +7088,7 @@ impl<'a> FitMessageCourse<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7191,7 +7192,7 @@ impl<'a> FitMessageCoursePoint<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7300,7 +7301,7 @@ impl<'a> FitMessageDeveloperDataId<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7351,16 +7352,71 @@ impl<'a> FitMessageDeveloperDataId<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageDeviceInfoFieldDeviceType {
+    Default(u8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
+    AntDeviceType(u8),
+}
+
+impl FitMessageDeviceInfoFieldDeviceType {
+    fn parse<'a>(message: &FitMessageDeviceInfo<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageDeviceInfoFieldDeviceType, &'a [u8])> {
+        match message.source_type {
+            Some(FitFieldSourceType::Antplus) => {
+                let (val, o) = FitFieldAntplusDeviceType::parse(inp)?;
+                Ok((FitMessageDeviceInfoFieldDeviceType::AntplusDeviceType(val), o))
+            },
+            Some(FitFieldSourceType::Ant) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageDeviceInfoFieldDeviceType::AntDeviceType(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageDeviceInfoFieldDeviceType::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageDeviceInfoFieldProduct {
+    Default(u16),
+    GarminProduct(FitFieldGarminProduct),
+}
+
+impl FitMessageDeviceInfoFieldProduct {
+    fn parse<'a>(message: &FitMessageDeviceInfo<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageDeviceInfoFieldProduct, &'a [u8])> {
+        match message.manufacturer {
+            Some(FitFieldManufacturer::Garmin) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageDeviceInfoFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::Dynastream) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageDeviceInfoFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::DynastreamOem) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageDeviceInfoFieldProduct::GarminProduct(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageDeviceInfoFieldProduct::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageDeviceInfo<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub timestamp: Option<FitFieldDateTime>,  // 
     pub device_index: Option<FitFieldDeviceIndex>,  // 
-    pub device_type: Option<u8>,  // 
+    pub device_type: Option<FitMessageDeviceInfoFieldDeviceType>,  // 
     pub manufacturer: Option<FitFieldManufacturer>,  // 
     pub serial_number: Option<u32>,  // 
-    pub product: Option<u16>,  // 
+    pub product: Option<FitMessageDeviceInfoFieldProduct>,  // 
     pub software_version: Option<u16>,  // 
     pub hardware_version: Option<u8>,  // 
     pub cum_operating_time: Option<u32>,  // Reset by new battery or charge.
@@ -7430,7 +7486,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7448,7 +7504,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
                     Ok(())
                 },
                 1 => { // device_type
-                    let (val, outp) = parse_uint8(inp)?;
+                    let (val, outp) = FitMessageDeviceInfoFieldDeviceType::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.device_type = Some(val);
                     Ok(())
@@ -7466,7 +7522,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
                     Ok(())
                 },
                 4 => { // product
-                    let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageDeviceInfoFieldProduct::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -7633,7 +7689,7 @@ impl<'a> FitMessageDeviceSettings<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7786,6 +7842,126 @@ impl<'a> FitMessageDeviceSettings<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageEventFieldData {
+    Default(u32),
+    CadLowAlert(u16),
+    BatteryLevel(u16),
+    CoursePointIndex(FitFieldMessageIndex),
+    CalorieDurationAlert(u32),
+    CadHighAlert(u16),
+    HrHighAlert(u8),
+    SportPoint(u32),
+    CommTimeout(FitFieldCommTimeoutType),
+    GearChangeData(u32),
+    VirtualPartnerSpeed(u16),
+    PowerLowAlert(u16),
+    TimeDurationAlert(u32),
+    DistanceDurationAlert(u32),
+    PowerHighAlert(u16),
+    SpeedLowAlert(u32),
+    TimerTrigger(FitFieldTimerTrigger),
+    HrLowAlert(u8),
+    SpeedHighAlert(u32),
+    RiderPosition(FitFieldRiderPositionType),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+}
+
+impl FitMessageEventFieldData {
+    fn parse<'a>(message: &FitMessageEvent<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageEventFieldData, &'a [u8])> {
+        match message.event {
+            Some(FitFieldEvent::Timer) => {
+                let (val, o) = FitFieldTimerTrigger::parse(inp)?;
+                Ok((FitMessageEventFieldData::TimerTrigger(val), o))
+            },
+            Some(FitFieldEvent::CoursePoint) => {
+                let (val, o) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::CoursePointIndex(val), o))
+            },
+            Some(FitFieldEvent::Battery) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::BatteryLevel(val), o))
+            },
+            Some(FitFieldEvent::VirtualPartnerPace) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::VirtualPartnerSpeed(val), o))
+            },
+            Some(FitFieldEvent::HrHighAlert) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageEventFieldData::HrHighAlert(val), o))
+            },
+            Some(FitFieldEvent::HrLowAlert) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageEventFieldData::HrLowAlert(val), o))
+            },
+            Some(FitFieldEvent::SpeedHighAlert) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::SpeedHighAlert(val), o))
+            },
+            Some(FitFieldEvent::SpeedLowAlert) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::SpeedLowAlert(val), o))
+            },
+            Some(FitFieldEvent::CadHighAlert) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::CadHighAlert(val), o))
+            },
+            Some(FitFieldEvent::CadLowAlert) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::CadLowAlert(val), o))
+            },
+            Some(FitFieldEvent::PowerHighAlert) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::PowerHighAlert(val), o))
+            },
+            Some(FitFieldEvent::PowerLowAlert) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::PowerLowAlert(val), o))
+            },
+            Some(FitFieldEvent::TimeDurationAlert) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::TimeDurationAlert(val), o))
+            },
+            Some(FitFieldEvent::DistanceDurationAlert) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::DistanceDurationAlert(val), o))
+            },
+            Some(FitFieldEvent::CalorieDurationAlert) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::CalorieDurationAlert(val), o))
+            },
+            Some(FitFieldEvent::FitnessEquipment) => {
+                let (val, o) = FitFieldFitnessEquipmentState::parse(inp)?;
+                Ok((FitMessageEventFieldData::FitnessEquipmentState(val), o))
+            },
+            Some(FitFieldEvent::SportPoint) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::SportPoint(val), o))
+            },
+            Some(FitFieldEvent::FrontGearChange) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::GearChangeData(val), o))
+            },
+            Some(FitFieldEvent::RearGearChange) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::GearChangeData(val), o))
+            },
+            Some(FitFieldEvent::RiderPositionChange) => {
+                let (val, o) = FitFieldRiderPositionType::parse(inp)?;
+                Ok((FitMessageEventFieldData::RiderPosition(val), o))
+            },
+            Some(FitFieldEvent::CommTimeout) => {
+                let (val, o) = FitFieldCommTimeoutType::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::CommTimeout(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageEventFieldData::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageEvent<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -7794,7 +7970,7 @@ pub struct FitMessageEvent<'a> {
     pub event: Option<FitFieldEvent>,  // 
     pub event_type: Option<FitFieldEventType>,  // 
     pub data16: Option<u16>,  // 
-    pub data: Option<u32>,  // 
+    pub data: Option<FitMessageEventFieldData>,  // 
     pub event_group: Option<u8>,  // 
     pub score: Option<u16>,  // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
     pub opponent_score: Option<u16>,  // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
@@ -7855,7 +8031,7 @@ impl<'a> FitMessageEvent<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -7885,7 +8061,7 @@ impl<'a> FitMessageEvent<'a> {
                     Ok(())
                 },
                 3 => { // data
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageEventFieldData::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.data = Some(val);
                     Ok(())
@@ -8006,7 +8182,7 @@ impl<'a> FitMessageExdDataConceptConfiguration<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8135,7 +8311,7 @@ impl<'a> FitMessageExdDataFieldConfiguration<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8230,7 +8406,7 @@ impl<'a> FitMessageExdScreenConfiguration<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8315,7 +8491,7 @@ impl<'a> FitMessageFieldCapabilities<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8424,7 +8600,7 @@ impl<'a> FitMessageFieldDescription<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8571,7 +8747,7 @@ impl<'a> FitMessageFileCapabilities<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8662,7 +8838,7 @@ impl<'a> FitMessageFileCreator<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8695,13 +8871,42 @@ impl<'a> FitMessageFileCreator<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageFileIdFieldProduct {
+    Default(u16),
+    GarminProduct(FitFieldGarminProduct),
+}
+
+impl FitMessageFileIdFieldProduct {
+    fn parse<'a>(message: &FitMessageFileId<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageFileIdFieldProduct, &'a [u8])> {
+        match message.manufacturer {
+            Some(FitFieldManufacturer::Garmin) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageFileIdFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::Dynastream) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageFileIdFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::DynastreamOem) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageFileIdFieldProduct::GarminProduct(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageFileIdFieldProduct::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageFileId<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub ftype: Option<FitFieldFile>,  // 
     pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub product: Option<u16>,  // 
+    pub product: Option<FitMessageFileIdFieldProduct>,  // 
     pub serial_number: Option<u32>,  // 
     pub time_created: Option<FitFieldDateTime>,  // Only set for files that are can be created/erased.
     pub number: Option<u16>,  // Only set for files that are not created/erased.
@@ -8739,7 +8944,7 @@ impl<'a> FitMessageFileId<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -8763,7 +8968,7 @@ impl<'a> FitMessageFileId<'a> {
                     Ok(())
                 },
                 2 => { // product
-                    let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageFileIdFieldProduct::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -8858,7 +9063,7 @@ impl<'a> FitMessageGoal<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9018,7 +9223,7 @@ impl<'a> FitMessageGpsMetadata<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9154,7 +9359,7 @@ impl<'a> FitMessageGyroscopeData<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9284,7 +9489,7 @@ impl<'a> FitMessageHr<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9377,7 +9582,7 @@ impl<'a> FitMessageHrZone<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9456,7 +9661,7 @@ impl<'a> FitMessageHrmProfile<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9539,7 +9744,7 @@ impl<'a> FitMessageHrv<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9566,6 +9771,73 @@ impl<'a> FitMessageHrv<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageLapFieldTotalCycles {
+    Default(u32),
+    TotalStrides(u32),
+}
+
+impl FitMessageLapFieldTotalCycles {
+    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageLapFieldTotalCycles, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Running) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageLapFieldTotalCycles::TotalStrides(val), o))
+            },
+            Some(FitFieldSport::Walking) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageLapFieldTotalCycles::TotalStrides(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageLapFieldTotalCycles::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageLapFieldAvgCadence {
+    Default(u8),
+    AvgRunningCadence(u8),
+}
+
+impl FitMessageLapFieldAvgCadence {
+    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageLapFieldAvgCadence, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Running) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageLapFieldAvgCadence::AvgRunningCadence(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageLapFieldAvgCadence::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageLapFieldMaxCadence {
+    Default(u8),
+    MaxRunningCadence(u8),
+}
+
+impl FitMessageLapFieldMaxCadence {
+    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageLapFieldMaxCadence, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Running) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageLapFieldMaxCadence::MaxRunningCadence(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageLapFieldMaxCadence::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageLap<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -9582,15 +9854,15 @@ pub struct FitMessageLap<'a> {
     pub total_elapsed_time: Option<u32>,  // Time (includes pauses)
     pub total_timer_time: Option<u32>,  // Timer Time (excludes pauses)
     pub total_distance: Option<u32>,  // 
-    pub total_cycles: Option<u32>,  // 
+    pub total_cycles: Option<FitMessageLapFieldTotalCycles>,  // 
     pub total_calories: Option<u16>,  // 
     pub total_fat_calories: Option<u16>,  // If New Leaf
     pub avg_speed: Option<u16>,  // 
     pub max_speed: Option<u16>,  // 
     pub avg_heart_rate: Option<u8>,  // 
     pub max_heart_rate: Option<u8>,  // 
-    pub avg_cadence: Option<u8>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
-    pub max_cadence: Option<u8>,  // 
+    pub avg_cadence: Option<FitMessageLapFieldAvgCadence>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
+    pub max_cadence: Option<FitMessageLapFieldMaxCadence>,  // 
     pub avg_power: Option<u16>,  // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
     pub max_power: Option<u16>,  // 
     pub total_ascent: Option<u16>,  // 
@@ -9819,7 +10091,7 @@ impl<'a> FitMessageLap<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -9891,7 +10163,7 @@ impl<'a> FitMessageLap<'a> {
                     Ok(())
                 },
                 10 => { // total_cycles
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageLapFieldTotalCycles::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.total_cycles = Some(val);
                     Ok(())
@@ -9933,13 +10205,13 @@ impl<'a> FitMessageLap<'a> {
                     Ok(())
                 },
                 17 => { // avg_cadence
-                    let (val, outp) = parse_uint8(inp)?;
+                    let (val, outp) = FitMessageLapFieldAvgCadence::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.avg_cadence = Some(val);
                     Ok(())
                 },
                 18 => { // max_cadence
-                    let (val, outp) = parse_uint8(inp)?;
+                    let (val, outp) = FitMessageLapFieldMaxCadence::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.max_cadence = Some(val);
                     Ok(())
@@ -10549,7 +10821,7 @@ impl<'a> FitMessageLength<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -10739,7 +11011,7 @@ impl<'a> FitMessageMagnetometerData<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -10852,7 +11124,7 @@ impl<'a> FitMessageMemoGlob<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -10897,6 +11169,37 @@ impl<'a> FitMessageMemoGlob<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageMesgCapabilitiesFieldCount {
+    Default(u16),
+    NumPerFile(u16),
+    MaxPerFileType(u16),
+    MaxPerFile(u16),
+}
+
+impl FitMessageMesgCapabilitiesFieldCount {
+    fn parse<'a>(message: &FitMessageMesgCapabilities<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageMesgCapabilitiesFieldCount, &'a [u8])> {
+        match message.count_type {
+            Some(FitFieldMesgCount::NumPerFile) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMesgCapabilitiesFieldCount::NumPerFile(val), o))
+            },
+            Some(FitFieldMesgCount::MaxPerFile) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMesgCapabilitiesFieldCount::MaxPerFile(val), o))
+            },
+            Some(FitFieldMesgCount::MaxPerFileType) => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMesgCapabilitiesFieldCount::MaxPerFileType(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMesgCapabilitiesFieldCount::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageMesgCapabilities<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -10905,7 +11208,7 @@ pub struct FitMessageMesgCapabilities<'a> {
     pub file: Option<FitFieldFile>,  // 
     pub mesg_num: Option<FitFieldMesgNum>,  // 
     pub count_type: Option<FitFieldMesgCount>,  // 
-    pub count: Option<u16>,  // 
+    pub count: Option<FitMessageMesgCapabilitiesFieldCount>,  // 
 }
 impl<'a> FitMessageMesgCapabilities<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMesgCapabilities<'a>>, &'a [u8])> {
@@ -10937,7 +11240,7 @@ impl<'a> FitMessageMesgCapabilities<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -10967,7 +11270,7 @@ impl<'a> FitMessageMesgCapabilities<'a> {
                     Ok(())
                 },
                 3 => { // count
-                    let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageMesgCapabilitiesFieldCount::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.count = Some(val);
                     Ok(())
@@ -11026,7 +11329,7 @@ impl<'a> FitMessageMetZone<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11071,6 +11374,40 @@ impl<'a> FitMessageMetZone<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageMonitoringFieldCycles {
+    Default(u32),
+    Strokes(u32),
+    Steps(u32),
+}
+
+impl FitMessageMonitoringFieldCycles {
+    fn parse<'a>(message: &FitMessageMonitoring<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageMonitoringFieldCycles, &'a [u8])> {
+        match message.activity_type {
+            Some(FitFieldActivityType::Walking) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMonitoringFieldCycles::Steps(val), o))
+            },
+            Some(FitFieldActivityType::Running) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMonitoringFieldCycles::Steps(val), o))
+            },
+            Some(FitFieldActivityType::Cycling) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMonitoringFieldCycles::Strokes(val), o))
+            },
+            Some(FitFieldActivityType::Swimming) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMonitoringFieldCycles::Strokes(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageMonitoringFieldCycles::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageMonitoring<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -11079,7 +11416,7 @@ pub struct FitMessageMonitoring<'a> {
     pub device_index: Option<FitFieldDeviceIndex>,  // Associates this data to device_info message.  Not required for file with single device (sensor).
     pub calories: Option<u16>,  // Accumulated total calories.  Maintained by MonitoringReader for each activity_type.  See SDK documentation
     pub distance: Option<u32>,  // Accumulated distance.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
-    pub cycles: Option<u32>,  // Accumulated cycles.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
+    pub cycles: Option<FitMessageMonitoringFieldCycles>,  // Accumulated cycles.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
     pub active_time: Option<u32>,  // 
     pub activity_type: Option<FitFieldActivityType>,  // 
     pub activity_subtype: Option<FitFieldActivitySubtype>,  // 
@@ -11172,7 +11509,7 @@ impl<'a> FitMessageMonitoring<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11202,7 +11539,7 @@ impl<'a> FitMessageMonitoring<'a> {
                     Ok(())
                 },
                 3 => { // cycles
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageMonitoringFieldCycles::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.cycles = Some(val);
                     Ok(())
@@ -11422,7 +11759,7 @@ impl<'a> FitMessageMonitoringInfo<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11528,7 +11865,7 @@ impl<'a> FitMessageNmeaSentence<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11628,7 +11965,7 @@ impl<'a> FitMessageObdiiData<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11735,7 +12072,7 @@ impl<'a> FitMessageOhrSettings<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11798,7 +12135,7 @@ impl<'a> FitMessagePowerZone<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -11969,7 +12306,6 @@ impl<'a> FitMessageRecord<'a> {
             step_length: None,
         };
 
-        println!("len: {:?}", input.len());
         let inp = &input[..(message.definition_message.message_size)];
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageRecord::parse_internal(&mut message, input, tz_offset) {
@@ -12004,7 +12340,6 @@ impl<'a> FitMessageRecord<'a> {
             inp2 = outp;
         }
 
-        println!("len inp2: {:?}", inp2.len());
         Ok((Rc::new(message), inp2))
     }
     fn parse_internal(message: &mut FitMessageRecord<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
@@ -12375,12 +12710,41 @@ impl<'a> FitMessageRecord<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageScheduleFieldProduct {
+    Default(u16),
+    GarminProduct(FitFieldGarminProduct),
+}
+
+impl FitMessageScheduleFieldProduct {
+    fn parse<'a>(message: &FitMessageSchedule<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageScheduleFieldProduct, &'a [u8])> {
+        match message.manufacturer {
+            Some(FitFieldManufacturer::Garmin) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageScheduleFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::Dynastream) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageScheduleFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::DynastreamOem) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageScheduleFieldProduct::GarminProduct(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageScheduleFieldProduct::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageSchedule<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub manufacturer: Option<FitFieldManufacturer>,  // Corresponds to file_id of scheduled workout / course.
-    pub product: Option<u16>,  // Corresponds to file_id of scheduled workout / course.
+    pub product: Option<FitMessageScheduleFieldProduct>,  // Corresponds to file_id of scheduled workout / course.
     pub serial_number: Option<u32>,  // Corresponds to file_id of scheduled workout / course.
     pub time_created: Option<FitFieldDateTime>,  // Corresponds to file_id of scheduled workout / course.
     pub completed: Option<bool>,  // TRUE if this activity has been started
@@ -12419,7 +12783,7 @@ impl<'a> FitMessageSchedule<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -12437,7 +12801,7 @@ impl<'a> FitMessageSchedule<'a> {
                     Ok(())
                 },
                 1 => { // product
-                    let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageScheduleFieldProduct::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -12528,7 +12892,7 @@ impl<'a> FitMessageSdmProfile<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -12645,7 +13009,7 @@ impl<'a> FitMessageSegmentFile<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -12768,7 +13132,7 @@ impl<'a> FitMessageSegmentId<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -12843,6 +13207,27 @@ impl<'a> FitMessageSegmentId<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageSegmentLapFieldTotalCycles {
+    Default(u32),
+    TotalStrokes(u32),
+}
+
+impl FitMessageSegmentLapFieldTotalCycles {
+    fn parse<'a>(message: &FitMessageSegmentLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSegmentLapFieldTotalCycles, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Cycling) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSegmentLapFieldTotalCycles::TotalStrokes(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSegmentLapFieldTotalCycles::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageSegmentLap<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -12859,7 +13244,7 @@ pub struct FitMessageSegmentLap<'a> {
     pub total_elapsed_time: Option<u32>,  // Time (includes pauses)
     pub total_timer_time: Option<u32>,  // Timer Time (excludes pauses)
     pub total_distance: Option<u32>,  // 
-    pub total_cycles: Option<u32>,  // 
+    pub total_cycles: Option<FitMessageSegmentLapFieldTotalCycles>,  // 
     pub total_calories: Option<u16>,  // 
     pub total_fat_calories: Option<u16>,  // If New Leaf
     pub avg_speed: Option<u16>,  // 
@@ -13058,7 +13443,7 @@ impl<'a> FitMessageSegmentLap<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -13130,7 +13515,7 @@ impl<'a> FitMessageSegmentLap<'a> {
                     Ok(())
                 },
                 10 => { // total_cycles
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageSegmentLapFieldTotalCycles::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.total_cycles = Some(val);
                     Ok(())
@@ -13639,7 +14024,7 @@ impl<'a> FitMessageSegmentLeaderboardEntry<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -13744,7 +14129,7 @@ impl<'a> FitMessageSegmentPoint<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -13801,6 +14186,73 @@ impl<'a> FitMessageSegmentPoint<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageSessionFieldTotalCycles {
+    Default(u32),
+    TotalStrides(u32),
+}
+
+impl FitMessageSessionFieldTotalCycles {
+    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSessionFieldTotalCycles, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Running) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSessionFieldTotalCycles::TotalStrides(val), o))
+            },
+            Some(FitFieldSport::Walking) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSessionFieldTotalCycles::TotalStrides(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSessionFieldTotalCycles::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageSessionFieldAvgCadence {
+    Default(u8),
+    AvgRunningCadence(u8),
+}
+
+impl FitMessageSessionFieldAvgCadence {
+    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSessionFieldAvgCadence, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Running) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageSessionFieldAvgCadence::AvgRunningCadence(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageSessionFieldAvgCadence::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageSessionFieldMaxCadence {
+    Default(u8),
+    MaxRunningCadence(u8),
+}
+
+impl FitMessageSessionFieldMaxCadence {
+    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSessionFieldMaxCadence, &'a [u8])> {
+        match message.sport {
+            Some(FitFieldSport::Running) => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageSessionFieldMaxCadence::MaxRunningCadence(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint8(inp)?;
+                Ok((FitMessageSessionFieldMaxCadence::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageSession<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -13817,15 +14269,15 @@ pub struct FitMessageSession<'a> {
     pub total_elapsed_time: Option<u32>,  // Time (includes pauses)
     pub total_timer_time: Option<u32>,  // Timer Time (excludes pauses)
     pub total_distance: Option<u32>,  // 
-    pub total_cycles: Option<u32>,  // 
+    pub total_cycles: Option<FitMessageSessionFieldTotalCycles>,  // 
     pub total_calories: Option<u16>,  // 
     pub total_fat_calories: Option<u16>,  // 
     pub avg_speed: Option<u16>,  // total_distance / total_timer_time
     pub max_speed: Option<u16>,  // 
     pub avg_heart_rate: Option<u8>,  // average heart rate (excludes pause time)
     pub max_heart_rate: Option<u8>,  // 
-    pub avg_cadence: Option<u8>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
-    pub max_cadence: Option<u8>,  // 
+    pub avg_cadence: Option<FitMessageSessionFieldAvgCadence>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
+    pub max_cadence: Option<FitMessageSessionFieldMaxCadence>,  // 
     pub avg_power: Option<u16>,  // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
     pub max_power: Option<u16>,  // 
     pub total_ascent: Option<u16>,  // 
@@ -14080,7 +14532,7 @@ impl<'a> FitMessageSession<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -14152,7 +14604,7 @@ impl<'a> FitMessageSession<'a> {
                     Ok(())
                 },
                 10 => { // total_cycles
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageSessionFieldTotalCycles::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.total_cycles = Some(val);
                     Ok(())
@@ -14194,13 +14646,13 @@ impl<'a> FitMessageSession<'a> {
                     Ok(())
                 },
                 18 => { // avg_cadence
-                    let (val, outp) = parse_uint8(inp)?;
+                    let (val, outp) = FitMessageSessionFieldAvgCadence::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.avg_cadence = Some(val);
                     Ok(())
                 },
                 19 => { // max_cadence
-                    let (val, outp) = parse_uint8(inp)?;
+                    let (val, outp) = FitMessageSessionFieldMaxCadence::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.max_cadence = Some(val);
                     Ok(())
@@ -14809,12 +15261,41 @@ impl<'a> FitMessageSession<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageSlaveDeviceFieldProduct {
+    Default(u16),
+    GarminProduct(FitFieldGarminProduct),
+}
+
+impl FitMessageSlaveDeviceFieldProduct {
+    fn parse<'a>(message: &FitMessageSlaveDevice<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSlaveDeviceFieldProduct, &'a [u8])> {
+        match message.manufacturer {
+            Some(FitFieldManufacturer::Garmin) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSlaveDeviceFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::Dynastream) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSlaveDeviceFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::DynastreamOem) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSlaveDeviceFieldProduct::GarminProduct(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageSlaveDeviceFieldProduct::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageSlaveDevice<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub product: Option<u16>,  // 
+    pub product: Option<FitMessageSlaveDeviceFieldProduct>,  // 
 }
 impl<'a> FitMessageSlaveDevice<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSlaveDevice<'a>>, &'a [u8])> {
@@ -14843,7 +15324,7 @@ impl<'a> FitMessageSlaveDevice<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -14861,7 +15342,7 @@ impl<'a> FitMessageSlaveDevice<'a> {
                     Ok(())
                 },
                 1 => { // product
-                    let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageSlaveDeviceFieldProduct::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -14912,7 +15393,7 @@ impl<'a> FitMessageSoftware<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -14987,7 +15468,7 @@ impl<'a> FitMessageSpeedZone<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15062,7 +15543,7 @@ impl<'a> FitMessageSport<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15101,13 +15582,39 @@ impl<'a> FitMessageSport<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageThreeDSensorCalibrationFieldCalibrationFactor {
+    Default(u32),
+    AccelCalFactor(u32),
+    GyroCalFactor(u32),
+}
+
+impl FitMessageThreeDSensorCalibrationFieldCalibrationFactor {
+    fn parse<'a>(message: &FitMessageThreeDSensorCalibration<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageThreeDSensorCalibrationFieldCalibrationFactor, &'a [u8])> {
+        match message.sensor_type {
+            Some(FitFieldSensorType::Accelerometer) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageThreeDSensorCalibrationFieldCalibrationFactor::AccelCalFactor(val), o))
+            },
+            Some(FitFieldSensorType::Gyroscope) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageThreeDSensorCalibrationFieldCalibrationFactor::GyroCalFactor(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageThreeDSensorCalibrationFieldCalibrationFactor::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageThreeDSensorCalibration<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
     pub sensor_type: Option<FitFieldSensorType>,  // Indicates which sensor the calibration is for
-    pub calibration_factor: Option<u32>,  // Calibration factor used to convert from raw ADC value to degrees, g,  etc.
+    pub calibration_factor: Option<FitMessageThreeDSensorCalibrationFieldCalibrationFactor>,  // Calibration factor used to convert from raw ADC value to degrees, g,  etc.
     pub calibration_divisor: Option<u32>,  // Calibration factor divisor
     pub level_shift: Option<u32>,  // Level shift value used to shift the ADC value back into range
     pub offset_cal: Option<i32>,  // Internal calibration factors, one for each: xy, yx, zx
@@ -15158,7 +15665,7 @@ impl<'a> FitMessageThreeDSensorCalibration<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15176,7 +15683,7 @@ impl<'a> FitMessageThreeDSensorCalibration<'a> {
                     Ok(())
                 },
                 1 => { // calibration_factor
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageThreeDSensorCalibrationFieldCalibrationFactor::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.calibration_factor = Some(val);
                     Ok(())
@@ -15278,7 +15785,7 @@ impl<'a> FitMessageTimestampCorrelation<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15404,7 +15911,7 @@ impl<'a> FitMessageTotals<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15485,6 +15992,35 @@ impl<'a> FitMessageTotals<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageTrainingFileFieldProduct {
+    Default(u16),
+    GarminProduct(FitFieldGarminProduct),
+}
+
+impl FitMessageTrainingFileFieldProduct {
+    fn parse<'a>(message: &FitMessageTrainingFile<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageTrainingFileFieldProduct, &'a [u8])> {
+        match message.manufacturer {
+            Some(FitFieldManufacturer::Garmin) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageTrainingFileFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::Dynastream) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageTrainingFileFieldProduct::GarminProduct(val), o))
+            },
+            Some(FitFieldManufacturer::DynastreamOem) => {
+                let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageTrainingFileFieldProduct::GarminProduct(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
+                Ok((FitMessageTrainingFileFieldProduct::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageTrainingFile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -15492,7 +16028,7 @@ pub struct FitMessageTrainingFile<'a> {
     pub timestamp: Option<FitFieldDateTime>,  // 
     pub ftype: Option<FitFieldFile>,  // 
     pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub product: Option<u16>,  // 
+    pub product: Option<FitMessageTrainingFileFieldProduct>,  // 
     pub serial_number: Option<u32>,  // 
     pub time_created: Option<FitFieldDateTime>,  // 
 }
@@ -15540,7 +16076,7 @@ impl<'a> FitMessageTrainingFile<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15564,7 +16100,7 @@ impl<'a> FitMessageTrainingFile<'a> {
                     Ok(())
                 },
                 2 => { // product
-                    let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageTrainingFileFieldProduct::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -15681,7 +16217,7 @@ impl<'a> FitMessageUserProfile<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15900,7 +16436,7 @@ impl<'a> FitMessageVideo<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -15983,7 +16519,7 @@ impl<'a> FitMessageVideoClip<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16082,7 +16618,7 @@ impl<'a> FitMessageVideoDescription<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16170,7 +16706,7 @@ impl<'a> FitMessageVideoFrame<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16245,7 +16781,7 @@ impl<'a> FitMessageVideoTitle<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16284,13 +16820,39 @@ impl<'a> FitMessageVideoTitle<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageWatchfaceSettingsFieldLayout<'a> {
+    Default(&'a [u8]),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
+    DigitalLayout(FitFieldDigitalWatchfaceLayout),
+}
+
+impl<'a> FitMessageWatchfaceSettingsFieldLayout<'a> {
+    fn parse(message: &FitMessageWatchfaceSettings<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWatchfaceSettingsFieldLayout<'a>, &'a [u8])> {
+        match message.mode {
+            Some(FitFieldWatchfaceMode::Digital) => {
+                let (val, o) = FitFieldDigitalWatchfaceLayout::parse(inp)?;
+                Ok((FitMessageWatchfaceSettingsFieldLayout::DigitalLayout(val), o))
+            },
+            Some(FitFieldWatchfaceMode::Analog) => {
+                let (val, o) = FitFieldAnalogWatchfaceLayout::parse(inp)?;
+                Ok((FitMessageWatchfaceSettingsFieldLayout::AnalogLayout(val), o))
+            },
+            _ => {
+                let (val, o) = parse_byte(inp, field.field_size)?;
+                Ok((FitMessageWatchfaceSettingsFieldLayout::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageWatchfaceSettings<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub message_index: Option<FitFieldMessageIndex>,  // 
     pub mode: Option<FitFieldWatchfaceMode>,  // 
-    pub layout: Option<&'a [u8]>,  // 
+    pub layout: Option<FitMessageWatchfaceSettingsFieldLayout<'a>>,  // 
 }
 impl<'a> FitMessageWatchfaceSettings<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWatchfaceSettings<'a>>, &'a [u8])> {
@@ -16320,7 +16882,7 @@ impl<'a> FitMessageWatchfaceSettings<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16338,7 +16900,7 @@ impl<'a> FitMessageWatchfaceSettings<'a> {
                     Ok(())
                 },
                 1 => { // layout
-                    let (val, outp) = parse_byte(inp, field.field_size)?;
+                    let (val, outp) = FitMessageWatchfaceSettingsFieldLayout::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.layout = Some(val);
                     Ok(())
@@ -16414,7 +16976,7 @@ impl<'a> FitMessageWeatherAlert<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16546,7 +17108,7 @@ impl<'a> FitMessageWeatherConditions<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16732,7 +17294,7 @@ impl<'a> FitMessageWeightScale<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16869,7 +17431,7 @@ impl<'a> FitMessageWorkout<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16914,6 +17476,230 @@ impl<'a> FitMessageWorkout<'a> {
 
 
 #[derive(Debug)]
+pub enum FitMessageWorkoutStepFieldDurationValue {
+    Default(u32),
+    DurationCalories(u32),
+    DurationTime(u32),
+    DurationStep(u32),
+    DurationPower(FitFieldWorkoutPower),
+    DurationHr(FitFieldWorkoutHr),
+    DurationDistance(u32),
+}
+
+impl FitMessageWorkoutStepFieldDurationValue {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldDurationValue, &'a [u8])> {
+        match message.duration_type {
+            Some(FitFieldWktStepDuration::Time) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationTime(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepetitionTime) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationTime(val), o))
+            },
+            Some(FitFieldWktStepDuration::Distance) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationDistance(val), o))
+            },
+            Some(FitFieldWktStepDuration::HrLessThan) => {
+                let (val, o) = FitFieldWorkoutHr::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationHr(val), o))
+            },
+            Some(FitFieldWktStepDuration::HrGreaterThan) => {
+                let (val, o) = FitFieldWorkoutHr::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationHr(val), o))
+            },
+            Some(FitFieldWktStepDuration::Calories) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationCalories(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilStepsCmplt) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilTime) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilDistance) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilCalories) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilHrLessThan) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilHrGreaterThan) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilPowerLessThan) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilPowerGreaterThan) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationStep(val), o))
+            },
+            Some(FitFieldWktStepDuration::PowerLessThan) => {
+                let (val, o) = FitFieldWorkoutPower::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationPower(val), o))
+            },
+            Some(FitFieldWktStepDuration::PowerGreaterThan) => {
+                let (val, o) = FitFieldWorkoutPower::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::DurationPower(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldDurationValue::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageWorkoutStepFieldTargetValue {
+    Default(u32),
+    TargetHrZone(u32),
+    RepeatTime(u32),
+    RepeatSteps(u32),
+    RepeatHr(FitFieldWorkoutHr),
+    RepeatDistance(u32),
+    TargetPowerZone(u32),
+    RepeatCalories(u32),
+    RepeatPower(FitFieldWorkoutPower),
+}
+
+impl FitMessageWorkoutStepFieldTargetValue {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldTargetValue, &'a [u8])> {
+        match message.duration_type {
+            Some(FitFieldWktStepDuration::RepeatUntilStepsCmplt) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatSteps(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilTime) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatTime(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilDistance) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatDistance(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilCalories) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatCalories(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilHrLessThan) => {
+                let (val, o) = FitFieldWorkoutHr::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatHr(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilHrGreaterThan) => {
+                let (val, o) = FitFieldWorkoutHr::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatHr(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilPowerLessThan) => {
+                let (val, o) = FitFieldWorkoutPower::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatPower(val), o))
+            },
+            Some(FitFieldWktStepDuration::RepeatUntilPowerGreaterThan) => {
+                let (val, o) = FitFieldWorkoutPower::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::RepeatPower(val), o))
+            },
+            _ => (),
+        }
+        match message.target_type {
+            Some(FitFieldWktStepTarget::HeartRate) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::TargetHrZone(val), o))
+            },
+            Some(FitFieldWktStepTarget::Power) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepFieldTargetValue::TargetPowerZone(val), o))
+            },
+            _ => (),
+        }
+        let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+        Ok((FitMessageWorkoutStepFieldTargetValue::Default(val), o))
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageWorkoutStepFieldCustomTargetValueLow {
+    Default(u32),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetCadenceLow(u32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
+    CustomTargetSpeedLow(u32),
+}
+
+impl FitMessageWorkoutStepFieldCustomTargetValueLow {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldCustomTargetValueLow, &'a [u8])> {
+        match message.target_type {
+            Some(FitFieldWktStepTarget::Speed) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueLow::CustomTargetSpeedLow(val), o))
+            },
+            Some(FitFieldWktStepTarget::HeartRate) => {
+                let (val, o) = FitFieldWorkoutHr::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueLow::CustomTargetHeartRateLow(val), o))
+            },
+            Some(FitFieldWktStepTarget::Cadence) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueLow::CustomTargetCadenceLow(val), o))
+            },
+            Some(FitFieldWktStepTarget::Power) => {
+                let (val, o) = FitFieldWorkoutPower::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueLow::CustomTargetPowerLow(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueLow::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum FitMessageWorkoutStepFieldCustomTargetValueHigh {
+    Default(u32),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetCadenceHigh(u32),
+    CustomTargetSpeedHigh(u32),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+}
+
+impl FitMessageWorkoutStepFieldCustomTargetValueHigh {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldCustomTargetValueHigh, &'a [u8])> {
+        match message.target_type {
+            Some(FitFieldWktStepTarget::Speed) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueHigh::CustomTargetSpeedHigh(val), o))
+            },
+            Some(FitFieldWktStepTarget::HeartRate) => {
+                let (val, o) = FitFieldWorkoutHr::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueHigh::CustomTargetHeartRateHigh(val), o))
+            },
+            Some(FitFieldWktStepTarget::Cadence) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueHigh::CustomTargetCadenceHigh(val), o))
+            },
+            Some(FitFieldWktStepTarget::Power) => {
+                let (val, o) = FitFieldWorkoutPower::parse(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueHigh::CustomTargetPowerHigh(val), o))
+            },
+            _ => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                Ok((FitMessageWorkoutStepFieldCustomTargetValueHigh::Default(val), o))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageWorkoutStep<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -16921,11 +17707,11 @@ pub struct FitMessageWorkoutStep<'a> {
     pub message_index: Option<FitFieldMessageIndex>,  // 
     pub wkt_step_name: Option<String>,  // 
     pub duration_type: Option<FitFieldWktStepDuration>,  // 
-    pub duration_value: Option<u32>,  // 
+    pub duration_value: Option<FitMessageWorkoutStepFieldDurationValue>,  // 
     pub target_type: Option<FitFieldWktStepTarget>,  // 
-    pub target_value: Option<u32>,  // 
-    pub custom_target_value_low: Option<u32>,  // 
-    pub custom_target_value_high: Option<u32>,  // 
+    pub target_value: Option<FitMessageWorkoutStepFieldTargetValue>,  // 
+    pub custom_target_value_low: Option<FitMessageWorkoutStepFieldCustomTargetValueLow>,  // 
+    pub custom_target_value_high: Option<FitMessageWorkoutStepFieldCustomTargetValueHigh>,  // 
     pub intensity: Option<FitFieldIntensity>,  // 
 }
 impl<'a> FitMessageWorkoutStep<'a> {
@@ -16962,7 +17748,7 @@ impl<'a> FitMessageWorkoutStep<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -16986,7 +17772,7 @@ impl<'a> FitMessageWorkoutStep<'a> {
                     Ok(())
                 },
                 2 => { // duration_value
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldDurationValue::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.duration_value = Some(val);
                     Ok(())
@@ -16998,19 +17784,19 @@ impl<'a> FitMessageWorkoutStep<'a> {
                     Ok(())
                 },
                 4 => { // target_value
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldTargetValue::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.target_value = Some(val);
                     Ok(())
                 },
                 5 => { // custom_target_value_low
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldCustomTargetValueLow::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.custom_target_value_low = Some(val);
                     Ok(())
                 },
                 6 => { // custom_target_value_high
-                    let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldCustomTargetValueHigh::parse(&message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.custom_target_value_high = Some(val);
                     Ok(())
@@ -17077,7 +17863,7 @@ impl<'a> FitMessageZonesTarget<'a> {
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
             message.developer_fields.push(dd);
             inp2 = outp;
         }
@@ -17208,7 +17994,6 @@ pub enum FitDataMessage<'a> {
 impl<'a> FitDataMessage<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(FitDataMessage<'a>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
-        println!("message size: {:?}", definition_message.message_size);
         match definition_message.global_mesg_num {
             FitFieldMesgNum::FileId => {
                 let (val, o) = FitMessageFileId::parse(input, header, parsing_state, offset_secs)?;

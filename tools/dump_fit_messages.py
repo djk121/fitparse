@@ -65,6 +65,7 @@ use chrono::{DateTime, UTC, FixedOffset, TimeZone, Duration};
 
 use FitRecordHeader;
 use FitDefinitionMessage;
+use FitFieldDefinition;
 use FitFieldDeveloperData;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
@@ -238,32 +239,135 @@ def parse_types_file(types_file_name):
 
     return types
 
+def fit_field_parser(field_type, types, message_name, field_with_subfields_name=None):
+    # fields in Fit Messages can be either base types (uint16, string) or
+    # previously-defined Fit types (MessageIndex). These need to be parsed
+    # differently.
+
+    parse_command = ''
+
+    if field_with_subfields_name:
+        return fit_subfield_parser(field_with_subfields_name, message_name)
+    elif is_fit_base_type(field_type.lower()):
+        return fit_base_type_parser(field_type)
+    else:
+        return fit_type_parser(field_type, types)
+
 def is_fit_base_type(t):
     return t in FIT_TYPE_MAP.keys()
 
-def fit_base_type_parser(f):
+def is_field_with_subfields(field):
+    return len(field['subfields']) > 0
 
-    parse = "parse_{}(inp".format(f['field_type'])
-    if f['field_type'] in ['string', 'byte']:
+def fit_subfield_parser(field_name, message_name):
+    this_field_name = "FitMessage{}Field{}".format(rustify_name(message_name), rustify_name(field_name))
+    return "{}::parse(&message, inp, &field, tz_offset)".format(this_field_name)
+
+def fit_base_type_parser(field_type):
+
+    parse = "parse_{}(inp".format(field_type)
+    if field_type in ['string', 'byte']:
         parse += ", field.field_size"
-    elif f['field_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
+    elif field_type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
         parse += ", message.definition_message.endianness"
     parse += ")"
     return parse
 
-def fit_type_parser(f, types):
+def fit_type_parser(field_type, types):
     # FIXME: don't need endianness for 1-byte types :(
 
-    fit_base_type = types[f['field_type']]['base_type']
+    fit_base_type = types[field_type]['base_type']
 
-    parse = "FitField{}::parse(inp".format(rustify_name(f['field_type']))
+    parse = "FitField{}::parse(inp".format(rustify_name(field_type))
     if fit_base_type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
         parse += ", message.definition_message.endianness"
 
-    if f['field_type'] == 'local_date_time':
+    if field_type == 'local_date_time':
         parse += ", tz_offset"
     parse += ")"
     return parse
+
+def field_name(field):
+    if field['field_type'] != 'enum' and field['field_type'] in FIT_TYPE_MAP.keys():
+        return FIT_TYPE_MAP[field['field_type']]
+    else:
+        return "FitField{}".format(rustify_name(field['field_type']))
+
+
+def field_with_subfields_name(message_name, field_name):
+    return "FitMessage{}Field{}".format(rustify_name(message_name), rustify_name(field_name))
+
+def output_message_subfield(message_name, field, types):
+    this_field_name = field_with_subfields_name(message_name, field['field_name'])
+    field_type_name = field_name(field)
+
+    lifetime_spec = ''
+    if '&' in field_type_name:
+        lifetime_spec = "<'a>"
+
+    sys.stdout.write("#[derive(Debug)]\n")
+    sys.stdout.write("pub enum {}{} {{\n".format(this_field_name, lifetime_spec))
+
+    sys.stdout.write("{}Default({}),\n".format(" "*4, field_type_name))
+
+    sf_names = set([sf['field_name'] for sf in field['subfields']])
+    for sf_name in sf_names:
+        for sf in field['subfields']:
+            if sf['field_name'] == sf_name:
+                sys.stdout.write("{}{}({}),\n".format(" "*4, rustify_name(sf['field_name']), field_name(sf)))
+                break
+
+    #for sf in field['subfields']:
+    #    sys.stdout.write("{}{}({}),\n".format(" "*4, rustify_name(sf['field_name']), field_name(sf)))
+    sys.stdout.write("}\n\n")
+
+    sys.stdout.write("impl{} {}{} {{\n".format(lifetime_spec, this_field_name, lifetime_spec))
+
+    p_lifetime_spec = ''
+    if not lifetime_spec:
+        p_lifetime_spec = "<'a>"
+    sys.stdout.write("{}fn parse{}(message: &FitMessage{}<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<({}{}, &'a [u8])> {{\n".format(" "*4, p_lifetime_spec, rustify_name(message_name), this_field_name, lifetime_spec))
+
+    subfield_ref_names = set([sf['ref_field_name'] for sf in field['subfields']])
+
+    if len(subfield_ref_names) == 1:
+
+        # all subfields should have the same ref_field_name
+        sys.stdout.write("{}match message.{} {{\n".format(" "*8, field['subfields'][0]['ref_field_name']))
+        for sf in field['subfields']:
+            # look up ref_field_type to get the enum name
+            sys.stdout.write("{}Some(FitField{}::{}) => {{\n".format(" "*12,
+                                                                rustify_name(sf['ref_field_type']),
+                                                                rustify_name(sf['ref_field_value'])))
+            sys.stdout.write("{}let (val, o) = {}?;\n".format(" "*16, fit_field_parser(sf['field_type'], types, message_name)))
+            sys.stdout.write("{}Ok(({}::{}(val), o))\n".format(" "*16, this_field_name, rustify_name(sf['field_name'])))
+            sys.stdout.write("{}}},\n".format(" "*12))
+        # if none of the ref fields match, we fall back to the default instructions
+        # for the field
+        sys.stdout.write("{}_ => {{\n".format(" "*12))
+        sys.stdout.write("{}let (val, o) = {}?;\n".format(" "*16, fit_field_parser(field['field_type'], types, message_name)))
+        sys.stdout.write("{}Ok(({}::Default(val), o))\n".format(" "*16, this_field_name))
+        sys.stdout.write("{}}}\n".format(" "*12))
+        sys.stdout.write("{}}}\n".format(" "*8))
+
+    else:
+        for sf_name in subfield_ref_names:
+            subfields = [sf for sf in field['subfields'] if sf['ref_field_name'] == sf_name]
+            sys.stdout.write("{}match message.{} {{\n".format(" "*8, sf_name))
+            for sf in subfields:
+                sys.stdout.write("{}Some(FitField{}::{}) => {{\n".format(" "*12,
+                                                                         rustify_name(sf['ref_field_type']),
+                                                                         rustify_name(sf['ref_field_value'])))
+                sys.stdout.write("{}let (val, o) = {}?;\n".format(" "*16, fit_field_parser(sf['field_type'], types, message_name)))
+                sys.stdout.write("{}return Ok(({}::{}(val), o))\n".format(" "*16, this_field_name, rustify_name(sf['field_name'])))
+                sys.stdout.write("{}}},\n".format(" "*12))
+            sys.stdout.write("{}_ => (),\n".format(" "*12))
+            sys.stdout.write("{}}}\n".format(" "*8))
+        sys.stdout.write("{}let (val, o) = {}?;\n".format(" "*8, fit_field_parser(field['field_type'], types, message_name)))
+        sys.stdout.write("{}Ok(({}::Default(val), o))\n".format(" "*8, this_field_name))
+
+    sys.stdout.write("{}}}\n".format(" "*4))
+    sys.stdout.write("}\n\n")
 
 def output_messages(messages, types):
 
@@ -273,27 +377,25 @@ def output_messages(messages, types):
         fields = sorted(message_def['fields'], key=lambda f: f['field_number'])
         has_timestamp = 'timestamp' in [f['field_name'] for f in fields]
 
-        # if a struct needs the lifetime spec, it's parse
+        for field in fields:
+            if field['subfields']:
+                output_message_subfield(this_message, field, types)
+
         lifetime_spec = "<'a>"
-        #if message_def['needs_lifetime_spec']:
-        #    lifetime_spec = "<'a>"
 
         sys.stdout.write("#[derive(Debug)]\n")
         sys.stdout.write("pub struct FitMessage{}{} {{\n".format(rustify_name(this_message), lifetime_spec))
-        #sys.stdout.write("pub struct FitMessage{}".format(rustify_name(this_message)))
-        #if contains_ref:
-        #    sys.stdout.write("<'a>")
-        #sys.stdout.write(" {\n")
         sys.stdout.write("{}header: FitRecordHeader,\n".format(" "*4))
         sys.stdout.write("{}definition_message: Rc<FitDefinitionMessage>,\n".format(" "*4))
         sys.stdout.write("{}developer_fields: Vec<FitFieldDeveloperData{}>,\n".format(" "*4, lifetime_spec))
         for field in message_def['fields']:
-            #sys.stdout.write("{}{}: ".format(" "*4, field['field_name']))
-            #if field['field_type'] == 'byte':
-            #    sys.stdout.write("&'a ")
-            #sys.stdout.write("Option<")
             sys.stdout.write("{}pub {}: Option<".format(" "*4, field['field_name']))
-            if field['field_type'] != 'enum' and field['field_type'] in FIT_TYPE_MAP.keys():
+
+            if field['subfields']:
+                sys.stdout.write("{}".format(field_with_subfields_name(this_message, field['field_name'])))
+                if field['field_type'] == 'byte':
+                    sys.stdout.write("<'a>")
+            elif field['field_type'] != 'enum' and field['field_type'] in FIT_TYPE_MAP.keys():
                 sys.stdout.write("{}".format(FIT_TYPE_MAP[field['field_type']]))
             else:
                 sys.stdout.write("FitField{}".format(rustify_name(field['field_type'])))
@@ -345,14 +447,12 @@ def output_messages(messages, types):
             sys.stdout.write("{}match offset_secs {{\n".format(" "*8))
             sys.stdout.write("{}Some(os) => {{\n".format(" "*12))
             sys.stdout.write("{}message.timestamp = Some(parsing_state.get_last_timestamp()?.new_from_offset(os));\n".format(" "*16))
-            #sys.stdout.write("{}()".format(" "*16))
             sys.stdout.write("{}}},\n".format(" "*12))
             sys.stdout.write("{}None => {{\n".format(" "*12))
             sys.stdout.write("{}match message.timestamp {{\n".format(" "*16))
             sys.stdout.write("{}Some(ts) => {{\n".format(" "*20))
 
             sys.stdout.write("{}parsing_state.set_last_timestamp(ts);\n".format(" "*24))
-            #sys.stdout.write("{}()".format(" "*24))
 
             sys.stdout.write("{}}},\n".format(" "*20))
             sys.stdout.write("{}None => return Err(Error::missing_timestamp_field())\n".format(" "*20))
@@ -364,7 +464,7 @@ def output_messages(messages, types):
         sys.stdout.write("{}for dev_field in &message.definition_message.developer_field_definitions {{\n".format(" "*8))
         sys.stdout.write("{}let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;\n".format(" "*12))
         sys.stdout.write("{}let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;\n".format(" "*12))
-        sys.stdout.write("{}let (dd, outp) = FitFieldDeveloperData::parse(inp, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;\n".format(" "*12))
+        sys.stdout.write("{}let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;\n".format(" "*12))
         sys.stdout.write("{}message.developer_fields.push(dd);\n".format(" "*12))
         sys.stdout.write("{}inp2 = outp;\n".format(" "*12))
         sys.stdout.write("{}}}\n\n".format(" "*8))
@@ -377,12 +477,6 @@ def output_messages(messages, types):
 
 
         sys.stdout.write("{}fn parse_internal(message: &mut FitMessage{}<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {{\n".format(" "*4, rustify_name(this_message)))
-
-        #if lifetime_spec != '':
-        #    sys.stdout.write("{}fn parse_internal<'b>(message: &mut FitMessage{}<'a>, input: &'a [u8], parsing_state: &'b mut FitParsingState, offset_secs: Option<u8>) -> Result<&'a [u8]> {{\n".format(" "*4, rustify_name(this_message)))
-        #else:
-        #    sys.stdout.write("{}fn parse_internal<'a, 'b>(message: &mut FitMessage{}, input: &'a [u8], parsing_state: &'b mut FitParsingState, offset_secs: Option<u8>) -> Result<&'a [u8]> {{\n".format(" "*4, rustify_name(this_message)))
-
 
         sys.stdout.write("{}let mut inp = input;\n".format(" "*8, ))
 
@@ -397,13 +491,16 @@ def output_messages(messages, types):
             # previously-defined Fit types (MessageIndex). These need to be parsed
             # differently.
 
-            parse_command = ''
-            if is_fit_base_type(field['field_type'].lower()):
-                parse_command = fit_base_type_parser(field)
-            else:
-                parse_command = fit_type_parser(field, types)
+            #parse_command = ''
+            #if is_fit_base_type(field['field_type'].lower()):
+            #    parse_command = fit_base_type_parser(field)
+            #else:
+            #    parse_command = fit_type_parser(field['field_type'], types)
 
-            sys.stdout.write("{}let (val, outp) = {}?;\n".format(" "*20, parse_command))
+            fwsfn = None
+            if field['subfields']:
+                fwsfn = field['field_name']
+            sys.stdout.write("{}let (val, outp) = {}?;\n".format(" "*20, fit_field_parser(field['field_type'], types, this_message, field_with_subfields_name=fwsfn)))
             sys.stdout.write("{}inp = outp;\n".format(" "*20))
             if field['field_type'][-1] == 'z':
                 sys.stdout.write("{}message.{} = val;\n".format(" "*20, field['field_name']))
@@ -418,30 +515,8 @@ def output_messages(messages, types):
         sys.stdout.write("{}}};\n".format(" "*12))
         sys.stdout.write("{}}}\n\n".format(" "*8))
 
-
-
         sys.stdout.write("{}Ok(inp)\n".format(" "*8))
         sys.stdout.write("{}}}\n".format(" "*4))
-
-
-        #sys.stdout.write("{}fn has_timestamp(&self) -> bool {{\n".format(" "*4))
-        #if not has_timestamp:
-        #    sys.stdout.write("{}false\n".format(" "*8))
-        #else:
-        #    sys.stdout.write("{}match self.timestamp {{\n".format(" "*8))
-        #    sys.stdout.write("{}Some(ts) => true,\n".format(" "*12))
-        #    sys.stdout.write("{}None => false,\n".format(" "*12))
-        #    sys.stdout.write("{}}}\n".format(" "*8))
-        #sys.stdout.write("{}}}\n".format(" "*4))
-
-        #if has_timestamp:
-        #    sys.stdout.write("{}fn get_timestamp(&self) -> Result<FitFieldDateTime> {{\n".format(" "*4))
-        #    sys.stdout.write("{}match self.timestamp {{\n".format(" "*8))
-        #    sys.stdout.write("{}Some(ts) => Ok(ts),\n".format(" "*12))
-        #    sys.stdout.write("{}None => Err(Error::timestamp_not_set_on_message())\n".format(" "*12))
-        #    sys.stdout.write("{}}}".format(" "*8))
-        #    sys.stdout.write("{}}}\n\n".format(" "*4))
-
 
         sys.stdout.write("}\n")
         sys.stdout.write("\n\n")
@@ -498,6 +573,21 @@ def parse_messages_file(messages_file_name, types):
             continue
 
         if line[0] != '':
+
+            # before moving on from the current message, resolve any
+            # subfield types
+
+            if current_message:
+                for field in messages[current_message]['fields']:
+                    if field['subfields']:
+                        for sf in field['subfields']:
+                            ref_field = [f for f in messages[current_message]['fields'] if f['field_name'] == sf['ref_field_name']]
+                            if not len(ref_field):
+                                print "error {}".format(current_message)
+                                sys.exit(1)
+                            else:
+                                sf['ref_field_type'] = ref_field[0]['field_type']
+
             current_message = line[0]
             message_comment = line[13]
             messages[current_message] = {
@@ -509,9 +599,25 @@ def parse_messages_file(messages_file_name, types):
 
         else:
             _, field_number, field_name, field_type, array, \
-            _, _, _, _, _, _, _, _, comment, _, _, _, _, _ = line
+            _, _, _, _, _, _, ref_field_name, ref_field_value, comment, _, _, _, _, _ = line
 
             if field_number == '':
+                if ref_field_name != '':
+                    # this is a dynamic field
+                    ref_fields = [x.strip() for x in ref_field_name.split(',')]
+                    ref_values = [x.strip() for x in ref_field_value.split(',')]
+
+                    for i in range(0, len(ref_fields)):
+
+
+
+                        messages[current_message]['fields'][-1]['subfields'].append({
+                            'field_name': field_name,
+                            'field_type': field_type,
+                            'ref_field_name': ref_fields[i],
+                            'ref_field_value': ref_values[i],
+                            'ref_field_type': None
+                        })
                 continue
 
             if field_name == 'type':
@@ -527,6 +633,7 @@ def parse_messages_file(messages_file_name, types):
                 #"rust_type": rust_type,
                 "array": array,
                 "field_comment": comment,
+                "subfields": []
             })
 
     return messages
