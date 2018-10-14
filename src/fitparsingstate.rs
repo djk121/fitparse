@@ -14,7 +14,7 @@ use errors::{Error, ErrorKind, Result};
 pub struct FitParsingState<'a> {
     map: HashMap<u16, Rc<FitDefinitionMessage>>,
     last_timestamp: Option<FitFieldDateTime>,
-    timezone_offset_secs: Option<i32>,
+    timezone_offset_secs: Option<f64>,
     developer_data_definitions: HashMap<u8, FitDeveloperDataDefinition<'a>>,
 }
 
@@ -51,15 +51,15 @@ impl<'a> FitParsingState<'a> {
         }
     }
 
-    pub fn set_timezone_offset(&mut self, timezone_offset_secs: i32) {
+    pub fn set_timezone_offset(&mut self, timezone_offset_secs: f64) {
         self.timezone_offset_secs = Some(timezone_offset_secs);
     }
 
-    pub fn get_timezone_offset(&self) -> i32 {
+    pub fn get_timezone_offset(&self) -> f64 {
         match self.timezone_offset_secs {
             Some(tzos) => tzos,
             //None => Err(Error::timezone_offset_not_set())
-            None => 0
+            None => 0.0
         }
     }
 

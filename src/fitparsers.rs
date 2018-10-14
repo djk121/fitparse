@@ -82,7 +82,6 @@ named_args!(parse_byte_internal(num_bytes: usize)<&[u8]>,
     )
 );
 
-
 //pub static GARMIN_EPOCH: DateTime<UTC> = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
 fn parse_date_time_internal(input: &[u8], endianness: nom::Endianness) -> Result<(DateTime<UTC>, u32, &[u8])> {
     // if the value is < 0x10000000, it's relative to device power on, else

@@ -5,6 +5,12 @@ use std::ops::Deref;
 use std::rc::Rc;
 use std::collections::HashMap;
 
+extern crate bit_vec;
+use bit_vec::BitVec;
+
+extern crate byteorder;
+use byteorder::{ByteOrder, BigEndian};
+
 extern crate chrono;
 use chrono::{DateTime, UTC, FixedOffset, TimeZone};
 
@@ -164,7 +170,7 @@ pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingStat
                             // so a value of +15 = (15 increments * 15 minutes * 60 seconds) =
                             // = +13500 seconds
                             if let Some(tzo) = time_zone_offset {
-                                parsing_state.set_timezone_offset((tzo * 15 * 60).into());
+                                parsing_state.set_timezone_offset((tzo * 15.0 * 60.0).into());
                             }
                         }
                     }
@@ -513,6 +519,52 @@ impl<'a> FitFieldDeveloperData<'a> {
 
 //trace_macros!(false);
 
+fn shift_out_u8(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, u8)> {
+    if (num_bits > 8) {
+        return Err(Error::incorrect_shift_input());
+    }
+
+    let (left, right) = shift_right(inp, num_bits)?;
+    Ok((left, right[3] as u8))
+}
+
+fn shift_out_u16(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, u16)> {
+    if (num_bits > 16) {
+        return Err(Error::incorrect_shift_input());
+    }
+
+    let (left, right) = shift_right(inp, num_bits)?;
+    Ok((left, BigEndian::read_u16(&right[2..4])))
+}
+
+fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
+    if (inp.len() > 4 || num_bits > 32) {
+        return Err(Error::incorrect_shift_input());
+    }
+
+    let input = BitVec::from_bytes(inp);
+
+    let mut left = BitVec::from_elem(32, false);
+    let mut right = BitVec::from_elem(32, false);
+
+    let mut to_copy = num_bits;
+    let mut input_ind = input.len() - 1;
+    let mut right_ind = right.len() - 1;
+
+    // copy num_bits to the result BV
+    while to_copy >= 0 {
+        right.set(right_ind, input[input_ind]);
+        input_ind = input_ind - 1;
+        right_ind = right_ind - 1;
+        to_copy = to_copy - 1;
+    }
+
+    for i in 0..(input.len()-num_bits) {
+        left.set(i+num_bits, input[i]);
+    }
+
+    return Ok((left.to_bytes(), right.to_bytes()))
+}
 
 #[cfg(test)]
 mod tests {

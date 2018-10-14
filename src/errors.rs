@@ -92,6 +92,14 @@ impl Error {
     pub(crate) fn developer_field_description_not_found(dfn: u8) -> Error {
         Error::from(ErrorKind::DeveloperFieldDescriptionNotFound(dfn))
     }
+
+    pub(crate) fn insufficient_data_for_shift() -> Error {
+        Error::from(ErrorKind::InsufficientDataForShift)
+    }
+
+    pub(crate) fn incorrect_shift_input() -> Error {
+        Error::from(ErrorKind::IncorrectShiftInput)
+    }
 }
 
 impl Fail for Error {
@@ -132,6 +140,8 @@ pub enum ErrorKind {
     ParseUnknownBaseValue,
     DeveloperDataDefinitionNotFound(u8),
     DeveloperFieldDescriptionNotFound(u8),
+    InsufficientDataForShift,
+    IncorrectShiftInput,
 }
 
 impl fmt::Display for ErrorKind {
@@ -193,6 +203,12 @@ impl fmt::Display for ErrorKind {
             },
             ErrorKind::DeveloperFieldDescriptionNotFound(ref dfn) => {
                 write!(f, "developer field number not found: {:?}", dfn)
+            },
+            ErrorKind::InsufficientDataForShift => {
+                write!(f, "insufficient data for shift")
+            },
+            ErrorKind::IncorrectShiftInput => {
+                write!(f, "bad inputs for shift operation")
             },
         }
     }

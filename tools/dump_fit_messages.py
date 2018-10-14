@@ -106,10 +106,10 @@ pub struct FitFieldLocalDateTime {
 }
 
 impl FitFieldLocalDateTime {
-    fn parse(input: &[u8], endianness: Endianness, offset_secs: i32) -> Result<(FitFieldLocalDateTime, &[u8])> {
+    fn parse(input: &[u8], endianness: Endianness, offset_secs: f64) -> Result<(FitFieldLocalDateTime, &[u8])> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let (garmin_epoch_offset, o) = parse_uint32(input, endianness)?;
-        let local_dt = FixedOffset::east(offset_secs).timestamp(
+        let local_dt = FixedOffset::east(offset_secs as i32).timestamp(
             (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
             0 // nanosecs
         );
@@ -261,7 +261,7 @@ def is_field_with_subfields(field):
 
 def fit_subfield_parser(field_name, message_name):
     this_field_name = "FitMessage{}Field{}".format(rustify_name(message_name), rustify_name(field_name))
-    return "{}::parse(&message, inp, &field, tz_offset)".format(this_field_name)
+    return "{}::parse(message, inp, &field, tz_offset)".format(this_field_name)
 
 def fit_base_type_parser(field_type):
 
@@ -326,7 +326,7 @@ def output_message_subfield(message_name, field, types):
     p_lifetime_spec = ''
     if not lifetime_spec:
         p_lifetime_spec = "<'a>"
-    sys.stdout.write("{}fn parse{}(message: &FitMessage{}<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<({}{}, &'a [u8])> {{\n".format(" "*4, p_lifetime_spec, rustify_name(message_name), this_field_name, lifetime_spec))
+    sys.stdout.write("{}fn parse{}(message: &FitMessage{}<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<({}{}, &'a [u8])> {{\n".format(" "*4, p_lifetime_spec, rustify_name(message_name), this_field_name, lifetime_spec))
 
     subfield_ref_names = set([sf['ref_field_name'] for sf in field['subfields']])
 
@@ -396,12 +396,15 @@ def output_messages(messages, types):
                 if field['field_type'] == 'byte':
                     sys.stdout.write("<'a>")
             elif field['field_type'] != 'enum' and field['field_type'] in FIT_TYPE_MAP.keys():
-                sys.stdout.write("{}".format(FIT_TYPE_MAP[field['field_type']]))
+                if field['scale'] and field['field_type'] != 'byte':
+                    sys.stdout.write("f64")
+                else:
+                    sys.stdout.write("{}".format(FIT_TYPE_MAP[field['field_type']]))
             else:
                 sys.stdout.write("FitField{}".format(rustify_name(field['field_type'])))
 
             sys.stdout.write(">,")
-            if field['field_comment'] is not None:
+            if field['field_comment']:
                 sys.stdout.write("  // {}".format(field['field_comment']))
             sys.stdout.write("\n")
         sys.stdout.write("}")
@@ -476,7 +479,7 @@ def output_messages(messages, types):
         sys.stdout.write("{}}}\n".format(" "*4))
 
 
-        sys.stdout.write("{}fn parse_internal(message: &mut FitMessage{}<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {{\n".format(" "*4, rustify_name(this_message)))
+        sys.stdout.write("{}fn parse_internal(message: &mut FitMessage{}<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {{\n".format(" "*4, rustify_name(this_message)))
 
         sys.stdout.write("{}let mut inp = input;\n".format(" "*8, ))
 
@@ -502,10 +505,18 @@ def output_messages(messages, types):
                 fwsfn = field['field_name']
             sys.stdout.write("{}let (val, outp) = {}?;\n".format(" "*20, fit_field_parser(field['field_type'], types, this_message, field_with_subfields_name=fwsfn)))
             sys.stdout.write("{}inp = outp;\n".format(" "*20))
+
+
+
             if field['field_type'][-1] == 'z':
                 sys.stdout.write("{}message.{} = val;\n".format(" "*20, field['field_name']))
             else:
-                sys.stdout.write("{}message.{} = Some(val);\n".format(" "*20, field['field_name']))
+                val = 'val'
+                if field['scale'] and is_fit_base_type(field['field_type']) and not field['subfields'] and field['field_type'] != 'byte':
+                    val = "(val as f64 / {} as f64)".format(field['scale'][0])
+                    if field['offset']:
+                        val = "{} - ({} as f64)".format(val, field['offset'])
+                sys.stdout.write("{}message.{} = Some({});\n".format(" "*20, field['field_name'], val))
 
             sys.stdout.write("{}Ok(())\n".format(" "*20))
             sys.stdout.write("{}}},\n".format(" "*16))
@@ -599,28 +610,39 @@ def parse_messages_file(messages_file_name, types):
 
         else:
             _, field_number, field_name, field_type, array, \
-            _, _, _, _, _, _, ref_field_name, ref_field_value, comment, _, _, _, _, _ = line
+            components, scale, offset, units, bits, _, \
+            ref_field_name, ref_field_value, comment, _, _, _, _, _ = line
+
+            parsed_components = []
+            parsed_bits = []
+            if components:
+                parsed_components = [x.strip() for x in components.split(',')]
+                parsed_bits = [int(x) for x in bits.split(',')]
+
+            parsed_scale = []
+            if scale:
+                parsed_scale = [x.strip() for x in scale.split(',')]
 
             if field_number == '':
-                if ref_field_name != '':
-                    # this is a dynamic field
+                if ref_field_name != '':  # this is a dynamic field
                     ref_fields = [x.strip() for x in ref_field_name.split(',')]
                     ref_values = [x.strip() for x in ref_field_value.split(',')]
 
                     for i in range(0, len(ref_fields)):
-
-
-
                         messages[current_message]['fields'][-1]['subfields'].append({
                             'field_name': field_name,
                             'field_type': field_type,
                             'ref_field_name': ref_fields[i],
                             'ref_field_value': ref_values[i],
-                            'ref_field_type': None
+                            'ref_field_type': None,
+                            'components': parsed_components,
+                            'bits': parsed_bits,
+                            'scale': parsed_scale,
+                            'offset': offset,
                         })
                 continue
 
-            if field_name == 'type':
+            if field_name == 'type':  # reserved word in rust
                 field_name = 'ftype'
 
             if field_type == 'byte':
@@ -630,8 +652,11 @@ def parse_messages_file(messages_file_name, types):
                 "field_number": int(field_number),
                 "field_name": field_name,
                 "field_type": field_type,
-                #"rust_type": rust_type,
                 "array": array,
+                "components": parsed_components,
+                "bits": parsed_bits,
+                "scale": parsed_scale,
+                "offset": offset,
                 "field_comment": comment,
                 "subfields": []
             })

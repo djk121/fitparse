@@ -49,10 +49,10 @@ pub struct FitFieldLocalDateTime {
 }
 
 impl FitFieldLocalDateTime {
-    fn parse(input: &[u8], endianness: Endianness, offset_secs: i32) -> Result<(FitFieldLocalDateTime, &[u8])> {
+    fn parse(input: &[u8], endianness: Endianness, offset_secs: f64) -> Result<(FitFieldLocalDateTime, &[u8])> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let (garmin_epoch_offset, o) = parse_uint32(input, endianness)?;
-        let local_dt = FixedOffset::east(offset_secs).timestamp(
+        let local_dt = FixedOffset::east(offset_secs as i32).timestamp(
             (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
             0 // nanosecs
         );
@@ -5503,7 +5503,7 @@ impl<'a> FitMessageAccelerometerData<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageAccelerometerData<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageAccelerometerData<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -5575,14 +5575,14 @@ pub struct FitMessageActivity<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub total_timer_time: Option<u32>,  // Exclude pauses
-    pub num_sessions: Option<u16>,  // 
-    pub ftype: Option<FitFieldActivity>,  // 
-    pub event: Option<FitFieldEvent>,  // 
-    pub event_type: Option<FitFieldEventType>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub total_timer_time: Option<f64>,  // Exclude pauses
+    pub num_sessions: Option<u16>,
+    pub ftype: Option<FitFieldActivity>,
+    pub event: Option<FitFieldEvent>,
+    pub event_type: Option<FitFieldEventType>,
     pub local_timestamp: Option<FitFieldLocalDateTime>,  // timestamp epoch expressed in local time, used to convert activity timestamps to local time 
-    pub event_group: Option<u8>,  // 
+    pub event_group: Option<u8>,
 }
 impl<'a> FitMessageActivity<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageActivity<'a>>, &'a [u8])> {
@@ -5637,14 +5637,14 @@ impl<'a> FitMessageActivity<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageActivity<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageActivity<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // total_timer_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_timer_time = Some(val);
+                    message.total_timer_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 1 => { // num_sessions
@@ -5703,11 +5703,11 @@ pub struct FitMessageAntChannelId<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub channel_number: Option<u8>,  // 
-    pub device_type: Option<u8>,  // 
-    pub device_number: Option<u16>,  // 
-    pub transmission_type: Option<u8>,  // 
-    pub device_index: Option<FitFieldDeviceIndex>,  // 
+    pub channel_number: Option<u8>,
+    pub device_type: Option<u8>,
+    pub device_number: Option<u16>,
+    pub transmission_type: Option<u8>,
+    pub device_index: Option<FitFieldDeviceIndex>,
 }
 impl<'a> FitMessageAntChannelId<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntChannelId<'a>>, &'a [u8])> {
@@ -5746,7 +5746,7 @@ impl<'a> FitMessageAntChannelId<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageAntChannelId<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageAntChannelId<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -5794,12 +5794,12 @@ pub struct FitMessageAntRx<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub fractional_timestamp: Option<u16>,  // 
-    pub mesg_id: Option<&'a [u8]>,  // 
-    pub mesg_data: Option<&'a [u8]>,  // 
-    pub channel_number: Option<u8>,  // 
-    pub data: Option<&'a [u8]>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub fractional_timestamp: Option<f64>,
+    pub mesg_id: Option<&'a [u8]>,
+    pub mesg_data: Option<&'a [u8]>,
+    pub channel_number: Option<u8>,
+    pub data: Option<&'a [u8]>,
 }
 impl<'a> FitMessageAntRx<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntRx<'a>>, &'a [u8])> {
@@ -5852,14 +5852,14 @@ impl<'a> FitMessageAntRx<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageAntRx<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageAntRx<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // fractional_timestamp
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.fractional_timestamp = Some(val);
+                    message.fractional_timestamp = Some((val as f64 / 32768 as f64));
                     Ok(())
                 },
                 1 => { // mesg_id
@@ -5906,12 +5906,12 @@ pub struct FitMessageAntTx<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub fractional_timestamp: Option<u16>,  // 
-    pub mesg_id: Option<&'a [u8]>,  // 
-    pub mesg_data: Option<&'a [u8]>,  // 
-    pub channel_number: Option<u8>,  // 
-    pub data: Option<&'a [u8]>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub fractional_timestamp: Option<f64>,
+    pub mesg_id: Option<&'a [u8]>,
+    pub mesg_data: Option<&'a [u8]>,
+    pub channel_number: Option<u8>,
+    pub data: Option<&'a [u8]>,
 }
 impl<'a> FitMessageAntTx<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntTx<'a>>, &'a [u8])> {
@@ -5964,14 +5964,14 @@ impl<'a> FitMessageAntTx<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageAntTx<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageAntTx<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // fractional_timestamp
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.fractional_timestamp = Some(val);
+                    message.fractional_timestamp = Some((val as f64 / 32768 as f64));
                     Ok(())
                 },
                 1 => { // mesg_id
@@ -6021,15 +6021,15 @@ pub struct FitMessageAviationAttitude<'a> {
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
     pub timestamp_ms: Option<u16>,  // Fractional part of timestamp, added to timestamp
     pub system_time: Option<u32>,  // System time associated with sample expressed in ms.
-    pub pitch: Option<i16>,  // Range -PI/2 to +PI/2
-    pub roll: Option<i16>,  // Range -PI to +PI
-    pub accel_lateral: Option<i16>,  // Range -78.4 to +78.4 (-8 Gs to 8 Gs)
-    pub accel_normal: Option<i16>,  // Range -78.4 to +78.4 (-8 Gs to 8 Gs)
-    pub turn_rate: Option<i16>,  // Range -8.727 to +8.727 (-500 degs/sec to +500 degs/sec)
-    pub stage: Option<FitFieldAttitudeStage>,  // 
+    pub pitch: Option<f64>,  // Range -PI/2 to +PI/2
+    pub roll: Option<f64>,  // Range -PI to +PI
+    pub accel_lateral: Option<f64>,  // Range -78.4 to +78.4 (-8 Gs to 8 Gs)
+    pub accel_normal: Option<f64>,  // Range -78.4 to +78.4 (-8 Gs to 8 Gs)
+    pub turn_rate: Option<f64>,  // Range -8.727 to +8.727 (-500 degs/sec to +500 degs/sec)
+    pub stage: Option<FitFieldAttitudeStage>,
     pub attitude_stage_complete: Option<u8>,  // The percent complete of the current attitude stage.  Set to 0 for attitude stages 0, 1 and 2 and to 100 for attitude stage 3 by AHRS modules that do not support it.  Range - 100
-    pub track: Option<u16>,  // Track Angle/Heading Range 0 - 2pi
-    pub validity: Option<FitFieldAttitudeValidity>,  // 
+    pub track: Option<f64>,  // Track Angle/Heading Range 0 - 2pi
+    pub validity: Option<FitFieldAttitudeValidity>,
 }
 impl<'a> FitMessageAviationAttitude<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageAviationAttitude<'a>>, &'a [u8])> {
@@ -6088,7 +6088,7 @@ impl<'a> FitMessageAviationAttitude<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageAviationAttitude<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageAviationAttitude<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -6107,31 +6107,31 @@ impl<'a> FitMessageAviationAttitude<'a> {
                 2 => { // pitch
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.pitch = Some(val);
+                    message.pitch = Some((val as f64 / 10430.38 as f64));
                     Ok(())
                 },
                 3 => { // roll
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.roll = Some(val);
+                    message.roll = Some((val as f64 / 10430.38 as f64));
                     Ok(())
                 },
                 4 => { // accel_lateral
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.accel_lateral = Some(val);
+                    message.accel_lateral = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 5 => { // accel_normal
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.accel_normal = Some(val);
+                    message.accel_normal = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 6 => { // turn_rate
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.turn_rate = Some(val);
+                    message.turn_rate = Some((val as f64 / 1024 as f64));
                     Ok(())
                 },
                 7 => { // stage
@@ -6149,7 +6149,7 @@ impl<'a> FitMessageAviationAttitude<'a> {
                 9 => { // track
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.track = Some(val);
+                    message.track = Some((val as f64 / 10430.38 as f64));
                     Ok(())
                 },
                 10 => { // validity
@@ -6178,38 +6178,38 @@ pub struct FitMessageBikeProfile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub name: Option<String>,  // 
-    pub sport: Option<FitFieldSport>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
-    pub odometer: Option<u32>,  // 
-    pub bike_spd_ant_id: Option<u16>,  // 
-    pub bike_cad_ant_id: Option<u16>,  // 
-    pub bike_spdcad_ant_id: Option<u16>,  // 
-    pub bike_power_ant_id: Option<u16>,  // 
-    pub custom_wheelsize: Option<u16>,  // 
-    pub auto_wheelsize: Option<u16>,  // 
-    pub bike_weight: Option<u16>,  // 
-    pub power_cal_factor: Option<u16>,  // 
-    pub auto_wheel_cal: Option<bool>,  // 
-    pub auto_power_zero: Option<bool>,  // 
-    pub id: Option<u8>,  // 
-    pub spd_enabled: Option<bool>,  // 
-    pub cad_enabled: Option<bool>,  // 
-    pub spdcad_enabled: Option<bool>,  // 
-    pub power_enabled: Option<bool>,  // 
-    pub crank_length: Option<u8>,  // 
-    pub enabled: Option<bool>,  // 
-    pub bike_spd_ant_id_trans_type: Option<u8>,  // 
-    pub bike_cad_ant_id_trans_type: Option<u8>,  // 
-    pub bike_spdcad_ant_id_trans_type: Option<u8>,  // 
-    pub bike_power_ant_id_trans_type: Option<u8>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub name: Option<String>,
+    pub sport: Option<FitFieldSport>,
+    pub sub_sport: Option<FitFieldSubSport>,
+    pub odometer: Option<f64>,
+    pub bike_spd_ant_id: Option<u16>,
+    pub bike_cad_ant_id: Option<u16>,
+    pub bike_spdcad_ant_id: Option<u16>,
+    pub bike_power_ant_id: Option<u16>,
+    pub custom_wheelsize: Option<f64>,
+    pub auto_wheelsize: Option<f64>,
+    pub bike_weight: Option<f64>,
+    pub power_cal_factor: Option<f64>,
+    pub auto_wheel_cal: Option<bool>,
+    pub auto_power_zero: Option<bool>,
+    pub id: Option<u8>,
+    pub spd_enabled: Option<bool>,
+    pub cad_enabled: Option<bool>,
+    pub spdcad_enabled: Option<bool>,
+    pub power_enabled: Option<bool>,
+    pub crank_length: Option<f64>,
+    pub enabled: Option<bool>,
+    pub bike_spd_ant_id_trans_type: Option<u8>,
+    pub bike_cad_ant_id_trans_type: Option<u8>,
+    pub bike_spdcad_ant_id_trans_type: Option<u8>,
+    pub bike_power_ant_id_trans_type: Option<u8>,
     pub odometer_rollover: Option<u8>,  // Rollover counter that can be used to extend the odometer
     pub front_gear_num: Option<u8>,  // Number of front gears
     pub front_gear: Option<u8>,  // Number of teeth on each gear 0 is innermost
     pub rear_gear_num: Option<u8>,  // Number of rear gears
     pub rear_gear: Option<u8>,  // Number of teeth on each gear 0 is innermost
-    pub shimano_di2_enabled: Option<bool>,  // 
+    pub shimano_di2_enabled: Option<bool>,
 }
 impl<'a> FitMessageBikeProfile<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageBikeProfile<'a>>, &'a [u8])> {
@@ -6275,7 +6275,7 @@ impl<'a> FitMessageBikeProfile<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageBikeProfile<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageBikeProfile<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -6300,7 +6300,7 @@ impl<'a> FitMessageBikeProfile<'a> {
                 3 => { // odometer
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.odometer = Some(val);
+                    message.odometer = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 4 => { // bike_spd_ant_id
@@ -6330,25 +6330,25 @@ impl<'a> FitMessageBikeProfile<'a> {
                 8 => { // custom_wheelsize
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.custom_wheelsize = Some(val);
+                    message.custom_wheelsize = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 9 => { // auto_wheelsize
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.auto_wheelsize = Some(val);
+                    message.auto_wheelsize = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 10 => { // bike_weight
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.bike_weight = Some(val);
+                    message.bike_weight = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 11 => { // power_cal_factor
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.power_cal_factor = Some(val);
+                    message.power_cal_factor = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 12 => { // auto_wheel_cal
@@ -6396,7 +6396,7 @@ impl<'a> FitMessageBikeProfile<'a> {
                 19 => { // crank_length
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.crank_length = Some(val);
+                    message.crank_length = Some((val as f64 / 2 as f64) - (-110 as f64));
                     Ok(())
                 },
                 20 => { // enabled
@@ -6485,16 +6485,16 @@ pub struct FitMessageBloodPressure<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub systolic_pressure: Option<u16>,  // 
-    pub diastolic_pressure: Option<u16>,  // 
-    pub mean_arterial_pressure: Option<u16>,  // 
-    pub map_3_sample_mean: Option<u16>,  // 
-    pub map_morning_values: Option<u16>,  // 
-    pub map_evening_values: Option<u16>,  // 
-    pub heart_rate: Option<u8>,  // 
-    pub heart_rate_type: Option<FitFieldHrType>,  // 
-    pub status: Option<FitFieldBpStatus>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub systolic_pressure: Option<u16>,
+    pub diastolic_pressure: Option<u16>,
+    pub mean_arterial_pressure: Option<u16>,
+    pub map_3_sample_mean: Option<u16>,
+    pub map_morning_values: Option<u16>,
+    pub map_evening_values: Option<u16>,
+    pub heart_rate: Option<u8>,
+    pub heart_rate_type: Option<FitFieldHrType>,
+    pub status: Option<FitFieldBpStatus>,
     pub user_profile_index: Option<FitFieldMessageIndex>,  // Associates this blood pressure message to a user.  This corresponds to the index of the user profile message in the blood pressure file.
 }
 impl<'a> FitMessageBloodPressure<'a> {
@@ -6553,7 +6553,7 @@ impl<'a> FitMessageBloodPressure<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageBloodPressure<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageBloodPressure<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -6637,9 +6637,9 @@ pub struct FitMessageCadenceZone<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub high_value: Option<u8>,  // 
-    pub name: Option<String>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub high_value: Option<u8>,
+    pub name: Option<String>,
 }
 impl<'a> FitMessageCadenceZone<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCadenceZone<'a>>, &'a [u8])> {
@@ -6676,7 +6676,7 @@ impl<'a> FitMessageCadenceZone<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageCadenceZone<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageCadenceZone<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -6714,9 +6714,9 @@ pub struct FitMessageCameraEvent<'a> {
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
-    pub camera_event_type: Option<FitFieldCameraEventType>,  // 
-    pub camera_file_uuid: Option<String>,  // 
-    pub camera_orientation: Option<FitFieldCameraOrientationType>,  // 
+    pub camera_event_type: Option<FitFieldCameraEventType>,
+    pub camera_file_uuid: Option<String>,
+    pub camera_orientation: Option<FitFieldCameraOrientationType>,
 }
 impl<'a> FitMessageCameraEvent<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCameraEvent<'a>>, &'a [u8])> {
@@ -6768,7 +6768,7 @@ impl<'a> FitMessageCameraEvent<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageCameraEvent<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageCameraEvent<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -6818,8 +6818,8 @@ pub struct FitMessageCapabilities<'a> {
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub languages: Option<u8>,  // Use language_bits_x types where x is index of array.
     pub sports: Option<FitFieldSportBits0>,  // Use sport_bits_x types where x is index of array.
-    pub workouts_supported: Option<FitFieldWorkoutCapabilities>,  // 
-    pub connectivity_supported: Option<FitFieldConnectivityCapabilities>,  // 
+    pub workouts_supported: Option<FitFieldWorkoutCapabilities>,
+    pub connectivity_supported: Option<FitFieldConnectivityCapabilities>,
 }
 impl<'a> FitMessageCapabilities<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCapabilities<'a>>, &'a [u8])> {
@@ -6857,7 +6857,7 @@ impl<'a> FitMessageCapabilities<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageCapabilities<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageCapabilities<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -6902,16 +6902,16 @@ pub struct FitMessageConnectivity<'a> {
     pub bluetooth_enabled: Option<bool>,  // Use Bluetooth for connectivity features
     pub bluetooth_le_enabled: Option<bool>,  // Use Bluetooth Low Energy for connectivity features
     pub ant_enabled: Option<bool>,  // Use ANT for connectivity features
-    pub name: Option<String>,  // 
-    pub live_tracking_enabled: Option<bool>,  // 
-    pub weather_conditions_enabled: Option<bool>,  // 
-    pub weather_alerts_enabled: Option<bool>,  // 
-    pub auto_activity_upload_enabled: Option<bool>,  // 
-    pub course_download_enabled: Option<bool>,  // 
-    pub workout_download_enabled: Option<bool>,  // 
-    pub gps_ephemeris_download_enabled: Option<bool>,  // 
-    pub incident_detection_enabled: Option<bool>,  // 
-    pub grouptrack_enabled: Option<bool>,  // 
+    pub name: Option<String>,
+    pub live_tracking_enabled: Option<bool>,
+    pub weather_conditions_enabled: Option<bool>,
+    pub weather_alerts_enabled: Option<bool>,
+    pub auto_activity_upload_enabled: Option<bool>,
+    pub course_download_enabled: Option<bool>,
+    pub workout_download_enabled: Option<bool>,
+    pub gps_ephemeris_download_enabled: Option<bool>,
+    pub incident_detection_enabled: Option<bool>,
+    pub grouptrack_enabled: Option<bool>,
 }
 impl<'a> FitMessageConnectivity<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageConnectivity<'a>>, &'a [u8])> {
@@ -6958,7 +6958,7 @@ impl<'a> FitMessageConnectivity<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageConnectivity<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageConnectivity<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -7054,10 +7054,10 @@ pub struct FitMessageCourse<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub sport: Option<FitFieldSport>,  // 
-    pub name: Option<String>,  // 
-    pub capabilities: Option<FitFieldCourseCapabilities>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
+    pub sport: Option<FitFieldSport>,
+    pub name: Option<String>,
+    pub capabilities: Option<FitFieldCourseCapabilities>,
+    pub sub_sport: Option<FitFieldSubSport>,
 }
 impl<'a> FitMessageCourse<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCourse<'a>>, &'a [u8])> {
@@ -7095,7 +7095,7 @@ impl<'a> FitMessageCourse<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageCourse<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageCourse<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -7137,14 +7137,14 @@ pub struct FitMessageCoursePoint<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub position_lat: Option<i32>,  // 
-    pub position_long: Option<i32>,  // 
-    pub distance: Option<u32>,  // 
-    pub ftype: Option<FitFieldCoursePoint>,  // 
-    pub name: Option<String>,  // 
-    pub favorite: Option<bool>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub timestamp: Option<FitFieldDateTime>,
+    pub position_lat: Option<i32>,
+    pub position_long: Option<i32>,
+    pub distance: Option<f64>,
+    pub ftype: Option<FitFieldCoursePoint>,
+    pub name: Option<String>,
+    pub favorite: Option<bool>,
 }
 impl<'a> FitMessageCoursePoint<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageCoursePoint<'a>>, &'a [u8])> {
@@ -7199,7 +7199,7 @@ impl<'a> FitMessageCoursePoint<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageCoursePoint<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageCoursePoint<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -7224,7 +7224,7 @@ impl<'a> FitMessageCoursePoint<'a> {
                 4 => { // distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.distance = Some(val);
+                    message.distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 5 => { // ftype
@@ -7265,11 +7265,11 @@ pub struct FitMessageDeveloperDataId<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub developer_id: Option<&'a [u8]>,  // 
-    pub application_id: Option<&'a [u8]>,  // 
-    pub manufacturer_id: Option<FitFieldManufacturer>,  // 
-    pub developer_data_index: Option<u8>,  // 
-    pub application_version: Option<u32>,  // 
+    pub developer_id: Option<&'a [u8]>,
+    pub application_id: Option<&'a [u8]>,
+    pub manufacturer_id: Option<FitFieldManufacturer>,
+    pub developer_data_index: Option<u8>,
+    pub application_version: Option<u32>,
 }
 impl<'a> FitMessageDeveloperDataId<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeveloperDataId<'a>>, &'a [u8])> {
@@ -7308,7 +7308,7 @@ impl<'a> FitMessageDeveloperDataId<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageDeveloperDataId<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageDeveloperDataId<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -7359,7 +7359,7 @@ pub enum FitMessageDeviceInfoFieldDeviceType {
 }
 
 impl FitMessageDeviceInfoFieldDeviceType {
-    fn parse<'a>(message: &FitMessageDeviceInfo<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageDeviceInfoFieldDeviceType, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageDeviceInfo<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageDeviceInfoFieldDeviceType, &'a [u8])> {
         match message.source_type {
             Some(FitFieldSourceType::Antplus) => {
                 let (val, o) = FitFieldAntplusDeviceType::parse(inp)?;
@@ -7384,7 +7384,7 @@ pub enum FitMessageDeviceInfoFieldProduct {
 }
 
 impl FitMessageDeviceInfoFieldProduct {
-    fn parse<'a>(message: &FitMessageDeviceInfo<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageDeviceInfoFieldProduct, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageDeviceInfo<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageDeviceInfoFieldProduct, &'a [u8])> {
         match message.manufacturer {
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -7411,23 +7411,23 @@ pub struct FitMessageDeviceInfo<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub device_index: Option<FitFieldDeviceIndex>,  // 
-    pub device_type: Option<FitMessageDeviceInfoFieldDeviceType>,  // 
-    pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub serial_number: Option<u32>,  // 
-    pub product: Option<FitMessageDeviceInfoFieldProduct>,  // 
-    pub software_version: Option<u16>,  // 
-    pub hardware_version: Option<u8>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub device_index: Option<FitFieldDeviceIndex>,
+    pub device_type: Option<FitMessageDeviceInfoFieldDeviceType>,
+    pub manufacturer: Option<FitFieldManufacturer>,
+    pub serial_number: Option<u32>,
+    pub product: Option<FitMessageDeviceInfoFieldProduct>,
+    pub software_version: Option<f64>,
+    pub hardware_version: Option<u8>,
     pub cum_operating_time: Option<u32>,  // Reset by new battery or charge.
-    pub battery_voltage: Option<u16>,  // 
-    pub battery_status: Option<FitFieldBatteryStatus>,  // 
+    pub battery_voltage: Option<f64>,
+    pub battery_status: Option<FitFieldBatteryStatus>,
     pub sensor_position: Option<FitFieldBodyLocation>,  // Indicates the location of the sensor
     pub descriptor: Option<String>,  // Used to describe the sensor or location
-    pub ant_transmission_type: Option<u8>,  // 
-    pub ant_device_number: Option<u16>,  // 
-    pub ant_network: Option<FitFieldAntNetwork>,  // 
-    pub source_type: Option<FitFieldSourceType>,  // 
+    pub ant_transmission_type: Option<u8>,
+    pub ant_device_number: Option<u16>,
+    pub ant_network: Option<FitFieldAntNetwork>,
+    pub source_type: Option<FitFieldSourceType>,
     pub product_name: Option<String>,  // Optional free form string to indicate the devices name or model
 }
 impl<'a> FitMessageDeviceInfo<'a> {
@@ -7493,7 +7493,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageDeviceInfo<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageDeviceInfo<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -7504,7 +7504,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
                     Ok(())
                 },
                 1 => { // device_type
-                    let (val, outp) = FitMessageDeviceInfoFieldDeviceType::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageDeviceInfoFieldDeviceType::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.device_type = Some(val);
                     Ok(())
@@ -7522,7 +7522,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
                     Ok(())
                 },
                 4 => { // product
-                    let (val, outp) = FitMessageDeviceInfoFieldProduct::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageDeviceInfoFieldProduct::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -7530,7 +7530,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
                 5 => { // software_version
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.software_version = Some(val);
+                    message.software_version = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 6 => { // hardware_version
@@ -7548,7 +7548,7 @@ impl<'a> FitMessageDeviceInfo<'a> {
                 10 => { // battery_voltage
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.battery_voltage = Some(val);
+                    message.battery_voltage = Some((val as f64 / 256 as f64));
                     Ok(())
                 },
                 11 => { // battery_status
@@ -7623,15 +7623,15 @@ pub struct FitMessageDeviceSettings<'a> {
     pub utc_offset: Option<u32>,  // Offset from system time. Required to convert timestamp from system time to UTC.
     pub time_offset: Option<u32>,  // Offset from system time.
     pub time_mode: Option<FitFieldTimeMode>,  // Display mode for the time
-    pub time_zone_offset: Option<i8>,  // timezone offset in 1/4 hour increments
+    pub time_zone_offset: Option<f64>,  // timezone offset in 1/4 hour increments
     pub backlight_mode: Option<FitFieldBacklightMode>,  // Mode for backlight
     pub activity_tracker_enabled: Option<bool>,  // Enabled state of the activity tracker functionality
     pub clock_time: Option<FitFieldDateTime>,  // UTC timestamp used to set the devices clock and date
     pub pages_enabled: Option<u16>,  // Bitfield  to configure enabled screens for each supported loop
     pub move_alert_enabled: Option<bool>,  // Enabled state of the move alert
     pub date_mode: Option<FitFieldDateMode>,  // Display mode for the date
-    pub display_orientation: Option<FitFieldDisplayOrientation>,  // 
-    pub mounting_side: Option<FitFieldSide>,  // 
+    pub display_orientation: Option<FitFieldDisplayOrientation>,
+    pub mounting_side: Option<FitFieldSide>,
     pub default_page: Option<u16>,  // Bitfield to indicate one page as default for each supported loop
     pub autosync_min_steps: Option<u16>,  // Minimum steps before an autosync can occur
     pub autosync_min_time: Option<u16>,  // Minimum minutes before an autosync can occur
@@ -7696,7 +7696,7 @@ impl<'a> FitMessageDeviceSettings<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageDeviceSettings<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageDeviceSettings<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -7727,7 +7727,7 @@ impl<'a> FitMessageDeviceSettings<'a> {
                 5 => { // time_zone_offset
                     let (val, outp) = parse_sint8(inp)?;
                     inp = outp;
-                    message.time_zone_offset = Some(val);
+                    message.time_zone_offset = Some((val as f64 / 4 as f64));
                     Ok(())
                 },
                 12 => { // backlight_mode
@@ -7867,7 +7867,7 @@ pub enum FitMessageEventFieldData {
 }
 
 impl FitMessageEventFieldData {
-    fn parse<'a>(message: &FitMessageEvent<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageEventFieldData, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageEvent<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageEventFieldData, &'a [u8])> {
         match message.event {
             Some(FitFieldEvent::Timer) => {
                 let (val, o) = FitFieldTimerTrigger::parse(inp)?;
@@ -7966,19 +7966,19 @@ pub struct FitMessageEvent<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub event: Option<FitFieldEvent>,  // 
-    pub event_type: Option<FitFieldEventType>,  // 
-    pub data16: Option<u16>,  // 
-    pub data: Option<FitMessageEventFieldData>,  // 
-    pub event_group: Option<u8>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub event: Option<FitFieldEvent>,
+    pub event_type: Option<FitFieldEventType>,
+    pub data16: Option<u16>,
+    pub data: Option<FitMessageEventFieldData>,
+    pub event_group: Option<u8>,
     pub score: Option<u16>,  // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
     pub opponent_score: Option<u16>,  // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
     pub front_gear_num: Option<u8>,  // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Front gear number. 1 is innermost.
     pub front_gear: Option<u8>,  // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Number of front teeth.
     pub rear_gear_num: Option<u8>,  // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Rear gear number. 1 is innermost.
     pub rear_gear: Option<u8>,  // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Number of rear teeth.
-    pub device_index: Option<FitFieldDeviceIndex>,  // 
+    pub device_index: Option<FitFieldDeviceIndex>,
 }
 impl<'a> FitMessageEvent<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageEvent<'a>>, &'a [u8])> {
@@ -8038,7 +8038,7 @@ impl<'a> FitMessageEvent<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageEvent<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageEvent<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8061,7 +8061,7 @@ impl<'a> FitMessageEvent<'a> {
                     Ok(())
                 },
                 3 => { // data
-                    let (val, outp) = FitMessageEventFieldData::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageEventFieldData::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.data = Some(val);
                     Ok(())
@@ -8134,17 +8134,17 @@ pub struct FitMessageExdDataConceptConfiguration<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub screen_index: Option<u8>,  // 
-    pub concept_field: Option<&'a [u8]>,  // 
-    pub field_id: Option<u8>,  // 
-    pub concept_index: Option<u8>,  // 
-    pub data_page: Option<u8>,  // 
-    pub concept_key: Option<u8>,  // 
-    pub scaling: Option<u8>,  // 
-    pub data_units: Option<FitFieldExdDataUnits>,  // 
-    pub qualifier: Option<FitFieldExdQualifiers>,  // 
-    pub descriptor: Option<FitFieldExdDescriptors>,  // 
-    pub is_signed: Option<bool>,  // 
+    pub screen_index: Option<u8>,
+    pub concept_field: Option<&'a [u8]>,
+    pub field_id: Option<u8>,
+    pub concept_index: Option<u8>,
+    pub data_page: Option<u8>,
+    pub concept_key: Option<u8>,
+    pub scaling: Option<u8>,
+    pub data_units: Option<FitFieldExdDataUnits>,
+    pub qualifier: Option<FitFieldExdQualifiers>,
+    pub descriptor: Option<FitFieldExdDescriptors>,
+    pub is_signed: Option<bool>,
 }
 impl<'a> FitMessageExdDataConceptConfiguration<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataConceptConfiguration<'a>>, &'a [u8])> {
@@ -8189,7 +8189,7 @@ impl<'a> FitMessageExdDataConceptConfiguration<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageExdDataConceptConfiguration<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageExdDataConceptConfiguration<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8273,12 +8273,12 @@ pub struct FitMessageExdDataFieldConfiguration<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub screen_index: Option<u8>,  // 
-    pub concept_field: Option<&'a [u8]>,  // 
-    pub field_id: Option<u8>,  // 
-    pub concept_count: Option<u8>,  // 
-    pub display_type: Option<FitFieldExdDisplayType>,  // 
-    pub title: Option<String>,  // 
+    pub screen_index: Option<u8>,
+    pub concept_field: Option<&'a [u8]>,
+    pub field_id: Option<u8>,
+    pub concept_count: Option<u8>,
+    pub display_type: Option<FitFieldExdDisplayType>,
+    pub title: Option<String>,
 }
 impl<'a> FitMessageExdDataFieldConfiguration<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataFieldConfiguration<'a>>, &'a [u8])> {
@@ -8318,7 +8318,7 @@ impl<'a> FitMessageExdDataFieldConfiguration<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageExdDataFieldConfiguration<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageExdDataFieldConfiguration<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8372,10 +8372,10 @@ pub struct FitMessageExdScreenConfiguration<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub screen_index: Option<u8>,  // 
+    pub screen_index: Option<u8>,
     pub field_count: Option<u8>,  // number of fields in screen
-    pub layout: Option<FitFieldExdLayout>,  // 
-    pub screen_enabled: Option<bool>,  // 
+    pub layout: Option<FitFieldExdLayout>,
+    pub screen_enabled: Option<bool>,
 }
 impl<'a> FitMessageExdScreenConfiguration<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdScreenConfiguration<'a>>, &'a [u8])> {
@@ -8413,7 +8413,7 @@ impl<'a> FitMessageExdScreenConfiguration<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageExdScreenConfiguration<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageExdScreenConfiguration<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8455,11 +8455,11 @@ pub struct FitMessageFieldCapabilities<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub file: Option<FitFieldFile>,  // 
-    pub mesg_num: Option<FitFieldMesgNum>,  // 
-    pub field_num: Option<u8>,  // 
-    pub count: Option<u16>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub file: Option<FitFieldFile>,
+    pub mesg_num: Option<FitFieldMesgNum>,
+    pub field_num: Option<u8>,
+    pub count: Option<u16>,
 }
 impl<'a> FitMessageFieldCapabilities<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldCapabilities<'a>>, &'a [u8])> {
@@ -8498,7 +8498,7 @@ impl<'a> FitMessageFieldCapabilities<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageFieldCapabilities<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageFieldCapabilities<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8546,20 +8546,20 @@ pub struct FitMessageFieldDescription<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub developer_data_index: Option<u8>,  // 
-    pub field_definition_number: Option<u8>,  // 
-    pub fit_base_type_id: Option<FitFieldFitBaseType>,  // 
-    pub field_name: Option<String>,  // 
-    pub array: Option<u8>,  // 
-    pub components: Option<String>,  // 
-    pub scale: Option<u8>,  // 
-    pub offset: Option<i8>,  // 
-    pub units: Option<String>,  // 
-    pub bits: Option<String>,  // 
-    pub accumulate: Option<String>,  // 
-    pub fit_base_unit_id: Option<FitFieldFitBaseUnit>,  // 
-    pub native_mesg_num: Option<FitFieldMesgNum>,  // 
-    pub native_field_num: Option<u8>,  // 
+    pub developer_data_index: Option<u8>,
+    pub field_definition_number: Option<u8>,
+    pub fit_base_type_id: Option<FitFieldFitBaseType>,
+    pub field_name: Option<String>,
+    pub array: Option<u8>,
+    pub components: Option<String>,
+    pub scale: Option<u8>,
+    pub offset: Option<i8>,
+    pub units: Option<String>,
+    pub bits: Option<String>,
+    pub accumulate: Option<String>,
+    pub fit_base_unit_id: Option<FitFieldFitBaseUnit>,
+    pub native_mesg_num: Option<FitFieldMesgNum>,
+    pub native_field_num: Option<u8>,
 }
 impl<'a> FitMessageFieldDescription<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldDescription<'a>>, &'a [u8])> {
@@ -8607,7 +8607,7 @@ impl<'a> FitMessageFieldDescription<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageFieldDescription<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageFieldDescription<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8709,12 +8709,12 @@ pub struct FitMessageFileCapabilities<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub ftype: Option<FitFieldFile>,  // 
-    pub flags: Option<FitFieldFileFlags>,  // 
-    pub directory: Option<String>,  // 
-    pub max_count: Option<u16>,  // 
-    pub max_size: Option<u32>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub ftype: Option<FitFieldFile>,
+    pub flags: Option<FitFieldFileFlags>,
+    pub directory: Option<String>,
+    pub max_count: Option<u16>,
+    pub max_size: Option<u32>,
 }
 impl<'a> FitMessageFileCapabilities<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCapabilities<'a>>, &'a [u8])> {
@@ -8754,7 +8754,7 @@ impl<'a> FitMessageFileCapabilities<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageFileCapabilities<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageFileCapabilities<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8808,8 +8808,8 @@ pub struct FitMessageFileCreator<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub software_version: Option<u16>,  // 
-    pub hardware_version: Option<u8>,  // 
+    pub software_version: Option<u16>,
+    pub hardware_version: Option<u8>,
 }
 impl<'a> FitMessageFileCreator<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCreator<'a>>, &'a [u8])> {
@@ -8845,7 +8845,7 @@ impl<'a> FitMessageFileCreator<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageFileCreator<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageFileCreator<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8877,7 +8877,7 @@ pub enum FitMessageFileIdFieldProduct {
 }
 
 impl FitMessageFileIdFieldProduct {
-    fn parse<'a>(message: &FitMessageFileId<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageFileIdFieldProduct, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageFileId<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageFileIdFieldProduct, &'a [u8])> {
         match message.manufacturer {
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -8904,10 +8904,10 @@ pub struct FitMessageFileId<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub ftype: Option<FitFieldFile>,  // 
-    pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub product: Option<FitMessageFileIdFieldProduct>,  // 
-    pub serial_number: Option<u32>,  // 
+    pub ftype: Option<FitFieldFile>,
+    pub manufacturer: Option<FitFieldManufacturer>,
+    pub product: Option<FitMessageFileIdFieldProduct>,
+    pub serial_number: Option<u32>,
     pub time_created: Option<FitFieldDateTime>,  // Only set for files that are can be created/erased.
     pub number: Option<u16>,  // Only set for files that are not created/erased.
     pub product_name: Option<String>,  // Optional free form string to indicate the devices name or model
@@ -8951,7 +8951,7 @@ impl<'a> FitMessageFileId<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageFileId<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageFileId<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -8968,7 +8968,7 @@ impl<'a> FitMessageFileId<'a> {
                     Ok(())
                 },
                 2 => { // product
-                    let (val, outp) = FitMessageFileIdFieldProduct::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageFileIdFieldProduct::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -9011,19 +9011,19 @@ pub struct FitMessageGoal<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub sport: Option<FitFieldSport>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
-    pub start_date: Option<FitFieldDateTime>,  // 
-    pub end_date: Option<FitFieldDateTime>,  // 
-    pub ftype: Option<FitFieldGoal>,  // 
-    pub value: Option<u32>,  // 
-    pub repeat: Option<bool>,  // 
-    pub target_value: Option<u32>,  // 
-    pub recurrence: Option<FitFieldGoalRecurrence>,  // 
-    pub recurrence_value: Option<u16>,  // 
-    pub enabled: Option<bool>,  // 
-    pub source: Option<FitFieldGoalSource>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub sport: Option<FitFieldSport>,
+    pub sub_sport: Option<FitFieldSubSport>,
+    pub start_date: Option<FitFieldDateTime>,
+    pub end_date: Option<FitFieldDateTime>,
+    pub ftype: Option<FitFieldGoal>,
+    pub value: Option<u32>,
+    pub repeat: Option<bool>,
+    pub target_value: Option<u32>,
+    pub recurrence: Option<FitFieldGoalRecurrence>,
+    pub recurrence_value: Option<u16>,
+    pub enabled: Option<bool>,
+    pub source: Option<FitFieldGoalSource>,
 }
 impl<'a> FitMessageGoal<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGoal<'a>>, &'a [u8])> {
@@ -9070,7 +9070,7 @@ impl<'a> FitMessageGoal<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageGoal<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageGoal<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -9168,13 +9168,13 @@ pub struct FitMessageGpsMetadata<'a> {
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
-    pub position_lat: Option<i32>,  // 
-    pub position_long: Option<i32>,  // 
-    pub enhanced_altitude: Option<u32>,  // 
-    pub enhanced_speed: Option<u32>,  // 
-    pub heading: Option<u16>,  // 
+    pub position_lat: Option<i32>,
+    pub position_long: Option<i32>,
+    pub enhanced_altitude: Option<f64>,
+    pub enhanced_speed: Option<f64>,
+    pub heading: Option<f64>,
     pub utc_timestamp: Option<FitFieldDateTime>,  // Used to correlate UTC to system time if the timestamp of the message is in system time.  This UTC time is derived from the GPS data.
-    pub velocity: Option<i16>,  // velocity[0] is lon velocity.  Velocity[1] is lat velocity.  Velocity[2] is altitude velocity.
+    pub velocity: Option<f64>,  // velocity[0] is lon velocity.  Velocity[1] is lat velocity.  Velocity[2] is altitude velocity.
 }
 impl<'a> FitMessageGpsMetadata<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageGpsMetadata<'a>>, &'a [u8])> {
@@ -9230,7 +9230,7 @@ impl<'a> FitMessageGpsMetadata<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageGpsMetadata<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageGpsMetadata<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -9255,19 +9255,19 @@ impl<'a> FitMessageGpsMetadata<'a> {
                 3 => { // enhanced_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_altitude = Some(val);
+                    message.enhanced_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 4 => { // enhanced_speed
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_speed = Some(val);
+                    message.enhanced_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 5 => { // heading
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.heading = Some(val);
+                    message.heading = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 6 => { // utc_timestamp
@@ -9279,7 +9279,7 @@ impl<'a> FitMessageGpsMetadata<'a> {
                 7 => { // velocity
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.velocity = Some(val);
+                    message.velocity = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 253 => { // timestamp
@@ -9366,7 +9366,7 @@ impl<'a> FitMessageGyroscopeData<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageGyroscopeData<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageGyroscopeData<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -9438,12 +9438,12 @@ pub struct FitMessageHr<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub fractional_timestamp: Option<u16>,  // 
-    pub time256: Option<u8>,  // 
-    pub filtered_bpm: Option<u8>,  // 
-    pub event_timestamp: Option<u32>,  // 
-    pub event_timestamp_12: Option<&'a [u8]>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub fractional_timestamp: Option<f64>,
+    pub time256: Option<f64>,
+    pub filtered_bpm: Option<u8>,
+    pub event_timestamp: Option<f64>,
+    pub event_timestamp_12: Option<&'a [u8]>,
 }
 impl<'a> FitMessageHr<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHr<'a>>, &'a [u8])> {
@@ -9496,20 +9496,20 @@ impl<'a> FitMessageHr<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageHr<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageHr<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // fractional_timestamp
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.fractional_timestamp = Some(val);
+                    message.fractional_timestamp = Some((val as f64 / 32768 as f64));
                     Ok(())
                 },
                 1 => { // time256
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.time256 = Some(val);
+                    message.time256 = Some((val as f64 / 256 as f64));
                     Ok(())
                 },
                 6 => { // filtered_bpm
@@ -9521,7 +9521,7 @@ impl<'a> FitMessageHr<'a> {
                 9 => { // event_timestamp
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.event_timestamp = Some(val);
+                    message.event_timestamp = Some((val as f64 / 1024 as f64));
                     Ok(())
                 },
                 10 => { // event_timestamp_12
@@ -9550,9 +9550,9 @@ pub struct FitMessageHrZone<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub high_bpm: Option<u8>,  // 
-    pub name: Option<String>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub high_bpm: Option<u8>,
+    pub name: Option<String>,
 }
 impl<'a> FitMessageHrZone<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrZone<'a>>, &'a [u8])> {
@@ -9589,7 +9589,7 @@ impl<'a> FitMessageHrZone<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageHrZone<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageHrZone<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -9625,11 +9625,11 @@ pub struct FitMessageHrmProfile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub enabled: Option<bool>,  // 
-    pub hrm_ant_id: Option<u16>,  // 
-    pub log_hrv: Option<bool>,  // 
-    pub hrm_ant_id_trans_type: Option<u8>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub enabled: Option<bool>,
+    pub hrm_ant_id: Option<u16>,
+    pub log_hrv: Option<bool>,
+    pub hrm_ant_id_trans_type: Option<u8>,
 }
 impl<'a> FitMessageHrmProfile<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrmProfile<'a>>, &'a [u8])> {
@@ -9668,7 +9668,7 @@ impl<'a> FitMessageHrmProfile<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageHrmProfile<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageHrmProfile<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -9716,7 +9716,7 @@ pub struct FitMessageHrv<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub time: Option<u16>,  // Time between beats
+    pub time: Option<f64>,  // Time between beats
 }
 impl<'a> FitMessageHrv<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrv<'a>>, &'a [u8])> {
@@ -9751,14 +9751,14 @@ impl<'a> FitMessageHrv<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageHrv<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageHrv<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // time
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time = Some(val);
+                    message.time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
@@ -9777,7 +9777,7 @@ pub enum FitMessageLapFieldTotalCycles {
 }
 
 impl FitMessageLapFieldTotalCycles {
-    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageLapFieldTotalCycles, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageLapFieldTotalCycles, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Running) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -9802,7 +9802,7 @@ pub enum FitMessageLapFieldAvgCadence {
 }
 
 impl FitMessageLapFieldAvgCadence {
-    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageLapFieldAvgCadence, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageLapFieldAvgCadence, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Running) => {
                 let (val, o) = parse_uint8(inp)?;
@@ -9823,7 +9823,7 @@ pub enum FitMessageLapFieldMaxCadence {
 }
 
 impl FitMessageLapFieldMaxCadence {
-    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageLapFieldMaxCadence, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageLapFieldMaxCadence, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Running) => {
                 let (val, o) = parse_uint8(inp)?;
@@ -9842,111 +9842,111 @@ pub struct FitMessageLap<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
     pub timestamp: Option<FitFieldDateTime>,  // Lap end time.
-    pub event: Option<FitFieldEvent>,  // 
-    pub event_type: Option<FitFieldEventType>,  // 
-    pub start_time: Option<FitFieldDateTime>,  // 
-    pub start_position_lat: Option<i32>,  // 
-    pub start_position_long: Option<i32>,  // 
-    pub end_position_lat: Option<i32>,  // 
-    pub end_position_long: Option<i32>,  // 
-    pub total_elapsed_time: Option<u32>,  // Time (includes pauses)
-    pub total_timer_time: Option<u32>,  // Timer Time (excludes pauses)
-    pub total_distance: Option<u32>,  // 
-    pub total_cycles: Option<FitMessageLapFieldTotalCycles>,  // 
-    pub total_calories: Option<u16>,  // 
+    pub event: Option<FitFieldEvent>,
+    pub event_type: Option<FitFieldEventType>,
+    pub start_time: Option<FitFieldDateTime>,
+    pub start_position_lat: Option<i32>,
+    pub start_position_long: Option<i32>,
+    pub end_position_lat: Option<i32>,
+    pub end_position_long: Option<i32>,
+    pub total_elapsed_time: Option<f64>,  // Time (includes pauses)
+    pub total_timer_time: Option<f64>,  // Timer Time (excludes pauses)
+    pub total_distance: Option<f64>,
+    pub total_cycles: Option<FitMessageLapFieldTotalCycles>,
+    pub total_calories: Option<u16>,
     pub total_fat_calories: Option<u16>,  // If New Leaf
-    pub avg_speed: Option<u16>,  // 
-    pub max_speed: Option<u16>,  // 
-    pub avg_heart_rate: Option<u8>,  // 
-    pub max_heart_rate: Option<u8>,  // 
+    pub avg_speed: Option<f64>,
+    pub max_speed: Option<f64>,
+    pub avg_heart_rate: Option<u8>,
+    pub max_heart_rate: Option<u8>,
     pub avg_cadence: Option<FitMessageLapFieldAvgCadence>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
-    pub max_cadence: Option<FitMessageLapFieldMaxCadence>,  // 
+    pub max_cadence: Option<FitMessageLapFieldMaxCadence>,
     pub avg_power: Option<u16>,  // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
-    pub max_power: Option<u16>,  // 
-    pub total_ascent: Option<u16>,  // 
-    pub total_descent: Option<u16>,  // 
-    pub intensity: Option<FitFieldIntensity>,  // 
-    pub lap_trigger: Option<FitFieldLapTrigger>,  // 
-    pub sport: Option<FitFieldSport>,  // 
-    pub event_group: Option<u8>,  // 
+    pub max_power: Option<u16>,
+    pub total_ascent: Option<u16>,
+    pub total_descent: Option<u16>,
+    pub intensity: Option<FitFieldIntensity>,
+    pub lap_trigger: Option<FitFieldLapTrigger>,
+    pub sport: Option<FitFieldSport>,
+    pub event_group: Option<u8>,
     pub num_lengths: Option<u16>,  // # of lengths of swim pool
-    pub normalized_power: Option<u16>,  // 
-    pub left_right_balance: Option<FitFieldLeftRightBalance100>,  // 
-    pub first_length_index: Option<u16>,  // 
-    pub avg_stroke_distance: Option<u16>,  // 
-    pub swim_stroke: Option<FitFieldSwimStroke>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
+    pub normalized_power: Option<u16>,
+    pub left_right_balance: Option<FitFieldLeftRightBalance100>,
+    pub first_length_index: Option<u16>,
+    pub avg_stroke_distance: Option<f64>,
+    pub swim_stroke: Option<FitFieldSwimStroke>,
+    pub sub_sport: Option<FitFieldSubSport>,
     pub num_active_lengths: Option<u16>,  // # of active lengths of swim pool
-    pub total_work: Option<u32>,  // 
-    pub avg_altitude: Option<u16>,  // 
-    pub max_altitude: Option<u16>,  // 
-    pub gps_accuracy: Option<u8>,  // 
-    pub avg_grade: Option<i16>,  // 
-    pub avg_pos_grade: Option<i16>,  // 
-    pub avg_neg_grade: Option<i16>,  // 
-    pub max_pos_grade: Option<i16>,  // 
-    pub max_neg_grade: Option<i16>,  // 
-    pub avg_temperature: Option<i8>,  // 
-    pub max_temperature: Option<i8>,  // 
-    pub total_moving_time: Option<u32>,  // 
-    pub avg_pos_vertical_speed: Option<i16>,  // 
-    pub avg_neg_vertical_speed: Option<i16>,  // 
-    pub max_pos_vertical_speed: Option<i16>,  // 
-    pub max_neg_vertical_speed: Option<i16>,  // 
-    pub time_in_hr_zone: Option<u32>,  // 
-    pub time_in_speed_zone: Option<u32>,  // 
-    pub time_in_cadence_zone: Option<u32>,  // 
-    pub time_in_power_zone: Option<u32>,  // 
-    pub repetition_num: Option<u16>,  // 
-    pub min_altitude: Option<u16>,  // 
-    pub min_heart_rate: Option<u8>,  // 
-    pub wkt_step_index: Option<FitFieldMessageIndex>,  // 
-    pub opponent_score: Option<u16>,  // 
+    pub total_work: Option<u32>,
+    pub avg_altitude: Option<f64>,
+    pub max_altitude: Option<f64>,
+    pub gps_accuracy: Option<u8>,
+    pub avg_grade: Option<f64>,
+    pub avg_pos_grade: Option<f64>,
+    pub avg_neg_grade: Option<f64>,
+    pub max_pos_grade: Option<f64>,
+    pub max_neg_grade: Option<f64>,
+    pub avg_temperature: Option<i8>,
+    pub max_temperature: Option<i8>,
+    pub total_moving_time: Option<f64>,
+    pub avg_pos_vertical_speed: Option<f64>,
+    pub avg_neg_vertical_speed: Option<f64>,
+    pub max_pos_vertical_speed: Option<f64>,
+    pub max_neg_vertical_speed: Option<f64>,
+    pub time_in_hr_zone: Option<f64>,
+    pub time_in_speed_zone: Option<f64>,
+    pub time_in_cadence_zone: Option<f64>,
+    pub time_in_power_zone: Option<f64>,
+    pub repetition_num: Option<u16>,
+    pub min_altitude: Option<f64>,
+    pub min_heart_rate: Option<u8>,
+    pub wkt_step_index: Option<FitFieldMessageIndex>,
+    pub opponent_score: Option<u16>,
     pub stroke_count: Option<u16>,  // stroke_type enum used as the index
     pub zone_count: Option<u16>,  // zone number used as the index
-    pub avg_vertical_oscillation: Option<u16>,  // 
-    pub avg_stance_time_percent: Option<u16>,  // 
-    pub avg_stance_time: Option<u16>,  // 
-    pub avg_fractional_cadence: Option<u8>,  // fractional part of the avg_cadence
-    pub max_fractional_cadence: Option<u8>,  // fractional part of the max_cadence
-    pub total_fractional_cycles: Option<u8>,  // fractional part of the total_cycles
-    pub player_score: Option<u16>,  // 
-    pub avg_total_hemoglobin_conc: Option<u16>,  // Avg saturated and unsaturated hemoglobin
-    pub min_total_hemoglobin_conc: Option<u16>,  // Min saturated and unsaturated hemoglobin
-    pub max_total_hemoglobin_conc: Option<u16>,  // Max saturated and unsaturated hemoglobin
-    pub avg_saturated_hemoglobin_percent: Option<u16>,  // Avg percentage of hemoglobin saturated with oxygen
-    pub min_saturated_hemoglobin_percent: Option<u16>,  // Min percentage of hemoglobin saturated with oxygen
-    pub max_saturated_hemoglobin_percent: Option<u16>,  // Max percentage of hemoglobin saturated with oxygen
-    pub avg_left_torque_effectiveness: Option<u8>,  // 
-    pub avg_right_torque_effectiveness: Option<u8>,  // 
-    pub avg_left_pedal_smoothness: Option<u8>,  // 
-    pub avg_right_pedal_smoothness: Option<u8>,  // 
-    pub avg_combined_pedal_smoothness: Option<u8>,  // 
-    pub time_standing: Option<u32>,  // Total time spent in the standing position
+    pub avg_vertical_oscillation: Option<f64>,
+    pub avg_stance_time_percent: Option<f64>,
+    pub avg_stance_time: Option<f64>,
+    pub avg_fractional_cadence: Option<f64>,  // fractional part of the avg_cadence
+    pub max_fractional_cadence: Option<f64>,  // fractional part of the max_cadence
+    pub total_fractional_cycles: Option<f64>,  // fractional part of the total_cycles
+    pub player_score: Option<u16>,
+    pub avg_total_hemoglobin_conc: Option<f64>,  // Avg saturated and unsaturated hemoglobin
+    pub min_total_hemoglobin_conc: Option<f64>,  // Min saturated and unsaturated hemoglobin
+    pub max_total_hemoglobin_conc: Option<f64>,  // Max saturated and unsaturated hemoglobin
+    pub avg_saturated_hemoglobin_percent: Option<f64>,  // Avg percentage of hemoglobin saturated with oxygen
+    pub min_saturated_hemoglobin_percent: Option<f64>,  // Min percentage of hemoglobin saturated with oxygen
+    pub max_saturated_hemoglobin_percent: Option<f64>,  // Max percentage of hemoglobin saturated with oxygen
+    pub avg_left_torque_effectiveness: Option<f64>,
+    pub avg_right_torque_effectiveness: Option<f64>,
+    pub avg_left_pedal_smoothness: Option<f64>,
+    pub avg_right_pedal_smoothness: Option<f64>,
+    pub avg_combined_pedal_smoothness: Option<f64>,
+    pub time_standing: Option<f64>,  // Total time spent in the standing position
     pub stand_count: Option<u16>,  // Number of transitions to the standing state
     pub avg_left_pco: Option<i8>,  // Average left platform center offset
     pub avg_right_pco: Option<i8>,  // Average right platform center offset
-    pub avg_left_power_phase: Option<u8>,  // Average left power phase angles. Data value indexes defined by power_phase_type.
-    pub avg_left_power_phase_peak: Option<u8>,  // Average left power phase peak angles. Data value indexes  defined by power_phase_type.
-    pub avg_right_power_phase: Option<u8>,  // Average right power phase angles. Data value indexes defined by power_phase_type.
-    pub avg_right_power_phase_peak: Option<u8>,  // Average right power phase peak angles. Data value indexes  defined by power_phase_type.
+    pub avg_left_power_phase: Option<f64>,  // Average left power phase angles. Data value indexes defined by power_phase_type.
+    pub avg_left_power_phase_peak: Option<f64>,  // Average left power phase peak angles. Data value indexes  defined by power_phase_type.
+    pub avg_right_power_phase: Option<f64>,  // Average right power phase angles. Data value indexes defined by power_phase_type.
+    pub avg_right_power_phase_peak: Option<f64>,  // Average right power phase peak angles. Data value indexes  defined by power_phase_type.
     pub avg_power_position: Option<u16>,  // Average power by position. Data value indexes defined by rider_position_type.
     pub max_power_position: Option<u16>,  // Maximum power by position. Data value indexes defined by rider_position_type.
     pub avg_cadence_position: Option<u8>,  // Average cadence by position. Data value indexes defined by rider_position_type.
     pub max_cadence_position: Option<u8>,  // Maximum cadence by position. Data value indexes defined by rider_position_type.
-    pub enhanced_avg_speed: Option<u32>,  // 
-    pub enhanced_max_speed: Option<u32>,  // 
-    pub enhanced_avg_altitude: Option<u32>,  // 
-    pub enhanced_min_altitude: Option<u32>,  // 
-    pub enhanced_max_altitude: Option<u32>,  // 
+    pub enhanced_avg_speed: Option<f64>,
+    pub enhanced_max_speed: Option<f64>,
+    pub enhanced_avg_altitude: Option<f64>,
+    pub enhanced_min_altitude: Option<f64>,
+    pub enhanced_max_altitude: Option<f64>,
     pub avg_lev_motor_power: Option<u16>,  // lev average motor power during lap
     pub max_lev_motor_power: Option<u16>,  // lev maximum motor power during lap
-    pub lev_battery_consumption: Option<u8>,  // lev battery consumption during lap
-    pub avg_vertical_ratio: Option<u16>,  // 
-    pub avg_stance_time_balance: Option<u16>,  // 
-    pub avg_step_length: Option<u16>,  // 
+    pub lev_battery_consumption: Option<f64>,  // lev battery consumption during lap
+    pub avg_vertical_ratio: Option<f64>,
+    pub avg_stance_time_balance: Option<f64>,
+    pub avg_step_length: Option<f64>,
 }
 impl<'a> FitMessageLap<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageLap<'a>>, &'a [u8])> {
@@ -10098,7 +10098,7 @@ impl<'a> FitMessageLap<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageLap<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageLap<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -10147,23 +10147,23 @@ impl<'a> FitMessageLap<'a> {
                 7 => { // total_elapsed_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_elapsed_time = Some(val);
+                    message.total_elapsed_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 8 => { // total_timer_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_timer_time = Some(val);
+                    message.total_timer_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 9 => { // total_distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_distance = Some(val);
+                    message.total_distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 10 => { // total_cycles
-                    let (val, outp) = FitMessageLapFieldTotalCycles::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageLapFieldTotalCycles::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.total_cycles = Some(val);
                     Ok(())
@@ -10183,13 +10183,13 @@ impl<'a> FitMessageLap<'a> {
                 13 => { // avg_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_speed = Some(val);
+                    message.avg_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 14 => { // max_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_speed = Some(val);
+                    message.max_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 15 => { // avg_heart_rate
@@ -10205,13 +10205,13 @@ impl<'a> FitMessageLap<'a> {
                     Ok(())
                 },
                 17 => { // avg_cadence
-                    let (val, outp) = FitMessageLapFieldAvgCadence::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageLapFieldAvgCadence::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.avg_cadence = Some(val);
                     Ok(())
                 },
                 18 => { // max_cadence
-                    let (val, outp) = FitMessageLapFieldMaxCadence::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageLapFieldMaxCadence::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.max_cadence = Some(val);
                     Ok(())
@@ -10291,7 +10291,7 @@ impl<'a> FitMessageLap<'a> {
                 37 => { // avg_stroke_distance
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stroke_distance = Some(val);
+                    message.avg_stroke_distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 38 => { // swim_stroke
@@ -10321,13 +10321,13 @@ impl<'a> FitMessageLap<'a> {
                 42 => { // avg_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_altitude = Some(val);
+                    message.avg_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 43 => { // max_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_altitude = Some(val);
+                    message.max_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 44 => { // gps_accuracy
@@ -10339,31 +10339,31 @@ impl<'a> FitMessageLap<'a> {
                 45 => { // avg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_grade = Some(val);
+                    message.avg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 46 => { // avg_pos_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_pos_grade = Some(val);
+                    message.avg_pos_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 47 => { // avg_neg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_neg_grade = Some(val);
+                    message.avg_neg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 48 => { // max_pos_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_pos_grade = Some(val);
+                    message.max_pos_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 49 => { // max_neg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_neg_grade = Some(val);
+                    message.max_neg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 50 => { // avg_temperature
@@ -10381,55 +10381,55 @@ impl<'a> FitMessageLap<'a> {
                 52 => { // total_moving_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_moving_time = Some(val);
+                    message.total_moving_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 53 => { // avg_pos_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_pos_vertical_speed = Some(val);
+                    message.avg_pos_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 54 => { // avg_neg_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_neg_vertical_speed = Some(val);
+                    message.avg_neg_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 55 => { // max_pos_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_pos_vertical_speed = Some(val);
+                    message.max_pos_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 56 => { // max_neg_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_neg_vertical_speed = Some(val);
+                    message.max_neg_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 57 => { // time_in_hr_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_hr_zone = Some(val);
+                    message.time_in_hr_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 58 => { // time_in_speed_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_speed_zone = Some(val);
+                    message.time_in_speed_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 59 => { // time_in_cadence_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_cadence_zone = Some(val);
+                    message.time_in_cadence_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 60 => { // time_in_power_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_power_zone = Some(val);
+                    message.time_in_power_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 61 => { // repetition_num
@@ -10441,7 +10441,7 @@ impl<'a> FitMessageLap<'a> {
                 62 => { // min_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_altitude = Some(val);
+                    message.min_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 63 => { // min_heart_rate
@@ -10477,37 +10477,37 @@ impl<'a> FitMessageLap<'a> {
                 77 => { // avg_vertical_oscillation
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_vertical_oscillation = Some(val);
+                    message.avg_vertical_oscillation = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 78 => { // avg_stance_time_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stance_time_percent = Some(val);
+                    message.avg_stance_time_percent = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 79 => { // avg_stance_time
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stance_time = Some(val);
+                    message.avg_stance_time = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 80 => { // avg_fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_fractional_cadence = Some(val);
+                    message.avg_fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 81 => { // max_fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.max_fractional_cadence = Some(val);
+                    message.max_fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 82 => { // total_fractional_cycles
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.total_fractional_cycles = Some(val);
+                    message.total_fractional_cycles = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 83 => { // player_score
@@ -10519,73 +10519,73 @@ impl<'a> FitMessageLap<'a> {
                 84 => { // avg_total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_total_hemoglobin_conc = Some(val);
+                    message.avg_total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 85 => { // min_total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_total_hemoglobin_conc = Some(val);
+                    message.min_total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 86 => { // max_total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_total_hemoglobin_conc = Some(val);
+                    message.max_total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 87 => { // avg_saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_saturated_hemoglobin_percent = Some(val);
+                    message.avg_saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 88 => { // min_saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_saturated_hemoglobin_percent = Some(val);
+                    message.min_saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 89 => { // max_saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_saturated_hemoglobin_percent = Some(val);
+                    message.max_saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 91 => { // avg_left_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_torque_effectiveness = Some(val);
+                    message.avg_left_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 92 => { // avg_right_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_torque_effectiveness = Some(val);
+                    message.avg_right_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 93 => { // avg_left_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_pedal_smoothness = Some(val);
+                    message.avg_left_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 94 => { // avg_right_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_pedal_smoothness = Some(val);
+                    message.avg_right_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 95 => { // avg_combined_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_combined_pedal_smoothness = Some(val);
+                    message.avg_combined_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 98 => { // time_standing
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_standing = Some(val);
+                    message.time_standing = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 99 => { // stand_count
@@ -10609,25 +10609,25 @@ impl<'a> FitMessageLap<'a> {
                 102 => { // avg_left_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_power_phase = Some(val);
+                    message.avg_left_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 103 => { // avg_left_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_power_phase_peak = Some(val);
+                    message.avg_left_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 104 => { // avg_right_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_power_phase = Some(val);
+                    message.avg_right_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 105 => { // avg_right_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_power_phase_peak = Some(val);
+                    message.avg_right_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 106 => { // avg_power_position
@@ -10657,31 +10657,31 @@ impl<'a> FitMessageLap<'a> {
                 110 => { // enhanced_avg_speed
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_avg_speed = Some(val);
+                    message.enhanced_avg_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 111 => { // enhanced_max_speed
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_max_speed = Some(val);
+                    message.enhanced_max_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 112 => { // enhanced_avg_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_avg_altitude = Some(val);
+                    message.enhanced_avg_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 113 => { // enhanced_min_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_min_altitude = Some(val);
+                    message.enhanced_min_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 114 => { // enhanced_max_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_max_altitude = Some(val);
+                    message.enhanced_max_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 115 => { // avg_lev_motor_power
@@ -10699,25 +10699,25 @@ impl<'a> FitMessageLap<'a> {
                 117 => { // lev_battery_consumption
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.lev_battery_consumption = Some(val);
+                    message.lev_battery_consumption = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 118 => { // avg_vertical_ratio
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_vertical_ratio = Some(val);
+                    message.avg_vertical_ratio = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 119 => { // avg_stance_time_balance
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stance_time_balance = Some(val);
+                    message.avg_stance_time_balance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 120 => { // avg_step_length
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_step_length = Some(val);
+                    message.avg_step_length = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 253 => { // timestamp
@@ -10746,22 +10746,22 @@ pub struct FitMessageLength<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub event: Option<FitFieldEvent>,  // 
-    pub event_type: Option<FitFieldEventType>,  // 
-    pub start_time: Option<FitFieldDateTime>,  // 
-    pub total_elapsed_time: Option<u32>,  // 
-    pub total_timer_time: Option<u32>,  // 
-    pub total_strokes: Option<u16>,  // 
-    pub avg_speed: Option<u16>,  // 
-    pub swim_stroke: Option<FitFieldSwimStroke>,  // 
-    pub avg_swimming_cadence: Option<u8>,  // 
-    pub event_group: Option<u8>,  // 
-    pub total_calories: Option<u16>,  // 
-    pub length_type: Option<FitFieldLengthType>,  // 
-    pub player_score: Option<u16>,  // 
-    pub opponent_score: Option<u16>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub timestamp: Option<FitFieldDateTime>,
+    pub event: Option<FitFieldEvent>,
+    pub event_type: Option<FitFieldEventType>,
+    pub start_time: Option<FitFieldDateTime>,
+    pub total_elapsed_time: Option<f64>,
+    pub total_timer_time: Option<f64>,
+    pub total_strokes: Option<u16>,
+    pub avg_speed: Option<f64>,
+    pub swim_stroke: Option<FitFieldSwimStroke>,
+    pub avg_swimming_cadence: Option<u8>,
+    pub event_group: Option<u8>,
+    pub total_calories: Option<u16>,
+    pub length_type: Option<FitFieldLengthType>,
+    pub player_score: Option<u16>,
+    pub opponent_score: Option<u16>,
     pub stroke_count: Option<u16>,  // stroke_type enum used as the index
     pub zone_count: Option<u16>,  // zone number used as the index
 }
@@ -10828,7 +10828,7 @@ impl<'a> FitMessageLength<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageLength<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageLength<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -10853,13 +10853,13 @@ impl<'a> FitMessageLength<'a> {
                 3 => { // total_elapsed_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_elapsed_time = Some(val);
+                    message.total_elapsed_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 4 => { // total_timer_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_timer_time = Some(val);
+                    message.total_timer_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 5 => { // total_strokes
@@ -10871,7 +10871,7 @@ impl<'a> FitMessageLength<'a> {
                 6 => { // avg_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_speed = Some(val);
+                    message.avg_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 7 => { // swim_stroke
@@ -11018,7 +11018,7 @@ impl<'a> FitMessageMagnetometerData<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageMagnetometerData<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageMagnetometerData<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11131,7 +11131,7 @@ impl<'a> FitMessageMemoGlob<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageMemoGlob<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageMemoGlob<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11177,7 +11177,7 @@ pub enum FitMessageMesgCapabilitiesFieldCount {
 }
 
 impl FitMessageMesgCapabilitiesFieldCount {
-    fn parse<'a>(message: &FitMessageMesgCapabilities<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageMesgCapabilitiesFieldCount, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageMesgCapabilities<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageMesgCapabilitiesFieldCount, &'a [u8])> {
         match message.count_type {
             Some(FitFieldMesgCount::NumPerFile) => {
                 let (val, o) = parse_uint16(inp, message.definition_message.endianness)?;
@@ -11204,11 +11204,11 @@ pub struct FitMessageMesgCapabilities<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub file: Option<FitFieldFile>,  // 
-    pub mesg_num: Option<FitFieldMesgNum>,  // 
-    pub count_type: Option<FitFieldMesgCount>,  // 
-    pub count: Option<FitMessageMesgCapabilitiesFieldCount>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub file: Option<FitFieldFile>,
+    pub mesg_num: Option<FitFieldMesgNum>,
+    pub count_type: Option<FitFieldMesgCount>,
+    pub count: Option<FitMessageMesgCapabilitiesFieldCount>,
 }
 impl<'a> FitMessageMesgCapabilities<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMesgCapabilities<'a>>, &'a [u8])> {
@@ -11247,7 +11247,7 @@ impl<'a> FitMessageMesgCapabilities<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageMesgCapabilities<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageMesgCapabilities<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11270,7 +11270,7 @@ impl<'a> FitMessageMesgCapabilities<'a> {
                     Ok(())
                 },
                 3 => { // count
-                    let (val, outp) = FitMessageMesgCapabilitiesFieldCount::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageMesgCapabilitiesFieldCount::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.count = Some(val);
                     Ok(())
@@ -11295,10 +11295,10 @@ pub struct FitMessageMetZone<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub high_bpm: Option<u8>,  // 
-    pub calories: Option<u16>,  // 
-    pub fat_calories: Option<u8>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub high_bpm: Option<u8>,
+    pub calories: Option<f64>,
+    pub fat_calories: Option<f64>,
 }
 impl<'a> FitMessageMetZone<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMetZone<'a>>, &'a [u8])> {
@@ -11336,7 +11336,7 @@ impl<'a> FitMessageMetZone<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageMetZone<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageMetZone<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11349,13 +11349,13 @@ impl<'a> FitMessageMetZone<'a> {
                 2 => { // calories
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.calories = Some(val);
+                    message.calories = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 3 => { // fat_calories
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.fat_calories = Some(val);
+                    message.fat_calories = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 254 => { // message_index
@@ -11381,7 +11381,7 @@ pub enum FitMessageMonitoringFieldCycles {
 }
 
 impl FitMessageMonitoringFieldCycles {
-    fn parse<'a>(message: &FitMessageMonitoring<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageMonitoringFieldCycles, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageMonitoring<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageMonitoringFieldCycles, &'a [u8])> {
         match message.activity_type {
             Some(FitFieldActivityType::Walking) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -11415,32 +11415,32 @@ pub struct FitMessageMonitoring<'a> {
     pub timestamp: Option<FitFieldDateTime>,  // Must align to logging interval, for example, time must be 00:00:00 for daily log.
     pub device_index: Option<FitFieldDeviceIndex>,  // Associates this data to device_info message.  Not required for file with single device (sensor).
     pub calories: Option<u16>,  // Accumulated total calories.  Maintained by MonitoringReader for each activity_type.  See SDK documentation
-    pub distance: Option<u32>,  // Accumulated distance.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
+    pub distance: Option<f64>,  // Accumulated distance.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
     pub cycles: Option<FitMessageMonitoringFieldCycles>,  // Accumulated cycles.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
-    pub active_time: Option<u32>,  // 
-    pub activity_type: Option<FitFieldActivityType>,  // 
-    pub activity_subtype: Option<FitFieldActivitySubtype>,  // 
-    pub activity_level: Option<FitFieldActivityLevel>,  // 
-    pub distance_16: Option<u16>,  // 
-    pub cycles_16: Option<u16>,  // 
-    pub active_time_16: Option<u16>,  // 
+    pub active_time: Option<f64>,
+    pub activity_type: Option<FitFieldActivityType>,
+    pub activity_subtype: Option<FitFieldActivitySubtype>,
+    pub activity_level: Option<FitFieldActivityLevel>,
+    pub distance_16: Option<u16>,
+    pub cycles_16: Option<u16>,
+    pub active_time_16: Option<u16>,
     pub local_timestamp: Option<FitFieldLocalDateTime>,  // Must align to logging interval, for example, time must be 00:00:00 for daily log.
-    pub temperature: Option<i16>,  // Avg temperature during the logging interval ended at timestamp
-    pub temperature_min: Option<i16>,  // Min temperature during the logging interval ended at timestamp
-    pub temperature_max: Option<i16>,  // Max temperature during the logging interval ended at timestamp
+    pub temperature: Option<f64>,  // Avg temperature during the logging interval ended at timestamp
+    pub temperature_min: Option<f64>,  // Min temperature during the logging interval ended at timestamp
+    pub temperature_max: Option<f64>,  // Max temperature during the logging interval ended at timestamp
     pub activity_time: Option<u16>,  // Indexed using minute_activity_level enum
-    pub active_calories: Option<u16>,  // 
+    pub active_calories: Option<u16>,
     pub current_activity_type_intensity: Option<&'a [u8]>,  // Indicates single type / intensity for duration since last monitoring message.
-    pub timestamp_min_8: Option<u8>,  // 
-    pub timestamp_16: Option<u16>,  // 
-    pub heart_rate: Option<u8>,  // 
-    pub intensity: Option<u8>,  // 
-    pub duration_min: Option<u16>,  // 
-    pub duration: Option<u32>,  // 
-    pub ascent: Option<u32>,  // 
-    pub descent: Option<u32>,  // 
-    pub moderate_activity_minutes: Option<u16>,  // 
-    pub vigorous_activity_minutes: Option<u16>,  // 
+    pub timestamp_min_8: Option<u8>,
+    pub timestamp_16: Option<u16>,
+    pub heart_rate: Option<u8>,
+    pub intensity: Option<f64>,
+    pub duration_min: Option<u16>,
+    pub duration: Option<u32>,
+    pub ascent: Option<f64>,
+    pub descent: Option<f64>,
+    pub moderate_activity_minutes: Option<u16>,
+    pub vigorous_activity_minutes: Option<u16>,
 }
 impl<'a> FitMessageMonitoring<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoring<'a>>, &'a [u8])> {
@@ -11516,7 +11516,7 @@ impl<'a> FitMessageMonitoring<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageMonitoring<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageMonitoring<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11535,11 +11535,11 @@ impl<'a> FitMessageMonitoring<'a> {
                 2 => { // distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.distance = Some(val);
+                    message.distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 3 => { // cycles
-                    let (val, outp) = FitMessageMonitoringFieldCycles::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageMonitoringFieldCycles::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.cycles = Some(val);
                     Ok(())
@@ -11547,7 +11547,7 @@ impl<'a> FitMessageMonitoring<'a> {
                 4 => { // active_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.active_time = Some(val);
+                    message.active_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 5 => { // activity_type
@@ -11595,19 +11595,19 @@ impl<'a> FitMessageMonitoring<'a> {
                 12 => { // temperature
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.temperature = Some(val);
+                    message.temperature = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 14 => { // temperature_min
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.temperature_min = Some(val);
+                    message.temperature_min = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 15 => { // temperature_max
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.temperature_max = Some(val);
+                    message.temperature_max = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 16 => { // activity_time
@@ -11649,7 +11649,7 @@ impl<'a> FitMessageMonitoring<'a> {
                 28 => { // intensity
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.intensity = Some(val);
+                    message.intensity = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 29 => { // duration_min
@@ -11667,13 +11667,13 @@ impl<'a> FitMessageMonitoring<'a> {
                 31 => { // ascent
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.ascent = Some(val);
+                    message.ascent = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 32 => { // descent
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.descent = Some(val);
+                    message.descent = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 33 => { // moderate_activity_minutes
@@ -11708,12 +11708,12 @@ pub struct FitMessageMonitoringInfo<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
     pub local_timestamp: Option<FitFieldLocalDateTime>,  // Use to convert activity timestamps to local time if device does not support time zone and daylight savings time correction.
-    pub activity_type: Option<FitFieldActivityType>,  // 
-    pub cycles_to_distance: Option<u16>,  // Indexed by activity_type
-    pub cycles_to_calories: Option<u16>,  // Indexed by activity_type
-    pub resting_metabolic_rate: Option<u16>,  // 
+    pub activity_type: Option<FitFieldActivityType>,
+    pub cycles_to_distance: Option<f64>,  // Indexed by activity_type
+    pub cycles_to_calories: Option<f64>,  // Indexed by activity_type
+    pub resting_metabolic_rate: Option<u16>,
 }
 impl<'a> FitMessageMonitoringInfo<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoringInfo<'a>>, &'a [u8])> {
@@ -11766,7 +11766,7 @@ impl<'a> FitMessageMonitoringInfo<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageMonitoringInfo<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageMonitoringInfo<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11785,13 +11785,13 @@ impl<'a> FitMessageMonitoringInfo<'a> {
                 3 => { // cycles_to_distance
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.cycles_to_distance = Some(val);
+                    message.cycles_to_distance = Some((val as f64 / 5000 as f64));
                     Ok(())
                 },
                 4 => { // cycles_to_calories
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.cycles_to_calories = Some(val);
+                    message.cycles_to_calories = Some((val as f64 / 5000 as f64));
                     Ok(())
                 },
                 5 => { // resting_metabolic_rate
@@ -11872,7 +11872,7 @@ impl<'a> FitMessageNmeaSentence<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageNmeaSentence<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageNmeaSentence<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -11972,7 +11972,7 @@ impl<'a> FitMessageObdiiData<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageObdiiData<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageObdiiData<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -12044,7 +12044,7 @@ pub struct FitMessageOhrSettings<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub enabled: Option<FitFieldSwitch>,  // 
+    pub enabled: Option<FitFieldSwitch>,
 }
 impl<'a> FitMessageOhrSettings<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageOhrSettings<'a>>, &'a [u8])> {
@@ -12079,7 +12079,7 @@ impl<'a> FitMessageOhrSettings<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageOhrSettings<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageOhrSettings<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -12103,9 +12103,9 @@ pub struct FitMessagePowerZone<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub high_value: Option<u16>,  // 
-    pub name: Option<String>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub high_value: Option<u16>,
+    pub name: Option<String>,
 }
 impl<'a> FitMessagePowerZone<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessagePowerZone<'a>>, &'a [u8])> {
@@ -12142,7 +12142,7 @@ impl<'a> FitMessagePowerZone<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessagePowerZone<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessagePowerZone<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -12178,65 +12178,65 @@ pub struct FitMessageRecord<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub position_lat: Option<i32>,  // 
-    pub position_long: Option<i32>,  // 
-    pub altitude: Option<u16>,  // 
-    pub heart_rate: Option<u8>,  // 
-    pub cadence: Option<u8>,  // 
-    pub distance: Option<u32>,  // 
-    pub speed: Option<u16>,  // 
-    pub power: Option<u16>,  // 
-    pub compressed_speed_distance: Option<&'a [u8]>,  // 
-    pub grade: Option<i16>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub position_lat: Option<i32>,
+    pub position_long: Option<i32>,
+    pub altitude: Option<f64>,
+    pub heart_rate: Option<u8>,
+    pub cadence: Option<u8>,
+    pub distance: Option<f64>,
+    pub speed: Option<f64>,
+    pub power: Option<u16>,
+    pub compressed_speed_distance: Option<&'a [u8]>,
+    pub grade: Option<f64>,
     pub resistance: Option<u8>,  // Relative. 0 is none  254 is Max.
-    pub time_from_course: Option<i32>,  // 
-    pub cycle_length: Option<u8>,  // 
-    pub temperature: Option<i8>,  // 
-    pub speed_1s: Option<u8>,  // Speed at 1s intervals.  Timestamp field indicates time of last array element.
-    pub cycles: Option<u8>,  // 
-    pub total_cycles: Option<u32>,  // 
-    pub compressed_accumulated_power: Option<u16>,  // 
-    pub accumulated_power: Option<u32>,  // 
-    pub left_right_balance: Option<FitFieldLeftRightBalance>,  // 
-    pub gps_accuracy: Option<u8>,  // 
-    pub vertical_speed: Option<i16>,  // 
-    pub calories: Option<u16>,  // 
-    pub vertical_oscillation: Option<u16>,  // 
-    pub stance_time_percent: Option<u16>,  // 
-    pub stance_time: Option<u16>,  // 
-    pub activity_type: Option<FitFieldActivityType>,  // 
-    pub left_torque_effectiveness: Option<u8>,  // 
-    pub right_torque_effectiveness: Option<u8>,  // 
-    pub left_pedal_smoothness: Option<u8>,  // 
-    pub right_pedal_smoothness: Option<u8>,  // 
-    pub combined_pedal_smoothness: Option<u8>,  // 
-    pub time128: Option<u8>,  // 
-    pub stroke_type: Option<FitFieldStrokeType>,  // 
-    pub zone: Option<u8>,  // 
-    pub ball_speed: Option<u16>,  // 
-    pub cadence256: Option<u16>,  // Log cadence and fractional cadence for backwards compatability
-    pub fractional_cadence: Option<u8>,  // 
-    pub total_hemoglobin_conc: Option<u16>,  // Total saturated and unsaturated hemoglobin
-    pub total_hemoglobin_conc_min: Option<u16>,  // Min saturated and unsaturated hemoglobin
-    pub total_hemoglobin_conc_max: Option<u16>,  // Max saturated and unsaturated hemoglobin
-    pub saturated_hemoglobin_percent: Option<u16>,  // Percentage of hemoglobin saturated with oxygen
-    pub saturated_hemoglobin_percent_min: Option<u16>,  // Min percentage of hemoglobin saturated with oxygen
-    pub saturated_hemoglobin_percent_max: Option<u16>,  // Max percentage of hemoglobin saturated with oxygen
-    pub device_index: Option<FitFieldDeviceIndex>,  // 
+    pub time_from_course: Option<f64>,
+    pub cycle_length: Option<f64>,
+    pub temperature: Option<i8>,
+    pub speed_1s: Option<f64>,  // Speed at 1s intervals.  Timestamp field indicates time of last array element.
+    pub cycles: Option<u8>,
+    pub total_cycles: Option<u32>,
+    pub compressed_accumulated_power: Option<u16>,
+    pub accumulated_power: Option<u32>,
+    pub left_right_balance: Option<FitFieldLeftRightBalance>,
+    pub gps_accuracy: Option<u8>,
+    pub vertical_speed: Option<f64>,
+    pub calories: Option<u16>,
+    pub vertical_oscillation: Option<f64>,
+    pub stance_time_percent: Option<f64>,
+    pub stance_time: Option<f64>,
+    pub activity_type: Option<FitFieldActivityType>,
+    pub left_torque_effectiveness: Option<f64>,
+    pub right_torque_effectiveness: Option<f64>,
+    pub left_pedal_smoothness: Option<f64>,
+    pub right_pedal_smoothness: Option<f64>,
+    pub combined_pedal_smoothness: Option<f64>,
+    pub time128: Option<f64>,
+    pub stroke_type: Option<FitFieldStrokeType>,
+    pub zone: Option<u8>,
+    pub ball_speed: Option<f64>,
+    pub cadence256: Option<f64>,  // Log cadence and fractional cadence for backwards compatability
+    pub fractional_cadence: Option<f64>,
+    pub total_hemoglobin_conc: Option<f64>,  // Total saturated and unsaturated hemoglobin
+    pub total_hemoglobin_conc_min: Option<f64>,  // Min saturated and unsaturated hemoglobin
+    pub total_hemoglobin_conc_max: Option<f64>,  // Max saturated and unsaturated hemoglobin
+    pub saturated_hemoglobin_percent: Option<f64>,  // Percentage of hemoglobin saturated with oxygen
+    pub saturated_hemoglobin_percent_min: Option<f64>,  // Min percentage of hemoglobin saturated with oxygen
+    pub saturated_hemoglobin_percent_max: Option<f64>,  // Max percentage of hemoglobin saturated with oxygen
+    pub device_index: Option<FitFieldDeviceIndex>,
     pub left_pco: Option<i8>,  // Left platform center offset
     pub right_pco: Option<i8>,  // Right platform center offset
-    pub left_power_phase: Option<u8>,  // Left power phase angles. Data value indexes defined by power_phase_type.
-    pub left_power_phase_peak: Option<u8>,  // Left power phase peak angles. Data value indexes defined by power_phase_type.
-    pub right_power_phase: Option<u8>,  // Right power phase angles. Data value indexes defined by power_phase_type.
-    pub right_power_phase_peak: Option<u8>,  // Right power phase peak angles. Data value indexes defined by power_phase_type.
-    pub enhanced_speed: Option<u32>,  // 
-    pub enhanced_altitude: Option<u32>,  // 
-    pub battery_soc: Option<u8>,  // lev battery state of charge
+    pub left_power_phase: Option<f64>,  // Left power phase angles. Data value indexes defined by power_phase_type.
+    pub left_power_phase_peak: Option<f64>,  // Left power phase peak angles. Data value indexes defined by power_phase_type.
+    pub right_power_phase: Option<f64>,  // Right power phase angles. Data value indexes defined by power_phase_type.
+    pub right_power_phase_peak: Option<f64>,  // Right power phase peak angles. Data value indexes defined by power_phase_type.
+    pub enhanced_speed: Option<f64>,
+    pub enhanced_altitude: Option<f64>,
+    pub battery_soc: Option<f64>,  // lev battery state of charge
     pub motor_power: Option<u16>,  // lev motor power
-    pub vertical_ratio: Option<u16>,  // 
-    pub stance_time_balance: Option<u16>,  // 
-    pub step_length: Option<u16>,  // 
+    pub vertical_ratio: Option<f64>,
+    pub stance_time_balance: Option<f64>,
+    pub step_length: Option<f64>,
 }
 impl<'a> FitMessageRecord<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageRecord<'a>>, &'a [u8])> {
@@ -12342,7 +12342,7 @@ impl<'a> FitMessageRecord<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageRecord<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageRecord<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -12361,7 +12361,7 @@ impl<'a> FitMessageRecord<'a> {
                 2 => { // altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.altitude = Some(val);
+                    message.altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 3 => { // heart_rate
@@ -12379,13 +12379,13 @@ impl<'a> FitMessageRecord<'a> {
                 5 => { // distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.distance = Some(val);
+                    message.distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 6 => { // speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.speed = Some(val);
+                    message.speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 7 => { // power
@@ -12403,7 +12403,7 @@ impl<'a> FitMessageRecord<'a> {
                 9 => { // grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.grade = Some(val);
+                    message.grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 10 => { // resistance
@@ -12415,13 +12415,13 @@ impl<'a> FitMessageRecord<'a> {
                 11 => { // time_from_course
                     let (val, outp) = parse_sint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_from_course = Some(val);
+                    message.time_from_course = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 12 => { // cycle_length
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.cycle_length = Some(val);
+                    message.cycle_length = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 13 => { // temperature
@@ -12433,7 +12433,7 @@ impl<'a> FitMessageRecord<'a> {
                 17 => { // speed_1s
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.speed_1s = Some(val);
+                    message.speed_1s = Some((val as f64 / 16 as f64));
                     Ok(())
                 },
                 18 => { // cycles
@@ -12475,7 +12475,7 @@ impl<'a> FitMessageRecord<'a> {
                 32 => { // vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.vertical_speed = Some(val);
+                    message.vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 33 => { // calories
@@ -12487,19 +12487,19 @@ impl<'a> FitMessageRecord<'a> {
                 39 => { // vertical_oscillation
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.vertical_oscillation = Some(val);
+                    message.vertical_oscillation = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 40 => { // stance_time_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.stance_time_percent = Some(val);
+                    message.stance_time_percent = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 41 => { // stance_time
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.stance_time = Some(val);
+                    message.stance_time = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 42 => { // activity_type
@@ -12511,37 +12511,37 @@ impl<'a> FitMessageRecord<'a> {
                 43 => { // left_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.left_torque_effectiveness = Some(val);
+                    message.left_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 44 => { // right_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.right_torque_effectiveness = Some(val);
+                    message.right_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 45 => { // left_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.left_pedal_smoothness = Some(val);
+                    message.left_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 46 => { // right_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.right_pedal_smoothness = Some(val);
+                    message.right_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 47 => { // combined_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.combined_pedal_smoothness = Some(val);
+                    message.combined_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 48 => { // time128
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.time128 = Some(val);
+                    message.time128 = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 49 => { // stroke_type
@@ -12559,55 +12559,55 @@ impl<'a> FitMessageRecord<'a> {
                 51 => { // ball_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.ball_speed = Some(val);
+                    message.ball_speed = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 52 => { // cadence256
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.cadence256 = Some(val);
+                    message.cadence256 = Some((val as f64 / 256 as f64));
                     Ok(())
                 },
                 53 => { // fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.fractional_cadence = Some(val);
+                    message.fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 54 => { // total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_hemoglobin_conc = Some(val);
+                    message.total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 55 => { // total_hemoglobin_conc_min
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_hemoglobin_conc_min = Some(val);
+                    message.total_hemoglobin_conc_min = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 56 => { // total_hemoglobin_conc_max
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_hemoglobin_conc_max = Some(val);
+                    message.total_hemoglobin_conc_max = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 57 => { // saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.saturated_hemoglobin_percent = Some(val);
+                    message.saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 58 => { // saturated_hemoglobin_percent_min
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.saturated_hemoglobin_percent_min = Some(val);
+                    message.saturated_hemoglobin_percent_min = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 59 => { // saturated_hemoglobin_percent_max
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.saturated_hemoglobin_percent_max = Some(val);
+                    message.saturated_hemoglobin_percent_max = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 62 => { // device_index
@@ -12631,43 +12631,43 @@ impl<'a> FitMessageRecord<'a> {
                 69 => { // left_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.left_power_phase = Some(val);
+                    message.left_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 70 => { // left_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.left_power_phase_peak = Some(val);
+                    message.left_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 71 => { // right_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.right_power_phase = Some(val);
+                    message.right_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 72 => { // right_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.right_power_phase_peak = Some(val);
+                    message.right_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 73 => { // enhanced_speed
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_speed = Some(val);
+                    message.enhanced_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 78 => { // enhanced_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_altitude = Some(val);
+                    message.enhanced_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 81 => { // battery_soc
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.battery_soc = Some(val);
+                    message.battery_soc = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 82 => { // motor_power
@@ -12679,19 +12679,19 @@ impl<'a> FitMessageRecord<'a> {
                 83 => { // vertical_ratio
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.vertical_ratio = Some(val);
+                    message.vertical_ratio = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 84 => { // stance_time_balance
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.stance_time_balance = Some(val);
+                    message.stance_time_balance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 85 => { // step_length
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.step_length = Some(val);
+                    message.step_length = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 253 => { // timestamp
@@ -12716,7 +12716,7 @@ pub enum FitMessageScheduleFieldProduct {
 }
 
 impl FitMessageScheduleFieldProduct {
-    fn parse<'a>(message: &FitMessageSchedule<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageScheduleFieldProduct, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageSchedule<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageScheduleFieldProduct, &'a [u8])> {
         match message.manufacturer {
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -12748,8 +12748,8 @@ pub struct FitMessageSchedule<'a> {
     pub serial_number: Option<u32>,  // Corresponds to file_id of scheduled workout / course.
     pub time_created: Option<FitFieldDateTime>,  // Corresponds to file_id of scheduled workout / course.
     pub completed: Option<bool>,  // TRUE if this activity has been started
-    pub ftype: Option<FitFieldSchedule>,  // 
-    pub scheduled_time: Option<FitFieldLocalDateTime>,  // 
+    pub ftype: Option<FitFieldSchedule>,
+    pub scheduled_time: Option<FitFieldLocalDateTime>,
 }
 impl<'a> FitMessageSchedule<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSchedule<'a>>, &'a [u8])> {
@@ -12790,7 +12790,7 @@ impl<'a> FitMessageSchedule<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSchedule<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSchedule<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -12801,7 +12801,7 @@ impl<'a> FitMessageSchedule<'a> {
                     Ok(())
                 },
                 1 => { // product
-                    let (val, outp) = FitMessageScheduleFieldProduct::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageScheduleFieldProduct::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -12850,13 +12850,13 @@ pub struct FitMessageSdmProfile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub enabled: Option<bool>,  // 
-    pub sdm_ant_id: Option<u16>,  // 
-    pub sdm_cal_factor: Option<u16>,  // 
-    pub odometer: Option<u32>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub enabled: Option<bool>,
+    pub sdm_ant_id: Option<u16>,
+    pub sdm_cal_factor: Option<f64>,
+    pub odometer: Option<f64>,
     pub speed_source: Option<bool>,  // Use footpod for speed source instead of GPS
-    pub sdm_ant_id_trans_type: Option<u8>,  // 
+    pub sdm_ant_id_trans_type: Option<u8>,
     pub odometer_rollover: Option<u8>,  // Rollover counter that can be used to extend the odometer
 }
 impl<'a> FitMessageSdmProfile<'a> {
@@ -12899,7 +12899,7 @@ impl<'a> FitMessageSdmProfile<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSdmProfile<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSdmProfile<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -12918,13 +12918,13 @@ impl<'a> FitMessageSdmProfile<'a> {
                 2 => { // sdm_cal_factor
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.sdm_cal_factor = Some(val);
+                    message.sdm_cal_factor = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 3 => { // odometer
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.odometer = Some(val);
+                    message.odometer = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 4 => { // speed_source
@@ -12965,7 +12965,7 @@ pub struct FitMessageSegmentFile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
     pub file_uuid: Option<String>,  // UUID of the segment file
     pub enabled: Option<bool>,  // Enabled state of the segment file
     pub user_profile_primary_key: Option<u32>,  // Primary key of the user that created the segment file
@@ -13016,7 +13016,7 @@ impl<'a> FitMessageSegmentFile<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSegmentFile<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSegmentFile<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -13139,7 +13139,7 @@ impl<'a> FitMessageSegmentId<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSegmentId<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSegmentId<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -13213,7 +13213,7 @@ pub enum FitMessageSegmentLapFieldTotalCycles {
 }
 
 impl FitMessageSegmentLapFieldTotalCycles {
-    fn parse<'a>(message: &FitMessageSegmentLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSegmentLapFieldTotalCycles, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageSegmentLap<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageSegmentLapFieldTotalCycles, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Cycling) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -13232,87 +13232,87 @@ pub struct FitMessageSegmentLap<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
     pub timestamp: Option<FitFieldDateTime>,  // Lap end time.
-    pub event: Option<FitFieldEvent>,  // 
-    pub event_type: Option<FitFieldEventType>,  // 
-    pub start_time: Option<FitFieldDateTime>,  // 
-    pub start_position_lat: Option<i32>,  // 
-    pub start_position_long: Option<i32>,  // 
-    pub end_position_lat: Option<i32>,  // 
-    pub end_position_long: Option<i32>,  // 
-    pub total_elapsed_time: Option<u32>,  // Time (includes pauses)
-    pub total_timer_time: Option<u32>,  // Timer Time (excludes pauses)
-    pub total_distance: Option<u32>,  // 
-    pub total_cycles: Option<FitMessageSegmentLapFieldTotalCycles>,  // 
-    pub total_calories: Option<u16>,  // 
+    pub event: Option<FitFieldEvent>,
+    pub event_type: Option<FitFieldEventType>,
+    pub start_time: Option<FitFieldDateTime>,
+    pub start_position_lat: Option<i32>,
+    pub start_position_long: Option<i32>,
+    pub end_position_lat: Option<i32>,
+    pub end_position_long: Option<i32>,
+    pub total_elapsed_time: Option<f64>,  // Time (includes pauses)
+    pub total_timer_time: Option<f64>,  // Timer Time (excludes pauses)
+    pub total_distance: Option<f64>,
+    pub total_cycles: Option<FitMessageSegmentLapFieldTotalCycles>,
+    pub total_calories: Option<u16>,
     pub total_fat_calories: Option<u16>,  // If New Leaf
-    pub avg_speed: Option<u16>,  // 
-    pub max_speed: Option<u16>,  // 
-    pub avg_heart_rate: Option<u8>,  // 
-    pub max_heart_rate: Option<u8>,  // 
+    pub avg_speed: Option<f64>,
+    pub max_speed: Option<f64>,
+    pub avg_heart_rate: Option<u8>,
+    pub max_heart_rate: Option<u8>,
     pub avg_cadence: Option<u8>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
-    pub max_cadence: Option<u8>,  // 
+    pub max_cadence: Option<u8>,
     pub avg_power: Option<u16>,  // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
-    pub max_power: Option<u16>,  // 
-    pub total_ascent: Option<u16>,  // 
-    pub total_descent: Option<u16>,  // 
-    pub sport: Option<FitFieldSport>,  // 
-    pub event_group: Option<u8>,  // 
+    pub max_power: Option<u16>,
+    pub total_ascent: Option<u16>,
+    pub total_descent: Option<u16>,
+    pub sport: Option<FitFieldSport>,
+    pub event_group: Option<u8>,
     pub nec_lat: Option<i32>,  // North east corner latitude.
     pub nec_long: Option<i32>,  // North east corner longitude.
     pub swc_lat: Option<i32>,  // South west corner latitude.
     pub swc_long: Option<i32>,  // South west corner latitude.
-    pub name: Option<String>,  // 
-    pub normalized_power: Option<u16>,  // 
-    pub left_right_balance: Option<FitFieldLeftRightBalance100>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
-    pub total_work: Option<u32>,  // 
-    pub avg_altitude: Option<u16>,  // 
-    pub max_altitude: Option<u16>,  // 
-    pub gps_accuracy: Option<u8>,  // 
-    pub avg_grade: Option<i16>,  // 
-    pub avg_pos_grade: Option<i16>,  // 
-    pub avg_neg_grade: Option<i16>,  // 
-    pub max_pos_grade: Option<i16>,  // 
-    pub max_neg_grade: Option<i16>,  // 
-    pub avg_temperature: Option<i8>,  // 
-    pub max_temperature: Option<i8>,  // 
-    pub total_moving_time: Option<u32>,  // 
-    pub avg_pos_vertical_speed: Option<i16>,  // 
-    pub avg_neg_vertical_speed: Option<i16>,  // 
-    pub max_pos_vertical_speed: Option<i16>,  // 
-    pub max_neg_vertical_speed: Option<i16>,  // 
-    pub time_in_hr_zone: Option<u32>,  // 
-    pub time_in_speed_zone: Option<u32>,  // 
-    pub time_in_cadence_zone: Option<u32>,  // 
-    pub time_in_power_zone: Option<u32>,  // 
-    pub repetition_num: Option<u16>,  // 
-    pub min_altitude: Option<u16>,  // 
-    pub min_heart_rate: Option<u8>,  // 
-    pub active_time: Option<u32>,  // 
-    pub wkt_step_index: Option<FitFieldMessageIndex>,  // 
-    pub sport_event: Option<FitFieldSportEvent>,  // 
-    pub avg_left_torque_effectiveness: Option<u8>,  // 
-    pub avg_right_torque_effectiveness: Option<u8>,  // 
-    pub avg_left_pedal_smoothness: Option<u8>,  // 
-    pub avg_right_pedal_smoothness: Option<u8>,  // 
-    pub avg_combined_pedal_smoothness: Option<u8>,  // 
-    pub status: Option<FitFieldSegmentLapStatus>,  // 
-    pub uuid: Option<String>,  // 
-    pub avg_fractional_cadence: Option<u8>,  // fractional part of the avg_cadence
-    pub max_fractional_cadence: Option<u8>,  // fractional part of the max_cadence
-    pub total_fractional_cycles: Option<u8>,  // fractional part of the total_cycles
-    pub front_gear_shift_count: Option<u16>,  // 
-    pub rear_gear_shift_count: Option<u16>,  // 
-    pub time_standing: Option<u32>,  // Total time spent in the standing position
+    pub name: Option<String>,
+    pub normalized_power: Option<u16>,
+    pub left_right_balance: Option<FitFieldLeftRightBalance100>,
+    pub sub_sport: Option<FitFieldSubSport>,
+    pub total_work: Option<u32>,
+    pub avg_altitude: Option<f64>,
+    pub max_altitude: Option<f64>,
+    pub gps_accuracy: Option<u8>,
+    pub avg_grade: Option<f64>,
+    pub avg_pos_grade: Option<f64>,
+    pub avg_neg_grade: Option<f64>,
+    pub max_pos_grade: Option<f64>,
+    pub max_neg_grade: Option<f64>,
+    pub avg_temperature: Option<i8>,
+    pub max_temperature: Option<i8>,
+    pub total_moving_time: Option<f64>,
+    pub avg_pos_vertical_speed: Option<f64>,
+    pub avg_neg_vertical_speed: Option<f64>,
+    pub max_pos_vertical_speed: Option<f64>,
+    pub max_neg_vertical_speed: Option<f64>,
+    pub time_in_hr_zone: Option<f64>,
+    pub time_in_speed_zone: Option<f64>,
+    pub time_in_cadence_zone: Option<f64>,
+    pub time_in_power_zone: Option<f64>,
+    pub repetition_num: Option<u16>,
+    pub min_altitude: Option<f64>,
+    pub min_heart_rate: Option<u8>,
+    pub active_time: Option<f64>,
+    pub wkt_step_index: Option<FitFieldMessageIndex>,
+    pub sport_event: Option<FitFieldSportEvent>,
+    pub avg_left_torque_effectiveness: Option<f64>,
+    pub avg_right_torque_effectiveness: Option<f64>,
+    pub avg_left_pedal_smoothness: Option<f64>,
+    pub avg_right_pedal_smoothness: Option<f64>,
+    pub avg_combined_pedal_smoothness: Option<f64>,
+    pub status: Option<FitFieldSegmentLapStatus>,
+    pub uuid: Option<String>,
+    pub avg_fractional_cadence: Option<f64>,  // fractional part of the avg_cadence
+    pub max_fractional_cadence: Option<f64>,  // fractional part of the max_cadence
+    pub total_fractional_cycles: Option<f64>,  // fractional part of the total_cycles
+    pub front_gear_shift_count: Option<u16>,
+    pub rear_gear_shift_count: Option<u16>,
+    pub time_standing: Option<f64>,  // Total time spent in the standing position
     pub stand_count: Option<u16>,  // Number of transitions to the standing state
     pub avg_left_pco: Option<i8>,  // Average left platform center offset
     pub avg_right_pco: Option<i8>,  // Average right platform center offset
-    pub avg_left_power_phase: Option<u8>,  // Average left power phase angles. Data value indexes defined by power_phase_type.
-    pub avg_left_power_phase_peak: Option<u8>,  // Average left power phase peak angles. Data value indexes defined by power_phase_type.
-    pub avg_right_power_phase: Option<u8>,  // Average right power phase angles. Data value indexes defined by power_phase_type.
-    pub avg_right_power_phase_peak: Option<u8>,  // Average right power phase peak angles. Data value indexes defined by power_phase_type.
+    pub avg_left_power_phase: Option<f64>,  // Average left power phase angles. Data value indexes defined by power_phase_type.
+    pub avg_left_power_phase_peak: Option<f64>,  // Average left power phase peak angles. Data value indexes defined by power_phase_type.
+    pub avg_right_power_phase: Option<f64>,  // Average right power phase angles. Data value indexes defined by power_phase_type.
+    pub avg_right_power_phase_peak: Option<f64>,  // Average right power phase peak angles. Data value indexes defined by power_phase_type.
     pub avg_power_position: Option<u16>,  // Average power by position. Data value indexes defined by rider_position_type.
     pub max_power_position: Option<u16>,  // Maximum power by position. Data value indexes defined by rider_position_type.
     pub avg_cadence_position: Option<u8>,  // Average cadence by position. Data value indexes defined by rider_position_type.
@@ -13450,7 +13450,7 @@ impl<'a> FitMessageSegmentLap<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSegmentLap<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSegmentLap<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -13499,23 +13499,23 @@ impl<'a> FitMessageSegmentLap<'a> {
                 7 => { // total_elapsed_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_elapsed_time = Some(val);
+                    message.total_elapsed_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 8 => { // total_timer_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_timer_time = Some(val);
+                    message.total_timer_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 9 => { // total_distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_distance = Some(val);
+                    message.total_distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 10 => { // total_cycles
-                    let (val, outp) = FitMessageSegmentLapFieldTotalCycles::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageSegmentLapFieldTotalCycles::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.total_cycles = Some(val);
                     Ok(())
@@ -13535,13 +13535,13 @@ impl<'a> FitMessageSegmentLap<'a> {
                 13 => { // avg_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_speed = Some(val);
+                    message.avg_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 14 => { // max_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_speed = Some(val);
+                    message.max_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 15 => { // avg_heart_rate
@@ -13661,13 +13661,13 @@ impl<'a> FitMessageSegmentLap<'a> {
                 34 => { // avg_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_altitude = Some(val);
+                    message.avg_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 35 => { // max_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_altitude = Some(val);
+                    message.max_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 36 => { // gps_accuracy
@@ -13679,31 +13679,31 @@ impl<'a> FitMessageSegmentLap<'a> {
                 37 => { // avg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_grade = Some(val);
+                    message.avg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 38 => { // avg_pos_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_pos_grade = Some(val);
+                    message.avg_pos_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 39 => { // avg_neg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_neg_grade = Some(val);
+                    message.avg_neg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 40 => { // max_pos_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_pos_grade = Some(val);
+                    message.max_pos_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 41 => { // max_neg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_neg_grade = Some(val);
+                    message.max_neg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 42 => { // avg_temperature
@@ -13721,55 +13721,55 @@ impl<'a> FitMessageSegmentLap<'a> {
                 44 => { // total_moving_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_moving_time = Some(val);
+                    message.total_moving_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 45 => { // avg_pos_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_pos_vertical_speed = Some(val);
+                    message.avg_pos_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 46 => { // avg_neg_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_neg_vertical_speed = Some(val);
+                    message.avg_neg_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 47 => { // max_pos_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_pos_vertical_speed = Some(val);
+                    message.max_pos_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 48 => { // max_neg_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_neg_vertical_speed = Some(val);
+                    message.max_neg_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 49 => { // time_in_hr_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_hr_zone = Some(val);
+                    message.time_in_hr_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 50 => { // time_in_speed_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_speed_zone = Some(val);
+                    message.time_in_speed_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 51 => { // time_in_cadence_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_cadence_zone = Some(val);
+                    message.time_in_cadence_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 52 => { // time_in_power_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_power_zone = Some(val);
+                    message.time_in_power_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 53 => { // repetition_num
@@ -13781,7 +13781,7 @@ impl<'a> FitMessageSegmentLap<'a> {
                 54 => { // min_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_altitude = Some(val);
+                    message.min_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 55 => { // min_heart_rate
@@ -13793,7 +13793,7 @@ impl<'a> FitMessageSegmentLap<'a> {
                 56 => { // active_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.active_time = Some(val);
+                    message.active_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 57 => { // wkt_step_index
@@ -13811,31 +13811,31 @@ impl<'a> FitMessageSegmentLap<'a> {
                 59 => { // avg_left_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_torque_effectiveness = Some(val);
+                    message.avg_left_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 60 => { // avg_right_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_torque_effectiveness = Some(val);
+                    message.avg_right_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 61 => { // avg_left_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_pedal_smoothness = Some(val);
+                    message.avg_left_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 62 => { // avg_right_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_pedal_smoothness = Some(val);
+                    message.avg_right_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 63 => { // avg_combined_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_combined_pedal_smoothness = Some(val);
+                    message.avg_combined_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 64 => { // status
@@ -13853,19 +13853,19 @@ impl<'a> FitMessageSegmentLap<'a> {
                 66 => { // avg_fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_fractional_cadence = Some(val);
+                    message.avg_fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 67 => { // max_fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.max_fractional_cadence = Some(val);
+                    message.max_fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 68 => { // total_fractional_cycles
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.total_fractional_cycles = Some(val);
+                    message.total_fractional_cycles = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 69 => { // front_gear_shift_count
@@ -13883,7 +13883,7 @@ impl<'a> FitMessageSegmentLap<'a> {
                 71 => { // time_standing
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_standing = Some(val);
+                    message.time_standing = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 72 => { // stand_count
@@ -13907,25 +13907,25 @@ impl<'a> FitMessageSegmentLap<'a> {
                 75 => { // avg_left_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_power_phase = Some(val);
+                    message.avg_left_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 76 => { // avg_left_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_power_phase_peak = Some(val);
+                    message.avg_left_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 77 => { // avg_right_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_power_phase = Some(val);
+                    message.avg_right_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 78 => { // avg_right_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_power_phase_peak = Some(val);
+                    message.avg_right_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 79 => { // avg_power_position
@@ -13984,12 +13984,12 @@ pub struct FitMessageSegmentLeaderboardEntry<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
     pub name: Option<String>,  // Friendly name assigned to leader
     pub ftype: Option<FitFieldSegmentLeaderboardType>,  // Leader classification
     pub group_primary_key: Option<u32>,  // Primary user ID of this leader
     pub activity_id: Option<u32>,  // ID of the activity associated with this leader time
-    pub segment_time: Option<u32>,  // Segment Time (includes pauses)
+    pub segment_time: Option<f64>,  // Segment Time (includes pauses)
     pub activity_id_string: Option<String>,  // String version of the activity_id. 21 characters long, express in decimal
 }
 impl<'a> FitMessageSegmentLeaderboardEntry<'a> {
@@ -14031,7 +14031,7 @@ impl<'a> FitMessageSegmentLeaderboardEntry<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSegmentLeaderboardEntry<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSegmentLeaderboardEntry<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -14062,7 +14062,7 @@ impl<'a> FitMessageSegmentLeaderboardEntry<'a> {
                 4 => { // segment_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.segment_time = Some(val);
+                    message.segment_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 5 => { // activity_id_string
@@ -14091,12 +14091,12 @@ pub struct FitMessageSegmentPoint<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub position_lat: Option<i32>,  // 
-    pub position_long: Option<i32>,  // 
-    pub distance: Option<u32>,  // Accumulated distance along the segment at the described point
-    pub altitude: Option<u16>,  // Accumulated altitude along the segment at the described point
-    pub leader_time: Option<u32>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment. 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub position_lat: Option<i32>,
+    pub position_long: Option<i32>,
+    pub distance: Option<f64>,  // Accumulated distance along the segment at the described point
+    pub altitude: Option<f64>,  // Accumulated altitude along the segment at the described point
+    pub leader_time: Option<f64>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment. 
 }
 impl<'a> FitMessageSegmentPoint<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentPoint<'a>>, &'a [u8])> {
@@ -14136,7 +14136,7 @@ impl<'a> FitMessageSegmentPoint<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSegmentPoint<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSegmentPoint<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -14155,19 +14155,19 @@ impl<'a> FitMessageSegmentPoint<'a> {
                 3 => { // distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.distance = Some(val);
+                    message.distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 4 => { // altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.altitude = Some(val);
+                    message.altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 5 => { // leader_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.leader_time = Some(val);
+                    message.leader_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 254 => { // message_index
@@ -14192,7 +14192,7 @@ pub enum FitMessageSessionFieldTotalCycles {
 }
 
 impl FitMessageSessionFieldTotalCycles {
-    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSessionFieldTotalCycles, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageSessionFieldTotalCycles, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Running) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -14217,7 +14217,7 @@ pub enum FitMessageSessionFieldAvgCadence {
 }
 
 impl FitMessageSessionFieldAvgCadence {
-    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSessionFieldAvgCadence, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageSessionFieldAvgCadence, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Running) => {
                 let (val, o) = parse_uint8(inp)?;
@@ -14238,7 +14238,7 @@ pub enum FitMessageSessionFieldMaxCadence {
 }
 
 impl FitMessageSessionFieldMaxCadence {
-    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSessionFieldMaxCadence, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageSession<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageSessionFieldMaxCadence, &'a [u8])> {
         match message.sport {
             Some(FitFieldSport::Running) => {
                 let (val, o) = parse_uint8(inp)?;
@@ -14261,120 +14261,120 @@ pub struct FitMessageSession<'a> {
     pub timestamp: Option<FitFieldDateTime>,  // Sesson end time.
     pub event: Option<FitFieldEvent>,  // session
     pub event_type: Option<FitFieldEventType>,  // stop
-    pub start_time: Option<FitFieldDateTime>,  // 
-    pub start_position_lat: Option<i32>,  // 
-    pub start_position_long: Option<i32>,  // 
-    pub sport: Option<FitFieldSport>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
-    pub total_elapsed_time: Option<u32>,  // Time (includes pauses)
-    pub total_timer_time: Option<u32>,  // Timer Time (excludes pauses)
-    pub total_distance: Option<u32>,  // 
-    pub total_cycles: Option<FitMessageSessionFieldTotalCycles>,  // 
-    pub total_calories: Option<u16>,  // 
-    pub total_fat_calories: Option<u16>,  // 
-    pub avg_speed: Option<u16>,  // total_distance / total_timer_time
-    pub max_speed: Option<u16>,  // 
+    pub start_time: Option<FitFieldDateTime>,
+    pub start_position_lat: Option<i32>,
+    pub start_position_long: Option<i32>,
+    pub sport: Option<FitFieldSport>,
+    pub sub_sport: Option<FitFieldSubSport>,
+    pub total_elapsed_time: Option<f64>,  // Time (includes pauses)
+    pub total_timer_time: Option<f64>,  // Timer Time (excludes pauses)
+    pub total_distance: Option<f64>,
+    pub total_cycles: Option<FitMessageSessionFieldTotalCycles>,
+    pub total_calories: Option<u16>,
+    pub total_fat_calories: Option<u16>,
+    pub avg_speed: Option<f64>,  // total_distance / total_timer_time
+    pub max_speed: Option<f64>,
     pub avg_heart_rate: Option<u8>,  // average heart rate (excludes pause time)
-    pub max_heart_rate: Option<u8>,  // 
+    pub max_heart_rate: Option<u8>,
     pub avg_cadence: Option<FitMessageSessionFieldAvgCadence>,  // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
-    pub max_cadence: Option<FitMessageSessionFieldMaxCadence>,  // 
+    pub max_cadence: Option<FitMessageSessionFieldMaxCadence>,
     pub avg_power: Option<u16>,  // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
-    pub max_power: Option<u16>,  // 
-    pub total_ascent: Option<u16>,  // 
-    pub total_descent: Option<u16>,  // 
-    pub total_training_effect: Option<u8>,  // 
-    pub first_lap_index: Option<u16>,  // 
-    pub num_laps: Option<u16>,  // 
-    pub event_group: Option<u8>,  // 
-    pub trigger: Option<FitFieldSessionTrigger>,  // 
-    pub nec_lat: Option<i32>,  // 
-    pub nec_long: Option<i32>,  // 
-    pub swc_lat: Option<i32>,  // 
-    pub swc_long: Option<i32>,  // 
-    pub normalized_power: Option<u16>,  // 
-    pub training_stress_score: Option<u16>,  // 
-    pub intensity_factor: Option<u16>,  // 
-    pub left_right_balance: Option<FitFieldLeftRightBalance100>,  // 
-    pub avg_stroke_count: Option<u32>,  // 
-    pub avg_stroke_distance: Option<u16>,  // 
-    pub swim_stroke: Option<FitFieldSwimStroke>,  // 
-    pub pool_length: Option<u16>,  // 
-    pub threshold_power: Option<u16>,  // 
-    pub pool_length_unit: Option<FitFieldDisplayMeasure>,  // 
+    pub max_power: Option<u16>,
+    pub total_ascent: Option<u16>,
+    pub total_descent: Option<u16>,
+    pub total_training_effect: Option<f64>,
+    pub first_lap_index: Option<u16>,
+    pub num_laps: Option<u16>,
+    pub event_group: Option<u8>,
+    pub trigger: Option<FitFieldSessionTrigger>,
+    pub nec_lat: Option<i32>,
+    pub nec_long: Option<i32>,
+    pub swc_lat: Option<i32>,
+    pub swc_long: Option<i32>,
+    pub normalized_power: Option<u16>,
+    pub training_stress_score: Option<f64>,
+    pub intensity_factor: Option<f64>,
+    pub left_right_balance: Option<FitFieldLeftRightBalance100>,
+    pub avg_stroke_count: Option<f64>,
+    pub avg_stroke_distance: Option<f64>,
+    pub swim_stroke: Option<FitFieldSwimStroke>,
+    pub pool_length: Option<f64>,
+    pub threshold_power: Option<u16>,
+    pub pool_length_unit: Option<FitFieldDisplayMeasure>,
     pub num_active_lengths: Option<u16>,  // # of active lengths of swim pool
-    pub total_work: Option<u32>,  // 
-    pub avg_altitude: Option<u16>,  // 
-    pub max_altitude: Option<u16>,  // 
-    pub gps_accuracy: Option<u8>,  // 
-    pub avg_grade: Option<i16>,  // 
-    pub avg_pos_grade: Option<i16>,  // 
-    pub avg_neg_grade: Option<i16>,  // 
-    pub max_pos_grade: Option<i16>,  // 
-    pub max_neg_grade: Option<i16>,  // 
-    pub avg_temperature: Option<i8>,  // 
-    pub max_temperature: Option<i8>,  // 
-    pub total_moving_time: Option<u32>,  // 
-    pub avg_pos_vertical_speed: Option<i16>,  // 
-    pub avg_neg_vertical_speed: Option<i16>,  // 
-    pub max_pos_vertical_speed: Option<i16>,  // 
-    pub max_neg_vertical_speed: Option<i16>,  // 
-    pub min_heart_rate: Option<u8>,  // 
-    pub time_in_hr_zone: Option<u32>,  // 
-    pub time_in_speed_zone: Option<u32>,  // 
-    pub time_in_cadence_zone: Option<u32>,  // 
-    pub time_in_power_zone: Option<u32>,  // 
-    pub avg_lap_time: Option<u32>,  // 
-    pub best_lap_index: Option<u16>,  // 
-    pub min_altitude: Option<u16>,  // 
-    pub player_score: Option<u16>,  // 
-    pub opponent_score: Option<u16>,  // 
-    pub opponent_name: Option<String>,  // 
+    pub total_work: Option<u32>,
+    pub avg_altitude: Option<f64>,
+    pub max_altitude: Option<f64>,
+    pub gps_accuracy: Option<u8>,
+    pub avg_grade: Option<f64>,
+    pub avg_pos_grade: Option<f64>,
+    pub avg_neg_grade: Option<f64>,
+    pub max_pos_grade: Option<f64>,
+    pub max_neg_grade: Option<f64>,
+    pub avg_temperature: Option<i8>,
+    pub max_temperature: Option<i8>,
+    pub total_moving_time: Option<f64>,
+    pub avg_pos_vertical_speed: Option<f64>,
+    pub avg_neg_vertical_speed: Option<f64>,
+    pub max_pos_vertical_speed: Option<f64>,
+    pub max_neg_vertical_speed: Option<f64>,
+    pub min_heart_rate: Option<u8>,
+    pub time_in_hr_zone: Option<f64>,
+    pub time_in_speed_zone: Option<f64>,
+    pub time_in_cadence_zone: Option<f64>,
+    pub time_in_power_zone: Option<f64>,
+    pub avg_lap_time: Option<f64>,
+    pub best_lap_index: Option<u16>,
+    pub min_altitude: Option<f64>,
+    pub player_score: Option<u16>,
+    pub opponent_score: Option<u16>,
+    pub opponent_name: Option<String>,
     pub stroke_count: Option<u16>,  // stroke_type enum used as the index
     pub zone_count: Option<u16>,  // zone number used as the index
-    pub max_ball_speed: Option<u16>,  // 
-    pub avg_ball_speed: Option<u16>,  // 
-    pub avg_vertical_oscillation: Option<u16>,  // 
-    pub avg_stance_time_percent: Option<u16>,  // 
-    pub avg_stance_time: Option<u16>,  // 
-    pub avg_fractional_cadence: Option<u8>,  // fractional part of the avg_cadence
-    pub max_fractional_cadence: Option<u8>,  // fractional part of the max_cadence
-    pub total_fractional_cycles: Option<u8>,  // fractional part of the total_cycles
-    pub avg_total_hemoglobin_conc: Option<u16>,  // Avg saturated and unsaturated hemoglobin
-    pub min_total_hemoglobin_conc: Option<u16>,  // Min saturated and unsaturated hemoglobin
-    pub max_total_hemoglobin_conc: Option<u16>,  // Max saturated and unsaturated hemoglobin
-    pub avg_saturated_hemoglobin_percent: Option<u16>,  // Avg percentage of hemoglobin saturated with oxygen
-    pub min_saturated_hemoglobin_percent: Option<u16>,  // Min percentage of hemoglobin saturated with oxygen
-    pub max_saturated_hemoglobin_percent: Option<u16>,  // Max percentage of hemoglobin saturated with oxygen
-    pub avg_left_torque_effectiveness: Option<u8>,  // 
-    pub avg_right_torque_effectiveness: Option<u8>,  // 
-    pub avg_left_pedal_smoothness: Option<u8>,  // 
-    pub avg_right_pedal_smoothness: Option<u8>,  // 
-    pub avg_combined_pedal_smoothness: Option<u8>,  // 
-    pub sport_index: Option<u8>,  // 
-    pub time_standing: Option<u32>,  // Total time spend in the standing position
+    pub max_ball_speed: Option<f64>,
+    pub avg_ball_speed: Option<f64>,
+    pub avg_vertical_oscillation: Option<f64>,
+    pub avg_stance_time_percent: Option<f64>,
+    pub avg_stance_time: Option<f64>,
+    pub avg_fractional_cadence: Option<f64>,  // fractional part of the avg_cadence
+    pub max_fractional_cadence: Option<f64>,  // fractional part of the max_cadence
+    pub total_fractional_cycles: Option<f64>,  // fractional part of the total_cycles
+    pub avg_total_hemoglobin_conc: Option<f64>,  // Avg saturated and unsaturated hemoglobin
+    pub min_total_hemoglobin_conc: Option<f64>,  // Min saturated and unsaturated hemoglobin
+    pub max_total_hemoglobin_conc: Option<f64>,  // Max saturated and unsaturated hemoglobin
+    pub avg_saturated_hemoglobin_percent: Option<f64>,  // Avg percentage of hemoglobin saturated with oxygen
+    pub min_saturated_hemoglobin_percent: Option<f64>,  // Min percentage of hemoglobin saturated with oxygen
+    pub max_saturated_hemoglobin_percent: Option<f64>,  // Max percentage of hemoglobin saturated with oxygen
+    pub avg_left_torque_effectiveness: Option<f64>,
+    pub avg_right_torque_effectiveness: Option<f64>,
+    pub avg_left_pedal_smoothness: Option<f64>,
+    pub avg_right_pedal_smoothness: Option<f64>,
+    pub avg_combined_pedal_smoothness: Option<f64>,
+    pub sport_index: Option<u8>,
+    pub time_standing: Option<f64>,  // Total time spend in the standing position
     pub stand_count: Option<u16>,  // Number of transitions to the standing state
     pub avg_left_pco: Option<i8>,  // Average platform center offset Left
     pub avg_right_pco: Option<i8>,  // Average platform center offset Right
-    pub avg_left_power_phase: Option<u8>,  // Average left power phase angles. Indexes defined by power_phase_type.
-    pub avg_left_power_phase_peak: Option<u8>,  // Average left power phase peak angles. Data value indexes defined by power_phase_type.
-    pub avg_right_power_phase: Option<u8>,  // Average right power phase angles. Data value indexes defined by power_phase_type.
-    pub avg_right_power_phase_peak: Option<u8>,  // Average right power phase peak angles data value indexes  defined by power_phase_type.
+    pub avg_left_power_phase: Option<f64>,  // Average left power phase angles. Indexes defined by power_phase_type.
+    pub avg_left_power_phase_peak: Option<f64>,  // Average left power phase peak angles. Data value indexes defined by power_phase_type.
+    pub avg_right_power_phase: Option<f64>,  // Average right power phase angles. Data value indexes defined by power_phase_type.
+    pub avg_right_power_phase_peak: Option<f64>,  // Average right power phase peak angles data value indexes  defined by power_phase_type.
     pub avg_power_position: Option<u16>,  // Average power by position. Data value indexes defined by rider_position_type.
     pub max_power_position: Option<u16>,  // Maximum power by position. Data value indexes defined by rider_position_type.
     pub avg_cadence_position: Option<u8>,  // Average cadence by position. Data value indexes defined by rider_position_type.
     pub max_cadence_position: Option<u8>,  // Maximum cadence by position. Data value indexes defined by rider_position_type.
-    pub enhanced_avg_speed: Option<u32>,  // total_distance / total_timer_time
-    pub enhanced_max_speed: Option<u32>,  // 
-    pub enhanced_avg_altitude: Option<u32>,  // 
-    pub enhanced_min_altitude: Option<u32>,  // 
-    pub enhanced_max_altitude: Option<u32>,  // 
+    pub enhanced_avg_speed: Option<f64>,  // total_distance / total_timer_time
+    pub enhanced_max_speed: Option<f64>,
+    pub enhanced_avg_altitude: Option<f64>,
+    pub enhanced_min_altitude: Option<f64>,
+    pub enhanced_max_altitude: Option<f64>,
     pub avg_lev_motor_power: Option<u16>,  // lev average motor power during session
     pub max_lev_motor_power: Option<u16>,  // lev maximum motor power during session
-    pub lev_battery_consumption: Option<u8>,  // lev battery consumption during session
-    pub avg_vertical_ratio: Option<u16>,  // 
-    pub avg_stance_time_balance: Option<u16>,  // 
-    pub avg_step_length: Option<u16>,  // 
-    pub total_anaerobic_training_effect: Option<u8>,  // 
+    pub lev_battery_consumption: Option<f64>,  // lev battery consumption during session
+    pub avg_vertical_ratio: Option<f64>,
+    pub avg_stance_time_balance: Option<f64>,
+    pub avg_step_length: Option<f64>,
+    pub total_anaerobic_training_effect: Option<f64>,
 }
 impl<'a> FitMessageSession<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSession<'a>>, &'a [u8])> {
@@ -14539,7 +14539,7 @@ impl<'a> FitMessageSession<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSession<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSession<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -14588,23 +14588,23 @@ impl<'a> FitMessageSession<'a> {
                 7 => { // total_elapsed_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_elapsed_time = Some(val);
+                    message.total_elapsed_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 8 => { // total_timer_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_timer_time = Some(val);
+                    message.total_timer_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 9 => { // total_distance
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_distance = Some(val);
+                    message.total_distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 10 => { // total_cycles
-                    let (val, outp) = FitMessageSessionFieldTotalCycles::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageSessionFieldTotalCycles::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.total_cycles = Some(val);
                     Ok(())
@@ -14624,13 +14624,13 @@ impl<'a> FitMessageSession<'a> {
                 14 => { // avg_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_speed = Some(val);
+                    message.avg_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 15 => { // max_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_speed = Some(val);
+                    message.max_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 16 => { // avg_heart_rate
@@ -14646,13 +14646,13 @@ impl<'a> FitMessageSession<'a> {
                     Ok(())
                 },
                 18 => { // avg_cadence
-                    let (val, outp) = FitMessageSessionFieldAvgCadence::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageSessionFieldAvgCadence::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.avg_cadence = Some(val);
                     Ok(())
                 },
                 19 => { // max_cadence
-                    let (val, outp) = FitMessageSessionFieldMaxCadence::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageSessionFieldMaxCadence::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.max_cadence = Some(val);
                     Ok(())
@@ -14684,7 +14684,7 @@ impl<'a> FitMessageSession<'a> {
                 24 => { // total_training_effect
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.total_training_effect = Some(val);
+                    message.total_training_effect = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 25 => { // first_lap_index
@@ -14744,13 +14744,13 @@ impl<'a> FitMessageSession<'a> {
                 35 => { // training_stress_score
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.training_stress_score = Some(val);
+                    message.training_stress_score = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 36 => { // intensity_factor
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.intensity_factor = Some(val);
+                    message.intensity_factor = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 37 => { // left_right_balance
@@ -14762,13 +14762,13 @@ impl<'a> FitMessageSession<'a> {
                 41 => { // avg_stroke_count
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stroke_count = Some(val);
+                    message.avg_stroke_count = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 42 => { // avg_stroke_distance
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stroke_distance = Some(val);
+                    message.avg_stroke_distance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 43 => { // swim_stroke
@@ -14780,7 +14780,7 @@ impl<'a> FitMessageSession<'a> {
                 44 => { // pool_length
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.pool_length = Some(val);
+                    message.pool_length = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 45 => { // threshold_power
@@ -14810,13 +14810,13 @@ impl<'a> FitMessageSession<'a> {
                 49 => { // avg_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_altitude = Some(val);
+                    message.avg_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 50 => { // max_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_altitude = Some(val);
+                    message.max_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 51 => { // gps_accuracy
@@ -14828,31 +14828,31 @@ impl<'a> FitMessageSession<'a> {
                 52 => { // avg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_grade = Some(val);
+                    message.avg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 53 => { // avg_pos_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_pos_grade = Some(val);
+                    message.avg_pos_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 54 => { // avg_neg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_neg_grade = Some(val);
+                    message.avg_neg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 55 => { // max_pos_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_pos_grade = Some(val);
+                    message.max_pos_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 56 => { // max_neg_grade
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_neg_grade = Some(val);
+                    message.max_neg_grade = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 57 => { // avg_temperature
@@ -14870,31 +14870,31 @@ impl<'a> FitMessageSession<'a> {
                 59 => { // total_moving_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.total_moving_time = Some(val);
+                    message.total_moving_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 60 => { // avg_pos_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_pos_vertical_speed = Some(val);
+                    message.avg_pos_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 61 => { // avg_neg_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_neg_vertical_speed = Some(val);
+                    message.avg_neg_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 62 => { // max_pos_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_pos_vertical_speed = Some(val);
+                    message.max_pos_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 63 => { // max_neg_vertical_speed
                     let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_neg_vertical_speed = Some(val);
+                    message.max_neg_vertical_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 64 => { // min_heart_rate
@@ -14906,31 +14906,31 @@ impl<'a> FitMessageSession<'a> {
                 65 => { // time_in_hr_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_hr_zone = Some(val);
+                    message.time_in_hr_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 66 => { // time_in_speed_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_speed_zone = Some(val);
+                    message.time_in_speed_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 67 => { // time_in_cadence_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_cadence_zone = Some(val);
+                    message.time_in_cadence_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 68 => { // time_in_power_zone
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_in_power_zone = Some(val);
+                    message.time_in_power_zone = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 69 => { // avg_lap_time
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_lap_time = Some(val);
+                    message.avg_lap_time = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 70 => { // best_lap_index
@@ -14942,7 +14942,7 @@ impl<'a> FitMessageSession<'a> {
                 71 => { // min_altitude
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_altitude = Some(val);
+                    message.min_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 82 => { // player_score
@@ -14978,115 +14978,115 @@ impl<'a> FitMessageSession<'a> {
                 87 => { // max_ball_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_ball_speed = Some(val);
+                    message.max_ball_speed = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 88 => { // avg_ball_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_ball_speed = Some(val);
+                    message.avg_ball_speed = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 89 => { // avg_vertical_oscillation
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_vertical_oscillation = Some(val);
+                    message.avg_vertical_oscillation = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 90 => { // avg_stance_time_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stance_time_percent = Some(val);
+                    message.avg_stance_time_percent = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 91 => { // avg_stance_time
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stance_time = Some(val);
+                    message.avg_stance_time = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 92 => { // avg_fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_fractional_cadence = Some(val);
+                    message.avg_fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 93 => { // max_fractional_cadence
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.max_fractional_cadence = Some(val);
+                    message.max_fractional_cadence = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 94 => { // total_fractional_cycles
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.total_fractional_cycles = Some(val);
+                    message.total_fractional_cycles = Some((val as f64 / 128 as f64));
                     Ok(())
                 },
                 95 => { // avg_total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_total_hemoglobin_conc = Some(val);
+                    message.avg_total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 96 => { // min_total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_total_hemoglobin_conc = Some(val);
+                    message.min_total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 97 => { // max_total_hemoglobin_conc
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_total_hemoglobin_conc = Some(val);
+                    message.max_total_hemoglobin_conc = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 98 => { // avg_saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_saturated_hemoglobin_percent = Some(val);
+                    message.avg_saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 99 => { // min_saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.min_saturated_hemoglobin_percent = Some(val);
+                    message.min_saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 100 => { // max_saturated_hemoglobin_percent
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.max_saturated_hemoglobin_percent = Some(val);
+                    message.max_saturated_hemoglobin_percent = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 101 => { // avg_left_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_torque_effectiveness = Some(val);
+                    message.avg_left_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 102 => { // avg_right_torque_effectiveness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_torque_effectiveness = Some(val);
+                    message.avg_right_torque_effectiveness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 103 => { // avg_left_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_pedal_smoothness = Some(val);
+                    message.avg_left_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 104 => { // avg_right_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_pedal_smoothness = Some(val);
+                    message.avg_right_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 105 => { // avg_combined_pedal_smoothness
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_combined_pedal_smoothness = Some(val);
+                    message.avg_combined_pedal_smoothness = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 111 => { // sport_index
@@ -15098,7 +15098,7 @@ impl<'a> FitMessageSession<'a> {
                 112 => { // time_standing
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.time_standing = Some(val);
+                    message.time_standing = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 113 => { // stand_count
@@ -15122,25 +15122,25 @@ impl<'a> FitMessageSession<'a> {
                 116 => { // avg_left_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_power_phase = Some(val);
+                    message.avg_left_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 117 => { // avg_left_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_left_power_phase_peak = Some(val);
+                    message.avg_left_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 118 => { // avg_right_power_phase
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_power_phase = Some(val);
+                    message.avg_right_power_phase = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 119 => { // avg_right_power_phase_peak
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.avg_right_power_phase_peak = Some(val);
+                    message.avg_right_power_phase_peak = Some((val as f64 / 0.7111111 as f64));
                     Ok(())
                 },
                 120 => { // avg_power_position
@@ -15170,31 +15170,31 @@ impl<'a> FitMessageSession<'a> {
                 124 => { // enhanced_avg_speed
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_avg_speed = Some(val);
+                    message.enhanced_avg_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 125 => { // enhanced_max_speed
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_max_speed = Some(val);
+                    message.enhanced_max_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 126 => { // enhanced_avg_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_avg_altitude = Some(val);
+                    message.enhanced_avg_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 127 => { // enhanced_min_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_min_altitude = Some(val);
+                    message.enhanced_min_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 128 => { // enhanced_max_altitude
                     let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.enhanced_max_altitude = Some(val);
+                    message.enhanced_max_altitude = Some((val as f64 / 5 as f64) - (500 as f64));
                     Ok(())
                 },
                 129 => { // avg_lev_motor_power
@@ -15212,31 +15212,31 @@ impl<'a> FitMessageSession<'a> {
                 131 => { // lev_battery_consumption
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.lev_battery_consumption = Some(val);
+                    message.lev_battery_consumption = Some((val as f64 / 2 as f64));
                     Ok(())
                 },
                 132 => { // avg_vertical_ratio
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_vertical_ratio = Some(val);
+                    message.avg_vertical_ratio = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 133 => { // avg_stance_time_balance
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_stance_time_balance = Some(val);
+                    message.avg_stance_time_balance = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 134 => { // avg_step_length
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.avg_step_length = Some(val);
+                    message.avg_step_length = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 137 => { // total_anaerobic_training_effect
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.total_anaerobic_training_effect = Some(val);
+                    message.total_anaerobic_training_effect = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 253 => { // timestamp
@@ -15267,7 +15267,7 @@ pub enum FitMessageSlaveDeviceFieldProduct {
 }
 
 impl FitMessageSlaveDeviceFieldProduct {
-    fn parse<'a>(message: &FitMessageSlaveDevice<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageSlaveDeviceFieldProduct, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageSlaveDevice<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageSlaveDeviceFieldProduct, &'a [u8])> {
         match message.manufacturer {
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -15294,8 +15294,8 @@ pub struct FitMessageSlaveDevice<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub product: Option<FitMessageSlaveDeviceFieldProduct>,  // 
+    pub manufacturer: Option<FitFieldManufacturer>,
+    pub product: Option<FitMessageSlaveDeviceFieldProduct>,
 }
 impl<'a> FitMessageSlaveDevice<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSlaveDevice<'a>>, &'a [u8])> {
@@ -15331,7 +15331,7 @@ impl<'a> FitMessageSlaveDevice<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSlaveDevice<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSlaveDevice<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -15342,7 +15342,7 @@ impl<'a> FitMessageSlaveDevice<'a> {
                     Ok(())
                 },
                 1 => { // product
-                    let (val, outp) = FitMessageSlaveDeviceFieldProduct::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageSlaveDeviceFieldProduct::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -15361,9 +15361,9 @@ pub struct FitMessageSoftware<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub version: Option<u16>,  // 
-    pub part_number: Option<String>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub version: Option<f64>,
+    pub part_number: Option<String>,
 }
 impl<'a> FitMessageSoftware<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSoftware<'a>>, &'a [u8])> {
@@ -15400,14 +15400,14 @@ impl<'a> FitMessageSoftware<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSoftware<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSoftware<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 3 => { // version
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.version = Some(val);
+                    message.version = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 5 => { // part_number
@@ -15436,9 +15436,9 @@ pub struct FitMessageSpeedZone<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub high_value: Option<u16>,  // 
-    pub name: Option<String>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub high_value: Option<f64>,
+    pub name: Option<String>,
 }
 impl<'a> FitMessageSpeedZone<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSpeedZone<'a>>, &'a [u8])> {
@@ -15475,14 +15475,14 @@ impl<'a> FitMessageSpeedZone<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSpeedZone<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSpeedZone<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // high_value
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.high_value = Some(val);
+                    message.high_value = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 1 => { // name
@@ -15511,9 +15511,9 @@ pub struct FitMessageSport<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub sport: Option<FitFieldSport>,  // 
-    pub sub_sport: Option<FitFieldSubSport>,  // 
-    pub name: Option<String>,  // 
+    pub sport: Option<FitFieldSport>,
+    pub sub_sport: Option<FitFieldSubSport>,
+    pub name: Option<String>,
 }
 impl<'a> FitMessageSport<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageSport<'a>>, &'a [u8])> {
@@ -15550,7 +15550,7 @@ impl<'a> FitMessageSport<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageSport<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageSport<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -15589,7 +15589,7 @@ pub enum FitMessageThreeDSensorCalibrationFieldCalibrationFactor {
 }
 
 impl FitMessageThreeDSensorCalibrationFieldCalibrationFactor {
-    fn parse<'a>(message: &FitMessageThreeDSensorCalibration<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageThreeDSensorCalibrationFieldCalibrationFactor, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageThreeDSensorCalibration<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageThreeDSensorCalibrationFieldCalibrationFactor, &'a [u8])> {
         match message.sensor_type {
             Some(FitFieldSensorType::Accelerometer) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -15618,7 +15618,7 @@ pub struct FitMessageThreeDSensorCalibration<'a> {
     pub calibration_divisor: Option<u32>,  // Calibration factor divisor
     pub level_shift: Option<u32>,  // Level shift value used to shift the ADC value back into range
     pub offset_cal: Option<i32>,  // Internal calibration factors, one for each: xy, yx, zx
-    pub orientation_matrix: Option<i32>,  // 3 x 3 rotation matrix (row major)
+    pub orientation_matrix: Option<f64>,  // 3 x 3 rotation matrix (row major)
 }
 impl<'a> FitMessageThreeDSensorCalibration<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageThreeDSensorCalibration<'a>>, &'a [u8])> {
@@ -15672,7 +15672,7 @@ impl<'a> FitMessageThreeDSensorCalibration<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageThreeDSensorCalibration<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageThreeDSensorCalibration<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -15683,7 +15683,7 @@ impl<'a> FitMessageThreeDSensorCalibration<'a> {
                     Ok(())
                 },
                 1 => { // calibration_factor
-                    let (val, outp) = FitMessageThreeDSensorCalibrationFieldCalibrationFactor::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageThreeDSensorCalibrationFieldCalibrationFactor::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.calibration_factor = Some(val);
                     Ok(())
@@ -15709,7 +15709,7 @@ impl<'a> FitMessageThreeDSensorCalibration<'a> {
                 5 => { // orientation_matrix
                     let (val, outp) = parse_sint32(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.orientation_matrix = Some(val);
+                    message.orientation_matrix = Some((val as f64 / 65535 as f64));
                     Ok(())
                 },
                 253 => { // timestamp
@@ -15733,9 +15733,9 @@ pub struct FitMessageTimestampCorrelation<'a> {
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of UTC timestamp at the time the system timestamp was recorded.
-    pub fractional_timestamp: Option<u16>,  // Fractional part of the UTC timestamp at the time the system timestamp was recorded.
+    pub fractional_timestamp: Option<f64>,  // Fractional part of the UTC timestamp at the time the system timestamp was recorded.
     pub system_timestamp: Option<FitFieldDateTime>,  // Whole second part of the system timestamp
-    pub fractional_system_timestamp: Option<u16>,  // Fractional part of the system timestamp
+    pub fractional_system_timestamp: Option<f64>,  // Fractional part of the system timestamp
     pub local_timestamp: Option<FitFieldLocalDateTime>,  // timestamp epoch expressed in local time used to convert timestamps to local time 
     pub timestamp_ms: Option<u16>,  // Millisecond part of the UTC timestamp at the time the system timestamp was recorded.
     pub system_timestamp_ms: Option<u16>,  // Millisecond part of the system timestamp
@@ -15792,14 +15792,14 @@ impl<'a> FitMessageTimestampCorrelation<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageTimestampCorrelation<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageTimestampCorrelation<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
                 0 => { // fractional_timestamp
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.fractional_timestamp = Some(val);
+                    message.fractional_timestamp = Some((val as f64 / 32768 as f64));
                     Ok(())
                 },
                 1 => { // system_timestamp
@@ -15811,7 +15811,7 @@ impl<'a> FitMessageTimestampCorrelation<'a> {
                 2 => { // fractional_system_timestamp
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.fractional_system_timestamp = Some(val);
+                    message.fractional_system_timestamp = Some((val as f64 / 32768 as f64));
                     Ok(())
                 },
                 3 => { // local_timestamp
@@ -15852,16 +15852,16 @@ pub struct FitMessageTotals<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub timestamp: Option<FitFieldDateTime>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub timestamp: Option<FitFieldDateTime>,
     pub timer_time: Option<u32>,  // Excludes pauses
-    pub distance: Option<u32>,  // 
-    pub calories: Option<u32>,  // 
-    pub sport: Option<FitFieldSport>,  // 
+    pub distance: Option<u32>,
+    pub calories: Option<u32>,
+    pub sport: Option<FitFieldSport>,
     pub elapsed_time: Option<u32>,  // Includes pauses
-    pub sessions: Option<u16>,  // 
-    pub active_time: Option<u32>,  // 
-    pub sport_index: Option<u8>,  // 
+    pub sessions: Option<u16>,
+    pub active_time: Option<u32>,
+    pub sport_index: Option<u8>,
 }
 impl<'a> FitMessageTotals<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTotals<'a>>, &'a [u8])> {
@@ -15918,7 +15918,7 @@ impl<'a> FitMessageTotals<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageTotals<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageTotals<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -15998,7 +15998,7 @@ pub enum FitMessageTrainingFileFieldProduct {
 }
 
 impl FitMessageTrainingFileFieldProduct {
-    fn parse<'a>(message: &FitMessageTrainingFile<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageTrainingFileFieldProduct, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageTrainingFile<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageTrainingFileFieldProduct, &'a [u8])> {
         match message.manufacturer {
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -16025,12 +16025,12 @@ pub struct FitMessageTrainingFile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub ftype: Option<FitFieldFile>,  // 
-    pub manufacturer: Option<FitFieldManufacturer>,  // 
-    pub product: Option<FitMessageTrainingFileFieldProduct>,  // 
-    pub serial_number: Option<u32>,  // 
-    pub time_created: Option<FitFieldDateTime>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub ftype: Option<FitFieldFile>,
+    pub manufacturer: Option<FitFieldManufacturer>,
+    pub product: Option<FitMessageTrainingFileFieldProduct>,
+    pub serial_number: Option<u32>,
+    pub time_created: Option<FitFieldDateTime>,
 }
 impl<'a> FitMessageTrainingFile<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageTrainingFile<'a>>, &'a [u8])> {
@@ -16083,7 +16083,7 @@ impl<'a> FitMessageTrainingFile<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageTrainingFile<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageTrainingFile<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16100,7 +16100,7 @@ impl<'a> FitMessageTrainingFile<'a> {
                     Ok(())
                 },
                 2 => { // product
-                    let (val, outp) = FitMessageTrainingFileFieldProduct::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageTrainingFileFieldProduct::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.product = Some(val);
                     Ok(())
@@ -16137,33 +16137,33 @@ pub struct FitMessageUserProfile<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub friendly_name: Option<String>,  // 
-    pub gender: Option<FitFieldGender>,  // 
-    pub age: Option<u8>,  // 
-    pub height: Option<u8>,  // 
-    pub weight: Option<u16>,  // 
-    pub language: Option<FitFieldLanguage>,  // 
-    pub elev_setting: Option<FitFieldDisplayMeasure>,  // 
-    pub weight_setting: Option<FitFieldDisplayMeasure>,  // 
-    pub resting_heart_rate: Option<u8>,  // 
-    pub default_max_running_heart_rate: Option<u8>,  // 
-    pub default_max_biking_heart_rate: Option<u8>,  // 
-    pub default_max_heart_rate: Option<u8>,  // 
-    pub hr_setting: Option<FitFieldDisplayHeart>,  // 
-    pub speed_setting: Option<FitFieldDisplayMeasure>,  // 
-    pub dist_setting: Option<FitFieldDisplayMeasure>,  // 
-    pub power_setting: Option<FitFieldDisplayPower>,  // 
-    pub activity_class: Option<FitFieldActivityClass>,  // 
-    pub position_setting: Option<FitFieldDisplayPosition>,  // 
-    pub temperature_setting: Option<FitFieldDisplayMeasure>,  // 
-    pub local_id: Option<FitFieldUserLocalId>,  // 
-    pub global_id: Option<&'a [u8]>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub friendly_name: Option<String>,
+    pub gender: Option<FitFieldGender>,
+    pub age: Option<u8>,
+    pub height: Option<f64>,
+    pub weight: Option<f64>,
+    pub language: Option<FitFieldLanguage>,
+    pub elev_setting: Option<FitFieldDisplayMeasure>,
+    pub weight_setting: Option<FitFieldDisplayMeasure>,
+    pub resting_heart_rate: Option<u8>,
+    pub default_max_running_heart_rate: Option<u8>,
+    pub default_max_biking_heart_rate: Option<u8>,
+    pub default_max_heart_rate: Option<u8>,
+    pub hr_setting: Option<FitFieldDisplayHeart>,
+    pub speed_setting: Option<FitFieldDisplayMeasure>,
+    pub dist_setting: Option<FitFieldDisplayMeasure>,
+    pub power_setting: Option<FitFieldDisplayPower>,
+    pub activity_class: Option<FitFieldActivityClass>,
+    pub position_setting: Option<FitFieldDisplayPosition>,
+    pub temperature_setting: Option<FitFieldDisplayMeasure>,
+    pub local_id: Option<FitFieldUserLocalId>,
+    pub global_id: Option<&'a [u8]>,
     pub wake_time: Option<FitFieldLocaltimeIntoDay>,  // Typical wake time
     pub sleep_time: Option<FitFieldLocaltimeIntoDay>,  // Typical bed time
-    pub height_setting: Option<FitFieldDisplayMeasure>,  // 
-    pub user_running_step_length: Option<u16>,  // User defined running step length set to 0 for auto length
-    pub user_walking_step_length: Option<u16>,  // User defined walking step length set to 0 for auto length
+    pub height_setting: Option<FitFieldDisplayMeasure>,
+    pub user_running_step_length: Option<f64>,  // User defined running step length set to 0 for auto length
+    pub user_walking_step_length: Option<f64>,  // User defined walking step length set to 0 for auto length
 }
 impl<'a> FitMessageUserProfile<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageUserProfile<'a>>, &'a [u8])> {
@@ -16224,7 +16224,7 @@ impl<'a> FitMessageUserProfile<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageUserProfile<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageUserProfile<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16249,13 +16249,13 @@ impl<'a> FitMessageUserProfile<'a> {
                 3 => { // height
                     let (val, outp) = parse_uint8(inp)?;
                     inp = outp;
-                    message.height = Some(val);
+                    message.height = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 4 => { // weight
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.weight = Some(val);
+                    message.weight = Some((val as f64 / 10 as f64));
                     Ok(())
                 },
                 5 => { // language
@@ -16375,13 +16375,13 @@ impl<'a> FitMessageUserProfile<'a> {
                 31 => { // user_running_step_length
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.user_running_step_length = Some(val);
+                    message.user_running_step_length = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 32 => { // user_walking_step_length
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.user_walking_step_length = Some(val);
+                    message.user_walking_step_length = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 254 => { // message_index
@@ -16404,8 +16404,8 @@ pub struct FitMessageVideo<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub url: Option<String>,  // 
-    pub hosting_provider: Option<String>,  // 
+    pub url: Option<String>,
+    pub hosting_provider: Option<String>,
     pub duration: Option<u32>,  // Playback time of video
 }
 impl<'a> FitMessageVideo<'a> {
@@ -16443,7 +16443,7 @@ impl<'a> FitMessageVideo<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageVideo<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageVideo<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16479,11 +16479,11 @@ pub struct FitMessageVideoClip<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub clip_number: Option<u16>,  // 
-    pub start_timestamp: Option<FitFieldDateTime>,  // 
-    pub start_timestamp_ms: Option<u16>,  // 
-    pub end_timestamp: Option<FitFieldDateTime>,  // 
-    pub end_timestamp_ms: Option<u16>,  // 
+    pub clip_number: Option<u16>,
+    pub start_timestamp: Option<FitFieldDateTime>,
+    pub start_timestamp_ms: Option<u16>,
+    pub end_timestamp: Option<FitFieldDateTime>,
+    pub end_timestamp_ms: Option<u16>,
     pub clip_start: Option<u32>,  // Start of clip in video time
     pub clip_end: Option<u32>,  // End of clip in video time
 }
@@ -16526,7 +16526,7 @@ impl<'a> FitMessageVideoClip<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageVideoClip<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageVideoClip<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16588,7 +16588,7 @@ pub struct FitMessageVideoDescription<'a> {
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub message_index: Option<FitFieldMessageIndex>,  // Long descriptions will be split into multiple parts
     pub message_count: Option<u16>,  // Total number of description parts
-    pub text: Option<String>,  // 
+    pub text: Option<String>,
 }
 impl<'a> FitMessageVideoDescription<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoDescription<'a>>, &'a [u8])> {
@@ -16625,7 +16625,7 @@ impl<'a> FitMessageVideoDescription<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageVideoDescription<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageVideoDescription<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16713,7 +16713,7 @@ impl<'a> FitMessageVideoFrame<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageVideoFrame<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageVideoFrame<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16751,7 +16751,7 @@ pub struct FitMessageVideoTitle<'a> {
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub message_index: Option<FitFieldMessageIndex>,  // Long titles will be split into multiple parts
     pub message_count: Option<u16>,  // Total number of title parts
-    pub text: Option<String>,  // 
+    pub text: Option<String>,
 }
 impl<'a> FitMessageVideoTitle<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoTitle<'a>>, &'a [u8])> {
@@ -16788,7 +16788,7 @@ impl<'a> FitMessageVideoTitle<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageVideoTitle<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageVideoTitle<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16827,7 +16827,7 @@ pub enum FitMessageWatchfaceSettingsFieldLayout<'a> {
 }
 
 impl<'a> FitMessageWatchfaceSettingsFieldLayout<'a> {
-    fn parse(message: &FitMessageWatchfaceSettings<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWatchfaceSettingsFieldLayout<'a>, &'a [u8])> {
+    fn parse(message: &FitMessageWatchfaceSettings<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageWatchfaceSettingsFieldLayout<'a>, &'a [u8])> {
         match message.mode {
             Some(FitFieldWatchfaceMode::Digital) => {
                 let (val, o) = FitFieldDigitalWatchfaceLayout::parse(inp)?;
@@ -16850,9 +16850,9 @@ pub struct FitMessageWatchfaceSettings<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub mode: Option<FitFieldWatchfaceMode>,  // 
-    pub layout: Option<FitMessageWatchfaceSettingsFieldLayout<'a>>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub mode: Option<FitFieldWatchfaceMode>,
+    pub layout: Option<FitMessageWatchfaceSettingsFieldLayout<'a>>,
 }
 impl<'a> FitMessageWatchfaceSettings<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWatchfaceSettings<'a>>, &'a [u8])> {
@@ -16889,7 +16889,7 @@ impl<'a> FitMessageWatchfaceSettings<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageWatchfaceSettings<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageWatchfaceSettings<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -16900,7 +16900,7 @@ impl<'a> FitMessageWatchfaceSettings<'a> {
                     Ok(())
                 },
                 1 => { // layout
-                    let (val, outp) = FitMessageWatchfaceSettingsFieldLayout::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageWatchfaceSettingsFieldLayout::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.layout = Some(val);
                     Ok(())
@@ -16925,7 +16925,7 @@ pub struct FitMessageWeatherAlert<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
     pub report_id: Option<String>,  // Unique identifier from GCS report ID string, length is 12
     pub issue_time: Option<FitFieldDateTime>,  // Time alert was issued
     pub expire_time: Option<FitFieldDateTime>,  // Time alert expires
@@ -16983,7 +16983,7 @@ impl<'a> FitMessageWeatherAlert<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageWeatherAlert<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageWeatherAlert<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -17039,20 +17039,20 @@ pub struct FitMessageWeatherConditions<'a> {
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
     pub timestamp: Option<FitFieldDateTime>,  // time of update for current conditions, else forecast time
     pub weather_report: Option<FitFieldWeatherReport>,  // Current or forecast
-    pub temperature: Option<i8>,  // 
+    pub temperature: Option<i8>,
     pub condition: Option<FitFieldWeatherStatus>,  // Corresponds to GSC Response weatherIcon field
-    pub wind_direction: Option<u16>,  // 
-    pub wind_speed: Option<u16>,  // 
+    pub wind_direction: Option<u16>,
+    pub wind_speed: Option<f64>,
     pub precipitation_probability: Option<u8>,  // range 0-100
     pub temperature_feels_like: Option<i8>,  // Heat Index if  GCS heatIdx above or equal to 90F or wind chill if GCS windChill below or equal to 32F
-    pub relative_humidity: Option<u8>,  // 
+    pub relative_humidity: Option<u8>,
     pub location: Option<String>,  // string corresponding to GCS response location string
-    pub observed_at_time: Option<FitFieldDateTime>,  // 
-    pub observed_location_lat: Option<i32>,  // 
-    pub observed_location_long: Option<i32>,  // 
-    pub day_of_week: Option<FitFieldDayOfWeek>,  // 
-    pub high_temperature: Option<i8>,  // 
-    pub low_temperature: Option<i8>,  // 
+    pub observed_at_time: Option<FitFieldDateTime>,
+    pub observed_location_lat: Option<i32>,
+    pub observed_location_long: Option<i32>,
+    pub day_of_week: Option<FitFieldDayOfWeek>,
+    pub high_temperature: Option<i8>,
+    pub low_temperature: Option<i8>,
 }
 impl<'a> FitMessageWeatherConditions<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherConditions<'a>>, &'a [u8])> {
@@ -17115,7 +17115,7 @@ impl<'a> FitMessageWeatherConditions<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageWeatherConditions<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageWeatherConditions<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -17146,7 +17146,7 @@ impl<'a> FitMessageWeatherConditions<'a> {
                 4 => { // wind_speed
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.wind_speed = Some(val);
+                    message.wind_speed = Some((val as f64 / 1000 as f64));
                     Ok(())
                 },
                 5 => { // precipitation_probability
@@ -17229,18 +17229,18 @@ pub struct FitMessageWeightScale<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub timestamp: Option<FitFieldDateTime>,  // 
-    pub weight: Option<FitFieldWeight>,  // 
-    pub percent_fat: Option<u16>,  // 
-    pub percent_hydration: Option<u16>,  // 
-    pub visceral_fat_mass: Option<u16>,  // 
-    pub bone_mass: Option<u16>,  // 
-    pub muscle_mass: Option<u16>,  // 
-    pub basal_met: Option<u16>,  // 
-    pub physique_rating: Option<u8>,  // 
-    pub active_met: Option<u16>,  // ~4kJ per kcal, 0.25 allows max 16384 kcal
-    pub metabolic_age: Option<u8>,  // 
-    pub visceral_fat_rating: Option<u8>,  // 
+    pub timestamp: Option<FitFieldDateTime>,
+    pub weight: Option<FitFieldWeight>,
+    pub percent_fat: Option<f64>,
+    pub percent_hydration: Option<f64>,
+    pub visceral_fat_mass: Option<f64>,
+    pub bone_mass: Option<f64>,
+    pub muscle_mass: Option<f64>,
+    pub basal_met: Option<f64>,
+    pub physique_rating: Option<u8>,
+    pub active_met: Option<f64>,  // ~4kJ per kcal, 0.25 allows max 16384 kcal
+    pub metabolic_age: Option<u8>,
+    pub visceral_fat_rating: Option<u8>,
     pub user_profile_index: Option<FitFieldMessageIndex>,  // Associates this weight scale message to a user.  This corresponds to the index of the user profile message in the weight scale file.
 }
 impl<'a> FitMessageWeightScale<'a> {
@@ -17301,7 +17301,7 @@ impl<'a> FitMessageWeightScale<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageWeightScale<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageWeightScale<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -17314,37 +17314,37 @@ impl<'a> FitMessageWeightScale<'a> {
                 1 => { // percent_fat
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.percent_fat = Some(val);
+                    message.percent_fat = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 2 => { // percent_hydration
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.percent_hydration = Some(val);
+                    message.percent_hydration = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 3 => { // visceral_fat_mass
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.visceral_fat_mass = Some(val);
+                    message.visceral_fat_mass = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 4 => { // bone_mass
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.bone_mass = Some(val);
+                    message.bone_mass = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 5 => { // muscle_mass
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.muscle_mass = Some(val);
+                    message.muscle_mass = Some((val as f64 / 100 as f64));
                     Ok(())
                 },
                 7 => { // basal_met
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.basal_met = Some(val);
+                    message.basal_met = Some((val as f64 / 4 as f64));
                     Ok(())
                 },
                 8 => { // physique_rating
@@ -17356,7 +17356,7 @@ impl<'a> FitMessageWeightScale<'a> {
                 9 => { // active_met
                     let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
                     inp = outp;
-                    message.active_met = Some(val);
+                    message.active_met = Some((val as f64 / 4 as f64));
                     Ok(())
                 },
                 10 => { // metabolic_age
@@ -17397,10 +17397,10 @@ pub struct FitMessageWorkout<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub sport: Option<FitFieldSport>,  // 
-    pub capabilities: Option<FitFieldWorkoutCapabilities>,  // 
+    pub sport: Option<FitFieldSport>,
+    pub capabilities: Option<FitFieldWorkoutCapabilities>,
     pub num_valid_steps: Option<u16>,  // number of valid steps
-    pub wkt_name: Option<String>,  // 
+    pub wkt_name: Option<String>,
 }
 impl<'a> FitMessageWorkout<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkout<'a>>, &'a [u8])> {
@@ -17438,7 +17438,7 @@ impl<'a> FitMessageWorkout<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageWorkout<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageWorkout<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -17487,7 +17487,7 @@ pub enum FitMessageWorkoutStepFieldDurationValue {
 }
 
 impl FitMessageWorkoutStepFieldDurationValue {
-    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldDurationValue, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageWorkoutStepFieldDurationValue, &'a [u8])> {
         match message.duration_type {
             Some(FitFieldWktStepDuration::Time) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -17575,7 +17575,7 @@ pub enum FitMessageWorkoutStepFieldTargetValue {
 }
 
 impl FitMessageWorkoutStepFieldTargetValue {
-    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldTargetValue, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageWorkoutStepFieldTargetValue, &'a [u8])> {
         match message.duration_type {
             Some(FitFieldWktStepDuration::RepeatUntilStepsCmplt) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -17637,7 +17637,7 @@ pub enum FitMessageWorkoutStepFieldCustomTargetValueLow {
 }
 
 impl FitMessageWorkoutStepFieldCustomTargetValueLow {
-    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldCustomTargetValueLow, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageWorkoutStepFieldCustomTargetValueLow, &'a [u8])> {
         match message.target_type {
             Some(FitFieldWktStepTarget::Speed) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -17673,7 +17673,7 @@ pub enum FitMessageWorkoutStepFieldCustomTargetValueHigh {
 }
 
 impl FitMessageWorkoutStepFieldCustomTargetValueHigh {
-    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: i32) -> Result<(FitMessageWorkoutStepFieldCustomTargetValueHigh, &'a [u8])> {
+    fn parse<'a>(message: &FitMessageWorkoutStep<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<(FitMessageWorkoutStepFieldCustomTargetValueHigh, &'a [u8])> {
         match message.target_type {
             Some(FitFieldWktStepTarget::Speed) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
@@ -17704,15 +17704,15 @@ pub struct FitMessageWorkoutStep<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub message_index: Option<FitFieldMessageIndex>,  // 
-    pub wkt_step_name: Option<String>,  // 
-    pub duration_type: Option<FitFieldWktStepDuration>,  // 
-    pub duration_value: Option<FitMessageWorkoutStepFieldDurationValue>,  // 
-    pub target_type: Option<FitFieldWktStepTarget>,  // 
-    pub target_value: Option<FitMessageWorkoutStepFieldTargetValue>,  // 
-    pub custom_target_value_low: Option<FitMessageWorkoutStepFieldCustomTargetValueLow>,  // 
-    pub custom_target_value_high: Option<FitMessageWorkoutStepFieldCustomTargetValueHigh>,  // 
-    pub intensity: Option<FitFieldIntensity>,  // 
+    pub message_index: Option<FitFieldMessageIndex>,
+    pub wkt_step_name: Option<String>,
+    pub duration_type: Option<FitFieldWktStepDuration>,
+    pub duration_value: Option<FitMessageWorkoutStepFieldDurationValue>,
+    pub target_type: Option<FitFieldWktStepTarget>,
+    pub target_value: Option<FitMessageWorkoutStepFieldTargetValue>,
+    pub custom_target_value_low: Option<FitMessageWorkoutStepFieldCustomTargetValueLow>,
+    pub custom_target_value_high: Option<FitMessageWorkoutStepFieldCustomTargetValueHigh>,
+    pub intensity: Option<FitFieldIntensity>,
 }
 impl<'a> FitMessageWorkoutStep<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutStep<'a>>, &'a [u8])> {
@@ -17755,7 +17755,7 @@ impl<'a> FitMessageWorkoutStep<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageWorkoutStep<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageWorkoutStep<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
@@ -17772,7 +17772,7 @@ impl<'a> FitMessageWorkoutStep<'a> {
                     Ok(())
                 },
                 2 => { // duration_value
-                    let (val, outp) = FitMessageWorkoutStepFieldDurationValue::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldDurationValue::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.duration_value = Some(val);
                     Ok(())
@@ -17784,19 +17784,19 @@ impl<'a> FitMessageWorkoutStep<'a> {
                     Ok(())
                 },
                 4 => { // target_value
-                    let (val, outp) = FitMessageWorkoutStepFieldTargetValue::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldTargetValue::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.target_value = Some(val);
                     Ok(())
                 },
                 5 => { // custom_target_value_low
-                    let (val, outp) = FitMessageWorkoutStepFieldCustomTargetValueLow::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldCustomTargetValueLow::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.custom_target_value_low = Some(val);
                     Ok(())
                 },
                 6 => { // custom_target_value_high
-                    let (val, outp) = FitMessageWorkoutStepFieldCustomTargetValueHigh::parse(&message, inp, &field, tz_offset)?;
+                    let (val, outp) = FitMessageWorkoutStepFieldCustomTargetValueHigh::parse(message, inp, &field, tz_offset)?;
                     inp = outp;
                     message.custom_target_value_high = Some(val);
                     Ok(())
@@ -17827,11 +17827,11 @@ pub struct FitMessageZonesTarget<'a> {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData<'a>>,
-    pub max_heart_rate: Option<u8>,  // 
-    pub threshold_heart_rate: Option<u8>,  // 
-    pub functional_threshold_power: Option<u16>,  // 
-    pub hr_calc_type: Option<FitFieldHrZoneCalc>,  // 
-    pub pwr_calc_type: Option<FitFieldPwrZoneCalc>,  // 
+    pub max_heart_rate: Option<u8>,
+    pub threshold_heart_rate: Option<u8>,
+    pub functional_threshold_power: Option<u16>,
+    pub hr_calc_type: Option<FitFieldHrZoneCalc>,
+    pub pwr_calc_type: Option<FitFieldPwrZoneCalc>,
 }
 impl<'a> FitMessageZonesTarget<'a> {
     pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: & mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<FitMessageZonesTarget<'a>>, &'a [u8])> {
@@ -17870,7 +17870,7 @@ impl<'a> FitMessageZonesTarget<'a> {
 
         Ok((Rc::new(message), inp2))
     }
-    fn parse_internal(message: &mut FitMessageZonesTarget<'a>, input: &'a [u8], tz_offset: i32) -> Result<&'a [u8]> {
+    fn parse_internal(message: &mut FitMessageZonesTarget<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let parse_result: Result<()> = match field.definition_number {
