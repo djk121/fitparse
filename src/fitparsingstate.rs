@@ -11,15 +11,15 @@ use FitDeveloperDataDefinition;
 use fittypes::{FitDataMessage, FitFieldDateTime, FitMessageFieldDescription};
 use errors::{Error, ErrorKind, Result};
 
-pub struct FitParsingState<'a> {
+pub struct FitParsingState {
     map: HashMap<u16, Rc<FitDefinitionMessage>>,
     last_timestamp: Option<FitFieldDateTime>,
     timezone_offset_secs: Option<f64>,
-    developer_data_definitions: HashMap<u8, FitDeveloperDataDefinition<'a>>,
+    developer_data_definitions: HashMap<u8, FitDeveloperDataDefinition>,
 }
 
-impl<'a> FitParsingState<'a> {
-    pub fn new() -> FitParsingState<'a> {
+impl FitParsingState {
+    pub fn new() -> FitParsingState {
         FitParsingState{
             map: HashMap::new(),
             last_timestamp: None,
@@ -63,12 +63,12 @@ impl<'a> FitParsingState<'a> {
         }
     }
 
-    pub fn set_developer_data_definition(&mut self, developer_data_index: u8, dd: FitDataMessage<'a>) {
+    pub fn set_developer_data_definition(&mut self, developer_data_index: u8, dd: FitDataMessage) {
         let p = self.developer_data_definitions.entry(developer_data_index).or_insert(FitDeveloperDataDefinition::new());
         p.add(dd);
     }
 
-    pub fn get_developer_data_definition(&self, developer_data_index: u8) -> Result<&FitDeveloperDataDefinition<'a>> {
+    pub fn get_developer_data_definition(&self, developer_data_index: u8) -> Result<&FitDeveloperDataDefinition> {
         match self.developer_data_definitions.get(&developer_data_index) {
             Some(ddd) => Ok(ddd),
             None => Err(Error::developer_data_definition_not_found(developer_data_index))

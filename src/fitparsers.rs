@@ -75,10 +75,10 @@ named_args!(parse_string_internal(num_bytes: usize)<String>,
 );
 
 
-named_args!(parse_byte_internal(num_bytes: usize)<&[u8]>,
+named_args!(parse_byte_internal(num_bytes: usize)<Vec<u8>>,
     do_parse!(
         b: take!(num_bytes) >>
-        (&b)
+        (b.to_vec())
     )
 );
 
@@ -233,7 +233,7 @@ macro_rules! nom_parser {
         }
     );
     ("byte") => (
-        pub fn parse_byte(input: &[u8], num_bytes: usize) -> Result<(&[u8], &[u8])> {
+        pub fn parse_byte(input: &[u8], num_bytes: usize) -> Result<(Vec<u8>, &[u8])> {
             nom_internal_parser!(parse_byte_internal, input, num_bytes)
         }
     );

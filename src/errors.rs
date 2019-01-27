@@ -100,6 +100,10 @@ impl Error {
     pub(crate) fn incorrect_shift_input() -> Error {
         Error::from(ErrorKind::IncorrectShiftInput)
     }
+
+    pub(crate) fn field_definition_number_not_found(fdn: u8) -> Error {
+        Error::from(ErrorKind::FieldDefinitionNumberNotFound(fdn))
+    }
 }
 
 impl Fail for Error {
@@ -142,6 +146,7 @@ pub enum ErrorKind {
     DeveloperFieldDescriptionNotFound(u8),
     InsufficientDataForShift,
     IncorrectShiftInput,
+    FieldDefinitionNumberNotFound(u8),
 }
 
 impl fmt::Display for ErrorKind {
@@ -210,6 +215,10 @@ impl fmt::Display for ErrorKind {
             ErrorKind::IncorrectShiftInput => {
                 write!(f, "bad inputs for shift operation")
             },
+            ErrorKind::FieldDefinitionNumberNotFound(ref fdn) => {
+                write!(f, "field definition number not found: {:?}", fdn)
+            },
+
         }
     }
 }

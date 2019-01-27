@@ -18,10 +18,29 @@ FIT_TYPE_MAP = {
     'sint16': 'i16',
     'sint32': 'i32',
     'bool': 'bool',
-    'byte': "&'a [u8]",
+    'byte': 'Vec<u8>',
+    #'byte': "&'a [u8]",
     'float32': 'f32',
     'float64': 'f64',
 
+}
+
+RUST_TYPE_SIZE_MAP = {
+    'enum': 1,
+    'uint8': 1,
+    'uint8z': 1,
+    'uint16': 2,
+    'uint16z': 2,
+    'uint32': 4,
+    'uint32z': 4,
+    'string': 4,
+    'sint8': 4,
+    'sint16': 4,
+    'sint32': 4,
+    'bool': 1,
+    'byte': 1,
+    'float32': 4,
+    'float64': 8,
 }
 
 FIT_BASE_TYPES = ['uint8', 'uint8z', 'uint16', 'uint16z', 'uint32', 'uint32z', 'sint8', 'sint16', 'sint32', 'float32', 'float64', 'string', 'byte']
@@ -75,6 +94,11 @@ impl From<{{ base_rust_type }}> for {{ type_name }} {
 }
 """
 
+def resolve_field_size(field_type, types):
+    if field_type in FIT_BASE_TYPES:
+        return RUST_TYPE_SIZE_MAP[field_type]
+    else:
+        return RUST_TYPE_SIZE_MAP[types[field_type]['base_type']]
 
 def rustify_name(name):
     rustified = [name[0].upper(),]
@@ -120,6 +144,8 @@ use FitFieldDefinition;
 use FitFieldDeveloperData;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
+
+use subset_with_pad;
 
 use errors::{Error, ErrorKind, Result};
 
@@ -242,14 +268,14 @@ def field_name(field):
 
 FDM_TEMPLATE = """
 #[derive(Debug)]
-pub enum FitDataMessage<'a> {
+pub enum FitDataMessage {
     {% for mn in message_names %}
-    {{ mn }}(Rc<FitMessage{{ mn }}<'a>>),
+    {{ mn }}(Rc<FitMessage{{ mn }}>),
     {%- endfor %}
 }
 
-impl<'a> FitDataMessage<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(FitDataMessage<'a>, &'a [u8])> {
+impl FitDataMessage {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, offset_secs: Option<u8>) -> Result<(FitDataMessage, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             {% for mesg in mesgs %}
@@ -280,10 +306,10 @@ def output_messages(messages, types):
 class Message(object):
     STRUCT_TEMPLATE = """
 #[derive(Debug)]
-pub struct {{ message_name }}<'a> {
+pub struct {{ message_name }} {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
-    developer_fields: Vec<FitFieldDeveloperData<'a>>,
+    developer_fields: Vec<FitFieldDeveloperData>,
     {% for field in fields -%}
     pub {{ field.name }}: {{ field.output_field_option() }},  {% if field.comment %}// {{ field.comment }}{% endif %}
     {% endfor %}
@@ -291,8 +317,8 @@ pub struct {{ message_name }}<'a> {
 """
 
     IMPL_TEMPLATE = """
-impl<'a> {{ message_name }}<'a> {
-    pub fn parse(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState<'a>, offset_secs: Option<u8>) -> Result<(Rc<{{ message_name }}<'a>>, &'a [u8])> {
+impl {{ message_name }} {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = {{ message_name }} {
             header: header,
@@ -343,20 +369,41 @@ impl<'a> {{ message_name }}<'a> {
         Ok((Rc::new(message), inp2))
     }
 
-    fn parse_internal(message: &mut {{ message_name }}<'a>, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
+    fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
-            let parse_result: Result<()> = match field.definition_number {
-            {% for field in fields %}
-                {{ field.number }} => {  // {{ field.name }}
-                    let (val, outp) = {{ field.output_field_parser() }}?;
-                    inp = outp;
-                    {{ field.output_parsed_field_assignment() }};
-                    Ok(())
-                },
-            {% endfor %}
-                invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
-            };
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, subfield_bit_range) = actions.remove(0);
+
+                let parse_result: Result<()> = match f.definition_number {
+                {% for field in fields %}
+                    {{ field.number }} => {  // {{ field.name }}
+
+                        let val = match subfield_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let (val, _) = {{ field.output_field_parser('&bytes') }}?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = {{ field.output_field_parser('inp') }}?;
+                                inp = outp;
+                                val
+                            }
+                        };
+                        {{ field.output_parsed_field_assignment() }};
+                        {% for action_push in field.output_components_action_pushes() %}
+                        {{ action_push }}
+                        {% endfor %}
+                        Ok(())
+                    },
+                {% endfor %}
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
         }
         Ok(inp)
     }
@@ -428,7 +475,7 @@ impl<'a> {{ message_name }}<'a> {
 
 
 class Field(object):
-    FIELD_OPTION_SUBFIELD = """Option<FitMessage{{ message_name }}Subfield{{ field_name }}{{ lifetime_spec }}>"""
+    FIELD_OPTION_SUBFIELD = """Option<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
     FIELD_OPTION_BASE_TYPE = """Option<{{ fit_type }}>"""
     FIELD_OPTION_FIT_TYPE = """Option<FitField{{ field_type }}>"""
 
@@ -468,13 +515,14 @@ class Field(object):
         return field_name(self)
 
 
-    FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, inp, &field, tz_offset)"""
+    FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, tz_offset)"""
 
-    def output_field_parser(self, only_default_case=False):
+    def output_field_parser(self, bytes_from, only_default_case=False):
         if self.subfields and not only_default_case:
             template = Environment().from_string(self.FIELD_PARSER_SUBFIELDS,
                                                  globals={'message_name': self.message.rustified_name,
-                                                          'field_name': self.rustified_name})
+                                                          'field_name': self.rustified_name,
+                                                          'bytes_from': bytes_from})
             return template.render()
 
         elif self.type in FIT_TYPE_MAP.keys():
@@ -483,7 +531,8 @@ class Field(object):
             template = Environment().from_string(FIELD_PARSER_BASE_TYPE,
                                                  globals={'field_type': self.type,
                                                           'field_size': field_size,
-                                                          'endianness': endianness})
+                                                          'endianness': endianness,
+                                                          'bytes_from': bytes_from})
             return template.render()
 
         else:
@@ -492,8 +541,34 @@ class Field(object):
             template = Environment().from_string(FIELD_PARSER_FIT_TYPE,
                                                  globals={'field_type': rustify_name(self.type),
                                                           'endianness': endianness,
-                                                          'local_date_time': local_date_time})
+                                                          'local_date_time': local_date_time,
+                                                          'bytes_from': bytes_from})
             return template.render()
+
+    def output_components_action_pushes(self):
+        if not self.components:
+            return ""
+
+        action_pushes = []
+        for i in range(len(self.components)):
+            for field in self.message.fields:
+                if self.components[i] == field.name:
+
+                    print >>sys.stderr, "components[{}]: {}".format(i, self.components[i])
+                    print >>sys.stderr, "bits: {}".format(self.bits)
+
+                    field_size = resolve_field_size(field.type, self.types)
+
+                    bit_start = 0
+                    x = 0
+                    while x < i:
+                        bit_start += self.bits[x]
+                        x = x + 1
+
+                    action_pushes.append("actions.push( (FitFieldDefinition{{definition_number: {}, field_size: {}, base_type: 0}}, Some(({}, {})) ));".format(field.number, field_size, bit_start, self.bits[i]))
+                    # action_push += "actions.push( (message.definition_message.get_field_definition({})?, Some(({}, {})) ));\n".format(field.number, bit_start, self.bits[i])
+
+        return action_pushes
 
     def output_field_option(self):
         content = ""
@@ -533,19 +608,20 @@ class Field(object):
             else:
                 return "message.{} = Some(val as f64 / {} as f64)".format(self.name, self.scale)
 
+
         return "message.{} = Some(val)".format(self.name)
 
     SUBFIELD_TEMPLATE = """
 #[derive(Debug)]
-pub enum {{ subfield_name }}{{ lifetime_spec }} {
+pub enum {{ subfield_name }} {
     Default({{ subfield_default_option }}),
     {%- for sf in subfield_enum_options %}
     {{ sf[0] }}({{ sf[1] }}),
     {%- endfor %}
 }
 
-impl{{ lifetime_spec }} {{ subfield_name }}{{ lifetime_spec }} {
-    fn parse{%- if lifetime_spec == '' -%}<'a>{%- endif -%}(message: &{{ message_name }}<'a>, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<({{ subfield_name }}{{ lifetime_spec }},  &'a [u8])> {
+impl {{ subfield_name }} {
+    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<({{ subfield_name }},  &'a [u8])> {
         {% for sf_name in subfield_ref_names %}
         match message.{{ sf_name }} {
         {% for sf in subfield_options[sf_name] %}
@@ -570,12 +646,13 @@ impl{{ lifetime_spec }} {{ subfield_name }}{{ lifetime_spec }} {
         for srn in subfield_ref_names:
             subfield_options[srn] = [sf for sf in self.subfields if sf.ref_field_name == srn]
 
-        subfield_default_parser = self.output_field_parser(only_default_case=True)
+        subfield_default_parser = self.output_field_parser('inp', only_default_case=True)
         subfield_enum_options = []
         for sf in self.subfields:
             ftn = sf.field_type_name
             if sf.type == 'byte':
-                ftn += "<'a>"
+                ftn = "Vec<u8>"
+                #ftn += "<'a>"
             subfield_enum_options.append((sf.field_name_rustified, ftn))
 
         lifetime_spec = ''
@@ -615,12 +692,12 @@ impl{{ lifetime_spec }} {{ subfield_name }}{{ lifetime_spec }} {
 
         return False
 
-FIELD_PARSER_BASE_TYPE = """parse_{{ field_type }}(inp
+FIELD_PARSER_BASE_TYPE = """parse_{{ field_type }}({{ bytes_from }}
 {%- if field_size -%}, field.field_size{%- endif -%}
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
 )"""
 
-FIELD_PARSER_FIT_TYPE = """FitField{{ field_type }}::parse(inp
+FIELD_PARSER_FIT_TYPE = """FitField{{ field_type }}::parse({{ bytes_from }}
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
 {%- if local_date_time -%}, tz_offset{%- endif -%}
 )"""
@@ -665,7 +742,8 @@ class Subfield(object):
             endianness = self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
             template = Environment().from_string(FIELD_PARSER_BASE_TYPE, globals={'field_type': self.type,
                                                                                   'field_size': field_size,
-                                                                                  'endianness': endianness})
+                                                                                  'endianness': endianness,
+                                                                                  'bytes_from': 'inp'})
             return template.render()
 
         else:
@@ -673,7 +751,8 @@ class Subfield(object):
             local_date_time = self.type == 'local_date_time'
             template = Environment().from_string(FIELD_PARSER_FIT_TYPE, globals={'field_type': rustify_name(self.type),
                                                                                  'endianness': endianness,
-                                                                                 'local_date_time': local_date_time})
+                                                                                 'local_date_time': local_date_time,
+                                                                                 'bytes_from': 'inp'})
             return template.render()
 
 
@@ -775,7 +854,7 @@ def parse_messages_file(messages_file_name, types):
             #    messages[current_message]['needs_lifetime_spec'] = True
 
             messages[current_message].add_field(
-                Field(field_number, field_name, field_type, array, components, bits, scale, offset, comment, types)
+                Field(field_number, field_name, field_type, array, parsed_components, parsed_bits, scale, offset, comment, types)
             )
 
             #messages[current_message]["fields"].append({

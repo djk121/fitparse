@@ -1,5 +1,6 @@
 
 #![feature(trace_macros)]
+#![feature(duration_as_u128)]
 
 use std::ops::Deref;
 use std::rc::Rc;
@@ -132,13 +133,13 @@ named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
 );
 
 #[derive(Debug)]
-pub enum FitMessage<'a> {
-    Data(FitDataMessage<'a>),
+pub enum FitMessage {
+    Data(FitDataMessage),
     Definition(Rc<FitDefinitionMessage>),
 }
 
 
-pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingState<'a>) -> Result<(FitMessage<'a>, &'a [u8])> {
+pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingState) -> Result<(FitMessage, &'a [u8])> {
     // get the header first
     let (header, o) = parse_record_header(input)?;
 
@@ -189,7 +190,7 @@ pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingStat
     Ok((fit_message, out))
 }
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug,PartialEq,Clone,Copy)]
 struct FitFieldDefinition {
     definition_number: u8,
     field_size: usize,
@@ -253,6 +254,15 @@ impl FitDefinitionMessage {
     fn parse(input: &[u8], header: FitNormalRecordHeader) -> Result<(Rc<FitDefinitionMessage>, &[u8])> {
         let (definition_message, o) = parse_definition_message(input, header)?;
         Ok((Rc::new(definition_message), o))
+    }
+
+    fn get_field_definition(&self, definition_number: u8) -> Result<FitFieldDefinition> {
+        for field in &self.field_definitions {
+            if field.definition_number == definition_number {
+                return Ok(field.clone())
+            }
+        }
+        return Err(Error::field_definition_number_not_found(definition_number))
     }
 }
 
@@ -366,20 +376,20 @@ named_args!(developer_fields_are_present(yesorno: bool)<bool>,
 );
 
 #[derive(Debug)]
-pub struct FitDeveloperDataDefinition<'a> {
-    developer_data_id: Option<Rc<FitMessageDeveloperDataId<'a>>>,
-    field_descriptions: HashMap<u8, Rc<FitMessageFieldDescription<'a>>>
+pub struct FitDeveloperDataDefinition {
+    developer_data_id: Option<Rc<FitMessageDeveloperDataId>>,
+    field_descriptions: HashMap<u8, Rc<FitMessageFieldDescription>>,
 }
 
-impl<'a> FitDeveloperDataDefinition<'a> {
-    fn new() -> FitDeveloperDataDefinition<'a> {
+impl FitDeveloperDataDefinition {
+    fn new() -> FitDeveloperDataDefinition {
         FitDeveloperDataDefinition{
             developer_data_id: None,
             field_descriptions: HashMap::new()
         }
     }
 
-    fn add(&mut self, message: FitDataMessage<'a>) -> &Self {
+    fn add(&mut self, message: FitDataMessage) -> &Self {
         //let m = &*message;
 
         match message {
@@ -397,7 +407,7 @@ impl<'a> FitDeveloperDataDefinition<'a> {
         }
     }
 
-    fn get_field_description(&self, field_number: u8) -> Result<Rc<FitMessageFieldDescription<'a>>> {
+    fn get_field_description(&self, field_number: u8) -> Result<Rc<FitMessageFieldDescription>> {
         match self.field_descriptions.get(&field_number) {
             Some(fd) => Ok(fd.clone()),
             None => Err(Error::developer_field_description_not_found(field_number))
@@ -406,7 +416,7 @@ impl<'a> FitDeveloperDataDefinition<'a> {
 }
 
 #[derive(Debug)]
-enum FitBaseValue<'a> {
+enum FitBaseValue {
     Sint8(i8),
     Uint8(u8),
     Uint8z(Option<u8>),
@@ -422,11 +432,11 @@ enum FitBaseValue<'a> {
     Uint64z(Option<u64>),
     Float64(f64),
     String(String),
-    Byte(&'a [u8])
+    Byte(Vec<u8>)
 }
 
-impl<'a> FitBaseValue<'a> {
-    fn parse(input: &'a [u8], variant: &FitFieldFitBaseType, endianness: Endianness, size: usize) -> Result<(FitBaseValue<'a>, &'a [u8])> {
+impl FitBaseValue {
+    fn parse<'a>(input: &'a [u8], variant: &FitFieldFitBaseType, endianness: Endianness, size: usize) -> Result<(FitBaseValue, &'a [u8])> {
         match variant {
             FitFieldFitBaseType::Sint8 => {
                 let (val, o) = parse_sint8(input)?;
@@ -478,7 +488,7 @@ impl<'a> FitBaseValue<'a> {
             },
             FitFieldFitBaseType::Byte => {
                 let (val, o) = parse_byte(input, size)?;
-                Ok((FitBaseValue::Byte(val), o))
+                Ok((FitBaseValue::Byte(val.to_vec()), o))
             },
             FitFieldFitBaseType::Sint64 => {
                 let (val, o) = parse_sint64(input, endianness)?;
@@ -498,13 +508,13 @@ impl<'a> FitBaseValue<'a> {
 }
 
 #[derive(Debug)]
-struct FitFieldDeveloperData<'a> {
-    field_description: Rc<FitMessageFieldDescription<'a>>,
-    value: FitBaseValue<'a>,
+struct FitFieldDeveloperData {
+    field_description: Rc<FitMessageFieldDescription>,
+    value: FitBaseValue,
 }
 
-impl<'a> FitFieldDeveloperData<'a> {
-    fn parse(input: &'a [u8], field_description: Rc<FitMessageFieldDescription<'a>>, endianness: Endianness, field_size: usize) -> Result<(FitFieldDeveloperData<'a>, &'a [u8])> {
+impl FitFieldDeveloperData {
+    fn parse<'a>(input: &'a [u8], field_description: Rc<FitMessageFieldDescription>, endianness: Endianness, field_size: usize) -> Result<(FitFieldDeveloperData, &'a [u8])> {
         let base_type_id = match &field_description.fit_base_type_id {
             Some(bti) => bti,
             None => return Err(Error::missing_fit_base_type())
@@ -537,7 +547,32 @@ fn shift_out_u16(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, u16)> {
     Ok((left, BigEndian::read_u16(&right[2..4])))
 }
 
-fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
+pub fn subset_with_pad(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u8>> {
+    let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits)?;
+    while bytes.len() < 8 {
+        bytes.push(0);
+    }
+
+    Ok(bytes)
+}
+
+pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u8>> {
+    let input = BitVec::from_bytes(inp);
+    let mut new = BitVec::new();
+    let mut to_copy = start;
+    while num_bits > 0 {
+        match input.get(to_copy) {
+            Some(next) => new.push(next),
+            None => return Err(Error::incorrect_shift_input())
+        }
+        to_copy = to_copy + 1;
+        num_bits = num_bits - 1;
+    }
+
+    Ok(new.to_bytes())
+}
+
+pub fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
     if (inp.len() > 4 || num_bits > 32) {
         return Err(Error::incorrect_shift_input());
     }
@@ -608,7 +643,7 @@ mod tests {
     }
 }
 
-mod fittypes;
+pub mod fittypes;
 #[macro_use] mod fitparsers;
 pub mod fitparsingstate;
 mod errors;
