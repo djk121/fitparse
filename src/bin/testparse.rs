@@ -2,16 +2,13 @@ extern crate fitparse;
 extern crate clap;
 extern crate failure;
 
-use std::io;
 use std::io::prelude::*;
 use std::fs::File;
-use std::rc::Rc;
 use clap::{App, Arg};
 
 use fitparse::fitparsingstate::FitParsingState;
 use fitparse::FitMessage;
-use fitparse::fittypes::{FitDataMessage, FitMessageRecord};
-use fitparse::fittypes::FitDataMessage::Record;
+use fitparse::fittypes::FitDataMessage;
 
 
 fn main() {
@@ -32,7 +29,10 @@ fn main() {
         _ => panic!("boo")
     };
     let mut v = vec![];
-    f.read_to_end(&mut v);
+    match f.read_to_end(&mut v) {
+        Ok(_) => (),
+        Err(e) => panic!("error reading file: {:?}", e)
+    }
 
     let (file_header, o) = match fitparse::FitFileHeader::parse(&v) {
         Ok((ffh, o)) => (ffh, o),

@@ -147,7 +147,7 @@ use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool,
 
 use subset_with_pad;
 
-use errors::{Error, ErrorKind, Result};
+use errors::{Error, Result};
 
 #[derive(Copy, Clone, Debug)]
 pub struct FitFieldDateTime {
@@ -164,9 +164,10 @@ impl FitFieldDateTime {
         }, o))
     }
 
-    fn new_from_offset(&self, offset_secs: u8) -> FitFieldDateTime {
+    #[allow(dead_code)]
+    fn new_from_offset(&self, _offset_secs: u8) -> FitFieldDateTime {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
-        let garmin_epoch_offset = self.seconds_since_garmin_epoch + (offset_secs as u32);
+        let garmin_epoch_offset = self.seconds_since_garmin_epoch + (_offset_secs as u32);
         let rust_time = garmin_epoch + Duration::seconds(garmin_epoch_offset.into());
         FitFieldDateTime{
             seconds_since_garmin_epoch: garmin_epoch_offset,
@@ -183,10 +184,10 @@ pub struct FitFieldLocalDateTime {
 }
 
 impl FitFieldLocalDateTime {
-    fn parse(input: &[u8], endianness: Endianness, offset_secs: f64) -> Result<(FitFieldLocalDateTime, &[u8])> {
+    fn parse(input: &[u8], endianness: Endianness, _offset_secs: f64) -> Result<(FitFieldLocalDateTime, &[u8])> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let (garmin_epoch_offset, o) = parse_uint32(input, endianness)?;
-        let local_dt = FixedOffset::east(offset_secs as i32).timestamp(
+        let local_dt = FixedOffset::east(_offset_secs as i32).timestamp(
             (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
             0 // nanosecs
         );
@@ -275,12 +276,12 @@ pub enum FitDataMessage {
 }
 
 impl FitDataMessage {
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, offset_secs: Option<u8>) -> Result<(FitDataMessage, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(FitDataMessage, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             {% for mesg in mesgs %}
             FitFieldMesgNum::{{ mesg }} => {
-                let (val, o) = FitMessage{{ mesg }}::parse(input, header, parsing_state, offset_secs)?;
+                let (val, o) = FitMessage{{ mesg }}::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::{{ mesg }}(val), o))
             },
             {%- endfor %}
@@ -318,7 +319,7 @@ pub struct {{ message_name }} {
 
     IMPL_TEMPLATE = """
 impl {{ message_name }} {
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, offset_secs: Option<u8>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = {{ message_name }} {
             header: header,
@@ -342,7 +343,7 @@ impl {{ message_name }} {
         };
 
         {% if has_timestamp_field %}
-        match offset_secs {
+        match _offset_secs {
             Some(os) => {
                 message.timestamp = Some(parsing_state.get_last_timestamp()?.new_from_offset(os));
             },
@@ -369,20 +370,20 @@ impl {{ message_name }} {
         Ok((Rc::new(message), inp2))
     }
 
-    fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
+    fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
 
             while actions.len() > 0 {
 
-                let (f, subfield_bit_range) = actions.remove(0);
+                let (f, components_bit_range) = actions.remove(0);
 
-                let parse_result: Result<()> = match f.definition_number {
+                let _parse_result: Result<()> = match f.definition_number {
                 {% for field in fields %}
                     {{ field.number }} => {  // {{ field.name }}
 
-                        let val = match subfield_bit_range {
+                        let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
                                 let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
                                 let (val, _) = {{ field.output_field_parser('&bytes') }}?;
@@ -515,9 +516,9 @@ class Field(object):
         return field_name(self)
 
 
-    FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, tz_offset)"""
+    FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, _tz_offset)"""
 
-    def output_field_parser(self, bytes_from, only_default_case=False):
+    def output_field_parser(self, bytes_from, only_default_case=False, field_variable_name='field'):
         if self.subfields and not only_default_case:
             template = Environment().from_string(self.FIELD_PARSER_SUBFIELDS,
                                                  globals={'message_name': self.message.rustified_name,
@@ -532,7 +533,8 @@ class Field(object):
                                                  globals={'field_type': self.type,
                                                           'field_size': field_size,
                                                           'endianness': endianness,
-                                                          'bytes_from': bytes_from})
+                                                          'bytes_from': bytes_from,
+                                                          'field_name': field_variable_name})
             return template.render()
 
         else:
@@ -621,7 +623,7 @@ pub enum {{ subfield_name }} {
 }
 
 impl {{ subfield_name }} {
-    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], field: &FitFieldDefinition, tz_offset: f64) -> Result<({{ subfield_name }},  &'a [u8])> {
+    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<({{ subfield_name }},  &'a [u8])> {
         {% for sf_name in subfield_ref_names %}
         match message.{{ sf_name }} {
         {% for sf in subfield_options[sf_name] %}
@@ -646,7 +648,7 @@ impl {{ subfield_name }} {
         for srn in subfield_ref_names:
             subfield_options[srn] = [sf for sf in self.subfields if sf.ref_field_name == srn]
 
-        subfield_default_parser = self.output_field_parser('inp', only_default_case=True)
+        subfield_default_parser = self.output_field_parser('inp', only_default_case=True, field_variable_name='_field')
         subfield_enum_options = []
         for sf in self.subfields:
             ftn = sf.field_type_name
@@ -693,13 +695,13 @@ impl {{ subfield_name }} {
         return False
 
 FIELD_PARSER_BASE_TYPE = """parse_{{ field_type }}({{ bytes_from }}
-{%- if field_size -%}, field.field_size{%- endif -%}
+{%- if field_size -%}, {{ field_name }}.field_size{%- endif -%}
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
 )"""
 
 FIELD_PARSER_FIT_TYPE = """FitField{{ field_type }}::parse({{ bytes_from }}
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
-{%- if local_date_time -%}, tz_offset{%- endif -%}
+{%- if local_date_time -%}, _tz_offset{%- endif -%}
 )"""
 
 
@@ -743,7 +745,8 @@ class Subfield(object):
             template = Environment().from_string(FIELD_PARSER_BASE_TYPE, globals={'field_type': self.type,
                                                                                   'field_size': field_size,
                                                                                   'endianness': endianness,
-                                                                                  'bytes_from': 'inp'})
+                                                                                  'bytes_from': 'inp',
+                                                                                  'field_name': '_field'})
             return template.render()
 
         else:

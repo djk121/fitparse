@@ -9,13 +9,7 @@ use std::collections::HashMap;
 extern crate bit_vec;
 use bit_vec::BitVec;
 
-extern crate byteorder;
-use byteorder::{ByteOrder, BigEndian};
-
 extern crate chrono;
-use chrono::{DateTime, UTC, FixedOffset, TimeZone};
-
-#[macro_use]
 extern crate failure;
 
 #[macro_use]
@@ -255,15 +249,6 @@ impl FitDefinitionMessage {
         let (definition_message, o) = parse_definition_message(input, header)?;
         Ok((Rc::new(definition_message), o))
     }
-
-    fn get_field_definition(&self, definition_number: u8) -> Result<FitFieldDefinition> {
-        for field in &self.field_definitions {
-            if field.definition_number == definition_number {
-                return Ok(field.clone())
-            }
-        }
-        return Err(Error::field_definition_number_not_found(definition_number))
-    }
 }
 
 #[derive(Debug)]
@@ -273,10 +258,6 @@ pub enum FitRecordHeader {
 }
 
 impl FitRecordHeader {
-    fn parse(input: &[u8]) -> Result<(FitRecordHeader, &[u8])> {
-        Ok(parse_record_header(input)?)
-    }
-
     fn local_mesg_num(&self) -> u16 {
         match self {
             FitRecordHeader::Normal(nrh) => nrh.local_mesg_num,
@@ -527,27 +508,7 @@ impl FitFieldDeveloperData {
     }
 }
 
-//trace_macros!(false);
-
-fn shift_out_u8(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, u8)> {
-    if (num_bits > 8) {
-        return Err(Error::incorrect_shift_input());
-    }
-
-    let (left, right) = shift_right(inp, num_bits)?;
-    Ok((left, right[3] as u8))
-}
-
-fn shift_out_u16(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, u16)> {
-    if (num_bits > 16) {
-        return Err(Error::incorrect_shift_input());
-    }
-
-    let (left, right) = shift_right(inp, num_bits)?;
-    Ok((left, BigEndian::read_u16(&right[2..4])))
-}
-
-pub fn subset_with_pad(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u8>> {
+pub fn subset_with_pad(inp: &[u8], start: usize, num_bits: usize) -> Result<Vec<u8>> {
     let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits)?;
     while bytes.len() < 8 {
         bytes.push(0);
@@ -573,7 +534,7 @@ pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u
 }
 
 pub fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
-    if (inp.len() > 4 || num_bits > 32) {
+    if inp.len() > 4 || num_bits > 32 {
         return Err(Error::incorrect_shift_input());
     }
 
@@ -587,7 +548,7 @@ pub fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
     let mut right_ind = right.len() - 1;
 
     // copy num_bits to the result BV
-    while to_copy >= 0 {
+    while to_copy > 0 {
         right.set(right_ind, input[input_ind]);
         input_ind = input_ind - 1;
         right_ind = right_ind - 1;

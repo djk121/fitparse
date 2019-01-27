@@ -1,15 +1,12 @@
 
 use std::rc::Rc;
-use std::cell::RefCell;
 use std::collections::HashMap;
-
-use chrono::{DateTime, UTC};
 
 use FitDefinitionMessage;
 use FitDeveloperDataDefinition;
 
-use fittypes::{FitDataMessage, FitFieldDateTime, FitMessageFieldDescription};
-use errors::{Error, ErrorKind, Result};
+use fittypes::{FitDataMessage, FitFieldDateTime};
+use errors::{Error, Result};
 
 pub struct FitParsingState {
     map: HashMap<u16, Rc<FitDefinitionMessage>>,

@@ -8,7 +8,7 @@ use chrono::{DateTime, UTC, Duration, TimeZone};
 use nom;
 use nom::{Endianness, be_f32, le_f32, be_f64, le_f64};
 
-use errors::{Error, ErrorKind, Result};
+use errors::{Error, Result};
 
 //trace_macros!(true);
 

@@ -1,5 +1,4 @@
 
-
 use std::fmt;
 use std::result;
 use failure::{Backtrace, Context, Fail};
@@ -17,90 +16,112 @@ impl Error {
         self.ctx.get_context()
     }
 
+    #[allow(dead_code)]
     pub(crate) fn parse_incomplete(pi: usize) -> Error {
         Error::from(ErrorKind::ParseIncomplete(pi))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn parse_incomplete_unknown() -> Error {
         Error::from(ErrorKind::ParseIncompleteUnknown)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn parse_error<T: AsRef<str>>(pe: T) -> Error {
         Error::from(ErrorKind::ParseError(pe.as_ref().to_string()))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn parse_zero() -> Error {
         Error::from(ErrorKind::ParseZero)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn unsupported_relative_timestamp() -> Error {
         Error::from(ErrorKind::UnsupportedRelativetimestamp)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn invalid_field_value<T: AsRef<str>>(fv: T) -> Error {
         Error::from(ErrorKind::InvalidFieldValue(fv.as_ref().to_string()))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn invalid_local_mesg_num<T: AsRef<str>>(ilmn: T) -> Error {
         Error::from(ErrorKind::InvalidLocalMesgNum(ilmn.as_ref().to_string()))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn timestamp_base_not_set() -> Error {
         Error::from(ErrorKind::TimestampBaseNotSet)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn timezone_offset_not_set() -> Error {
         Error::from(ErrorKind::TimezoneOffsetNotSet)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn wrong_header_type() -> Error {
         Error::from(ErrorKind::WrongHeaderType)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn unknown_error() -> Error {
         Error::from(ErrorKind::UnknownError)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn timestamp_not_set_on_message() -> Error {
         Error::from(ErrorKind::TimestampNotSetOnMessage)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn missing_timestamp_field() -> Error {
         Error::from(ErrorKind::MissingTimestampField)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn invalid_field_number(ifn: u8) -> Error {
         Error::from(ErrorKind::InvalidFieldNumber(ifn))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn message_parse_failed<T: AsRef<str>>(fm: T) -> Error {
         Error::from(ErrorKind::MessageParseFailed(fm.as_ref().to_string()))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn missing_fit_base_type() -> Error {
         Error::from(ErrorKind::MissingFitBaseType)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn parse_unknown_base_value() -> Error {
         Error::from(ErrorKind::ParseUnknownBaseValue)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn developer_data_definition_not_found(dddn: u8) -> Error {
         Error::from(ErrorKind::DeveloperDataDefinitionNotFound(dddn))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn developer_field_description_not_found(dfn: u8) -> Error {
         Error::from(ErrorKind::DeveloperFieldDescriptionNotFound(dfn))
     }
 
+    #[allow(dead_code)]
     pub(crate) fn insufficient_data_for_shift() -> Error {
         Error::from(ErrorKind::InsufficientDataForShift)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn incorrect_shift_input() -> Error {
         Error::from(ErrorKind::IncorrectShiftInput)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn field_definition_number_not_found(fdn: u8) -> Error {
         Error::from(ErrorKind::FieldDefinitionNumberNotFound(fdn))
     }
