@@ -372,6 +372,7 @@ impl {{ message_name }} {
 
     fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
+        let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
             let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
 
@@ -382,7 +383,6 @@ impl {{ message_name }} {
                 let _parse_result: Result<()> = match f.definition_number {
                 {% for field in fields %}
                     {{ field.number }} => {  // {{ field.name }}
-
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
                                 let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
@@ -391,20 +391,21 @@ impl {{ message_name }} {
                             },
                             None => {
                                 let (val, outp) = {{ field.output_field_parser('inp') }}?;
-                                inp = outp;
+                                saved_outp = outp;
                                 val
                             }
                         };
                         {{ field.output_parsed_field_assignment() }};
-                        {% for action_push in field.output_components_action_pushes() %}
+                        {% for action_push in field.output_components_action_pushes() -%}
                         {{ action_push }}
-                        {% endfor %}
+                        {% endfor -%}
                         Ok(())
                     },
                 {% endfor %}
                     invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
                 };
             }
+            inp = saved_outp;
         }
         Ok(inp)
     }

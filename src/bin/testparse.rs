@@ -80,7 +80,7 @@ fn main() {
             FitMessage::Data(dm) => {
                 match dm {
                     FitDataMessage::Record(r) => {
-                        println!("record: {:?}", r.position_lat)
+                        println!("distance: {:?}", r.distance)
                     },
                     _ => ()
                 }
