@@ -593,7 +593,14 @@ mod tests {
                                       0b00000000, 0b00000001, 0b00000000, // 4th field def
                                       ];
 
-        let res = definition_message(&defintion_message_data);
+        let rh = FitNormalRecordHeader{
+            message_type: FitNormalRecordHeaderMessageType::Definition,
+            developer_fields_present: false,
+            local_mesg_num: 0,
+        };
+
+        let res = parse_definition_message(&defintion_message_data, rh);
+        //let res = definition_message(&defintion_message_data);
         println!("def: {:?}", res);
         assert_eq!(1,1);
     }

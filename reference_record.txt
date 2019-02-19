@@ -1,0 +1,663 @@
+FitMessageRecord {
+    header: Normal(
+        FitNormalRecordHeader {
+            message_type: Data,
+            developer_fields_present: false,
+            local_mesg_num: 0
+        }
+    ),
+    definition_message: FitDefinitionMessage {
+        header: FitNormalRecordHeader {
+            message_type: Definition,
+            developer_fields_present: true,
+            local_mesg_num: 0
+        },
+        endianness: Little,
+        global_mesg_num: Record,
+        num_fields: 11,
+        message_size: 42,
+        field_definitions: [
+            FitFieldDefinition {
+                definition_number: 253,
+                field_size: 4,
+                base_type: 6
+            },
+            FitFieldDefinition {
+                definition_number: 0,
+                field_size: 4,
+                base_type: 5
+            },
+            FitFieldDefinition {
+                definition_number: 1,
+                field_size: 4,
+                base_type: 5
+            },
+            FitFieldDefinition {
+                definition_number: 5,
+                field_size: 4,
+                base_type: 6
+            },
+            FitFieldDefinition {
+                definition_number: 2,
+                field_size: 2,
+                base_type: 4
+            },
+            FitFieldDefinition {
+                definition_number: 6,
+                field_size: 2,
+                base_type: 4
+            },
+            FitFieldDefinition {
+                definition_number: 7,
+                field_size: 2,
+                base_type: 4
+            },
+            FitFieldDefinition {
+                definition_number: 3,
+                field_size: 1,
+                base_type: 2
+            },
+            FitFieldDefinition {
+                definition_number: 4,
+                field_size: 1,
+                base_type: 2
+            },
+            FitFieldDefinition {
+                definition_number: 39,
+                field_size: 2,
+                base_type: 4
+            },
+            FitFieldDefinition {
+                definition_number: 41,
+                field_size: 2,
+                base_type: 4
+            }
+        ],
+        num_developer_fields: 4,
+        developer_field_definitions: [
+            FitDeveloperFieldDefinition {
+                definition_number: 8,
+                field_size: 2,
+                developer_data_index: 0
+            },
+            FitDeveloperFieldDefinition {
+                definition_number: 9,
+                field_size: 4,
+                developer_data_index: 0
+            },
+            FitDeveloperFieldDefinition {
+                definition_number: 6,
+                field_size: 4,
+                developer_data_index: 0
+            },
+            FitDeveloperFieldDefinition {
+                definition_number: 5,
+                field_size: 4,
+                developer_data_index: 0
+            }
+        ]
+    },
+    developer_fields: [
+        FitFieldDeveloperData {
+            field_description: FitMessageFieldDescription {
+                header: Normal(
+                    FitNormalRecordHeader {
+                        message_type: Data,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    }
+                ),
+                definition_message: FitDefinitionMessage {
+                    header: FitNormalRecordHeader {
+                        message_type: Definition,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    },
+                    endianness: Little,
+                    global_mesg_num: FieldDescription,
+                    num_fields: 5,
+                    message_size: 20,
+                    field_definitions: [
+                        FitFieldDefinition {
+                            definition_number: 0,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 1,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 2,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 3,
+                            field_size: 11,
+                            base_type: 7
+                        },
+                        FitFieldDefinition {
+                            definition_number: 8,
+                            field_size: 6,
+                            base_type: 7
+                        }
+                    ],
+                    num_developer_fields: 0,
+                    developer_field_definitions: []
+                },
+                developer_fields: [],
+                raw_bytes: [
+                    0,
+                    8,
+                    132,
+                    70,
+                    111,
+                    114,
+                    109,
+                    32,
+                    80,
+                    111,
+                    119,
+                    101,
+                    114,
+                    0,
+                    87,
+                    97,
+                    116,
+                    116,
+                    115,
+                    0
+                ],
+                message_name: "FitMessageFieldDescription",
+                developer_data_index: Some(
+                    0
+                ),
+                field_definition_number: Some(
+                    8
+                ),
+                fit_base_type_id: Some(
+                    Uint16
+                ),
+                field_name: Some(
+                    "Form Power\u{0}"
+                ),
+                array: None,
+                components: None,
+                scale: None,
+                offset: None,
+                units: Some(
+                    "Watts\u{0}"
+                ),
+                bits: None,
+                accumulate: None,
+                fit_base_unit_id: None,
+                native_mesg_num: None,
+                native_field_num: None
+            },
+            value: Uint16(
+                57
+            )
+        },
+        FitFieldDeveloperData {
+            field_description: FitMessageFieldDescription {
+                header: Normal(
+                    FitNormalRecordHeader {
+                        message_type: Data,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    }
+                ),
+                definition_message: FitDefinitionMessage {
+                    header: FitNormalRecordHeader {
+                        message_type: Definition,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    },
+                    endianness: Little,
+                    global_mesg_num: FieldDescription,
+                    num_fields: 5,
+                    message_size: 29,
+                    field_definitions: [
+                        FitFieldDefinition {
+                            definition_number: 0,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 1,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 2,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 3,
+                            field_size: 21,
+                            base_type: 7
+                        },
+                        FitFieldDefinition {
+                            definition_number: 8,
+                            field_size: 5,
+                            base_type: 7
+                        }
+                    ],
+                    num_developer_fields: 0,
+                    developer_field_definitions: []
+                },
+                developer_fields: [],
+                raw_bytes: [
+                    0,
+                    9,
+                    136,
+                    76,
+                    101,
+                    103,
+                    32,
+                    83,
+                    112,
+                    114,
+                    105,
+                    110,
+                    103,
+                    32,
+                    83,
+                    116,
+                    105,
+                    102,
+                    102,
+                    110,
+                    101,
+                    115,
+                    115,
+                    0,
+                    75,
+                    78,
+                    47,
+                    109,
+                    0
+                ],
+                message_name: "FitMessageFieldDescription",
+                developer_data_index: Some(
+                    0
+                ),
+                field_definition_number: Some(
+                    9
+                ),
+                fit_base_type_id: Some(
+                    Float32
+                ),
+                field_name: Some(
+                    "Leg Spring Stiffness\u{0}"
+                ),
+                array: None,
+                components: None,
+                scale: None,
+                offset: None,
+                units: Some(
+                    "KN/m\u{0}"
+                ),
+                bits: None,
+                accumulate: None,
+                fit_base_unit_id: None,
+                native_mesg_num: None,
+                native_field_num: None
+            },
+            value: Float32(
+                8.5
+            )
+        },
+        FitFieldDeveloperData {
+            field_description: FitMessageFieldDescription {
+                header: Normal(
+                    FitNormalRecordHeader {
+                        message_type: Data,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    }
+                ),
+                definition_message: FitDefinitionMessage {
+                    header: FitNormalRecordHeader {
+                        message_type: Definition,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    },
+                    endianness: Little,
+                    global_mesg_num: FieldDescription,
+                    num_fields: 6,
+                    message_size: 21,
+                    field_definitions: [
+                        FitFieldDefinition {
+                            definition_number: 0,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 1,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 14,
+                            field_size: 2,
+                            base_type: 4
+                        },
+                        FitFieldDefinition {
+                            definition_number: 2,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 3,
+                            field_size: 9,
+                            base_type: 7
+                        },
+                        FitFieldDefinition {
+                            definition_number: 8,
+                            field_size: 7,
+                            base_type: 7
+                        }
+                    ],
+                    num_developer_fields: 0,
+                    developer_field_definitions: []
+                },
+                developer_fields: [],
+                raw_bytes: [
+                    0,
+                    6,
+                    5,
+                    0,
+                    134,
+                    68,
+                    105,
+                    115,
+                    116,
+                    97,
+                    110,
+                    99,
+                    101,
+                    0,
+                    77,
+                    101,
+                    116,
+                    101,
+                    114,
+                    115,
+                    0
+                ],
+                message_name: "FitMessageFieldDescription",
+                developer_data_index: Some(
+                    0
+                ),
+                field_definition_number: Some(
+                    6
+                ),
+                fit_base_type_id: Some(
+                    Uint32
+                ),
+                field_name: Some(
+                    "Distance\u{0}"
+                ),
+                array: None,
+                components: None,
+                scale: None,
+                offset: None,
+                units: Some(
+                    "Meters\u{0}"
+                ),
+                bits: None,
+                accumulate: None,
+                fit_base_unit_id: None,
+                native_mesg_num: Some(
+                    SdmProfile
+                ),
+                native_field_num: None
+            },
+            value: Uint32(
+                0
+            )
+        },
+        FitFieldDeveloperData {
+            field_description: FitMessageFieldDescription {
+                header: Normal(
+                    FitNormalRecordHeader {
+                        message_type: Data,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    }
+                ),
+                definition_message: FitDefinitionMessage {
+                    header: FitNormalRecordHeader {
+                        message_type: Definition,
+                        developer_fields_present: false,
+                        local_mesg_num: 0
+                    },
+                    endianness: Little,
+                    global_mesg_num: FieldDescription,
+                    num_fields: 6,
+                    message_size: 15,
+                    field_definitions: [
+                        FitFieldDefinition {
+                            definition_number: 0,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 1,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 14,
+                            field_size: 2,
+                            base_type: 4
+                        },
+                        FitFieldDefinition {
+                            definition_number: 2,
+                            field_size: 1,
+                            base_type: 2
+                        },
+                        FitFieldDefinition {
+                            definition_number: 3,
+                            field_size: 6,
+                            base_type: 7
+                        },
+                        FitFieldDefinition {
+                            definition_number: 8,
+                            field_size: 4,
+                            base_type: 7
+                        }
+                    ],
+                    num_developer_fields: 0,
+                    developer_field_definitions: []
+                },
+                developer_fields: [],
+                raw_bytes: [
+                    0,
+                    5,
+                    6,
+                    0,
+                    136,
+                    83,
+                    112,
+                    101,
+                    101,
+                    100,
+                    0,
+                    77,
+                    47,
+                    83,
+                    0
+                ],
+                message_name: "FitMessageFieldDescription",
+                developer_data_index: Some(
+                    0
+                ),
+                field_definition_number: Some(
+                    5
+                ),
+                fit_base_type_id: Some(
+                    Float32
+                ),
+                field_name: Some(
+                    "Speed\u{0}"
+                ),
+                array: None,
+                components: None,
+                scale: None,
+                offset: None,
+                units: Some(
+                    "M/S\u{0}"
+                ),
+                bits: None,
+                accumulate: None,
+                fit_base_unit_id: None,
+                native_mesg_num: Some(
+                    BikeProfile
+                ),
+                native_field_num: None
+            },
+            value: Float32(
+                0.0
+            )
+        }
+    ],
+    raw_bytes: [
+        43,
+        60,
+        169,
+        51,
+        160,
+        121,
+        69,
+        30,
+        192,
+        125,
+        126,
+        205,
+        152,
+        8,
+        19,
+        0,
+        81,
+        8,
+        87,
+        13,
+        209,
+        0,
+        151,
+        182,
+        151,
+        2,
+        16,
+        9,
+        57,
+        0,
+        0,
+        0,
+        8,
+        65,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    message_name: "FitMessageRecord",
+    timestamp: Some(
+        FitFieldDateTime {
+            seconds_since_garmin_epoch: 866729003,
+            rust_time: 2017-06-18T14:03:23Z
+        }
+    ),
+    position_lat: Some(
+        507869600
+    ),
+    position_long: Some(
+        -847348288
+    ),
+    altitude: Some(
+        -74.19999999999999
+    ),
+    heart_rate: Some(
+        151
+    ),
+    cadence: Some(
+        182
+    ),
+    distance: Some(
+        12473.84
+    ),
+    speed: Some(
+        3.415
+    ),
+    power: Some(
+        209
+    ),
+    compressed_speed_distance: None,
+    grade: None,
+    resistance: None,
+    time_from_course: None,
+    cycle_length: None,
+    temperature: None,
+    speed_1s: None,
+    cycles: None,
+    total_cycles: None,
+    compressed_accumulated_power: None,
+    accumulated_power: None,
+    left_right_balance: None,
+    gps_accuracy: None,
+    vertical_speed: None,
+    calories: None,
+    vertical_oscillation: Some(
+        66.3
+    ),
+    stance_time_percent: None,
+    stance_time: Some(
+        232.0
+    ),
+    activity_type: None,
+    left_torque_effectiveness: None,
+    right_torque_effectiveness: None,
+    left_pedal_smoothness: None,
+    right_pedal_smoothness: None,
+    combined_pedal_smoothness: None,
+    time128: None,
+    stroke_type: None,
+    zone: None,
+    ball_speed: None,
+    cadence256: None,
+    fractional_cadence: None,
+    total_hemoglobin_conc: None,
+    total_hemoglobin_conc_min: None,
+    total_hemoglobin_conc_max: None,
+    saturated_hemoglobin_percent: None,
+    saturated_hemoglobin_percent_min: None,
+    saturated_hemoglobin_percent_max: None,
+    device_index: None,
+    left_pco: None,
+    right_pco: None,
+    left_power_phase: None,
+    left_power_phase_peak: None,
+    right_power_phase: None,
+    right_power_phase_peak: None,
+    enhanced_speed: Some(
+        3.415
+    ),
+    enhanced_altitude: Some(
+        -74.19999999999999
+    ),
+    battery_soc: None,
+    motor_power: None,
+    vertical_ratio: None,
+    stance_time_balance: None,
+    step_length: None
+}
+0b00101011, 0b00111100, 0b10101001, 0b00110011, 0b10100000, 0b01111001, 0b01000101, 0b00011110, 0b11000000, 0b01111101, 0b01111110, 0b11001101, 0b10011000, 0b00001000, 0b00010011, 0b00000000, 0b01010001, 0b00001000, 0b01010111, 0b00001101, 0b11010001, 0b00000000, 0b10010111, 0b10110110, 0b10010111, 0b00000010, 0b00010000, 0b00001001, 0b00111001, 0b00000000, 0b00000000, 0b00000000, 0b00001000, 0b01000001, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000

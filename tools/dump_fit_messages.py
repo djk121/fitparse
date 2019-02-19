@@ -289,6 +289,10 @@ impl FitDataMessage {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "./fittypes_test.rs"]
+mod fittypes_test;
 """
 
 def output_messages(messages, types):
@@ -311,6 +315,8 @@ pub struct {{ message_name }} {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     {% for field in fields -%}
     pub {{ field.name }}: {{ field.output_field_option() }},  {% if field.comment %}// {{ field.comment }}{% endif %}
     {% endfor %}
@@ -319,18 +325,23 @@ pub struct {{ message_name }} {
 
     IMPL_TEMPLATE = """
 impl {{ message_name }} {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = {{ message_name }} {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "{{ message_name }}",
             {%- for field in fields %}
             {{ field.name }}: None,
             {%- endfor %}
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match {{ message_name }}::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -385,7 +396,7 @@ impl {{ message_name }} {
                     {{ field.number }} => {  // {{ field.name }}
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = {{ field.output_field_parser('&bytes') }}?;
                                 val
                             },

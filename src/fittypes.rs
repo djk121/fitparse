@@ -6144,6 +6144,8 @@ pub struct FitMessageAccelerometerData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
     pub sample_time_offset: Option<u16>,  // Each time in the array describes the time at which the accelerometer sample with the corrosponding index was taken. Limited to 30 samples in each message. The samples may span across seconds. Array size must match the number of samples in accel_x and accel_y and accel_z
@@ -6156,12 +6158,15 @@ pub struct FitMessageAccelerometerData {
     
 }
 impl FitMessageAccelerometerData {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAccelerometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAccelerometerData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageAccelerometerData",
             timestamp: None,
             timestamp_ms: None,
             sample_time_offset: None,
@@ -6174,6 +6179,8 @@ impl FitMessageAccelerometerData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAccelerometerData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -6214,7 +6221,7 @@ impl FitMessageAccelerometerData {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6231,7 +6238,7 @@ impl FitMessageAccelerometerData {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6248,7 +6255,7 @@ impl FitMessageAccelerometerData {
                     1 => {  // sample_time_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6265,7 +6272,7 @@ impl FitMessageAccelerometerData {
                     2 => {  // accel_x
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6282,7 +6289,7 @@ impl FitMessageAccelerometerData {
                     3 => {  // accel_y
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6299,7 +6306,7 @@ impl FitMessageAccelerometerData {
                     4 => {  // accel_z
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6316,7 +6323,7 @@ impl FitMessageAccelerometerData {
                     5 => {  // calibrated_accel_x
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6333,7 +6340,7 @@ impl FitMessageAccelerometerData {
                     6 => {  // calibrated_accel_y
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6350,7 +6357,7 @@ impl FitMessageAccelerometerData {
                     7 => {  // calibrated_accel_z
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6377,6 +6384,8 @@ pub struct FitMessageActivity {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub total_timer_time: Option<f64>,  // Exclude pauses
     pub num_sessions: Option<u16>,  
@@ -6388,12 +6397,15 @@ pub struct FitMessageActivity {
     
 }
 impl FitMessageActivity {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageActivity>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageActivity {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageActivity",
             timestamp: None,
             total_timer_time: None,
             num_sessions: None,
@@ -6405,6 +6417,8 @@ impl FitMessageActivity {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageActivity::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -6445,7 +6459,7 @@ impl FitMessageActivity {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6462,7 +6476,7 @@ impl FitMessageActivity {
                     0 => {  // total_timer_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6479,7 +6493,7 @@ impl FitMessageActivity {
                     1 => {  // num_sessions
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6496,7 +6510,7 @@ impl FitMessageActivity {
                     2 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivity::parse(&bytes)?;
                                 val
                             },
@@ -6513,7 +6527,7 @@ impl FitMessageActivity {
                     3 => {  // event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEvent::parse(&bytes)?;
                                 val
                             },
@@ -6530,7 +6544,7 @@ impl FitMessageActivity {
                     4 => {  // event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEventType::parse(&bytes)?;
                                 val
                             },
@@ -6547,7 +6561,7 @@ impl FitMessageActivity {
                     5 => {  // local_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocalDateTime::parse(&bytes, message.definition_message.endianness, _tz_offset)?;
                                 val
                             },
@@ -6564,7 +6578,7 @@ impl FitMessageActivity {
                     6 => {  // event_group
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -6591,6 +6605,8 @@ pub struct FitMessageAntChannelId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub channel_number: Option<u8>,  
     pub device_type: Option<u8>,  
     pub device_number: Option<u16>,  
@@ -6599,12 +6615,15 @@ pub struct FitMessageAntChannelId {
     
 }
 impl FitMessageAntChannelId {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntChannelId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntChannelId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageAntChannelId",
             channel_number: None,
             device_type: None,
             device_number: None,
@@ -6613,6 +6632,8 @@ impl FitMessageAntChannelId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAntChannelId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -6653,7 +6674,7 @@ impl FitMessageAntChannelId {
                     0 => {  // channel_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -6670,7 +6691,7 @@ impl FitMessageAntChannelId {
                     1 => {  // device_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -6687,7 +6708,7 @@ impl FitMessageAntChannelId {
                     2 => {  // device_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6704,7 +6725,7 @@ impl FitMessageAntChannelId {
                     3 => {  // transmission_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -6721,7 +6742,7 @@ impl FitMessageAntChannelId {
                     4 => {  // device_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDeviceIndex::parse(&bytes)?;
                                 val
                             },
@@ -6748,6 +6769,8 @@ pub struct FitMessageAntRx {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub fractional_timestamp: Option<f64>,  
     pub mesg_id: Option<Vec<u8>>,  
@@ -6757,12 +6780,15 @@ pub struct FitMessageAntRx {
     
 }
 impl FitMessageAntRx {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntRx>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntRx {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageAntRx",
             timestamp: None,
             fractional_timestamp: None,
             mesg_id: None,
@@ -6772,6 +6798,8 @@ impl FitMessageAntRx {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAntRx::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -6812,7 +6840,7 @@ impl FitMessageAntRx {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6829,7 +6857,7 @@ impl FitMessageAntRx {
                     0 => {  // fractional_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -6846,7 +6874,7 @@ impl FitMessageAntRx {
                     1 => {  // mesg_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -6863,7 +6891,7 @@ impl FitMessageAntRx {
                     2 => {  // mesg_data
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -6889,7 +6917,7 @@ impl FitMessageAntRx {
                     3 => {  // channel_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -6906,7 +6934,7 @@ impl FitMessageAntRx {
                     4 => {  // data
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -6933,6 +6961,8 @@ pub struct FitMessageAntTx {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub fractional_timestamp: Option<f64>,  
     pub mesg_id: Option<Vec<u8>>,  
@@ -6942,12 +6972,15 @@ pub struct FitMessageAntTx {
     
 }
 impl FitMessageAntTx {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntTx>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntTx {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageAntTx",
             timestamp: None,
             fractional_timestamp: None,
             mesg_id: None,
@@ -6957,6 +6990,8 @@ impl FitMessageAntTx {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAntTx::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -6997,7 +7032,7 @@ impl FitMessageAntTx {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7014,7 +7049,7 @@ impl FitMessageAntTx {
                     0 => {  // fractional_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7031,7 +7066,7 @@ impl FitMessageAntTx {
                     1 => {  // mesg_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -7048,7 +7083,7 @@ impl FitMessageAntTx {
                     2 => {  // mesg_data
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -7074,7 +7109,7 @@ impl FitMessageAntTx {
                     3 => {  // channel_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -7091,7 +7126,7 @@ impl FitMessageAntTx {
                     4 => {  // data
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -7118,6 +7153,8 @@ pub struct FitMessageAviationAttitude {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
     pub timestamp_ms: Option<u16>,  // Fractional part of timestamp, added to timestamp
     pub system_time: Option<u32>,  // System time associated with sample expressed in ms.
@@ -7133,12 +7170,15 @@ pub struct FitMessageAviationAttitude {
     
 }
 impl FitMessageAviationAttitude {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAviationAttitude>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAviationAttitude {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageAviationAttitude",
             timestamp: None,
             timestamp_ms: None,
             system_time: None,
@@ -7154,6 +7194,8 @@ impl FitMessageAviationAttitude {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAviationAttitude::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -7194,7 +7236,7 @@ impl FitMessageAviationAttitude {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7211,7 +7253,7 @@ impl FitMessageAviationAttitude {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7228,7 +7270,7 @@ impl FitMessageAviationAttitude {
                     1 => {  // system_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7245,7 +7287,7 @@ impl FitMessageAviationAttitude {
                     2 => {  // pitch
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7262,7 +7304,7 @@ impl FitMessageAviationAttitude {
                     3 => {  // roll
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7279,7 +7321,7 @@ impl FitMessageAviationAttitude {
                     4 => {  // accel_lateral
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7296,7 +7338,7 @@ impl FitMessageAviationAttitude {
                     5 => {  // accel_normal
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7313,7 +7355,7 @@ impl FitMessageAviationAttitude {
                     6 => {  // turn_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7330,7 +7372,7 @@ impl FitMessageAviationAttitude {
                     7 => {  // stage
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldAttitudeStage::parse(&bytes)?;
                                 val
                             },
@@ -7347,7 +7389,7 @@ impl FitMessageAviationAttitude {
                     8 => {  // attitude_stage_complete
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -7364,7 +7406,7 @@ impl FitMessageAviationAttitude {
                     9 => {  // track
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7381,7 +7423,7 @@ impl FitMessageAviationAttitude {
                     10 => {  // validity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldAttitudeValidity::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7408,6 +7450,8 @@ pub struct FitMessageBikeProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub name: Option<String>,  
     pub sport: Option<FitFieldSport>,  
@@ -7443,12 +7487,15 @@ pub struct FitMessageBikeProfile {
     
 }
 impl FitMessageBikeProfile {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageBikeProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBikeProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageBikeProfile",
             message_index: None,
             name: None,
             sport: None,
@@ -7484,6 +7531,8 @@ impl FitMessageBikeProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageBikeProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -7524,7 +7573,7 @@ impl FitMessageBikeProfile {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7541,7 +7590,7 @@ impl FitMessageBikeProfile {
                     0 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -7558,7 +7607,7 @@ impl FitMessageBikeProfile {
                     1 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -7575,7 +7624,7 @@ impl FitMessageBikeProfile {
                     2 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -7592,7 +7641,7 @@ impl FitMessageBikeProfile {
                     3 => {  // odometer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7609,7 +7658,7 @@ impl FitMessageBikeProfile {
                     4 => {  // bike_spd_ant_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7626,7 +7675,7 @@ impl FitMessageBikeProfile {
                     5 => {  // bike_cad_ant_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7643,7 +7692,7 @@ impl FitMessageBikeProfile {
                     6 => {  // bike_spdcad_ant_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7660,7 +7709,7 @@ impl FitMessageBikeProfile {
                     7 => {  // bike_power_ant_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7677,7 +7726,7 @@ impl FitMessageBikeProfile {
                     8 => {  // custom_wheelsize
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7694,7 +7743,7 @@ impl FitMessageBikeProfile {
                     9 => {  // auto_wheelsize
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7711,7 +7760,7 @@ impl FitMessageBikeProfile {
                     10 => {  // bike_weight
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7728,7 +7777,7 @@ impl FitMessageBikeProfile {
                     11 => {  // power_cal_factor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -7745,7 +7794,7 @@ impl FitMessageBikeProfile {
                     12 => {  // auto_wheel_cal
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7762,7 +7811,7 @@ impl FitMessageBikeProfile {
                     13 => {  // auto_power_zero
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7779,7 +7828,7 @@ impl FitMessageBikeProfile {
                     14 => {  // id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -7796,7 +7845,7 @@ impl FitMessageBikeProfile {
                     15 => {  // spd_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7813,7 +7862,7 @@ impl FitMessageBikeProfile {
                     16 => {  // cad_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7830,7 +7879,7 @@ impl FitMessageBikeProfile {
                     17 => {  // spdcad_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7847,7 +7896,7 @@ impl FitMessageBikeProfile {
                     18 => {  // power_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7864,7 +7913,7 @@ impl FitMessageBikeProfile {
                     19 => {  // crank_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -7881,7 +7930,7 @@ impl FitMessageBikeProfile {
                     20 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -7898,7 +7947,7 @@ impl FitMessageBikeProfile {
                     21 => {  // bike_spd_ant_id_trans_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -7915,7 +7964,7 @@ impl FitMessageBikeProfile {
                     22 => {  // bike_cad_ant_id_trans_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -7932,7 +7981,7 @@ impl FitMessageBikeProfile {
                     23 => {  // bike_spdcad_ant_id_trans_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -7949,7 +7998,7 @@ impl FitMessageBikeProfile {
                     24 => {  // bike_power_ant_id_trans_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -7966,7 +8015,7 @@ impl FitMessageBikeProfile {
                     37 => {  // odometer_rollover
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -7983,7 +8032,7 @@ impl FitMessageBikeProfile {
                     38 => {  // front_gear_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -8000,7 +8049,7 @@ impl FitMessageBikeProfile {
                     39 => {  // front_gear
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -8017,7 +8066,7 @@ impl FitMessageBikeProfile {
                     40 => {  // rear_gear_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -8034,7 +8083,7 @@ impl FitMessageBikeProfile {
                     41 => {  // rear_gear
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -8051,7 +8100,7 @@ impl FitMessageBikeProfile {
                     44 => {  // shimano_di2_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8078,6 +8127,8 @@ pub struct FitMessageBloodPressure {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub systolic_pressure: Option<u16>,  
     pub diastolic_pressure: Option<u16>,  
@@ -8092,12 +8143,15 @@ pub struct FitMessageBloodPressure {
     
 }
 impl FitMessageBloodPressure {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageBloodPressure>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBloodPressure {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageBloodPressure",
             timestamp: None,
             systolic_pressure: None,
             diastolic_pressure: None,
@@ -8112,6 +8166,8 @@ impl FitMessageBloodPressure {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageBloodPressure::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -8152,7 +8208,7 @@ impl FitMessageBloodPressure {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8169,7 +8225,7 @@ impl FitMessageBloodPressure {
                     0 => {  // systolic_pressure
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8186,7 +8242,7 @@ impl FitMessageBloodPressure {
                     1 => {  // diastolic_pressure
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8203,7 +8259,7 @@ impl FitMessageBloodPressure {
                     2 => {  // mean_arterial_pressure
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8220,7 +8276,7 @@ impl FitMessageBloodPressure {
                     3 => {  // map_3_sample_mean
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8237,7 +8293,7 @@ impl FitMessageBloodPressure {
                     4 => {  // map_morning_values
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8254,7 +8310,7 @@ impl FitMessageBloodPressure {
                     5 => {  // map_evening_values
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8271,7 +8327,7 @@ impl FitMessageBloodPressure {
                     6 => {  // heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -8288,7 +8344,7 @@ impl FitMessageBloodPressure {
                     7 => {  // heart_rate_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldHrType::parse(&bytes)?;
                                 val
                             },
@@ -8305,7 +8361,7 @@ impl FitMessageBloodPressure {
                     8 => {  // status
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldBpStatus::parse(&bytes)?;
                                 val
                             },
@@ -8322,7 +8378,7 @@ impl FitMessageBloodPressure {
                     9 => {  // user_profile_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8349,24 +8405,31 @@ pub struct FitMessageCadenceZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub high_value: Option<u8>,  
     pub name: Option<String>,  
     
 }
 impl FitMessageCadenceZone {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCadenceZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCadenceZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageCadenceZone",
             message_index: None,
             high_value: None,
             name: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCadenceZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -8407,7 +8470,7 @@ impl FitMessageCadenceZone {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8424,7 +8487,7 @@ impl FitMessageCadenceZone {
                     0 => {  // high_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -8441,7 +8504,7 @@ impl FitMessageCadenceZone {
                     1 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -8468,6 +8531,8 @@ pub struct FitMessageCameraEvent {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
     pub camera_event_type: Option<FitFieldCameraEventType>,  
@@ -8476,12 +8541,15 @@ pub struct FitMessageCameraEvent {
     
 }
 impl FitMessageCameraEvent {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCameraEvent>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCameraEvent {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageCameraEvent",
             timestamp: None,
             timestamp_ms: None,
             camera_event_type: None,
@@ -8490,6 +8558,8 @@ impl FitMessageCameraEvent {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCameraEvent::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -8530,7 +8600,7 @@ impl FitMessageCameraEvent {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8547,7 +8617,7 @@ impl FitMessageCameraEvent {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8564,7 +8634,7 @@ impl FitMessageCameraEvent {
                     1 => {  // camera_event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldCameraEventType::parse(&bytes)?;
                                 val
                             },
@@ -8581,7 +8651,7 @@ impl FitMessageCameraEvent {
                     2 => {  // camera_file_uuid
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -8598,7 +8668,7 @@ impl FitMessageCameraEvent {
                     3 => {  // camera_orientation
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldCameraOrientationType::parse(&bytes)?;
                                 val
                             },
@@ -8625,6 +8695,8 @@ pub struct FitMessageCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub languages: Option<u8>,  // Use language_bits_x types where x is index of array.
     pub sports: Option<FitFieldSportBits0>,  // Use sport_bits_x types where x is index of array.
     pub workouts_supported: Option<FitFieldWorkoutCapabilities>,  
@@ -8632,12 +8704,15 @@ pub struct FitMessageCapabilities {
     
 }
 impl FitMessageCapabilities {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageCapabilities",
             languages: None,
             sports: None,
             workouts_supported: None,
@@ -8645,6 +8720,8 @@ impl FitMessageCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -8685,7 +8762,7 @@ impl FitMessageCapabilities {
                     0 => {  // languages
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -8702,7 +8779,7 @@ impl FitMessageCapabilities {
                     1 => {  // sports
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSportBits0::parse(&bytes)?;
                                 val
                             },
@@ -8719,7 +8796,7 @@ impl FitMessageCapabilities {
                     21 => {  // workouts_supported
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWorkoutCapabilities::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8736,7 +8813,7 @@ impl FitMessageCapabilities {
                     23 => {  // connectivity_supported
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldConnectivityCapabilities::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -8763,6 +8840,8 @@ pub struct FitMessageConnectivity {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub bluetooth_enabled: Option<bool>,  // Use Bluetooth for connectivity features
     pub bluetooth_le_enabled: Option<bool>,  // Use Bluetooth Low Energy for connectivity features
     pub ant_enabled: Option<bool>,  // Use ANT for connectivity features
@@ -8779,12 +8858,15 @@ pub struct FitMessageConnectivity {
     
 }
 impl FitMessageConnectivity {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageConnectivity>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageConnectivity {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageConnectivity",
             bluetooth_enabled: None,
             bluetooth_le_enabled: None,
             ant_enabled: None,
@@ -8801,6 +8883,8 @@ impl FitMessageConnectivity {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageConnectivity::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -8841,7 +8925,7 @@ impl FitMessageConnectivity {
                     0 => {  // bluetooth_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8858,7 +8942,7 @@ impl FitMessageConnectivity {
                     1 => {  // bluetooth_le_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8875,7 +8959,7 @@ impl FitMessageConnectivity {
                     2 => {  // ant_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8892,7 +8976,7 @@ impl FitMessageConnectivity {
                     3 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -8909,7 +8993,7 @@ impl FitMessageConnectivity {
                     4 => {  // live_tracking_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8926,7 +9010,7 @@ impl FitMessageConnectivity {
                     5 => {  // weather_conditions_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8943,7 +9027,7 @@ impl FitMessageConnectivity {
                     6 => {  // weather_alerts_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8960,7 +9044,7 @@ impl FitMessageConnectivity {
                     7 => {  // auto_activity_upload_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8977,7 +9061,7 @@ impl FitMessageConnectivity {
                     8 => {  // course_download_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -8994,7 +9078,7 @@ impl FitMessageConnectivity {
                     9 => {  // workout_download_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -9011,7 +9095,7 @@ impl FitMessageConnectivity {
                     10 => {  // gps_ephemeris_download_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -9028,7 +9112,7 @@ impl FitMessageConnectivity {
                     11 => {  // incident_detection_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -9045,7 +9129,7 @@ impl FitMessageConnectivity {
                     12 => {  // grouptrack_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -9072,6 +9156,8 @@ pub struct FitMessageCourse {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub sport: Option<FitFieldSport>,  
     pub name: Option<String>,  
     pub capabilities: Option<FitFieldCourseCapabilities>,  
@@ -9079,12 +9165,15 @@ pub struct FitMessageCourse {
     
 }
 impl FitMessageCourse {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCourse>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCourse {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageCourse",
             sport: None,
             name: None,
             capabilities: None,
@@ -9092,6 +9181,8 @@ impl FitMessageCourse {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCourse::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -9132,7 +9223,7 @@ impl FitMessageCourse {
                     4 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -9149,7 +9240,7 @@ impl FitMessageCourse {
                     5 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -9166,7 +9257,7 @@ impl FitMessageCourse {
                     6 => {  // capabilities
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldCourseCapabilities::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9183,7 +9274,7 @@ impl FitMessageCourse {
                     7 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -9210,6 +9301,8 @@ pub struct FitMessageCoursePoint {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub timestamp: Option<FitFieldDateTime>,  
     pub position_lat: Option<i32>,  
@@ -9221,12 +9314,15 @@ pub struct FitMessageCoursePoint {
     
 }
 impl FitMessageCoursePoint {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCoursePoint>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCoursePoint {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageCoursePoint",
             message_index: None,
             timestamp: None,
             position_lat: None,
@@ -9238,6 +9334,8 @@ impl FitMessageCoursePoint {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCoursePoint::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -9278,7 +9376,7 @@ impl FitMessageCoursePoint {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9295,7 +9393,7 @@ impl FitMessageCoursePoint {
                     1 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9312,7 +9410,7 @@ impl FitMessageCoursePoint {
                     2 => {  // position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9329,7 +9427,7 @@ impl FitMessageCoursePoint {
                     3 => {  // position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9346,7 +9444,7 @@ impl FitMessageCoursePoint {
                     4 => {  // distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9363,7 +9461,7 @@ impl FitMessageCoursePoint {
                     5 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldCoursePoint::parse(&bytes)?;
                                 val
                             },
@@ -9380,7 +9478,7 @@ impl FitMessageCoursePoint {
                     6 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -9397,7 +9495,7 @@ impl FitMessageCoursePoint {
                     8 => {  // favorite
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -9424,6 +9522,8 @@ pub struct FitMessageDeveloperDataId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub developer_id: Option<Vec<u8>>,  
     pub application_id: Option<Vec<u8>>,  
     pub manufacturer_id: Option<FitFieldManufacturer>,  
@@ -9432,12 +9532,15 @@ pub struct FitMessageDeveloperDataId {
     
 }
 impl FitMessageDeveloperDataId {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeveloperDataId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeveloperDataId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDeveloperDataId",
             developer_id: None,
             application_id: None,
             manufacturer_id: None,
@@ -9446,6 +9549,8 @@ impl FitMessageDeveloperDataId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDeveloperDataId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -9486,7 +9591,7 @@ impl FitMessageDeveloperDataId {
                     0 => {  // developer_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -9503,7 +9608,7 @@ impl FitMessageDeveloperDataId {
                     1 => {  // application_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -9520,7 +9625,7 @@ impl FitMessageDeveloperDataId {
                     2 => {  // manufacturer_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9537,7 +9642,7 @@ impl FitMessageDeveloperDataId {
                     3 => {  // developer_data_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -9554,7 +9659,7 @@ impl FitMessageDeveloperDataId {
                     4 => {  // application_version
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9643,6 +9748,8 @@ pub struct FitMessageDeviceInfo {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub device_index: Option<FitFieldDeviceIndex>,  
     pub device_type: Option<FitMessageDeviceInfoSubfieldDeviceType>,  
@@ -9664,12 +9771,15 @@ pub struct FitMessageDeviceInfo {
     
 }
 impl FitMessageDeviceInfo {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceInfo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeviceInfo {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDeviceInfo",
             timestamp: None,
             device_index: None,
             device_type: None,
@@ -9691,6 +9801,8 @@ impl FitMessageDeviceInfo {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDeviceInfo::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -9731,7 +9843,7 @@ impl FitMessageDeviceInfo {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9748,7 +9860,7 @@ impl FitMessageDeviceInfo {
                     0 => {  // device_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDeviceIndex::parse(&bytes)?;
                                 val
                             },
@@ -9765,7 +9877,7 @@ impl FitMessageDeviceInfo {
                     1 => {  // device_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageDeviceInfoSubfieldDeviceType::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -9782,7 +9894,7 @@ impl FitMessageDeviceInfo {
                     2 => {  // manufacturer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9799,7 +9911,7 @@ impl FitMessageDeviceInfo {
                     3 => {  // serial_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9816,7 +9928,7 @@ impl FitMessageDeviceInfo {
                     4 => {  // product
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageDeviceInfoSubfieldProduct::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -9833,7 +9945,7 @@ impl FitMessageDeviceInfo {
                     5 => {  // software_version
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9850,7 +9962,7 @@ impl FitMessageDeviceInfo {
                     6 => {  // hardware_version
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -9867,7 +9979,7 @@ impl FitMessageDeviceInfo {
                     7 => {  // cum_operating_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9884,7 +9996,7 @@ impl FitMessageDeviceInfo {
                     10 => {  // battery_voltage
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9901,7 +10013,7 @@ impl FitMessageDeviceInfo {
                     11 => {  // battery_status
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldBatteryStatus::parse(&bytes)?;
                                 val
                             },
@@ -9918,7 +10030,7 @@ impl FitMessageDeviceInfo {
                     18 => {  // sensor_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldBodyLocation::parse(&bytes)?;
                                 val
                             },
@@ -9935,7 +10047,7 @@ impl FitMessageDeviceInfo {
                     19 => {  // descriptor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -9952,7 +10064,7 @@ impl FitMessageDeviceInfo {
                     20 => {  // ant_transmission_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -9969,7 +10081,7 @@ impl FitMessageDeviceInfo {
                     21 => {  // ant_device_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -9986,7 +10098,7 @@ impl FitMessageDeviceInfo {
                     22 => {  // ant_network
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldAntNetwork::parse(&bytes)?;
                                 val
                             },
@@ -10003,7 +10115,7 @@ impl FitMessageDeviceInfo {
                     25 => {  // source_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSourceType::parse(&bytes)?;
                                 val
                             },
@@ -10020,7 +10132,7 @@ impl FitMessageDeviceInfo {
                     27 => {  // product_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -10047,6 +10159,8 @@ pub struct FitMessageDeviceSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub active_time_zone: Option<u8>,  // Index into time zone arrays.
     pub utc_offset: Option<u32>,  // Offset from system time. Required to convert timestamp from system time to UTC.
     pub time_offset: Option<u32>,  // Offset from system time.
@@ -10072,12 +10186,15 @@ pub struct FitMessageDeviceSettings {
     
 }
 impl FitMessageDeviceSettings {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeviceSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDeviceSettings",
             active_time_zone: None,
             utc_offset: None,
             time_offset: None,
@@ -10103,6 +10220,8 @@ impl FitMessageDeviceSettings {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDeviceSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -10143,7 +10262,7 @@ impl FitMessageDeviceSettings {
                     0 => {  // active_time_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -10160,7 +10279,7 @@ impl FitMessageDeviceSettings {
                     1 => {  // utc_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10177,7 +10296,7 @@ impl FitMessageDeviceSettings {
                     2 => {  // time_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10194,7 +10313,7 @@ impl FitMessageDeviceSettings {
                     4 => {  // time_mode
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldTimeMode::parse(&bytes)?;
                                 val
                             },
@@ -10211,7 +10330,7 @@ impl FitMessageDeviceSettings {
                     5 => {  // time_zone_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -10228,7 +10347,7 @@ impl FitMessageDeviceSettings {
                     12 => {  // backlight_mode
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldBacklightMode::parse(&bytes)?;
                                 val
                             },
@@ -10245,7 +10364,7 @@ impl FitMessageDeviceSettings {
                     36 => {  // activity_tracker_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -10262,7 +10381,7 @@ impl FitMessageDeviceSettings {
                     39 => {  // clock_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10279,7 +10398,7 @@ impl FitMessageDeviceSettings {
                     40 => {  // pages_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10296,7 +10415,7 @@ impl FitMessageDeviceSettings {
                     46 => {  // move_alert_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -10313,7 +10432,7 @@ impl FitMessageDeviceSettings {
                     47 => {  // date_mode
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateMode::parse(&bytes)?;
                                 val
                             },
@@ -10330,7 +10449,7 @@ impl FitMessageDeviceSettings {
                     55 => {  // display_orientation
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayOrientation::parse(&bytes)?;
                                 val
                             },
@@ -10347,7 +10466,7 @@ impl FitMessageDeviceSettings {
                     56 => {  // mounting_side
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSide::parse(&bytes)?;
                                 val
                             },
@@ -10364,7 +10483,7 @@ impl FitMessageDeviceSettings {
                     57 => {  // default_page
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10381,7 +10500,7 @@ impl FitMessageDeviceSettings {
                     58 => {  // autosync_min_steps
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10398,7 +10517,7 @@ impl FitMessageDeviceSettings {
                     59 => {  // autosync_min_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10415,7 +10534,7 @@ impl FitMessageDeviceSettings {
                     80 => {  // lactate_threshold_autodetect_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -10432,7 +10551,7 @@ impl FitMessageDeviceSettings {
                     86 => {  // ble_auto_upload_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -10449,7 +10568,7 @@ impl FitMessageDeviceSettings {
                     89 => {  // auto_sync_frequency
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldAutoSyncFrequency::parse(&bytes)?;
                                 val
                             },
@@ -10466,7 +10585,7 @@ impl FitMessageDeviceSettings {
                     90 => {  // auto_activity_detect
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldAutoActivityDetect::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10483,7 +10602,7 @@ impl FitMessageDeviceSettings {
                     94 => {  // number_of_screens
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -10500,7 +10619,7 @@ impl FitMessageDeviceSettings {
                     95 => {  // smart_notification_display_orientation
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayOrientation::parse(&bytes)?;
                                 val
                             },
@@ -10669,6 +10788,8 @@ pub struct FitMessageEvent {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub event: Option<FitFieldEvent>,  
     pub event_type: Option<FitFieldEventType>,  
@@ -10685,12 +10806,15 @@ pub struct FitMessageEvent {
     
 }
 impl FitMessageEvent {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageEvent>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageEvent {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageEvent",
             timestamp: None,
             event: None,
             event_type: None,
@@ -10707,6 +10831,8 @@ impl FitMessageEvent {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageEvent::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -10747,7 +10873,7 @@ impl FitMessageEvent {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10764,7 +10890,7 @@ impl FitMessageEvent {
                     0 => {  // event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEvent::parse(&bytes)?;
                                 val
                             },
@@ -10781,7 +10907,7 @@ impl FitMessageEvent {
                     1 => {  // event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEventType::parse(&bytes)?;
                                 val
                             },
@@ -10798,7 +10924,7 @@ impl FitMessageEvent {
                     2 => {  // data16
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10816,7 +10942,7 @@ impl FitMessageEvent {
                     3 => {  // data
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageEventSubfieldData::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -10833,7 +10959,7 @@ impl FitMessageEvent {
                     4 => {  // event_group
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -10850,7 +10976,7 @@ impl FitMessageEvent {
                     7 => {  // score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10867,7 +10993,7 @@ impl FitMessageEvent {
                     8 => {  // opponent_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -10884,7 +11010,7 @@ impl FitMessageEvent {
                     9 => {  // front_gear_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -10901,7 +11027,7 @@ impl FitMessageEvent {
                     10 => {  // front_gear
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -10918,7 +11044,7 @@ impl FitMessageEvent {
                     11 => {  // rear_gear_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -10935,7 +11061,7 @@ impl FitMessageEvent {
                     12 => {  // rear_gear
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -10952,7 +11078,7 @@ impl FitMessageEvent {
                     13 => {  // device_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDeviceIndex::parse(&bytes)?;
                                 val
                             },
@@ -10979,6 +11105,8 @@ pub struct FitMessageExdDataConceptConfiguration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub screen_index: Option<u8>,  
     pub concept_field: Option<Vec<u8>>,  
     pub field_id: Option<u8>,  
@@ -10993,12 +11121,15 @@ pub struct FitMessageExdDataConceptConfiguration {
     
 }
 impl FitMessageExdDataConceptConfiguration {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataConceptConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataConceptConfiguration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageExdDataConceptConfiguration",
             screen_index: None,
             concept_field: None,
             field_id: None,
@@ -11013,6 +11144,8 @@ impl FitMessageExdDataConceptConfiguration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExdDataConceptConfiguration::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11053,7 +11186,7 @@ impl FitMessageExdDataConceptConfiguration {
                     0 => {  // screen_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11070,7 +11203,7 @@ impl FitMessageExdDataConceptConfiguration {
                     1 => {  // concept_field
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -11089,7 +11222,7 @@ impl FitMessageExdDataConceptConfiguration {
                     2 => {  // field_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11106,7 +11239,7 @@ impl FitMessageExdDataConceptConfiguration {
                     3 => {  // concept_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11123,7 +11256,7 @@ impl FitMessageExdDataConceptConfiguration {
                     4 => {  // data_page
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11140,7 +11273,7 @@ impl FitMessageExdDataConceptConfiguration {
                     5 => {  // concept_key
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11157,7 +11290,7 @@ impl FitMessageExdDataConceptConfiguration {
                     6 => {  // scaling
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11174,7 +11307,7 @@ impl FitMessageExdDataConceptConfiguration {
                     8 => {  // data_units
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldExdDataUnits::parse(&bytes)?;
                                 val
                             },
@@ -11191,7 +11324,7 @@ impl FitMessageExdDataConceptConfiguration {
                     9 => {  // qualifier
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldExdQualifiers::parse(&bytes)?;
                                 val
                             },
@@ -11208,7 +11341,7 @@ impl FitMessageExdDataConceptConfiguration {
                     10 => {  // descriptor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldExdDescriptors::parse(&bytes)?;
                                 val
                             },
@@ -11225,7 +11358,7 @@ impl FitMessageExdDataConceptConfiguration {
                     11 => {  // is_signed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -11252,6 +11385,8 @@ pub struct FitMessageExdDataFieldConfiguration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub screen_index: Option<u8>,  
     pub concept_field: Option<Vec<u8>>,  
     pub field_id: Option<u8>,  
@@ -11261,12 +11396,15 @@ pub struct FitMessageExdDataFieldConfiguration {
     
 }
 impl FitMessageExdDataFieldConfiguration {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataFieldConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataFieldConfiguration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageExdDataFieldConfiguration",
             screen_index: None,
             concept_field: None,
             field_id: None,
@@ -11276,6 +11414,8 @@ impl FitMessageExdDataFieldConfiguration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExdDataFieldConfiguration::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11316,7 +11456,7 @@ impl FitMessageExdDataFieldConfiguration {
                     0 => {  // screen_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11333,7 +11473,7 @@ impl FitMessageExdDataFieldConfiguration {
                     1 => {  // concept_field
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -11352,7 +11492,7 @@ impl FitMessageExdDataFieldConfiguration {
                     2 => {  // field_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11369,7 +11509,7 @@ impl FitMessageExdDataFieldConfiguration {
                     3 => {  // concept_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11386,7 +11526,7 @@ impl FitMessageExdDataFieldConfiguration {
                     4 => {  // display_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldExdDisplayType::parse(&bytes)?;
                                 val
                             },
@@ -11403,7 +11543,7 @@ impl FitMessageExdDataFieldConfiguration {
                     5 => {  // title
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -11430,6 +11570,8 @@ pub struct FitMessageExdScreenConfiguration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub screen_index: Option<u8>,  
     pub field_count: Option<u8>,  // number of fields in screen
     pub layout: Option<FitFieldExdLayout>,  
@@ -11437,12 +11579,15 @@ pub struct FitMessageExdScreenConfiguration {
     
 }
 impl FitMessageExdScreenConfiguration {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdScreenConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdScreenConfiguration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageExdScreenConfiguration",
             screen_index: None,
             field_count: None,
             layout: None,
@@ -11450,6 +11595,8 @@ impl FitMessageExdScreenConfiguration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExdScreenConfiguration::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11490,7 +11637,7 @@ impl FitMessageExdScreenConfiguration {
                     0 => {  // screen_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11507,7 +11654,7 @@ impl FitMessageExdScreenConfiguration {
                     1 => {  // field_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11524,7 +11671,7 @@ impl FitMessageExdScreenConfiguration {
                     2 => {  // layout
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldExdLayout::parse(&bytes)?;
                                 val
                             },
@@ -11541,7 +11688,7 @@ impl FitMessageExdScreenConfiguration {
                     3 => {  // screen_enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -11568,6 +11715,8 @@ pub struct FitMessageFieldCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub file: Option<FitFieldFile>,  
     pub mesg_num: Option<FitFieldMesgNum>,  
@@ -11576,12 +11725,15 @@ pub struct FitMessageFieldCapabilities {
     
 }
 impl FitMessageFieldCapabilities {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFieldCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageFieldCapabilities",
             message_index: None,
             file: None,
             mesg_num: None,
@@ -11590,6 +11742,8 @@ impl FitMessageFieldCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFieldCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11630,7 +11784,7 @@ impl FitMessageFieldCapabilities {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -11647,7 +11801,7 @@ impl FitMessageFieldCapabilities {
                     0 => {  // file
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFile::parse(&bytes)?;
                                 val
                             },
@@ -11664,7 +11818,7 @@ impl FitMessageFieldCapabilities {
                     1 => {  // mesg_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMesgNum::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -11681,7 +11835,7 @@ impl FitMessageFieldCapabilities {
                     2 => {  // field_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11698,7 +11852,7 @@ impl FitMessageFieldCapabilities {
                     3 => {  // count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -11725,6 +11879,8 @@ pub struct FitMessageFieldDescription {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub developer_data_index: Option<u8>,  
     pub field_definition_number: Option<u8>,  
     pub fit_base_type_id: Option<FitFieldFitBaseType>,  
@@ -11742,12 +11898,15 @@ pub struct FitMessageFieldDescription {
     
 }
 impl FitMessageFieldDescription {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldDescription>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFieldDescription {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageFieldDescription",
             developer_data_index: None,
             field_definition_number: None,
             fit_base_type_id: None,
@@ -11765,6 +11924,8 @@ impl FitMessageFieldDescription {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFieldDescription::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11805,7 +11966,7 @@ impl FitMessageFieldDescription {
                     0 => {  // developer_data_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11822,7 +11983,7 @@ impl FitMessageFieldDescription {
                     1 => {  // field_definition_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11839,7 +12000,7 @@ impl FitMessageFieldDescription {
                     2 => {  // fit_base_type_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFitBaseType::parse(&bytes)?;
                                 val
                             },
@@ -11856,7 +12017,7 @@ impl FitMessageFieldDescription {
                     3 => {  // field_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -11873,7 +12034,7 @@ impl FitMessageFieldDescription {
                     4 => {  // array
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11890,7 +12051,7 @@ impl FitMessageFieldDescription {
                     5 => {  // components
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -11907,7 +12068,7 @@ impl FitMessageFieldDescription {
                     6 => {  // scale
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -11924,7 +12085,7 @@ impl FitMessageFieldDescription {
                     7 => {  // offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -11941,7 +12102,7 @@ impl FitMessageFieldDescription {
                     8 => {  // units
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -11958,7 +12119,7 @@ impl FitMessageFieldDescription {
                     9 => {  // bits
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -11975,7 +12136,7 @@ impl FitMessageFieldDescription {
                     10 => {  // accumulate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -11992,7 +12153,7 @@ impl FitMessageFieldDescription {
                     13 => {  // fit_base_unit_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFitBaseUnit::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12009,7 +12170,7 @@ impl FitMessageFieldDescription {
                     14 => {  // native_mesg_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMesgNum::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12026,7 +12187,7 @@ impl FitMessageFieldDescription {
                     15 => {  // native_field_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -12053,6 +12214,8 @@ pub struct FitMessageFileCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub ftype: Option<FitFieldFile>,  
     pub flags: Option<FitFieldFileFlags>,  
@@ -12062,12 +12225,15 @@ pub struct FitMessageFileCapabilities {
     
 }
 impl FitMessageFileCapabilities {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageFileCapabilities",
             message_index: None,
             ftype: None,
             flags: None,
@@ -12077,6 +12243,8 @@ impl FitMessageFileCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFileCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12117,7 +12285,7 @@ impl FitMessageFileCapabilities {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12134,7 +12302,7 @@ impl FitMessageFileCapabilities {
                     0 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFile::parse(&bytes)?;
                                 val
                             },
@@ -12151,7 +12319,7 @@ impl FitMessageFileCapabilities {
                     1 => {  // flags
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFileFlags::parse(&bytes)?;
                                 val
                             },
@@ -12168,7 +12336,7 @@ impl FitMessageFileCapabilities {
                     2 => {  // directory
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -12185,7 +12353,7 @@ impl FitMessageFileCapabilities {
                     3 => {  // max_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12202,7 +12370,7 @@ impl FitMessageFileCapabilities {
                     4 => {  // max_size
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12229,22 +12397,29 @@ pub struct FitMessageFileCreator {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub software_version: Option<u16>,  
     pub hardware_version: Option<u8>,  
     
 }
 impl FitMessageFileCreator {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCreator>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCreator {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageFileCreator",
             software_version: None,
             hardware_version: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFileCreator::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12285,7 +12460,7 @@ impl FitMessageFileCreator {
                     0 => {  // software_version
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12302,7 +12477,7 @@ impl FitMessageFileCreator {
                     1 => {  // hardware_version
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -12362,6 +12537,8 @@ pub struct FitMessageFileId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub ftype: Option<FitFieldFile>,  
     pub manufacturer: Option<FitFieldManufacturer>,  
     pub product: Option<FitMessageFileIdSubfieldProduct>,  
@@ -12372,12 +12549,15 @@ pub struct FitMessageFileId {
     
 }
 impl FitMessageFileId {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageFileId",
             ftype: None,
             manufacturer: None,
             product: None,
@@ -12388,6 +12568,8 @@ impl FitMessageFileId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFileId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12428,7 +12610,7 @@ impl FitMessageFileId {
                     0 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFile::parse(&bytes)?;
                                 val
                             },
@@ -12445,7 +12627,7 @@ impl FitMessageFileId {
                     1 => {  // manufacturer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12462,7 +12644,7 @@ impl FitMessageFileId {
                     2 => {  // product
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageFileIdSubfieldProduct::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -12479,7 +12661,7 @@ impl FitMessageFileId {
                     3 => {  // serial_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12496,7 +12678,7 @@ impl FitMessageFileId {
                     4 => {  // time_created
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12513,7 +12695,7 @@ impl FitMessageFileId {
                     5 => {  // number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12530,7 +12712,7 @@ impl FitMessageFileId {
                     8 => {  // product_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -12557,6 +12739,8 @@ pub struct FitMessageGoal {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub sport: Option<FitFieldSport>,  
     pub sub_sport: Option<FitFieldSubSport>,  
@@ -12573,12 +12757,15 @@ pub struct FitMessageGoal {
     
 }
 impl FitMessageGoal {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageGoal>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGoal {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageGoal",
             message_index: None,
             sport: None,
             sub_sport: None,
@@ -12595,6 +12782,8 @@ impl FitMessageGoal {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageGoal::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12635,7 +12824,7 @@ impl FitMessageGoal {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12652,7 +12841,7 @@ impl FitMessageGoal {
                     0 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -12669,7 +12858,7 @@ impl FitMessageGoal {
                     1 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -12686,7 +12875,7 @@ impl FitMessageGoal {
                     2 => {  // start_date
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12703,7 +12892,7 @@ impl FitMessageGoal {
                     3 => {  // end_date
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12720,7 +12909,7 @@ impl FitMessageGoal {
                     4 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldGoal::parse(&bytes)?;
                                 val
                             },
@@ -12737,7 +12926,7 @@ impl FitMessageGoal {
                     5 => {  // value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12754,7 +12943,7 @@ impl FitMessageGoal {
                     6 => {  // repeat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -12771,7 +12960,7 @@ impl FitMessageGoal {
                     7 => {  // target_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12788,7 +12977,7 @@ impl FitMessageGoal {
                     8 => {  // recurrence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldGoalRecurrence::parse(&bytes)?;
                                 val
                             },
@@ -12805,7 +12994,7 @@ impl FitMessageGoal {
                     9 => {  // recurrence_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12822,7 +13011,7 @@ impl FitMessageGoal {
                     10 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -12839,7 +13028,7 @@ impl FitMessageGoal {
                     11 => {  // source
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldGoalSource::parse(&bytes)?;
                                 val
                             },
@@ -12866,6 +13055,8 @@ pub struct FitMessageGpsMetadata {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
     pub position_lat: Option<i32>,  
@@ -12878,12 +13069,15 @@ pub struct FitMessageGpsMetadata {
     
 }
 impl FitMessageGpsMetadata {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageGpsMetadata>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGpsMetadata {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageGpsMetadata",
             timestamp: None,
             timestamp_ms: None,
             position_lat: None,
@@ -12896,6 +13090,8 @@ impl FitMessageGpsMetadata {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageGpsMetadata::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12936,7 +13132,7 @@ impl FitMessageGpsMetadata {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12953,7 +13149,7 @@ impl FitMessageGpsMetadata {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12970,7 +13166,7 @@ impl FitMessageGpsMetadata {
                     1 => {  // position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -12987,7 +13183,7 @@ impl FitMessageGpsMetadata {
                     2 => {  // position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13004,7 +13200,7 @@ impl FitMessageGpsMetadata {
                     3 => {  // enhanced_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13021,7 +13217,7 @@ impl FitMessageGpsMetadata {
                     4 => {  // enhanced_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13038,7 +13234,7 @@ impl FitMessageGpsMetadata {
                     5 => {  // heading
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13055,7 +13251,7 @@ impl FitMessageGpsMetadata {
                     6 => {  // utc_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13072,7 +13268,7 @@ impl FitMessageGpsMetadata {
                     7 => {  // velocity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13099,6 +13295,8 @@ pub struct FitMessageGyroscopeData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
     pub sample_time_offset: Option<u16>,  // Each time in the array describes the time at which the gyro sample with the corrosponding index was taken. Limited to 30 samples in each message. The samples may span across seconds. Array size must match the number of samples in gyro_x and gyro_y and gyro_z
@@ -13111,12 +13309,15 @@ pub struct FitMessageGyroscopeData {
     
 }
 impl FitMessageGyroscopeData {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageGyroscopeData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGyroscopeData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageGyroscopeData",
             timestamp: None,
             timestamp_ms: None,
             sample_time_offset: None,
@@ -13129,6 +13330,8 @@ impl FitMessageGyroscopeData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageGyroscopeData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13169,7 +13372,7 @@ impl FitMessageGyroscopeData {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13186,7 +13389,7 @@ impl FitMessageGyroscopeData {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13203,7 +13406,7 @@ impl FitMessageGyroscopeData {
                     1 => {  // sample_time_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13220,7 +13423,7 @@ impl FitMessageGyroscopeData {
                     2 => {  // gyro_x
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13237,7 +13440,7 @@ impl FitMessageGyroscopeData {
                     3 => {  // gyro_y
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13254,7 +13457,7 @@ impl FitMessageGyroscopeData {
                     4 => {  // gyro_z
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13271,7 +13474,7 @@ impl FitMessageGyroscopeData {
                     5 => {  // calibrated_gyro_x
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13288,7 +13491,7 @@ impl FitMessageGyroscopeData {
                     6 => {  // calibrated_gyro_y
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13305,7 +13508,7 @@ impl FitMessageGyroscopeData {
                     7 => {  // calibrated_gyro_z
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13332,6 +13535,8 @@ pub struct FitMessageHr {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub fractional_timestamp: Option<f64>,  
     pub time256: Option<f64>,  
@@ -13341,12 +13546,15 @@ pub struct FitMessageHr {
     
 }
 impl FitMessageHr {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHr>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHr {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageHr",
             timestamp: None,
             fractional_timestamp: None,
             time256: None,
@@ -13356,6 +13564,8 @@ impl FitMessageHr {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHr::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13396,7 +13606,7 @@ impl FitMessageHr {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13413,7 +13623,7 @@ impl FitMessageHr {
                     0 => {  // fractional_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13430,7 +13640,7 @@ impl FitMessageHr {
                     1 => {  // time256
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -13448,7 +13658,7 @@ impl FitMessageHr {
                     6 => {  // filtered_bpm
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -13465,7 +13675,7 @@ impl FitMessageHr {
                     9 => {  // event_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13482,7 +13692,7 @@ impl FitMessageHr {
                     10 => {  // event_timestamp_12
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -13519,24 +13729,31 @@ pub struct FitMessageHrZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub high_bpm: Option<u8>,  
     pub name: Option<String>,  
     
 }
 impl FitMessageHrZone {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageHrZone",
             message_index: None,
             high_bpm: None,
             name: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHrZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13577,7 +13794,7 @@ impl FitMessageHrZone {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13594,7 +13811,7 @@ impl FitMessageHrZone {
                     1 => {  // high_bpm
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -13611,7 +13828,7 @@ impl FitMessageHrZone {
                     2 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -13638,6 +13855,8 @@ pub struct FitMessageHrmProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub enabled: Option<bool>,  
     pub hrm_ant_id: Option<u16>,  
@@ -13646,12 +13865,15 @@ pub struct FitMessageHrmProfile {
     
 }
 impl FitMessageHrmProfile {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrmProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrmProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageHrmProfile",
             message_index: None,
             enabled: None,
             hrm_ant_id: None,
@@ -13660,6 +13882,8 @@ impl FitMessageHrmProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHrmProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13700,7 +13924,7 @@ impl FitMessageHrmProfile {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13717,7 +13941,7 @@ impl FitMessageHrmProfile {
                     0 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -13734,7 +13958,7 @@ impl FitMessageHrmProfile {
                     1 => {  // hrm_ant_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13751,7 +13975,7 @@ impl FitMessageHrmProfile {
                     2 => {  // log_hrv
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -13768,7 +13992,7 @@ impl FitMessageHrmProfile {
                     3 => {  // hrm_ant_id_trans_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -13795,20 +14019,27 @@ pub struct FitMessageHrv {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub time: Option<f64>,  // Time between beats
     
 }
 impl FitMessageHrv {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrv>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrv {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageHrv",
             time: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHrv::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13849,7 +14080,7 @@ impl FitMessageHrv {
                     0 => {  // time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -13950,6 +14181,8 @@ pub struct FitMessageLap {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub timestamp: Option<FitFieldDateTime>,  // Lap end time.
     pub event: Option<FitFieldEvent>,  
@@ -14058,12 +14291,15 @@ pub struct FitMessageLap {
     
 }
 impl FitMessageLap {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageLap>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLap {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageLap",
             message_index: None,
             timestamp: None,
             event: None,
@@ -14172,6 +14408,8 @@ impl FitMessageLap {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageLap::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -14212,7 +14450,7 @@ impl FitMessageLap {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14229,7 +14467,7 @@ impl FitMessageLap {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14246,7 +14484,7 @@ impl FitMessageLap {
                     0 => {  // event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEvent::parse(&bytes)?;
                                 val
                             },
@@ -14263,7 +14501,7 @@ impl FitMessageLap {
                     1 => {  // event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEventType::parse(&bytes)?;
                                 val
                             },
@@ -14280,7 +14518,7 @@ impl FitMessageLap {
                     2 => {  // start_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14297,7 +14535,7 @@ impl FitMessageLap {
                     3 => {  // start_position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14314,7 +14552,7 @@ impl FitMessageLap {
                     4 => {  // start_position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14331,7 +14569,7 @@ impl FitMessageLap {
                     5 => {  // end_position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14348,7 +14586,7 @@ impl FitMessageLap {
                     6 => {  // end_position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14365,7 +14603,7 @@ impl FitMessageLap {
                     7 => {  // total_elapsed_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14382,7 +14620,7 @@ impl FitMessageLap {
                     8 => {  // total_timer_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14399,7 +14637,7 @@ impl FitMessageLap {
                     9 => {  // total_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14416,7 +14654,7 @@ impl FitMessageLap {
                     10 => {  // total_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageLapSubfieldTotalCycles::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -14433,7 +14671,7 @@ impl FitMessageLap {
                     11 => {  // total_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14450,7 +14688,7 @@ impl FitMessageLap {
                     12 => {  // total_fat_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14467,7 +14705,7 @@ impl FitMessageLap {
                     13 => {  // avg_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14485,7 +14723,7 @@ impl FitMessageLap {
                     14 => {  // max_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14503,7 +14741,7 @@ impl FitMessageLap {
                     15 => {  // avg_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -14520,7 +14758,7 @@ impl FitMessageLap {
                     16 => {  // max_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -14537,7 +14775,7 @@ impl FitMessageLap {
                     17 => {  // avg_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageLapSubfieldAvgCadence::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -14554,7 +14792,7 @@ impl FitMessageLap {
                     18 => {  // max_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageLapSubfieldMaxCadence::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -14571,7 +14809,7 @@ impl FitMessageLap {
                     19 => {  // avg_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14588,7 +14826,7 @@ impl FitMessageLap {
                     20 => {  // max_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14605,7 +14843,7 @@ impl FitMessageLap {
                     21 => {  // total_ascent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14622,7 +14860,7 @@ impl FitMessageLap {
                     22 => {  // total_descent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14639,7 +14877,7 @@ impl FitMessageLap {
                     23 => {  // intensity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldIntensity::parse(&bytes)?;
                                 val
                             },
@@ -14656,7 +14894,7 @@ impl FitMessageLap {
                     24 => {  // lap_trigger
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLapTrigger::parse(&bytes)?;
                                 val
                             },
@@ -14673,7 +14911,7 @@ impl FitMessageLap {
                     25 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -14690,7 +14928,7 @@ impl FitMessageLap {
                     26 => {  // event_group
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -14707,7 +14945,7 @@ impl FitMessageLap {
                     32 => {  // num_lengths
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14724,7 +14962,7 @@ impl FitMessageLap {
                     33 => {  // normalized_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14741,7 +14979,7 @@ impl FitMessageLap {
                     34 => {  // left_right_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLeftRightBalance100::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14758,7 +14996,7 @@ impl FitMessageLap {
                     35 => {  // first_length_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14775,7 +15013,7 @@ impl FitMessageLap {
                     37 => {  // avg_stroke_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14792,7 +15030,7 @@ impl FitMessageLap {
                     38 => {  // swim_stroke
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSwimStroke::parse(&bytes)?;
                                 val
                             },
@@ -14809,7 +15047,7 @@ impl FitMessageLap {
                     39 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -14826,7 +15064,7 @@ impl FitMessageLap {
                     40 => {  // num_active_lengths
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14843,7 +15081,7 @@ impl FitMessageLap {
                     41 => {  // total_work
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14860,7 +15098,7 @@ impl FitMessageLap {
                     42 => {  // avg_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14878,7 +15116,7 @@ impl FitMessageLap {
                     43 => {  // max_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14896,7 +15134,7 @@ impl FitMessageLap {
                     44 => {  // gps_accuracy
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -14913,7 +15151,7 @@ impl FitMessageLap {
                     45 => {  // avg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14930,7 +15168,7 @@ impl FitMessageLap {
                     46 => {  // avg_pos_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14947,7 +15185,7 @@ impl FitMessageLap {
                     47 => {  // avg_neg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14964,7 +15202,7 @@ impl FitMessageLap {
                     48 => {  // max_pos_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14981,7 +15219,7 @@ impl FitMessageLap {
                     49 => {  // max_neg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -14998,7 +15236,7 @@ impl FitMessageLap {
                     50 => {  // avg_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -15015,7 +15253,7 @@ impl FitMessageLap {
                     51 => {  // max_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -15032,7 +15270,7 @@ impl FitMessageLap {
                     52 => {  // total_moving_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15049,7 +15287,7 @@ impl FitMessageLap {
                     53 => {  // avg_pos_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15066,7 +15304,7 @@ impl FitMessageLap {
                     54 => {  // avg_neg_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15083,7 +15321,7 @@ impl FitMessageLap {
                     55 => {  // max_pos_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15100,7 +15338,7 @@ impl FitMessageLap {
                     56 => {  // max_neg_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15117,7 +15355,7 @@ impl FitMessageLap {
                     57 => {  // time_in_hr_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15134,7 +15372,7 @@ impl FitMessageLap {
                     58 => {  // time_in_speed_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15151,7 +15389,7 @@ impl FitMessageLap {
                     59 => {  // time_in_cadence_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15168,7 +15406,7 @@ impl FitMessageLap {
                     60 => {  // time_in_power_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15185,7 +15423,7 @@ impl FitMessageLap {
                     61 => {  // repetition_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15202,7 +15440,7 @@ impl FitMessageLap {
                     62 => {  // min_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15220,7 +15458,7 @@ impl FitMessageLap {
                     63 => {  // min_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15237,7 +15475,7 @@ impl FitMessageLap {
                     71 => {  // wkt_step_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15254,7 +15492,7 @@ impl FitMessageLap {
                     74 => {  // opponent_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15271,7 +15509,7 @@ impl FitMessageLap {
                     75 => {  // stroke_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15288,7 +15526,7 @@ impl FitMessageLap {
                     76 => {  // zone_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15305,7 +15543,7 @@ impl FitMessageLap {
                     77 => {  // avg_vertical_oscillation
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15322,7 +15560,7 @@ impl FitMessageLap {
                     78 => {  // avg_stance_time_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15339,7 +15577,7 @@ impl FitMessageLap {
                     79 => {  // avg_stance_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15356,7 +15594,7 @@ impl FitMessageLap {
                     80 => {  // avg_fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15373,7 +15611,7 @@ impl FitMessageLap {
                     81 => {  // max_fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15390,7 +15628,7 @@ impl FitMessageLap {
                     82 => {  // total_fractional_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15407,7 +15645,7 @@ impl FitMessageLap {
                     83 => {  // player_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15424,7 +15662,7 @@ impl FitMessageLap {
                     84 => {  // avg_total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15441,7 +15679,7 @@ impl FitMessageLap {
                     85 => {  // min_total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15458,7 +15696,7 @@ impl FitMessageLap {
                     86 => {  // max_total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15475,7 +15713,7 @@ impl FitMessageLap {
                     87 => {  // avg_saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15492,7 +15730,7 @@ impl FitMessageLap {
                     88 => {  // min_saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15509,7 +15747,7 @@ impl FitMessageLap {
                     89 => {  // max_saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15526,7 +15764,7 @@ impl FitMessageLap {
                     91 => {  // avg_left_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15543,7 +15781,7 @@ impl FitMessageLap {
                     92 => {  // avg_right_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15560,7 +15798,7 @@ impl FitMessageLap {
                     93 => {  // avg_left_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15577,7 +15815,7 @@ impl FitMessageLap {
                     94 => {  // avg_right_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15594,7 +15832,7 @@ impl FitMessageLap {
                     95 => {  // avg_combined_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15611,7 +15849,7 @@ impl FitMessageLap {
                     98 => {  // time_standing
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15628,7 +15866,7 @@ impl FitMessageLap {
                     99 => {  // stand_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15645,7 +15883,7 @@ impl FitMessageLap {
                     100 => {  // avg_left_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -15662,7 +15900,7 @@ impl FitMessageLap {
                     101 => {  // avg_right_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -15679,7 +15917,7 @@ impl FitMessageLap {
                     102 => {  // avg_left_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15696,7 +15934,7 @@ impl FitMessageLap {
                     103 => {  // avg_left_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15713,7 +15951,7 @@ impl FitMessageLap {
                     104 => {  // avg_right_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15730,7 +15968,7 @@ impl FitMessageLap {
                     105 => {  // avg_right_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15747,7 +15985,7 @@ impl FitMessageLap {
                     106 => {  // avg_power_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15764,7 +16002,7 @@ impl FitMessageLap {
                     107 => {  // max_power_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15781,7 +16019,7 @@ impl FitMessageLap {
                     108 => {  // avg_cadence_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15798,7 +16036,7 @@ impl FitMessageLap {
                     109 => {  // max_cadence_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15815,7 +16053,7 @@ impl FitMessageLap {
                     110 => {  // enhanced_avg_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15832,7 +16070,7 @@ impl FitMessageLap {
                     111 => {  // enhanced_max_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15849,7 +16087,7 @@ impl FitMessageLap {
                     112 => {  // enhanced_avg_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15866,7 +16104,7 @@ impl FitMessageLap {
                     113 => {  // enhanced_min_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15883,7 +16121,7 @@ impl FitMessageLap {
                     114 => {  // enhanced_max_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15900,7 +16138,7 @@ impl FitMessageLap {
                     115 => {  // avg_lev_motor_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15917,7 +16155,7 @@ impl FitMessageLap {
                     116 => {  // max_lev_motor_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15934,7 +16172,7 @@ impl FitMessageLap {
                     117 => {  // lev_battery_consumption
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -15951,7 +16189,7 @@ impl FitMessageLap {
                     118 => {  // avg_vertical_ratio
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15968,7 +16206,7 @@ impl FitMessageLap {
                     119 => {  // avg_stance_time_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -15985,7 +16223,7 @@ impl FitMessageLap {
                     120 => {  // avg_step_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16012,6 +16250,8 @@ pub struct FitMessageLength {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub timestamp: Option<FitFieldDateTime>,  
     pub event: Option<FitFieldEvent>,  
@@ -16033,12 +16273,15 @@ pub struct FitMessageLength {
     
 }
 impl FitMessageLength {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageLength>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLength {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageLength",
             message_index: None,
             timestamp: None,
             event: None,
@@ -16060,6 +16303,8 @@ impl FitMessageLength {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageLength::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16100,7 +16345,7 @@ impl FitMessageLength {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16117,7 +16362,7 @@ impl FitMessageLength {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16134,7 +16379,7 @@ impl FitMessageLength {
                     0 => {  // event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEvent::parse(&bytes)?;
                                 val
                             },
@@ -16151,7 +16396,7 @@ impl FitMessageLength {
                     1 => {  // event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEventType::parse(&bytes)?;
                                 val
                             },
@@ -16168,7 +16413,7 @@ impl FitMessageLength {
                     2 => {  // start_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16185,7 +16430,7 @@ impl FitMessageLength {
                     3 => {  // total_elapsed_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16202,7 +16447,7 @@ impl FitMessageLength {
                     4 => {  // total_timer_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16219,7 +16464,7 @@ impl FitMessageLength {
                     5 => {  // total_strokes
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16236,7 +16481,7 @@ impl FitMessageLength {
                     6 => {  // avg_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16253,7 +16498,7 @@ impl FitMessageLength {
                     7 => {  // swim_stroke
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSwimStroke::parse(&bytes)?;
                                 val
                             },
@@ -16270,7 +16515,7 @@ impl FitMessageLength {
                     9 => {  // avg_swimming_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -16287,7 +16532,7 @@ impl FitMessageLength {
                     10 => {  // event_group
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -16304,7 +16549,7 @@ impl FitMessageLength {
                     11 => {  // total_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16321,7 +16566,7 @@ impl FitMessageLength {
                     12 => {  // length_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLengthType::parse(&bytes)?;
                                 val
                             },
@@ -16338,7 +16583,7 @@ impl FitMessageLength {
                     18 => {  // player_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16355,7 +16600,7 @@ impl FitMessageLength {
                     19 => {  // opponent_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16372,7 +16617,7 @@ impl FitMessageLength {
                     20 => {  // stroke_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16389,7 +16634,7 @@ impl FitMessageLength {
                     21 => {  // zone_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16416,6 +16661,8 @@ pub struct FitMessageMagnetometerData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
     pub sample_time_offset: Option<u16>,  // Each time in the array describes the time at which the compass sample with the corrosponding index was taken. Limited to 30 samples in each message. The samples may span across seconds. Array size must match the number of samples in cmps_x and cmps_y and cmps_z
@@ -16428,12 +16675,15 @@ pub struct FitMessageMagnetometerData {
     
 }
 impl FitMessageMagnetometerData {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMagnetometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMagnetometerData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageMagnetometerData",
             timestamp: None,
             timestamp_ms: None,
             sample_time_offset: None,
@@ -16446,6 +16696,8 @@ impl FitMessageMagnetometerData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMagnetometerData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16486,7 +16738,7 @@ impl FitMessageMagnetometerData {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16503,7 +16755,7 @@ impl FitMessageMagnetometerData {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16520,7 +16772,7 @@ impl FitMessageMagnetometerData {
                     1 => {  // sample_time_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16537,7 +16789,7 @@ impl FitMessageMagnetometerData {
                     2 => {  // mag_x
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16554,7 +16806,7 @@ impl FitMessageMagnetometerData {
                     3 => {  // mag_y
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16571,7 +16823,7 @@ impl FitMessageMagnetometerData {
                     4 => {  // mag_z
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16588,7 +16840,7 @@ impl FitMessageMagnetometerData {
                     5 => {  // calibrated_mag_x
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16605,7 +16857,7 @@ impl FitMessageMagnetometerData {
                     6 => {  // calibrated_mag_y
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16622,7 +16874,7 @@ impl FitMessageMagnetometerData {
                     7 => {  // calibrated_mag_z
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16649,6 +16901,8 @@ pub struct FitMessageMemoGlob {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub part_index: Option<u32>,  // Sequence number of memo blocks
     pub memo: Option<Vec<u8>>,  // Block of utf8 bytes 
     pub message_number: Option<u16>,  // Allows relating glob to another mesg  If used only required for first part of each memo_glob
@@ -16656,12 +16910,15 @@ pub struct FitMessageMemoGlob {
     
 }
 impl FitMessageMemoGlob {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMemoGlob>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMemoGlob {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageMemoGlob",
             part_index: None,
             memo: None,
             message_number: None,
@@ -16669,6 +16926,8 @@ impl FitMessageMemoGlob {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMemoGlob::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16709,7 +16968,7 @@ impl FitMessageMemoGlob {
                     250 => {  // part_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16726,7 +16985,7 @@ impl FitMessageMemoGlob {
                     0 => {  // memo
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -16743,7 +17002,7 @@ impl FitMessageMemoGlob {
                     1 => {  // message_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16760,7 +17019,7 @@ impl FitMessageMemoGlob {
                     2 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16822,6 +17081,8 @@ pub struct FitMessageMesgCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub file: Option<FitFieldFile>,  
     pub mesg_num: Option<FitFieldMesgNum>,  
@@ -16830,12 +17091,15 @@ pub struct FitMessageMesgCapabilities {
     
 }
 impl FitMessageMesgCapabilities {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMesgCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMesgCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageMesgCapabilities",
             message_index: None,
             file: None,
             mesg_num: None,
@@ -16844,6 +17108,8 @@ impl FitMessageMesgCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMesgCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16884,7 +17150,7 @@ impl FitMessageMesgCapabilities {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16901,7 +17167,7 @@ impl FitMessageMesgCapabilities {
                     0 => {  // file
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFile::parse(&bytes)?;
                                 val
                             },
@@ -16918,7 +17184,7 @@ impl FitMessageMesgCapabilities {
                     1 => {  // mesg_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMesgNum::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -16935,7 +17201,7 @@ impl FitMessageMesgCapabilities {
                     2 => {  // count_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMesgCount::parse(&bytes)?;
                                 val
                             },
@@ -16952,7 +17218,7 @@ impl FitMessageMesgCapabilities {
                     3 => {  // count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageMesgCapabilitiesSubfieldCount::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -16979,6 +17245,8 @@ pub struct FitMessageMetZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub high_bpm: Option<u8>,  
     pub calories: Option<f64>,  
@@ -16986,12 +17254,15 @@ pub struct FitMessageMetZone {
     
 }
 impl FitMessageMetZone {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMetZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMetZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageMetZone",
             message_index: None,
             high_bpm: None,
             calories: None,
@@ -16999,6 +17270,8 @@ impl FitMessageMetZone {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMetZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -17039,7 +17312,7 @@ impl FitMessageMetZone {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17056,7 +17329,7 @@ impl FitMessageMetZone {
                     1 => {  // high_bpm
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -17073,7 +17346,7 @@ impl FitMessageMetZone {
                     2 => {  // calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17090,7 +17363,7 @@ impl FitMessageMetZone {
                     3 => {  // fat_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -17156,6 +17429,8 @@ pub struct FitMessageMonitoring {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Must align to logging interval, for example, time must be 00:00:00 for daily log.
     pub device_index: Option<FitFieldDeviceIndex>,  // Associates this data to device_info message.  Not required for file with single device (sensor).
     pub calories: Option<u16>,  // Accumulated total calories.  Maintained by MonitoringReader for each activity_type.  See SDK documentation
@@ -17188,12 +17463,15 @@ pub struct FitMessageMonitoring {
     
 }
 impl FitMessageMonitoring {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoring>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoring {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageMonitoring",
             timestamp: None,
             device_index: None,
             calories: None,
@@ -17226,6 +17504,8 @@ impl FitMessageMonitoring {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMonitoring::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -17266,7 +17546,7 @@ impl FitMessageMonitoring {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17283,7 +17563,7 @@ impl FitMessageMonitoring {
                     0 => {  // device_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDeviceIndex::parse(&bytes)?;
                                 val
                             },
@@ -17300,7 +17580,7 @@ impl FitMessageMonitoring {
                     1 => {  // calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17317,7 +17597,7 @@ impl FitMessageMonitoring {
                     2 => {  // distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17334,7 +17614,7 @@ impl FitMessageMonitoring {
                     3 => {  // cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageMonitoringSubfieldCycles::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -17351,7 +17631,7 @@ impl FitMessageMonitoring {
                     4 => {  // active_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17368,7 +17648,7 @@ impl FitMessageMonitoring {
                     5 => {  // activity_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivityType::parse(&bytes)?;
                                 val
                             },
@@ -17385,7 +17665,7 @@ impl FitMessageMonitoring {
                     6 => {  // activity_subtype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivitySubtype::parse(&bytes)?;
                                 val
                             },
@@ -17402,7 +17682,7 @@ impl FitMessageMonitoring {
                     7 => {  // activity_level
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivityLevel::parse(&bytes)?;
                                 val
                             },
@@ -17419,7 +17699,7 @@ impl FitMessageMonitoring {
                     8 => {  // distance_16
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17436,7 +17716,7 @@ impl FitMessageMonitoring {
                     9 => {  // cycles_16
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17453,7 +17733,7 @@ impl FitMessageMonitoring {
                     10 => {  // active_time_16
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17470,7 +17750,7 @@ impl FitMessageMonitoring {
                     11 => {  // local_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocalDateTime::parse(&bytes, message.definition_message.endianness, _tz_offset)?;
                                 val
                             },
@@ -17487,7 +17767,7 @@ impl FitMessageMonitoring {
                     12 => {  // temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17504,7 +17784,7 @@ impl FitMessageMonitoring {
                     14 => {  // temperature_min
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17521,7 +17801,7 @@ impl FitMessageMonitoring {
                     15 => {  // temperature_max
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17538,7 +17818,7 @@ impl FitMessageMonitoring {
                     16 => {  // activity_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17555,7 +17835,7 @@ impl FitMessageMonitoring {
                     19 => {  // active_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17572,7 +17852,7 @@ impl FitMessageMonitoring {
                     24 => {  // current_activity_type_intensity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -17591,7 +17871,7 @@ impl FitMessageMonitoring {
                     25 => {  // timestamp_min_8
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -17608,7 +17888,7 @@ impl FitMessageMonitoring {
                     26 => {  // timestamp_16
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17625,7 +17905,7 @@ impl FitMessageMonitoring {
                     27 => {  // heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -17642,7 +17922,7 @@ impl FitMessageMonitoring {
                     28 => {  // intensity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -17659,7 +17939,7 @@ impl FitMessageMonitoring {
                     29 => {  // duration_min
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17676,7 +17956,7 @@ impl FitMessageMonitoring {
                     30 => {  // duration
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17693,7 +17973,7 @@ impl FitMessageMonitoring {
                     31 => {  // ascent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17710,7 +17990,7 @@ impl FitMessageMonitoring {
                     32 => {  // descent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17727,7 +18007,7 @@ impl FitMessageMonitoring {
                     33 => {  // moderate_activity_minutes
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17744,7 +18024,7 @@ impl FitMessageMonitoring {
                     34 => {  // vigorous_activity_minutes
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17771,6 +18051,8 @@ pub struct FitMessageMonitoringInfo {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub local_timestamp: Option<FitFieldLocalDateTime>,  // Use to convert activity timestamps to local time if device does not support time zone and daylight savings time correction.
     pub activity_type: Option<FitFieldActivityType>,  
@@ -17780,12 +18062,15 @@ pub struct FitMessageMonitoringInfo {
     
 }
 impl FitMessageMonitoringInfo {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoringInfo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoringInfo {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageMonitoringInfo",
             timestamp: None,
             local_timestamp: None,
             activity_type: None,
@@ -17795,6 +18080,8 @@ impl FitMessageMonitoringInfo {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMonitoringInfo::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -17835,7 +18122,7 @@ impl FitMessageMonitoringInfo {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17852,7 +18139,7 @@ impl FitMessageMonitoringInfo {
                     0 => {  // local_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocalDateTime::parse(&bytes, message.definition_message.endianness, _tz_offset)?;
                                 val
                             },
@@ -17869,7 +18156,7 @@ impl FitMessageMonitoringInfo {
                     1 => {  // activity_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivityType::parse(&bytes)?;
                                 val
                             },
@@ -17886,7 +18173,7 @@ impl FitMessageMonitoringInfo {
                     3 => {  // cycles_to_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17903,7 +18190,7 @@ impl FitMessageMonitoringInfo {
                     4 => {  // cycles_to_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17920,7 +18207,7 @@ impl FitMessageMonitoringInfo {
                     5 => {  // resting_metabolic_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -17947,24 +18234,31 @@ pub struct FitMessageNmeaSentence {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
     pub timestamp_ms: Option<u16>,  // Fractional part of timestamp, added to timestamp
     pub sentence: Option<String>,  // NMEA sentence
     
 }
 impl FitMessageNmeaSentence {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageNmeaSentence>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageNmeaSentence {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageNmeaSentence",
             timestamp: None,
             timestamp_ms: None,
             sentence: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageNmeaSentence::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18005,7 +18299,7 @@ impl FitMessageNmeaSentence {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18022,7 +18316,7 @@ impl FitMessageNmeaSentence {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18039,7 +18333,7 @@ impl FitMessageNmeaSentence {
                     1 => {  // sentence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -18066,6 +18360,8 @@ pub struct FitMessageObdiiData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
     pub timestamp_ms: Option<u16>,  // Fractional part of timestamp, added to timestamp
     pub time_offset: Option<u16>,  // Offset of PID reading [i] from start_timestamp+start_timestamp_ms. Readings may span accross seconds.
@@ -18078,12 +18374,15 @@ pub struct FitMessageObdiiData {
     
 }
 impl FitMessageObdiiData {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageObdiiData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageObdiiData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageObdiiData",
             timestamp: None,
             timestamp_ms: None,
             time_offset: None,
@@ -18096,6 +18395,8 @@ impl FitMessageObdiiData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageObdiiData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18136,7 +18437,7 @@ impl FitMessageObdiiData {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18153,7 +18454,7 @@ impl FitMessageObdiiData {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18170,7 +18471,7 @@ impl FitMessageObdiiData {
                     1 => {  // time_offset
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18187,7 +18488,7 @@ impl FitMessageObdiiData {
                     2 => {  // pid
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -18204,7 +18505,7 @@ impl FitMessageObdiiData {
                     3 => {  // raw_data
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -18221,7 +18522,7 @@ impl FitMessageObdiiData {
                     4 => {  // pid_data_size
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18238,7 +18539,7 @@ impl FitMessageObdiiData {
                     5 => {  // system_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18255,7 +18556,7 @@ impl FitMessageObdiiData {
                     6 => {  // start_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18272,7 +18573,7 @@ impl FitMessageObdiiData {
                     7 => {  // start_timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18299,20 +18600,27 @@ pub struct FitMessageOhrSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub enabled: Option<FitFieldSwitch>,  
     
 }
 impl FitMessageOhrSettings {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageOhrSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageOhrSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageOhrSettings",
             enabled: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageOhrSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18353,7 +18661,7 @@ impl FitMessageOhrSettings {
                     0 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSwitch::parse(&bytes)?;
                                 val
                             },
@@ -18380,24 +18688,31 @@ pub struct FitMessagePowerZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub high_value: Option<u16>,  
     pub name: Option<String>,  
     
 }
 impl FitMessagePowerZone {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessagePowerZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessagePowerZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessagePowerZone",
             message_index: None,
             high_value: None,
             name: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessagePowerZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18438,7 +18753,7 @@ impl FitMessagePowerZone {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18455,7 +18770,7 @@ impl FitMessagePowerZone {
                     1 => {  // high_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18472,7 +18787,7 @@ impl FitMessagePowerZone {
                     2 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -18499,6 +18814,8 @@ pub struct FitMessageRecord {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub position_lat: Option<i32>,  
     pub position_long: Option<i32>,  
@@ -18561,12 +18878,15 @@ pub struct FitMessageRecord {
     
 }
 impl FitMessageRecord {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageRecord>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageRecord {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageRecord",
             timestamp: None,
             position_lat: None,
             position_long: None,
@@ -18629,6 +18949,8 @@ impl FitMessageRecord {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageRecord::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18669,7 +18991,7 @@ impl FitMessageRecord {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18686,7 +19008,7 @@ impl FitMessageRecord {
                     0 => {  // position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18703,7 +19025,7 @@ impl FitMessageRecord {
                     1 => {  // position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18720,7 +19042,7 @@ impl FitMessageRecord {
                     2 => {  // altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18738,7 +19060,7 @@ impl FitMessageRecord {
                     3 => {  // heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18755,7 +19077,7 @@ impl FitMessageRecord {
                     4 => {  // cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18772,7 +19094,7 @@ impl FitMessageRecord {
                     5 => {  // distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18789,7 +19111,7 @@ impl FitMessageRecord {
                     6 => {  // speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18807,7 +19129,7 @@ impl FitMessageRecord {
                     7 => {  // power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18824,7 +19146,7 @@ impl FitMessageRecord {
                     8 => {  // compressed_speed_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -18843,7 +19165,7 @@ impl FitMessageRecord {
                     9 => {  // grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18860,7 +19182,7 @@ impl FitMessageRecord {
                     10 => {  // resistance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18877,7 +19199,7 @@ impl FitMessageRecord {
                     11 => {  // time_from_course
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18894,7 +19216,7 @@ impl FitMessageRecord {
                     12 => {  // cycle_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18911,7 +19233,7 @@ impl FitMessageRecord {
                     13 => {  // temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -18928,7 +19250,7 @@ impl FitMessageRecord {
                     17 => {  // speed_1s
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18945,7 +19267,7 @@ impl FitMessageRecord {
                     18 => {  // cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -18963,7 +19285,7 @@ impl FitMessageRecord {
                     19 => {  // total_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18980,7 +19302,7 @@ impl FitMessageRecord {
                     28 => {  // compressed_accumulated_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -18998,7 +19320,7 @@ impl FitMessageRecord {
                     29 => {  // accumulated_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19015,7 +19337,7 @@ impl FitMessageRecord {
                     30 => {  // left_right_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLeftRightBalance::parse(&bytes)?;
                                 val
                             },
@@ -19032,7 +19354,7 @@ impl FitMessageRecord {
                     31 => {  // gps_accuracy
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19049,7 +19371,7 @@ impl FitMessageRecord {
                     32 => {  // vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19066,7 +19388,7 @@ impl FitMessageRecord {
                     33 => {  // calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19083,7 +19405,7 @@ impl FitMessageRecord {
                     39 => {  // vertical_oscillation
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19100,7 +19422,7 @@ impl FitMessageRecord {
                     40 => {  // stance_time_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19117,7 +19439,7 @@ impl FitMessageRecord {
                     41 => {  // stance_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19134,7 +19456,7 @@ impl FitMessageRecord {
                     42 => {  // activity_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivityType::parse(&bytes)?;
                                 val
                             },
@@ -19151,7 +19473,7 @@ impl FitMessageRecord {
                     43 => {  // left_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19168,7 +19490,7 @@ impl FitMessageRecord {
                     44 => {  // right_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19185,7 +19507,7 @@ impl FitMessageRecord {
                     45 => {  // left_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19202,7 +19524,7 @@ impl FitMessageRecord {
                     46 => {  // right_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19219,7 +19541,7 @@ impl FitMessageRecord {
                     47 => {  // combined_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19236,7 +19558,7 @@ impl FitMessageRecord {
                     48 => {  // time128
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19253,7 +19575,7 @@ impl FitMessageRecord {
                     49 => {  // stroke_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldStrokeType::parse(&bytes)?;
                                 val
                             },
@@ -19270,7 +19592,7 @@ impl FitMessageRecord {
                     50 => {  // zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19287,7 +19609,7 @@ impl FitMessageRecord {
                     51 => {  // ball_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19304,7 +19626,7 @@ impl FitMessageRecord {
                     52 => {  // cadence256
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19321,7 +19643,7 @@ impl FitMessageRecord {
                     53 => {  // fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19338,7 +19660,7 @@ impl FitMessageRecord {
                     54 => {  // total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19355,7 +19677,7 @@ impl FitMessageRecord {
                     55 => {  // total_hemoglobin_conc_min
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19372,7 +19694,7 @@ impl FitMessageRecord {
                     56 => {  // total_hemoglobin_conc_max
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19389,7 +19711,7 @@ impl FitMessageRecord {
                     57 => {  // saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19406,7 +19728,7 @@ impl FitMessageRecord {
                     58 => {  // saturated_hemoglobin_percent_min
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19423,7 +19745,7 @@ impl FitMessageRecord {
                     59 => {  // saturated_hemoglobin_percent_max
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19440,7 +19762,7 @@ impl FitMessageRecord {
                     62 => {  // device_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDeviceIndex::parse(&bytes)?;
                                 val
                             },
@@ -19457,7 +19779,7 @@ impl FitMessageRecord {
                     67 => {  // left_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -19474,7 +19796,7 @@ impl FitMessageRecord {
                     68 => {  // right_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -19491,7 +19813,7 @@ impl FitMessageRecord {
                     69 => {  // left_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19508,7 +19830,7 @@ impl FitMessageRecord {
                     70 => {  // left_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19525,7 +19847,7 @@ impl FitMessageRecord {
                     71 => {  // right_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19542,7 +19864,7 @@ impl FitMessageRecord {
                     72 => {  // right_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19559,7 +19881,7 @@ impl FitMessageRecord {
                     73 => {  // enhanced_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19576,7 +19898,7 @@ impl FitMessageRecord {
                     78 => {  // enhanced_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19593,7 +19915,7 @@ impl FitMessageRecord {
                     81 => {  // battery_soc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -19610,7 +19932,7 @@ impl FitMessageRecord {
                     82 => {  // motor_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19627,7 +19949,7 @@ impl FitMessageRecord {
                     83 => {  // vertical_ratio
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19644,7 +19966,7 @@ impl FitMessageRecord {
                     84 => {  // stance_time_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19661,7 +19983,7 @@ impl FitMessageRecord {
                     85 => {  // step_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19721,6 +20043,8 @@ pub struct FitMessageSchedule {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub manufacturer: Option<FitFieldManufacturer>,  // Corresponds to file_id of scheduled workout / course.
     pub product: Option<FitMessageScheduleSubfieldProduct>,  // Corresponds to file_id of scheduled workout / course.
     pub serial_number: Option<u32>,  // Corresponds to file_id of scheduled workout / course.
@@ -19731,12 +20055,15 @@ pub struct FitMessageSchedule {
     
 }
 impl FitMessageSchedule {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSchedule>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSchedule {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSchedule",
             manufacturer: None,
             product: None,
             serial_number: None,
@@ -19747,6 +20074,8 @@ impl FitMessageSchedule {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSchedule::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -19787,7 +20116,7 @@ impl FitMessageSchedule {
                     0 => {  // manufacturer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19804,7 +20133,7 @@ impl FitMessageSchedule {
                     1 => {  // product
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageScheduleSubfieldProduct::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -19821,7 +20150,7 @@ impl FitMessageSchedule {
                     2 => {  // serial_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19838,7 +20167,7 @@ impl FitMessageSchedule {
                     3 => {  // time_created
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -19855,7 +20184,7 @@ impl FitMessageSchedule {
                     4 => {  // completed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -19872,7 +20201,7 @@ impl FitMessageSchedule {
                     5 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSchedule::parse(&bytes)?;
                                 val
                             },
@@ -19889,7 +20218,7 @@ impl FitMessageSchedule {
                     6 => {  // scheduled_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocalDateTime::parse(&bytes, message.definition_message.endianness, _tz_offset)?;
                                 val
                             },
@@ -19916,6 +20245,8 @@ pub struct FitMessageSdmProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub enabled: Option<bool>,  
     pub sdm_ant_id: Option<u16>,  
@@ -19927,12 +20258,15 @@ pub struct FitMessageSdmProfile {
     
 }
 impl FitMessageSdmProfile {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSdmProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSdmProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSdmProfile",
             message_index: None,
             enabled: None,
             sdm_ant_id: None,
@@ -19944,6 +20278,8 @@ impl FitMessageSdmProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSdmProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -19984,7 +20320,7 @@ impl FitMessageSdmProfile {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20001,7 +20337,7 @@ impl FitMessageSdmProfile {
                     0 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -20018,7 +20354,7 @@ impl FitMessageSdmProfile {
                     1 => {  // sdm_ant_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20035,7 +20371,7 @@ impl FitMessageSdmProfile {
                     2 => {  // sdm_cal_factor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20052,7 +20388,7 @@ impl FitMessageSdmProfile {
                     3 => {  // odometer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20069,7 +20405,7 @@ impl FitMessageSdmProfile {
                     4 => {  // speed_source
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -20086,7 +20422,7 @@ impl FitMessageSdmProfile {
                     5 => {  // sdm_ant_id_trans_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8z(&bytes)?;
                                 val
                             },
@@ -20103,7 +20439,7 @@ impl FitMessageSdmProfile {
                     7 => {  // odometer_rollover
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -20130,6 +20466,8 @@ pub struct FitMessageSegmentFile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub file_uuid: Option<String>,  // UUID of the segment file
     pub enabled: Option<bool>,  // Enabled state of the segment file
@@ -20142,12 +20480,15 @@ pub struct FitMessageSegmentFile {
     
 }
 impl FitMessageSegmentFile {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentFile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentFile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSegmentFile",
             message_index: None,
             file_uuid: None,
             enabled: None,
@@ -20160,6 +20501,8 @@ impl FitMessageSegmentFile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentFile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -20200,7 +20543,7 @@ impl FitMessageSegmentFile {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20217,7 +20560,7 @@ impl FitMessageSegmentFile {
                     1 => {  // file_uuid
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -20234,7 +20577,7 @@ impl FitMessageSegmentFile {
                     3 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -20251,7 +20594,7 @@ impl FitMessageSegmentFile {
                     4 => {  // user_profile_primary_key
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20268,7 +20611,7 @@ impl FitMessageSegmentFile {
                     7 => {  // leader_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSegmentLeaderboardType::parse(&bytes)?;
                                 val
                             },
@@ -20285,7 +20628,7 @@ impl FitMessageSegmentFile {
                     8 => {  // leader_group_primary_key
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20302,7 +20645,7 @@ impl FitMessageSegmentFile {
                     9 => {  // leader_activity_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20319,7 +20662,7 @@ impl FitMessageSegmentFile {
                     10 => {  // leader_activity_id_string
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -20336,7 +20679,7 @@ impl FitMessageSegmentFile {
                     11 => {  // default_race_leader
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -20363,6 +20706,8 @@ pub struct FitMessageSegmentId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub name: Option<String>,  // Friendly name assigned to segment
     pub uuid: Option<String>,  // UUID of the segment
     pub sport: Option<FitFieldSport>,  // Sport associated with the segment
@@ -20375,12 +20720,15 @@ pub struct FitMessageSegmentId {
     
 }
 impl FitMessageSegmentId {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSegmentId",
             name: None,
             uuid: None,
             sport: None,
@@ -20393,6 +20741,8 @@ impl FitMessageSegmentId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -20433,7 +20783,7 @@ impl FitMessageSegmentId {
                     0 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -20450,7 +20800,7 @@ impl FitMessageSegmentId {
                     1 => {  // uuid
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -20467,7 +20817,7 @@ impl FitMessageSegmentId {
                     2 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -20484,7 +20834,7 @@ impl FitMessageSegmentId {
                     3 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_bool(&bytes)?;
                                 val
                             },
@@ -20501,7 +20851,7 @@ impl FitMessageSegmentId {
                     4 => {  // user_profile_primary_key
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20518,7 +20868,7 @@ impl FitMessageSegmentId {
                     5 => {  // device_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20535,7 +20885,7 @@ impl FitMessageSegmentId {
                     6 => {  // default_race_leader
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -20552,7 +20902,7 @@ impl FitMessageSegmentId {
                     7 => {  // delete_status
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSegmentDeleteStatus::parse(&bytes)?;
                                 val
                             },
@@ -20569,7 +20919,7 @@ impl FitMessageSegmentId {
                     8 => {  // selection_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSegmentSelectionType::parse(&bytes)?;
                                 val
                             },
@@ -20619,6 +20969,8 @@ pub struct FitMessageSegmentLap {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub timestamp: Option<FitFieldDateTime>,  // Lap end time.
     pub event: Option<FitFieldEvent>,  
@@ -20708,12 +21060,15 @@ pub struct FitMessageSegmentLap {
     
 }
 impl FitMessageSegmentLap {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLap>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLap {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSegmentLap",
             message_index: None,
             timestamp: None,
             event: None,
@@ -20803,6 +21158,8 @@ impl FitMessageSegmentLap {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentLap::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -20843,7 +21200,7 @@ impl FitMessageSegmentLap {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20860,7 +21217,7 @@ impl FitMessageSegmentLap {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20877,7 +21234,7 @@ impl FitMessageSegmentLap {
                     0 => {  // event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEvent::parse(&bytes)?;
                                 val
                             },
@@ -20894,7 +21251,7 @@ impl FitMessageSegmentLap {
                     1 => {  // event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEventType::parse(&bytes)?;
                                 val
                             },
@@ -20911,7 +21268,7 @@ impl FitMessageSegmentLap {
                     2 => {  // start_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20928,7 +21285,7 @@ impl FitMessageSegmentLap {
                     3 => {  // start_position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20945,7 +21302,7 @@ impl FitMessageSegmentLap {
                     4 => {  // start_position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20962,7 +21319,7 @@ impl FitMessageSegmentLap {
                     5 => {  // end_position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20979,7 +21336,7 @@ impl FitMessageSegmentLap {
                     6 => {  // end_position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -20996,7 +21353,7 @@ impl FitMessageSegmentLap {
                     7 => {  // total_elapsed_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21013,7 +21370,7 @@ impl FitMessageSegmentLap {
                     8 => {  // total_timer_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21030,7 +21387,7 @@ impl FitMessageSegmentLap {
                     9 => {  // total_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21047,7 +21404,7 @@ impl FitMessageSegmentLap {
                     10 => {  // total_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageSegmentLapSubfieldTotalCycles::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -21064,7 +21421,7 @@ impl FitMessageSegmentLap {
                     11 => {  // total_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21081,7 +21438,7 @@ impl FitMessageSegmentLap {
                     12 => {  // total_fat_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21098,7 +21455,7 @@ impl FitMessageSegmentLap {
                     13 => {  // avg_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21115,7 +21472,7 @@ impl FitMessageSegmentLap {
                     14 => {  // max_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21132,7 +21489,7 @@ impl FitMessageSegmentLap {
                     15 => {  // avg_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21149,7 +21506,7 @@ impl FitMessageSegmentLap {
                     16 => {  // max_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21166,7 +21523,7 @@ impl FitMessageSegmentLap {
                     17 => {  // avg_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21183,7 +21540,7 @@ impl FitMessageSegmentLap {
                     18 => {  // max_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21200,7 +21557,7 @@ impl FitMessageSegmentLap {
                     19 => {  // avg_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21217,7 +21574,7 @@ impl FitMessageSegmentLap {
                     20 => {  // max_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21234,7 +21591,7 @@ impl FitMessageSegmentLap {
                     21 => {  // total_ascent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21251,7 +21608,7 @@ impl FitMessageSegmentLap {
                     22 => {  // total_descent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21268,7 +21625,7 @@ impl FitMessageSegmentLap {
                     23 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -21285,7 +21642,7 @@ impl FitMessageSegmentLap {
                     24 => {  // event_group
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21302,7 +21659,7 @@ impl FitMessageSegmentLap {
                     25 => {  // nec_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21319,7 +21676,7 @@ impl FitMessageSegmentLap {
                     26 => {  // nec_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21336,7 +21693,7 @@ impl FitMessageSegmentLap {
                     27 => {  // swc_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21353,7 +21710,7 @@ impl FitMessageSegmentLap {
                     28 => {  // swc_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21370,7 +21727,7 @@ impl FitMessageSegmentLap {
                     29 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -21387,7 +21744,7 @@ impl FitMessageSegmentLap {
                     30 => {  // normalized_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21404,7 +21761,7 @@ impl FitMessageSegmentLap {
                     31 => {  // left_right_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLeftRightBalance100::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21421,7 +21778,7 @@ impl FitMessageSegmentLap {
                     32 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -21438,7 +21795,7 @@ impl FitMessageSegmentLap {
                     33 => {  // total_work
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21455,7 +21812,7 @@ impl FitMessageSegmentLap {
                     34 => {  // avg_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21472,7 +21829,7 @@ impl FitMessageSegmentLap {
                     35 => {  // max_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21489,7 +21846,7 @@ impl FitMessageSegmentLap {
                     36 => {  // gps_accuracy
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21506,7 +21863,7 @@ impl FitMessageSegmentLap {
                     37 => {  // avg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21523,7 +21880,7 @@ impl FitMessageSegmentLap {
                     38 => {  // avg_pos_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21540,7 +21897,7 @@ impl FitMessageSegmentLap {
                     39 => {  // avg_neg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21557,7 +21914,7 @@ impl FitMessageSegmentLap {
                     40 => {  // max_pos_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21574,7 +21931,7 @@ impl FitMessageSegmentLap {
                     41 => {  // max_neg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21591,7 +21948,7 @@ impl FitMessageSegmentLap {
                     42 => {  // avg_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -21608,7 +21965,7 @@ impl FitMessageSegmentLap {
                     43 => {  // max_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -21625,7 +21982,7 @@ impl FitMessageSegmentLap {
                     44 => {  // total_moving_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21642,7 +21999,7 @@ impl FitMessageSegmentLap {
                     45 => {  // avg_pos_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21659,7 +22016,7 @@ impl FitMessageSegmentLap {
                     46 => {  // avg_neg_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21676,7 +22033,7 @@ impl FitMessageSegmentLap {
                     47 => {  // max_pos_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21693,7 +22050,7 @@ impl FitMessageSegmentLap {
                     48 => {  // max_neg_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21710,7 +22067,7 @@ impl FitMessageSegmentLap {
                     49 => {  // time_in_hr_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21727,7 +22084,7 @@ impl FitMessageSegmentLap {
                     50 => {  // time_in_speed_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21744,7 +22101,7 @@ impl FitMessageSegmentLap {
                     51 => {  // time_in_cadence_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21761,7 +22118,7 @@ impl FitMessageSegmentLap {
                     52 => {  // time_in_power_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21778,7 +22135,7 @@ impl FitMessageSegmentLap {
                     53 => {  // repetition_num
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21795,7 +22152,7 @@ impl FitMessageSegmentLap {
                     54 => {  // min_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21812,7 +22169,7 @@ impl FitMessageSegmentLap {
                     55 => {  // min_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21829,7 +22186,7 @@ impl FitMessageSegmentLap {
                     56 => {  // active_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21846,7 +22203,7 @@ impl FitMessageSegmentLap {
                     57 => {  // wkt_step_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -21863,7 +22220,7 @@ impl FitMessageSegmentLap {
                     58 => {  // sport_event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSportEvent::parse(&bytes)?;
                                 val
                             },
@@ -21880,7 +22237,7 @@ impl FitMessageSegmentLap {
                     59 => {  // avg_left_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21897,7 +22254,7 @@ impl FitMessageSegmentLap {
                     60 => {  // avg_right_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21914,7 +22271,7 @@ impl FitMessageSegmentLap {
                     61 => {  // avg_left_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21931,7 +22288,7 @@ impl FitMessageSegmentLap {
                     62 => {  // avg_right_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21948,7 +22305,7 @@ impl FitMessageSegmentLap {
                     63 => {  // avg_combined_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -21965,7 +22322,7 @@ impl FitMessageSegmentLap {
                     64 => {  // status
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSegmentLapStatus::parse(&bytes)?;
                                 val
                             },
@@ -21982,7 +22339,7 @@ impl FitMessageSegmentLap {
                     65 => {  // uuid
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -21999,7 +22356,7 @@ impl FitMessageSegmentLap {
                     66 => {  // avg_fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22016,7 +22373,7 @@ impl FitMessageSegmentLap {
                     67 => {  // max_fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22033,7 +22390,7 @@ impl FitMessageSegmentLap {
                     68 => {  // total_fractional_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22050,7 +22407,7 @@ impl FitMessageSegmentLap {
                     69 => {  // front_gear_shift_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22067,7 +22424,7 @@ impl FitMessageSegmentLap {
                     70 => {  // rear_gear_shift_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22084,7 +22441,7 @@ impl FitMessageSegmentLap {
                     71 => {  // time_standing
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22101,7 +22458,7 @@ impl FitMessageSegmentLap {
                     72 => {  // stand_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22118,7 +22475,7 @@ impl FitMessageSegmentLap {
                     73 => {  // avg_left_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -22135,7 +22492,7 @@ impl FitMessageSegmentLap {
                     74 => {  // avg_right_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -22152,7 +22509,7 @@ impl FitMessageSegmentLap {
                     75 => {  // avg_left_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22169,7 +22526,7 @@ impl FitMessageSegmentLap {
                     76 => {  // avg_left_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22186,7 +22543,7 @@ impl FitMessageSegmentLap {
                     77 => {  // avg_right_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22203,7 +22560,7 @@ impl FitMessageSegmentLap {
                     78 => {  // avg_right_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22220,7 +22577,7 @@ impl FitMessageSegmentLap {
                     79 => {  // avg_power_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22237,7 +22594,7 @@ impl FitMessageSegmentLap {
                     80 => {  // max_power_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22254,7 +22611,7 @@ impl FitMessageSegmentLap {
                     81 => {  // avg_cadence_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22271,7 +22628,7 @@ impl FitMessageSegmentLap {
                     82 => {  // max_cadence_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -22288,7 +22645,7 @@ impl FitMessageSegmentLap {
                     83 => {  // manufacturer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22315,6 +22672,8 @@ pub struct FitMessageSegmentLeaderboardEntry {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub name: Option<String>,  // Friendly name assigned to leader
     pub ftype: Option<FitFieldSegmentLeaderboardType>,  // Leader classification
@@ -22325,12 +22684,15 @@ pub struct FitMessageSegmentLeaderboardEntry {
     
 }
 impl FitMessageSegmentLeaderboardEntry {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLeaderboardEntry {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSegmentLeaderboardEntry",
             message_index: None,
             name: None,
             ftype: None,
@@ -22341,6 +22703,8 @@ impl FitMessageSegmentLeaderboardEntry {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentLeaderboardEntry::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -22381,7 +22745,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22398,7 +22762,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     0 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -22415,7 +22779,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     1 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSegmentLeaderboardType::parse(&bytes)?;
                                 val
                             },
@@ -22432,7 +22796,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     2 => {  // group_primary_key
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22449,7 +22813,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     3 => {  // activity_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22466,7 +22830,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     4 => {  // segment_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22483,7 +22847,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     5 => {  // activity_id_string
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -22510,6 +22874,8 @@ pub struct FitMessageSegmentPoint {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub position_lat: Option<i32>,  
     pub position_long: Option<i32>,  
@@ -22519,12 +22885,15 @@ pub struct FitMessageSegmentPoint {
     
 }
 impl FitMessageSegmentPoint {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentPoint>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentPoint {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSegmentPoint",
             message_index: None,
             position_lat: None,
             position_long: None,
@@ -22534,6 +22903,8 @@ impl FitMessageSegmentPoint {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentPoint::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -22574,7 +22945,7 @@ impl FitMessageSegmentPoint {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22591,7 +22962,7 @@ impl FitMessageSegmentPoint {
                     1 => {  // position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22608,7 +22979,7 @@ impl FitMessageSegmentPoint {
                     2 => {  // position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22625,7 +22996,7 @@ impl FitMessageSegmentPoint {
                     3 => {  // distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22642,7 +23013,7 @@ impl FitMessageSegmentPoint {
                     4 => {  // altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22659,7 +23030,7 @@ impl FitMessageSegmentPoint {
                     5 => {  // leader_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -22760,6 +23131,8 @@ pub struct FitMessageSession {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Selected bit is set for the current session.
     pub timestamp: Option<FitFieldDateTime>,  // Sesson end time.
     pub event: Option<FitFieldEvent>,  // session
@@ -22881,12 +23254,15 @@ pub struct FitMessageSession {
     
 }
 impl FitMessageSession {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSession>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSession {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSession",
             message_index: None,
             timestamp: None,
             event: None,
@@ -23008,6 +23384,8 @@ impl FitMessageSession {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSession::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -23048,7 +23426,7 @@ impl FitMessageSession {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23065,7 +23443,7 @@ impl FitMessageSession {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23082,7 +23460,7 @@ impl FitMessageSession {
                     0 => {  // event
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEvent::parse(&bytes)?;
                                 val
                             },
@@ -23099,7 +23477,7 @@ impl FitMessageSession {
                     1 => {  // event_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldEventType::parse(&bytes)?;
                                 val
                             },
@@ -23116,7 +23494,7 @@ impl FitMessageSession {
                     2 => {  // start_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23133,7 +23511,7 @@ impl FitMessageSession {
                     3 => {  // start_position_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23150,7 +23528,7 @@ impl FitMessageSession {
                     4 => {  // start_position_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23167,7 +23545,7 @@ impl FitMessageSession {
                     5 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -23184,7 +23562,7 @@ impl FitMessageSession {
                     6 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -23201,7 +23579,7 @@ impl FitMessageSession {
                     7 => {  // total_elapsed_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23218,7 +23596,7 @@ impl FitMessageSession {
                     8 => {  // total_timer_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23235,7 +23613,7 @@ impl FitMessageSession {
                     9 => {  // total_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23252,7 +23630,7 @@ impl FitMessageSession {
                     10 => {  // total_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageSessionSubfieldTotalCycles::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -23269,7 +23647,7 @@ impl FitMessageSession {
                     11 => {  // total_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23286,7 +23664,7 @@ impl FitMessageSession {
                     13 => {  // total_fat_calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23303,7 +23681,7 @@ impl FitMessageSession {
                     14 => {  // avg_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23321,7 +23699,7 @@ impl FitMessageSession {
                     15 => {  // max_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23339,7 +23717,7 @@ impl FitMessageSession {
                     16 => {  // avg_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -23356,7 +23734,7 @@ impl FitMessageSession {
                     17 => {  // max_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -23373,7 +23751,7 @@ impl FitMessageSession {
                     18 => {  // avg_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageSessionSubfieldAvgCadence::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -23390,7 +23768,7 @@ impl FitMessageSession {
                     19 => {  // max_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageSessionSubfieldMaxCadence::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -23407,7 +23785,7 @@ impl FitMessageSession {
                     20 => {  // avg_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23424,7 +23802,7 @@ impl FitMessageSession {
                     21 => {  // max_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23441,7 +23819,7 @@ impl FitMessageSession {
                     22 => {  // total_ascent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23458,7 +23836,7 @@ impl FitMessageSession {
                     23 => {  // total_descent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23475,7 +23853,7 @@ impl FitMessageSession {
                     24 => {  // total_training_effect
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -23492,7 +23870,7 @@ impl FitMessageSession {
                     25 => {  // first_lap_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23509,7 +23887,7 @@ impl FitMessageSession {
                     26 => {  // num_laps
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23526,7 +23904,7 @@ impl FitMessageSession {
                     27 => {  // event_group
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -23543,7 +23921,7 @@ impl FitMessageSession {
                     28 => {  // trigger
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSessionTrigger::parse(&bytes)?;
                                 val
                             },
@@ -23560,7 +23938,7 @@ impl FitMessageSession {
                     29 => {  // nec_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23577,7 +23955,7 @@ impl FitMessageSession {
                     30 => {  // nec_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23594,7 +23972,7 @@ impl FitMessageSession {
                     31 => {  // swc_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23611,7 +23989,7 @@ impl FitMessageSession {
                     32 => {  // swc_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23628,7 +24006,7 @@ impl FitMessageSession {
                     34 => {  // normalized_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23645,7 +24023,7 @@ impl FitMessageSession {
                     35 => {  // training_stress_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23662,7 +24040,7 @@ impl FitMessageSession {
                     36 => {  // intensity_factor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23679,7 +24057,7 @@ impl FitMessageSession {
                     37 => {  // left_right_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLeftRightBalance100::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23696,7 +24074,7 @@ impl FitMessageSession {
                     41 => {  // avg_stroke_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23713,7 +24091,7 @@ impl FitMessageSession {
                     42 => {  // avg_stroke_distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23730,7 +24108,7 @@ impl FitMessageSession {
                     43 => {  // swim_stroke
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSwimStroke::parse(&bytes)?;
                                 val
                             },
@@ -23747,7 +24125,7 @@ impl FitMessageSession {
                     44 => {  // pool_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23764,7 +24142,7 @@ impl FitMessageSession {
                     45 => {  // threshold_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23781,7 +24159,7 @@ impl FitMessageSession {
                     46 => {  // pool_length_unit
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -23798,7 +24176,7 @@ impl FitMessageSession {
                     47 => {  // num_active_lengths
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23815,7 +24193,7 @@ impl FitMessageSession {
                     48 => {  // total_work
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23832,7 +24210,7 @@ impl FitMessageSession {
                     49 => {  // avg_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23850,7 +24228,7 @@ impl FitMessageSession {
                     50 => {  // max_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23868,7 +24246,7 @@ impl FitMessageSession {
                     51 => {  // gps_accuracy
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -23885,7 +24263,7 @@ impl FitMessageSession {
                     52 => {  // avg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23902,7 +24280,7 @@ impl FitMessageSession {
                     53 => {  // avg_pos_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23919,7 +24297,7 @@ impl FitMessageSession {
                     54 => {  // avg_neg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23936,7 +24314,7 @@ impl FitMessageSession {
                     55 => {  // max_pos_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23953,7 +24331,7 @@ impl FitMessageSession {
                     56 => {  // max_neg_grade
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -23970,7 +24348,7 @@ impl FitMessageSession {
                     57 => {  // avg_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -23987,7 +24365,7 @@ impl FitMessageSession {
                     58 => {  // max_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -24004,7 +24382,7 @@ impl FitMessageSession {
                     59 => {  // total_moving_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24021,7 +24399,7 @@ impl FitMessageSession {
                     60 => {  // avg_pos_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24038,7 +24416,7 @@ impl FitMessageSession {
                     61 => {  // avg_neg_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24055,7 +24433,7 @@ impl FitMessageSession {
                     62 => {  // max_pos_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24072,7 +24450,7 @@ impl FitMessageSession {
                     63 => {  // max_neg_vertical_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24089,7 +24467,7 @@ impl FitMessageSession {
                     64 => {  // min_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24106,7 +24484,7 @@ impl FitMessageSession {
                     65 => {  // time_in_hr_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24123,7 +24501,7 @@ impl FitMessageSession {
                     66 => {  // time_in_speed_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24140,7 +24518,7 @@ impl FitMessageSession {
                     67 => {  // time_in_cadence_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24157,7 +24535,7 @@ impl FitMessageSession {
                     68 => {  // time_in_power_zone
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24174,7 +24552,7 @@ impl FitMessageSession {
                     69 => {  // avg_lap_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24191,7 +24569,7 @@ impl FitMessageSession {
                     70 => {  // best_lap_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24208,7 +24586,7 @@ impl FitMessageSession {
                     71 => {  // min_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24226,7 +24604,7 @@ impl FitMessageSession {
                     82 => {  // player_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24243,7 +24621,7 @@ impl FitMessageSession {
                     83 => {  // opponent_score
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24260,7 +24638,7 @@ impl FitMessageSession {
                     84 => {  // opponent_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -24277,7 +24655,7 @@ impl FitMessageSession {
                     85 => {  // stroke_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24294,7 +24672,7 @@ impl FitMessageSession {
                     86 => {  // zone_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24311,7 +24689,7 @@ impl FitMessageSession {
                     87 => {  // max_ball_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24328,7 +24706,7 @@ impl FitMessageSession {
                     88 => {  // avg_ball_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24345,7 +24723,7 @@ impl FitMessageSession {
                     89 => {  // avg_vertical_oscillation
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24362,7 +24740,7 @@ impl FitMessageSession {
                     90 => {  // avg_stance_time_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24379,7 +24757,7 @@ impl FitMessageSession {
                     91 => {  // avg_stance_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24396,7 +24774,7 @@ impl FitMessageSession {
                     92 => {  // avg_fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24413,7 +24791,7 @@ impl FitMessageSession {
                     93 => {  // max_fractional_cadence
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24430,7 +24808,7 @@ impl FitMessageSession {
                     94 => {  // total_fractional_cycles
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24447,7 +24825,7 @@ impl FitMessageSession {
                     95 => {  // avg_total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24464,7 +24842,7 @@ impl FitMessageSession {
                     96 => {  // min_total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24481,7 +24859,7 @@ impl FitMessageSession {
                     97 => {  // max_total_hemoglobin_conc
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24498,7 +24876,7 @@ impl FitMessageSession {
                     98 => {  // avg_saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24515,7 +24893,7 @@ impl FitMessageSession {
                     99 => {  // min_saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24532,7 +24910,7 @@ impl FitMessageSession {
                     100 => {  // max_saturated_hemoglobin_percent
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24549,7 +24927,7 @@ impl FitMessageSession {
                     101 => {  // avg_left_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24566,7 +24944,7 @@ impl FitMessageSession {
                     102 => {  // avg_right_torque_effectiveness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24583,7 +24961,7 @@ impl FitMessageSession {
                     103 => {  // avg_left_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24600,7 +24978,7 @@ impl FitMessageSession {
                     104 => {  // avg_right_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24617,7 +24995,7 @@ impl FitMessageSession {
                     105 => {  // avg_combined_pedal_smoothness
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24634,7 +25012,7 @@ impl FitMessageSession {
                     111 => {  // sport_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24651,7 +25029,7 @@ impl FitMessageSession {
                     112 => {  // time_standing
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24668,7 +25046,7 @@ impl FitMessageSession {
                     113 => {  // stand_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24685,7 +25063,7 @@ impl FitMessageSession {
                     114 => {  // avg_left_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -24702,7 +25080,7 @@ impl FitMessageSession {
                     115 => {  // avg_right_pco
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -24719,7 +25097,7 @@ impl FitMessageSession {
                     116 => {  // avg_left_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24736,7 +25114,7 @@ impl FitMessageSession {
                     117 => {  // avg_left_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24753,7 +25131,7 @@ impl FitMessageSession {
                     118 => {  // avg_right_power_phase
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24770,7 +25148,7 @@ impl FitMessageSession {
                     119 => {  // avg_right_power_phase_peak
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24787,7 +25165,7 @@ impl FitMessageSession {
                     120 => {  // avg_power_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24804,7 +25182,7 @@ impl FitMessageSession {
                     121 => {  // max_power_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24821,7 +25199,7 @@ impl FitMessageSession {
                     122 => {  // avg_cadence_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24838,7 +25216,7 @@ impl FitMessageSession {
                     123 => {  // max_cadence_position
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24855,7 +25233,7 @@ impl FitMessageSession {
                     124 => {  // enhanced_avg_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24872,7 +25250,7 @@ impl FitMessageSession {
                     125 => {  // enhanced_max_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24889,7 +25267,7 @@ impl FitMessageSession {
                     126 => {  // enhanced_avg_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24906,7 +25284,7 @@ impl FitMessageSession {
                     127 => {  // enhanced_min_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24923,7 +25301,7 @@ impl FitMessageSession {
                     128 => {  // enhanced_max_altitude
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24940,7 +25318,7 @@ impl FitMessageSession {
                     129 => {  // avg_lev_motor_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24957,7 +25335,7 @@ impl FitMessageSession {
                     130 => {  // max_lev_motor_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -24974,7 +25352,7 @@ impl FitMessageSession {
                     131 => {  // lev_battery_consumption
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -24991,7 +25369,7 @@ impl FitMessageSession {
                     132 => {  // avg_vertical_ratio
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25008,7 +25386,7 @@ impl FitMessageSession {
                     133 => {  // avg_stance_time_balance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25025,7 +25403,7 @@ impl FitMessageSession {
                     134 => {  // avg_step_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25042,7 +25420,7 @@ impl FitMessageSession {
                     137 => {  // total_anaerobic_training_effect
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -25102,22 +25480,29 @@ pub struct FitMessageSlaveDevice {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub manufacturer: Option<FitFieldManufacturer>,  
     pub product: Option<FitMessageSlaveDeviceSubfieldProduct>,  
     
 }
 impl FitMessageSlaveDevice {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSlaveDevice>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSlaveDevice {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSlaveDevice",
             manufacturer: None,
             product: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSlaveDevice::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25158,7 +25543,7 @@ impl FitMessageSlaveDevice {
                     0 => {  // manufacturer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25175,7 +25560,7 @@ impl FitMessageSlaveDevice {
                     1 => {  // product
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageSlaveDeviceSubfieldProduct::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -25202,24 +25587,31 @@ pub struct FitMessageSoftware {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub version: Option<f64>,  
     pub part_number: Option<String>,  
     
 }
 impl FitMessageSoftware {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSoftware>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSoftware {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSoftware",
             message_index: None,
             version: None,
             part_number: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSoftware::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25260,7 +25652,7 @@ impl FitMessageSoftware {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25277,7 +25669,7 @@ impl FitMessageSoftware {
                     3 => {  // version
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25294,7 +25686,7 @@ impl FitMessageSoftware {
                     5 => {  // part_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -25321,24 +25713,31 @@ pub struct FitMessageSpeedZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub high_value: Option<f64>,  
     pub name: Option<String>,  
     
 }
 impl FitMessageSpeedZone {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSpeedZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSpeedZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSpeedZone",
             message_index: None,
             high_value: None,
             name: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSpeedZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25379,7 +25778,7 @@ impl FitMessageSpeedZone {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25396,7 +25795,7 @@ impl FitMessageSpeedZone {
                     0 => {  // high_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25413,7 +25812,7 @@ impl FitMessageSpeedZone {
                     1 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -25440,24 +25839,31 @@ pub struct FitMessageSport {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub sport: Option<FitFieldSport>,  
     pub sub_sport: Option<FitFieldSubSport>,  
     pub name: Option<String>,  
     
 }
 impl FitMessageSport {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSport>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSport {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSport",
             sport: None,
             sub_sport: None,
             name: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSport::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25498,7 +25904,7 @@ impl FitMessageSport {
                     0 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -25515,7 +25921,7 @@ impl FitMessageSport {
                     1 => {  // sub_sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSubSport::parse(&bytes)?;
                                 val
                             },
@@ -25532,7 +25938,7 @@ impl FitMessageSport {
                     3 => {  // name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -25588,6 +25994,8 @@ pub struct FitMessageThreeDSensorCalibration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
     pub sensor_type: Option<FitFieldSensorType>,  // Indicates which sensor the calibration is for
     pub calibration_factor: Option<FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor>,  // Calibration factor used to convert from raw ADC value to degrees, g,  etc.
@@ -25598,12 +26006,15 @@ pub struct FitMessageThreeDSensorCalibration {
     
 }
 impl FitMessageThreeDSensorCalibration {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageThreeDSensorCalibration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageThreeDSensorCalibration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageThreeDSensorCalibration",
             timestamp: None,
             sensor_type: None,
             calibration_factor: None,
@@ -25614,6 +26025,8 @@ impl FitMessageThreeDSensorCalibration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageThreeDSensorCalibration::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25654,7 +26067,7 @@ impl FitMessageThreeDSensorCalibration {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25671,7 +26084,7 @@ impl FitMessageThreeDSensorCalibration {
                     0 => {  // sensor_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSensorType::parse(&bytes)?;
                                 val
                             },
@@ -25688,7 +26101,7 @@ impl FitMessageThreeDSensorCalibration {
                     1 => {  // calibration_factor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -25705,7 +26118,7 @@ impl FitMessageThreeDSensorCalibration {
                     2 => {  // calibration_divisor
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25722,7 +26135,7 @@ impl FitMessageThreeDSensorCalibration {
                     3 => {  // level_shift
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25739,7 +26152,7 @@ impl FitMessageThreeDSensorCalibration {
                     4 => {  // offset_cal
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25756,7 +26169,7 @@ impl FitMessageThreeDSensorCalibration {
                     5 => {  // orientation_matrix
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25783,6 +26196,8 @@ pub struct FitMessageTimestampCorrelation {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of UTC timestamp at the time the system timestamp was recorded.
     pub fractional_timestamp: Option<f64>,  // Fractional part of the UTC timestamp at the time the system timestamp was recorded.
     pub system_timestamp: Option<FitFieldDateTime>,  // Whole second part of the system timestamp
@@ -25793,12 +26208,15 @@ pub struct FitMessageTimestampCorrelation {
     
 }
 impl FitMessageTimestampCorrelation {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageTimestampCorrelation>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTimestampCorrelation {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageTimestampCorrelation",
             timestamp: None,
             fractional_timestamp: None,
             system_timestamp: None,
@@ -25809,6 +26227,8 @@ impl FitMessageTimestampCorrelation {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageTimestampCorrelation::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25849,7 +26269,7 @@ impl FitMessageTimestampCorrelation {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25866,7 +26286,7 @@ impl FitMessageTimestampCorrelation {
                     0 => {  // fractional_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25883,7 +26303,7 @@ impl FitMessageTimestampCorrelation {
                     1 => {  // system_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25900,7 +26320,7 @@ impl FitMessageTimestampCorrelation {
                     2 => {  // fractional_system_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25917,7 +26337,7 @@ impl FitMessageTimestampCorrelation {
                     3 => {  // local_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocalDateTime::parse(&bytes, message.definition_message.endianness, _tz_offset)?;
                                 val
                             },
@@ -25934,7 +26354,7 @@ impl FitMessageTimestampCorrelation {
                     4 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25951,7 +26371,7 @@ impl FitMessageTimestampCorrelation {
                     5 => {  // system_timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -25978,6 +26398,8 @@ pub struct FitMessageTotals {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub timestamp: Option<FitFieldDateTime>,  
     pub timer_time: Option<u32>,  // Excludes pauses
@@ -25991,12 +26413,15 @@ pub struct FitMessageTotals {
     
 }
 impl FitMessageTotals {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageTotals>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTotals {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageTotals",
             message_index: None,
             timestamp: None,
             timer_time: None,
@@ -26010,6 +26435,8 @@ impl FitMessageTotals {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageTotals::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -26050,7 +26477,7 @@ impl FitMessageTotals {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26067,7 +26494,7 @@ impl FitMessageTotals {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26084,7 +26511,7 @@ impl FitMessageTotals {
                     0 => {  // timer_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26101,7 +26528,7 @@ impl FitMessageTotals {
                     1 => {  // distance
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26118,7 +26545,7 @@ impl FitMessageTotals {
                     2 => {  // calories
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26135,7 +26562,7 @@ impl FitMessageTotals {
                     3 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -26152,7 +26579,7 @@ impl FitMessageTotals {
                     4 => {  // elapsed_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26169,7 +26596,7 @@ impl FitMessageTotals {
                     5 => {  // sessions
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26186,7 +26613,7 @@ impl FitMessageTotals {
                     6 => {  // active_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26203,7 +26630,7 @@ impl FitMessageTotals {
                     9 => {  // sport_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26263,6 +26690,8 @@ pub struct FitMessageTrainingFile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub ftype: Option<FitFieldFile>,  
     pub manufacturer: Option<FitFieldManufacturer>,  
@@ -26272,12 +26701,15 @@ pub struct FitMessageTrainingFile {
     
 }
 impl FitMessageTrainingFile {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageTrainingFile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTrainingFile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageTrainingFile",
             timestamp: None,
             ftype: None,
             manufacturer: None,
@@ -26287,6 +26719,8 @@ impl FitMessageTrainingFile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageTrainingFile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -26327,7 +26761,7 @@ impl FitMessageTrainingFile {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26344,7 +26778,7 @@ impl FitMessageTrainingFile {
                     0 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldFile::parse(&bytes)?;
                                 val
                             },
@@ -26361,7 +26795,7 @@ impl FitMessageTrainingFile {
                     1 => {  // manufacturer
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldManufacturer::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26378,7 +26812,7 @@ impl FitMessageTrainingFile {
                     2 => {  // product
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageTrainingFileSubfieldProduct::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -26395,7 +26829,7 @@ impl FitMessageTrainingFile {
                     3 => {  // serial_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32z(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26412,7 +26846,7 @@ impl FitMessageTrainingFile {
                     4 => {  // time_created
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26439,6 +26873,8 @@ pub struct FitMessageUserProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub friendly_name: Option<String>,  
     pub gender: Option<FitFieldGender>,  
@@ -26469,12 +26905,15 @@ pub struct FitMessageUserProfile {
     
 }
 impl FitMessageUserProfile {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageUserProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageUserProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageUserProfile",
             message_index: None,
             friendly_name: None,
             gender: None,
@@ -26505,6 +26944,8 @@ impl FitMessageUserProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageUserProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -26545,7 +26986,7 @@ impl FitMessageUserProfile {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26562,7 +27003,7 @@ impl FitMessageUserProfile {
                     0 => {  // friendly_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -26579,7 +27020,7 @@ impl FitMessageUserProfile {
                     1 => {  // gender
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldGender::parse(&bytes)?;
                                 val
                             },
@@ -26596,7 +27037,7 @@ impl FitMessageUserProfile {
                     2 => {  // age
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26613,7 +27054,7 @@ impl FitMessageUserProfile {
                     3 => {  // height
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26630,7 +27071,7 @@ impl FitMessageUserProfile {
                     4 => {  // weight
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26647,7 +27088,7 @@ impl FitMessageUserProfile {
                     5 => {  // language
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLanguage::parse(&bytes)?;
                                 val
                             },
@@ -26664,7 +27105,7 @@ impl FitMessageUserProfile {
                     6 => {  // elev_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -26681,7 +27122,7 @@ impl FitMessageUserProfile {
                     7 => {  // weight_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -26698,7 +27139,7 @@ impl FitMessageUserProfile {
                     8 => {  // resting_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26715,7 +27156,7 @@ impl FitMessageUserProfile {
                     9 => {  // default_max_running_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26732,7 +27173,7 @@ impl FitMessageUserProfile {
                     10 => {  // default_max_biking_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26749,7 +27190,7 @@ impl FitMessageUserProfile {
                     11 => {  // default_max_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -26766,7 +27207,7 @@ impl FitMessageUserProfile {
                     12 => {  // hr_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayHeart::parse(&bytes)?;
                                 val
                             },
@@ -26783,7 +27224,7 @@ impl FitMessageUserProfile {
                     13 => {  // speed_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -26800,7 +27241,7 @@ impl FitMessageUserProfile {
                     14 => {  // dist_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -26817,7 +27258,7 @@ impl FitMessageUserProfile {
                     16 => {  // power_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayPower::parse(&bytes)?;
                                 val
                             },
@@ -26834,7 +27275,7 @@ impl FitMessageUserProfile {
                     17 => {  // activity_class
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldActivityClass::parse(&bytes)?;
                                 val
                             },
@@ -26851,7 +27292,7 @@ impl FitMessageUserProfile {
                     18 => {  // position_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayPosition::parse(&bytes)?;
                                 val
                             },
@@ -26868,7 +27309,7 @@ impl FitMessageUserProfile {
                     21 => {  // temperature_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -26885,7 +27326,7 @@ impl FitMessageUserProfile {
                     22 => {  // local_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldUserLocalId::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26902,7 +27343,7 @@ impl FitMessageUserProfile {
                     23 => {  // global_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_byte(&bytes, field.field_size)?;
                                 val
                             },
@@ -26919,7 +27360,7 @@ impl FitMessageUserProfile {
                     28 => {  // wake_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocaltimeIntoDay::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26936,7 +27377,7 @@ impl FitMessageUserProfile {
                     29 => {  // sleep_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldLocaltimeIntoDay::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26953,7 +27394,7 @@ impl FitMessageUserProfile {
                     30 => {  // height_setting
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
                                 val
                             },
@@ -26970,7 +27411,7 @@ impl FitMessageUserProfile {
                     31 => {  // user_running_step_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -26987,7 +27428,7 @@ impl FitMessageUserProfile {
                     32 => {  // user_walking_step_length
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27014,24 +27455,31 @@ pub struct FitMessageVideo {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub url: Option<String>,  
     pub hosting_provider: Option<String>,  
     pub duration: Option<u32>,  // Playback time of video
     
 }
 impl FitMessageVideo {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideo {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageVideo",
             url: None,
             hosting_provider: None,
             duration: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideo::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27072,7 +27520,7 @@ impl FitMessageVideo {
                     0 => {  // url
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -27089,7 +27537,7 @@ impl FitMessageVideo {
                     1 => {  // hosting_provider
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -27106,7 +27554,7 @@ impl FitMessageVideo {
                     2 => {  // duration
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27133,6 +27581,8 @@ pub struct FitMessageVideoClip {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub clip_number: Option<u16>,  
     pub start_timestamp: Option<FitFieldDateTime>,  
     pub start_timestamp_ms: Option<u16>,  
@@ -27143,12 +27593,15 @@ pub struct FitMessageVideoClip {
     
 }
 impl FitMessageVideoClip {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoClip>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoClip {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageVideoClip",
             clip_number: None,
             start_timestamp: None,
             start_timestamp_ms: None,
@@ -27159,6 +27612,8 @@ impl FitMessageVideoClip {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoClip::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27199,7 +27654,7 @@ impl FitMessageVideoClip {
                     0 => {  // clip_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27216,7 +27671,7 @@ impl FitMessageVideoClip {
                     1 => {  // start_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27233,7 +27688,7 @@ impl FitMessageVideoClip {
                     2 => {  // start_timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27250,7 +27705,7 @@ impl FitMessageVideoClip {
                     3 => {  // end_timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27267,7 +27722,7 @@ impl FitMessageVideoClip {
                     4 => {  // end_timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27284,7 +27739,7 @@ impl FitMessageVideoClip {
                     6 => {  // clip_start
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27301,7 +27756,7 @@ impl FitMessageVideoClip {
                     7 => {  // clip_end
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27328,24 +27783,31 @@ pub struct FitMessageVideoDescription {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Long descriptions will be split into multiple parts
     pub message_count: Option<u16>,  // Total number of description parts
     pub text: Option<String>,  
     
 }
 impl FitMessageVideoDescription {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoDescription>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoDescription {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageVideoDescription",
             message_index: None,
             message_count: None,
             text: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoDescription::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27386,7 +27848,7 @@ impl FitMessageVideoDescription {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27403,7 +27865,7 @@ impl FitMessageVideoDescription {
                     0 => {  // message_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27420,7 +27882,7 @@ impl FitMessageVideoDescription {
                     1 => {  // text
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -27447,24 +27909,31 @@ pub struct FitMessageVideoFrame {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
     pub frame_number: Option<u32>,  // Number of the frame that the timestamp and timestamp_ms correlate to
     
 }
 impl FitMessageVideoFrame {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoFrame>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoFrame {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageVideoFrame",
             timestamp: None,
             timestamp_ms: None,
             frame_number: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoFrame::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27505,7 +27974,7 @@ impl FitMessageVideoFrame {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27522,7 +27991,7 @@ impl FitMessageVideoFrame {
                     0 => {  // timestamp_ms
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27539,7 +28008,7 @@ impl FitMessageVideoFrame {
                     1 => {  // frame_number
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27566,24 +28035,31 @@ pub struct FitMessageVideoTitle {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Long titles will be split into multiple parts
     pub message_count: Option<u16>,  // Total number of title parts
     pub text: Option<String>,  
     
 }
 impl FitMessageVideoTitle {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoTitle>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoTitle {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageVideoTitle",
             message_index: None,
             message_count: None,
             text: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoTitle::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27624,7 +28100,7 @@ impl FitMessageVideoTitle {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27641,7 +28117,7 @@ impl FitMessageVideoTitle {
                     0 => {  // message_count
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27658,7 +28134,7 @@ impl FitMessageVideoTitle {
                     1 => {  // text
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -27714,24 +28190,31 @@ pub struct FitMessageWatchfaceSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub mode: Option<FitFieldWatchfaceMode>,  
     pub layout: Option<FitMessageWatchfaceSettingsSubfieldLayout>,  
     
 }
 impl FitMessageWatchfaceSettings {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWatchfaceSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWatchfaceSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWatchfaceSettings",
             message_index: None,
             mode: None,
             layout: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWatchfaceSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27772,7 +28255,7 @@ impl FitMessageWatchfaceSettings {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27789,7 +28272,7 @@ impl FitMessageWatchfaceSettings {
                     0 => {  // mode
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWatchfaceMode::parse(&bytes)?;
                                 val
                             },
@@ -27806,7 +28289,7 @@ impl FitMessageWatchfaceSettings {
                     1 => {  // layout
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageWatchfaceSettingsSubfieldLayout::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -27833,6 +28316,8 @@ pub struct FitMessageWeatherAlert {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub report_id: Option<String>,  // Unique identifier from GCS report ID string, length is 12
     pub issue_time: Option<FitFieldDateTime>,  // Time alert was issued
@@ -27842,12 +28327,15 @@ pub struct FitMessageWeatherAlert {
     
 }
 impl FitMessageWeatherAlert {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherAlert>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeatherAlert {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWeatherAlert",
             timestamp: None,
             report_id: None,
             issue_time: None,
@@ -27857,6 +28345,8 @@ impl FitMessageWeatherAlert {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWeatherAlert::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -27897,7 +28387,7 @@ impl FitMessageWeatherAlert {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27914,7 +28404,7 @@ impl FitMessageWeatherAlert {
                     0 => {  // report_id
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -27931,7 +28421,7 @@ impl FitMessageWeatherAlert {
                     1 => {  // issue_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27948,7 +28438,7 @@ impl FitMessageWeatherAlert {
                     2 => {  // expire_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -27965,7 +28455,7 @@ impl FitMessageWeatherAlert {
                     3 => {  // severity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWeatherSeverity::parse(&bytes)?;
                                 val
                             },
@@ -27982,7 +28472,7 @@ impl FitMessageWeatherAlert {
                     4 => {  // ftype
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWeatherSevereType::parse(&bytes)?;
                                 val
                             },
@@ -28009,6 +28499,8 @@ pub struct FitMessageWeatherConditions {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // time of update for current conditions, else forecast time
     pub weather_report: Option<FitFieldWeatherReport>,  // Current or forecast
     pub temperature: Option<i8>,  
@@ -28028,12 +28520,15 @@ pub struct FitMessageWeatherConditions {
     
 }
 impl FitMessageWeatherConditions {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherConditions>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeatherConditions {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWeatherConditions",
             timestamp: None,
             weather_report: None,
             temperature: None,
@@ -28053,6 +28548,8 @@ impl FitMessageWeatherConditions {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWeatherConditions::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -28093,7 +28590,7 @@ impl FitMessageWeatherConditions {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28110,7 +28607,7 @@ impl FitMessageWeatherConditions {
                     0 => {  // weather_report
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWeatherReport::parse(&bytes)?;
                                 val
                             },
@@ -28127,7 +28624,7 @@ impl FitMessageWeatherConditions {
                     1 => {  // temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -28144,7 +28641,7 @@ impl FitMessageWeatherConditions {
                     2 => {  // condition
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWeatherStatus::parse(&bytes)?;
                                 val
                             },
@@ -28161,7 +28658,7 @@ impl FitMessageWeatherConditions {
                     3 => {  // wind_direction
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28178,7 +28675,7 @@ impl FitMessageWeatherConditions {
                     4 => {  // wind_speed
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28195,7 +28692,7 @@ impl FitMessageWeatherConditions {
                     5 => {  // precipitation_probability
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -28212,7 +28709,7 @@ impl FitMessageWeatherConditions {
                     6 => {  // temperature_feels_like
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -28229,7 +28726,7 @@ impl FitMessageWeatherConditions {
                     7 => {  // relative_humidity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -28246,7 +28743,7 @@ impl FitMessageWeatherConditions {
                     8 => {  // location
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -28263,7 +28760,7 @@ impl FitMessageWeatherConditions {
                     9 => {  // observed_at_time
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28280,7 +28777,7 @@ impl FitMessageWeatherConditions {
                     10 => {  // observed_location_lat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28297,7 +28794,7 @@ impl FitMessageWeatherConditions {
                     11 => {  // observed_location_long
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28314,7 +28811,7 @@ impl FitMessageWeatherConditions {
                     12 => {  // day_of_week
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDayOfWeek::parse(&bytes)?;
                                 val
                             },
@@ -28331,7 +28828,7 @@ impl FitMessageWeatherConditions {
                     13 => {  // high_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -28348,7 +28845,7 @@ impl FitMessageWeatherConditions {
                     14 => {  // low_temperature
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_sint8(&bytes)?;
                                 val
                             },
@@ -28375,6 +28872,8 @@ pub struct FitMessageWeightScale {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
     pub weight: Option<FitFieldWeight>,  
     pub percent_fat: Option<f64>,  
@@ -28391,12 +28890,15 @@ pub struct FitMessageWeightScale {
     
 }
 impl FitMessageWeightScale {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeightScale>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeightScale {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWeightScale",
             timestamp: None,
             weight: None,
             percent_fat: None,
@@ -28413,6 +28915,8 @@ impl FitMessageWeightScale {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWeightScale::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -28453,7 +28957,7 @@ impl FitMessageWeightScale {
                     253 => {  // timestamp
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28470,7 +28974,7 @@ impl FitMessageWeightScale {
                     0 => {  // weight
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWeight::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28487,7 +28991,7 @@ impl FitMessageWeightScale {
                     1 => {  // percent_fat
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28504,7 +29008,7 @@ impl FitMessageWeightScale {
                     2 => {  // percent_hydration
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28521,7 +29025,7 @@ impl FitMessageWeightScale {
                     3 => {  // visceral_fat_mass
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28538,7 +29042,7 @@ impl FitMessageWeightScale {
                     4 => {  // bone_mass
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28555,7 +29059,7 @@ impl FitMessageWeightScale {
                     5 => {  // muscle_mass
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28572,7 +29076,7 @@ impl FitMessageWeightScale {
                     7 => {  // basal_met
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28589,7 +29093,7 @@ impl FitMessageWeightScale {
                     8 => {  // physique_rating
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -28606,7 +29110,7 @@ impl FitMessageWeightScale {
                     9 => {  // active_met
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28623,7 +29127,7 @@ impl FitMessageWeightScale {
                     10 => {  // metabolic_age
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -28640,7 +29144,7 @@ impl FitMessageWeightScale {
                     11 => {  // visceral_fat_rating
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -28657,7 +29161,7 @@ impl FitMessageWeightScale {
                     12 => {  // user_profile_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28684,6 +29188,8 @@ pub struct FitMessageWorkout {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub sport: Option<FitFieldSport>,  
     pub capabilities: Option<FitFieldWorkoutCapabilities>,  
     pub num_valid_steps: Option<u16>,  // number of valid steps
@@ -28691,12 +29197,15 @@ pub struct FitMessageWorkout {
     
 }
 impl FitMessageWorkout {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkout>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkout {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWorkout",
             sport: None,
             capabilities: None,
             num_valid_steps: None,
@@ -28704,6 +29213,8 @@ impl FitMessageWorkout {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWorkout::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -28744,7 +29255,7 @@ impl FitMessageWorkout {
                     4 => {  // sport
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldSport::parse(&bytes)?;
                                 val
                             },
@@ -28761,7 +29272,7 @@ impl FitMessageWorkout {
                     5 => {  // capabilities
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWorkoutCapabilities::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28778,7 +29289,7 @@ impl FitMessageWorkout {
                     6 => {  // num_valid_steps
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -28795,7 +29306,7 @@ impl FitMessageWorkout {
                     8 => {  // wkt_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -29087,6 +29598,8 @@ pub struct FitMessageWorkoutStep {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub wkt_step_name: Option<String>,  
     pub duration_type: Option<FitFieldWktStepDuration>,  
@@ -29099,12 +29612,15 @@ pub struct FitMessageWorkoutStep {
     
 }
 impl FitMessageWorkoutStep {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutStep>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkoutStep {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWorkoutStep",
             message_index: None,
             wkt_step_name: None,
             duration_type: None,
@@ -29117,6 +29633,8 @@ impl FitMessageWorkoutStep {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWorkoutStep::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -29157,7 +29675,7 @@ impl FitMessageWorkoutStep {
                     254 => {  // message_index
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -29174,7 +29692,7 @@ impl FitMessageWorkoutStep {
                     0 => {  // wkt_step_name
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_string(&bytes, field.field_size)?;
                                 val
                             },
@@ -29191,7 +29709,7 @@ impl FitMessageWorkoutStep {
                     1 => {  // duration_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWktStepDuration::parse(&bytes)?;
                                 val
                             },
@@ -29208,7 +29726,7 @@ impl FitMessageWorkoutStep {
                     2 => {  // duration_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageWorkoutStepSubfieldDurationValue::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -29225,7 +29743,7 @@ impl FitMessageWorkoutStep {
                     3 => {  // target_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldWktStepTarget::parse(&bytes)?;
                                 val
                             },
@@ -29242,7 +29760,7 @@ impl FitMessageWorkoutStep {
                     4 => {  // target_value
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageWorkoutStepSubfieldTargetValue::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -29259,7 +29777,7 @@ impl FitMessageWorkoutStep {
                     5 => {  // custom_target_value_low
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageWorkoutStepSubfieldCustomTargetValueLow::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -29276,7 +29794,7 @@ impl FitMessageWorkoutStep {
                     6 => {  // custom_target_value_high
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitMessageWorkoutStepSubfieldCustomTargetValueHigh::parse(message, &bytes, &field, _tz_offset)?;
                                 val
                             },
@@ -29293,7 +29811,7 @@ impl FitMessageWorkoutStep {
                     7 => {  // intensity
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldIntensity::parse(&bytes)?;
                                 val
                             },
@@ -29320,6 +29838,8 @@ pub struct FitMessageZonesTarget {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
     pub max_heart_rate: Option<u8>,  
     pub threshold_heart_rate: Option<u8>,  
     pub functional_threshold_power: Option<u16>,  
@@ -29328,12 +29848,15 @@ pub struct FitMessageZonesTarget {
     
 }
 impl FitMessageZonesTarget {
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageZonesTarget>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageZonesTarget {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageZonesTarget",
             max_heart_rate: None,
             threshold_heart_rate: None,
             functional_threshold_power: None,
@@ -29342,6 +29865,8 @@ impl FitMessageZonesTarget {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageZonesTarget::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -29382,7 +29907,7 @@ impl FitMessageZonesTarget {
                     1 => {  // max_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -29399,7 +29924,7 @@ impl FitMessageZonesTarget {
                     2 => {  // threshold_heart_rate
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint8(&bytes)?;
                                 val
                             },
@@ -29416,7 +29941,7 @@ impl FitMessageZonesTarget {
                     3 => {  // functional_threshold_power
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
                                 val
                             },
@@ -29433,7 +29958,7 @@ impl FitMessageZonesTarget {
                     5 => {  // hr_calc_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldHrZoneCalc::parse(&bytes)?;
                                 val
                             },
@@ -29450,7 +29975,7 @@ impl FitMessageZonesTarget {
                     7 => {  // pwr_calc_type
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..10], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
                                 let (val, _) = FitFieldPwrZoneCalc::parse(&bytes)?;
                                 val
                             },
@@ -29861,3 +30386,7 @@ impl FitDataMessage {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "./fittypes_test.rs"]
+mod fittypes_test;
