@@ -75,7 +75,7 @@ impl FitFieldLocalDateTime {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldPowerPhaseType { // fit base type: enum
     PowerPhaseStartAngle = 0,
     PowerPhaseEndAngle = 1,
@@ -107,7 +107,7 @@ impl From<u8> for FitFieldPowerPhaseType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLeftRightBalance { // fit base type: uint8
     Mask = 127,  // % contribution
     Right = 128,  // data corresponds to right if set, otherwise unknown
@@ -135,7 +135,7 @@ impl From<u8> for FitFieldLeftRightBalance {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWorkoutCapabilities { // fit base type: uint32z
     Interval = 1,
     Custom = 2,
@@ -191,7 +191,7 @@ impl From<u32> for FitFieldWorkoutCapabilities {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSensorType { // fit base type: enum
     Accelerometer = 0,
     Gyroscope = 1,
@@ -221,7 +221,7 @@ impl From<u8> for FitFieldSensorType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldGender { // fit base type: enum
     Female = 0,
     Male = 1,
@@ -249,7 +249,7 @@ impl From<u8> for FitFieldGender {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSessionTrigger { // fit base type: enum
     ActivityEnd = 0,
     Manual = 1,  // User changed sport.
@@ -281,7 +281,7 @@ impl From<u8> for FitFieldSessionTrigger {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldFileFlags { // fit base type: uint8z
     Read = 2,
     Write = 4,
@@ -315,7 +315,7 @@ impl From<u8> for FitFieldFileFlags {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldMesgCount { // fit base type: enum
     NumPerFile = 0,
     MaxPerFile = 1,
@@ -345,7 +345,7 @@ impl From<u8> for FitFieldMesgCount {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldFitBaseType { // fit base type: uint8
     Enum = 0,
     Sint8 = 1,
@@ -403,7 +403,7 @@ impl From<u8> for FitFieldFitBaseType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldTimerTrigger { // fit base type: enum
     Manual = 0,
     Auto = 1,
@@ -433,7 +433,7 @@ impl From<u8> for FitFieldTimerTrigger {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportEvent { // fit base type: enum
     Uncategorized = 0,
     Geocaching = 1,
@@ -475,7 +475,7 @@ impl From<u8> for FitFieldSportEvent {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAutoscroll { // fit base type: enum
     None = 0,
     Slow = 1,
@@ -507,7 +507,7 @@ impl From<u8> for FitFieldAutoscroll {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldStrokeType { // fit base type: enum
     NoEvent = 0,
     Other = 1,  // stroke was detected but cannot be identified
@@ -543,7 +543,7 @@ impl From<u8> for FitFieldStrokeType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWeatherSevereType { // fit base type: enum
     Unspecified = 0,
     Tornado = 1,
@@ -737,7 +737,7 @@ impl From<u8> for FitFieldWeatherSevereType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldHrZoneCalc { // fit base type: enum
     Custom = 0,
     PercentMaxHr = 1,
@@ -767,7 +767,7 @@ impl From<u8> for FitFieldHrZoneCalc {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldHrType { // fit base type: enum
     Normal = 0,
     Irregular = 1,
@@ -795,7 +795,7 @@ impl From<u8> for FitFieldHrType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSegmentLeaderboardType { // fit base type: enum
     Overall = 0,
     PersonalBest = 1,
@@ -841,7 +841,7 @@ impl From<u8> for FitFieldSegmentLeaderboardType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAttitudeStage { // fit base type: enum
     Failed = 0,
     Aligning = 1,
@@ -873,7 +873,7 @@ impl From<u8> for FitFieldAttitudeStage {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDigitalWatchfaceLayout { // fit base type: enum
     Traditional = 0,
     Modern = 1,
@@ -903,7 +903,7 @@ impl From<u8> for FitFieldDigitalWatchfaceLayout {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldPwrZoneCalc { // fit base type: enum
     Custom = 0,
     PercentFtp = 1,
@@ -931,7 +931,7 @@ impl From<u8> for FitFieldPwrZoneCalc {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWktStepTarget { // fit base type: enum
     Speed = 0,
     HeartRate = 1,
@@ -969,7 +969,7 @@ impl From<u8> for FitFieldWktStepTarget {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldActivity { // fit base type: enum
     Manual = 0,
     AutoMultiSport = 1,
@@ -997,7 +997,7 @@ impl From<u8> for FitFieldActivity {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWatchfaceMode { // fit base type: enum
     Digital = 0,
     Analog = 1,
@@ -1027,7 +1027,7 @@ impl From<u8> for FitFieldWatchfaceMode {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldCoursePoint { // fit base type: enum
     Generic = 0,
     Summit = 1,
@@ -1103,7 +1103,7 @@ impl From<u8> for FitFieldCoursePoint {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSide { // fit base type: enum
     Right = 0,
     Left = 1,
@@ -1131,7 +1131,7 @@ impl From<u8> for FitFieldSide {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAnalogWatchfaceLayout { // fit base type: enum
     Minimal = 0,
     Traditional = 1,
@@ -1161,7 +1161,7 @@ impl From<u8> for FitFieldAnalogWatchfaceLayout {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWeight { // fit base type: uint16
     Calculating = 65534,
 }
@@ -1187,7 +1187,7 @@ impl From<u16> for FitFieldWeight {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldIntensity { // fit base type: enum
     Active = 0,
     Rest = 1,
@@ -1219,7 +1219,7 @@ impl From<u8> for FitFieldIntensity {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldConnectivityCapabilities { // fit base type: uint32z
     Bluetooth = 1,
     BluetoothLe = 2,
@@ -1309,7 +1309,7 @@ impl From<u32> for FitFieldConnectivityCapabilities {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSport { // fit base type: enum
     Generic = 0,
     Running = 1,
@@ -1433,7 +1433,7 @@ impl From<u8> for FitFieldSport {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldEvent { // fit base type: enum
     Timer = 0,  // Group 0.  Start / stop_all
     Workout = 3,  // start / stop
@@ -1529,7 +1529,7 @@ impl From<u8> for FitFieldEvent {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDisplayPower { // fit base type: enum
     Watts = 0,
     PercentFtp = 1,
@@ -1557,7 +1557,7 @@ impl From<u8> for FitFieldDisplayPower {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBikeLightNetworkConfigType { // fit base type: enum
     Auto = 0,
     Individual = 4,
@@ -1589,7 +1589,7 @@ impl From<u8> for FitFieldBikeLightNetworkConfigType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBpStatus { // fit base type: enum
     NoError = 0,
     ErrorIncompleteData = 1,
@@ -1623,7 +1623,7 @@ impl From<u8> for FitFieldBpStatus {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBikeLightBeamAngleMode { // fit base type: uint8
     Manual = 0,
     Auto = 1,
@@ -1651,7 +1651,7 @@ impl From<u8> for FitFieldBikeLightBeamAngleMode {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLocaltimeIntoDay { // fit base type: uint32
 }
 
@@ -1675,7 +1675,7 @@ impl From<u32> for FitFieldLocaltimeIntoDay {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDisplayPosition { // fit base type: enum
     Degree = 0,  // dd.dddddd
     DegreeMinute = 1,  // dddmm.mmm
@@ -1783,7 +1783,7 @@ impl From<u8> for FitFieldDisplayPosition {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldGoalRecurrence { // fit base type: enum
     Off = 0,
     Daily = 1,
@@ -1819,7 +1819,7 @@ impl From<u8> for FitFieldGoalRecurrence {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSchedule { // fit base type: enum
     Workout = 0,
     Course = 1,
@@ -1847,7 +1847,7 @@ impl From<u8> for FitFieldSchedule {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLeftRightBalance100 { // fit base type: uint16
     Mask = 16383,  // % contribution scaled by 100
     Right = 32768,  // data corresponds to right if set, otherwise unknown
@@ -1875,7 +1875,7 @@ impl From<u16> for FitFieldLeftRightBalance100 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldCommTimeoutType { // fit base type: uint16
     WildcardPairingTimeout = 0,  // Timeout pairing to any device
     PairingTimeout = 1,  // Timeout pairing to previously paired device
@@ -1907,7 +1907,7 @@ impl From<u16> for FitFieldCommTimeoutType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSegmentLapStatus { // fit base type: enum
     End = 0,
     Fail = 1,
@@ -1935,7 +1935,7 @@ impl From<u8> for FitFieldSegmentLapStatus {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldManufacturer { // fit base type: uint16
     Garmin = 1,
     GarminFr405Antfs = 2,  // Do not use.  Used by FR405 for ANTFS man id.
@@ -2209,7 +2209,7 @@ impl From<u16> for FitFieldManufacturer {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLengthType { // fit base type: enum
     Idle = 0,  // Rest period. Length with no strokes
     Active = 1,  // Length with strokes.
@@ -2237,7 +2237,7 @@ impl From<u8> for FitFieldLengthType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLanguage { // fit base type: enum
     English = 0,
     French = 1,
@@ -2331,7 +2331,7 @@ impl From<u8> for FitFieldLanguage {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldActivityClass { // fit base type: enum
     Level = 127,  // 0 to 100
     LevelMax = 100,
@@ -2361,7 +2361,7 @@ impl From<u8> for FitFieldActivityClass {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAttitudeValidity { // fit base type: uint16
     TrackAngleHeadingValid = 1,
     PitchValid = 2,
@@ -2411,7 +2411,7 @@ impl From<u16> for FitFieldAttitudeValidity {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldTimeZone { // fit base type: enum
     Almaty = 0,
     Bangkok = 1,
@@ -2647,7 +2647,7 @@ impl From<u8> for FitFieldTimeZone {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSegmentSelectionType { // fit base type: enum
     Starred = 0,
     Suggested = 1,
@@ -2675,7 +2675,7 @@ impl From<u8> for FitFieldSegmentSelectionType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldUserLocalId { // fit base type: uint16
     LocalMin = 0,
     LocalMax = 15,
@@ -2711,7 +2711,7 @@ impl From<u16> for FitFieldUserLocalId {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldExdDescriptors { // fit base type: enum
     BikeLightBatteryStatus = 0,
     BeamAngleStatus = 1,
@@ -2927,7 +2927,7 @@ impl From<u8> for FitFieldExdDescriptors {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldActivityType { // fit base type: enum
     Generic = 0,
     Running = 1,
@@ -2969,7 +2969,7 @@ impl From<u8> for FitFieldActivityType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAutolapTrigger { // fit base type: enum
     Time = 0,
     Distance = 1,
@@ -3007,7 +3007,7 @@ impl From<u8> for FitFieldAutolapTrigger {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBacklightMode { // fit base type: enum
     Off = 0,
     Manual = 1,
@@ -3045,7 +3045,7 @@ impl From<u8> for FitFieldBacklightMode {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDisplayOrientation { // fit base type: enum
     Auto = 0,  // automatic if the device supports it
     Portrait = 1,
@@ -3079,7 +3079,7 @@ impl From<u8> for FitFieldDisplayOrientation {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLapTrigger { // fit base type: enum
     Manual = 0,
     Time = 1,
@@ -3121,7 +3121,7 @@ impl From<u8> for FitFieldLapTrigger {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldCourseCapabilities { // fit base type: uint32z
     Processed = 1,
     Valid = 2,
@@ -3171,7 +3171,7 @@ impl From<u32> for FitFieldCourseCapabilities {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldTimeMode { // fit base type: enum
     Hour12 = 0,
     Hour24 = 1,  // Does not use a leading zero and has a colon
@@ -3207,7 +3207,7 @@ impl From<u8> for FitFieldTimeMode {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldExdQualifiers { // fit base type: enum
     NoQualifier = 0,
     Instantaneous = 1,
@@ -3317,7 +3317,7 @@ impl From<u8> for FitFieldExdQualifiers {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldGoalSource { // fit base type: enum
     Auto = 0,  // Device generated
     Community = 1,  // Social network sourced goal
@@ -3347,7 +3347,7 @@ impl From<u8> for FitFieldGoalSource {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDateMode { // fit base type: enum
     DayMonth = 0,
     MonthDay = 1,
@@ -3375,7 +3375,7 @@ impl From<u8> for FitFieldDateMode {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSubSport { // fit base type: enum
     Generic = 0,
     Treadmill = 1,  // Run/Fitness Equipment
@@ -3507,7 +3507,7 @@ impl From<u8> for FitFieldSubSport {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDeviceIndex { // fit base type: uint8
     Creator = 0,  // Creator of the file is always device index 0.
 }
@@ -3533,7 +3533,7 @@ impl From<u8> for FitFieldDeviceIndex {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits0 { // fit base type: uint8z
     Generic = 1,
     Running = 2,
@@ -3577,7 +3577,7 @@ impl From<u8> for FitFieldSportBits0 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits1 { // fit base type: uint8z
     Tennis = 1,
     AmericanFootball = 2,
@@ -3621,7 +3621,7 @@ impl From<u8> for FitFieldSportBits1 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits2 { // fit base type: uint8z
     Mountaineering = 1,
     Hiking = 2,
@@ -3665,7 +3665,7 @@ impl From<u8> for FitFieldSportBits2 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits3 { // fit base type: uint8z
     Driving = 1,
     Golf = 2,
@@ -3709,7 +3709,7 @@ impl From<u8> for FitFieldSportBits3 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits4 { // fit base type: uint8z
     Sailing = 1,
     IceSkating = 2,
@@ -3753,7 +3753,7 @@ impl From<u8> for FitFieldSportBits4 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits5 { // fit base type: uint8z
     WaterSkiing = 1,
     Kayaking = 2,
@@ -3797,7 +3797,7 @@ impl From<u8> for FitFieldSportBits5 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits6 { // fit base type: uint8z
     FloorClimbing = 1,
 }
@@ -3827,7 +3827,7 @@ impl From<u8> for FitFieldSportBits6 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSegmentDeleteStatus { // fit base type: enum
     DoNotDelete = 0,
     DeleteOne = 1,
@@ -3857,7 +3857,7 @@ impl From<u8> for FitFieldSegmentDeleteStatus {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldFitnessEquipmentState { // fit base type: enum
     Ready = 0,
     InUse = 1,
@@ -3889,7 +3889,7 @@ impl From<u8> for FitFieldFitnessEquipmentState {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAutoActivityDetect { // fit base type: uint32
     None = 0,
     Running = 1,
@@ -3927,7 +3927,7 @@ impl From<u32> for FitFieldAutoActivityDetect {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldRiderPositionType { // fit base type: enum
     Seated = 0,
     Standing = 1,
@@ -3955,7 +3955,7 @@ impl From<u8> for FitFieldRiderPositionType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldGarminProduct { // fit base type: uint16
     Hrm1 = 1,
     Axh01 = 2,  // AXH01 HRM chipset
@@ -4273,7 +4273,7 @@ impl From<u16> for FitFieldGarminProduct {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldExdLayout { // fit base type: enum
     FullScreen = 0,
     HalfVertical = 1,
@@ -4313,7 +4313,7 @@ impl From<u8> for FitFieldExdLayout {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWorkoutPower { // fit base type: uint32
     WattsOffset = 1000,
 }
@@ -4339,7 +4339,7 @@ impl From<u32> for FitFieldWorkoutPower {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWeatherReport { // fit base type: enum
     Current = 0,
     HourlyForecast = 1,
@@ -4369,7 +4369,7 @@ impl From<u8> for FitFieldWeatherReport {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldActivitySubtype { // fit base type: enum
     Generic = 0,
     Treadmill = 1,  // Run
@@ -4433,7 +4433,7 @@ impl From<u8> for FitFieldActivitySubtype {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDayOfWeek { // fit base type: enum
     Sunday = 0,
     Monday = 1,
@@ -4471,7 +4471,7 @@ impl From<u8> for FitFieldDayOfWeek {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAntplusDeviceType { // fit base type: uint8
     Antfs = 1,
     BikePower = 11,
@@ -4541,7 +4541,7 @@ impl From<u8> for FitFieldAntplusDeviceType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldTurnType { // fit base type: enum
     ArrivingIdx = 0,
     ArrivingLeftIdx = 1,
@@ -4641,7 +4641,7 @@ impl From<u8> for FitFieldTurnType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldFitBaseUnit { // fit base type: uint16
     Other = 0,
 }
@@ -4667,7 +4667,7 @@ impl From<u16> for FitFieldFitBaseUnit {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBatteryStatus { // fit base type: uint8
     New = 1,
     Good = 2,
@@ -4705,7 +4705,7 @@ impl From<u8> for FitFieldBatteryStatus {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldChecksum { // fit base type: uint8
     Clear = 0,  // Allows clear of checksum for flash memory where can only write 1 to 0 without erasing sector.
     Ok = 1,  // Set to mark checksum as valid if computes to invalid values 0 or 0xFF.  Checksum can also be set to ok to save encoding computation time.
@@ -4733,7 +4733,7 @@ impl From<u8> for FitFieldChecksum {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWorkoutHr { // fit base type: uint32
     BpmOffset = 100,
 }
@@ -4759,7 +4759,7 @@ impl From<u32> for FitFieldWorkoutHr {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLanguageBits3 { // fit base type: uint8z
     Bulgarian = 1,
     Romanian = 2,
@@ -4803,7 +4803,7 @@ impl From<u8> for FitFieldLanguageBits3 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLanguageBits2 { // fit base type: uint8z
     Slovenian = 1,
     Swedish = 2,
@@ -4847,7 +4847,7 @@ impl From<u8> for FitFieldLanguageBits2 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLanguageBits1 { // fit base type: uint8z
     Dutch = 1,
     Finnish = 2,
@@ -4891,7 +4891,7 @@ impl From<u8> for FitFieldLanguageBits1 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLanguageBits0 { // fit base type: uint8z
     English = 1,
     French = 2,
@@ -4935,7 +4935,7 @@ impl From<u8> for FitFieldLanguageBits0 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldEventType { // fit base type: enum
     Start = 0,
     Stop = 1,
@@ -4979,7 +4979,7 @@ impl From<u8> for FitFieldEventType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLanguageBits4 { // fit base type: uint8z
     BrazilianPortuguese = 1,
     Indonesian = 2,
@@ -5011,7 +5011,7 @@ impl From<u8> for FitFieldLanguageBits4 {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBodyLocation { // fit base type: enum
     LeftLeg = 0,
     LeftCalf = 1,
@@ -5115,7 +5115,7 @@ impl From<u8> for FitFieldBodyLocation {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldFile { // fit base type: enum
     Device = 1,  // Read only, single file. Must be in root directory.
     Settings = 2,  // Read/write, single file. Directory=Settings
@@ -5179,7 +5179,7 @@ impl From<u8> for FitFieldFile {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDisplayMeasure { // fit base type: enum
     Metric = 0,
     Statute = 1,
@@ -5209,7 +5209,7 @@ impl From<u8> for FitFieldDisplayMeasure {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldCameraEventType { // fit base type: enum
     VideoStart = 0,  // Start of video recording
     VideoSplit = 1,  // Mark of video file split (end of one file, beginning of the other)
@@ -5259,7 +5259,7 @@ impl From<u8> for FitFieldCameraEventType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAutoSyncFrequency { // fit base type: enum
     Never = 0,
     Occasionally = 1,
@@ -5291,7 +5291,7 @@ impl From<u8> for FitFieldAutoSyncFrequency {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldMessageIndex { // fit base type: uint16
     Selected = 32768,  // message is selected if set
     Reserved = 28672,  // reserved (default 0)
@@ -5321,7 +5321,7 @@ impl From<u16> for FitFieldMessageIndex {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldGoal { // fit base type: enum
     Time = 0,
     Distance = 1,
@@ -5359,7 +5359,7 @@ impl From<u8> for FitFieldGoal {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldActivityLevel { // fit base type: enum
     Low = 0,
     Medium = 1,
@@ -5389,7 +5389,7 @@ impl From<u8> for FitFieldActivityLevel {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWktStepDuration { // fit base type: enum
     Time = 0,
     Distance = 1,
@@ -5447,7 +5447,7 @@ impl From<u8> for FitFieldWktStepDuration {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWeatherSeverity { // fit base type: enum
     Unknown = 0,
     Warning = 1,
@@ -5481,7 +5481,7 @@ impl From<u8> for FitFieldWeatherSeverity {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldCameraOrientationType { // fit base type: enum
     CameraOrientation0 = 0,
     CameraOrientation90 = 1,
@@ -5513,7 +5513,7 @@ impl From<u8> for FitFieldCameraOrientationType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWeatherStatus { // fit base type: enum
     Clear = 0,
     PartlyCloudy = 1,
@@ -5579,7 +5579,7 @@ impl From<u8> for FitFieldWeatherStatus {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldExdDisplayType { // fit base type: enum
     Numerical = 0,
     Simple = 1,
@@ -5625,7 +5625,7 @@ impl From<u8> for FitFieldExdDisplayType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSourceType { // fit base type: enum
     Ant = 0,  // External device connected with ANT
     Antplus = 1,  // External device connected with ANT+
@@ -5661,7 +5661,7 @@ impl From<u8> for FitFieldSourceType {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDisplayHeart { // fit base type: enum
     Bpm = 0,
     Max = 1,
@@ -5691,7 +5691,7 @@ impl From<u8> for FitFieldDisplayHeart {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldTimeIntoDay { // fit base type: uint32
 }
 
@@ -5715,7 +5715,7 @@ impl From<u32> for FitFieldTimeIntoDay {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSwimStroke { // fit base type: enum
     Freestyle = 0,
     Backstroke = 1,
@@ -5753,7 +5753,7 @@ impl From<u8> for FitFieldSwimStroke {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSupportedExdScreenLayouts { // fit base type: uint32z
     FullScreen = 1,
     HalfVertical = 2,
@@ -5797,7 +5797,7 @@ impl From<u32> for FitFieldSupportedExdScreenLayouts {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSwitch { // fit base type: enum
     Off = 0,
     On = 1,
@@ -5827,7 +5827,7 @@ impl From<u8> for FitFieldSwitch {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldMesgNum { // fit base type: uint16
     FileId = 0,
     Capabilities = 1,
@@ -6005,7 +6005,7 @@ impl From<u16> for FitFieldMesgNum {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAntNetwork { // fit base type: enum
     Public = 0,
     Antplus = 1,
@@ -6037,7 +6037,7 @@ impl From<u8> for FitFieldAntNetwork {
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitFieldExdDataUnits { // fit base type: enum
     NoUnits = 0,
     Laps = 1,

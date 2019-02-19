@@ -60,7 +60,7 @@ TYPE_TEMPLATE = """
     {% set endianness_clause_pass = '' -%}
 {% endif %}
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum {{ type_name }} { // fit base type: {{ base_type }}
 {%- for field in fields if not field["value_name"][0].isdigit() %}
     {{ rustify_name(field["value_name"]) }} = {{ field["value"]}},

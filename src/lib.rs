@@ -232,7 +232,7 @@ struct FitDeveloperFieldDefinition {
 // The definition message will be a companion to the parser for
 // the actual message type.
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FitDefinitionMessage {
     header: FitNormalRecordHeader,
     endianness: nom::Endianness,
@@ -599,16 +599,47 @@ mod tests {
             local_mesg_num: 0,
         };
 
-        let res = parse_definition_message(&defintion_message_data, rh);
+        let expected = FitDefinitionMessage {
+            header: FitNormalRecordHeader {
+                message_type: FitNormalRecordHeaderMessageType::Definition,
+                developer_fields_present: false,
+                local_mesg_num: 0
+            },
+            endianness: Endianness::Little,
+            global_mesg_num: FitFieldMesgNum::FileId,
+            num_fields: 4,
+            field_definitions: vec![
+                FitFieldDefinition {
+                    definition_number: 3,
+                    field_size: 4,
+                    base_type: 12,
+                },
+                FitFieldDefinition {
+                    definition_number: 4,
+                    field_size: 4,
+                    base_type: 6,
+                },
+                FitFieldDefinition {
+                    definition_number: 1,
+                    field_size: 2,
+                    base_type: 4,
+                },
+                FitFieldDefinition {
+                    definition_number: 0,
+                    field_size: 1,
+                    base_type: 0,
+                },
+            ],
+            developer_field_definitions: vec![],
+            num_developer_fields: 0,
+            message_size: 11,
+        };
+
+        let (res, _) = parse_definition_message(&defintion_message_data, rh).unwrap();
         //let res = definition_message(&defintion_message_data);
-        println!("def: {:?}", res);
-        assert_eq!(1,1);
+        assert_eq!(res, expected);
     }
 
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
 }
 
 pub mod fittypes;
