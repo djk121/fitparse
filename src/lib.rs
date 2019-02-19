@@ -68,7 +68,7 @@ named!(normal_record_header<&[u8], FitRecordHeader>,
 // these are supposed to come after some message indicating the base time
 // to_which time_offset should be added, so we'll require extra context from
 // the parser to figure out the absolute timestmap
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FitCompressedTimestampHeader {
     local_mesg_num: u16,
     offset_secs: u8,
@@ -251,7 +251,7 @@ impl FitDefinitionMessage {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum FitRecordHeader {
     Normal(FitNormalRecordHeader),
     CompressedTimestamp(FitCompressedTimestampHeader),
@@ -575,10 +575,10 @@ mod tests {
             local_mesg_num: 0,
         };
 
-        let res = normal_record_header(&record_header_data);
-        println!("{:?}", res);
+        let (_, rh) = normal_record_header(&record_header_data).unwrap();
+        println!("{:?}", rh);
 
-        assert_eq!(1,1);
+        assert_eq!(rh, FitRecordHeader::Normal(expected));
     }
 
     #[test]
