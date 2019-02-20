@@ -2,6 +2,7 @@
 
 import csv
 import sys
+import inflect # for number -> words conversion
 
 from jinja2 import Template, Environment
 
@@ -249,6 +250,20 @@ def parse_types_file(types_file_name):
             # 4iiiis and 1partcarbon are not valid rust identifiers
             elif current_type == 'manufacturer' and value_name[0].isdigit():
                 continue
+
+            if value_name[0].isdigit():
+                new_value_name = ''
+                i = 0
+                temp = ''
+                while value_name[i].isdigit():
+                    temp += value_name[i]
+                    i = i + 1
+
+                p = inflect.engine()
+                as_words = p.number_to_words(temp)
+                as_words = as_words.replace("-", "_")
+
+                value_name = as_words + value_name[i:]
 
             types[current_type]["fields"].append({"value": int(value.strip(), 0),
                                                   "comment": comment.strip(),

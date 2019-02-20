@@ -192,10 +192,83 @@ impl From<u32> for FitFieldWorkoutCapabilities {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldShoulderPressExerciseName { // fit base type: uint16
+    AlternatingDumbbellShoulderPress = 0,
+    ArnoldPress = 1,
+    BarbellFrontSquatToPushPress = 2,
+    BarbellPushPress = 3,
+    BarbellShoulderPress = 4,
+    DeadCurlPress = 5,
+    DumbbellAlternatingShoulderPressAndTwist = 6,
+    DumbbellHammerCurlToLungeToPress = 7,
+    DumbbellPushPress = 8,
+    FloorInvertedShoulderPress = 9,
+    WeightedFloorInvertedShoulderPress = 10,
+    InvertedShoulderPress = 11,
+    WeightedInvertedShoulderPress = 12,
+    OneArmPushPress = 13,
+    OverheadBarbellPress = 14,
+    OverheadDumbbellPress = 15,
+    SeatedBarbellShoulderPress = 16,
+    SeatedDumbbellShoulderPress = 17,
+    SingleArmDumbbellShoulderPress = 18,
+    SingleArmStepUpAndPress = 19,
+    SmithMachineOverheadPress = 20,
+    SplitStanceHammerCurlToPress = 21,
+    SwissBallDumbbellShoulderPress = 22,
+    WeightPlateFrontRaise = 23,
+}
+
+impl FitFieldShoulderPressExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldShoulderPressExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldShoulderPressExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldShoulderPressExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldShoulderPressExerciseName::AlternatingDumbbellShoulderPress,
+            1 => FitFieldShoulderPressExerciseName::ArnoldPress,
+            2 => FitFieldShoulderPressExerciseName::BarbellFrontSquatToPushPress,
+            3 => FitFieldShoulderPressExerciseName::BarbellPushPress,
+            4 => FitFieldShoulderPressExerciseName::BarbellShoulderPress,
+            5 => FitFieldShoulderPressExerciseName::DeadCurlPress,
+            6 => FitFieldShoulderPressExerciseName::DumbbellAlternatingShoulderPressAndTwist,
+            7 => FitFieldShoulderPressExerciseName::DumbbellHammerCurlToLungeToPress,
+            8 => FitFieldShoulderPressExerciseName::DumbbellPushPress,
+            9 => FitFieldShoulderPressExerciseName::FloorInvertedShoulderPress,
+            10 => FitFieldShoulderPressExerciseName::WeightedFloorInvertedShoulderPress,
+            11 => FitFieldShoulderPressExerciseName::InvertedShoulderPress,
+            12 => FitFieldShoulderPressExerciseName::WeightedInvertedShoulderPress,
+            13 => FitFieldShoulderPressExerciseName::OneArmPushPress,
+            14 => FitFieldShoulderPressExerciseName::OverheadBarbellPress,
+            15 => FitFieldShoulderPressExerciseName::OverheadDumbbellPress,
+            16 => FitFieldShoulderPressExerciseName::SeatedBarbellShoulderPress,
+            17 => FitFieldShoulderPressExerciseName::SeatedDumbbellShoulderPress,
+            18 => FitFieldShoulderPressExerciseName::SingleArmDumbbellShoulderPress,
+            19 => FitFieldShoulderPressExerciseName::SingleArmStepUpAndPress,
+            20 => FitFieldShoulderPressExerciseName::SmithMachineOverheadPress,
+            21 => FitFieldShoulderPressExerciseName::SplitStanceHammerCurlToPress,
+            22 => FitFieldShoulderPressExerciseName::SwissBallDumbbellShoulderPress,
+            23 => FitFieldShoulderPressExerciseName::WeightPlateFrontRaise,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldShoulderPressExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSensorType { // fit base type: enum
     Accelerometer = 0,
     Gyroscope = 1,
     Compass = 2,  // Magnetometer
+    Barometer = 3,
 }
 
 impl FitFieldSensorType {
@@ -211,6 +284,7 @@ impl From<u8> for FitFieldSensorType {
             0 => FitFieldSensorType::Accelerometer,
             1 => FitFieldSensorType::Gyroscope,
             2 => FitFieldSensorType::Compass,
+            3 => FitFieldSensorType::Barometer,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSensorType", invalid_field_num))
         }
     }
@@ -316,6 +390,100 @@ impl From<u8> for FitFieldFileFlags {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldBacklightTimeout { // fit base type: uint8
+    Infinite = 0,  // Backlight stays on forever.
+}
+
+impl FitFieldBacklightTimeout {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldBacklightTimeout, &[u8])> {
+        let (val, o) = parse_uint8(input)?;
+        Ok((FitFieldBacklightTimeout::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldBacklightTimeout {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldBacklightTimeout::Infinite,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBacklightTimeout", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldCardioExerciseName { // fit base type: uint16
+    BobAndWeaveCircle = 0,
+    WeightedBobAndWeaveCircle = 1,
+    CardioCoreCrawl = 2,
+    WeightedCardioCoreCrawl = 3,
+    DoubleUnder = 4,
+    WeightedDoubleUnder = 5,
+    JumpRope = 6,
+    WeightedJumpRope = 7,
+    JumpRopeCrossover = 8,
+    WeightedJumpRopeCrossover = 9,
+    JumpRopeJog = 10,
+    WeightedJumpRopeJog = 11,
+    JumpingJacks = 12,
+    WeightedJumpingJacks = 13,
+    SkiMoguls = 14,
+    WeightedSkiMoguls = 15,
+    SplitJacks = 16,
+    WeightedSplitJacks = 17,
+    SquatJacks = 18,
+    WeightedSquatJacks = 19,
+    TripleUnder = 20,
+    WeightedTripleUnder = 21,
+}
+
+impl FitFieldCardioExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldCardioExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldCardioExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldCardioExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldCardioExerciseName::BobAndWeaveCircle,
+            1 => FitFieldCardioExerciseName::WeightedBobAndWeaveCircle,
+            2 => FitFieldCardioExerciseName::CardioCoreCrawl,
+            3 => FitFieldCardioExerciseName::WeightedCardioCoreCrawl,
+            4 => FitFieldCardioExerciseName::DoubleUnder,
+            5 => FitFieldCardioExerciseName::WeightedDoubleUnder,
+            6 => FitFieldCardioExerciseName::JumpRope,
+            7 => FitFieldCardioExerciseName::WeightedJumpRope,
+            8 => FitFieldCardioExerciseName::JumpRopeCrossover,
+            9 => FitFieldCardioExerciseName::WeightedJumpRopeCrossover,
+            10 => FitFieldCardioExerciseName::JumpRopeJog,
+            11 => FitFieldCardioExerciseName::WeightedJumpRopeJog,
+            12 => FitFieldCardioExerciseName::JumpingJacks,
+            13 => FitFieldCardioExerciseName::WeightedJumpingJacks,
+            14 => FitFieldCardioExerciseName::SkiMoguls,
+            15 => FitFieldCardioExerciseName::WeightedSkiMoguls,
+            16 => FitFieldCardioExerciseName::SplitJacks,
+            17 => FitFieldCardioExerciseName::WeightedSplitJacks,
+            18 => FitFieldCardioExerciseName::SquatJacks,
+            19 => FitFieldCardioExerciseName::WeightedSquatJacks,
+            20 => FitFieldCardioExerciseName::TripleUnder,
+            21 => FitFieldCardioExerciseName::WeightedTripleUnder,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCardioExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldMesgCount { // fit base type: enum
     NumPerFile = 0,
     MaxPerFile = 1,
@@ -394,6 +562,168 @@ impl From<u8> for FitFieldFitBaseType {
             143 => FitFieldFitBaseType::Uint64,
             144 => FitFieldFitBaseType::Uint64z,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFitBaseType", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldTotalBodyExerciseName { // fit base type: uint16
+    Burpee = 0,
+    WeightedBurpee = 1,
+    BurpeeBoxJump = 2,
+    WeightedBurpeeBoxJump = 3,
+    HighPullBurpee = 4,
+    ManMakers = 5,
+    OneArmBurpee = 6,
+    SquatThrusts = 7,
+    WeightedSquatThrusts = 8,
+    SquatPlankPushUp = 9,
+    WeightedSquatPlankPushUp = 10,
+    StandingTRotationBalance = 11,
+    WeightedStandingTRotationBalance = 12,
+}
+
+impl FitFieldTotalBodyExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldTotalBodyExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldTotalBodyExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldTotalBodyExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldTotalBodyExerciseName::Burpee,
+            1 => FitFieldTotalBodyExerciseName::WeightedBurpee,
+            2 => FitFieldTotalBodyExerciseName::BurpeeBoxJump,
+            3 => FitFieldTotalBodyExerciseName::WeightedBurpeeBoxJump,
+            4 => FitFieldTotalBodyExerciseName::HighPullBurpee,
+            5 => FitFieldTotalBodyExerciseName::ManMakers,
+            6 => FitFieldTotalBodyExerciseName::OneArmBurpee,
+            7 => FitFieldTotalBodyExerciseName::SquatThrusts,
+            8 => FitFieldTotalBodyExerciseName::WeightedSquatThrusts,
+            9 => FitFieldTotalBodyExerciseName::SquatPlankPushUp,
+            10 => FitFieldTotalBodyExerciseName::WeightedSquatPlankPushUp,
+            11 => FitFieldTotalBodyExerciseName::StandingTRotationBalance,
+            12 => FitFieldTotalBodyExerciseName::WeightedStandingTRotationBalance,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTotalBodyExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldCurlExerciseName { // fit base type: uint16
+    AlternatingDumbbellBicepsCurl = 0,
+    AlternatingDumbbellBicepsCurlOnSwissBall = 1,
+    AlternatingInclineDumbbellBicepsCurl = 2,
+    BarbellBicepsCurl = 3,
+    BarbellReverseWristCurl = 4,
+    BarbellWristCurl = 5,
+    BehindTheBackBarbellReverseWristCurl = 6,
+    BehindTheBackOneArmCableCurl = 7,
+    CableBicepsCurl = 8,
+    CableHammerCurl = 9,
+    CheatingBarbellBicepsCurl = 10,
+    CloseGripEzBarBicepsCurl = 11,
+    CrossBodyDumbbellHammerCurl = 12,
+    DeadHangBicepsCurl = 13,
+    DeclineHammerCurl = 14,
+    DumbbellBicepsCurlWithStaticHold = 15,
+    DumbbellHammerCurl = 16,
+    DumbbellReverseWristCurl = 17,
+    DumbbellWristCurl = 18,
+    EzBarPreacherCurl = 19,
+    ForwardBendBicepsCurl = 20,
+    HammerCurlToPress = 21,
+    InclineDumbbellBicepsCurl = 22,
+    InclineOffsetThumbDumbbellCurl = 23,
+    KettlebellBicepsCurl = 24,
+    LyingConcentrationCableCurl = 25,
+    OneArmPreacherCurl = 26,
+    PlatePinchCurl = 27,
+    PreacherCurlWithCable = 28,
+    ReverseEzBarCurl = 29,
+    ReverseGripWristCurl = 30,
+    ReverseGripBarbellBicepsCurl = 31,
+    SeatedAlternatingDumbbellBicepsCurl = 32,
+    SeatedDumbbellBicepsCurl = 33,
+    SeatedReverseDumbbellCurl = 34,
+    SplitStanceOffsetPinkyDumbbellCurl = 35,
+    StandingAlternatingDumbbellCurls = 36,
+    StandingDumbbellBicepsCurl = 37,
+    StandingEzBarBicepsCurl = 38,
+    StaticCurl = 39,
+    SwissBallDumbbellOverheadTricepsExtension = 40,
+    SwissBallEzBarPreacherCurl = 41,
+    TwistingStandingDumbbellBicepsCurl = 42,
+    WideGripEzBarBicepsCurl = 43,
+}
+
+impl FitFieldCurlExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldCurlExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldCurlExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldCurlExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldCurlExerciseName::AlternatingDumbbellBicepsCurl,
+            1 => FitFieldCurlExerciseName::AlternatingDumbbellBicepsCurlOnSwissBall,
+            2 => FitFieldCurlExerciseName::AlternatingInclineDumbbellBicepsCurl,
+            3 => FitFieldCurlExerciseName::BarbellBicepsCurl,
+            4 => FitFieldCurlExerciseName::BarbellReverseWristCurl,
+            5 => FitFieldCurlExerciseName::BarbellWristCurl,
+            6 => FitFieldCurlExerciseName::BehindTheBackBarbellReverseWristCurl,
+            7 => FitFieldCurlExerciseName::BehindTheBackOneArmCableCurl,
+            8 => FitFieldCurlExerciseName::CableBicepsCurl,
+            9 => FitFieldCurlExerciseName::CableHammerCurl,
+            10 => FitFieldCurlExerciseName::CheatingBarbellBicepsCurl,
+            11 => FitFieldCurlExerciseName::CloseGripEzBarBicepsCurl,
+            12 => FitFieldCurlExerciseName::CrossBodyDumbbellHammerCurl,
+            13 => FitFieldCurlExerciseName::DeadHangBicepsCurl,
+            14 => FitFieldCurlExerciseName::DeclineHammerCurl,
+            15 => FitFieldCurlExerciseName::DumbbellBicepsCurlWithStaticHold,
+            16 => FitFieldCurlExerciseName::DumbbellHammerCurl,
+            17 => FitFieldCurlExerciseName::DumbbellReverseWristCurl,
+            18 => FitFieldCurlExerciseName::DumbbellWristCurl,
+            19 => FitFieldCurlExerciseName::EzBarPreacherCurl,
+            20 => FitFieldCurlExerciseName::ForwardBendBicepsCurl,
+            21 => FitFieldCurlExerciseName::HammerCurlToPress,
+            22 => FitFieldCurlExerciseName::InclineDumbbellBicepsCurl,
+            23 => FitFieldCurlExerciseName::InclineOffsetThumbDumbbellCurl,
+            24 => FitFieldCurlExerciseName::KettlebellBicepsCurl,
+            25 => FitFieldCurlExerciseName::LyingConcentrationCableCurl,
+            26 => FitFieldCurlExerciseName::OneArmPreacherCurl,
+            27 => FitFieldCurlExerciseName::PlatePinchCurl,
+            28 => FitFieldCurlExerciseName::PreacherCurlWithCable,
+            29 => FitFieldCurlExerciseName::ReverseEzBarCurl,
+            30 => FitFieldCurlExerciseName::ReverseGripWristCurl,
+            31 => FitFieldCurlExerciseName::ReverseGripBarbellBicepsCurl,
+            32 => FitFieldCurlExerciseName::SeatedAlternatingDumbbellBicepsCurl,
+            33 => FitFieldCurlExerciseName::SeatedDumbbellBicepsCurl,
+            34 => FitFieldCurlExerciseName::SeatedReverseDumbbellCurl,
+            35 => FitFieldCurlExerciseName::SplitStanceOffsetPinkyDumbbellCurl,
+            36 => FitFieldCurlExerciseName::StandingAlternatingDumbbellCurls,
+            37 => FitFieldCurlExerciseName::StandingDumbbellBicepsCurl,
+            38 => FitFieldCurlExerciseName::StandingEzBarBicepsCurl,
+            39 => FitFieldCurlExerciseName::StaticCurl,
+            40 => FitFieldCurlExerciseName::SwissBallDumbbellOverheadTricepsExtension,
+            41 => FitFieldCurlExerciseName::SwissBallEzBarPreacherCurl,
+            42 => FitFieldCurlExerciseName::TwistingStandingDumbbellBicepsCurl,
+            43 => FitFieldCurlExerciseName::WideGripEzBarBicepsCurl,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCurlExerciseName", invalid_field_num))
         }
     }
 }
@@ -534,6 +864,32 @@ impl From<u8> for FitFieldStrokeType {
             4 => FitFieldStrokeType::Backhand,
             5 => FitFieldStrokeType::Smash,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldStrokeType", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldTissueModelType { // fit base type: enum
+    Zhl16c = 0,  // Buhlmann's decompression algorithm, version C
+}
+
+impl FitFieldTissueModelType {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldTissueModelType, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldTissueModelType::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldTissueModelType {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldTissueModelType::Zhl16c,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTissueModelType", invalid_field_num))
         }
     }
 }
@@ -874,6 +1230,30 @@ impl From<u8> for FitFieldAttitudeStage {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldLocalDeviceType { // fit base type: uint8
+}
+
+impl FitFieldLocalDeviceType {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldLocalDeviceType, &[u8])> {
+        let (val, o) = parse_uint8(input)?;
+        Ok((FitFieldLocalDeviceType::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldLocalDeviceType {
+    fn from(code: u8) -> Self {
+        match code {
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLocalDeviceType", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldDigitalWatchfaceLayout { // fit base type: enum
     Traditional = 0,
     Modern = 1,
@@ -932,6 +1312,72 @@ impl From<u8> for FitFieldPwrZoneCalc {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldOlympicLiftExerciseName { // fit base type: uint16
+    BarbellHangPowerClean = 0,
+    BarbellHangSquatClean = 1,
+    BarbellPowerClean = 2,
+    BarbellPowerSnatch = 3,
+    BarbellSquatClean = 4,
+    CleanAndJerk = 5,
+    BarbellHangPowerSnatch = 6,
+    BarbellHangPull = 7,
+    BarbellHighPull = 8,
+    BarbellSnatch = 9,
+    BarbellSplitJerk = 10,
+    Clean = 11,
+    DumbbellClean = 12,
+    DumbbellHangPull = 13,
+    OneHandDumbbellSplitSnatch = 14,
+    PushJerk = 15,
+    SingleArmDumbbellSnatch = 16,
+    SingleArmHangSnatch = 17,
+    SingleArmKettlebellSnatch = 18,
+    SplitJerk = 19,
+    SquatCleanAndJerk = 20,
+}
+
+impl FitFieldOlympicLiftExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldOlympicLiftExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldOlympicLiftExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldOlympicLiftExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldOlympicLiftExerciseName::BarbellHangPowerClean,
+            1 => FitFieldOlympicLiftExerciseName::BarbellHangSquatClean,
+            2 => FitFieldOlympicLiftExerciseName::BarbellPowerClean,
+            3 => FitFieldOlympicLiftExerciseName::BarbellPowerSnatch,
+            4 => FitFieldOlympicLiftExerciseName::BarbellSquatClean,
+            5 => FitFieldOlympicLiftExerciseName::CleanAndJerk,
+            6 => FitFieldOlympicLiftExerciseName::BarbellHangPowerSnatch,
+            7 => FitFieldOlympicLiftExerciseName::BarbellHangPull,
+            8 => FitFieldOlympicLiftExerciseName::BarbellHighPull,
+            9 => FitFieldOlympicLiftExerciseName::BarbellSnatch,
+            10 => FitFieldOlympicLiftExerciseName::BarbellSplitJerk,
+            11 => FitFieldOlympicLiftExerciseName::Clean,
+            12 => FitFieldOlympicLiftExerciseName::DumbbellClean,
+            13 => FitFieldOlympicLiftExerciseName::DumbbellHangPull,
+            14 => FitFieldOlympicLiftExerciseName::OneHandDumbbellSplitSnatch,
+            15 => FitFieldOlympicLiftExerciseName::PushJerk,
+            16 => FitFieldOlympicLiftExerciseName::SingleArmDumbbellSnatch,
+            17 => FitFieldOlympicLiftExerciseName::SingleArmHangSnatch,
+            18 => FitFieldOlympicLiftExerciseName::SingleArmKettlebellSnatch,
+            19 => FitFieldOlympicLiftExerciseName::SplitJerk,
+            20 => FitFieldOlympicLiftExerciseName::SquatCleanAndJerk,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldOlympicLiftExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldWktStepTarget { // fit base type: enum
     Speed = 0,
     HeartRate = 1,
@@ -940,6 +1386,13 @@ pub enum FitFieldWktStepTarget { // fit base type: enum
     Power = 4,
     Grade = 5,
     Resistance = 6,
+    Power3s = 7,
+    Power10s = 8,
+    Power30s = 9,
+    PowerLap = 10,
+    SwimStroke = 11,
+    SpeedLap = 12,
+    HeartRateLap = 13,
 }
 
 impl FitFieldWktStepTarget {
@@ -959,7 +1412,58 @@ impl From<u8> for FitFieldWktStepTarget {
             4 => FitFieldWktStepTarget::Power,
             5 => FitFieldWktStepTarget::Grade,
             6 => FitFieldWktStepTarget::Resistance,
+            7 => FitFieldWktStepTarget::Power3s,
+            8 => FitFieldWktStepTarget::Power10s,
+            9 => FitFieldWktStepTarget::Power30s,
+            10 => FitFieldWktStepTarget::PowerLap,
+            11 => FitFieldWktStepTarget::SwimStroke,
+            12 => FitFieldWktStepTarget::SpeedLap,
+            13 => FitFieldWktStepTarget::HeartRateLap,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWktStepTarget", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldFlyeExerciseName { // fit base type: uint16
+    CableCrossover = 0,
+    DeclineDumbbellFlye = 1,
+    DumbbellFlye = 2,
+    InclineDumbbellFlye = 3,
+    KettlebellFlye = 4,
+    KneelingRearFlye = 5,
+    SingleArmStandingCableReverseFlye = 6,
+    SwissBallDumbbellFlye = 7,
+    ArmRotations = 8,
+    HugATree = 9,
+}
+
+impl FitFieldFlyeExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldFlyeExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldFlyeExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldFlyeExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldFlyeExerciseName::CableCrossover,
+            1 => FitFieldFlyeExerciseName::DeclineDumbbellFlye,
+            2 => FitFieldFlyeExerciseName::DumbbellFlye,
+            3 => FitFieldFlyeExerciseName::InclineDumbbellFlye,
+            4 => FitFieldFlyeExerciseName::KettlebellFlye,
+            5 => FitFieldFlyeExerciseName::KneelingRearFlye,
+            6 => FitFieldFlyeExerciseName::SingleArmStandingCableReverseFlye,
+            7 => FitFieldFlyeExerciseName::SwissBallDumbbellFlye,
+            8 => FitFieldFlyeExerciseName::ArmRotations,
+            9 => FitFieldFlyeExerciseName::HugATree,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFlyeExerciseName", invalid_field_num))
         }
     }
 }
@@ -1002,6 +1506,7 @@ pub enum FitFieldWatchfaceMode { // fit base type: enum
     Digital = 0,
     Analog = 1,
     ConnectIq = 2,
+    Disabled = 3,
 }
 
 impl FitFieldWatchfaceMode {
@@ -1017,6 +1522,7 @@ impl From<u8> for FitFieldWatchfaceMode {
             0 => FitFieldWatchfaceMode::Digital,
             1 => FitFieldWatchfaceMode::Analog,
             2 => FitFieldWatchfaceMode::ConnectIq,
+            3 => FitFieldWatchfaceMode::Disabled,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWatchfaceMode", invalid_field_num))
         }
     }
@@ -1132,6 +1638,98 @@ impl From<u8> for FitFieldSide {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldRowExerciseName { // fit base type: uint16
+    BarbellStraightLegDeadliftToRow = 0,
+    CableRowStanding = 1,
+    DumbbellRow = 2,
+    ElevatedFeetInvertedRow = 3,
+    WeightedElevatedFeetInvertedRow = 4,
+    FacePull = 5,
+    FacePullWithExternalRotation = 6,
+    InvertedRowWithFeetOnSwissBall = 7,
+    WeightedInvertedRowWithFeetOnSwissBall = 8,
+    KettlebellRow = 9,
+    ModifiedInvertedRow = 10,
+    WeightedModifiedInvertedRow = 11,
+    NeutralGripAlternatingDumbbellRow = 12,
+    OneArmBentOverRow = 13,
+    OneLeggedDumbbellRow = 14,
+    RenegadeRow = 15,
+    ReverseGripBarbellRow = 16,
+    RopeHandleCableRow = 17,
+    SeatedCableRow = 18,
+    SeatedDumbbellRow = 19,
+    SingleArmCableRow = 20,
+    SingleArmCableRowAndRotation = 21,
+    SingleArmInvertedRow = 22,
+    WeightedSingleArmInvertedRow = 23,
+    SingleArmNeutralGripDumbbellRow = 24,
+    SingleArmNeutralGripDumbbellRowAndRotation = 25,
+    SuspendedInvertedRow = 26,
+    WeightedSuspendedInvertedRow = 27,
+    TBarRow = 28,
+    TowelGripInvertedRow = 29,
+    WeightedTowelGripInvertedRow = 30,
+    UnderhandGripCableRow = 31,
+    VGripCableRow = 32,
+    WideGripSeatedCableRow = 33,
+}
+
+impl FitFieldRowExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldRowExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldRowExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldRowExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldRowExerciseName::BarbellStraightLegDeadliftToRow,
+            1 => FitFieldRowExerciseName::CableRowStanding,
+            2 => FitFieldRowExerciseName::DumbbellRow,
+            3 => FitFieldRowExerciseName::ElevatedFeetInvertedRow,
+            4 => FitFieldRowExerciseName::WeightedElevatedFeetInvertedRow,
+            5 => FitFieldRowExerciseName::FacePull,
+            6 => FitFieldRowExerciseName::FacePullWithExternalRotation,
+            7 => FitFieldRowExerciseName::InvertedRowWithFeetOnSwissBall,
+            8 => FitFieldRowExerciseName::WeightedInvertedRowWithFeetOnSwissBall,
+            9 => FitFieldRowExerciseName::KettlebellRow,
+            10 => FitFieldRowExerciseName::ModifiedInvertedRow,
+            11 => FitFieldRowExerciseName::WeightedModifiedInvertedRow,
+            12 => FitFieldRowExerciseName::NeutralGripAlternatingDumbbellRow,
+            13 => FitFieldRowExerciseName::OneArmBentOverRow,
+            14 => FitFieldRowExerciseName::OneLeggedDumbbellRow,
+            15 => FitFieldRowExerciseName::RenegadeRow,
+            16 => FitFieldRowExerciseName::ReverseGripBarbellRow,
+            17 => FitFieldRowExerciseName::RopeHandleCableRow,
+            18 => FitFieldRowExerciseName::SeatedCableRow,
+            19 => FitFieldRowExerciseName::SeatedDumbbellRow,
+            20 => FitFieldRowExerciseName::SingleArmCableRow,
+            21 => FitFieldRowExerciseName::SingleArmCableRowAndRotation,
+            22 => FitFieldRowExerciseName::SingleArmInvertedRow,
+            23 => FitFieldRowExerciseName::WeightedSingleArmInvertedRow,
+            24 => FitFieldRowExerciseName::SingleArmNeutralGripDumbbellRow,
+            25 => FitFieldRowExerciseName::SingleArmNeutralGripDumbbellRowAndRotation,
+            26 => FitFieldRowExerciseName::SuspendedInvertedRow,
+            27 => FitFieldRowExerciseName::WeightedSuspendedInvertedRow,
+            28 => FitFieldRowExerciseName::TBarRow,
+            29 => FitFieldRowExerciseName::TowelGripInvertedRow,
+            30 => FitFieldRowExerciseName::WeightedTowelGripInvertedRow,
+            31 => FitFieldRowExerciseName::UnderhandGripCableRow,
+            32 => FitFieldRowExerciseName::VGripCableRow,
+            33 => FitFieldRowExerciseName::WideGripSeatedCableRow,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldRowExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAnalogWatchfaceLayout { // fit base type: enum
     Minimal = 0,
     Traditional = 1,
@@ -1178,6 +1776,36 @@ impl From<u16> for FitFieldWeight {
         match code {
             65534 => FitFieldWeight::Calculating,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeight", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldDiveGasStatus { // fit base type: enum
+    Disabled = 0,
+    Enabled = 1,
+    BackupOnly = 2,
+}
+
+impl FitFieldDiveGasStatus {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldDiveGasStatus, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldDiveGasStatus::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldDiveGasStatus {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldDiveGasStatus::Disabled,
+            1 => FitFieldDiveGasStatus::Enabled,
+            2 => FitFieldDiveGasStatus::BackupOnly,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDiveGasStatus", invalid_field_num))
         }
     }
 }
@@ -1252,6 +1880,7 @@ pub enum FitFieldConnectivityCapabilities { // fit base type: uint32z
     RemoteManualSync = 268435456,
     LiveTrackAutoStart = 536870912,  // Device supports LiveTrack auto start
     LiveTrackMessaging = 1073741824,  // Device supports LiveTrack Messaging
+    InstantInput = 2147483648,  // Device supports instant input feature
 }
 
 impl FitFieldConnectivityCapabilities {
@@ -1299,7 +1928,216 @@ impl From<u32> for FitFieldConnectivityCapabilities {
             268435456 => FitFieldConnectivityCapabilities::RemoteManualSync,
             536870912 => FitFieldConnectivityCapabilities::LiveTrackAutoStart,
             1073741824 => FitFieldConnectivityCapabilities::LiveTrackMessaging,
+            2147483648 => FitFieldConnectivityCapabilities::InstantInput,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldConnectivityCapabilities", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldSquatExerciseName { // fit base type: uint16
+    LegPress = 0,
+    BackSquatWithBodyBar = 1,
+    BackSquats = 2,
+    WeightedBackSquats = 3,
+    BalancingSquat = 4,
+    WeightedBalancingSquat = 5,
+    BarbellBackSquat = 6,
+    BarbellBoxSquat = 7,
+    BarbellFrontSquat = 8,
+    BarbellHackSquat = 9,
+    BarbellHangSquatSnatch = 10,
+    BarbellLateralStepUp = 11,
+    BarbellQuarterSquat = 12,
+    BarbellSiffSquat = 13,
+    BarbellSquatSnatch = 14,
+    BarbellSquatWithHeelsRaised = 15,
+    BarbellStepover = 16,
+    BarbellStepUp = 17,
+    BenchSquatWithRotationalChop = 18,
+    WeightedBenchSquatWithRotationalChop = 19,
+    BodyWeightWallSquat = 20,
+    WeightedWallSquat = 21,
+    BoxStepSquat = 22,
+    WeightedBoxStepSquat = 23,
+    BracedSquat = 24,
+    CrossedArmBarbellFrontSquat = 25,
+    CrossoverDumbbellStepUp = 26,
+    DumbbellFrontSquat = 27,
+    DumbbellSplitSquat = 28,
+    DumbbellSquat = 29,
+    DumbbellSquatClean = 30,
+    DumbbellStepover = 31,
+    DumbbellStepUp = 32,
+    ElevatedSingleLegSquat = 33,
+    WeightedElevatedSingleLegSquat = 34,
+    FigureFourSquats = 35,
+    WeightedFigureFourSquats = 36,
+    GobletSquat = 37,
+    KettlebellSquat = 38,
+    KettlebellSwingOverhead = 39,
+    KettlebellSwingWithFlipToSquat = 40,
+    LateralDumbbellStepUp = 41,
+    OneLeggedSquat = 42,
+    OverheadDumbbellSquat = 43,
+    OverheadSquat = 44,
+    PartialSingleLegSquat = 45,
+    WeightedPartialSingleLegSquat = 46,
+    PistolSquat = 47,
+    WeightedPistolSquat = 48,
+    PlieSlides = 49,
+    WeightedPlieSlides = 50,
+    PlieSquat = 51,
+    WeightedPlieSquat = 52,
+    PrisonerSquat = 53,
+    WeightedPrisonerSquat = 54,
+    SingleLegBenchGetUp = 55,
+    WeightedSingleLegBenchGetUp = 56,
+    SingleLegBenchSquat = 57,
+    WeightedSingleLegBenchSquat = 58,
+    SingleLegSquatOnSwissBall = 59,
+    WeightedSingleLegSquatOnSwissBall = 60,
+    Squat = 61,
+    WeightedSquat = 62,
+    SquatsWithBand = 63,
+    StaggeredSquat = 64,
+    WeightedStaggeredSquat = 65,
+    StepUp = 66,
+    WeightedStepUp = 67,
+    SuitcaseSquats = 68,
+    SumoSquat = 69,
+    SumoSquatSlideIn = 70,
+    WeightedSumoSquatSlideIn = 71,
+    SumoSquatToHighPull = 72,
+    SumoSquatToStand = 73,
+    WeightedSumoSquatToStand = 74,
+    SumoSquatWithRotation = 75,
+    WeightedSumoSquatWithRotation = 76,
+    SwissBallBodyWeightWallSquat = 77,
+    WeightedSwissBallWallSquat = 78,
+    Thrusters = 79,
+    UnevenSquat = 80,
+    WeightedUnevenSquat = 81,
+    WaistSlimmingSquat = 82,
+    WallBall = 83,
+    WideStanceBarbellSquat = 84,
+    WideStanceGobletSquat = 85,
+    ZercherSquat = 86,
+    KbsOverhead = 87,
+    SquatAndSideKick = 88,
+    SquatJumpsInNOut = 89,
+    PilatesPlieSquatsParallelTurnedOutFlatAndHeels = 90,
+    ReleveStraightLegAndKneeBentWithOneLegVariation = 91,
+}
+
+impl FitFieldSquatExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldSquatExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldSquatExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldSquatExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldSquatExerciseName::LegPress,
+            1 => FitFieldSquatExerciseName::BackSquatWithBodyBar,
+            2 => FitFieldSquatExerciseName::BackSquats,
+            3 => FitFieldSquatExerciseName::WeightedBackSquats,
+            4 => FitFieldSquatExerciseName::BalancingSquat,
+            5 => FitFieldSquatExerciseName::WeightedBalancingSquat,
+            6 => FitFieldSquatExerciseName::BarbellBackSquat,
+            7 => FitFieldSquatExerciseName::BarbellBoxSquat,
+            8 => FitFieldSquatExerciseName::BarbellFrontSquat,
+            9 => FitFieldSquatExerciseName::BarbellHackSquat,
+            10 => FitFieldSquatExerciseName::BarbellHangSquatSnatch,
+            11 => FitFieldSquatExerciseName::BarbellLateralStepUp,
+            12 => FitFieldSquatExerciseName::BarbellQuarterSquat,
+            13 => FitFieldSquatExerciseName::BarbellSiffSquat,
+            14 => FitFieldSquatExerciseName::BarbellSquatSnatch,
+            15 => FitFieldSquatExerciseName::BarbellSquatWithHeelsRaised,
+            16 => FitFieldSquatExerciseName::BarbellStepover,
+            17 => FitFieldSquatExerciseName::BarbellStepUp,
+            18 => FitFieldSquatExerciseName::BenchSquatWithRotationalChop,
+            19 => FitFieldSquatExerciseName::WeightedBenchSquatWithRotationalChop,
+            20 => FitFieldSquatExerciseName::BodyWeightWallSquat,
+            21 => FitFieldSquatExerciseName::WeightedWallSquat,
+            22 => FitFieldSquatExerciseName::BoxStepSquat,
+            23 => FitFieldSquatExerciseName::WeightedBoxStepSquat,
+            24 => FitFieldSquatExerciseName::BracedSquat,
+            25 => FitFieldSquatExerciseName::CrossedArmBarbellFrontSquat,
+            26 => FitFieldSquatExerciseName::CrossoverDumbbellStepUp,
+            27 => FitFieldSquatExerciseName::DumbbellFrontSquat,
+            28 => FitFieldSquatExerciseName::DumbbellSplitSquat,
+            29 => FitFieldSquatExerciseName::DumbbellSquat,
+            30 => FitFieldSquatExerciseName::DumbbellSquatClean,
+            31 => FitFieldSquatExerciseName::DumbbellStepover,
+            32 => FitFieldSquatExerciseName::DumbbellStepUp,
+            33 => FitFieldSquatExerciseName::ElevatedSingleLegSquat,
+            34 => FitFieldSquatExerciseName::WeightedElevatedSingleLegSquat,
+            35 => FitFieldSquatExerciseName::FigureFourSquats,
+            36 => FitFieldSquatExerciseName::WeightedFigureFourSquats,
+            37 => FitFieldSquatExerciseName::GobletSquat,
+            38 => FitFieldSquatExerciseName::KettlebellSquat,
+            39 => FitFieldSquatExerciseName::KettlebellSwingOverhead,
+            40 => FitFieldSquatExerciseName::KettlebellSwingWithFlipToSquat,
+            41 => FitFieldSquatExerciseName::LateralDumbbellStepUp,
+            42 => FitFieldSquatExerciseName::OneLeggedSquat,
+            43 => FitFieldSquatExerciseName::OverheadDumbbellSquat,
+            44 => FitFieldSquatExerciseName::OverheadSquat,
+            45 => FitFieldSquatExerciseName::PartialSingleLegSquat,
+            46 => FitFieldSquatExerciseName::WeightedPartialSingleLegSquat,
+            47 => FitFieldSquatExerciseName::PistolSquat,
+            48 => FitFieldSquatExerciseName::WeightedPistolSquat,
+            49 => FitFieldSquatExerciseName::PlieSlides,
+            50 => FitFieldSquatExerciseName::WeightedPlieSlides,
+            51 => FitFieldSquatExerciseName::PlieSquat,
+            52 => FitFieldSquatExerciseName::WeightedPlieSquat,
+            53 => FitFieldSquatExerciseName::PrisonerSquat,
+            54 => FitFieldSquatExerciseName::WeightedPrisonerSquat,
+            55 => FitFieldSquatExerciseName::SingleLegBenchGetUp,
+            56 => FitFieldSquatExerciseName::WeightedSingleLegBenchGetUp,
+            57 => FitFieldSquatExerciseName::SingleLegBenchSquat,
+            58 => FitFieldSquatExerciseName::WeightedSingleLegBenchSquat,
+            59 => FitFieldSquatExerciseName::SingleLegSquatOnSwissBall,
+            60 => FitFieldSquatExerciseName::WeightedSingleLegSquatOnSwissBall,
+            61 => FitFieldSquatExerciseName::Squat,
+            62 => FitFieldSquatExerciseName::WeightedSquat,
+            63 => FitFieldSquatExerciseName::SquatsWithBand,
+            64 => FitFieldSquatExerciseName::StaggeredSquat,
+            65 => FitFieldSquatExerciseName::WeightedStaggeredSquat,
+            66 => FitFieldSquatExerciseName::StepUp,
+            67 => FitFieldSquatExerciseName::WeightedStepUp,
+            68 => FitFieldSquatExerciseName::SuitcaseSquats,
+            69 => FitFieldSquatExerciseName::SumoSquat,
+            70 => FitFieldSquatExerciseName::SumoSquatSlideIn,
+            71 => FitFieldSquatExerciseName::WeightedSumoSquatSlideIn,
+            72 => FitFieldSquatExerciseName::SumoSquatToHighPull,
+            73 => FitFieldSquatExerciseName::SumoSquatToStand,
+            74 => FitFieldSquatExerciseName::WeightedSumoSquatToStand,
+            75 => FitFieldSquatExerciseName::SumoSquatWithRotation,
+            76 => FitFieldSquatExerciseName::WeightedSumoSquatWithRotation,
+            77 => FitFieldSquatExerciseName::SwissBallBodyWeightWallSquat,
+            78 => FitFieldSquatExerciseName::WeightedSwissBallWallSquat,
+            79 => FitFieldSquatExerciseName::Thrusters,
+            80 => FitFieldSquatExerciseName::UnevenSquat,
+            81 => FitFieldSquatExerciseName::WeightedUnevenSquat,
+            82 => FitFieldSquatExerciseName::WaistSlimmingSquat,
+            83 => FitFieldSquatExerciseName::WallBall,
+            84 => FitFieldSquatExerciseName::WideStanceBarbellSquat,
+            85 => FitFieldSquatExerciseName::WideStanceGobletSquat,
+            86 => FitFieldSquatExerciseName::ZercherSquat,
+            87 => FitFieldSquatExerciseName::KbsOverhead,
+            88 => FitFieldSquatExerciseName::SquatAndSideKick,
+            89 => FitFieldSquatExerciseName::SquatJumpsInNOut,
+            90 => FitFieldSquatExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeels,
+            91 => FitFieldSquatExerciseName::ReleveStraightLegAndKneeBentWithOneLegVariation,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSquatExerciseName", invalid_field_num))
         }
     }
 }
@@ -1624,6 +2462,124 @@ impl From<u8> for FitFieldBpStatus {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldShoulderStabilityExerciseName { // fit base type: uint16
+    NinetyDegreeCableExternalRotation = 0,
+    BandExternalRotation = 1,
+    BandInternalRotation = 2,
+    BentArmLateralRaiseAndExternalRotation = 3,
+    CableExternalRotation = 4,
+    DumbbellFacePullWithExternalRotation = 5,
+    FloorIRaise = 6,
+    WeightedFloorIRaise = 7,
+    FloorTRaise = 8,
+    WeightedFloorTRaise = 9,
+    FloorYRaise = 10,
+    WeightedFloorYRaise = 11,
+    InclineIRaise = 12,
+    WeightedInclineIRaise = 13,
+    InclineLRaise = 14,
+    WeightedInclineLRaise = 15,
+    InclineTRaise = 16,
+    WeightedInclineTRaise = 17,
+    InclineWRaise = 18,
+    WeightedInclineWRaise = 19,
+    InclineYRaise = 20,
+    WeightedInclineYRaise = 21,
+    LyingExternalRotation = 22,
+    SeatedDumbbellExternalRotation = 23,
+    StandingLRaise = 24,
+    SwissBallIRaise = 25,
+    WeightedSwissBallIRaise = 26,
+    SwissBallTRaise = 27,
+    WeightedSwissBallTRaise = 28,
+    SwissBallWRaise = 29,
+    WeightedSwissBallWRaise = 30,
+    SwissBallYRaise = 31,
+    WeightedSwissBallYRaise = 32,
+}
+
+impl FitFieldShoulderStabilityExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldShoulderStabilityExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldShoulderStabilityExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldShoulderStabilityExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldShoulderStabilityExerciseName::NinetyDegreeCableExternalRotation,
+            1 => FitFieldShoulderStabilityExerciseName::BandExternalRotation,
+            2 => FitFieldShoulderStabilityExerciseName::BandInternalRotation,
+            3 => FitFieldShoulderStabilityExerciseName::BentArmLateralRaiseAndExternalRotation,
+            4 => FitFieldShoulderStabilityExerciseName::CableExternalRotation,
+            5 => FitFieldShoulderStabilityExerciseName::DumbbellFacePullWithExternalRotation,
+            6 => FitFieldShoulderStabilityExerciseName::FloorIRaise,
+            7 => FitFieldShoulderStabilityExerciseName::WeightedFloorIRaise,
+            8 => FitFieldShoulderStabilityExerciseName::FloorTRaise,
+            9 => FitFieldShoulderStabilityExerciseName::WeightedFloorTRaise,
+            10 => FitFieldShoulderStabilityExerciseName::FloorYRaise,
+            11 => FitFieldShoulderStabilityExerciseName::WeightedFloorYRaise,
+            12 => FitFieldShoulderStabilityExerciseName::InclineIRaise,
+            13 => FitFieldShoulderStabilityExerciseName::WeightedInclineIRaise,
+            14 => FitFieldShoulderStabilityExerciseName::InclineLRaise,
+            15 => FitFieldShoulderStabilityExerciseName::WeightedInclineLRaise,
+            16 => FitFieldShoulderStabilityExerciseName::InclineTRaise,
+            17 => FitFieldShoulderStabilityExerciseName::WeightedInclineTRaise,
+            18 => FitFieldShoulderStabilityExerciseName::InclineWRaise,
+            19 => FitFieldShoulderStabilityExerciseName::WeightedInclineWRaise,
+            20 => FitFieldShoulderStabilityExerciseName::InclineYRaise,
+            21 => FitFieldShoulderStabilityExerciseName::WeightedInclineYRaise,
+            22 => FitFieldShoulderStabilityExerciseName::LyingExternalRotation,
+            23 => FitFieldShoulderStabilityExerciseName::SeatedDumbbellExternalRotation,
+            24 => FitFieldShoulderStabilityExerciseName::StandingLRaise,
+            25 => FitFieldShoulderStabilityExerciseName::SwissBallIRaise,
+            26 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallIRaise,
+            27 => FitFieldShoulderStabilityExerciseName::SwissBallTRaise,
+            28 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallTRaise,
+            29 => FitFieldShoulderStabilityExerciseName::SwissBallWRaise,
+            30 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallWRaise,
+            31 => FitFieldShoulderStabilityExerciseName::SwissBallYRaise,
+            32 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallYRaise,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldShoulderStabilityExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldDiveBacklightMode { // fit base type: enum
+    AtDepth = 0,
+    AlwaysOn = 1,
+}
+
+impl FitFieldDiveBacklightMode {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldDiveBacklightMode, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldDiveBacklightMode::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldDiveBacklightMode {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldDiveBacklightMode::AtDepth,
+            1 => FitFieldDiveBacklightMode::AlwaysOn,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDiveBacklightMode", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldBikeLightBeamAngleMode { // fit base type: uint8
     Manual = 0,
     Auto = 1,
@@ -1666,6 +2622,198 @@ impl From<u32> for FitFieldLocaltimeIntoDay {
     fn from(code: u32) -> Self {
         match code {
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLocaltimeIntoDay", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldLegCurlExerciseName { // fit base type: uint16
+    LegCurl = 0,
+    WeightedLegCurl = 1,
+    GoodMorning = 2,
+    SeatedBarbellGoodMorning = 3,
+    SingleLegBarbellGoodMorning = 4,
+    SingleLegSlidingLegCurl = 5,
+    SlidingLegCurl = 6,
+    SplitBarbellGoodMorning = 7,
+    SplitStanceExtension = 8,
+    StaggeredStanceGoodMorning = 9,
+    SwissBallHipRaiseAndLegCurl = 10,
+    ZercherGoodMorning = 11,
+}
+
+impl FitFieldLegCurlExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldLegCurlExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldLegCurlExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldLegCurlExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldLegCurlExerciseName::LegCurl,
+            1 => FitFieldLegCurlExerciseName::WeightedLegCurl,
+            2 => FitFieldLegCurlExerciseName::GoodMorning,
+            3 => FitFieldLegCurlExerciseName::SeatedBarbellGoodMorning,
+            4 => FitFieldLegCurlExerciseName::SingleLegBarbellGoodMorning,
+            5 => FitFieldLegCurlExerciseName::SingleLegSlidingLegCurl,
+            6 => FitFieldLegCurlExerciseName::SlidingLegCurl,
+            7 => FitFieldLegCurlExerciseName::SplitBarbellGoodMorning,
+            8 => FitFieldLegCurlExerciseName::SplitStanceExtension,
+            9 => FitFieldLegCurlExerciseName::StaggeredStanceGoodMorning,
+            10 => FitFieldLegCurlExerciseName::SwissBallHipRaiseAndLegCurl,
+            11 => FitFieldLegCurlExerciseName::ZercherGoodMorning,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLegCurlExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldWarmUpExerciseName { // fit base type: uint16
+    QuadrupedRocking = 0,
+    NeckTilts = 1,
+    AnkleCircles = 2,
+    AnkleDorsiflexionWithBand = 3,
+    AnkleInternalRotation = 4,
+    ArmCircles = 5,
+    BentOverReachToSky = 6,
+    CatCamel = 7,
+    ElbowToFootLunge = 8,
+    ForwardAndBackwardLegSwings = 9,
+    Groiners = 10,
+    InvertedHamstringStretch = 11,
+    LateralDuckUnder = 12,
+    NeckRotations = 13,
+    OppositeArmAndLegBalance = 14,
+    ReachRollAndLift = 15,
+    Scorpion = 16,
+    ShoulderCircles = 17,
+    SideToSideLegSwings = 18,
+    SleeperStretch = 19,
+    SlideOut = 20,
+    SwissBallHipCrossover = 21,
+    SwissBallReachRollAndLift = 22,
+    SwissBallWindshieldWipers = 23,
+    ThoracicRotation = 24,
+    WalkingHighKicks = 25,
+    WalkingHighKnees = 26,
+    WalkingKneeHugs = 27,
+    WalkingLegCradles = 28,
+    Walkout = 29,
+    WalkoutFromPushUpPosition = 30,
+}
+
+impl FitFieldWarmUpExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldWarmUpExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldWarmUpExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldWarmUpExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldWarmUpExerciseName::QuadrupedRocking,
+            1 => FitFieldWarmUpExerciseName::NeckTilts,
+            2 => FitFieldWarmUpExerciseName::AnkleCircles,
+            3 => FitFieldWarmUpExerciseName::AnkleDorsiflexionWithBand,
+            4 => FitFieldWarmUpExerciseName::AnkleInternalRotation,
+            5 => FitFieldWarmUpExerciseName::ArmCircles,
+            6 => FitFieldWarmUpExerciseName::BentOverReachToSky,
+            7 => FitFieldWarmUpExerciseName::CatCamel,
+            8 => FitFieldWarmUpExerciseName::ElbowToFootLunge,
+            9 => FitFieldWarmUpExerciseName::ForwardAndBackwardLegSwings,
+            10 => FitFieldWarmUpExerciseName::Groiners,
+            11 => FitFieldWarmUpExerciseName::InvertedHamstringStretch,
+            12 => FitFieldWarmUpExerciseName::LateralDuckUnder,
+            13 => FitFieldWarmUpExerciseName::NeckRotations,
+            14 => FitFieldWarmUpExerciseName::OppositeArmAndLegBalance,
+            15 => FitFieldWarmUpExerciseName::ReachRollAndLift,
+            16 => FitFieldWarmUpExerciseName::Scorpion,
+            17 => FitFieldWarmUpExerciseName::ShoulderCircles,
+            18 => FitFieldWarmUpExerciseName::SideToSideLegSwings,
+            19 => FitFieldWarmUpExerciseName::SleeperStretch,
+            20 => FitFieldWarmUpExerciseName::SlideOut,
+            21 => FitFieldWarmUpExerciseName::SwissBallHipCrossover,
+            22 => FitFieldWarmUpExerciseName::SwissBallReachRollAndLift,
+            23 => FitFieldWarmUpExerciseName::SwissBallWindshieldWipers,
+            24 => FitFieldWarmUpExerciseName::ThoracicRotation,
+            25 => FitFieldWarmUpExerciseName::WalkingHighKicks,
+            26 => FitFieldWarmUpExerciseName::WalkingHighKnees,
+            27 => FitFieldWarmUpExerciseName::WalkingKneeHugs,
+            28 => FitFieldWarmUpExerciseName::WalkingLegCradles,
+            29 => FitFieldWarmUpExerciseName::Walkout,
+            30 => FitFieldWarmUpExerciseName::WalkoutFromPushUpPosition,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWarmUpExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldShrugExerciseName { // fit base type: uint16
+    BarbellJumpShrug = 0,
+    BarbellShrug = 1,
+    BarbellUprightRow = 2,
+    BehindTheBackSmithMachineShrug = 3,
+    DumbbellJumpShrug = 4,
+    DumbbellShrug = 5,
+    DumbbellUprightRow = 6,
+    InclineDumbbellShrug = 7,
+    OverheadBarbellShrug = 8,
+    OverheadDumbbellShrug = 9,
+    ScaptionAndShrug = 10,
+    ScapularRetraction = 11,
+    SerratusChairShrug = 12,
+    WeightedSerratusChairShrug = 13,
+    SerratusShrug = 14,
+    WeightedSerratusShrug = 15,
+    WideGripJumpShrug = 16,
+}
+
+impl FitFieldShrugExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldShrugExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldShrugExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldShrugExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldShrugExerciseName::BarbellJumpShrug,
+            1 => FitFieldShrugExerciseName::BarbellShrug,
+            2 => FitFieldShrugExerciseName::BarbellUprightRow,
+            3 => FitFieldShrugExerciseName::BehindTheBackSmithMachineShrug,
+            4 => FitFieldShrugExerciseName::DumbbellJumpShrug,
+            5 => FitFieldShrugExerciseName::DumbbellShrug,
+            6 => FitFieldShrugExerciseName::DumbbellUprightRow,
+            7 => FitFieldShrugExerciseName::InclineDumbbellShrug,
+            8 => FitFieldShrugExerciseName::OverheadBarbellShrug,
+            9 => FitFieldShrugExerciseName::OverheadDumbbellShrug,
+            10 => FitFieldShrugExerciseName::ScaptionAndShrug,
+            11 => FitFieldShrugExerciseName::ScapularRetraction,
+            12 => FitFieldShrugExerciseName::SerratusChairShrug,
+            13 => FitFieldShrugExerciseName::WeightedSerratusChairShrug,
+            14 => FitFieldShrugExerciseName::SerratusShrug,
+            15 => FitFieldShrugExerciseName::WeightedSerratusShrug,
+            16 => FitFieldShrugExerciseName::WideGripJumpShrug,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldShrugExerciseName", invalid_field_num))
         }
     }
 }
@@ -1848,6 +2996,34 @@ impl From<u8> for FitFieldSchedule {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldSetType { // fit base type: uint8
+    Rest = 0,
+    Active = 1,
+}
+
+impl FitFieldSetType {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldSetType, &[u8])> {
+        let (val, o) = parse_uint8(input)?;
+        Ok((FitFieldSetType::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldSetType {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldSetType::Rest,
+            1 => FitFieldSetType::Active,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSetType", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLeftRightBalance100 { // fit base type: uint16
     Mask = 16383,  // % contribution scaled by 100
     Right = 32768,  // data corresponds to right if set, otherwise unknown
@@ -1908,6 +3084,40 @@ impl From<u16> for FitFieldCommTimeoutType {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldCarryExerciseName { // fit base type: uint16
+    BarHolds = 0,
+    FarmersWalk = 1,
+    FarmersWalkOnToes = 2,
+    HexDumbbellHold = 3,
+    OverheadCarry = 4,
+}
+
+impl FitFieldCarryExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldCarryExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldCarryExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldCarryExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldCarryExerciseName::BarHolds,
+            1 => FitFieldCarryExerciseName::FarmersWalk,
+            2 => FitFieldCarryExerciseName::FarmersWalkOnToes,
+            3 => FitFieldCarryExerciseName::HexDumbbellHold,
+            4 => FitFieldCarryExerciseName::OverheadCarry,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCarryExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSegmentLapStatus { // fit base type: enum
     End = 0,
     Fail = 1,
@@ -1926,6 +3136,106 @@ impl From<u8> for FitFieldSegmentLapStatus {
             0 => FitFieldSegmentLapStatus::End,
             1 => FitFieldSegmentLapStatus::Fail,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSegmentLapStatus", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldSitUpExerciseName { // fit base type: uint16
+    AlternatingSitUp = 0,
+    WeightedAlternatingSitUp = 1,
+    BentKneeVUp = 2,
+    WeightedBentKneeVUp = 3,
+    ButterflySitUp = 4,
+    WeightedButterflySitup = 5,
+    CrossPunchRollUp = 6,
+    WeightedCrossPunchRollUp = 7,
+    CrossedArmsSitUp = 8,
+    WeightedCrossedArmsSitUp = 9,
+    GetUpSitUp = 10,
+    WeightedGetUpSitUp = 11,
+    HoveringSitUp = 12,
+    WeightedHoveringSitUp = 13,
+    KettlebellSitUp = 14,
+    MedicineBallAlternatingVUp = 15,
+    MedicineBallSitUp = 16,
+    MedicineBallVUp = 17,
+    ModifiedSitUp = 18,
+    NegativeSitUp = 19,
+    OneArmFullSitUp = 20,
+    RecliningCircle = 21,
+    WeightedRecliningCircle = 22,
+    ReverseCurlUp = 23,
+    WeightedReverseCurlUp = 24,
+    SingleLegSwissBallJackknife = 25,
+    WeightedSingleLegSwissBallJackknife = 26,
+    TheTeaser = 27,
+    TheTeaserWeighted = 28,
+    ThreePartRollDown = 29,
+    WeightedThreePartRollDown = 30,
+    VUp = 31,
+    WeightedVUp = 32,
+    WeightedRussianTwistOnSwissBall = 33,
+    WeightedSitUp = 34,
+    XAbs = 35,
+    WeightedXAbs = 36,
+    SitUp = 37,
+}
+
+impl FitFieldSitUpExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldSitUpExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldSitUpExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldSitUpExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldSitUpExerciseName::AlternatingSitUp,
+            1 => FitFieldSitUpExerciseName::WeightedAlternatingSitUp,
+            2 => FitFieldSitUpExerciseName::BentKneeVUp,
+            3 => FitFieldSitUpExerciseName::WeightedBentKneeVUp,
+            4 => FitFieldSitUpExerciseName::ButterflySitUp,
+            5 => FitFieldSitUpExerciseName::WeightedButterflySitup,
+            6 => FitFieldSitUpExerciseName::CrossPunchRollUp,
+            7 => FitFieldSitUpExerciseName::WeightedCrossPunchRollUp,
+            8 => FitFieldSitUpExerciseName::CrossedArmsSitUp,
+            9 => FitFieldSitUpExerciseName::WeightedCrossedArmsSitUp,
+            10 => FitFieldSitUpExerciseName::GetUpSitUp,
+            11 => FitFieldSitUpExerciseName::WeightedGetUpSitUp,
+            12 => FitFieldSitUpExerciseName::HoveringSitUp,
+            13 => FitFieldSitUpExerciseName::WeightedHoveringSitUp,
+            14 => FitFieldSitUpExerciseName::KettlebellSitUp,
+            15 => FitFieldSitUpExerciseName::MedicineBallAlternatingVUp,
+            16 => FitFieldSitUpExerciseName::MedicineBallSitUp,
+            17 => FitFieldSitUpExerciseName::MedicineBallVUp,
+            18 => FitFieldSitUpExerciseName::ModifiedSitUp,
+            19 => FitFieldSitUpExerciseName::NegativeSitUp,
+            20 => FitFieldSitUpExerciseName::OneArmFullSitUp,
+            21 => FitFieldSitUpExerciseName::RecliningCircle,
+            22 => FitFieldSitUpExerciseName::WeightedRecliningCircle,
+            23 => FitFieldSitUpExerciseName::ReverseCurlUp,
+            24 => FitFieldSitUpExerciseName::WeightedReverseCurlUp,
+            25 => FitFieldSitUpExerciseName::SingleLegSwissBallJackknife,
+            26 => FitFieldSitUpExerciseName::WeightedSingleLegSwissBallJackknife,
+            27 => FitFieldSitUpExerciseName::TheTeaser,
+            28 => FitFieldSitUpExerciseName::TheTeaserWeighted,
+            29 => FitFieldSitUpExerciseName::ThreePartRollDown,
+            30 => FitFieldSitUpExerciseName::WeightedThreePartRollDown,
+            31 => FitFieldSitUpExerciseName::VUp,
+            32 => FitFieldSitUpExerciseName::WeightedVUp,
+            33 => FitFieldSitUpExerciseName::WeightedRussianTwistOnSwissBall,
+            34 => FitFieldSitUpExerciseName::WeightedSitUp,
+            35 => FitFieldSitUpExerciseName::XAbs,
+            36 => FitFieldSitUpExerciseName::WeightedXAbs,
+            37 => FitFieldSitUpExerciseName::SitUp,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSitUpExerciseName", invalid_field_num))
         }
     }
 }
@@ -2041,6 +3351,23 @@ pub enum FitFieldManufacturer { // fit base type: uint16
     Magene = 107,
     GiantManufacturingCo = 108,
     Tigrasport = 109,  // Tigrasport
+    Salutron = 110,
+    Technogym = 111,
+    BrytonSensors = 112,
+    LatitudeLimited = 113,
+    SoaringTechnology = 114,
+    Igpsport = 115,
+    Thinkrider = 116,
+    GopherSport = 117,
+    Waterrower = 118,
+    Orangetheory = 119,
+    Inpeak = 120,
+    Kinetic = 121,
+    JohnsonHealthTech = 122,
+    PolarElectro = 123,
+    Seesense = 124,
+    NciTechnology = 125,
+    Iqsquare = 126,
     Development = 255,
     Healthandlife = 257,
     Lezyne = 258,
@@ -2061,6 +3388,29 @@ pub enum FitFieldManufacturer { // fit base type: uint16
     Evesports = 273,
     SensitivusGauge = 274,
     Podoon = 275,
+    LifeTimeFitness = 276,
+    FalcoEMotors = 277,  // Falco eMotors Inc.
+    Minoura = 278,
+    Cycliq = 279,
+    Luxottica = 280,
+    TrainerRoad = 281,
+    TheSufferfest = 282,
+    Fullspeedahead = 283,
+    Virtualtraining = 284,
+    Feedbacksports = 285,
+    Omata = 286,
+    Vdo = 287,
+    Magneticdays = 288,
+    Hammerhead = 289,
+    KineticByKurt = 290,
+    Shapelog = 291,
+    Dabuziduo = 292,
+    Jetblack = 293,
+    Coros = 294,
+    Virtugo = 295,
+    Velosense = 296,
+    Cycligentinc = 297,
+    Trailforks = 298,
     Actigraphcorp = 5759,
 }
 
@@ -2178,6 +3528,23 @@ impl From<u16> for FitFieldManufacturer {
             107 => FitFieldManufacturer::Magene,
             108 => FitFieldManufacturer::GiantManufacturingCo,
             109 => FitFieldManufacturer::Tigrasport,
+            110 => FitFieldManufacturer::Salutron,
+            111 => FitFieldManufacturer::Technogym,
+            112 => FitFieldManufacturer::BrytonSensors,
+            113 => FitFieldManufacturer::LatitudeLimited,
+            114 => FitFieldManufacturer::SoaringTechnology,
+            115 => FitFieldManufacturer::Igpsport,
+            116 => FitFieldManufacturer::Thinkrider,
+            117 => FitFieldManufacturer::GopherSport,
+            118 => FitFieldManufacturer::Waterrower,
+            119 => FitFieldManufacturer::Orangetheory,
+            120 => FitFieldManufacturer::Inpeak,
+            121 => FitFieldManufacturer::Kinetic,
+            122 => FitFieldManufacturer::JohnsonHealthTech,
+            123 => FitFieldManufacturer::PolarElectro,
+            124 => FitFieldManufacturer::Seesense,
+            125 => FitFieldManufacturer::NciTechnology,
+            126 => FitFieldManufacturer::Iqsquare,
             255 => FitFieldManufacturer::Development,
             257 => FitFieldManufacturer::Healthandlife,
             258 => FitFieldManufacturer::Lezyne,
@@ -2198,6 +3565,29 @@ impl From<u16> for FitFieldManufacturer {
             273 => FitFieldManufacturer::Evesports,
             274 => FitFieldManufacturer::SensitivusGauge,
             275 => FitFieldManufacturer::Podoon,
+            276 => FitFieldManufacturer::LifeTimeFitness,
+            277 => FitFieldManufacturer::FalcoEMotors,
+            278 => FitFieldManufacturer::Minoura,
+            279 => FitFieldManufacturer::Cycliq,
+            280 => FitFieldManufacturer::Luxottica,
+            281 => FitFieldManufacturer::TrainerRoad,
+            282 => FitFieldManufacturer::TheSufferfest,
+            283 => FitFieldManufacturer::Fullspeedahead,
+            284 => FitFieldManufacturer::Virtualtraining,
+            285 => FitFieldManufacturer::Feedbacksports,
+            286 => FitFieldManufacturer::Omata,
+            287 => FitFieldManufacturer::Vdo,
+            288 => FitFieldManufacturer::Magneticdays,
+            289 => FitFieldManufacturer::Hammerhead,
+            290 => FitFieldManufacturer::KineticByKurt,
+            291 => FitFieldManufacturer::Shapelog,
+            292 => FitFieldManufacturer::Dabuziduo,
+            293 => FitFieldManufacturer::Jetblack,
+            294 => FitFieldManufacturer::Coros,
+            295 => FitFieldManufacturer::Virtugo,
+            296 => FitFieldManufacturer::Velosense,
+            297 => FitFieldManufacturer::Cycligentinc,
+            298 => FitFieldManufacturer::Trailforks,
             5759 => FitFieldManufacturer::Actigraphcorp,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldManufacturer", invalid_field_num))
         }
@@ -2273,6 +3663,10 @@ pub enum FitFieldLanguage { // fit base type: enum
     Hebrew = 31,
     BrazilianPortuguese = 32,
     Indonesian = 33,
+    Malaysian = 34,
+    Vietnamese = 35,
+    Burmese = 36,
+    Mongolian = 37,
     Custom = 254,
 }
 
@@ -2320,8 +3714,104 @@ impl From<u8> for FitFieldLanguage {
             31 => FitFieldLanguage::Hebrew,
             32 => FitFieldLanguage::BrazilianPortuguese,
             33 => FitFieldLanguage::Indonesian,
+            34 => FitFieldLanguage::Malaysian,
+            35 => FitFieldLanguage::Vietnamese,
+            36 => FitFieldLanguage::Burmese,
+            37 => FitFieldLanguage::Mongolian,
             254 => FitFieldLanguage::Custom,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguage", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldHipStabilityExerciseName { // fit base type: uint16
+    BandSideLyingLegRaise = 0,
+    DeadBug = 1,
+    WeightedDeadBug = 2,
+    ExternalHipRaise = 3,
+    WeightedExternalHipRaise = 4,
+    FireHydrantKicks = 5,
+    WeightedFireHydrantKicks = 6,
+    HipCircles = 7,
+    WeightedHipCircles = 8,
+    InnerThighLift = 9,
+    WeightedInnerThighLift = 10,
+    LateralWalksWithBandAtAnkles = 11,
+    PretzelSideKick = 12,
+    WeightedPretzelSideKick = 13,
+    ProneHipInternalRotation = 14,
+    WeightedProneHipInternalRotation = 15,
+    Quadruped = 16,
+    QuadrupedHipExtension = 17,
+    WeightedQuadrupedHipExtension = 18,
+    QuadrupedWithLegLift = 19,
+    WeightedQuadrupedWithLegLift = 20,
+    SideLyingLegRaise = 21,
+    WeightedSideLyingLegRaise = 22,
+    SlidingHipAdduction = 23,
+    WeightedSlidingHipAdduction = 24,
+    StandingAdduction = 25,
+    WeightedStandingAdduction = 26,
+    StandingCableHipAbduction = 27,
+    StandingHipAbduction = 28,
+    WeightedStandingHipAbduction = 29,
+    StandingRearLegRaise = 30,
+    WeightedStandingRearLegRaise = 31,
+    SupineHipInternalRotation = 32,
+    WeightedSupineHipInternalRotation = 33,
+}
+
+impl FitFieldHipStabilityExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldHipStabilityExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldHipStabilityExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldHipStabilityExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldHipStabilityExerciseName::BandSideLyingLegRaise,
+            1 => FitFieldHipStabilityExerciseName::DeadBug,
+            2 => FitFieldHipStabilityExerciseName::WeightedDeadBug,
+            3 => FitFieldHipStabilityExerciseName::ExternalHipRaise,
+            4 => FitFieldHipStabilityExerciseName::WeightedExternalHipRaise,
+            5 => FitFieldHipStabilityExerciseName::FireHydrantKicks,
+            6 => FitFieldHipStabilityExerciseName::WeightedFireHydrantKicks,
+            7 => FitFieldHipStabilityExerciseName::HipCircles,
+            8 => FitFieldHipStabilityExerciseName::WeightedHipCircles,
+            9 => FitFieldHipStabilityExerciseName::InnerThighLift,
+            10 => FitFieldHipStabilityExerciseName::WeightedInnerThighLift,
+            11 => FitFieldHipStabilityExerciseName::LateralWalksWithBandAtAnkles,
+            12 => FitFieldHipStabilityExerciseName::PretzelSideKick,
+            13 => FitFieldHipStabilityExerciseName::WeightedPretzelSideKick,
+            14 => FitFieldHipStabilityExerciseName::ProneHipInternalRotation,
+            15 => FitFieldHipStabilityExerciseName::WeightedProneHipInternalRotation,
+            16 => FitFieldHipStabilityExerciseName::Quadruped,
+            17 => FitFieldHipStabilityExerciseName::QuadrupedHipExtension,
+            18 => FitFieldHipStabilityExerciseName::WeightedQuadrupedHipExtension,
+            19 => FitFieldHipStabilityExerciseName::QuadrupedWithLegLift,
+            20 => FitFieldHipStabilityExerciseName::WeightedQuadrupedWithLegLift,
+            21 => FitFieldHipStabilityExerciseName::SideLyingLegRaise,
+            22 => FitFieldHipStabilityExerciseName::WeightedSideLyingLegRaise,
+            23 => FitFieldHipStabilityExerciseName::SlidingHipAdduction,
+            24 => FitFieldHipStabilityExerciseName::WeightedSlidingHipAdduction,
+            25 => FitFieldHipStabilityExerciseName::StandingAdduction,
+            26 => FitFieldHipStabilityExerciseName::WeightedStandingAdduction,
+            27 => FitFieldHipStabilityExerciseName::StandingCableHipAbduction,
+            28 => FitFieldHipStabilityExerciseName::StandingHipAbduction,
+            29 => FitFieldHipStabilityExerciseName::WeightedStandingHipAbduction,
+            30 => FitFieldHipStabilityExerciseName::StandingRearLegRaise,
+            31 => FitFieldHipStabilityExerciseName::WeightedStandingRearLegRaise,
+            32 => FitFieldHipStabilityExerciseName::SupineHipInternalRotation,
+            33 => FitFieldHipStabilityExerciseName::WeightedSupineHipInternalRotation,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHipStabilityExerciseName", invalid_field_num))
         }
     }
 }
@@ -2402,6 +3892,62 @@ impl From<u16> for FitFieldAttitudeValidity {
             2048 => FitFieldAttitudeValidity::TrueTrackAngle,
             4096 => FitFieldAttitudeValidity::MagneticHeading,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAttitudeValidity", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldFaveroProduct { // fit base type: uint16
+    AssiomaUno = 10,
+    AssiomaDuo = 12,
+}
+
+impl FitFieldFaveroProduct {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldFaveroProduct, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldFaveroProduct::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldFaveroProduct {
+    fn from(code: u16) -> Self {
+        match code {
+            10 => FitFieldFaveroProduct::AssiomaUno,
+            12 => FitFieldFaveroProduct::AssiomaDuo,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFaveroProduct", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldDiveAlarmType { // fit base type: enum
+    Depth = 0,
+    Time = 1,
+}
+
+impl FitFieldDiveAlarmType {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldDiveAlarmType, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldDiveAlarmType::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldDiveAlarmType {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldDiveAlarmType::Depth,
+            1 => FitFieldDiveAlarmType::Time,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDiveAlarmType", invalid_field_num))
         }
     }
 }
@@ -2712,6 +4258,110 @@ impl From<u16> for FitFieldUserLocalId {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldHyperextensionExerciseName { // fit base type: uint16
+    BackExtensionWithOppositeArmAndLegReach = 0,
+    WeightedBackExtensionWithOppositeArmAndLegReach = 1,
+    BaseRotations = 2,
+    WeightedBaseRotations = 3,
+    BentKneeReverseHyperextension = 4,
+    WeightedBentKneeReverseHyperextension = 5,
+    HollowHoldAndRoll = 6,
+    WeightedHollowHoldAndRoll = 7,
+    Kicks = 8,
+    WeightedKicks = 9,
+    KneeRaises = 10,
+    WeightedKneeRaises = 11,
+    KneelingSuperman = 12,
+    WeightedKneelingSuperman = 13,
+    LatPullDownWithRow = 14,
+    MedicineBallDeadliftToReach = 15,
+    OneArmOneLegRow = 16,
+    OneArmRowWithBand = 17,
+    OverheadLungeWithMedicineBall = 18,
+    PlankKneeTucks = 19,
+    WeightedPlankKneeTucks = 20,
+    SideStep = 21,
+    WeightedSideStep = 22,
+    SingleLegBackExtension = 23,
+    WeightedSingleLegBackExtension = 24,
+    SpineExtension = 25,
+    WeightedSpineExtension = 26,
+    StaticBackExtension = 27,
+    WeightedStaticBackExtension = 28,
+    SupermanFromFloor = 29,
+    WeightedSupermanFromFloor = 30,
+    SwissBallBackExtension = 31,
+    WeightedSwissBallBackExtension = 32,
+    SwissBallHyperextension = 33,
+    WeightedSwissBallHyperextension = 34,
+    SwissBallOppositeArmAndLegLift = 35,
+    WeightedSwissBallOppositeArmAndLegLift = 36,
+    SupermanOnSwissBall = 37,
+    Cobra = 38,
+    SupineFloorBarre = 39,
+}
+
+impl FitFieldHyperextensionExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldHyperextensionExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldHyperextensionExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldHyperextensionExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldHyperextensionExerciseName::BackExtensionWithOppositeArmAndLegReach,
+            1 => FitFieldHyperextensionExerciseName::WeightedBackExtensionWithOppositeArmAndLegReach,
+            2 => FitFieldHyperextensionExerciseName::BaseRotations,
+            3 => FitFieldHyperextensionExerciseName::WeightedBaseRotations,
+            4 => FitFieldHyperextensionExerciseName::BentKneeReverseHyperextension,
+            5 => FitFieldHyperextensionExerciseName::WeightedBentKneeReverseHyperextension,
+            6 => FitFieldHyperextensionExerciseName::HollowHoldAndRoll,
+            7 => FitFieldHyperextensionExerciseName::WeightedHollowHoldAndRoll,
+            8 => FitFieldHyperextensionExerciseName::Kicks,
+            9 => FitFieldHyperextensionExerciseName::WeightedKicks,
+            10 => FitFieldHyperextensionExerciseName::KneeRaises,
+            11 => FitFieldHyperextensionExerciseName::WeightedKneeRaises,
+            12 => FitFieldHyperextensionExerciseName::KneelingSuperman,
+            13 => FitFieldHyperextensionExerciseName::WeightedKneelingSuperman,
+            14 => FitFieldHyperextensionExerciseName::LatPullDownWithRow,
+            15 => FitFieldHyperextensionExerciseName::MedicineBallDeadliftToReach,
+            16 => FitFieldHyperextensionExerciseName::OneArmOneLegRow,
+            17 => FitFieldHyperextensionExerciseName::OneArmRowWithBand,
+            18 => FitFieldHyperextensionExerciseName::OverheadLungeWithMedicineBall,
+            19 => FitFieldHyperextensionExerciseName::PlankKneeTucks,
+            20 => FitFieldHyperextensionExerciseName::WeightedPlankKneeTucks,
+            21 => FitFieldHyperextensionExerciseName::SideStep,
+            22 => FitFieldHyperextensionExerciseName::WeightedSideStep,
+            23 => FitFieldHyperextensionExerciseName::SingleLegBackExtension,
+            24 => FitFieldHyperextensionExerciseName::WeightedSingleLegBackExtension,
+            25 => FitFieldHyperextensionExerciseName::SpineExtension,
+            26 => FitFieldHyperextensionExerciseName::WeightedSpineExtension,
+            27 => FitFieldHyperextensionExerciseName::StaticBackExtension,
+            28 => FitFieldHyperextensionExerciseName::WeightedStaticBackExtension,
+            29 => FitFieldHyperextensionExerciseName::SupermanFromFloor,
+            30 => FitFieldHyperextensionExerciseName::WeightedSupermanFromFloor,
+            31 => FitFieldHyperextensionExerciseName::SwissBallBackExtension,
+            32 => FitFieldHyperextensionExerciseName::WeightedSwissBallBackExtension,
+            33 => FitFieldHyperextensionExerciseName::SwissBallHyperextension,
+            34 => FitFieldHyperextensionExerciseName::WeightedSwissBallHyperextension,
+            35 => FitFieldHyperextensionExerciseName::SwissBallOppositeArmAndLegLift,
+            36 => FitFieldHyperextensionExerciseName::WeightedSwissBallOppositeArmAndLegLift,
+            37 => FitFieldHyperextensionExerciseName::SupermanOnSwissBall,
+            38 => FitFieldHyperextensionExerciseName::Cobra,
+            39 => FitFieldHyperextensionExerciseName::SupineFloorBarre,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHyperextensionExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldExdDescriptors { // fit base type: enum
     BikeLightBatteryStatus = 0,
     BeamAngleStatus = 1,
@@ -2809,6 +4459,7 @@ pub enum FitFieldExdDescriptors { // fit base type: enum
     Vmg = 93,
     AmbientPressure = 94,
     Pressure = 95,
+    Vam = 96,
 }
 
 impl FitFieldExdDescriptors {
@@ -2917,6 +4568,7 @@ impl From<u8> for FitFieldExdDescriptors {
             93 => FitFieldExdDescriptors::Vmg,
             94 => FitFieldExdDescriptors::AmbientPressure,
             95 => FitFieldExdDescriptors::Pressure,
+            96 => FitFieldExdDescriptors::Vam,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdDescriptors", invalid_field_num))
         }
     }
@@ -2960,6 +4612,38 @@ impl From<u8> for FitFieldActivityType {
             8 => FitFieldActivityType::Sedentary,
             254 => FitFieldActivityType::All,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldActivityType", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldTone { // fit base type: enum
+    Off = 0,
+    Tone = 1,
+    Vibrate = 2,
+    ToneAndVibrate = 3,
+}
+
+impl FitFieldTone {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldTone, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldTone::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldTone {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldTone::Off,
+            1 => FitFieldTone::Tone,
+            2 => FitFieldTone::Vibrate,
+            3 => FitFieldTone::ToneAndVibrate,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTone", invalid_field_num))
         }
     }
 }
@@ -3080,6 +4764,130 @@ impl From<u8> for FitFieldDisplayOrientation {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldHipRaiseExerciseName { // fit base type: uint16
+    BarbellHipThrustOnFloor = 0,
+    BarbellHipThrustWithBench = 1,
+    BentKneeSwissBallReverseHipRaise = 2,
+    WeightedBentKneeSwissBallReverseHipRaise = 3,
+    BridgeWithLegExtension = 4,
+    WeightedBridgeWithLegExtension = 5,
+    ClamBridge = 6,
+    FrontKickTabletop = 7,
+    WeightedFrontKickTabletop = 8,
+    HipExtensionAndCross = 9,
+    WeightedHipExtensionAndCross = 10,
+    HipRaise = 11,
+    WeightedHipRaise = 12,
+    HipRaiseWithFeetOnSwissBall = 13,
+    WeightedHipRaiseWithFeetOnSwissBall = 14,
+    HipRaiseWithHeadOnBosuBall = 15,
+    WeightedHipRaiseWithHeadOnBosuBall = 16,
+    HipRaiseWithHeadOnSwissBall = 17,
+    WeightedHipRaiseWithHeadOnSwissBall = 18,
+    HipRaiseWithKneeSqueeze = 19,
+    WeightedHipRaiseWithKneeSqueeze = 20,
+    InclineRearLegExtension = 21,
+    WeightedInclineRearLegExtension = 22,
+    KettlebellSwing = 23,
+    MarchingHipRaise = 24,
+    WeightedMarchingHipRaise = 25,
+    MarchingHipRaiseWithFeetOnASwissBall = 26,
+    WeightedMarchingHipRaiseWithFeetOnASwissBall = 27,
+    ReverseHipRaise = 28,
+    WeightedReverseHipRaise = 29,
+    SingleLegHipRaise = 30,
+    WeightedSingleLegHipRaise = 31,
+    SingleLegHipRaiseWithFootOnBench = 32,
+    WeightedSingleLegHipRaiseWithFootOnBench = 33,
+    SingleLegHipRaiseWithFootOnBosuBall = 34,
+    WeightedSingleLegHipRaiseWithFootOnBosuBall = 35,
+    SingleLegHipRaiseWithFootOnFoamRoller = 36,
+    WeightedSingleLegHipRaiseWithFootOnFoamRoller = 37,
+    SingleLegHipRaiseWithFootOnMedicineBall = 38,
+    WeightedSingleLegHipRaiseWithFootOnMedicineBall = 39,
+    SingleLegHipRaiseWithHeadOnBosuBall = 40,
+    WeightedSingleLegHipRaiseWithHeadOnBosuBall = 41,
+    WeightedClamBridge = 42,
+    SingleLegSwissBallHipRaiseAndLegCurl = 43,
+    Clams = 44,
+    InnerThighCircles = 45,
+    InnerThighSideLift = 46,
+    LegCircles = 47,
+    LegLift = 48,
+    LegLiftInExternalRotation = 49,
+}
+
+impl FitFieldHipRaiseExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldHipRaiseExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldHipRaiseExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldHipRaiseExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldHipRaiseExerciseName::BarbellHipThrustOnFloor,
+            1 => FitFieldHipRaiseExerciseName::BarbellHipThrustWithBench,
+            2 => FitFieldHipRaiseExerciseName::BentKneeSwissBallReverseHipRaise,
+            3 => FitFieldHipRaiseExerciseName::WeightedBentKneeSwissBallReverseHipRaise,
+            4 => FitFieldHipRaiseExerciseName::BridgeWithLegExtension,
+            5 => FitFieldHipRaiseExerciseName::WeightedBridgeWithLegExtension,
+            6 => FitFieldHipRaiseExerciseName::ClamBridge,
+            7 => FitFieldHipRaiseExerciseName::FrontKickTabletop,
+            8 => FitFieldHipRaiseExerciseName::WeightedFrontKickTabletop,
+            9 => FitFieldHipRaiseExerciseName::HipExtensionAndCross,
+            10 => FitFieldHipRaiseExerciseName::WeightedHipExtensionAndCross,
+            11 => FitFieldHipRaiseExerciseName::HipRaise,
+            12 => FitFieldHipRaiseExerciseName::WeightedHipRaise,
+            13 => FitFieldHipRaiseExerciseName::HipRaiseWithFeetOnSwissBall,
+            14 => FitFieldHipRaiseExerciseName::WeightedHipRaiseWithFeetOnSwissBall,
+            15 => FitFieldHipRaiseExerciseName::HipRaiseWithHeadOnBosuBall,
+            16 => FitFieldHipRaiseExerciseName::WeightedHipRaiseWithHeadOnBosuBall,
+            17 => FitFieldHipRaiseExerciseName::HipRaiseWithHeadOnSwissBall,
+            18 => FitFieldHipRaiseExerciseName::WeightedHipRaiseWithHeadOnSwissBall,
+            19 => FitFieldHipRaiseExerciseName::HipRaiseWithKneeSqueeze,
+            20 => FitFieldHipRaiseExerciseName::WeightedHipRaiseWithKneeSqueeze,
+            21 => FitFieldHipRaiseExerciseName::InclineRearLegExtension,
+            22 => FitFieldHipRaiseExerciseName::WeightedInclineRearLegExtension,
+            23 => FitFieldHipRaiseExerciseName::KettlebellSwing,
+            24 => FitFieldHipRaiseExerciseName::MarchingHipRaise,
+            25 => FitFieldHipRaiseExerciseName::WeightedMarchingHipRaise,
+            26 => FitFieldHipRaiseExerciseName::MarchingHipRaiseWithFeetOnASwissBall,
+            27 => FitFieldHipRaiseExerciseName::WeightedMarchingHipRaiseWithFeetOnASwissBall,
+            28 => FitFieldHipRaiseExerciseName::ReverseHipRaise,
+            29 => FitFieldHipRaiseExerciseName::WeightedReverseHipRaise,
+            30 => FitFieldHipRaiseExerciseName::SingleLegHipRaise,
+            31 => FitFieldHipRaiseExerciseName::WeightedSingleLegHipRaise,
+            32 => FitFieldHipRaiseExerciseName::SingleLegHipRaiseWithFootOnBench,
+            33 => FitFieldHipRaiseExerciseName::WeightedSingleLegHipRaiseWithFootOnBench,
+            34 => FitFieldHipRaiseExerciseName::SingleLegHipRaiseWithFootOnBosuBall,
+            35 => FitFieldHipRaiseExerciseName::WeightedSingleLegHipRaiseWithFootOnBosuBall,
+            36 => FitFieldHipRaiseExerciseName::SingleLegHipRaiseWithFootOnFoamRoller,
+            37 => FitFieldHipRaiseExerciseName::WeightedSingleLegHipRaiseWithFootOnFoamRoller,
+            38 => FitFieldHipRaiseExerciseName::SingleLegHipRaiseWithFootOnMedicineBall,
+            39 => FitFieldHipRaiseExerciseName::WeightedSingleLegHipRaiseWithFootOnMedicineBall,
+            40 => FitFieldHipRaiseExerciseName::SingleLegHipRaiseWithHeadOnBosuBall,
+            41 => FitFieldHipRaiseExerciseName::WeightedSingleLegHipRaiseWithHeadOnBosuBall,
+            42 => FitFieldHipRaiseExerciseName::WeightedClamBridge,
+            43 => FitFieldHipRaiseExerciseName::SingleLegSwissBallHipRaiseAndLegCurl,
+            44 => FitFieldHipRaiseExerciseName::Clams,
+            45 => FitFieldHipRaiseExerciseName::InnerThighCircles,
+            46 => FitFieldHipRaiseExerciseName::InnerThighSideLift,
+            47 => FitFieldHipRaiseExerciseName::LegCircles,
+            48 => FitFieldHipRaiseExerciseName::LegLift,
+            49 => FitFieldHipRaiseExerciseName::LegLiftInExternalRotation,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHipRaiseExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldLapTrigger { // fit base type: enum
     Manual = 0,
     Time = 1,
@@ -3112,6 +4920,38 @@ impl From<u8> for FitFieldLapTrigger {
             7 => FitFieldLapTrigger::SessionEnd,
             8 => FitFieldLapTrigger::FitnessEquipment,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLapTrigger", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldWaterType { // fit base type: enum
+    Fresh = 0,
+    Salt = 1,
+    En13319 = 2,
+    Custom = 3,
+}
+
+impl FitFieldWaterType {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldWaterType, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldWaterType::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldWaterType {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldWaterType::Fresh,
+            1 => FitFieldWaterType::Salt,
+            2 => FitFieldWaterType::En13319,
+            3 => FitFieldWaterType::Custom,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWaterType", invalid_field_num))
         }
     }
 }
@@ -3162,6 +5002,112 @@ impl From<u32> for FitFieldCourseCapabilities {
             512 => FitFieldCourseCapabilities::Navigation,
             1024 => FitFieldCourseCapabilities::Bikeway,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCourseCapabilities", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldTricepsExtensionExerciseName { // fit base type: uint16
+    BenchDip = 0,
+    WeightedBenchDip = 1,
+    BodyWeightDip = 2,
+    CableKickback = 3,
+    CableLyingTricepsExtension = 4,
+    CableOverheadTricepsExtension = 5,
+    DumbbellKickback = 6,
+    DumbbellLyingTricepsExtension = 7,
+    EzBarOverheadTricepsExtension = 8,
+    InclineDip = 9,
+    WeightedInclineDip = 10,
+    InclineEzBarLyingTricepsExtension = 11,
+    LyingDumbbellPulloverToExtension = 12,
+    LyingEzBarTricepsExtension = 13,
+    LyingTricepsExtensionToCloseGripBenchPress = 14,
+    OverheadDumbbellTricepsExtension = 15,
+    RecliningTricepsPress = 16,
+    ReverseGripPressdown = 17,
+    ReverseGripTricepsPressdown = 18,
+    RopePressdown = 19,
+    SeatedBarbellOverheadTricepsExtension = 20,
+    SeatedDumbbellOverheadTricepsExtension = 21,
+    SeatedEzBarOverheadTricepsExtension = 22,
+    SeatedSingleArmOverheadDumbbellExtension = 23,
+    SingleArmDumbbellOverheadTricepsExtension = 24,
+    SingleDumbbellSeatedOverheadTricepsExtension = 25,
+    SingleLegBenchDipAndKick = 26,
+    WeightedSingleLegBenchDipAndKick = 27,
+    SingleLegDip = 28,
+    WeightedSingleLegDip = 29,
+    StaticLyingTricepsExtension = 30,
+    SuspendedDip = 31,
+    WeightedSuspendedDip = 32,
+    SwissBallDumbbellLyingTricepsExtension = 33,
+    SwissBallEzBarLyingTricepsExtension = 34,
+    SwissBallEzBarOverheadTricepsExtension = 35,
+    TabletopDip = 36,
+    WeightedTabletopDip = 37,
+    TricepsExtensionOnFloor = 38,
+    TricepsPressdown = 39,
+    WeightedDip = 40,
+}
+
+impl FitFieldTricepsExtensionExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldTricepsExtensionExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldTricepsExtensionExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldTricepsExtensionExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldTricepsExtensionExerciseName::BenchDip,
+            1 => FitFieldTricepsExtensionExerciseName::WeightedBenchDip,
+            2 => FitFieldTricepsExtensionExerciseName::BodyWeightDip,
+            3 => FitFieldTricepsExtensionExerciseName::CableKickback,
+            4 => FitFieldTricepsExtensionExerciseName::CableLyingTricepsExtension,
+            5 => FitFieldTricepsExtensionExerciseName::CableOverheadTricepsExtension,
+            6 => FitFieldTricepsExtensionExerciseName::DumbbellKickback,
+            7 => FitFieldTricepsExtensionExerciseName::DumbbellLyingTricepsExtension,
+            8 => FitFieldTricepsExtensionExerciseName::EzBarOverheadTricepsExtension,
+            9 => FitFieldTricepsExtensionExerciseName::InclineDip,
+            10 => FitFieldTricepsExtensionExerciseName::WeightedInclineDip,
+            11 => FitFieldTricepsExtensionExerciseName::InclineEzBarLyingTricepsExtension,
+            12 => FitFieldTricepsExtensionExerciseName::LyingDumbbellPulloverToExtension,
+            13 => FitFieldTricepsExtensionExerciseName::LyingEzBarTricepsExtension,
+            14 => FitFieldTricepsExtensionExerciseName::LyingTricepsExtensionToCloseGripBenchPress,
+            15 => FitFieldTricepsExtensionExerciseName::OverheadDumbbellTricepsExtension,
+            16 => FitFieldTricepsExtensionExerciseName::RecliningTricepsPress,
+            17 => FitFieldTricepsExtensionExerciseName::ReverseGripPressdown,
+            18 => FitFieldTricepsExtensionExerciseName::ReverseGripTricepsPressdown,
+            19 => FitFieldTricepsExtensionExerciseName::RopePressdown,
+            20 => FitFieldTricepsExtensionExerciseName::SeatedBarbellOverheadTricepsExtension,
+            21 => FitFieldTricepsExtensionExerciseName::SeatedDumbbellOverheadTricepsExtension,
+            22 => FitFieldTricepsExtensionExerciseName::SeatedEzBarOverheadTricepsExtension,
+            23 => FitFieldTricepsExtensionExerciseName::SeatedSingleArmOverheadDumbbellExtension,
+            24 => FitFieldTricepsExtensionExerciseName::SingleArmDumbbellOverheadTricepsExtension,
+            25 => FitFieldTricepsExtensionExerciseName::SingleDumbbellSeatedOverheadTricepsExtension,
+            26 => FitFieldTricepsExtensionExerciseName::SingleLegBenchDipAndKick,
+            27 => FitFieldTricepsExtensionExerciseName::WeightedSingleLegBenchDipAndKick,
+            28 => FitFieldTricepsExtensionExerciseName::SingleLegDip,
+            29 => FitFieldTricepsExtensionExerciseName::WeightedSingleLegDip,
+            30 => FitFieldTricepsExtensionExerciseName::StaticLyingTricepsExtension,
+            31 => FitFieldTricepsExtensionExerciseName::SuspendedDip,
+            32 => FitFieldTricepsExtensionExerciseName::WeightedSuspendedDip,
+            33 => FitFieldTricepsExtensionExerciseName::SwissBallDumbbellLyingTricepsExtension,
+            34 => FitFieldTricepsExtensionExerciseName::SwissBallEzBarLyingTricepsExtension,
+            35 => FitFieldTricepsExtensionExerciseName::SwissBallEzBarOverheadTricepsExtension,
+            36 => FitFieldTricepsExtensionExerciseName::TabletopDip,
+            37 => FitFieldTricepsExtensionExerciseName::WeightedTabletopDip,
+            38 => FitFieldTricepsExtensionExerciseName::TricepsExtensionOnFloor,
+            39 => FitFieldTricepsExtensionExerciseName::TricepsPressdown,
+            40 => FitFieldTricepsExtensionExerciseName::WeightedDip,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTricepsExtensionExerciseName", invalid_field_num))
         }
     }
 }
@@ -3243,6 +5189,7 @@ pub enum FitFieldExdQualifiers { // fit base type: enum
     LastSport = 31,
     Moving = 32,
     Stopped = 33,
+    EstimatedTotal = 34,
     Zone9 = 242,
     Zone8 = 243,
     Zone7 = 244,
@@ -3298,6 +5245,7 @@ impl From<u8> for FitFieldExdQualifiers {
             31 => FitFieldExdQualifiers::LastSport,
             32 => FitFieldExdQualifiers::Moving,
             33 => FitFieldExdQualifiers::Stopped,
+            34 => FitFieldExdQualifiers::EstimatedTotal,
             242 => FitFieldExdQualifiers::Zone9,
             243 => FitFieldExdQualifiers::Zone8,
             244 => FitFieldExdQualifiers::Zone7,
@@ -3401,7 +5349,7 @@ pub enum FitFieldSubSport { // fit base type: enum
     WarmUp = 21,  // Tennis
     Match = 22,  // Tennis
     Exercise = 23,  // Tennis
-    Challenge = 24,  // Tennis
+    Challenge = 24,
     IndoorSkiing = 25,  // Fitness Equipment
     CardioTraining = 26,  // Training
     IndoorWalking = 27,  // Walking/Fitness Equipment
@@ -3421,7 +5369,7 @@ pub enum FitFieldSubSport { // fit base type: enum
     Whitewater = 41,  // Kayaking/Rafting
     SkateSkiing = 42,  // Cross Country Skiing
     Yoga = 43,  // Training
-    Pilates = 44,  // Training
+    Pilates = 44,  // Fitness Equipment
     IndoorRunning = 45,  // Run
     GravelCycling = 46,  // Cycling
     EBikeMountain = 47,  // Cycling
@@ -3430,6 +5378,13 @@ pub enum FitFieldSubSport { // fit base type: enum
     Navigate = 50,
     TrackMe = 51,
     Map = 52,
+    SingleGasDiving = 53,  // Diving
+    MultiGasDiving = 54,  // Diving
+    GaugeDiving = 55,  // Diving
+    ApneaDiving = 56,  // Diving
+    ApneaHunting = 57,  // Diving
+    VirtualActivity = 58,
+    Obstacle = 59,  // Used for events where participants run, crawl through mud, climb over walls, etc.
     All = 254,
 }
 
@@ -3496,8 +5451,107 @@ impl From<u8> for FitFieldSubSport {
             50 => FitFieldSubSport::Navigate,
             51 => FitFieldSubSport::TrackMe,
             52 => FitFieldSubSport::Map,
+            53 => FitFieldSubSport::SingleGasDiving,
+            54 => FitFieldSubSport::MultiGasDiving,
+            55 => FitFieldSubSport::GaugeDiving,
+            56 => FitFieldSubSport::ApneaDiving,
+            57 => FitFieldSubSport::ApneaHunting,
+            58 => FitFieldSubSport::VirtualActivity,
+            59 => FitFieldSubSport::Obstacle,
             254 => FitFieldSubSport::All,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSubSport", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldExerciseCategory { // fit base type: uint16
+    BenchPress = 0,
+    CalfRaise = 1,
+    Cardio = 2,
+    Carry = 3,
+    Chop = 4,
+    Core = 5,
+    Crunch = 6,
+    Curl = 7,
+    Deadlift = 8,
+    Flye = 9,
+    HipRaise = 10,
+    HipStability = 11,
+    HipSwing = 12,
+    Hyperextension = 13,
+    LateralRaise = 14,
+    LegCurl = 15,
+    LegRaise = 16,
+    Lunge = 17,
+    OlympicLift = 18,
+    Plank = 19,
+    Plyo = 20,
+    PullUp = 21,
+    PushUp = 22,
+    Row = 23,
+    ShoulderPress = 24,
+    ShoulderStability = 25,
+    Shrug = 26,
+    SitUp = 27,
+    Squat = 28,
+    TotalBody = 29,
+    TricepsExtension = 30,
+    WarmUp = 31,
+    Run = 32,
+    Unknown = 65534,
+}
+
+impl FitFieldExerciseCategory {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldExerciseCategory, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldExerciseCategory::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldExerciseCategory {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldExerciseCategory::BenchPress,
+            1 => FitFieldExerciseCategory::CalfRaise,
+            2 => FitFieldExerciseCategory::Cardio,
+            3 => FitFieldExerciseCategory::Carry,
+            4 => FitFieldExerciseCategory::Chop,
+            5 => FitFieldExerciseCategory::Core,
+            6 => FitFieldExerciseCategory::Crunch,
+            7 => FitFieldExerciseCategory::Curl,
+            8 => FitFieldExerciseCategory::Deadlift,
+            9 => FitFieldExerciseCategory::Flye,
+            10 => FitFieldExerciseCategory::HipRaise,
+            11 => FitFieldExerciseCategory::HipStability,
+            12 => FitFieldExerciseCategory::HipSwing,
+            13 => FitFieldExerciseCategory::Hyperextension,
+            14 => FitFieldExerciseCategory::LateralRaise,
+            15 => FitFieldExerciseCategory::LegCurl,
+            16 => FitFieldExerciseCategory::LegRaise,
+            17 => FitFieldExerciseCategory::Lunge,
+            18 => FitFieldExerciseCategory::OlympicLift,
+            19 => FitFieldExerciseCategory::Plank,
+            20 => FitFieldExerciseCategory::Plyo,
+            21 => FitFieldExerciseCategory::PullUp,
+            22 => FitFieldExerciseCategory::PushUp,
+            23 => FitFieldExerciseCategory::Row,
+            24 => FitFieldExerciseCategory::ShoulderPress,
+            25 => FitFieldExerciseCategory::ShoulderStability,
+            26 => FitFieldExerciseCategory::Shrug,
+            27 => FitFieldExerciseCategory::SitUp,
+            28 => FitFieldExerciseCategory::Squat,
+            29 => FitFieldExerciseCategory::TotalBody,
+            30 => FitFieldExerciseCategory::TricepsExtension,
+            31 => FitFieldExerciseCategory::WarmUp,
+            32 => FitFieldExerciseCategory::Run,
+            65534 => FitFieldExerciseCategory::Unknown,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExerciseCategory", invalid_field_num))
         }
     }
 }
@@ -3524,6 +5578,192 @@ impl From<u8> for FitFieldDeviceIndex {
         match code {
             0 => FitFieldDeviceIndex::Creator,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDeviceIndex", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldLungeExerciseName { // fit base type: uint16
+    OverheadLunge = 0,
+    LungeMatrix = 1,
+    WeightedLungeMatrix = 2,
+    AlternatingBarbellForwardLunge = 3,
+    AlternatingDumbbellLungeWithReach = 4,
+    BackFootElevatedDumbbellSplitSquat = 5,
+    BarbellBoxLunge = 6,
+    BarbellBulgarianSplitSquat = 7,
+    BarbellCrossoverLunge = 8,
+    BarbellFrontSplitSquat = 9,
+    BarbellLunge = 10,
+    BarbellReverseLunge = 11,
+    BarbellSideLunge = 12,
+    BarbellSplitSquat = 13,
+    CoreControlRearLunge = 14,
+    DiagonalLunge = 15,
+    DropLunge = 16,
+    DumbbellBoxLunge = 17,
+    DumbbellBulgarianSplitSquat = 18,
+    DumbbellCrossoverLunge = 19,
+    DumbbellDiagonalLunge = 20,
+    DumbbellLunge = 21,
+    DumbbellLungeAndRotation = 22,
+    DumbbellOverheadBulgarianSplitSquat = 23,
+    DumbbellReverseLungeToHighKneeAndPress = 24,
+    DumbbellSideLunge = 25,
+    ElevatedFrontFootBarbellSplitSquat = 26,
+    FrontFootElevatedDumbbellSplitSquat = 27,
+    GunslingerLunge = 28,
+    LawnmowerLunge = 29,
+    LowLungeWithIsometricAdduction = 30,
+    LowSideToSideLunge = 31,
+    Lunge = 32,
+    WeightedLunge = 33,
+    LungeWithArmReach = 34,
+    LungeWithDiagonalReach = 35,
+    LungeWithSideBend = 36,
+    OffsetDumbbellLunge = 37,
+    OffsetDumbbellReverseLunge = 38,
+    OverheadBulgarianSplitSquat = 39,
+    OverheadDumbbellReverseLunge = 40,
+    OverheadDumbbellSplitSquat = 41,
+    OverheadLungeWithRotation = 42,
+    ReverseBarbellBoxLunge = 43,
+    ReverseBoxLunge = 44,
+    ReverseDumbbellBoxLunge = 45,
+    ReverseDumbbellCrossoverLunge = 46,
+    ReverseDumbbellDiagonalLunge = 47,
+    ReverseLungeWithReachBack = 48,
+    WeightedReverseLungeWithReachBack = 49,
+    ReverseLungeWithTwistAndOverheadReach = 50,
+    WeightedReverseLungeWithTwistAndOverheadReach = 51,
+    ReverseSlidingBoxLunge = 52,
+    WeightedReverseSlidingBoxLunge = 53,
+    ReverseSlidingLunge = 54,
+    WeightedReverseSlidingLunge = 55,
+    RunnersLungeToBalance = 56,
+    WeightedRunnersLungeToBalance = 57,
+    ShiftingSideLunge = 58,
+    SideAndCrossoverLunge = 59,
+    WeightedSideAndCrossoverLunge = 60,
+    SideLunge = 61,
+    WeightedSideLunge = 62,
+    SideLungeAndPress = 63,
+    SideLungeJumpOff = 64,
+    SideLungeSweep = 65,
+    WeightedSideLungeSweep = 66,
+    SideLungeToCrossoverTap = 67,
+    WeightedSideLungeToCrossoverTap = 68,
+    SideToSideLungeChops = 69,
+    WeightedSideToSideLungeChops = 70,
+    SiffJumpLunge = 71,
+    WeightedSiffJumpLunge = 72,
+    SingleArmReverseLungeAndPress = 73,
+    SlidingLateralLunge = 74,
+    WeightedSlidingLateralLunge = 75,
+    WalkingBarbellLunge = 76,
+    WalkingDumbbellLunge = 77,
+    WalkingLunge = 78,
+    WeightedWalkingLunge = 79,
+    WideGripOverheadBarbellSplitSquat = 80,
+}
+
+impl FitFieldLungeExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldLungeExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldLungeExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldLungeExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldLungeExerciseName::OverheadLunge,
+            1 => FitFieldLungeExerciseName::LungeMatrix,
+            2 => FitFieldLungeExerciseName::WeightedLungeMatrix,
+            3 => FitFieldLungeExerciseName::AlternatingBarbellForwardLunge,
+            4 => FitFieldLungeExerciseName::AlternatingDumbbellLungeWithReach,
+            5 => FitFieldLungeExerciseName::BackFootElevatedDumbbellSplitSquat,
+            6 => FitFieldLungeExerciseName::BarbellBoxLunge,
+            7 => FitFieldLungeExerciseName::BarbellBulgarianSplitSquat,
+            8 => FitFieldLungeExerciseName::BarbellCrossoverLunge,
+            9 => FitFieldLungeExerciseName::BarbellFrontSplitSquat,
+            10 => FitFieldLungeExerciseName::BarbellLunge,
+            11 => FitFieldLungeExerciseName::BarbellReverseLunge,
+            12 => FitFieldLungeExerciseName::BarbellSideLunge,
+            13 => FitFieldLungeExerciseName::BarbellSplitSquat,
+            14 => FitFieldLungeExerciseName::CoreControlRearLunge,
+            15 => FitFieldLungeExerciseName::DiagonalLunge,
+            16 => FitFieldLungeExerciseName::DropLunge,
+            17 => FitFieldLungeExerciseName::DumbbellBoxLunge,
+            18 => FitFieldLungeExerciseName::DumbbellBulgarianSplitSquat,
+            19 => FitFieldLungeExerciseName::DumbbellCrossoverLunge,
+            20 => FitFieldLungeExerciseName::DumbbellDiagonalLunge,
+            21 => FitFieldLungeExerciseName::DumbbellLunge,
+            22 => FitFieldLungeExerciseName::DumbbellLungeAndRotation,
+            23 => FitFieldLungeExerciseName::DumbbellOverheadBulgarianSplitSquat,
+            24 => FitFieldLungeExerciseName::DumbbellReverseLungeToHighKneeAndPress,
+            25 => FitFieldLungeExerciseName::DumbbellSideLunge,
+            26 => FitFieldLungeExerciseName::ElevatedFrontFootBarbellSplitSquat,
+            27 => FitFieldLungeExerciseName::FrontFootElevatedDumbbellSplitSquat,
+            28 => FitFieldLungeExerciseName::GunslingerLunge,
+            29 => FitFieldLungeExerciseName::LawnmowerLunge,
+            30 => FitFieldLungeExerciseName::LowLungeWithIsometricAdduction,
+            31 => FitFieldLungeExerciseName::LowSideToSideLunge,
+            32 => FitFieldLungeExerciseName::Lunge,
+            33 => FitFieldLungeExerciseName::WeightedLunge,
+            34 => FitFieldLungeExerciseName::LungeWithArmReach,
+            35 => FitFieldLungeExerciseName::LungeWithDiagonalReach,
+            36 => FitFieldLungeExerciseName::LungeWithSideBend,
+            37 => FitFieldLungeExerciseName::OffsetDumbbellLunge,
+            38 => FitFieldLungeExerciseName::OffsetDumbbellReverseLunge,
+            39 => FitFieldLungeExerciseName::OverheadBulgarianSplitSquat,
+            40 => FitFieldLungeExerciseName::OverheadDumbbellReverseLunge,
+            41 => FitFieldLungeExerciseName::OverheadDumbbellSplitSquat,
+            42 => FitFieldLungeExerciseName::OverheadLungeWithRotation,
+            43 => FitFieldLungeExerciseName::ReverseBarbellBoxLunge,
+            44 => FitFieldLungeExerciseName::ReverseBoxLunge,
+            45 => FitFieldLungeExerciseName::ReverseDumbbellBoxLunge,
+            46 => FitFieldLungeExerciseName::ReverseDumbbellCrossoverLunge,
+            47 => FitFieldLungeExerciseName::ReverseDumbbellDiagonalLunge,
+            48 => FitFieldLungeExerciseName::ReverseLungeWithReachBack,
+            49 => FitFieldLungeExerciseName::WeightedReverseLungeWithReachBack,
+            50 => FitFieldLungeExerciseName::ReverseLungeWithTwistAndOverheadReach,
+            51 => FitFieldLungeExerciseName::WeightedReverseLungeWithTwistAndOverheadReach,
+            52 => FitFieldLungeExerciseName::ReverseSlidingBoxLunge,
+            53 => FitFieldLungeExerciseName::WeightedReverseSlidingBoxLunge,
+            54 => FitFieldLungeExerciseName::ReverseSlidingLunge,
+            55 => FitFieldLungeExerciseName::WeightedReverseSlidingLunge,
+            56 => FitFieldLungeExerciseName::RunnersLungeToBalance,
+            57 => FitFieldLungeExerciseName::WeightedRunnersLungeToBalance,
+            58 => FitFieldLungeExerciseName::ShiftingSideLunge,
+            59 => FitFieldLungeExerciseName::SideAndCrossoverLunge,
+            60 => FitFieldLungeExerciseName::WeightedSideAndCrossoverLunge,
+            61 => FitFieldLungeExerciseName::SideLunge,
+            62 => FitFieldLungeExerciseName::WeightedSideLunge,
+            63 => FitFieldLungeExerciseName::SideLungeAndPress,
+            64 => FitFieldLungeExerciseName::SideLungeJumpOff,
+            65 => FitFieldLungeExerciseName::SideLungeSweep,
+            66 => FitFieldLungeExerciseName::WeightedSideLungeSweep,
+            67 => FitFieldLungeExerciseName::SideLungeToCrossoverTap,
+            68 => FitFieldLungeExerciseName::WeightedSideLungeToCrossoverTap,
+            69 => FitFieldLungeExerciseName::SideToSideLungeChops,
+            70 => FitFieldLungeExerciseName::WeightedSideToSideLungeChops,
+            71 => FitFieldLungeExerciseName::SiffJumpLunge,
+            72 => FitFieldLungeExerciseName::WeightedSiffJumpLunge,
+            73 => FitFieldLungeExerciseName::SingleArmReverseLungeAndPress,
+            74 => FitFieldLungeExerciseName::SlidingLateralLunge,
+            75 => FitFieldLungeExerciseName::WeightedSlidingLateralLunge,
+            76 => FitFieldLungeExerciseName::WalkingBarbellLunge,
+            77 => FitFieldLungeExerciseName::WalkingDumbbellLunge,
+            78 => FitFieldLungeExerciseName::WalkingLunge,
+            79 => FitFieldLungeExerciseName::WeightedWalkingLunge,
+            80 => FitFieldLungeExerciseName::WideGripOverheadBarbellSplitSquat,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLungeExerciseName", invalid_field_num))
         }
     }
 }
@@ -3828,6 +6068,108 @@ impl From<u8> for FitFieldSportBits6 {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldPullUpExerciseName { // fit base type: uint16
+    BandedPullUps = 0,
+    ThirtyDegreeLatPulldown = 1,
+    BandAssistedChinUp = 2,
+    CloseGripChinUp = 3,
+    WeightedCloseGripChinUp = 4,
+    CloseGripLatPulldown = 5,
+    CrossoverChinUp = 6,
+    WeightedCrossoverChinUp = 7,
+    EzBarPullover = 8,
+    HangingHurdle = 9,
+    WeightedHangingHurdle = 10,
+    KneelingLatPulldown = 11,
+    KneelingUnderhandGripLatPulldown = 12,
+    LatPulldown = 13,
+    MixedGripChinUp = 14,
+    WeightedMixedGripChinUp = 15,
+    MixedGripPullUp = 16,
+    WeightedMixedGripPullUp = 17,
+    ReverseGripPulldown = 18,
+    StandingCablePullover = 19,
+    StraightArmPulldown = 20,
+    SwissBallEzBarPullover = 21,
+    TowelPullUp = 22,
+    WeightedTowelPullUp = 23,
+    WeightedPullUp = 24,
+    WideGripLatPulldown = 25,
+    WideGripPullUp = 26,
+    WeightedWideGripPullUp = 27,
+    BurpeePullUp = 28,
+    WeightedBurpeePullUp = 29,
+    JumpingPullUps = 30,
+    WeightedJumpingPullUps = 31,
+    KippingPullUp = 32,
+    WeightedKippingPullUp = 33,
+    LPullUp = 34,
+    WeightedLPullUp = 35,
+    SuspendedChinUp = 36,
+    WeightedSuspendedChinUp = 37,
+    PullUp = 38,
+}
+
+impl FitFieldPullUpExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldPullUpExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldPullUpExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldPullUpExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldPullUpExerciseName::BandedPullUps,
+            1 => FitFieldPullUpExerciseName::ThirtyDegreeLatPulldown,
+            2 => FitFieldPullUpExerciseName::BandAssistedChinUp,
+            3 => FitFieldPullUpExerciseName::CloseGripChinUp,
+            4 => FitFieldPullUpExerciseName::WeightedCloseGripChinUp,
+            5 => FitFieldPullUpExerciseName::CloseGripLatPulldown,
+            6 => FitFieldPullUpExerciseName::CrossoverChinUp,
+            7 => FitFieldPullUpExerciseName::WeightedCrossoverChinUp,
+            8 => FitFieldPullUpExerciseName::EzBarPullover,
+            9 => FitFieldPullUpExerciseName::HangingHurdle,
+            10 => FitFieldPullUpExerciseName::WeightedHangingHurdle,
+            11 => FitFieldPullUpExerciseName::KneelingLatPulldown,
+            12 => FitFieldPullUpExerciseName::KneelingUnderhandGripLatPulldown,
+            13 => FitFieldPullUpExerciseName::LatPulldown,
+            14 => FitFieldPullUpExerciseName::MixedGripChinUp,
+            15 => FitFieldPullUpExerciseName::WeightedMixedGripChinUp,
+            16 => FitFieldPullUpExerciseName::MixedGripPullUp,
+            17 => FitFieldPullUpExerciseName::WeightedMixedGripPullUp,
+            18 => FitFieldPullUpExerciseName::ReverseGripPulldown,
+            19 => FitFieldPullUpExerciseName::StandingCablePullover,
+            20 => FitFieldPullUpExerciseName::StraightArmPulldown,
+            21 => FitFieldPullUpExerciseName::SwissBallEzBarPullover,
+            22 => FitFieldPullUpExerciseName::TowelPullUp,
+            23 => FitFieldPullUpExerciseName::WeightedTowelPullUp,
+            24 => FitFieldPullUpExerciseName::WeightedPullUp,
+            25 => FitFieldPullUpExerciseName::WideGripLatPulldown,
+            26 => FitFieldPullUpExerciseName::WideGripPullUp,
+            27 => FitFieldPullUpExerciseName::WeightedWideGripPullUp,
+            28 => FitFieldPullUpExerciseName::BurpeePullUp,
+            29 => FitFieldPullUpExerciseName::WeightedBurpeePullUp,
+            30 => FitFieldPullUpExerciseName::JumpingPullUps,
+            31 => FitFieldPullUpExerciseName::WeightedJumpingPullUps,
+            32 => FitFieldPullUpExerciseName::KippingPullUp,
+            33 => FitFieldPullUpExerciseName::WeightedKippingPullUp,
+            34 => FitFieldPullUpExerciseName::LPullUp,
+            35 => FitFieldPullUpExerciseName::WeightedLPullUp,
+            36 => FitFieldPullUpExerciseName::SuspendedChinUp,
+            37 => FitFieldPullUpExerciseName::WeightedSuspendedChinUp,
+            38 => FitFieldPullUpExerciseName::PullUp,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPullUpExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldSegmentDeleteStatus { // fit base type: enum
     DoNotDelete = 0,
     DeleteOne = 1,
@@ -3928,9 +6270,77 @@ impl From<u32> for FitFieldAutoActivityDetect {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldCalfRaiseExerciseName { // fit base type: uint16
+    ThreeWayCalfRaise = 0,
+    ThreeWayWeightedCalfRaise = 1,
+    ThreeWaySingleLegCalfRaise = 2,
+    ThreeWayWeightedSingleLegCalfRaise = 3,
+    DonkeyCalfRaise = 4,
+    WeightedDonkeyCalfRaise = 5,
+    SeatedCalfRaise = 6,
+    WeightedSeatedCalfRaise = 7,
+    SeatedDumbbellToeRaise = 8,
+    SingleLegBentKneeCalfRaise = 9,
+    WeightedSingleLegBentKneeCalfRaise = 10,
+    SingleLegDeclinePushUp = 11,
+    SingleLegDonkeyCalfRaise = 12,
+    WeightedSingleLegDonkeyCalfRaise = 13,
+    SingleLegHipRaiseWithKneeHold = 14,
+    SingleLegStandingCalfRaise = 15,
+    SingleLegStandingDumbbellCalfRaise = 16,
+    StandingBarbellCalfRaise = 17,
+    StandingCalfRaise = 18,
+    WeightedStandingCalfRaise = 19,
+    StandingDumbbellCalfRaise = 20,
+}
+
+impl FitFieldCalfRaiseExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldCalfRaiseExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldCalfRaiseExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldCalfRaiseExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldCalfRaiseExerciseName::ThreeWayCalfRaise,
+            1 => FitFieldCalfRaiseExerciseName::ThreeWayWeightedCalfRaise,
+            2 => FitFieldCalfRaiseExerciseName::ThreeWaySingleLegCalfRaise,
+            3 => FitFieldCalfRaiseExerciseName::ThreeWayWeightedSingleLegCalfRaise,
+            4 => FitFieldCalfRaiseExerciseName::DonkeyCalfRaise,
+            5 => FitFieldCalfRaiseExerciseName::WeightedDonkeyCalfRaise,
+            6 => FitFieldCalfRaiseExerciseName::SeatedCalfRaise,
+            7 => FitFieldCalfRaiseExerciseName::WeightedSeatedCalfRaise,
+            8 => FitFieldCalfRaiseExerciseName::SeatedDumbbellToeRaise,
+            9 => FitFieldCalfRaiseExerciseName::SingleLegBentKneeCalfRaise,
+            10 => FitFieldCalfRaiseExerciseName::WeightedSingleLegBentKneeCalfRaise,
+            11 => FitFieldCalfRaiseExerciseName::SingleLegDeclinePushUp,
+            12 => FitFieldCalfRaiseExerciseName::SingleLegDonkeyCalfRaise,
+            13 => FitFieldCalfRaiseExerciseName::WeightedSingleLegDonkeyCalfRaise,
+            14 => FitFieldCalfRaiseExerciseName::SingleLegHipRaiseWithKneeHold,
+            15 => FitFieldCalfRaiseExerciseName::SingleLegStandingCalfRaise,
+            16 => FitFieldCalfRaiseExerciseName::SingleLegStandingDumbbellCalfRaise,
+            17 => FitFieldCalfRaiseExerciseName::StandingBarbellCalfRaise,
+            18 => FitFieldCalfRaiseExerciseName::StandingCalfRaise,
+            19 => FitFieldCalfRaiseExerciseName::WeightedStandingCalfRaise,
+            20 => FitFieldCalfRaiseExerciseName::StandingDumbbellCalfRaise,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCalfRaiseExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldRiderPositionType { // fit base type: enum
     Seated = 0,
     Standing = 1,
+    TransitionToSeated = 2,
+    TransitionToStanding = 3,
 }
 
 impl FitFieldRiderPositionType {
@@ -3945,7 +6355,99 @@ impl From<u8> for FitFieldRiderPositionType {
         match code {
             0 => FitFieldRiderPositionType::Seated,
             1 => FitFieldRiderPositionType::Standing,
+            2 => FitFieldRiderPositionType::TransitionToSeated,
+            3 => FitFieldRiderPositionType::TransitionToStanding,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldRiderPositionType", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldPlyoExerciseName { // fit base type: uint16
+    AlternatingJumpLunge = 0,
+    WeightedAlternatingJumpLunge = 1,
+    BarbellJumpSquat = 2,
+    BodyWeightJumpSquat = 3,
+    WeightedJumpSquat = 4,
+    CrossKneeStrike = 5,
+    WeightedCrossKneeStrike = 6,
+    DepthJump = 7,
+    WeightedDepthJump = 8,
+    DumbbellJumpSquat = 9,
+    DumbbellSplitJump = 10,
+    FrontKneeStrike = 11,
+    WeightedFrontKneeStrike = 12,
+    HighBoxJump = 13,
+    WeightedHighBoxJump = 14,
+    IsometricExplosiveBodyWeightJumpSquat = 15,
+    WeightedIsometricExplosiveJumpSquat = 16,
+    LateralLeapAndHop = 17,
+    WeightedLateralLeapAndHop = 18,
+    LateralPlyoSquats = 19,
+    WeightedLateralPlyoSquats = 20,
+    LateralSlide = 21,
+    WeightedLateralSlide = 22,
+    MedicineBallOverheadThrows = 23,
+    MedicineBallSideThrow = 24,
+    MedicineBallSlam = 25,
+    SideToSideMedicineBallThrows = 26,
+    SideToSideShuffleJump = 27,
+    WeightedSideToSideShuffleJump = 28,
+    SquatJumpOntoBox = 29,
+    WeightedSquatJumpOntoBox = 30,
+    SquatJumpsInAndOut = 31,
+    WeightedSquatJumpsInAndOut = 32,
+}
+
+impl FitFieldPlyoExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldPlyoExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldPlyoExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldPlyoExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldPlyoExerciseName::AlternatingJumpLunge,
+            1 => FitFieldPlyoExerciseName::WeightedAlternatingJumpLunge,
+            2 => FitFieldPlyoExerciseName::BarbellJumpSquat,
+            3 => FitFieldPlyoExerciseName::BodyWeightJumpSquat,
+            4 => FitFieldPlyoExerciseName::WeightedJumpSquat,
+            5 => FitFieldPlyoExerciseName::CrossKneeStrike,
+            6 => FitFieldPlyoExerciseName::WeightedCrossKneeStrike,
+            7 => FitFieldPlyoExerciseName::DepthJump,
+            8 => FitFieldPlyoExerciseName::WeightedDepthJump,
+            9 => FitFieldPlyoExerciseName::DumbbellJumpSquat,
+            10 => FitFieldPlyoExerciseName::DumbbellSplitJump,
+            11 => FitFieldPlyoExerciseName::FrontKneeStrike,
+            12 => FitFieldPlyoExerciseName::WeightedFrontKneeStrike,
+            13 => FitFieldPlyoExerciseName::HighBoxJump,
+            14 => FitFieldPlyoExerciseName::WeightedHighBoxJump,
+            15 => FitFieldPlyoExerciseName::IsometricExplosiveBodyWeightJumpSquat,
+            16 => FitFieldPlyoExerciseName::WeightedIsometricExplosiveJumpSquat,
+            17 => FitFieldPlyoExerciseName::LateralLeapAndHop,
+            18 => FitFieldPlyoExerciseName::WeightedLateralLeapAndHop,
+            19 => FitFieldPlyoExerciseName::LateralPlyoSquats,
+            20 => FitFieldPlyoExerciseName::WeightedLateralPlyoSquats,
+            21 => FitFieldPlyoExerciseName::LateralSlide,
+            22 => FitFieldPlyoExerciseName::WeightedLateralSlide,
+            23 => FitFieldPlyoExerciseName::MedicineBallOverheadThrows,
+            24 => FitFieldPlyoExerciseName::MedicineBallSideThrow,
+            25 => FitFieldPlyoExerciseName::MedicineBallSlam,
+            26 => FitFieldPlyoExerciseName::SideToSideMedicineBallThrows,
+            27 => FitFieldPlyoExerciseName::SideToSideShuffleJump,
+            28 => FitFieldPlyoExerciseName::WeightedSideToSideShuffleJump,
+            29 => FitFieldPlyoExerciseName::SquatJumpOntoBox,
+            30 => FitFieldPlyoExerciseName::WeightedSquatJumpOntoBox,
+            31 => FitFieldPlyoExerciseName::SquatJumpsInAndOut,
+            32 => FitFieldPlyoExerciseName::WeightedSquatJumpsInAndOut,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPlyoExerciseName", invalid_field_num))
         }
     }
 }
@@ -4091,13 +6593,23 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     VariaVision = 2398,
     VivoFit3 = 2406,
     Fenix3Hr = 2413,
+    VirbUltra30 = 2417,
     IndexSmartScale = 2429,
     Fr235 = 2431,
+    Fenix3Chronos = 2432,
     Oregon7xx = 2441,
     Rino7xx = 2444,
     Nautix = 2496,
     Edge820 = 2530,
     EdgeExplore820 = 2531,
+    Fenix5s = 2544,
+    D2BravoTitanium = 2547,
+    VariaUt800 = 2567,  // Varia UT 800 SW
+    RunningDynamicsPod = 2593,
+    Fenix5x = 2604,
+    VivoFitJr = 2606,
+    Fr935 = 2691,
+    Fenix5 = 2697,
     Sdm4 = 10007,  // SDM4 footpod
     EdgeRemote = 10014,
     TrainingCenter = 20119,
@@ -4250,13 +6762,23 @@ impl From<u16> for FitFieldGarminProduct {
             2398 => FitFieldGarminProduct::VariaVision,
             2406 => FitFieldGarminProduct::VivoFit3,
             2413 => FitFieldGarminProduct::Fenix3Hr,
+            2417 => FitFieldGarminProduct::VirbUltra30,
             2429 => FitFieldGarminProduct::IndexSmartScale,
             2431 => FitFieldGarminProduct::Fr235,
+            2432 => FitFieldGarminProduct::Fenix3Chronos,
             2441 => FitFieldGarminProduct::Oregon7xx,
             2444 => FitFieldGarminProduct::Rino7xx,
             2496 => FitFieldGarminProduct::Nautix,
             2530 => FitFieldGarminProduct::Edge820,
             2531 => FitFieldGarminProduct::EdgeExplore820,
+            2544 => FitFieldGarminProduct::Fenix5s,
+            2547 => FitFieldGarminProduct::D2BravoTitanium,
+            2567 => FitFieldGarminProduct::VariaUt800,
+            2593 => FitFieldGarminProduct::RunningDynamicsPod,
+            2604 => FitFieldGarminProduct::Fenix5x,
+            2606 => FitFieldGarminProduct::VivoFitJr,
+            2691 => FitFieldGarminProduct::Fr935,
+            2697 => FitFieldGarminProduct::Fenix5,
             10007 => FitFieldGarminProduct::Sdm4,
             10014 => FitFieldGarminProduct::EdgeRemote,
             20119 => FitFieldGarminProduct::TrainingCenter,
@@ -4330,6 +6852,112 @@ impl From<u32> for FitFieldWorkoutPower {
         match code {
             1000 => FitFieldWorkoutPower::WattsOffset,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutPower", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldChopExerciseName { // fit base type: uint16
+    CablePullThrough = 0,
+    CableRotationalLift = 1,
+    CableWoodchop = 2,
+    CrossChopToKnee = 3,
+    WeightedCrossChopToKnee = 4,
+    DumbbellChop = 5,
+    HalfKneelingRotation = 6,
+    WeightedHalfKneelingRotation = 7,
+    HalfKneelingRotationalChop = 8,
+    HalfKneelingRotationalReverseChop = 9,
+    HalfKneelingStabilityChop = 10,
+    HalfKneelingStabilityReverseChop = 11,
+    KneelingRotationalChop = 12,
+    KneelingRotationalReverseChop = 13,
+    KneelingStabilityChop = 14,
+    KneelingWoodchopper = 15,
+    MedicineBallWoodChops = 16,
+    PowerSquatChops = 17,
+    WeightedPowerSquatChops = 18,
+    StandingRotationalChop = 19,
+    StandingSplitRotationalChop = 20,
+    StandingSplitRotationalReverseChop = 21,
+    StandingStabilityReverseChop = 22,
+}
+
+impl FitFieldChopExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldChopExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldChopExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldChopExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldChopExerciseName::CablePullThrough,
+            1 => FitFieldChopExerciseName::CableRotationalLift,
+            2 => FitFieldChopExerciseName::CableWoodchop,
+            3 => FitFieldChopExerciseName::CrossChopToKnee,
+            4 => FitFieldChopExerciseName::WeightedCrossChopToKnee,
+            5 => FitFieldChopExerciseName::DumbbellChop,
+            6 => FitFieldChopExerciseName::HalfKneelingRotation,
+            7 => FitFieldChopExerciseName::WeightedHalfKneelingRotation,
+            8 => FitFieldChopExerciseName::HalfKneelingRotationalChop,
+            9 => FitFieldChopExerciseName::HalfKneelingRotationalReverseChop,
+            10 => FitFieldChopExerciseName::HalfKneelingStabilityChop,
+            11 => FitFieldChopExerciseName::HalfKneelingStabilityReverseChop,
+            12 => FitFieldChopExerciseName::KneelingRotationalChop,
+            13 => FitFieldChopExerciseName::KneelingRotationalReverseChop,
+            14 => FitFieldChopExerciseName::KneelingStabilityChop,
+            15 => FitFieldChopExerciseName::KneelingWoodchopper,
+            16 => FitFieldChopExerciseName::MedicineBallWoodChops,
+            17 => FitFieldChopExerciseName::PowerSquatChops,
+            18 => FitFieldChopExerciseName::WeightedPowerSquatChops,
+            19 => FitFieldChopExerciseName::StandingRotationalChop,
+            20 => FitFieldChopExerciseName::StandingSplitRotationalChop,
+            21 => FitFieldChopExerciseName::StandingSplitRotationalReverseChop,
+            22 => FitFieldChopExerciseName::StandingStabilityReverseChop,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldChopExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldWorkoutEquipment { // fit base type: enum
+    None = 0,
+    SwimFins = 1,
+    SwimKickboard = 2,
+    SwimPaddles = 3,
+    SwimPullBuoy = 4,
+    SwimSnorkel = 5,
+}
+
+impl FitFieldWorkoutEquipment {
+    pub fn parse(input: &[u8]) -> Result<(FitFieldWorkoutEquipment, &[u8])> {
+        let (val, o) = parse_enum(input)?;
+        Ok((FitFieldWorkoutEquipment::from(val), o))
+    }
+}
+
+impl From<u8> for FitFieldWorkoutEquipment {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldWorkoutEquipment::None,
+            1 => FitFieldWorkoutEquipment::SwimFins,
+            2 => FitFieldWorkoutEquipment::SwimKickboard,
+            3 => FitFieldWorkoutEquipment::SwimPaddles,
+            4 => FitFieldWorkoutEquipment::SwimPullBuoy,
+            5 => FitFieldWorkoutEquipment::SwimSnorkel,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutEquipment", invalid_field_num))
         }
     }
 }
@@ -4472,6 +7100,98 @@ impl From<u8> for FitFieldDayOfWeek {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldLateralRaiseExerciseName { // fit base type: uint16
+    FortyFiveDegreeCableExternalRotation = 0,
+    AlternatingLateralRaiseWithStaticHold = 1,
+    BarMuscleUp = 2,
+    BentOverLateralRaise = 3,
+    CableDiagonalRaise = 4,
+    CableFrontRaise = 5,
+    CalorieRow = 6,
+    ComboShoulderRaise = 7,
+    DumbbellDiagonalRaise = 8,
+    DumbbellVRaise = 9,
+    FrontRaise = 10,
+    LeaningDumbbellLateralRaise = 11,
+    LyingDumbbellRaise = 12,
+    MuscleUp = 13,
+    OneArmCableLateralRaise = 14,
+    OverhandGripRearLateralRaise = 15,
+    PlateRaises = 16,
+    RingDip = 17,
+    WeightedRingDip = 18,
+    RingMuscleUp = 19,
+    WeightedRingMuscleUp = 20,
+    RopeClimb = 21,
+    WeightedRopeClimb = 22,
+    Scaption = 23,
+    SeatedLateralRaise = 24,
+    SeatedRearLateralRaise = 25,
+    SideLyingLateralRaise = 26,
+    StandingLift = 27,
+    SuspendedRow = 28,
+    UnderhandGripRearLateralRaise = 29,
+    WallSlide = 30,
+    WeightedWallSlide = 31,
+    ArmCircles = 32,
+    ShavingTheHead = 33,
+}
+
+impl FitFieldLateralRaiseExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldLateralRaiseExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldLateralRaiseExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldLateralRaiseExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldLateralRaiseExerciseName::FortyFiveDegreeCableExternalRotation,
+            1 => FitFieldLateralRaiseExerciseName::AlternatingLateralRaiseWithStaticHold,
+            2 => FitFieldLateralRaiseExerciseName::BarMuscleUp,
+            3 => FitFieldLateralRaiseExerciseName::BentOverLateralRaise,
+            4 => FitFieldLateralRaiseExerciseName::CableDiagonalRaise,
+            5 => FitFieldLateralRaiseExerciseName::CableFrontRaise,
+            6 => FitFieldLateralRaiseExerciseName::CalorieRow,
+            7 => FitFieldLateralRaiseExerciseName::ComboShoulderRaise,
+            8 => FitFieldLateralRaiseExerciseName::DumbbellDiagonalRaise,
+            9 => FitFieldLateralRaiseExerciseName::DumbbellVRaise,
+            10 => FitFieldLateralRaiseExerciseName::FrontRaise,
+            11 => FitFieldLateralRaiseExerciseName::LeaningDumbbellLateralRaise,
+            12 => FitFieldLateralRaiseExerciseName::LyingDumbbellRaise,
+            13 => FitFieldLateralRaiseExerciseName::MuscleUp,
+            14 => FitFieldLateralRaiseExerciseName::OneArmCableLateralRaise,
+            15 => FitFieldLateralRaiseExerciseName::OverhandGripRearLateralRaise,
+            16 => FitFieldLateralRaiseExerciseName::PlateRaises,
+            17 => FitFieldLateralRaiseExerciseName::RingDip,
+            18 => FitFieldLateralRaiseExerciseName::WeightedRingDip,
+            19 => FitFieldLateralRaiseExerciseName::RingMuscleUp,
+            20 => FitFieldLateralRaiseExerciseName::WeightedRingMuscleUp,
+            21 => FitFieldLateralRaiseExerciseName::RopeClimb,
+            22 => FitFieldLateralRaiseExerciseName::WeightedRopeClimb,
+            23 => FitFieldLateralRaiseExerciseName::Scaption,
+            24 => FitFieldLateralRaiseExerciseName::SeatedLateralRaise,
+            25 => FitFieldLateralRaiseExerciseName::SeatedRearLateralRaise,
+            26 => FitFieldLateralRaiseExerciseName::SideLyingLateralRaise,
+            27 => FitFieldLateralRaiseExerciseName::StandingLift,
+            28 => FitFieldLateralRaiseExerciseName::SuspendedRow,
+            29 => FitFieldLateralRaiseExerciseName::UnderhandGripRearLateralRaise,
+            30 => FitFieldLateralRaiseExerciseName::WallSlide,
+            31 => FitFieldLateralRaiseExerciseName::WeightedWallSlide,
+            32 => FitFieldLateralRaiseExerciseName::ArmCircles,
+            33 => FitFieldLateralRaiseExerciseName::ShavingTheHead,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLateralRaiseExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldAntplusDeviceType { // fit base type: uint8
     Antfs = 1,
     BikePower = 11,
@@ -4490,6 +7210,7 @@ pub enum FitFieldAntplusDeviceType { // fit base type: uint8
     BikeLightShared = 36,
     Exd = 38,
     BikeRadar = 40,
+    BikeAero = 46,
     WeightScale = 119,
     HeartRate = 120,
     BikeSpeedCadence = 121,
@@ -4525,6 +7246,7 @@ impl From<u8> for FitFieldAntplusDeviceType {
             36 => FitFieldAntplusDeviceType::BikeLightShared,
             38 => FitFieldAntplusDeviceType::Exd,
             40 => FitFieldAntplusDeviceType::BikeRadar,
+            46 => FitFieldAntplusDeviceType::BikeAero,
             119 => FitFieldAntplusDeviceType::WeightScale,
             120 => FitFieldAntplusDeviceType::HeartRate,
             121 => FitFieldAntplusDeviceType::BikeSpeedCadence,
@@ -4644,6 +7366,8 @@ impl From<u8> for FitFieldTurnType {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldFitBaseUnit { // fit base type: uint16
     Other = 0,
+    Kilogram = 1,
+    Pound = 2,
 }
 
 impl FitFieldFitBaseUnit {
@@ -4657,6 +7381,8 @@ impl From<u16> for FitFieldFitBaseUnit {
     fn from(code: u16) -> Self {
         match code {
             0 => FitFieldFitBaseUnit::Other,
+            1 => FitFieldFitBaseUnit::Kilogram,
+            2 => FitFieldFitBaseUnit::Pound,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFitBaseUnit", invalid_field_num))
         }
     }
@@ -4750,6 +7476,74 @@ impl From<u32> for FitFieldWorkoutHr {
         match code {
             100 => FitFieldWorkoutHr::BpmOffset,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutHr", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldLegRaiseExerciseName { // fit base type: uint16
+    HangingKneeRaise = 0,
+    HangingLegRaise = 1,
+    WeightedHangingLegRaise = 2,
+    HangingSingleLegRaise = 3,
+    WeightedHangingSingleLegRaise = 4,
+    KettlebellLegRaises = 5,
+    LegLoweringDrill = 6,
+    WeightedLegLoweringDrill = 7,
+    LyingStraightLegRaise = 8,
+    WeightedLyingStraightLegRaise = 9,
+    MedicineBallLegDrops = 10,
+    QuadrupedLegRaise = 11,
+    WeightedQuadrupedLegRaise = 12,
+    ReverseLegRaise = 13,
+    WeightedReverseLegRaise = 14,
+    ReverseLegRaiseOnSwissBall = 15,
+    WeightedReverseLegRaiseOnSwissBall = 16,
+    SingleLegLoweringDrill = 17,
+    WeightedSingleLegLoweringDrill = 18,
+    WeightedHangingKneeRaise = 19,
+    LateralStepover = 20,
+    WeightedLateralStepover = 21,
+}
+
+impl FitFieldLegRaiseExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldLegRaiseExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldLegRaiseExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldLegRaiseExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldLegRaiseExerciseName::HangingKneeRaise,
+            1 => FitFieldLegRaiseExerciseName::HangingLegRaise,
+            2 => FitFieldLegRaiseExerciseName::WeightedHangingLegRaise,
+            3 => FitFieldLegRaiseExerciseName::HangingSingleLegRaise,
+            4 => FitFieldLegRaiseExerciseName::WeightedHangingSingleLegRaise,
+            5 => FitFieldLegRaiseExerciseName::KettlebellLegRaises,
+            6 => FitFieldLegRaiseExerciseName::LegLoweringDrill,
+            7 => FitFieldLegRaiseExerciseName::WeightedLegLoweringDrill,
+            8 => FitFieldLegRaiseExerciseName::LyingStraightLegRaise,
+            9 => FitFieldLegRaiseExerciseName::WeightedLyingStraightLegRaise,
+            10 => FitFieldLegRaiseExerciseName::MedicineBallLegDrops,
+            11 => FitFieldLegRaiseExerciseName::QuadrupedLegRaise,
+            12 => FitFieldLegRaiseExerciseName::WeightedQuadrupedLegRaise,
+            13 => FitFieldLegRaiseExerciseName::ReverseLegRaise,
+            14 => FitFieldLegRaiseExerciseName::WeightedReverseLegRaise,
+            15 => FitFieldLegRaiseExerciseName::ReverseLegRaiseOnSwissBall,
+            16 => FitFieldLegRaiseExerciseName::WeightedReverseLegRaiseOnSwissBall,
+            17 => FitFieldLegRaiseExerciseName::SingleLegLoweringDrill,
+            18 => FitFieldLegRaiseExerciseName::WeightedSingleLegLoweringDrill,
+            19 => FitFieldLegRaiseExerciseName::WeightedHangingKneeRaise,
+            20 => FitFieldLegRaiseExerciseName::LateralStepover,
+            21 => FitFieldLegRaiseExerciseName::WeightedLateralStepover,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLegRaiseExerciseName", invalid_field_num))
         }
     }
 }
@@ -4983,6 +7777,10 @@ impl From<u8> for FitFieldEventType {
 pub enum FitFieldLanguageBits4 { // fit base type: uint8z
     BrazilianPortuguese = 1,
     Indonesian = 2,
+    Malaysian = 4,
+    Vietnamese = 8,
+    Burmese = 16,
+    Mongolian = 32,
 }
 
 impl FitFieldLanguageBits4 {
@@ -5001,6 +7799,10 @@ impl From<u8> for FitFieldLanguageBits4 {
         match code {
             1 => FitFieldLanguageBits4::BrazilianPortuguese,
             2 => FitFieldLanguageBits4::Indonesian,
+            4 => FitFieldLanguageBits4::Malaysian,
+            8 => FitFieldLanguageBits4::Vietnamese,
+            16 => FitFieldLanguageBits4::Burmese,
+            32 => FitFieldLanguageBits4::Mongolian,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguageBits4", invalid_field_num))
         }
     }
@@ -5265,6 +8067,7 @@ pub enum FitFieldAutoSyncFrequency { // fit base type: enum
     Occasionally = 1,
     Frequent = 2,
     OnceADay = 3,
+    Remote = 4,
 }
 
 impl FitFieldAutoSyncFrequency {
@@ -5281,6 +8084,7 @@ impl From<u8> for FitFieldAutoSyncFrequency {
             1 => FitFieldAutoSyncFrequency::Occasionally,
             2 => FitFieldAutoSyncFrequency::Frequent,
             3 => FitFieldAutoSyncFrequency::OnceADay,
+            4 => FitFieldAutoSyncFrequency::Remote,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAutoSyncFrequency", invalid_field_num))
         }
     }
@@ -5360,6 +8164,84 @@ impl From<u8> for FitFieldGoal {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldBenchPressExerciseName { // fit base type: uint16
+    AlternatingDumbbellChestPressOnSwissBall = 0,
+    BarbellBenchPress = 1,
+    BarbellBoardBenchPress = 2,
+    BarbellFloorPress = 3,
+    CloseGripBarbellBenchPress = 4,
+    DeclineDumbbellBenchPress = 5,
+    DumbbellBenchPress = 6,
+    DumbbellFloorPress = 7,
+    InclineBarbellBenchPress = 8,
+    InclineDumbbellBenchPress = 9,
+    InclineSmithMachineBenchPress = 10,
+    IsometricBarbellBenchPress = 11,
+    KettlebellChestPress = 12,
+    NeutralGripDumbbellBenchPress = 13,
+    NeutralGripDumbbellInclineBenchPress = 14,
+    OneArmFloorPress = 15,
+    WeightedOneArmFloorPress = 16,
+    PartialLockout = 17,
+    ReverseGripBarbellBenchPress = 18,
+    ReverseGripInclineBenchPress = 19,
+    SingleArmCableChestPress = 20,
+    SingleArmDumbbellBenchPress = 21,
+    SmithMachineBenchPress = 22,
+    SwissBallDumbbellChestPress = 23,
+    TripleStopBarbellBenchPress = 24,
+    WideGripBarbellBenchPress = 25,
+    AlternatingDumbbellChestPress = 26,
+}
+
+impl FitFieldBenchPressExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldBenchPressExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldBenchPressExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldBenchPressExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldBenchPressExerciseName::AlternatingDumbbellChestPressOnSwissBall,
+            1 => FitFieldBenchPressExerciseName::BarbellBenchPress,
+            2 => FitFieldBenchPressExerciseName::BarbellBoardBenchPress,
+            3 => FitFieldBenchPressExerciseName::BarbellFloorPress,
+            4 => FitFieldBenchPressExerciseName::CloseGripBarbellBenchPress,
+            5 => FitFieldBenchPressExerciseName::DeclineDumbbellBenchPress,
+            6 => FitFieldBenchPressExerciseName::DumbbellBenchPress,
+            7 => FitFieldBenchPressExerciseName::DumbbellFloorPress,
+            8 => FitFieldBenchPressExerciseName::InclineBarbellBenchPress,
+            9 => FitFieldBenchPressExerciseName::InclineDumbbellBenchPress,
+            10 => FitFieldBenchPressExerciseName::InclineSmithMachineBenchPress,
+            11 => FitFieldBenchPressExerciseName::IsometricBarbellBenchPress,
+            12 => FitFieldBenchPressExerciseName::KettlebellChestPress,
+            13 => FitFieldBenchPressExerciseName::NeutralGripDumbbellBenchPress,
+            14 => FitFieldBenchPressExerciseName::NeutralGripDumbbellInclineBenchPress,
+            15 => FitFieldBenchPressExerciseName::OneArmFloorPress,
+            16 => FitFieldBenchPressExerciseName::WeightedOneArmFloorPress,
+            17 => FitFieldBenchPressExerciseName::PartialLockout,
+            18 => FitFieldBenchPressExerciseName::ReverseGripBarbellBenchPress,
+            19 => FitFieldBenchPressExerciseName::ReverseGripInclineBenchPress,
+            20 => FitFieldBenchPressExerciseName::SingleArmCableChestPress,
+            21 => FitFieldBenchPressExerciseName::SingleArmDumbbellBenchPress,
+            22 => FitFieldBenchPressExerciseName::SmithMachineBenchPress,
+            23 => FitFieldBenchPressExerciseName::SwissBallDumbbellChestPress,
+            24 => FitFieldBenchPressExerciseName::TripleStopBarbellBenchPress,
+            25 => FitFieldBenchPressExerciseName::WideGripBarbellBenchPress,
+            26 => FitFieldBenchPressExerciseName::AlternatingDumbbellChestPress,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBenchPressExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldActivityLevel { // fit base type: enum
     Low = 0,
     Medium = 1,
@@ -5407,7 +8289,20 @@ pub enum FitFieldWktStepDuration { // fit base type: enum
     RepeatUntilPowerGreaterThan = 13,
     PowerLessThan = 14,
     PowerGreaterThan = 15,
+    TrainingPeaksTss = 16,
+    RepeatUntilPowerLastLapLessThan = 17,
+    RepeatUntilMaxPowerLastLapLessThan = 18,
+    Power3sLessThan = 19,
+    Power10sLessThan = 20,
+    Power30sLessThan = 21,
+    Power3sGreaterThan = 22,
+    Power10sGreaterThan = 23,
+    Power30sGreaterThan = 24,
+    PowerLapLessThan = 25,
+    PowerLapGreaterThan = 26,
+    RepeatUntilTrainingPeaksTss = 27,
     RepetitionTime = 28,
+    Reps = 29,
 }
 
 impl FitFieldWktStepDuration {
@@ -5436,7 +8331,20 @@ impl From<u8> for FitFieldWktStepDuration {
             13 => FitFieldWktStepDuration::RepeatUntilPowerGreaterThan,
             14 => FitFieldWktStepDuration::PowerLessThan,
             15 => FitFieldWktStepDuration::PowerGreaterThan,
+            16 => FitFieldWktStepDuration::TrainingPeaksTss,
+            17 => FitFieldWktStepDuration::RepeatUntilPowerLastLapLessThan,
+            18 => FitFieldWktStepDuration::RepeatUntilMaxPowerLastLapLessThan,
+            19 => FitFieldWktStepDuration::Power3sLessThan,
+            20 => FitFieldWktStepDuration::Power10sLessThan,
+            21 => FitFieldWktStepDuration::Power30sLessThan,
+            22 => FitFieldWktStepDuration::Power3sGreaterThan,
+            23 => FitFieldWktStepDuration::Power10sGreaterThan,
+            24 => FitFieldWktStepDuration::Power30sGreaterThan,
+            25 => FitFieldWktStepDuration::PowerLapLessThan,
+            26 => FitFieldWktStepDuration::PowerLapGreaterThan,
+            27 => FitFieldWktStepDuration::RepeatUntilTrainingPeaksTss,
             28 => FitFieldWktStepDuration::RepetitionTime,
+            29 => FitFieldWktStepDuration::Reps,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWktStepDuration", invalid_field_num))
         }
     }
@@ -5472,6 +8380,300 @@ impl From<u8> for FitFieldWeatherSeverity {
             3 => FitFieldWeatherSeverity::Advisory,
             4 => FitFieldWeatherSeverity::Statement,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeatherSeverity", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldPlankExerciseName { // fit base type: uint16
+    FortyFiveDegreePlank = 0,
+    Weighted45DegreePlank = 1,
+    NinetyDegreeStaticHold = 2,
+    Weighted90DegreeStaticHold = 3,
+    BearCrawl = 4,
+    WeightedBearCrawl = 5,
+    CrossBodyMountainClimber = 6,
+    WeightedCrossBodyMountainClimber = 7,
+    ElbowPlankPikeJacks = 8,
+    WeightedElbowPlankPikeJacks = 9,
+    ElevatedFeetPlank = 10,
+    WeightedElevatedFeetPlank = 11,
+    ElevatorAbs = 12,
+    WeightedElevatorAbs = 13,
+    ExtendedPlank = 14,
+    WeightedExtendedPlank = 15,
+    FullPlankPasseTwist = 16,
+    WeightedFullPlankPasseTwist = 17,
+    InchingElbowPlank = 18,
+    WeightedInchingElbowPlank = 19,
+    InchwormToSidePlank = 20,
+    WeightedInchwormToSidePlank = 21,
+    KneelingPlank = 22,
+    WeightedKneelingPlank = 23,
+    KneelingSidePlankWithLegLift = 24,
+    WeightedKneelingSidePlankWithLegLift = 25,
+    LateralRoll = 26,
+    WeightedLateralRoll = 27,
+    LyingReversePlank = 28,
+    WeightedLyingReversePlank = 29,
+    MedicineBallMountainClimber = 30,
+    WeightedMedicineBallMountainClimber = 31,
+    ModifiedMountainClimberAndExtension = 32,
+    WeightedModifiedMountainClimberAndExtension = 33,
+    MountainClimber = 34,
+    WeightedMountainClimber = 35,
+    MountainClimberOnSlidingDiscs = 36,
+    WeightedMountainClimberOnSlidingDiscs = 37,
+    MountainClimberWithFeetOnBosuBall = 38,
+    WeightedMountainClimberWithFeetOnBosuBall = 39,
+    MountainClimberWithHandsOnBench = 40,
+    MountainClimberWithHandsOnSwissBall = 41,
+    WeightedMountainClimberWithHandsOnSwissBall = 42,
+    Plank = 43,
+    PlankJacksWithFeetOnSlidingDiscs = 44,
+    WeightedPlankJacksWithFeetOnSlidingDiscs = 45,
+    PlankKneeTwist = 46,
+    WeightedPlankKneeTwist = 47,
+    PlankPikeJumps = 48,
+    WeightedPlankPikeJumps = 49,
+    PlankPikes = 50,
+    WeightedPlankPikes = 51,
+    PlankToStandUp = 52,
+    WeightedPlankToStandUp = 53,
+    PlankWithArmRaise = 54,
+    WeightedPlankWithArmRaise = 55,
+    PlankWithKneeToElbow = 56,
+    WeightedPlankWithKneeToElbow = 57,
+    PlankWithObliqueCrunch = 58,
+    WeightedPlankWithObliqueCrunch = 59,
+    PlyometricSidePlank = 60,
+    WeightedPlyometricSidePlank = 61,
+    RollingSidePlank = 62,
+    WeightedRollingSidePlank = 63,
+    SideKickPlank = 64,
+    WeightedSideKickPlank = 65,
+    SidePlank = 66,
+    WeightedSidePlank = 67,
+    SidePlankAndRow = 68,
+    WeightedSidePlankAndRow = 69,
+    SidePlankLift = 70,
+    WeightedSidePlankLift = 71,
+    SidePlankWithElbowOnBosuBall = 72,
+    WeightedSidePlankWithElbowOnBosuBall = 73,
+    SidePlankWithFeetOnBench = 74,
+    WeightedSidePlankWithFeetOnBench = 75,
+    SidePlankWithKneeCircle = 76,
+    WeightedSidePlankWithKneeCircle = 77,
+    SidePlankWithKneeTuck = 78,
+    WeightedSidePlankWithKneeTuck = 79,
+    SidePlankWithLegLift = 80,
+    WeightedSidePlankWithLegLift = 81,
+    SidePlankWithReachUnder = 82,
+    WeightedSidePlankWithReachUnder = 83,
+    SingleLegElevatedFeetPlank = 84,
+    WeightedSingleLegElevatedFeetPlank = 85,
+    SingleLegFlexAndExtend = 86,
+    WeightedSingleLegFlexAndExtend = 87,
+    SingleLegSidePlank = 88,
+    WeightedSingleLegSidePlank = 89,
+    SpidermanPlank = 90,
+    WeightedSpidermanPlank = 91,
+    StraightArmPlank = 92,
+    WeightedStraightArmPlank = 93,
+    StraightArmPlankWithShoulderTouch = 94,
+    WeightedStraightArmPlankWithShoulderTouch = 95,
+    SwissBallPlank = 96,
+    WeightedSwissBallPlank = 97,
+    SwissBallPlankLegLift = 98,
+    WeightedSwissBallPlankLegLift = 99,
+    SwissBallPlankLegLiftAndHold = 100,
+    SwissBallPlankWithFeetOnBench = 101,
+    WeightedSwissBallPlankWithFeetOnBench = 102,
+    SwissBallProneJackknife = 103,
+    WeightedSwissBallProneJackknife = 104,
+    SwissBallSidePlank = 105,
+    WeightedSwissBallSidePlank = 106,
+    ThreeWayPlank = 107,
+    WeightedThreeWayPlank = 108,
+    TowelPlankAndKneeIn = 109,
+    WeightedTowelPlankAndKneeIn = 110,
+    TStabilization = 111,
+    WeightedTStabilization = 112,
+    TurkishGetUpToSidePlank = 113,
+    WeightedTurkishGetUpToSidePlank = 114,
+    TwoPointPlank = 115,
+    WeightedTwoPointPlank = 116,
+    WeightedPlank = 117,
+    WideStancePlankWithDiagonalArmLift = 118,
+    WeightedWideStancePlankWithDiagonalArmLift = 119,
+    WideStancePlankWithDiagonalLegLift = 120,
+    WeightedWideStancePlankWithDiagonalLegLift = 121,
+    WideStancePlankWithLegLift = 122,
+    WeightedWideStancePlankWithLegLift = 123,
+    WideStancePlankWithOppositeArmAndLegLift = 124,
+    WeightedMountainClimberWithHandsOnBench = 125,
+    WeightedSwissBallPlankLegLiftAndHold = 126,
+    WeightedWideStancePlankWithOppositeArmAndLegLift = 127,
+    PlankWithFeetOnSwissBall = 128,
+    SidePlankToPlankWithReachUnder = 129,
+    BridgeWithGluteLowerLift = 130,
+    BridgeOneLegBridge = 131,
+    PlankWithArmVariations = 132,
+    PlankWithLegLift = 133,
+    ReversePlankWithLegPull = 134,
+}
+
+impl FitFieldPlankExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldPlankExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldPlankExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldPlankExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldPlankExerciseName::FortyFiveDegreePlank,
+            1 => FitFieldPlankExerciseName::Weighted45DegreePlank,
+            2 => FitFieldPlankExerciseName::NinetyDegreeStaticHold,
+            3 => FitFieldPlankExerciseName::Weighted90DegreeStaticHold,
+            4 => FitFieldPlankExerciseName::BearCrawl,
+            5 => FitFieldPlankExerciseName::WeightedBearCrawl,
+            6 => FitFieldPlankExerciseName::CrossBodyMountainClimber,
+            7 => FitFieldPlankExerciseName::WeightedCrossBodyMountainClimber,
+            8 => FitFieldPlankExerciseName::ElbowPlankPikeJacks,
+            9 => FitFieldPlankExerciseName::WeightedElbowPlankPikeJacks,
+            10 => FitFieldPlankExerciseName::ElevatedFeetPlank,
+            11 => FitFieldPlankExerciseName::WeightedElevatedFeetPlank,
+            12 => FitFieldPlankExerciseName::ElevatorAbs,
+            13 => FitFieldPlankExerciseName::WeightedElevatorAbs,
+            14 => FitFieldPlankExerciseName::ExtendedPlank,
+            15 => FitFieldPlankExerciseName::WeightedExtendedPlank,
+            16 => FitFieldPlankExerciseName::FullPlankPasseTwist,
+            17 => FitFieldPlankExerciseName::WeightedFullPlankPasseTwist,
+            18 => FitFieldPlankExerciseName::InchingElbowPlank,
+            19 => FitFieldPlankExerciseName::WeightedInchingElbowPlank,
+            20 => FitFieldPlankExerciseName::InchwormToSidePlank,
+            21 => FitFieldPlankExerciseName::WeightedInchwormToSidePlank,
+            22 => FitFieldPlankExerciseName::KneelingPlank,
+            23 => FitFieldPlankExerciseName::WeightedKneelingPlank,
+            24 => FitFieldPlankExerciseName::KneelingSidePlankWithLegLift,
+            25 => FitFieldPlankExerciseName::WeightedKneelingSidePlankWithLegLift,
+            26 => FitFieldPlankExerciseName::LateralRoll,
+            27 => FitFieldPlankExerciseName::WeightedLateralRoll,
+            28 => FitFieldPlankExerciseName::LyingReversePlank,
+            29 => FitFieldPlankExerciseName::WeightedLyingReversePlank,
+            30 => FitFieldPlankExerciseName::MedicineBallMountainClimber,
+            31 => FitFieldPlankExerciseName::WeightedMedicineBallMountainClimber,
+            32 => FitFieldPlankExerciseName::ModifiedMountainClimberAndExtension,
+            33 => FitFieldPlankExerciseName::WeightedModifiedMountainClimberAndExtension,
+            34 => FitFieldPlankExerciseName::MountainClimber,
+            35 => FitFieldPlankExerciseName::WeightedMountainClimber,
+            36 => FitFieldPlankExerciseName::MountainClimberOnSlidingDiscs,
+            37 => FitFieldPlankExerciseName::WeightedMountainClimberOnSlidingDiscs,
+            38 => FitFieldPlankExerciseName::MountainClimberWithFeetOnBosuBall,
+            39 => FitFieldPlankExerciseName::WeightedMountainClimberWithFeetOnBosuBall,
+            40 => FitFieldPlankExerciseName::MountainClimberWithHandsOnBench,
+            41 => FitFieldPlankExerciseName::MountainClimberWithHandsOnSwissBall,
+            42 => FitFieldPlankExerciseName::WeightedMountainClimberWithHandsOnSwissBall,
+            43 => FitFieldPlankExerciseName::Plank,
+            44 => FitFieldPlankExerciseName::PlankJacksWithFeetOnSlidingDiscs,
+            45 => FitFieldPlankExerciseName::WeightedPlankJacksWithFeetOnSlidingDiscs,
+            46 => FitFieldPlankExerciseName::PlankKneeTwist,
+            47 => FitFieldPlankExerciseName::WeightedPlankKneeTwist,
+            48 => FitFieldPlankExerciseName::PlankPikeJumps,
+            49 => FitFieldPlankExerciseName::WeightedPlankPikeJumps,
+            50 => FitFieldPlankExerciseName::PlankPikes,
+            51 => FitFieldPlankExerciseName::WeightedPlankPikes,
+            52 => FitFieldPlankExerciseName::PlankToStandUp,
+            53 => FitFieldPlankExerciseName::WeightedPlankToStandUp,
+            54 => FitFieldPlankExerciseName::PlankWithArmRaise,
+            55 => FitFieldPlankExerciseName::WeightedPlankWithArmRaise,
+            56 => FitFieldPlankExerciseName::PlankWithKneeToElbow,
+            57 => FitFieldPlankExerciseName::WeightedPlankWithKneeToElbow,
+            58 => FitFieldPlankExerciseName::PlankWithObliqueCrunch,
+            59 => FitFieldPlankExerciseName::WeightedPlankWithObliqueCrunch,
+            60 => FitFieldPlankExerciseName::PlyometricSidePlank,
+            61 => FitFieldPlankExerciseName::WeightedPlyometricSidePlank,
+            62 => FitFieldPlankExerciseName::RollingSidePlank,
+            63 => FitFieldPlankExerciseName::WeightedRollingSidePlank,
+            64 => FitFieldPlankExerciseName::SideKickPlank,
+            65 => FitFieldPlankExerciseName::WeightedSideKickPlank,
+            66 => FitFieldPlankExerciseName::SidePlank,
+            67 => FitFieldPlankExerciseName::WeightedSidePlank,
+            68 => FitFieldPlankExerciseName::SidePlankAndRow,
+            69 => FitFieldPlankExerciseName::WeightedSidePlankAndRow,
+            70 => FitFieldPlankExerciseName::SidePlankLift,
+            71 => FitFieldPlankExerciseName::WeightedSidePlankLift,
+            72 => FitFieldPlankExerciseName::SidePlankWithElbowOnBosuBall,
+            73 => FitFieldPlankExerciseName::WeightedSidePlankWithElbowOnBosuBall,
+            74 => FitFieldPlankExerciseName::SidePlankWithFeetOnBench,
+            75 => FitFieldPlankExerciseName::WeightedSidePlankWithFeetOnBench,
+            76 => FitFieldPlankExerciseName::SidePlankWithKneeCircle,
+            77 => FitFieldPlankExerciseName::WeightedSidePlankWithKneeCircle,
+            78 => FitFieldPlankExerciseName::SidePlankWithKneeTuck,
+            79 => FitFieldPlankExerciseName::WeightedSidePlankWithKneeTuck,
+            80 => FitFieldPlankExerciseName::SidePlankWithLegLift,
+            81 => FitFieldPlankExerciseName::WeightedSidePlankWithLegLift,
+            82 => FitFieldPlankExerciseName::SidePlankWithReachUnder,
+            83 => FitFieldPlankExerciseName::WeightedSidePlankWithReachUnder,
+            84 => FitFieldPlankExerciseName::SingleLegElevatedFeetPlank,
+            85 => FitFieldPlankExerciseName::WeightedSingleLegElevatedFeetPlank,
+            86 => FitFieldPlankExerciseName::SingleLegFlexAndExtend,
+            87 => FitFieldPlankExerciseName::WeightedSingleLegFlexAndExtend,
+            88 => FitFieldPlankExerciseName::SingleLegSidePlank,
+            89 => FitFieldPlankExerciseName::WeightedSingleLegSidePlank,
+            90 => FitFieldPlankExerciseName::SpidermanPlank,
+            91 => FitFieldPlankExerciseName::WeightedSpidermanPlank,
+            92 => FitFieldPlankExerciseName::StraightArmPlank,
+            93 => FitFieldPlankExerciseName::WeightedStraightArmPlank,
+            94 => FitFieldPlankExerciseName::StraightArmPlankWithShoulderTouch,
+            95 => FitFieldPlankExerciseName::WeightedStraightArmPlankWithShoulderTouch,
+            96 => FitFieldPlankExerciseName::SwissBallPlank,
+            97 => FitFieldPlankExerciseName::WeightedSwissBallPlank,
+            98 => FitFieldPlankExerciseName::SwissBallPlankLegLift,
+            99 => FitFieldPlankExerciseName::WeightedSwissBallPlankLegLift,
+            100 => FitFieldPlankExerciseName::SwissBallPlankLegLiftAndHold,
+            101 => FitFieldPlankExerciseName::SwissBallPlankWithFeetOnBench,
+            102 => FitFieldPlankExerciseName::WeightedSwissBallPlankWithFeetOnBench,
+            103 => FitFieldPlankExerciseName::SwissBallProneJackknife,
+            104 => FitFieldPlankExerciseName::WeightedSwissBallProneJackknife,
+            105 => FitFieldPlankExerciseName::SwissBallSidePlank,
+            106 => FitFieldPlankExerciseName::WeightedSwissBallSidePlank,
+            107 => FitFieldPlankExerciseName::ThreeWayPlank,
+            108 => FitFieldPlankExerciseName::WeightedThreeWayPlank,
+            109 => FitFieldPlankExerciseName::TowelPlankAndKneeIn,
+            110 => FitFieldPlankExerciseName::WeightedTowelPlankAndKneeIn,
+            111 => FitFieldPlankExerciseName::TStabilization,
+            112 => FitFieldPlankExerciseName::WeightedTStabilization,
+            113 => FitFieldPlankExerciseName::TurkishGetUpToSidePlank,
+            114 => FitFieldPlankExerciseName::WeightedTurkishGetUpToSidePlank,
+            115 => FitFieldPlankExerciseName::TwoPointPlank,
+            116 => FitFieldPlankExerciseName::WeightedTwoPointPlank,
+            117 => FitFieldPlankExerciseName::WeightedPlank,
+            118 => FitFieldPlankExerciseName::WideStancePlankWithDiagonalArmLift,
+            119 => FitFieldPlankExerciseName::WeightedWideStancePlankWithDiagonalArmLift,
+            120 => FitFieldPlankExerciseName::WideStancePlankWithDiagonalLegLift,
+            121 => FitFieldPlankExerciseName::WeightedWideStancePlankWithDiagonalLegLift,
+            122 => FitFieldPlankExerciseName::WideStancePlankWithLegLift,
+            123 => FitFieldPlankExerciseName::WeightedWideStancePlankWithLegLift,
+            124 => FitFieldPlankExerciseName::WideStancePlankWithOppositeArmAndLegLift,
+            125 => FitFieldPlankExerciseName::WeightedMountainClimberWithHandsOnBench,
+            126 => FitFieldPlankExerciseName::WeightedSwissBallPlankLegLiftAndHold,
+            127 => FitFieldPlankExerciseName::WeightedWideStancePlankWithOppositeArmAndLegLift,
+            128 => FitFieldPlankExerciseName::PlankWithFeetOnSwissBall,
+            129 => FitFieldPlankExerciseName::SidePlankToPlankWithReachUnder,
+            130 => FitFieldPlankExerciseName::BridgeWithGluteLowerLift,
+            131 => FitFieldPlankExerciseName::BridgeOneLegBridge,
+            132 => FitFieldPlankExerciseName::PlankWithArmVariations,
+            133 => FitFieldPlankExerciseName::PlankWithLegLift,
+            134 => FitFieldPlankExerciseName::ReversePlankWithLegPull,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPlankExerciseName", invalid_field_num))
         }
     }
 }
@@ -5692,6 +8894,370 @@ impl From<u8> for FitFieldDisplayHeart {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldCoreExerciseName { // fit base type: uint16
+    AbsJabs = 0,
+    WeightedAbsJabs = 1,
+    AlternatingPlateReach = 2,
+    BarbellRollout = 3,
+    WeightedBarbellRollout = 4,
+    BodyBarObliqueTwist = 5,
+    CableCorePress = 6,
+    CableSideBend = 7,
+    SideBend = 8,
+    WeightedSideBend = 9,
+    CrescentCircle = 10,
+    WeightedCrescentCircle = 11,
+    CyclingRussianTwist = 12,
+    WeightedCyclingRussianTwist = 13,
+    ElevatedFeetRussianTwist = 14,
+    WeightedElevatedFeetRussianTwist = 15,
+    HalfTurkishGetUp = 16,
+    KettlebellWindmill = 17,
+    KneelingAbWheel = 18,
+    WeightedKneelingAbWheel = 19,
+    ModifiedFrontLever = 20,
+    OpenKneeTucks = 21,
+    WeightedOpenKneeTucks = 22,
+    SideAbsLegLift = 23,
+    WeightedSideAbsLegLift = 24,
+    SwissBallJackknife = 25,
+    WeightedSwissBallJackknife = 26,
+    SwissBallPike = 27,
+    WeightedSwissBallPike = 28,
+    SwissBallRollout = 29,
+    WeightedSwissBallRollout = 30,
+    TriangleHipPress = 31,
+    WeightedTriangleHipPress = 32,
+    TrxSuspendedJackknife = 33,
+    WeightedTrxSuspendedJackknife = 34,
+    UBoat = 35,
+    WeightedUBoat = 36,
+    WindmillSwitches = 37,
+    WeightedWindmillSwitches = 38,
+    AlternatingSlideOut = 39,
+    WeightedAlternatingSlideOut = 40,
+    GhdBackExtensions = 41,
+    WeightedGhdBackExtensions = 42,
+    OverheadWalk = 43,
+    Inchworm = 44,
+    WeightedModifiedFrontLever = 45,
+    RussianTwist = 46,
+    AbdominalLegRotations = 47,
+    ArmAndLegExtensionOnKnees = 48,
+    Bicycle = 49,
+    BicepCurlWithLegExtension = 50,
+    CatCow = 51,
+    Corkscrew = 52,
+    CrissCross = 53,
+    CrissCrossWithBall = 54,
+    DoubleLegStretch = 55,
+    KneeFolds = 56,
+    LowerLift = 57,
+    NeckPull = 58,
+    PelvicClocks = 59,
+    RollOver = 60,
+    RollUp = 61,
+    Rolling = 62,
+    Rowing1 = 63,
+    Rowing2 = 64,
+    Scissors = 65,
+    SingleLegCircles = 66,
+    SingleLegStretch = 67,
+    SnakeTwist1And2 = 68,
+    Swan = 69,
+    Swimming = 70,
+    Teaser = 71,
+    TheHundred = 72,
+}
+
+impl FitFieldCoreExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldCoreExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldCoreExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldCoreExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldCoreExerciseName::AbsJabs,
+            1 => FitFieldCoreExerciseName::WeightedAbsJabs,
+            2 => FitFieldCoreExerciseName::AlternatingPlateReach,
+            3 => FitFieldCoreExerciseName::BarbellRollout,
+            4 => FitFieldCoreExerciseName::WeightedBarbellRollout,
+            5 => FitFieldCoreExerciseName::BodyBarObliqueTwist,
+            6 => FitFieldCoreExerciseName::CableCorePress,
+            7 => FitFieldCoreExerciseName::CableSideBend,
+            8 => FitFieldCoreExerciseName::SideBend,
+            9 => FitFieldCoreExerciseName::WeightedSideBend,
+            10 => FitFieldCoreExerciseName::CrescentCircle,
+            11 => FitFieldCoreExerciseName::WeightedCrescentCircle,
+            12 => FitFieldCoreExerciseName::CyclingRussianTwist,
+            13 => FitFieldCoreExerciseName::WeightedCyclingRussianTwist,
+            14 => FitFieldCoreExerciseName::ElevatedFeetRussianTwist,
+            15 => FitFieldCoreExerciseName::WeightedElevatedFeetRussianTwist,
+            16 => FitFieldCoreExerciseName::HalfTurkishGetUp,
+            17 => FitFieldCoreExerciseName::KettlebellWindmill,
+            18 => FitFieldCoreExerciseName::KneelingAbWheel,
+            19 => FitFieldCoreExerciseName::WeightedKneelingAbWheel,
+            20 => FitFieldCoreExerciseName::ModifiedFrontLever,
+            21 => FitFieldCoreExerciseName::OpenKneeTucks,
+            22 => FitFieldCoreExerciseName::WeightedOpenKneeTucks,
+            23 => FitFieldCoreExerciseName::SideAbsLegLift,
+            24 => FitFieldCoreExerciseName::WeightedSideAbsLegLift,
+            25 => FitFieldCoreExerciseName::SwissBallJackknife,
+            26 => FitFieldCoreExerciseName::WeightedSwissBallJackknife,
+            27 => FitFieldCoreExerciseName::SwissBallPike,
+            28 => FitFieldCoreExerciseName::WeightedSwissBallPike,
+            29 => FitFieldCoreExerciseName::SwissBallRollout,
+            30 => FitFieldCoreExerciseName::WeightedSwissBallRollout,
+            31 => FitFieldCoreExerciseName::TriangleHipPress,
+            32 => FitFieldCoreExerciseName::WeightedTriangleHipPress,
+            33 => FitFieldCoreExerciseName::TrxSuspendedJackknife,
+            34 => FitFieldCoreExerciseName::WeightedTrxSuspendedJackknife,
+            35 => FitFieldCoreExerciseName::UBoat,
+            36 => FitFieldCoreExerciseName::WeightedUBoat,
+            37 => FitFieldCoreExerciseName::WindmillSwitches,
+            38 => FitFieldCoreExerciseName::WeightedWindmillSwitches,
+            39 => FitFieldCoreExerciseName::AlternatingSlideOut,
+            40 => FitFieldCoreExerciseName::WeightedAlternatingSlideOut,
+            41 => FitFieldCoreExerciseName::GhdBackExtensions,
+            42 => FitFieldCoreExerciseName::WeightedGhdBackExtensions,
+            43 => FitFieldCoreExerciseName::OverheadWalk,
+            44 => FitFieldCoreExerciseName::Inchworm,
+            45 => FitFieldCoreExerciseName::WeightedModifiedFrontLever,
+            46 => FitFieldCoreExerciseName::RussianTwist,
+            47 => FitFieldCoreExerciseName::AbdominalLegRotations,
+            48 => FitFieldCoreExerciseName::ArmAndLegExtensionOnKnees,
+            49 => FitFieldCoreExerciseName::Bicycle,
+            50 => FitFieldCoreExerciseName::BicepCurlWithLegExtension,
+            51 => FitFieldCoreExerciseName::CatCow,
+            52 => FitFieldCoreExerciseName::Corkscrew,
+            53 => FitFieldCoreExerciseName::CrissCross,
+            54 => FitFieldCoreExerciseName::CrissCrossWithBall,
+            55 => FitFieldCoreExerciseName::DoubleLegStretch,
+            56 => FitFieldCoreExerciseName::KneeFolds,
+            57 => FitFieldCoreExerciseName::LowerLift,
+            58 => FitFieldCoreExerciseName::NeckPull,
+            59 => FitFieldCoreExerciseName::PelvicClocks,
+            60 => FitFieldCoreExerciseName::RollOver,
+            61 => FitFieldCoreExerciseName::RollUp,
+            62 => FitFieldCoreExerciseName::Rolling,
+            63 => FitFieldCoreExerciseName::Rowing1,
+            64 => FitFieldCoreExerciseName::Rowing2,
+            65 => FitFieldCoreExerciseName::Scissors,
+            66 => FitFieldCoreExerciseName::SingleLegCircles,
+            67 => FitFieldCoreExerciseName::SingleLegStretch,
+            68 => FitFieldCoreExerciseName::SnakeTwist1And2,
+            69 => FitFieldCoreExerciseName::Swan,
+            70 => FitFieldCoreExerciseName::Swimming,
+            71 => FitFieldCoreExerciseName::Teaser,
+            72 => FitFieldCoreExerciseName::TheHundred,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCoreExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldCrunchExerciseName { // fit base type: uint16
+    BicycleCrunch = 0,
+    CableCrunch = 1,
+    CircularArmCrunch = 2,
+    CrossedArmsCrunch = 3,
+    WeightedCrossedArmsCrunch = 4,
+    CrossLegReverseCrunch = 5,
+    WeightedCrossLegReverseCrunch = 6,
+    CrunchChop = 7,
+    WeightedCrunchChop = 8,
+    DoubleCrunch = 9,
+    WeightedDoubleCrunch = 10,
+    ElbowToKneeCrunch = 11,
+    WeightedElbowToKneeCrunch = 12,
+    FlutterKicks = 13,
+    WeightedFlutterKicks = 14,
+    FoamRollerReverseCrunchOnBench = 15,
+    WeightedFoamRollerReverseCrunchOnBench = 16,
+    FoamRollerReverseCrunchWithDumbbell = 17,
+    FoamRollerReverseCrunchWithMedicineBall = 18,
+    FrogPress = 19,
+    HangingKneeRaiseObliqueCrunch = 20,
+    WeightedHangingKneeRaiseObliqueCrunch = 21,
+    HipCrossover = 22,
+    WeightedHipCrossover = 23,
+    HollowRock = 24,
+    WeightedHollowRock = 25,
+    InclineReverseCrunch = 26,
+    WeightedInclineReverseCrunch = 27,
+    KneelingCableCrunch = 28,
+    KneelingCrossCrunch = 29,
+    WeightedKneelingCrossCrunch = 30,
+    KneelingObliqueCableCrunch = 31,
+    KneesToElbow = 32,
+    LegExtensions = 33,
+    WeightedLegExtensions = 34,
+    LegLevers = 35,
+    McgillCurlUp = 36,
+    WeightedMcgillCurlUp = 37,
+    ModifiedPilatesRollUpWithBall = 38,
+    WeightedModifiedPilatesRollUpWithBall = 39,
+    PilatesCrunch = 40,
+    WeightedPilatesCrunch = 41,
+    PilatesRollUpWithBall = 42,
+    WeightedPilatesRollUpWithBall = 43,
+    RaisedLegsCrunch = 44,
+    WeightedRaisedLegsCrunch = 45,
+    ReverseCrunch = 46,
+    WeightedReverseCrunch = 47,
+    ReverseCrunchOnABench = 48,
+    WeightedReverseCrunchOnABench = 49,
+    ReverseCurlAndLift = 50,
+    WeightedReverseCurlAndLift = 51,
+    RotationalLift = 52,
+    WeightedRotationalLift = 53,
+    SeatedAlternatingReverseCrunch = 54,
+    WeightedSeatedAlternatingReverseCrunch = 55,
+    SeatedLegU = 56,
+    WeightedSeatedLegU = 57,
+    SideToSideCrunchAndWeave = 58,
+    WeightedSideToSideCrunchAndWeave = 59,
+    SingleLegReverseCrunch = 60,
+    WeightedSingleLegReverseCrunch = 61,
+    SkaterCrunchCross = 62,
+    WeightedSkaterCrunchCross = 63,
+    StandingCableCrunch = 64,
+    StandingSideCrunch = 65,
+    StepClimb = 66,
+    WeightedStepClimb = 67,
+    SwissBallCrunch = 68,
+    SwissBallReverseCrunch = 69,
+    WeightedSwissBallReverseCrunch = 70,
+    SwissBallRussianTwist = 71,
+    WeightedSwissBallRussianTwist = 72,
+    SwissBallSideCrunch = 73,
+    WeightedSwissBallSideCrunch = 74,
+    ThoracicCrunchesOnFoamRoller = 75,
+    WeightedThoracicCrunchesOnFoamRoller = 76,
+    TricepsCrunch = 77,
+    WeightedBicycleCrunch = 78,
+    WeightedCrunch = 79,
+    WeightedSwissBallCrunch = 80,
+    ToesToBar = 81,
+    WeightedToesToBar = 82,
+    Crunch = 83,
+    StraightLegCrunchWithBall = 84,
+}
+
+impl FitFieldCrunchExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldCrunchExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldCrunchExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldCrunchExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldCrunchExerciseName::BicycleCrunch,
+            1 => FitFieldCrunchExerciseName::CableCrunch,
+            2 => FitFieldCrunchExerciseName::CircularArmCrunch,
+            3 => FitFieldCrunchExerciseName::CrossedArmsCrunch,
+            4 => FitFieldCrunchExerciseName::WeightedCrossedArmsCrunch,
+            5 => FitFieldCrunchExerciseName::CrossLegReverseCrunch,
+            6 => FitFieldCrunchExerciseName::WeightedCrossLegReverseCrunch,
+            7 => FitFieldCrunchExerciseName::CrunchChop,
+            8 => FitFieldCrunchExerciseName::WeightedCrunchChop,
+            9 => FitFieldCrunchExerciseName::DoubleCrunch,
+            10 => FitFieldCrunchExerciseName::WeightedDoubleCrunch,
+            11 => FitFieldCrunchExerciseName::ElbowToKneeCrunch,
+            12 => FitFieldCrunchExerciseName::WeightedElbowToKneeCrunch,
+            13 => FitFieldCrunchExerciseName::FlutterKicks,
+            14 => FitFieldCrunchExerciseName::WeightedFlutterKicks,
+            15 => FitFieldCrunchExerciseName::FoamRollerReverseCrunchOnBench,
+            16 => FitFieldCrunchExerciseName::WeightedFoamRollerReverseCrunchOnBench,
+            17 => FitFieldCrunchExerciseName::FoamRollerReverseCrunchWithDumbbell,
+            18 => FitFieldCrunchExerciseName::FoamRollerReverseCrunchWithMedicineBall,
+            19 => FitFieldCrunchExerciseName::FrogPress,
+            20 => FitFieldCrunchExerciseName::HangingKneeRaiseObliqueCrunch,
+            21 => FitFieldCrunchExerciseName::WeightedHangingKneeRaiseObliqueCrunch,
+            22 => FitFieldCrunchExerciseName::HipCrossover,
+            23 => FitFieldCrunchExerciseName::WeightedHipCrossover,
+            24 => FitFieldCrunchExerciseName::HollowRock,
+            25 => FitFieldCrunchExerciseName::WeightedHollowRock,
+            26 => FitFieldCrunchExerciseName::InclineReverseCrunch,
+            27 => FitFieldCrunchExerciseName::WeightedInclineReverseCrunch,
+            28 => FitFieldCrunchExerciseName::KneelingCableCrunch,
+            29 => FitFieldCrunchExerciseName::KneelingCrossCrunch,
+            30 => FitFieldCrunchExerciseName::WeightedKneelingCrossCrunch,
+            31 => FitFieldCrunchExerciseName::KneelingObliqueCableCrunch,
+            32 => FitFieldCrunchExerciseName::KneesToElbow,
+            33 => FitFieldCrunchExerciseName::LegExtensions,
+            34 => FitFieldCrunchExerciseName::WeightedLegExtensions,
+            35 => FitFieldCrunchExerciseName::LegLevers,
+            36 => FitFieldCrunchExerciseName::McgillCurlUp,
+            37 => FitFieldCrunchExerciseName::WeightedMcgillCurlUp,
+            38 => FitFieldCrunchExerciseName::ModifiedPilatesRollUpWithBall,
+            39 => FitFieldCrunchExerciseName::WeightedModifiedPilatesRollUpWithBall,
+            40 => FitFieldCrunchExerciseName::PilatesCrunch,
+            41 => FitFieldCrunchExerciseName::WeightedPilatesCrunch,
+            42 => FitFieldCrunchExerciseName::PilatesRollUpWithBall,
+            43 => FitFieldCrunchExerciseName::WeightedPilatesRollUpWithBall,
+            44 => FitFieldCrunchExerciseName::RaisedLegsCrunch,
+            45 => FitFieldCrunchExerciseName::WeightedRaisedLegsCrunch,
+            46 => FitFieldCrunchExerciseName::ReverseCrunch,
+            47 => FitFieldCrunchExerciseName::WeightedReverseCrunch,
+            48 => FitFieldCrunchExerciseName::ReverseCrunchOnABench,
+            49 => FitFieldCrunchExerciseName::WeightedReverseCrunchOnABench,
+            50 => FitFieldCrunchExerciseName::ReverseCurlAndLift,
+            51 => FitFieldCrunchExerciseName::WeightedReverseCurlAndLift,
+            52 => FitFieldCrunchExerciseName::RotationalLift,
+            53 => FitFieldCrunchExerciseName::WeightedRotationalLift,
+            54 => FitFieldCrunchExerciseName::SeatedAlternatingReverseCrunch,
+            55 => FitFieldCrunchExerciseName::WeightedSeatedAlternatingReverseCrunch,
+            56 => FitFieldCrunchExerciseName::SeatedLegU,
+            57 => FitFieldCrunchExerciseName::WeightedSeatedLegU,
+            58 => FitFieldCrunchExerciseName::SideToSideCrunchAndWeave,
+            59 => FitFieldCrunchExerciseName::WeightedSideToSideCrunchAndWeave,
+            60 => FitFieldCrunchExerciseName::SingleLegReverseCrunch,
+            61 => FitFieldCrunchExerciseName::WeightedSingleLegReverseCrunch,
+            62 => FitFieldCrunchExerciseName::SkaterCrunchCross,
+            63 => FitFieldCrunchExerciseName::WeightedSkaterCrunchCross,
+            64 => FitFieldCrunchExerciseName::StandingCableCrunch,
+            65 => FitFieldCrunchExerciseName::StandingSideCrunch,
+            66 => FitFieldCrunchExerciseName::StepClimb,
+            67 => FitFieldCrunchExerciseName::WeightedStepClimb,
+            68 => FitFieldCrunchExerciseName::SwissBallCrunch,
+            69 => FitFieldCrunchExerciseName::SwissBallReverseCrunch,
+            70 => FitFieldCrunchExerciseName::WeightedSwissBallReverseCrunch,
+            71 => FitFieldCrunchExerciseName::SwissBallRussianTwist,
+            72 => FitFieldCrunchExerciseName::WeightedSwissBallRussianTwist,
+            73 => FitFieldCrunchExerciseName::SwissBallSideCrunch,
+            74 => FitFieldCrunchExerciseName::WeightedSwissBallSideCrunch,
+            75 => FitFieldCrunchExerciseName::ThoracicCrunchesOnFoamRoller,
+            76 => FitFieldCrunchExerciseName::WeightedThoracicCrunchesOnFoamRoller,
+            77 => FitFieldCrunchExerciseName::TricepsCrunch,
+            78 => FitFieldCrunchExerciseName::WeightedBicycleCrunch,
+            79 => FitFieldCrunchExerciseName::WeightedCrunch,
+            80 => FitFieldCrunchExerciseName::WeightedSwissBallCrunch,
+            81 => FitFieldCrunchExerciseName::ToesToBar,
+            82 => FitFieldCrunchExerciseName::WeightedToesToBar,
+            83 => FitFieldCrunchExerciseName::Crunch,
+            84 => FitFieldCrunchExerciseName::StraightLegCrunchWithBall,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCrunchExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldTimeIntoDay { // fit base type: uint32
 }
 
@@ -5706,6 +9272,68 @@ impl From<u32> for FitFieldTimeIntoDay {
     fn from(code: u32) -> Self {
         match code {
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTimeIntoDay", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldRunExerciseName { // fit base type: uint16
+    Run = 0,
+    Walk = 1,
+    Jog = 2,
+    Sprint = 3,
+}
+
+impl FitFieldRunExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldRunExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldRunExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldRunExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldRunExerciseName::Run,
+            1 => FitFieldRunExerciseName::Walk,
+            2 => FitFieldRunExerciseName::Jog,
+            3 => FitFieldRunExerciseName::Sprint,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldRunExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldHipSwingExerciseName { // fit base type: uint16
+    SingleArmKettlebellSwing = 0,
+    SingleArmDumbbellSwing = 1,
+    StepOutSwing = 2,
+}
+
+impl FitFieldHipSwingExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldHipSwingExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldHipSwingExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldHipSwingExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldHipSwingExerciseName::SingleArmKettlebellSwing,
+            1 => FitFieldHipSwingExerciseName::SingleArmDumbbellSwing,
+            2 => FitFieldHipSwingExerciseName::StepOutSwing,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHipSwingExerciseName", invalid_field_num))
         }
     }
 }
@@ -5828,6 +9456,188 @@ impl From<u8> for FitFieldSwitch {
 
 
 #[derive(Debug, PartialEq)]
+pub enum FitFieldPushUpExerciseName { // fit base type: uint16
+    ChestPressWithBand = 0,
+    AlternatingStaggeredPushUp = 1,
+    WeightedAlternatingStaggeredPushUp = 2,
+    AlternatingHandsMedicineBallPushUp = 3,
+    WeightedAlternatingHandsMedicineBallPushUp = 4,
+    BosuBallPushUp = 5,
+    WeightedBosuBallPushUp = 6,
+    ClappingPushUp = 7,
+    WeightedClappingPushUp = 8,
+    CloseGripMedicineBallPushUp = 9,
+    WeightedCloseGripMedicineBallPushUp = 10,
+    CloseHandsPushUp = 11,
+    WeightedCloseHandsPushUp = 12,
+    DeclinePushUp = 13,
+    WeightedDeclinePushUp = 14,
+    DiamondPushUp = 15,
+    WeightedDiamondPushUp = 16,
+    ExplosiveCrossoverPushUp = 17,
+    WeightedExplosiveCrossoverPushUp = 18,
+    ExplosivePushUp = 19,
+    WeightedExplosivePushUp = 20,
+    FeetElevatedSideToSidePushUp = 21,
+    WeightedFeetElevatedSideToSidePushUp = 22,
+    HandReleasePushUp = 23,
+    WeightedHandReleasePushUp = 24,
+    HandstandPushUp = 25,
+    WeightedHandstandPushUp = 26,
+    InclinePushUp = 27,
+    WeightedInclinePushUp = 28,
+    IsometricExplosivePushUp = 29,
+    WeightedIsometricExplosivePushUp = 30,
+    JudoPushUp = 31,
+    WeightedJudoPushUp = 32,
+    KneelingPushUp = 33,
+    WeightedKneelingPushUp = 34,
+    MedicineBallChestPass = 35,
+    MedicineBallPushUp = 36,
+    WeightedMedicineBallPushUp = 37,
+    OneArmPushUp = 38,
+    WeightedOneArmPushUp = 39,
+    WeightedPushUp = 40,
+    PushUpAndRow = 41,
+    WeightedPushUpAndRow = 42,
+    PushUpPlus = 43,
+    WeightedPushUpPlus = 44,
+    PushUpWithFeetOnSwissBall = 45,
+    WeightedPushUpWithFeetOnSwissBall = 46,
+    PushUpWithOneHandOnMedicineBall = 47,
+    WeightedPushUpWithOneHandOnMedicineBall = 48,
+    ShoulderPushUp = 49,
+    WeightedShoulderPushUp = 50,
+    SingleArmMedicineBallPushUp = 51,
+    WeightedSingleArmMedicineBallPushUp = 52,
+    SpidermanPushUp = 53,
+    WeightedSpidermanPushUp = 54,
+    StackedFeetPushUp = 55,
+    WeightedStackedFeetPushUp = 56,
+    StaggeredHandsPushUp = 57,
+    WeightedStaggeredHandsPushUp = 58,
+    SuspendedPushUp = 59,
+    WeightedSuspendedPushUp = 60,
+    SwissBallPushUp = 61,
+    WeightedSwissBallPushUp = 62,
+    SwissBallPushUpPlus = 63,
+    WeightedSwissBallPushUpPlus = 64,
+    TPushUp = 65,
+    WeightedTPushUp = 66,
+    TripleStopPushUp = 67,
+    WeightedTripleStopPushUp = 68,
+    WideHandsPushUp = 69,
+    WeightedWideHandsPushUp = 70,
+    ParalletteHandstandPushUp = 71,
+    WeightedParalletteHandstandPushUp = 72,
+    RingHandstandPushUp = 73,
+    WeightedRingHandstandPushUp = 74,
+    RingPushUp = 75,
+    WeightedRingPushUp = 76,
+    PushUp = 77,
+    PilatesPushup = 78,
+}
+
+impl FitFieldPushUpExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldPushUpExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldPushUpExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldPushUpExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldPushUpExerciseName::ChestPressWithBand,
+            1 => FitFieldPushUpExerciseName::AlternatingStaggeredPushUp,
+            2 => FitFieldPushUpExerciseName::WeightedAlternatingStaggeredPushUp,
+            3 => FitFieldPushUpExerciseName::AlternatingHandsMedicineBallPushUp,
+            4 => FitFieldPushUpExerciseName::WeightedAlternatingHandsMedicineBallPushUp,
+            5 => FitFieldPushUpExerciseName::BosuBallPushUp,
+            6 => FitFieldPushUpExerciseName::WeightedBosuBallPushUp,
+            7 => FitFieldPushUpExerciseName::ClappingPushUp,
+            8 => FitFieldPushUpExerciseName::WeightedClappingPushUp,
+            9 => FitFieldPushUpExerciseName::CloseGripMedicineBallPushUp,
+            10 => FitFieldPushUpExerciseName::WeightedCloseGripMedicineBallPushUp,
+            11 => FitFieldPushUpExerciseName::CloseHandsPushUp,
+            12 => FitFieldPushUpExerciseName::WeightedCloseHandsPushUp,
+            13 => FitFieldPushUpExerciseName::DeclinePushUp,
+            14 => FitFieldPushUpExerciseName::WeightedDeclinePushUp,
+            15 => FitFieldPushUpExerciseName::DiamondPushUp,
+            16 => FitFieldPushUpExerciseName::WeightedDiamondPushUp,
+            17 => FitFieldPushUpExerciseName::ExplosiveCrossoverPushUp,
+            18 => FitFieldPushUpExerciseName::WeightedExplosiveCrossoverPushUp,
+            19 => FitFieldPushUpExerciseName::ExplosivePushUp,
+            20 => FitFieldPushUpExerciseName::WeightedExplosivePushUp,
+            21 => FitFieldPushUpExerciseName::FeetElevatedSideToSidePushUp,
+            22 => FitFieldPushUpExerciseName::WeightedFeetElevatedSideToSidePushUp,
+            23 => FitFieldPushUpExerciseName::HandReleasePushUp,
+            24 => FitFieldPushUpExerciseName::WeightedHandReleasePushUp,
+            25 => FitFieldPushUpExerciseName::HandstandPushUp,
+            26 => FitFieldPushUpExerciseName::WeightedHandstandPushUp,
+            27 => FitFieldPushUpExerciseName::InclinePushUp,
+            28 => FitFieldPushUpExerciseName::WeightedInclinePushUp,
+            29 => FitFieldPushUpExerciseName::IsometricExplosivePushUp,
+            30 => FitFieldPushUpExerciseName::WeightedIsometricExplosivePushUp,
+            31 => FitFieldPushUpExerciseName::JudoPushUp,
+            32 => FitFieldPushUpExerciseName::WeightedJudoPushUp,
+            33 => FitFieldPushUpExerciseName::KneelingPushUp,
+            34 => FitFieldPushUpExerciseName::WeightedKneelingPushUp,
+            35 => FitFieldPushUpExerciseName::MedicineBallChestPass,
+            36 => FitFieldPushUpExerciseName::MedicineBallPushUp,
+            37 => FitFieldPushUpExerciseName::WeightedMedicineBallPushUp,
+            38 => FitFieldPushUpExerciseName::OneArmPushUp,
+            39 => FitFieldPushUpExerciseName::WeightedOneArmPushUp,
+            40 => FitFieldPushUpExerciseName::WeightedPushUp,
+            41 => FitFieldPushUpExerciseName::PushUpAndRow,
+            42 => FitFieldPushUpExerciseName::WeightedPushUpAndRow,
+            43 => FitFieldPushUpExerciseName::PushUpPlus,
+            44 => FitFieldPushUpExerciseName::WeightedPushUpPlus,
+            45 => FitFieldPushUpExerciseName::PushUpWithFeetOnSwissBall,
+            46 => FitFieldPushUpExerciseName::WeightedPushUpWithFeetOnSwissBall,
+            47 => FitFieldPushUpExerciseName::PushUpWithOneHandOnMedicineBall,
+            48 => FitFieldPushUpExerciseName::WeightedPushUpWithOneHandOnMedicineBall,
+            49 => FitFieldPushUpExerciseName::ShoulderPushUp,
+            50 => FitFieldPushUpExerciseName::WeightedShoulderPushUp,
+            51 => FitFieldPushUpExerciseName::SingleArmMedicineBallPushUp,
+            52 => FitFieldPushUpExerciseName::WeightedSingleArmMedicineBallPushUp,
+            53 => FitFieldPushUpExerciseName::SpidermanPushUp,
+            54 => FitFieldPushUpExerciseName::WeightedSpidermanPushUp,
+            55 => FitFieldPushUpExerciseName::StackedFeetPushUp,
+            56 => FitFieldPushUpExerciseName::WeightedStackedFeetPushUp,
+            57 => FitFieldPushUpExerciseName::StaggeredHandsPushUp,
+            58 => FitFieldPushUpExerciseName::WeightedStaggeredHandsPushUp,
+            59 => FitFieldPushUpExerciseName::SuspendedPushUp,
+            60 => FitFieldPushUpExerciseName::WeightedSuspendedPushUp,
+            61 => FitFieldPushUpExerciseName::SwissBallPushUp,
+            62 => FitFieldPushUpExerciseName::WeightedSwissBallPushUp,
+            63 => FitFieldPushUpExerciseName::SwissBallPushUpPlus,
+            64 => FitFieldPushUpExerciseName::WeightedSwissBallPushUpPlus,
+            65 => FitFieldPushUpExerciseName::TPushUp,
+            66 => FitFieldPushUpExerciseName::WeightedTPushUp,
+            67 => FitFieldPushUpExerciseName::TripleStopPushUp,
+            68 => FitFieldPushUpExerciseName::WeightedTripleStopPushUp,
+            69 => FitFieldPushUpExerciseName::WideHandsPushUp,
+            70 => FitFieldPushUpExerciseName::WeightedWideHandsPushUp,
+            71 => FitFieldPushUpExerciseName::ParalletteHandstandPushUp,
+            72 => FitFieldPushUpExerciseName::WeightedParalletteHandstandPushUp,
+            73 => FitFieldPushUpExerciseName::RingHandstandPushUp,
+            74 => FitFieldPushUpExerciseName::WeightedRingHandstandPushUp,
+            75 => FitFieldPushUpExerciseName::RingPushUp,
+            76 => FitFieldPushUpExerciseName::WeightedRingPushUp,
+            77 => FitFieldPushUpExerciseName::PushUp,
+            78 => FitFieldPushUpExerciseName::PilatesPushup,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPushUpExerciseName", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
 pub enum FitFieldMesgNum { // fit base type: uint16
     FileId = 0,
     Capabilities = 1,
@@ -5882,6 +9692,7 @@ pub enum FitFieldMesgNum { // fit base type: uint16
     SegmentLeaderboardEntry = 149,
     SegmentPoint = 150,
     SegmentFile = 151,
+    WorkoutSession = 158,
     WatchfaceSettings = 159,
     GpsMetadata = 160,
     CameraEvent = 161,
@@ -5904,6 +9715,15 @@ pub enum FitFieldMesgNum { // fit base type: uint16
     FieldDescription = 206,
     DeveloperDataId = 207,
     MagnetometerData = 208,
+    BarometerData = 209,
+    OneDSensorCalibration = 210,
+    Set = 225,
+    StressLevel = 227,
+    DiveSettings = 258,
+    DiveGas = 259,
+    DiveAlarm = 262,
+    ExerciseTitle = 264,
+    DiveSummary = 268,
     MfgRangeMin = 65280,  // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
     MfgRangeMax = 65534,  // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 }
@@ -5971,6 +9791,7 @@ impl From<u16> for FitFieldMesgNum {
             149 => FitFieldMesgNum::SegmentLeaderboardEntry,
             150 => FitFieldMesgNum::SegmentPoint,
             151 => FitFieldMesgNum::SegmentFile,
+            158 => FitFieldMesgNum::WorkoutSession,
             159 => FitFieldMesgNum::WatchfaceSettings,
             160 => FitFieldMesgNum::GpsMetadata,
             161 => FitFieldMesgNum::CameraEvent,
@@ -5993,9 +9814,80 @@ impl From<u16> for FitFieldMesgNum {
             206 => FitFieldMesgNum::FieldDescription,
             207 => FitFieldMesgNum::DeveloperDataId,
             208 => FitFieldMesgNum::MagnetometerData,
+            209 => FitFieldMesgNum::BarometerData,
+            210 => FitFieldMesgNum::OneDSensorCalibration,
+            225 => FitFieldMesgNum::Set,
+            227 => FitFieldMesgNum::StressLevel,
+            258 => FitFieldMesgNum::DiveSettings,
+            259 => FitFieldMesgNum::DiveGas,
+            262 => FitFieldMesgNum::DiveAlarm,
+            264 => FitFieldMesgNum::ExerciseTitle,
+            268 => FitFieldMesgNum::DiveSummary,
             65280 => FitFieldMesgNum::MfgRangeMin,
             65534 => FitFieldMesgNum::MfgRangeMax,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldMesgNum", invalid_field_num))
+        }
+    }
+}
+
+
+
+
+
+
+#[derive(Debug, PartialEq)]
+pub enum FitFieldDeadliftExerciseName { // fit base type: uint16
+    BarbellDeadlift = 0,
+    BarbellStraightLegDeadlift = 1,
+    DumbbellDeadlift = 2,
+    DumbbellSingleLegDeadliftToRow = 3,
+    DumbbellStraightLegDeadlift = 4,
+    KettlebellFloorToShelf = 5,
+    OneArmOneLegDeadlift = 6,
+    RackPull = 7,
+    RotationalDumbbellStraightLegDeadlift = 8,
+    SingleArmDeadlift = 9,
+    SingleLegBarbellDeadlift = 10,
+    SingleLegBarbellStraightLegDeadlift = 11,
+    SingleLegDeadliftWithBarbell = 12,
+    SingleLegRdlCircuit = 13,
+    SingleLegRomanianDeadliftWithDumbbell = 14,
+    SumoDeadlift = 15,
+    SumoDeadliftHighPull = 16,
+    TrapBarDeadlift = 17,
+    WideGripBarbellDeadlift = 18,
+}
+
+impl FitFieldDeadliftExerciseName {
+    pub fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldDeadliftExerciseName, &[u8])> {
+        let (val, o) = parse_uint16(input, endianness)?;
+        Ok((FitFieldDeadliftExerciseName::from(val), o))
+    }
+}
+
+impl From<u16> for FitFieldDeadliftExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldDeadliftExerciseName::BarbellDeadlift,
+            1 => FitFieldDeadliftExerciseName::BarbellStraightLegDeadlift,
+            2 => FitFieldDeadliftExerciseName::DumbbellDeadlift,
+            3 => FitFieldDeadliftExerciseName::DumbbellSingleLegDeadliftToRow,
+            4 => FitFieldDeadliftExerciseName::DumbbellStraightLegDeadlift,
+            5 => FitFieldDeadliftExerciseName::KettlebellFloorToShelf,
+            6 => FitFieldDeadliftExerciseName::OneArmOneLegDeadlift,
+            7 => FitFieldDeadliftExerciseName::RackPull,
+            8 => FitFieldDeadliftExerciseName::RotationalDumbbellStraightLegDeadlift,
+            9 => FitFieldDeadliftExerciseName::SingleArmDeadlift,
+            10 => FitFieldDeadliftExerciseName::SingleLegBarbellDeadlift,
+            11 => FitFieldDeadliftExerciseName::SingleLegBarbellStraightLegDeadlift,
+            12 => FitFieldDeadliftExerciseName::SingleLegDeadliftWithBarbell,
+            13 => FitFieldDeadliftExerciseName::SingleLegRdlCircuit,
+            14 => FitFieldDeadliftExerciseName::SingleLegRomanianDeadliftWithDumbbell,
+            15 => FitFieldDeadliftExerciseName::SumoDeadlift,
+            16 => FitFieldDeadliftExerciseName::SumoDeadliftHighPull,
+            17 => FitFieldDeadliftExerciseName::TrapBarDeadlift,
+            18 => FitFieldDeadliftExerciseName::WideGripBarbellDeadlift,
+            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDeadliftExerciseName", invalid_field_num))
         }
     }
 }
@@ -6081,6 +9973,14 @@ pub enum FitFieldExdDataUnits { // fit base type: enum
     EnumCoursePoint = 39,
     Bradians = 40,
     EnumSport = 41,
+    InchesHg = 42,
+    MmHg = 43,
+    Mbars = 44,
+    HectoPascals = 45,
+    FeetPerMin = 46,
+    MetersPerMin = 47,
+    MetersPerSec = 48,
+    EightCardinal = 49,
 }
 
 impl FitFieldExdDataUnits {
@@ -6135,6 +10035,14 @@ impl From<u8> for FitFieldExdDataUnits {
             39 => FitFieldExdDataUnits::EnumCoursePoint,
             40 => FitFieldExdDataUnits::Bradians,
             41 => FitFieldExdDataUnits::EnumSport,
+            42 => FitFieldExdDataUnits::InchesHg,
+            43 => FitFieldExdDataUnits::MmHg,
+            44 => FitFieldExdDataUnits::Mbars,
+            45 => FitFieldExdDataUnits::HectoPascals,
+            46 => FitFieldExdDataUnits::FeetPerMin,
+            47 => FitFieldExdDataUnits::MetersPerMin,
+            48 => FitFieldExdDataUnits::MetersPerSec,
+            49 => FitFieldExdDataUnits::EightCardinal,
             invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdDataUnits", invalid_field_num))
         }
     }
@@ -6155,6 +10063,9 @@ pub struct FitMessageAccelerometerData {
     pub calibrated_accel_x: Option<f32>,  // Calibrated accel reading
     pub calibrated_accel_y: Option<f32>,  // Calibrated accel reading
     pub calibrated_accel_z: Option<f32>,  // Calibrated accel reading
+    pub compressed_calibrated_accel_x: Option<i16>,  // Calibrated accel reading
+    pub compressed_calibrated_accel_y: Option<i16>,  // Calibrated accel reading
+    pub compressed_calibrated_accel_z: Option<i16>,  // Calibrated accel reading
     
 }
 impl FitMessageAccelerometerData {
@@ -6176,6 +10087,9 @@ impl FitMessageAccelerometerData {
             calibrated_accel_x: None,
             calibrated_accel_y: None,
             calibrated_accel_z: None,
+            compressed_calibrated_accel_x: None,
+            compressed_calibrated_accel_y: None,
+            compressed_calibrated_accel_z: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -6368,6 +10282,57 @@ impl FitMessageAccelerometerData {
                             }
                         };
                         message.calibrated_accel_z = Some(val);
+                        Ok(())
+                    },
+                
+                    8 => {  // compressed_calibrated_accel_x
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.compressed_calibrated_accel_x = Some(val);
+                        Ok(())
+                    },
+                
+                    9 => {  // compressed_calibrated_accel_y
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.compressed_calibrated_accel_y = Some(val);
+                        Ok(())
+                    },
+                
+                    10 => {  // compressed_calibrated_accel_z
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.compressed_calibrated_accel_z = Some(val);
                         Ok(())
                     },
                 
@@ -7434,6 +11399,151 @@ impl FitMessageAviationAttitude {
                             }
                         };
                         message.validity = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageBarometerData {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
+    pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
+    pub sample_time_offset: Option<u16>,  // Each time in the array describes the time at which the barometer sample with the corrosponding index was taken. The samples may span across seconds. Array size must match the number of samples in baro_cal
+    pub baro_pres: Option<u32>,  // These are the raw ADC reading. The samples may span across seconds. A conversion will need to be done on this data once read.
+    
+}
+impl FitMessageBarometerData {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageBarometerData>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageBarometerData {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageBarometerData",
+            timestamp: None,
+            timestamp_ms: None,
+            sample_time_offset: None,
+            baro_pres: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageBarometerData::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageBarometerData:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageBarometerData, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    253 => {  // timestamp
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.timestamp = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // timestamp_ms
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.timestamp_ms = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // sample_time_offset
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.sample_time_offset = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // baro_pres
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.baro_pres = Some(val);
                         Ok(())
                     },
                 
@@ -9714,12 +13824,18 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     Default(u16),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
     fn parse<'a>(message: &FitMessageDeviceInfo, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageDeviceInfoSubfieldProduct,  &'a [u8])> {
         
         match message.manufacturer {
+        
+            Some(FitFieldManufacturer::FaveroElectronics) => {
+                let (val, o) = FitFieldFaveroProduct::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageDeviceInfoSubfieldProduct::FaveroProduct(val), o))
+            },
         
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -10183,6 +14299,7 @@ pub struct FitMessageDeviceSettings {
     pub auto_activity_detect: Option<FitFieldAutoActivityDetect>,  // Allows setting specific activities auto-activity detect enabled/disabled settings
     pub number_of_screens: Option<u8>,  // Number of screens configured to display
     pub smart_notification_display_orientation: Option<FitFieldDisplayOrientation>,  // Smart Notification display orientation
+    pub tap_interface: Option<FitFieldSwitch>,  
     
 }
 impl FitMessageDeviceSettings {
@@ -10217,6 +14334,7 @@ impl FitMessageDeviceSettings {
             auto_activity_detect: None,
             number_of_screens: None,
             smart_notification_display_orientation: None,
+            tap_interface: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -10630,6 +14748,1202 @@ impl FitMessageDeviceSettings {
                             }
                         };
                         message.smart_notification_display_orientation = Some(val);
+                        Ok(())
+                    },
+                
+                    134 => {  // tap_interface
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSwitch::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSwitch::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.tap_interface = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageDiveAlarm {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: Option<FitFieldMessageIndex>,  // Index of the alarm
+    pub depth: Option<f64>,  
+    pub time: Option<f64>,  
+    pub enabled: Option<bool>,  
+    pub alarm_type: Option<FitFieldDiveAlarmType>,  
+    pub sound: Option<FitFieldTone>,  
+    pub dive_types: Option<FitFieldSubSport>,  
+    
+}
+impl FitMessageDiveAlarm {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveAlarm>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageDiveAlarm {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDiveAlarm",
+            message_index: None,
+            depth: None,
+            time: None,
+            enabled: None,
+            alarm_type: None,
+            sound: None,
+            dive_types: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageDiveAlarm::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageDiveAlarm:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageDiveAlarm, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    254 => {  // message_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.message_index = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // depth
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.depth = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    1 => {  // time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_sint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.time = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    2 => {  // enabled
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_bool(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_bool(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.enabled = Some(val);
+                        Ok(())
+                    },
+                
+                    3 => {  // alarm_type
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDiveAlarmType::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDiveAlarmType::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.alarm_type = Some(val);
+                        Ok(())
+                    },
+                
+                    4 => {  // sound
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldTone::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldTone::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.sound = Some(val);
+                        Ok(())
+                    },
+                
+                    5 => {  // dive_types
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSubSport::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSubSport::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.dive_types = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageDiveGas {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: Option<FitFieldMessageIndex>,  
+    pub helium_content: Option<u8>,  
+    pub oxygen_content: Option<u8>,  
+    pub status: Option<FitFieldDiveGasStatus>,  
+    
+}
+impl FitMessageDiveGas {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveGas>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageDiveGas {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDiveGas",
+            message_index: None,
+            helium_content: None,
+            oxygen_content: None,
+            status: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageDiveGas::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageDiveGas:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageDiveGas, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    254 => {  // message_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.message_index = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // helium_content
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.helium_content = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // oxygen_content
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.oxygen_content = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // status
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDiveGasStatus::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDiveGasStatus::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.status = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
+    Default(u8),
+    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
+    HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
+}
+
+impl FitMessageDiveSettingsSubfieldHeartRateSource {
+    fn parse<'a>(message: &FitMessageDiveSettings, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageDiveSettingsSubfieldHeartRateSource,  &'a [u8])> {
+        
+        match message.heart_rate_source_type {
+        
+            Some(FitFieldSourceType::Antplus) => {
+                let (val, o) = FitFieldAntplusDeviceType::parse(inp)?;
+                return Ok((FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateAntplusDeviceType(val), o))
+            },
+        
+            Some(FitFieldSourceType::Local) => {
+                let (val, o) = FitFieldLocalDeviceType::parse(inp)?;
+                return Ok((FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateLocalDeviceType(val), o))
+            },
+        
+            _ => (),
+        }
+        
+        let (val, o) = parse_uint8(inp)?;
+        Ok((FitMessageDiveSettingsSubfieldHeartRateSource::Default(val),o))
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageDiveSettings {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: Option<FitFieldMessageIndex>,  
+    pub name: Option<String>,  
+    pub model: Option<FitFieldTissueModelType>,  
+    pub gf_low: Option<u8>,  
+    pub gf_high: Option<u8>,  
+    pub water_type: Option<FitFieldWaterType>,  
+    pub water_density: Option<f32>,  // Fresh water is usually 1000; salt water is usually 1025
+    pub po2_warn: Option<f64>,  // Typically 1.40
+    pub po2_critical: Option<f64>,  // Typically 1.60
+    pub po2_deco: Option<f64>,  
+    pub safety_stop_enabled: Option<bool>,  
+    pub bottom_depth: Option<f32>,  
+    pub bottom_time: Option<u32>,  
+    pub apnea_countdown_enabled: Option<bool>,  
+    pub apnea_countdown_time: Option<u32>,  
+    pub backlight_mode: Option<FitFieldDiveBacklightMode>,  
+    pub backlight_brightness: Option<u8>,  
+    pub backlight_timeout: Option<FitFieldBacklightTimeout>,  
+    pub repeat_dive_interval: Option<f64>,  // Time between surfacing and ending the activity
+    pub safety_stop_time: Option<f64>,  // Time at safety stop (if enabled)
+    pub heart_rate_source_type: Option<FitFieldSourceType>,  
+    pub heart_rate_source: Option<FitMessageDiveSettingsSubfieldHeartRateSource>,  
+    
+}
+impl FitMessageDiveSettings {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveSettings>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageDiveSettings {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDiveSettings",
+            message_index: None,
+            name: None,
+            model: None,
+            gf_low: None,
+            gf_high: None,
+            water_type: None,
+            water_density: None,
+            po2_warn: None,
+            po2_critical: None,
+            po2_deco: None,
+            safety_stop_enabled: None,
+            bottom_depth: None,
+            bottom_time: None,
+            apnea_countdown_enabled: None,
+            apnea_countdown_time: None,
+            backlight_mode: None,
+            backlight_brightness: None,
+            backlight_timeout: None,
+            repeat_dive_interval: None,
+            safety_stop_time: None,
+            heart_rate_source_type: None,
+            heart_rate_source: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageDiveSettings::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageDiveSettings:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageDiveSettings, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    254 => {  // message_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.message_index = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // name
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_string(&bytes, field.field_size)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_string(inp, field.field_size)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.name = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // model
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldTissueModelType::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldTissueModelType::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.model = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // gf_low
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.gf_low = Some(val);
+                        Ok(())
+                    },
+                
+                    3 => {  // gf_high
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.gf_high = Some(val);
+                        Ok(())
+                    },
+                
+                    4 => {  // water_type
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldWaterType::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldWaterType::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.water_type = Some(val);
+                        Ok(())
+                    },
+                
+                    5 => {  // water_density
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_float32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.water_density = Some(val);
+                        Ok(())
+                    },
+                
+                    6 => {  // po2_warn
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.po2_warn = Some(val as f64 / 100 as f64);
+                        Ok(())
+                    },
+                
+                    7 => {  // po2_critical
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.po2_critical = Some(val as f64 / 100 as f64);
+                        Ok(())
+                    },
+                
+                    8 => {  // po2_deco
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.po2_deco = Some(val as f64 / 100 as f64);
+                        Ok(())
+                    },
+                
+                    9 => {  // safety_stop_enabled
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_bool(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_bool(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.safety_stop_enabled = Some(val);
+                        Ok(())
+                    },
+                
+                    10 => {  // bottom_depth
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_float32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_float32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.bottom_depth = Some(val);
+                        Ok(())
+                    },
+                
+                    11 => {  // bottom_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.bottom_time = Some(val);
+                        Ok(())
+                    },
+                
+                    12 => {  // apnea_countdown_enabled
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_bool(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_bool(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.apnea_countdown_enabled = Some(val);
+                        Ok(())
+                    },
+                
+                    13 => {  // apnea_countdown_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.apnea_countdown_time = Some(val);
+                        Ok(())
+                    },
+                
+                    14 => {  // backlight_mode
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDiveBacklightMode::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDiveBacklightMode::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.backlight_mode = Some(val);
+                        Ok(())
+                    },
+                
+                    15 => {  // backlight_brightness
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.backlight_brightness = Some(val);
+                        Ok(())
+                    },
+                
+                    16 => {  // backlight_timeout
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldBacklightTimeout::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldBacklightTimeout::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.backlight_timeout = Some(val);
+                        Ok(())
+                    },
+                
+                    17 => {  // repeat_dive_interval
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.repeat_dive_interval = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    18 => {  // safety_stop_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.safety_stop_time = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    19 => {  // heart_rate_source_type
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSourceType::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSourceType::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.heart_rate_source_type = Some(val);
+                        Ok(())
+                    },
+                
+                    20 => {  // heart_rate_source
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitMessageDiveSettingsSubfieldHeartRateSource::parse(message, &bytes, &field, _tz_offset)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitMessageDiveSettingsSubfieldHeartRateSource::parse(message, inp, &field, _tz_offset)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.heart_rate_source = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageDiveSummary {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: Option<FitFieldDateTime>,  
+    pub reference_mesg: Option<FitFieldMesgNum>,  
+    pub reference_index: Option<FitFieldMessageIndex>,  
+    pub avg_depth: Option<f64>,  // 0 if above water
+    pub max_depth: Option<f64>,  // 0 if above water
+    pub surface_interval: Option<f64>,  // Time since end of last dive
+    pub start_cns: Option<f64>,  
+    pub end_cns: Option<f64>,  
+    pub start_n2: Option<f64>,  
+    pub end_n2: Option<f64>,  
+    pub o2_toxicity: Option<u16>,  
+    pub dive_number: Option<u32>,  
+    pub bottom_time: Option<f64>,  
+    
+}
+impl FitMessageDiveSummary {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveSummary>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageDiveSummary {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageDiveSummary",
+            timestamp: None,
+            reference_mesg: None,
+            reference_index: None,
+            avg_depth: None,
+            max_depth: None,
+            surface_interval: None,
+            start_cns: None,
+            end_cns: None,
+            start_n2: None,
+            end_n2: None,
+            o2_toxicity: None,
+            dive_number: None,
+            bottom_time: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageDiveSummary::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageDiveSummary:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageDiveSummary, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    253 => {  // timestamp
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.timestamp = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // reference_mesg
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMesgNum::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMesgNum::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.reference_mesg = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // reference_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.reference_index = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // avg_depth
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.avg_depth = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    3 => {  // max_depth
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.max_depth = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    4 => {  // surface_interval
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.surface_interval = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    5 => {  // start_cns
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.start_cns = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    6 => {  // end_cns
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.end_cns = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    7 => {  // start_n2
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.start_n2 = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    8 => {  // end_n2
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.end_n2 = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    9 => {  // o2_toxicity
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.o2_toxicity = Some(val);
+                        Ok(())
+                    },
+                
+                    10 => {  // dive_number
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.dive_number = Some(val);
+                        Ok(())
+                    },
+                
+                    11 => {  // bottom_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.bottom_time = Some(val as f64 / 1000 as f64);
                         Ok(())
                     },
                 
@@ -11711,6 +17025,151 @@ impl FitMessageExdScreenConfiguration {
     }
 }
 #[derive(Debug)]
+pub struct FitMessageExerciseTitle {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: Option<FitFieldMessageIndex>,  
+    pub exercise_category: Option<FitFieldExerciseCategory>,  
+    pub exercise_name: Option<u16>,  
+    pub wkt_step_name: Option<String>,  
+    
+}
+impl FitMessageExerciseTitle {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExerciseTitle>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageExerciseTitle {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageExerciseTitle",
+            message_index: None,
+            exercise_category: None,
+            exercise_name: None,
+            wkt_step_name: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageExerciseTitle::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageExerciseTitle:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageExerciseTitle, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    254 => {  // message_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.message_index = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // exercise_category
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldExerciseCategory::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldExerciseCategory::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.exercise_category = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // exercise_name
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.exercise_name = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // wkt_step_name
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_string(&bytes, field.field_size)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_string(inp, field.field_size)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.wkt_step_name = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
 pub struct FitMessageFieldCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -12503,12 +17962,18 @@ impl FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     Default(u16),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
     fn parse<'a>(message: &FitMessageFileId, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageFileIdSubfieldProduct,  &'a [u8])> {
         
         match message.manufacturer {
+        
+            Some(FitFieldManufacturer::FaveroElectronics) => {
+                let (val, o) = FitFieldFaveroProduct::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageFileIdSubfieldProduct::FaveroProduct(val), o))
+            },
         
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -14288,6 +19753,7 @@ pub struct FitMessageLap {
     pub avg_vertical_ratio: Option<f64>,  
     pub avg_stance_time_balance: Option<f64>,  
     pub avg_step_length: Option<f64>,  
+    pub avg_vam: Option<f64>,  
     
 }
 impl FitMessageLap {
@@ -14405,6 +19871,7 @@ impl FitMessageLap {
             avg_vertical_ratio: None,
             avg_stance_time_balance: None,
             avg_step_length: None,
+            avg_vam: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -16237,6 +21704,23 @@ impl FitMessageLap {
                         Ok(())
                     },
                 
+                    121 => {  // avg_vam
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.avg_vam = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
                     invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
                 };
             }
@@ -16904,7 +22388,7 @@ pub struct FitMessageMemoGlob {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub part_index: Option<u32>,  // Sequence number of memo blocks
-    pub memo: Option<Vec<u8>>,  // Block of utf8 bytes 
+    pub memo: Option<Vec<u8>>,  // Block of utf8 bytes
     pub message_number: Option<u16>,  // Allows relating glob to another mesg  If used only required for first part of each memo_glob
     pub message_index: Option<FitFieldMessageIndex>,  // Index of external mesg
     
@@ -18602,6 +24086,7 @@ pub struct FitMessageOhrSettings {
     developer_fields: Vec<FitFieldDeveloperData>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
+    pub timestamp: Option<FitFieldDateTime>,  
     pub enabled: Option<FitFieldSwitch>,  
     
 }
@@ -18615,6 +24100,7 @@ impl FitMessageOhrSettings {
             developer_fields: vec![],
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageOhrSettings",
+            timestamp: None,
             enabled: None,
         };
 
@@ -18658,6 +24144,23 @@ impl FitMessageOhrSettings {
 
                 let _parse_result: Result<()> = match f.definition_number {
                 
+                    253 => {  // timestamp
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.timestamp = Some(val);
+                        Ok(())
+                    },
+                
                     0 => {  // enabled
                         let val = match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
@@ -18672,6 +24175,212 @@ impl FitMessageOhrSettings {
                             }
                         };
                         message.enabled = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub enum FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
+    Default(u32),
+    BaroCalFactor(u32),
+}
+
+impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
+    fn parse<'a>(message: &FitMessageOneDSensorCalibration, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageOneDSensorCalibrationSubfieldCalibrationFactor,  &'a [u8])> {
+        
+        match message.sensor_type {
+        
+            Some(FitFieldSensorType::Barometer) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::BaroCalFactor(val), o))
+            },
+        
+            _ => (),
+        }
+        
+        let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+        Ok((FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::Default(val),o))
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageOneDSensorCalibration {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
+    pub sensor_type: Option<FitFieldSensorType>,  // Indicates which sensor the calibration is for
+    pub calibration_factor: Option<FitMessageOneDSensorCalibrationSubfieldCalibrationFactor>,  // Calibration factor used to convert from raw ADC value to degrees, g,  etc.
+    pub calibration_divisor: Option<u32>,  // Calibration factor divisor
+    pub level_shift: Option<u32>,  // Level shift value used to shift the ADC value back into range
+    pub offset_cal: Option<i32>,  // Internal Calibration factor
+    
+}
+impl FitMessageOneDSensorCalibration {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageOneDSensorCalibration>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageOneDSensorCalibration {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageOneDSensorCalibration",
+            timestamp: None,
+            sensor_type: None,
+            calibration_factor: None,
+            calibration_divisor: None,
+            level_shift: None,
+            offset_cal: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageOneDSensorCalibration::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageOneDSensorCalibration:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageOneDSensorCalibration, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    253 => {  // timestamp
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.timestamp = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // sensor_type
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSensorType::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSensorType::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.sensor_type = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // calibration_factor
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::parse(message, &bytes, &field, _tz_offset)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::parse(message, inp, &field, _tz_offset)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.calibration_factor = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // calibration_divisor
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.calibration_divisor = Some(val);
+                        Ok(())
+                    },
+                
+                    3 => {  // level_shift
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.level_shift = Some(val);
+                        Ok(())
+                    },
+                
+                    4 => {  // offset_cal
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_sint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_sint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.offset_cal = Some(val);
                         Ok(())
                     },
                 
@@ -18875,6 +24584,14 @@ pub struct FitMessageRecord {
     pub vertical_ratio: Option<f64>,  
     pub stance_time_balance: Option<f64>,  
     pub step_length: Option<f64>,  
+    pub absolute_pressure: Option<u32>,  // Includes atmospheric pressure
+    pub depth: Option<f64>,  // 0 if above water
+    pub next_stop_depth: Option<f64>,  // 0 if above water
+    pub next_stop_time: Option<f64>,  
+    pub time_to_surface: Option<f64>,  
+    pub ndl_time: Option<f64>,  
+    pub cns_load: Option<u8>,  
+    pub n2_load: Option<f64>,  
     
 }
 impl FitMessageRecord {
@@ -18946,6 +24663,14 @@ impl FitMessageRecord {
             vertical_ratio: None,
             stance_time_balance: None,
             step_length: None,
+            absolute_pressure: None,
+            depth: None,
+            next_stop_depth: None,
+            next_stop_time: None,
+            time_to_surface: None,
+            ndl_time: None,
+            cns_load: None,
+            n2_load: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -19997,6 +25722,142 @@ impl FitMessageRecord {
                         Ok(())
                     },
                 
+                    91 => {  // absolute_pressure
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.absolute_pressure = Some(val);
+                        Ok(())
+                    },
+                
+                    92 => {  // depth
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.depth = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    93 => {  // next_stop_depth
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.next_stop_depth = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    94 => {  // next_stop_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.next_stop_time = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    95 => {  // time_to_surface
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.time_to_surface = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    96 => {  // ndl_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.ndl_time = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
+                    97 => {  // cns_load
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint8(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint8(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.cns_load = Some(val);
+                        Ok(())
+                    },
+                
+                    98 => {  // n2_load
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.n2_load = Some(val as f64 / 1 as f64);
+                        Ok(())
+                    },
+                
                     invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
                 };
             }
@@ -20009,12 +25870,18 @@ impl FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     Default(u16),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
     fn parse<'a>(message: &FitMessageSchedule, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageScheduleSubfieldProduct,  &'a [u8])> {
         
         match message.manufacturer {
+        
+            Some(FitFieldManufacturer::FaveroElectronics) => {
+                let (val, o) = FitFieldFaveroProduct::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageScheduleSubfieldProduct::FaveroProduct(val), o))
+            },
         
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -20712,7 +26579,7 @@ pub struct FitMessageSegmentId {
     pub uuid: Option<String>,  // UUID of the segment
     pub sport: Option<FitFieldSport>,  // Sport associated with the segment
     pub enabled: Option<bool>,  // Segment enabled for evaluation
-    pub user_profile_primary_key: Option<u32>,  // Primary key of the user that created the segment 
+    pub user_profile_primary_key: Option<u32>,  // Primary key of the user that created the segment
     pub device_id: Option<u32>,  // ID of the device that created the segment
     pub default_race_leader: Option<u8>,  // Index for the Leader Board entry selected as the default race participant
     pub delete_status: Option<FitFieldSegmentDeleteStatus>,  // Indicates if any segments should be deleted
@@ -22881,7 +28748,7 @@ pub struct FitMessageSegmentPoint {
     pub position_long: Option<i32>,  
     pub distance: Option<f64>,  // Accumulated distance along the segment at the described point
     pub altitude: Option<f64>,  // Accumulated altitude along the segment at the described point
-    pub leader_time: Option<f64>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment. 
+    pub leader_time: Option<f64>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
     
 }
 impl FitMessageSegmentPoint {
@@ -23251,6 +29118,7 @@ pub struct FitMessageSession {
     pub avg_stance_time_balance: Option<f64>,  
     pub avg_step_length: Option<f64>,  
     pub total_anaerobic_training_effect: Option<f64>,  
+    pub avg_vam: Option<f64>,  
     
 }
 impl FitMessageSession {
@@ -23381,6 +29249,7 @@ impl FitMessageSession {
             avg_stance_time_balance: None,
             avg_step_length: None,
             total_anaerobic_training_effect: None,
+            avg_vam: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -25434,6 +31303,301 @@ impl FitMessageSession {
                         Ok(())
                     },
                 
+                    139 => {  // avg_vam
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.avg_vam = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageSet {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: Option<FitFieldDateTime>,  // Timestamp of the set
+    pub duration: Option<f64>,  
+    pub repetitions: Option<u16>,  // # of repitions of the movement
+    pub weight: Option<f64>,  // Amount of weight applied for the set
+    pub set_type: Option<FitFieldSetType>,  
+    pub start_time: Option<FitFieldDateTime>,  // Start time of the set
+    pub category: Option<FitFieldExerciseCategory>,  
+    pub category_subtype: Option<u16>,  // Based on the associated category, see [category]_exercise_names
+    pub weight_display_unit: Option<FitFieldFitBaseUnit>,  
+    pub message_index: Option<FitFieldMessageIndex>,  
+    pub wkt_step_index: Option<FitFieldMessageIndex>,  
+    
+}
+impl FitMessageSet {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSet>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageSet {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageSet",
+            timestamp: None,
+            duration: None,
+            repetitions: None,
+            weight: None,
+            set_type: None,
+            start_time: None,
+            category: None,
+            category_subtype: None,
+            weight_display_unit: None,
+            message_index: None,
+            wkt_step_index: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageSet::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageSet:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageSet, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    254 => {  // timestamp
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.timestamp = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // duration
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.duration = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    3 => {  // repetitions
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.repetitions = Some(val);
+                        Ok(())
+                    },
+                
+                    4 => {  // weight
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.weight = Some(val as f64 / 16 as f64);
+                        Ok(())
+                    },
+                
+                    5 => {  // set_type
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSetType::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSetType::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.set_type = Some(val);
+                        Ok(())
+                    },
+                
+                    6 => {  // start_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.start_time = Some(val);
+                        Ok(())
+                    },
+                
+                    7 => {  // category
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldExerciseCategory::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldExerciseCategory::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.category = Some(val);
+                        Ok(())
+                    },
+                
+                    8 => {  // category_subtype
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.category_subtype = Some(val);
+                        Ok(())
+                    },
+                
+                    9 => {  // weight_display_unit
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldFitBaseUnit::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldFitBaseUnit::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.weight_display_unit = Some(val);
+                        Ok(())
+                    },
+                
+                    10 => {  // message_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.message_index = Some(val);
+                        Ok(())
+                    },
+                
+                    11 => {  // wkt_step_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.wkt_step_index = Some(val);
+                        Ok(())
+                    },
+                
                     invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
                 };
             }
@@ -25446,12 +31610,18 @@ impl FitMessageSession {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     Default(u16),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
     fn parse<'a>(message: &FitMessageSlaveDevice, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageSlaveDeviceSubfieldProduct,  &'a [u8])> {
         
         match message.manufacturer {
+        
+            Some(FitFieldManufacturer::FaveroElectronics) => {
+                let (val, o) = FitFieldFaveroProduct::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageSlaveDeviceSubfieldProduct::FaveroProduct(val), o))
+            },
         
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -25961,6 +32131,113 @@ impl FitMessageSport {
     }
 }
 #[derive(Debug)]
+pub struct FitMessageStressLevel {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub stress_level_value: Option<i16>,  
+    pub stress_level_time: Option<FitFieldDateTime>,  // Time stress score was calculated
+    
+}
+impl FitMessageStressLevel {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageStressLevel>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageStressLevel {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageStressLevel",
+            stress_level_value: None,
+            stress_level_time: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageStressLevel::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageStressLevel:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageStressLevel, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    0 => {  // stress_level_value
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_sint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_sint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.stress_level_value = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // stress_level_time
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDateTime::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDateTime::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.stress_level_time = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     Default(u32),
     GyroCalFactor(u32),
@@ -26202,7 +32479,7 @@ pub struct FitMessageTimestampCorrelation {
     pub fractional_timestamp: Option<f64>,  // Fractional part of the UTC timestamp at the time the system timestamp was recorded.
     pub system_timestamp: Option<FitFieldDateTime>,  // Whole second part of the system timestamp
     pub fractional_system_timestamp: Option<f64>,  // Fractional part of the system timestamp
-    pub local_timestamp: Option<FitFieldLocalDateTime>,  // timestamp epoch expressed in local time used to convert timestamps to local time 
+    pub local_timestamp: Option<FitFieldLocalDateTime>,  // timestamp epoch expressed in local time used to convert timestamps to local time
     pub timestamp_ms: Option<u16>,  // Millisecond part of the UTC timestamp at the time the system timestamp was recorded.
     pub system_timestamp_ms: Option<u16>,  // Millisecond part of the system timestamp
     
@@ -26656,12 +32933,18 @@ impl FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     Default(u16),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
     fn parse<'a>(message: &FitMessageTrainingFile, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<(FitMessageTrainingFileSubfieldProduct,  &'a [u8])> {
         
         match message.manufacturer {
+        
+            Some(FitFieldManufacturer::FaveroElectronics) => {
+                let (val, o) = FitFieldFaveroProduct::parse(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageTrainingFileSubfieldProduct::FaveroProduct(val), o))
+            },
         
             Some(FitFieldManufacturer::Garmin) => {
                 let (val, o) = FitFieldGarminProduct::parse(inp, message.definition_message.endianness)?;
@@ -26902,6 +33185,8 @@ pub struct FitMessageUserProfile {
     pub height_setting: Option<FitFieldDisplayMeasure>,  
     pub user_running_step_length: Option<f64>,  // User defined running step length set to 0 for auto length
     pub user_walking_step_length: Option<f64>,  // User defined walking step length set to 0 for auto length
+    pub depth_setting: Option<FitFieldDisplayMeasure>,  
+    pub dive_count: Option<u32>,  
     
 }
 impl FitMessageUserProfile {
@@ -26941,6 +33226,8 @@ impl FitMessageUserProfile {
             height_setting: None,
             user_running_step_length: None,
             user_walking_step_length: None,
+            depth_setting: None,
+            dive_count: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -27439,6 +33726,40 @@ impl FitMessageUserProfile {
                             }
                         };
                         message.user_walking_step_length = Some(val as f64 / 1000 as f64);
+                        Ok(())
+                    },
+                
+                    47 => {  // depth_setting
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDisplayMeasure::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.depth_setting = Some(val);
+                        Ok(())
+                    },
+                
+                    49 => {  // dive_count
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint32(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint32(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.dive_count = Some(val);
                         Ok(())
                     },
                 
@@ -29194,6 +35515,9 @@ pub struct FitMessageWorkout {
     pub capabilities: Option<FitFieldWorkoutCapabilities>,  
     pub num_valid_steps: Option<u16>,  // number of valid steps
     pub wkt_name: Option<String>,  
+    pub sub_sport: Option<FitFieldSubSport>,  
+    pub pool_length: Option<f64>,  
+    pub pool_length_unit: Option<FitFieldDisplayMeasure>,  
     
 }
 impl FitMessageWorkout {
@@ -29210,6 +35534,9 @@ impl FitMessageWorkout {
             capabilities: None,
             num_valid_steps: None,
             wkt_name: None,
+            sub_sport: None,
+            pool_length: None,
+            pool_length_unit: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -29320,6 +35647,259 @@ impl FitMessageWorkout {
                         Ok(())
                     },
                 
+                    11 => {  // sub_sport
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSubSport::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSubSport::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.sub_sport = Some(val);
+                        Ok(())
+                    },
+                
+                    14 => {  // pool_length
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.pool_length = Some(val as f64 / 100 as f64);
+                        Ok(())
+                    },
+                
+                    15 => {  // pool_length_unit
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDisplayMeasure::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.pool_length_unit = Some(val);
+                        Ok(())
+                    },
+                
+                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                };
+            }
+            inp = saved_outp;
+        }
+        Ok(inp)
+    }
+}
+#[derive(Debug)]
+pub struct FitMessageWorkoutSession {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    pub raw_bytes: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: Option<FitFieldMessageIndex>,  
+    pub sport: Option<FitFieldSport>,  
+    pub sub_sport: Option<FitFieldSubSport>,  
+    pub num_valid_steps: Option<u16>,  
+    pub first_step_index: Option<u16>,  
+    pub pool_length: Option<f64>,  
+    pub pool_length_unit: Option<FitFieldDisplayMeasure>,  
+    
+}
+impl FitMessageWorkoutSession {
+
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutSession>, &'a [u8])> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let mut message = FitMessageWorkoutSession {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            message_name: "FitMessageWorkoutSession",
+            message_index: None,
+            sport: None,
+            sub_sport: None,
+            num_valid_steps: None,
+            first_step_index: None,
+            pool_length: None,
+            pool_length_unit: None,
+        };
+
+        let inp = &input[..(message.definition_message.message_size)];
+        message.raw_bytes.resize(message.definition_message.message_size, 0);
+        message.raw_bytes.copy_from_slice(inp);
+        let tz_offset = parsing_state.get_timezone_offset();
+        let o = match FitMessageWorkoutSession::parse_internal(&mut message, input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from("Error parsing FitMessageWorkoutSession:");
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            }
+        };
+
+        
+
+        let mut inp2 = o;
+        for dev_field in &message.definition_message.developer_field_definitions {
+            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
+            message.developer_fields.push(dd);
+            inp2 = outp;
+        }
+
+        Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_internal<'a>(message: &mut FitMessageWorkoutSession, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+        let mut inp = input;
+        let mut saved_outp = input;
+        for field in &message.definition_message.field_definitions {
+            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            while actions.len() > 0 {
+
+                let (f, components_bit_range) = actions.remove(0);
+
+                let _parse_result: Result<()> = match f.definition_number {
+                
+                    254 => {  // message_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldMessageIndex::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldMessageIndex::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.message_index = Some(val);
+                        Ok(())
+                    },
+                
+                    0 => {  // sport
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSport::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSport::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.sport = Some(val);
+                        Ok(())
+                    },
+                
+                    1 => {  // sub_sport
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldSubSport::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldSubSport::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.sub_sport = Some(val);
+                        Ok(())
+                    },
+                
+                    2 => {  // num_valid_steps
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.num_valid_steps = Some(val);
+                        Ok(())
+                    },
+                
+                    3 => {  // first_step_index
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.first_step_index = Some(val);
+                        Ok(())
+                    },
+                
+                    4 => {  // pool_length
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.pool_length = Some(val as f64 / 100 as f64);
+                        Ok(())
+                    },
+                
+                    5 => {  // pool_length_unit
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldDisplayMeasure::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldDisplayMeasure::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.pool_length_unit = Some(val);
+                        Ok(())
+                    },
+                
                     invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
                 };
             }
@@ -29331,6 +35911,7 @@ impl FitMessageWorkout {
 #[derive(Debug)]
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     Default(u32),
+    DurationReps(u32),
     DurationDistance(u32),
     DurationTime(u32),
     DurationPower(FitFieldWorkoutPower),
@@ -29424,6 +36005,11 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
                 return Ok((FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val), o))
             },
         
+            Some(FitFieldWktStepDuration::Reps) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepSubfieldDurationValue::DurationReps(val), o))
+            },
+        
             _ => (),
         }
         
@@ -29438,7 +36024,10 @@ pub enum FitMessageWorkoutStepSubfieldTargetValue {
     RepeatCalories(u32),
     RepeatTime(u32),
     RepeatPower(FitFieldWorkoutPower),
+    TargetStrokeType(FitFieldSwimStroke),
     RepeatSteps(u32),
+    TargetCadenceZone(u32),
+    TargetSpeedZone(u32),
     TargetHrZone(u32),
     RepeatDistance(u32),
     TargetPowerZone(u32),
@@ -29494,14 +36083,29 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         
         match message.target_type {
         
+            Some(FitFieldWktStepTarget::Speed) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val), o))
+            },
+        
             Some(FitFieldWktStepTarget::HeartRate) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
                 return Ok((FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val), o))
             },
         
+            Some(FitFieldWktStepTarget::Cadence) => {
+                let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
+                return Ok((FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val), o))
+            },
+        
             Some(FitFieldWktStepTarget::Power) => {
                 let (val, o) = parse_uint32(inp, message.definition_message.endianness)?;
                 return Ok((FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val), o))
+            },
+        
+            Some(FitFieldWktStepTarget::SwimStroke) => {
+                let (val, o) = FitFieldSwimStroke::parse(inp)?;
+                return Ok((FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val), o))
             },
         
             _ => (),
@@ -29609,6 +36213,12 @@ pub struct FitMessageWorkoutStep {
     pub custom_target_value_low: Option<FitMessageWorkoutStepSubfieldCustomTargetValueLow>,  
     pub custom_target_value_high: Option<FitMessageWorkoutStepSubfieldCustomTargetValueHigh>,  
     pub intensity: Option<FitFieldIntensity>,  
+    pub notes: Option<String>,  
+    pub equipment: Option<FitFieldWorkoutEquipment>,  
+    pub exercise_category: Option<FitFieldExerciseCategory>,  
+    pub exercise_name: Option<u16>,  
+    pub exercise_weight: Option<f64>,  
+    pub weight_display_unit: Option<FitFieldFitBaseUnit>,  
     
 }
 impl FitMessageWorkoutStep {
@@ -29630,6 +36240,12 @@ impl FitMessageWorkoutStep {
             custom_target_value_low: None,
             custom_target_value_high: None,
             intensity: None,
+            notes: None,
+            equipment: None,
+            exercise_category: None,
+            exercise_name: None,
+            exercise_weight: None,
+            weight_display_unit: None,
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -29825,6 +36441,108 @@ impl FitMessageWorkoutStep {
                         Ok(())
                     },
                 
+                    8 => {  // notes
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_string(&bytes, field.field_size)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_string(inp, field.field_size)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.notes = Some(val);
+                        Ok(())
+                    },
+                
+                    9 => {  // equipment
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldWorkoutEquipment::parse(&bytes)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldWorkoutEquipment::parse(inp)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.equipment = Some(val);
+                        Ok(())
+                    },
+                
+                    10 => {  // exercise_category
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldExerciseCategory::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldExerciseCategory::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.exercise_category = Some(val);
+                        Ok(())
+                    },
+                
+                    11 => {  // exercise_name
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.exercise_name = Some(val);
+                        Ok(())
+                    },
+                
+                    12 => {  // exercise_weight
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = parse_uint16(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = parse_uint16(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.exercise_weight = Some(val as f64 / 100 as f64);
+                        Ok(())
+                    },
+                
+                    13 => {  // weight_display_unit
+                        let val = match components_bit_range {
+                            Some((bit_range_start, num_bits)) => {
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let (val, _) = FitFieldFitBaseUnit::parse(&bytes, message.definition_message.endianness)?;
+                                val
+                            },
+                            None => {
+                                let (val, outp) = FitFieldFitBaseUnit::parse(inp, message.definition_message.endianness)?;
+                                saved_outp = outp;
+                                val
+                            }
+                        };
+                        message.weight_display_unit = Some(val);
+                        Ok(())
+                    },
+                
                     invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
                 };
             }
@@ -30006,6 +36724,7 @@ pub enum FitDataMessage {
     AntRx(Rc<FitMessageAntRx>),
     AntTx(Rc<FitMessageAntTx>),
     AviationAttitude(Rc<FitMessageAviationAttitude>),
+    BarometerData(Rc<FitMessageBarometerData>),
     BikeProfile(Rc<FitMessageBikeProfile>),
     BloodPressure(Rc<FitMessageBloodPressure>),
     CadenceZone(Rc<FitMessageCadenceZone>),
@@ -30017,10 +36736,15 @@ pub enum FitDataMessage {
     DeveloperDataId(Rc<FitMessageDeveloperDataId>),
     DeviceInfo(Rc<FitMessageDeviceInfo>),
     DeviceSettings(Rc<FitMessageDeviceSettings>),
+    DiveAlarm(Rc<FitMessageDiveAlarm>),
+    DiveGas(Rc<FitMessageDiveGas>),
+    DiveSettings(Rc<FitMessageDiveSettings>),
+    DiveSummary(Rc<FitMessageDiveSummary>),
     Event(Rc<FitMessageEvent>),
     ExdDataConceptConfiguration(Rc<FitMessageExdDataConceptConfiguration>),
     ExdDataFieldConfiguration(Rc<FitMessageExdDataFieldConfiguration>),
     ExdScreenConfiguration(Rc<FitMessageExdScreenConfiguration>),
+    ExerciseTitle(Rc<FitMessageExerciseTitle>),
     FieldCapabilities(Rc<FitMessageFieldCapabilities>),
     FieldDescription(Rc<FitMessageFieldDescription>),
     FileCapabilities(Rc<FitMessageFileCapabilities>),
@@ -30044,6 +36768,7 @@ pub enum FitDataMessage {
     NmeaSentence(Rc<FitMessageNmeaSentence>),
     ObdiiData(Rc<FitMessageObdiiData>),
     OhrSettings(Rc<FitMessageOhrSettings>),
+    OneDSensorCalibration(Rc<FitMessageOneDSensorCalibration>),
     PowerZone(Rc<FitMessagePowerZone>),
     Record(Rc<FitMessageRecord>),
     Schedule(Rc<FitMessageSchedule>),
@@ -30054,10 +36779,12 @@ pub enum FitDataMessage {
     SegmentLeaderboardEntry(Rc<FitMessageSegmentLeaderboardEntry>),
     SegmentPoint(Rc<FitMessageSegmentPoint>),
     Session(Rc<FitMessageSession>),
+    Set(Rc<FitMessageSet>),
     SlaveDevice(Rc<FitMessageSlaveDevice>),
     Software(Rc<FitMessageSoftware>),
     SpeedZone(Rc<FitMessageSpeedZone>),
     Sport(Rc<FitMessageSport>),
+    StressLevel(Rc<FitMessageStressLevel>),
     ThreeDSensorCalibration(Rc<FitMessageThreeDSensorCalibration>),
     TimestampCorrelation(Rc<FitMessageTimestampCorrelation>),
     Totals(Rc<FitMessageTotals>),
@@ -30073,6 +36800,7 @@ pub enum FitDataMessage {
     WeatherConditions(Rc<FitMessageWeatherConditions>),
     WeightScale(Rc<FitMessageWeightScale>),
     Workout(Rc<FitMessageWorkout>),
+    WorkoutSession(Rc<FitMessageWorkoutSession>),
     WorkoutStep(Rc<FitMessageWorkoutStep>),
     ZonesTarget(Rc<FitMessageZonesTarget>),
 }
@@ -30105,6 +36833,10 @@ impl FitDataMessage {
             FitFieldMesgNum::AviationAttitude => {
                 let (val, o) = FitMessageAviationAttitude::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::AviationAttitude(val), o))
+            },
+            FitFieldMesgNum::BarometerData => {
+                let (val, o) = FitMessageBarometerData::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::BarometerData(val), o))
             },
             FitFieldMesgNum::BikeProfile => {
                 let (val, o) = FitMessageBikeProfile::parse(input, header, parsing_state, _offset_secs)?;
@@ -30150,6 +36882,22 @@ impl FitDataMessage {
                 let (val, o) = FitMessageDeviceSettings::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::DeviceSettings(val), o))
             },
+            FitFieldMesgNum::DiveAlarm => {
+                let (val, o) = FitMessageDiveAlarm::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::DiveAlarm(val), o))
+            },
+            FitFieldMesgNum::DiveGas => {
+                let (val, o) = FitMessageDiveGas::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::DiveGas(val), o))
+            },
+            FitFieldMesgNum::DiveSettings => {
+                let (val, o) = FitMessageDiveSettings::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::DiveSettings(val), o))
+            },
+            FitFieldMesgNum::DiveSummary => {
+                let (val, o) = FitMessageDiveSummary::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::DiveSummary(val), o))
+            },
             FitFieldMesgNum::Event => {
                 let (val, o) = FitMessageEvent::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::Event(val), o))
@@ -30165,6 +36913,10 @@ impl FitDataMessage {
             FitFieldMesgNum::ExdScreenConfiguration => {
                 let (val, o) = FitMessageExdScreenConfiguration::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::ExdScreenConfiguration(val), o))
+            },
+            FitFieldMesgNum::ExerciseTitle => {
+                let (val, o) = FitMessageExerciseTitle::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::ExerciseTitle(val), o))
             },
             FitFieldMesgNum::FieldCapabilities => {
                 let (val, o) = FitMessageFieldCapabilities::parse(input, header, parsing_state, _offset_secs)?;
@@ -30258,6 +37010,10 @@ impl FitDataMessage {
                 let (val, o) = FitMessageOhrSettings::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::OhrSettings(val), o))
             },
+            FitFieldMesgNum::OneDSensorCalibration => {
+                let (val, o) = FitMessageOneDSensorCalibration::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::OneDSensorCalibration(val), o))
+            },
             FitFieldMesgNum::PowerZone => {
                 let (val, o) = FitMessagePowerZone::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::PowerZone(val), o))
@@ -30298,6 +37054,10 @@ impl FitDataMessage {
                 let (val, o) = FitMessageSession::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::Session(val), o))
             },
+            FitFieldMesgNum::Set => {
+                let (val, o) = FitMessageSet::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::Set(val), o))
+            },
             FitFieldMesgNum::SlaveDevice => {
                 let (val, o) = FitMessageSlaveDevice::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::SlaveDevice(val), o))
@@ -30313,6 +37073,10 @@ impl FitDataMessage {
             FitFieldMesgNum::Sport => {
                 let (val, o) = FitMessageSport::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::Sport(val), o))
+            },
+            FitFieldMesgNum::StressLevel => {
+                let (val, o) = FitMessageStressLevel::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::StressLevel(val), o))
             },
             FitFieldMesgNum::ThreeDSensorCalibration => {
                 let (val, o) = FitMessageThreeDSensorCalibration::parse(input, header, parsing_state, _offset_secs)?;
@@ -30373,6 +37137,10 @@ impl FitDataMessage {
             FitFieldMesgNum::Workout => {
                 let (val, o) = FitMessageWorkout::parse(input, header, parsing_state, _offset_secs)?;
                 Ok((FitDataMessage::Workout(val), o))
+            },
+            FitFieldMesgNum::WorkoutSession => {
+                let (val, o) = FitMessageWorkoutSession::parse(input, header, parsing_state, _offset_secs)?;
+                Ok((FitDataMessage::WorkoutSession(val), o))
             },
             FitFieldMesgNum::WorkoutStep => {
                 let (val, o) = FitMessageWorkoutStep::parse(input, header, parsing_state, _offset_secs)?;
