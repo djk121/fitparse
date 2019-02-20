@@ -152,26 +152,46 @@ fn fit_message_record_with_developer_fields() {
     parsing_state.add(0, definition_message_final.clone());
 
     let developer_field_descriptions = vec![
+<<<<<<< HEAD
         ("Form Power".to_string(),
          "Watts".to_string(),
+=======
+        ("Form Power\u{0}".to_string(),
+         "Watts\u{0}".to_string(),
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
          8,
          None,
          FitFieldFitBaseType::Uint16,
          vec![(0,1,2), (1,1,2), (2,1,2), (3,11,7), (8,6,7)]),
+<<<<<<< HEAD
         ("Leg Spring Stiffness".to_string(),
          "KN/m".to_string(),
+=======
+        ("Leg Spring Stiffness\u{0}".to_string(),
+         "KN/m\u{0}".to_string(),
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
          9,
          None,
          FitFieldFitBaseType::Float32,
          vec![(0,1,2), (1,1,2), (2,1,2), (3,21,7), (8,5,7)]),
+<<<<<<< HEAD
         ("Distance".to_string(),
          "Meters".to_string(),
+=======
+        ("Distance\u{0}".to_string(),
+         "Meters\u{0}".to_string(),
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
          6,
          Some(FitFieldMesgNum::SdmProfile),
          FitFieldFitBaseType::Uint32,
          vec![(0,1,2), (1,1,2), (14,2,4), (2,1,2), (3,9,7), (8,7,7)]),
+<<<<<<< HEAD
         ("Speed".to_string(),
          "M/S".to_string(),
+=======
+        ("Speed\u{0}".to_string(),
+         "M/S\u{0}".to_string(),
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
          5,
          Some(FitFieldMesgNum::BikeProfile),
          FitFieldFitBaseType::Float32,
@@ -197,18 +217,29 @@ fn fit_message_record_with_developer_fields() {
     assert_eq!(rec.heart_rate, Some(151));
     assert_eq!(rec.power, Some(209));
 
+<<<<<<< HEAD
     let fp_field_name = "Form Power".to_string();
+=======
+    let fp_field_name = "Form Power\u{0}".to_string();
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
 
     for ffdd in &rec.developer_fields {
         match ffdd.field_description.field_name {
             Some(ref field_name) => {
                 if *field_name == fp_field_name {
+<<<<<<< HEAD
                     assert_eq!(ffdd.value, FitBaseValue::Uint16(57));
                     return
+=======
+                    assert_eq!(ffdd.value, FitBaseValue::Uint16(57))
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
                 }
             },
             _ => ()
         }
     }
+<<<<<<< HEAD
     assert_eq!(1,2);
+=======
+>>>>>>> 5264a4d3769f2667450e2ac3e3b6074e9af88aac
 }
