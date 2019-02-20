@@ -396,7 +396,7 @@ impl FitDeveloperDataDefinition {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum FitBaseValue {
     Sint8(i8),
     Uint8(u8),
