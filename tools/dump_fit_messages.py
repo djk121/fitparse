@@ -450,19 +450,44 @@ impl {{ message_name }} {
                 let _parse_result: Result<()> = match f.definition_number {
                 {% for field in fields %}
                     {{ field.number }} => {  // {{ field.name }}
-                        let val = match components_bit_range {
+                        match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
                                 let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                {% if field.array %}
+                                let mut array_size = field.field_size / field.base_type_size();
+                                let mut val = Vec::with_capacity(array_size);
+                                let mut tempp = &bytes[..];
+                                while array_size > 0 {
+                                    let (v, outp) = {{ field.output_field_parser('tempp') }}?;
+                                    tempp = outp;
+                                    val.push(v);
+                                    array_size = array_size - 1
+                                }
+                                {% else %}
                                 let (val, _) = {{ field.output_field_parser('&bytes') }}?;
-                                val
+                                {% endif %}
+                                {{ field.output_parsed_field_assignment() }};
                             },
                             None => {
+                                {% if field.array %}
+                                let mut array_size = field.field_size / field.base_type_size();
+                                let mut val = Vec::with_capacity(array_size);
+                                let mut tempp = inp;
+                                while array_size > 0 {
+                                    let (v, outp) = {{ field.output_field_parser('tempp') }}?;
+                                    tempp = outp;
+                                    val.push(v);
+                                    array_size = array_size - 1
+                                }
+                                saved_outp = tempp;
+                                {% else %}
                                 let (val, outp) = {{ field.output_field_parser('inp') }}?;
                                 saved_outp = outp;
-                                val
+                                {% endif %}
+                                {{ field.output_parsed_field_assignment() }};
                             }
-                        };
-                        {{ field.output_parsed_field_assignment() }};
+                        }
+
                         {% for action_push in field.output_components_action_pushes() -%}
                         {{ action_push }}
                         {% endfor -%}
@@ -552,14 +577,14 @@ impl {{ message_name }} {
 
 class Field(object):
     FIELD_OPTION_SUBFIELD = """Option<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
-    FIELD_OPTION_BASE_TYPE = """Option<{{ fit_type }}>"""
-    FIELD_OPTION_FIT_TYPE = """Option<FitField{{ field_type }}>"""
+    FIELD_OPTION_BASE_TYPE = """Option<{% if is_vec %}Vec<{% endif %}{{ fit_type }}{% if is_vec %}>{% endif %}>"""
+    FIELD_OPTION_FIT_TYPE = """Option<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
 
     def __init__(self, number, name, type, array, components, bits, scale, offset, comment, types):
         self.number = int(number)
         self.name = name
         self.type = type
-        self.array = array
+        self.array = (array != '' and type != 'byte')
         self.components = components
         self.bits = bits
         self.scale = scale
@@ -631,8 +656,8 @@ class Field(object):
             for field in self.message.fields:
                 if self.components[i] == field.name:
 
-                    print >>sys.stderr, "components[{}]: {}".format(i, self.components[i])
-                    print >>sys.stderr, "bits: {}".format(self.bits)
+                    # print >>sys.stderr, "components[{}]: {}".format(i, self.components[i])
+                    # print >>sys.stderr, "bits: {}".format(self.bits)
 
                     field_size = resolve_field_size(field.type, self.types)
 
@@ -662,29 +687,53 @@ class Field(object):
             content = template.render()
         elif self.type != 'enum' and self.type in FIT_TYPE_MAP.keys():
             if self.scale and self.type != 'byte':
-                content = "Option<f64>"
+                if self.array:
+                    content = "Option<Vec<f64>>"
+                else:
+                    content = "Option<f64>"
+
             else:
+                if self.name == 'bottom_time':
+                    print >>sys.stderr, "bottom_time is_vec: {}".format(self.array)
+
+                fit_type = FIT_TYPE_MAP[self.type]
+                if self.type[-1] == 'z' and self.array:
+                    fit_type = "Option<{}>".format(fit_type)
+
                 template = Environment().from_string(self.FIELD_OPTION_BASE_TYPE,
-                                                     globals={'fit_type': FIT_TYPE_MAP[self.type]})
+                                                     globals={'fit_type': fit_type,
+                                                              'is_vec': self.array})
                 content = template.render()
 
         else:
             template = Environment().from_string(self.FIELD_OPTION_FIT_TYPE,
-                                                 globals={'field_type': rustify_name(self.type)})
+                                                 globals={'field_type': rustify_name(self.type),
+                                                          'is_vec': self.array})
             content = template.render()
 
         return content
 
     def output_parsed_field_assignment(self):
-        if self.type[-1] == 'z':
+        if self.type[-1] == 'z' and not self.array:
             return "message.{} = val".format(self.name)
+            #else:
+                #return "message.{} = Some(val)".for
 
         if self.scale and is_fit_base_type(self.type) and not self.subfields and self.type != 'byte':
-            if self.offset:
-                return "message.{} = Some((val as f64 / {} as f64) - ({} as f64))".format(self.name, self.scale, self.offset)
-            else:
-                return "message.{} = Some(val as f64 / {} as f64)".format(self.name, self.scale)
 
+            #if self.array:
+            #    return "message.{} = Some(val)".format(self.name)
+
+            if self.offset:
+                if not self.array:
+                    return "message.{} = Some((val as f64 / {} as f64) - ({} as f64))".format(self.name, self.scale, self.offset)
+                else:
+                    return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64) - ({} as f64)).collect())".format(self.name, self.scale, self.offset)
+            else:
+                if not self.array:
+                    return "message.{} = Some(val as f64 / {} as f64)".format(self.name, self.scale)
+                else:
+                    return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64)).collect())".format(self.name, self.scale)
 
         return "message.{} = Some(val)".format(self.name)
 
@@ -931,8 +980,11 @@ def parse_messages_file(messages_file_name, types):
             #if field_type == 'byte':
             #    messages[current_message]['needs_lifetime_spec'] = True
 
+            if field_name == 'bottom_time':
+                print >> sys.stderr, "bottom_time array: '{}'".format(array)
+
             messages[current_message].add_field(
-                Field(field_number, field_name, field_type, array, parsed_components, parsed_bits, scale, offset, comment, types)
+                Field(field_number, field_name, field_type, array.strip(), parsed_components, parsed_bits, scale, offset, comment, types)
             )
 
             #messages[current_message]["fields"].append({
