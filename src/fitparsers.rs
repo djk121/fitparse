@@ -2,7 +2,6 @@
 
 //use chrono::NaiveDateTime;
 
-use std::ffi::CStr;
 use chrono::{DateTime, UTC, Duration, TimeZone};
 
 use nom;
@@ -70,7 +69,8 @@ fn parse_float64_internal(input: &[u8], endianness: nom::Endianness) -> nom::IRe
 named_args!(parse_string_internal(num_bytes: usize)<String>,
     do_parse!(
         s: take!(num_bytes) >>
-        (CStr::from_bytes_with_nul(s).unwrap().to_str().unwrap().to_string())
+        (String::from_utf8_lossy(s).to_string())
+        //(CStr::from_bytes_with_nul(s).unwrap().to_str().unwrap().to_string())
     )
 );
 
@@ -259,8 +259,8 @@ nom_parser!("sint64");
 nom_parser!("uint64");
 nom_parser!("uint64z");
 nom_parser!("float64");
-nom_parser!("string");
 nom_parser!("byte");
+nom_parser!("string");
 nom_parser!("date_time");
 
 

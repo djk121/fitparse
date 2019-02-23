@@ -67,6 +67,7 @@ pub enum {{ type_name }} { // fit base type: {{ base_type }}
     {{ rustify_name(field["value_name"]) }} = {{ field["value"]}},
     {%- if field["comment"] %}  // {{ field["comment"] }}{% endif %}
 {%- endfor %}
+    UnknownToSdk = -1
 }
 
 impl {{ type_name }} {
@@ -89,7 +90,7 @@ impl From<{{ base_rust_type }}> for {{ type_name }} {
         {%- for field in fields %}
             {{ field['value'] }} => {{ type_name }}::{{ field['rustified_value_name'] }},
         {%- endfor %}
-            invalid_field_num => panic!(format!("invalid field_num {} for {{ type_name }}", invalid_field_num))
+            _ => {{ type_name }}::UnknownToSdk
         }
     }
 }
@@ -134,6 +135,9 @@ def output_types(types):
     special_types = r"""
 
 use std::rc::Rc;
+use std::mem::transmute;
+use std::collections::HashMap;
+use std::cmp::Ordering;
 
 use nom::Endianness;
 
@@ -143,6 +147,9 @@ use FitRecordHeader;
 use FitDefinitionMessage;
 use FitFieldDefinition;
 use FitFieldDeveloperData;
+use FitGlobalMesgNum;
+use FitMessageUnknownToSdk;
+use FitBaseValue;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
 
@@ -166,7 +173,33 @@ impl FitFieldDateTime {
     }
 
     #[allow(dead_code)]
-    fn new_from_offset(&self, _offset_secs: u8) -> FitFieldDateTime {
+    pub fn new_from_compressed_timestamp(&self, offset_secs: u8) -> Result<FitFieldDateTime> {
+        let last_5_existing = {
+            let bytes: [u8; 4] = unsafe { transmute(self.seconds_since_garmin_epoch.to_be()) };
+            bytes[3] & 0x0000001F
+        };
+        let last_5_offset = offset_secs & 0x0000001F;
+
+        let new_epoch_offset = match last_5_existing.cmp(&last_5_offset) {
+            Ordering::Equal => {
+                self.seconds_since_garmin_epoch
+            },
+            Ordering::Greater => {
+                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32 + 0x20
+            },
+            Ordering::Less => {
+                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32
+            }
+        };
+
+        let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
+
+        let (ffdt, _) = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
+        Ok(ffdt)
+    }
+
+    #[allow(dead_code)]
+    pub fn new_from_offset(&self, _offset_secs: u8) -> FitFieldDateTime {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let garmin_epoch_offset = self.seconds_since_garmin_epoch + (_offset_secs as u32);
         let rust_time = garmin_epoch + Duration::seconds(garmin_epoch_offset.into());
@@ -200,7 +233,8 @@ impl FitFieldLocalDateTime {
     }
 }
 
-    """
+
+"""
 
     sys.stdout.write(special_types)
     sys.stdout.write("\n")
@@ -288,19 +322,24 @@ pub enum FitDataMessage {
     {% for mn in message_names %}
     {{ mn }}(Rc<FitMessage{{ mn }}>),
     {%- endfor %}
+    UnknownToSdk(Rc<FitMessageUnknownToSdk>)
 }
 
 impl FitDataMessage {
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(FitDataMessage, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             {% for mesg in mesgs %}
-            FitFieldMesgNum::{{ mesg }} => {
-                let (val, o) = FitMessage{{ mesg }}::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::{{ mesg }}(val), o))
+            FitGlobalMesgNum::Known(FitFieldMesgNum::{{ mesg }}) => {
+                let (val, o) = FitMessage{{ mesg }}::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::{{ mesg }}(val)), o))
             },
             {%- endfor %}
-            _ => Err(Error::unknown_error())
+            FitGlobalMesgNum::Unknown(number) => {
+                let (val, o) = FitMessageUnknownToSdk::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::UnknownToSdk(val)), o))
+            }
+            _ => Ok((None, &input[definition_message.message_size..]))
         }
     }
 }
@@ -330,6 +369,7 @@ pub struct {{ message_name }} {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     {% for field in fields -%}
@@ -341,12 +381,13 @@ pub struct {{ message_name }} {
     IMPL_TEMPLATE = """
 impl {{ message_name }} {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = {{ message_name }} {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "{{ message_name }}",
             {%- for field in fields %}
@@ -369,9 +410,9 @@ impl {{ message_name }} {
         };
 
         {% if has_timestamp_field %}
-        match _offset_secs {
-            Some(os) => {
-                message.timestamp = Some(parsing_state.get_last_timestamp()?.new_from_offset(os));
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
             },
             None => {
                 match message.timestamp {
@@ -428,7 +469,13 @@ impl {{ message_name }} {
                         Ok(())
                     },
                 {% endfor %}
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -491,7 +538,8 @@ impl {{ message_name }} {
     def output_impl(self):
         template = Environment().from_string(self.IMPL_TEMPLATE,
                                              globals={'message_name': self.message_name,
-                                                      'fields': self.fields})
+                                                      'fields': self.fields,
+                                                      'has_timestamp_field': self.has_timestamp_field})
         sys.stdout.write(template.render())
 
     def output_subfields(self):

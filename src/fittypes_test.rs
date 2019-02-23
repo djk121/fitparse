@@ -17,11 +17,11 @@ fn make_definition_message() -> FitDefinitionMessage {
             local_mesg_num: 0
         },
         endianness: Little,
-        global_mesg_num: FitFieldMesgNum::Record,
+        global_mesg_num: FitGlobalMesgNum::Known(FitFieldMesgNum::Record),
         num_fields: 11,
         message_size: 28,
         field_definitions: make_field_definitions(
-            vec![(253,4,6), (0,4,5), (1,4,5), (5,4,6), (2,2,4), (6,2,4), (7,2,4), (3,1,2), (4,1,2), (39,2,4), (41,2,4)]
+            vec![(253,4,134), (0,4,133), (1,4,133), (5,4,134), (2,2,131), (6,2,131), (7,2,131), (3,1,2), (4,1,2), (39,2,131), (41,2,131)]
         ),
         num_developer_fields: 0,
         developer_field_definitions: vec![]
@@ -55,7 +55,7 @@ fn make_field_description(field_name: String, units: String, field_definition_nu
                     local_mesg_num: 0
                 },
                 endianness: Little,
-                global_mesg_num: FitFieldMesgNum::FieldDescription,
+                global_mesg_num: FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription),
                 num_fields: field_definitions.len() as u8,
                 message_size: field_definitions.iter().map(|(_, field_size, _)| field_size).sum(),
                 field_definitions: make_field_definitions(field_definitions),
@@ -63,6 +63,7 @@ fn make_field_description(field_name: String, units: String, field_definition_nu
                 developer_field_definitions: vec![]
             }),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: vec![],
             message_name: "FitMessageFieldDescription",
             developer_data_index: Some(0),

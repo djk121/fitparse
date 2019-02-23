@@ -1,6 +1,9 @@
 
 
 use std::rc::Rc;
+use std::mem::transmute;
+use std::collections::HashMap;
+use std::cmp::Ordering;
 
 use nom::Endianness;
 
@@ -10,6 +13,9 @@ use FitRecordHeader;
 use FitDefinitionMessage;
 use FitFieldDefinition;
 use FitFieldDeveloperData;
+use FitGlobalMesgNum;
+use FitMessageUnknownToSdk;
+use FitBaseValue;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
 
@@ -33,7 +39,33 @@ impl FitFieldDateTime {
     }
 
     #[allow(dead_code)]
-    fn new_from_offset(&self, _offset_secs: u8) -> FitFieldDateTime {
+    pub fn new_from_compressed_timestamp(&self, offset_secs: u8) -> Result<FitFieldDateTime> {
+        let last_5_existing = {
+            let bytes: [u8; 4] = unsafe { transmute(self.seconds_since_garmin_epoch.to_be()) };
+            bytes[3] & 0x0000001F
+        };
+        let last_5_offset = offset_secs & 0x0000001F;
+
+        let new_epoch_offset = match last_5_existing.cmp(&last_5_offset) {
+            Ordering::Equal => {
+                self.seconds_since_garmin_epoch
+            },
+            Ordering::Greater => {
+                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32 + 0x20
+            },
+            Ordering::Less => {
+                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32
+            }
+        };
+
+        let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
+
+        let (ffdt, _) = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
+        Ok(ffdt)
+    }
+
+    #[allow(dead_code)]
+    pub fn new_from_offset(&self, _offset_secs: u8) -> FitFieldDateTime {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let garmin_epoch_offset = self.seconds_since_garmin_epoch + (_offset_secs as u32);
         let rust_time = garmin_epoch + Duration::seconds(garmin_epoch_offset.into());
@@ -67,7 +99,8 @@ impl FitFieldLocalDateTime {
     }
 }
 
-    
+
+
 
 
 
@@ -81,6 +114,7 @@ pub enum FitFieldPowerPhaseType { // fit base type: enum
     PowerPhaseEndAngle = 1,
     PowerPhaseArcLength = 2,
     PowerPhaseCenter = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldPowerPhaseType {
@@ -97,7 +131,7 @@ impl From<u8> for FitFieldPowerPhaseType {
             1 => FitFieldPowerPhaseType::PowerPhaseEndAngle,
             2 => FitFieldPowerPhaseType::PowerPhaseArcLength,
             3 => FitFieldPowerPhaseType::PowerPhaseCenter,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPowerPhaseType", invalid_field_num))
+            _ => FitFieldPowerPhaseType::UnknownToSdk
         }
     }
 }
@@ -111,6 +145,7 @@ impl From<u8> for FitFieldPowerPhaseType {
 pub enum FitFieldLeftRightBalance { // fit base type: uint8
     Mask = 127,  // % contribution
     Right = 128,  // data corresponds to right if set, otherwise unknown
+    UnknownToSdk = -1
 }
 
 impl FitFieldLeftRightBalance {
@@ -125,7 +160,7 @@ impl From<u8> for FitFieldLeftRightBalance {
         match code {
             127 => FitFieldLeftRightBalance::Mask,
             128 => FitFieldLeftRightBalance::Right,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLeftRightBalance", invalid_field_num))
+            _ => FitFieldLeftRightBalance::UnknownToSdk
         }
     }
 }
@@ -151,6 +186,7 @@ pub enum FitFieldWorkoutCapabilities { // fit base type: uint32z
     Grade = 4096,  // Grade source required for workout step.
     Resistance = 8192,  // Resistance source required for workout step.
     Protected = 16384,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWorkoutCapabilities {
@@ -181,7 +217,7 @@ impl From<u32> for FitFieldWorkoutCapabilities {
             4096 => FitFieldWorkoutCapabilities::Grade,
             8192 => FitFieldWorkoutCapabilities::Resistance,
             16384 => FitFieldWorkoutCapabilities::Protected,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutCapabilities", invalid_field_num))
+            _ => FitFieldWorkoutCapabilities::UnknownToSdk
         }
     }
 }
@@ -217,6 +253,7 @@ pub enum FitFieldShoulderPressExerciseName { // fit base type: uint16
     SplitStanceHammerCurlToPress = 21,
     SwissBallDumbbellShoulderPress = 22,
     WeightPlateFrontRaise = 23,
+    UnknownToSdk = -1
 }
 
 impl FitFieldShoulderPressExerciseName {
@@ -253,7 +290,7 @@ impl From<u16> for FitFieldShoulderPressExerciseName {
             21 => FitFieldShoulderPressExerciseName::SplitStanceHammerCurlToPress,
             22 => FitFieldShoulderPressExerciseName::SwissBallDumbbellShoulderPress,
             23 => FitFieldShoulderPressExerciseName::WeightPlateFrontRaise,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldShoulderPressExerciseName", invalid_field_num))
+            _ => FitFieldShoulderPressExerciseName::UnknownToSdk
         }
     }
 }
@@ -269,6 +306,7 @@ pub enum FitFieldSensorType { // fit base type: enum
     Gyroscope = 1,
     Compass = 2,  // Magnetometer
     Barometer = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSensorType {
@@ -285,7 +323,7 @@ impl From<u8> for FitFieldSensorType {
             1 => FitFieldSensorType::Gyroscope,
             2 => FitFieldSensorType::Compass,
             3 => FitFieldSensorType::Barometer,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSensorType", invalid_field_num))
+            _ => FitFieldSensorType::UnknownToSdk
         }
     }
 }
@@ -299,6 +337,7 @@ impl From<u8> for FitFieldSensorType {
 pub enum FitFieldGender { // fit base type: enum
     Female = 0,
     Male = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldGender {
@@ -313,7 +352,7 @@ impl From<u8> for FitFieldGender {
         match code {
             0 => FitFieldGender::Female,
             1 => FitFieldGender::Male,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldGender", invalid_field_num))
+            _ => FitFieldGender::UnknownToSdk
         }
     }
 }
@@ -329,6 +368,7 @@ pub enum FitFieldSessionTrigger { // fit base type: enum
     Manual = 1,  // User changed sport.
     AutoMultiSport = 2,  // Auto multi-sport feature is enabled and user pressed lap button to advance session.
     FitnessEquipment = 3,  // Auto sport change caused by user linking to fitness equipment.
+    UnknownToSdk = -1
 }
 
 impl FitFieldSessionTrigger {
@@ -345,7 +385,7 @@ impl From<u8> for FitFieldSessionTrigger {
             1 => FitFieldSessionTrigger::Manual,
             2 => FitFieldSessionTrigger::AutoMultiSport,
             3 => FitFieldSessionTrigger::FitnessEquipment,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSessionTrigger", invalid_field_num))
+            _ => FitFieldSessionTrigger::UnknownToSdk
         }
     }
 }
@@ -360,6 +400,7 @@ pub enum FitFieldFileFlags { // fit base type: uint8z
     Read = 2,
     Write = 4,
     Erase = 8,
+    UnknownToSdk = -1
 }
 
 impl FitFieldFileFlags {
@@ -379,7 +420,7 @@ impl From<u8> for FitFieldFileFlags {
             2 => FitFieldFileFlags::Read,
             4 => FitFieldFileFlags::Write,
             8 => FitFieldFileFlags::Erase,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFileFlags", invalid_field_num))
+            _ => FitFieldFileFlags::UnknownToSdk
         }
     }
 }
@@ -392,6 +433,7 @@ impl From<u8> for FitFieldFileFlags {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldBacklightTimeout { // fit base type: uint8
     Infinite = 0,  // Backlight stays on forever.
+    UnknownToSdk = -1
 }
 
 impl FitFieldBacklightTimeout {
@@ -405,7 +447,7 @@ impl From<u8> for FitFieldBacklightTimeout {
     fn from(code: u8) -> Self {
         match code {
             0 => FitFieldBacklightTimeout::Infinite,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBacklightTimeout", invalid_field_num))
+            _ => FitFieldBacklightTimeout::UnknownToSdk
         }
     }
 }
@@ -439,6 +481,7 @@ pub enum FitFieldCardioExerciseName { // fit base type: uint16
     WeightedSquatJacks = 19,
     TripleUnder = 20,
     WeightedTripleUnder = 21,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCardioExerciseName {
@@ -473,7 +516,7 @@ impl From<u16> for FitFieldCardioExerciseName {
             19 => FitFieldCardioExerciseName::WeightedSquatJacks,
             20 => FitFieldCardioExerciseName::TripleUnder,
             21 => FitFieldCardioExerciseName::WeightedTripleUnder,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCardioExerciseName", invalid_field_num))
+            _ => FitFieldCardioExerciseName::UnknownToSdk
         }
     }
 }
@@ -488,6 +531,7 @@ pub enum FitFieldMesgCount { // fit base type: enum
     NumPerFile = 0,
     MaxPerFile = 1,
     MaxPerFileType = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldMesgCount {
@@ -503,7 +547,7 @@ impl From<u8> for FitFieldMesgCount {
             0 => FitFieldMesgCount::NumPerFile,
             1 => FitFieldMesgCount::MaxPerFile,
             2 => FitFieldMesgCount::MaxPerFileType,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldMesgCount", invalid_field_num))
+            _ => FitFieldMesgCount::UnknownToSdk
         }
     }
 }
@@ -532,6 +576,7 @@ pub enum FitFieldFitBaseType { // fit base type: uint8
     Sint64 = 142,
     Uint64 = 143,
     Uint64z = 144,
+    UnknownToSdk = -1
 }
 
 impl FitFieldFitBaseType {
@@ -561,7 +606,7 @@ impl From<u8> for FitFieldFitBaseType {
             142 => FitFieldFitBaseType::Sint64,
             143 => FitFieldFitBaseType::Uint64,
             144 => FitFieldFitBaseType::Uint64z,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFitBaseType", invalid_field_num))
+            _ => FitFieldFitBaseType::UnknownToSdk
         }
     }
 }
@@ -586,6 +631,7 @@ pub enum FitFieldTotalBodyExerciseName { // fit base type: uint16
     WeightedSquatPlankPushUp = 10,
     StandingTRotationBalance = 11,
     WeightedStandingTRotationBalance = 12,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTotalBodyExerciseName {
@@ -611,7 +657,7 @@ impl From<u16> for FitFieldTotalBodyExerciseName {
             10 => FitFieldTotalBodyExerciseName::WeightedSquatPlankPushUp,
             11 => FitFieldTotalBodyExerciseName::StandingTRotationBalance,
             12 => FitFieldTotalBodyExerciseName::WeightedStandingTRotationBalance,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTotalBodyExerciseName", invalid_field_num))
+            _ => FitFieldTotalBodyExerciseName::UnknownToSdk
         }
     }
 }
@@ -667,6 +713,7 @@ pub enum FitFieldCurlExerciseName { // fit base type: uint16
     SwissBallEzBarPreacherCurl = 41,
     TwistingStandingDumbbellBicepsCurl = 42,
     WideGripEzBarBicepsCurl = 43,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCurlExerciseName {
@@ -723,7 +770,7 @@ impl From<u16> for FitFieldCurlExerciseName {
             41 => FitFieldCurlExerciseName::SwissBallEzBarPreacherCurl,
             42 => FitFieldCurlExerciseName::TwistingStandingDumbbellBicepsCurl,
             43 => FitFieldCurlExerciseName::WideGripEzBarBicepsCurl,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCurlExerciseName", invalid_field_num))
+            _ => FitFieldCurlExerciseName::UnknownToSdk
         }
     }
 }
@@ -738,6 +785,7 @@ pub enum FitFieldTimerTrigger { // fit base type: enum
     Manual = 0,
     Auto = 1,
     FitnessEquipment = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTimerTrigger {
@@ -753,7 +801,7 @@ impl From<u8> for FitFieldTimerTrigger {
             0 => FitFieldTimerTrigger::Manual,
             1 => FitFieldTimerTrigger::Auto,
             2 => FitFieldTimerTrigger::FitnessEquipment,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTimerTrigger", invalid_field_num))
+            _ => FitFieldTimerTrigger::UnknownToSdk
         }
     }
 }
@@ -774,6 +822,7 @@ pub enum FitFieldSportEvent { // fit base type: enum
     Training = 6,
     Transportation = 7,
     Touring = 8,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportEvent {
@@ -795,7 +844,7 @@ impl From<u8> for FitFieldSportEvent {
             6 => FitFieldSportEvent::Training,
             7 => FitFieldSportEvent::Transportation,
             8 => FitFieldSportEvent::Touring,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportEvent", invalid_field_num))
+            _ => FitFieldSportEvent::UnknownToSdk
         }
     }
 }
@@ -811,6 +860,7 @@ pub enum FitFieldAutoscroll { // fit base type: enum
     Slow = 1,
     Medium = 2,
     Fast = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAutoscroll {
@@ -827,7 +877,7 @@ impl From<u8> for FitFieldAutoscroll {
             1 => FitFieldAutoscroll::Slow,
             2 => FitFieldAutoscroll::Medium,
             3 => FitFieldAutoscroll::Fast,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAutoscroll", invalid_field_num))
+            _ => FitFieldAutoscroll::UnknownToSdk
         }
     }
 }
@@ -845,6 +895,7 @@ pub enum FitFieldStrokeType { // fit base type: enum
     Forehand = 3,
     Backhand = 4,
     Smash = 5,
+    UnknownToSdk = -1
 }
 
 impl FitFieldStrokeType {
@@ -863,7 +914,7 @@ impl From<u8> for FitFieldStrokeType {
             3 => FitFieldStrokeType::Forehand,
             4 => FitFieldStrokeType::Backhand,
             5 => FitFieldStrokeType::Smash,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldStrokeType", invalid_field_num))
+            _ => FitFieldStrokeType::UnknownToSdk
         }
     }
 }
@@ -876,6 +927,7 @@ impl From<u8> for FitFieldStrokeType {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldTissueModelType { // fit base type: enum
     Zhl16c = 0,  // Buhlmann's decompression algorithm, version C
+    UnknownToSdk = -1
 }
 
 impl FitFieldTissueModelType {
@@ -889,7 +941,7 @@ impl From<u8> for FitFieldTissueModelType {
     fn from(code: u8) -> Self {
         match code {
             0 => FitFieldTissueModelType::Zhl16c,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTissueModelType", invalid_field_num))
+            _ => FitFieldTissueModelType::UnknownToSdk
         }
     }
 }
@@ -986,6 +1038,7 @@ pub enum FitFieldWeatherSevereType { // fit base type: enum
     LowWater = 82,
     Hydrological = 83,
     SpecialWeather = 84,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWeatherSevereType {
@@ -1083,7 +1136,7 @@ impl From<u8> for FitFieldWeatherSevereType {
             82 => FitFieldWeatherSevereType::LowWater,
             83 => FitFieldWeatherSevereType::Hydrological,
             84 => FitFieldWeatherSevereType::SpecialWeather,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeatherSevereType", invalid_field_num))
+            _ => FitFieldWeatherSevereType::UnknownToSdk
         }
     }
 }
@@ -1098,6 +1151,7 @@ pub enum FitFieldHrZoneCalc { // fit base type: enum
     Custom = 0,
     PercentMaxHr = 1,
     PercentHrr = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldHrZoneCalc {
@@ -1113,7 +1167,7 @@ impl From<u8> for FitFieldHrZoneCalc {
             0 => FitFieldHrZoneCalc::Custom,
             1 => FitFieldHrZoneCalc::PercentMaxHr,
             2 => FitFieldHrZoneCalc::PercentHrr,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHrZoneCalc", invalid_field_num))
+            _ => FitFieldHrZoneCalc::UnknownToSdk
         }
     }
 }
@@ -1127,6 +1181,7 @@ impl From<u8> for FitFieldHrZoneCalc {
 pub enum FitFieldHrType { // fit base type: enum
     Normal = 0,
     Irregular = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldHrType {
@@ -1141,7 +1196,7 @@ impl From<u8> for FitFieldHrType {
         match code {
             0 => FitFieldHrType::Normal,
             1 => FitFieldHrType::Irregular,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHrType", invalid_field_num))
+            _ => FitFieldHrType::UnknownToSdk
         }
     }
 }
@@ -1164,6 +1219,7 @@ pub enum FitFieldSegmentLeaderboardType { // fit base type: enum
     Goal = 8,
     Rival = 9,
     ClubLeader = 10,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSegmentLeaderboardType {
@@ -1187,7 +1243,7 @@ impl From<u8> for FitFieldSegmentLeaderboardType {
             8 => FitFieldSegmentLeaderboardType::Goal,
             9 => FitFieldSegmentLeaderboardType::Rival,
             10 => FitFieldSegmentLeaderboardType::ClubLeader,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSegmentLeaderboardType", invalid_field_num))
+            _ => FitFieldSegmentLeaderboardType::UnknownToSdk
         }
     }
 }
@@ -1203,6 +1259,7 @@ pub enum FitFieldAttitudeStage { // fit base type: enum
     Aligning = 1,
     Degraded = 2,
     Valid = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAttitudeStage {
@@ -1219,7 +1276,7 @@ impl From<u8> for FitFieldAttitudeStage {
             1 => FitFieldAttitudeStage::Aligning,
             2 => FitFieldAttitudeStage::Degraded,
             3 => FitFieldAttitudeStage::Valid,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAttitudeStage", invalid_field_num))
+            _ => FitFieldAttitudeStage::UnknownToSdk
         }
     }
 }
@@ -1231,6 +1288,7 @@ impl From<u8> for FitFieldAttitudeStage {
 
 #[derive(Debug, PartialEq)]
 pub enum FitFieldLocalDeviceType { // fit base type: uint8
+    UnknownToSdk = -1
 }
 
 impl FitFieldLocalDeviceType {
@@ -1243,7 +1301,7 @@ impl FitFieldLocalDeviceType {
 impl From<u8> for FitFieldLocalDeviceType {
     fn from(code: u8) -> Self {
         match code {
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLocalDeviceType", invalid_field_num))
+            _ => FitFieldLocalDeviceType::UnknownToSdk
         }
     }
 }
@@ -1258,6 +1316,7 @@ pub enum FitFieldDigitalWatchfaceLayout { // fit base type: enum
     Traditional = 0,
     Modern = 1,
     Bold = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDigitalWatchfaceLayout {
@@ -1273,7 +1332,7 @@ impl From<u8> for FitFieldDigitalWatchfaceLayout {
             0 => FitFieldDigitalWatchfaceLayout::Traditional,
             1 => FitFieldDigitalWatchfaceLayout::Modern,
             2 => FitFieldDigitalWatchfaceLayout::Bold,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDigitalWatchfaceLayout", invalid_field_num))
+            _ => FitFieldDigitalWatchfaceLayout::UnknownToSdk
         }
     }
 }
@@ -1287,6 +1346,7 @@ impl From<u8> for FitFieldDigitalWatchfaceLayout {
 pub enum FitFieldPwrZoneCalc { // fit base type: enum
     Custom = 0,
     PercentFtp = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldPwrZoneCalc {
@@ -1301,7 +1361,7 @@ impl From<u8> for FitFieldPwrZoneCalc {
         match code {
             0 => FitFieldPwrZoneCalc::Custom,
             1 => FitFieldPwrZoneCalc::PercentFtp,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPwrZoneCalc", invalid_field_num))
+            _ => FitFieldPwrZoneCalc::UnknownToSdk
         }
     }
 }
@@ -1334,6 +1394,7 @@ pub enum FitFieldOlympicLiftExerciseName { // fit base type: uint16
     SingleArmKettlebellSnatch = 18,
     SplitJerk = 19,
     SquatCleanAndJerk = 20,
+    UnknownToSdk = -1
 }
 
 impl FitFieldOlympicLiftExerciseName {
@@ -1367,7 +1428,7 @@ impl From<u16> for FitFieldOlympicLiftExerciseName {
             18 => FitFieldOlympicLiftExerciseName::SingleArmKettlebellSnatch,
             19 => FitFieldOlympicLiftExerciseName::SplitJerk,
             20 => FitFieldOlympicLiftExerciseName::SquatCleanAndJerk,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldOlympicLiftExerciseName", invalid_field_num))
+            _ => FitFieldOlympicLiftExerciseName::UnknownToSdk
         }
     }
 }
@@ -1393,6 +1454,7 @@ pub enum FitFieldWktStepTarget { // fit base type: enum
     SwimStroke = 11,
     SpeedLap = 12,
     HeartRateLap = 13,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWktStepTarget {
@@ -1419,7 +1481,7 @@ impl From<u8> for FitFieldWktStepTarget {
             11 => FitFieldWktStepTarget::SwimStroke,
             12 => FitFieldWktStepTarget::SpeedLap,
             13 => FitFieldWktStepTarget::HeartRateLap,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWktStepTarget", invalid_field_num))
+            _ => FitFieldWktStepTarget::UnknownToSdk
         }
     }
 }
@@ -1441,6 +1503,7 @@ pub enum FitFieldFlyeExerciseName { // fit base type: uint16
     SwissBallDumbbellFlye = 7,
     ArmRotations = 8,
     HugATree = 9,
+    UnknownToSdk = -1
 }
 
 impl FitFieldFlyeExerciseName {
@@ -1463,7 +1526,7 @@ impl From<u16> for FitFieldFlyeExerciseName {
             7 => FitFieldFlyeExerciseName::SwissBallDumbbellFlye,
             8 => FitFieldFlyeExerciseName::ArmRotations,
             9 => FitFieldFlyeExerciseName::HugATree,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFlyeExerciseName", invalid_field_num))
+            _ => FitFieldFlyeExerciseName::UnknownToSdk
         }
     }
 }
@@ -1477,6 +1540,7 @@ impl From<u16> for FitFieldFlyeExerciseName {
 pub enum FitFieldActivity { // fit base type: enum
     Manual = 0,
     AutoMultiSport = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldActivity {
@@ -1491,7 +1555,7 @@ impl From<u8> for FitFieldActivity {
         match code {
             0 => FitFieldActivity::Manual,
             1 => FitFieldActivity::AutoMultiSport,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldActivity", invalid_field_num))
+            _ => FitFieldActivity::UnknownToSdk
         }
     }
 }
@@ -1507,6 +1571,7 @@ pub enum FitFieldWatchfaceMode { // fit base type: enum
     Analog = 1,
     ConnectIq = 2,
     Disabled = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWatchfaceMode {
@@ -1523,7 +1588,7 @@ impl From<u8> for FitFieldWatchfaceMode {
             1 => FitFieldWatchfaceMode::Analog,
             2 => FitFieldWatchfaceMode::ConnectIq,
             3 => FitFieldWatchfaceMode::Disabled,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWatchfaceMode", invalid_field_num))
+            _ => FitFieldWatchfaceMode::UnknownToSdk
         }
     }
 }
@@ -1561,6 +1626,7 @@ pub enum FitFieldCoursePoint { // fit base type: enum
     UTurn = 23,
     SegmentStart = 24,
     SegmentEnd = 25,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCoursePoint {
@@ -1599,7 +1665,7 @@ impl From<u8> for FitFieldCoursePoint {
             23 => FitFieldCoursePoint::UTurn,
             24 => FitFieldCoursePoint::SegmentStart,
             25 => FitFieldCoursePoint::SegmentEnd,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCoursePoint", invalid_field_num))
+            _ => FitFieldCoursePoint::UnknownToSdk
         }
     }
 }
@@ -1613,6 +1679,7 @@ impl From<u8> for FitFieldCoursePoint {
 pub enum FitFieldSide { // fit base type: enum
     Right = 0,
     Left = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSide {
@@ -1627,7 +1694,7 @@ impl From<u8> for FitFieldSide {
         match code {
             0 => FitFieldSide::Right,
             1 => FitFieldSide::Left,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSide", invalid_field_num))
+            _ => FitFieldSide::UnknownToSdk
         }
     }
 }
@@ -1673,6 +1740,7 @@ pub enum FitFieldRowExerciseName { // fit base type: uint16
     UnderhandGripCableRow = 31,
     VGripCableRow = 32,
     WideGripSeatedCableRow = 33,
+    UnknownToSdk = -1
 }
 
 impl FitFieldRowExerciseName {
@@ -1719,7 +1787,7 @@ impl From<u16> for FitFieldRowExerciseName {
             31 => FitFieldRowExerciseName::UnderhandGripCableRow,
             32 => FitFieldRowExerciseName::VGripCableRow,
             33 => FitFieldRowExerciseName::WideGripSeatedCableRow,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldRowExerciseName", invalid_field_num))
+            _ => FitFieldRowExerciseName::UnknownToSdk
         }
     }
 }
@@ -1734,6 +1802,7 @@ pub enum FitFieldAnalogWatchfaceLayout { // fit base type: enum
     Minimal = 0,
     Traditional = 1,
     Modern = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAnalogWatchfaceLayout {
@@ -1749,7 +1818,7 @@ impl From<u8> for FitFieldAnalogWatchfaceLayout {
             0 => FitFieldAnalogWatchfaceLayout::Minimal,
             1 => FitFieldAnalogWatchfaceLayout::Traditional,
             2 => FitFieldAnalogWatchfaceLayout::Modern,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAnalogWatchfaceLayout", invalid_field_num))
+            _ => FitFieldAnalogWatchfaceLayout::UnknownToSdk
         }
     }
 }
@@ -1762,6 +1831,7 @@ impl From<u8> for FitFieldAnalogWatchfaceLayout {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldWeight { // fit base type: uint16
     Calculating = 65534,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWeight {
@@ -1775,7 +1845,7 @@ impl From<u16> for FitFieldWeight {
     fn from(code: u16) -> Self {
         match code {
             65534 => FitFieldWeight::Calculating,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeight", invalid_field_num))
+            _ => FitFieldWeight::UnknownToSdk
         }
     }
 }
@@ -1790,6 +1860,7 @@ pub enum FitFieldDiveGasStatus { // fit base type: enum
     Disabled = 0,
     Enabled = 1,
     BackupOnly = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDiveGasStatus {
@@ -1805,7 +1876,7 @@ impl From<u8> for FitFieldDiveGasStatus {
             0 => FitFieldDiveGasStatus::Disabled,
             1 => FitFieldDiveGasStatus::Enabled,
             2 => FitFieldDiveGasStatus::BackupOnly,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDiveGasStatus", invalid_field_num))
+            _ => FitFieldDiveGasStatus::UnknownToSdk
         }
     }
 }
@@ -1821,6 +1892,7 @@ pub enum FitFieldIntensity { // fit base type: enum
     Rest = 1,
     Warmup = 2,
     Cooldown = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldIntensity {
@@ -1837,7 +1909,7 @@ impl From<u8> for FitFieldIntensity {
             1 => FitFieldIntensity::Rest,
             2 => FitFieldIntensity::Warmup,
             3 => FitFieldIntensity::Cooldown,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldIntensity", invalid_field_num))
+            _ => FitFieldIntensity::UnknownToSdk
         }
     }
 }
@@ -1881,6 +1953,7 @@ pub enum FitFieldConnectivityCapabilities { // fit base type: uint32z
     LiveTrackAutoStart = 536870912,  // Device supports LiveTrack auto start
     LiveTrackMessaging = 1073741824,  // Device supports LiveTrack Messaging
     InstantInput = 2147483648,  // Device supports instant input feature
+    UnknownToSdk = -1
 }
 
 impl FitFieldConnectivityCapabilities {
@@ -1929,7 +2002,7 @@ impl From<u32> for FitFieldConnectivityCapabilities {
             536870912 => FitFieldConnectivityCapabilities::LiveTrackAutoStart,
             1073741824 => FitFieldConnectivityCapabilities::LiveTrackMessaging,
             2147483648 => FitFieldConnectivityCapabilities::InstantInput,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldConnectivityCapabilities", invalid_field_num))
+            _ => FitFieldConnectivityCapabilities::UnknownToSdk
         }
     }
 }
@@ -2033,6 +2106,7 @@ pub enum FitFieldSquatExerciseName { // fit base type: uint16
     SquatJumpsInNOut = 89,
     PilatesPlieSquatsParallelTurnedOutFlatAndHeels = 90,
     ReleveStraightLegAndKneeBentWithOneLegVariation = 91,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSquatExerciseName {
@@ -2137,7 +2211,7 @@ impl From<u16> for FitFieldSquatExerciseName {
             89 => FitFieldSquatExerciseName::SquatJumpsInNOut,
             90 => FitFieldSquatExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeels,
             91 => FitFieldSquatExerciseName::ReleveStraightLegAndKneeBentWithOneLegVariation,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSquatExerciseName", invalid_field_num))
+            _ => FitFieldSquatExerciseName::UnknownToSdk
         }
     }
 }
@@ -2199,6 +2273,7 @@ pub enum FitFieldSport { // fit base type: enum
     Boxing = 47,
     FloorClimbing = 48,
     All = 254,  // All is for goals only to include all sports.
+    UnknownToSdk = -1
 }
 
 impl FitFieldSport {
@@ -2261,7 +2336,7 @@ impl From<u8> for FitFieldSport {
             47 => FitFieldSport::Boxing,
             48 => FitFieldSport::FloorClimbing,
             254 => FitFieldSport::All,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSport", invalid_field_num))
+            _ => FitFieldSport::UnknownToSdk
         }
     }
 }
@@ -2309,6 +2384,7 @@ pub enum FitFieldEvent { // fit base type: enum
     ElevHighAlert = 45,  // Group 0.  Start / stop when in alert condition.
     ElevLowAlert = 46,  // Group 0.  Start / stop when in alert condition.
     CommTimeout = 47,  // marker
+    UnknownToSdk = -1
 }
 
 impl FitFieldEvent {
@@ -2357,7 +2433,7 @@ impl From<u8> for FitFieldEvent {
             45 => FitFieldEvent::ElevHighAlert,
             46 => FitFieldEvent::ElevLowAlert,
             47 => FitFieldEvent::CommTimeout,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldEvent", invalid_field_num))
+            _ => FitFieldEvent::UnknownToSdk
         }
     }
 }
@@ -2371,6 +2447,7 @@ impl From<u8> for FitFieldEvent {
 pub enum FitFieldDisplayPower { // fit base type: enum
     Watts = 0,
     PercentFtp = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDisplayPower {
@@ -2385,7 +2462,7 @@ impl From<u8> for FitFieldDisplayPower {
         match code {
             0 => FitFieldDisplayPower::Watts,
             1 => FitFieldDisplayPower::PercentFtp,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDisplayPower", invalid_field_num))
+            _ => FitFieldDisplayPower::UnknownToSdk
         }
     }
 }
@@ -2401,6 +2478,7 @@ pub enum FitFieldBikeLightNetworkConfigType { // fit base type: enum
     Individual = 4,
     HighVisibility = 5,
     Trail = 6,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBikeLightNetworkConfigType {
@@ -2417,7 +2495,7 @@ impl From<u8> for FitFieldBikeLightNetworkConfigType {
             4 => FitFieldBikeLightNetworkConfigType::Individual,
             5 => FitFieldBikeLightNetworkConfigType::HighVisibility,
             6 => FitFieldBikeLightNetworkConfigType::Trail,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBikeLightNetworkConfigType", invalid_field_num))
+            _ => FitFieldBikeLightNetworkConfigType::UnknownToSdk
         }
     }
 }
@@ -2434,6 +2512,7 @@ pub enum FitFieldBpStatus { // fit base type: enum
     ErrorNoMeasurement = 2,
     ErrorDataOutOfRange = 3,
     ErrorIrregularHeartRate = 4,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBpStatus {
@@ -2451,7 +2530,7 @@ impl From<u8> for FitFieldBpStatus {
             2 => FitFieldBpStatus::ErrorNoMeasurement,
             3 => FitFieldBpStatus::ErrorDataOutOfRange,
             4 => FitFieldBpStatus::ErrorIrregularHeartRate,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBpStatus", invalid_field_num))
+            _ => FitFieldBpStatus::UnknownToSdk
         }
     }
 }
@@ -2496,6 +2575,7 @@ pub enum FitFieldShoulderStabilityExerciseName { // fit base type: uint16
     WeightedSwissBallWRaise = 30,
     SwissBallYRaise = 31,
     WeightedSwissBallYRaise = 32,
+    UnknownToSdk = -1
 }
 
 impl FitFieldShoulderStabilityExerciseName {
@@ -2541,7 +2621,7 @@ impl From<u16> for FitFieldShoulderStabilityExerciseName {
             30 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallWRaise,
             31 => FitFieldShoulderStabilityExerciseName::SwissBallYRaise,
             32 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallYRaise,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldShoulderStabilityExerciseName", invalid_field_num))
+            _ => FitFieldShoulderStabilityExerciseName::UnknownToSdk
         }
     }
 }
@@ -2555,6 +2635,7 @@ impl From<u16> for FitFieldShoulderStabilityExerciseName {
 pub enum FitFieldDiveBacklightMode { // fit base type: enum
     AtDepth = 0,
     AlwaysOn = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDiveBacklightMode {
@@ -2569,7 +2650,7 @@ impl From<u8> for FitFieldDiveBacklightMode {
         match code {
             0 => FitFieldDiveBacklightMode::AtDepth,
             1 => FitFieldDiveBacklightMode::AlwaysOn,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDiveBacklightMode", invalid_field_num))
+            _ => FitFieldDiveBacklightMode::UnknownToSdk
         }
     }
 }
@@ -2583,6 +2664,7 @@ impl From<u8> for FitFieldDiveBacklightMode {
 pub enum FitFieldBikeLightBeamAngleMode { // fit base type: uint8
     Manual = 0,
     Auto = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBikeLightBeamAngleMode {
@@ -2597,7 +2679,7 @@ impl From<u8> for FitFieldBikeLightBeamAngleMode {
         match code {
             0 => FitFieldBikeLightBeamAngleMode::Manual,
             1 => FitFieldBikeLightBeamAngleMode::Auto,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBikeLightBeamAngleMode", invalid_field_num))
+            _ => FitFieldBikeLightBeamAngleMode::UnknownToSdk
         }
     }
 }
@@ -2609,6 +2691,7 @@ impl From<u8> for FitFieldBikeLightBeamAngleMode {
 
 #[derive(Debug, PartialEq)]
 pub enum FitFieldLocaltimeIntoDay { // fit base type: uint32
+    UnknownToSdk = -1
 }
 
 impl FitFieldLocaltimeIntoDay {
@@ -2621,7 +2704,7 @@ impl FitFieldLocaltimeIntoDay {
 impl From<u32> for FitFieldLocaltimeIntoDay {
     fn from(code: u32) -> Self {
         match code {
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLocaltimeIntoDay", invalid_field_num))
+            _ => FitFieldLocaltimeIntoDay::UnknownToSdk
         }
     }
 }
@@ -2645,6 +2728,7 @@ pub enum FitFieldLegCurlExerciseName { // fit base type: uint16
     StaggeredStanceGoodMorning = 9,
     SwissBallHipRaiseAndLegCurl = 10,
     ZercherGoodMorning = 11,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLegCurlExerciseName {
@@ -2669,7 +2753,7 @@ impl From<u16> for FitFieldLegCurlExerciseName {
             9 => FitFieldLegCurlExerciseName::StaggeredStanceGoodMorning,
             10 => FitFieldLegCurlExerciseName::SwissBallHipRaiseAndLegCurl,
             11 => FitFieldLegCurlExerciseName::ZercherGoodMorning,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLegCurlExerciseName", invalid_field_num))
+            _ => FitFieldLegCurlExerciseName::UnknownToSdk
         }
     }
 }
@@ -2712,6 +2796,7 @@ pub enum FitFieldWarmUpExerciseName { // fit base type: uint16
     WalkingLegCradles = 28,
     Walkout = 29,
     WalkoutFromPushUpPosition = 30,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWarmUpExerciseName {
@@ -2755,7 +2840,7 @@ impl From<u16> for FitFieldWarmUpExerciseName {
             28 => FitFieldWarmUpExerciseName::WalkingLegCradles,
             29 => FitFieldWarmUpExerciseName::Walkout,
             30 => FitFieldWarmUpExerciseName::WalkoutFromPushUpPosition,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWarmUpExerciseName", invalid_field_num))
+            _ => FitFieldWarmUpExerciseName::UnknownToSdk
         }
     }
 }
@@ -2784,6 +2869,7 @@ pub enum FitFieldShrugExerciseName { // fit base type: uint16
     SerratusShrug = 14,
     WeightedSerratusShrug = 15,
     WideGripJumpShrug = 16,
+    UnknownToSdk = -1
 }
 
 impl FitFieldShrugExerciseName {
@@ -2813,7 +2899,7 @@ impl From<u16> for FitFieldShrugExerciseName {
             14 => FitFieldShrugExerciseName::SerratusShrug,
             15 => FitFieldShrugExerciseName::WeightedSerratusShrug,
             16 => FitFieldShrugExerciseName::WideGripJumpShrug,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldShrugExerciseName", invalid_field_num))
+            _ => FitFieldShrugExerciseName::UnknownToSdk
         }
     }
 }
@@ -2867,6 +2953,7 @@ pub enum FitFieldDisplayPosition { // fit base type: enum
     EstonianGrid = 39,  // Estonian grid system
     LatvianGrid = 40,  // Latvian Transverse Mercator
     SwedishRef99Grid = 41,  // Reference Grid 99 TM (Swedish)
+    UnknownToSdk = -1
 }
 
 impl FitFieldDisplayPosition {
@@ -2921,7 +3008,7 @@ impl From<u8> for FitFieldDisplayPosition {
             39 => FitFieldDisplayPosition::EstonianGrid,
             40 => FitFieldDisplayPosition::LatvianGrid,
             41 => FitFieldDisplayPosition::SwedishRef99Grid,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDisplayPosition", invalid_field_num))
+            _ => FitFieldDisplayPosition::UnknownToSdk
         }
     }
 }
@@ -2939,6 +3026,7 @@ pub enum FitFieldGoalRecurrence { // fit base type: enum
     Monthly = 3,
     Yearly = 4,
     Custom = 5,
+    UnknownToSdk = -1
 }
 
 impl FitFieldGoalRecurrence {
@@ -2957,7 +3045,7 @@ impl From<u8> for FitFieldGoalRecurrence {
             3 => FitFieldGoalRecurrence::Monthly,
             4 => FitFieldGoalRecurrence::Yearly,
             5 => FitFieldGoalRecurrence::Custom,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldGoalRecurrence", invalid_field_num))
+            _ => FitFieldGoalRecurrence::UnknownToSdk
         }
     }
 }
@@ -2971,6 +3059,7 @@ impl From<u8> for FitFieldGoalRecurrence {
 pub enum FitFieldSchedule { // fit base type: enum
     Workout = 0,
     Course = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSchedule {
@@ -2985,7 +3074,7 @@ impl From<u8> for FitFieldSchedule {
         match code {
             0 => FitFieldSchedule::Workout,
             1 => FitFieldSchedule::Course,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSchedule", invalid_field_num))
+            _ => FitFieldSchedule::UnknownToSdk
         }
     }
 }
@@ -2999,6 +3088,7 @@ impl From<u8> for FitFieldSchedule {
 pub enum FitFieldSetType { // fit base type: uint8
     Rest = 0,
     Active = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSetType {
@@ -3013,7 +3103,7 @@ impl From<u8> for FitFieldSetType {
         match code {
             0 => FitFieldSetType::Rest,
             1 => FitFieldSetType::Active,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSetType", invalid_field_num))
+            _ => FitFieldSetType::UnknownToSdk
         }
     }
 }
@@ -3027,6 +3117,7 @@ impl From<u8> for FitFieldSetType {
 pub enum FitFieldLeftRightBalance100 { // fit base type: uint16
     Mask = 16383,  // % contribution scaled by 100
     Right = 32768,  // data corresponds to right if set, otherwise unknown
+    UnknownToSdk = -1
 }
 
 impl FitFieldLeftRightBalance100 {
@@ -3041,7 +3132,7 @@ impl From<u16> for FitFieldLeftRightBalance100 {
         match code {
             16383 => FitFieldLeftRightBalance100::Mask,
             32768 => FitFieldLeftRightBalance100::Right,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLeftRightBalance100", invalid_field_num))
+            _ => FitFieldLeftRightBalance100::UnknownToSdk
         }
     }
 }
@@ -3057,6 +3148,7 @@ pub enum FitFieldCommTimeoutType { // fit base type: uint16
     PairingTimeout = 1,  // Timeout pairing to previously paired device
     ConnectionLost = 2,  // Temporary loss of communications
     ConnectionTimeout = 3,  // Connection closed due to extended bad communications
+    UnknownToSdk = -1
 }
 
 impl FitFieldCommTimeoutType {
@@ -3073,7 +3165,7 @@ impl From<u16> for FitFieldCommTimeoutType {
             1 => FitFieldCommTimeoutType::PairingTimeout,
             2 => FitFieldCommTimeoutType::ConnectionLost,
             3 => FitFieldCommTimeoutType::ConnectionTimeout,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCommTimeoutType", invalid_field_num))
+            _ => FitFieldCommTimeoutType::UnknownToSdk
         }
     }
 }
@@ -3090,6 +3182,7 @@ pub enum FitFieldCarryExerciseName { // fit base type: uint16
     FarmersWalkOnToes = 2,
     HexDumbbellHold = 3,
     OverheadCarry = 4,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCarryExerciseName {
@@ -3107,7 +3200,7 @@ impl From<u16> for FitFieldCarryExerciseName {
             2 => FitFieldCarryExerciseName::FarmersWalkOnToes,
             3 => FitFieldCarryExerciseName::HexDumbbellHold,
             4 => FitFieldCarryExerciseName::OverheadCarry,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCarryExerciseName", invalid_field_num))
+            _ => FitFieldCarryExerciseName::UnknownToSdk
         }
     }
 }
@@ -3121,6 +3214,7 @@ impl From<u16> for FitFieldCarryExerciseName {
 pub enum FitFieldSegmentLapStatus { // fit base type: enum
     End = 0,
     Fail = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSegmentLapStatus {
@@ -3135,7 +3229,7 @@ impl From<u8> for FitFieldSegmentLapStatus {
         match code {
             0 => FitFieldSegmentLapStatus::End,
             1 => FitFieldSegmentLapStatus::Fail,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSegmentLapStatus", invalid_field_num))
+            _ => FitFieldSegmentLapStatus::UnknownToSdk
         }
     }
 }
@@ -3185,6 +3279,7 @@ pub enum FitFieldSitUpExerciseName { // fit base type: uint16
     XAbs = 35,
     WeightedXAbs = 36,
     SitUp = 37,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSitUpExerciseName {
@@ -3235,7 +3330,7 @@ impl From<u16> for FitFieldSitUpExerciseName {
             35 => FitFieldSitUpExerciseName::XAbs,
             36 => FitFieldSitUpExerciseName::WeightedXAbs,
             37 => FitFieldSitUpExerciseName::SitUp,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSitUpExerciseName", invalid_field_num))
+            _ => FitFieldSitUpExerciseName::UnknownToSdk
         }
     }
 }
@@ -3412,6 +3507,7 @@ pub enum FitFieldManufacturer { // fit base type: uint16
     Cycligentinc = 297,
     Trailforks = 298,
     Actigraphcorp = 5759,
+    UnknownToSdk = -1
 }
 
 impl FitFieldManufacturer {
@@ -3589,7 +3685,7 @@ impl From<u16> for FitFieldManufacturer {
             297 => FitFieldManufacturer::Cycligentinc,
             298 => FitFieldManufacturer::Trailforks,
             5759 => FitFieldManufacturer::Actigraphcorp,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldManufacturer", invalid_field_num))
+            _ => FitFieldManufacturer::UnknownToSdk
         }
     }
 }
@@ -3603,6 +3699,7 @@ impl From<u16> for FitFieldManufacturer {
 pub enum FitFieldLengthType { // fit base type: enum
     Idle = 0,  // Rest period. Length with no strokes
     Active = 1,  // Length with strokes.
+    UnknownToSdk = -1
 }
 
 impl FitFieldLengthType {
@@ -3617,7 +3714,7 @@ impl From<u8> for FitFieldLengthType {
         match code {
             0 => FitFieldLengthType::Idle,
             1 => FitFieldLengthType::Active,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLengthType", invalid_field_num))
+            _ => FitFieldLengthType::UnknownToSdk
         }
     }
 }
@@ -3668,6 +3765,7 @@ pub enum FitFieldLanguage { // fit base type: enum
     Burmese = 36,
     Mongolian = 37,
     Custom = 254,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLanguage {
@@ -3719,7 +3817,7 @@ impl From<u8> for FitFieldLanguage {
             36 => FitFieldLanguage::Burmese,
             37 => FitFieldLanguage::Mongolian,
             254 => FitFieldLanguage::Custom,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguage", invalid_field_num))
+            _ => FitFieldLanguage::UnknownToSdk
         }
     }
 }
@@ -3765,6 +3863,7 @@ pub enum FitFieldHipStabilityExerciseName { // fit base type: uint16
     WeightedStandingRearLegRaise = 31,
     SupineHipInternalRotation = 32,
     WeightedSupineHipInternalRotation = 33,
+    UnknownToSdk = -1
 }
 
 impl FitFieldHipStabilityExerciseName {
@@ -3811,7 +3910,7 @@ impl From<u16> for FitFieldHipStabilityExerciseName {
             31 => FitFieldHipStabilityExerciseName::WeightedStandingRearLegRaise,
             32 => FitFieldHipStabilityExerciseName::SupineHipInternalRotation,
             33 => FitFieldHipStabilityExerciseName::WeightedSupineHipInternalRotation,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHipStabilityExerciseName", invalid_field_num))
+            _ => FitFieldHipStabilityExerciseName::UnknownToSdk
         }
     }
 }
@@ -3826,6 +3925,7 @@ pub enum FitFieldActivityClass { // fit base type: enum
     Level = 127,  // 0 to 100
     LevelMax = 100,
     Athlete = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldActivityClass {
@@ -3841,7 +3941,7 @@ impl From<u8> for FitFieldActivityClass {
             127 => FitFieldActivityClass::Level,
             100 => FitFieldActivityClass::LevelMax,
             128 => FitFieldActivityClass::Athlete,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldActivityClass", invalid_field_num))
+            _ => FitFieldActivityClass::UnknownToSdk
         }
     }
 }
@@ -3866,6 +3966,7 @@ pub enum FitFieldAttitudeValidity { // fit base type: uint16
     SolutionCoasting = 1024,
     TrueTrackAngle = 2048,
     MagneticHeading = 4096,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAttitudeValidity {
@@ -3891,7 +3992,7 @@ impl From<u16> for FitFieldAttitudeValidity {
             1024 => FitFieldAttitudeValidity::SolutionCoasting,
             2048 => FitFieldAttitudeValidity::TrueTrackAngle,
             4096 => FitFieldAttitudeValidity::MagneticHeading,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAttitudeValidity", invalid_field_num))
+            _ => FitFieldAttitudeValidity::UnknownToSdk
         }
     }
 }
@@ -3905,6 +4006,7 @@ impl From<u16> for FitFieldAttitudeValidity {
 pub enum FitFieldFaveroProduct { // fit base type: uint16
     AssiomaUno = 10,
     AssiomaDuo = 12,
+    UnknownToSdk = -1
 }
 
 impl FitFieldFaveroProduct {
@@ -3919,7 +4021,7 @@ impl From<u16> for FitFieldFaveroProduct {
         match code {
             10 => FitFieldFaveroProduct::AssiomaUno,
             12 => FitFieldFaveroProduct::AssiomaDuo,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFaveroProduct", invalid_field_num))
+            _ => FitFieldFaveroProduct::UnknownToSdk
         }
     }
 }
@@ -3933,6 +4035,7 @@ impl From<u16> for FitFieldFaveroProduct {
 pub enum FitFieldDiveAlarmType { // fit base type: enum
     Depth = 0,
     Time = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDiveAlarmType {
@@ -3947,7 +4050,7 @@ impl From<u8> for FitFieldDiveAlarmType {
         match code {
             0 => FitFieldDiveAlarmType::Depth,
             1 => FitFieldDiveAlarmType::Time,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDiveAlarmType", invalid_field_num))
+            _ => FitFieldDiveAlarmType::UnknownToSdk
         }
     }
 }
@@ -4065,6 +4168,7 @@ pub enum FitFieldTimeZone { // fit base type: enum
     Santiago = 103,
     Manual = 253,
     Automatic = 254,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTimeZone {
@@ -4183,7 +4287,7 @@ impl From<u8> for FitFieldTimeZone {
             103 => FitFieldTimeZone::Santiago,
             253 => FitFieldTimeZone::Manual,
             254 => FitFieldTimeZone::Automatic,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTimeZone", invalid_field_num))
+            _ => FitFieldTimeZone::UnknownToSdk
         }
     }
 }
@@ -4197,6 +4301,7 @@ impl From<u8> for FitFieldTimeZone {
 pub enum FitFieldSegmentSelectionType { // fit base type: enum
     Starred = 0,
     Suggested = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSegmentSelectionType {
@@ -4211,7 +4316,7 @@ impl From<u8> for FitFieldSegmentSelectionType {
         match code {
             0 => FitFieldSegmentSelectionType::Starred,
             1 => FitFieldSegmentSelectionType::Suggested,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSegmentSelectionType", invalid_field_num))
+            _ => FitFieldSegmentSelectionType::UnknownToSdk
         }
     }
 }
@@ -4229,6 +4334,7 @@ pub enum FitFieldUserLocalId { // fit base type: uint16
     StationaryMax = 255,
     PortableMin = 256,
     PortableMax = 65534,
+    UnknownToSdk = -1
 }
 
 impl FitFieldUserLocalId {
@@ -4247,7 +4353,7 @@ impl From<u16> for FitFieldUserLocalId {
             255 => FitFieldUserLocalId::StationaryMax,
             256 => FitFieldUserLocalId::PortableMin,
             65534 => FitFieldUserLocalId::PortableMax,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldUserLocalId", invalid_field_num))
+            _ => FitFieldUserLocalId::UnknownToSdk
         }
     }
 }
@@ -4299,6 +4405,7 @@ pub enum FitFieldHyperextensionExerciseName { // fit base type: uint16
     SupermanOnSwissBall = 37,
     Cobra = 38,
     SupineFloorBarre = 39,
+    UnknownToSdk = -1
 }
 
 impl FitFieldHyperextensionExerciseName {
@@ -4351,7 +4458,7 @@ impl From<u16> for FitFieldHyperextensionExerciseName {
             37 => FitFieldHyperextensionExerciseName::SupermanOnSwissBall,
             38 => FitFieldHyperextensionExerciseName::Cobra,
             39 => FitFieldHyperextensionExerciseName::SupineFloorBarre,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHyperextensionExerciseName", invalid_field_num))
+            _ => FitFieldHyperextensionExerciseName::UnknownToSdk
         }
     }
 }
@@ -4460,6 +4567,7 @@ pub enum FitFieldExdDescriptors { // fit base type: enum
     AmbientPressure = 94,
     Pressure = 95,
     Vam = 96,
+    UnknownToSdk = -1
 }
 
 impl FitFieldExdDescriptors {
@@ -4569,7 +4677,7 @@ impl From<u8> for FitFieldExdDescriptors {
             94 => FitFieldExdDescriptors::AmbientPressure,
             95 => FitFieldExdDescriptors::Pressure,
             96 => FitFieldExdDescriptors::Vam,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdDescriptors", invalid_field_num))
+            _ => FitFieldExdDescriptors::UnknownToSdk
         }
     }
 }
@@ -4590,6 +4698,7 @@ pub enum FitFieldActivityType { // fit base type: enum
     Walking = 6,
     Sedentary = 8,
     All = 254,  // All is for goals only to include all sports.
+    UnknownToSdk = -1
 }
 
 impl FitFieldActivityType {
@@ -4611,7 +4720,7 @@ impl From<u8> for FitFieldActivityType {
             6 => FitFieldActivityType::Walking,
             8 => FitFieldActivityType::Sedentary,
             254 => FitFieldActivityType::All,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldActivityType", invalid_field_num))
+            _ => FitFieldActivityType::UnknownToSdk
         }
     }
 }
@@ -4627,6 +4736,7 @@ pub enum FitFieldTone { // fit base type: enum
     Tone = 1,
     Vibrate = 2,
     ToneAndVibrate = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTone {
@@ -4643,7 +4753,7 @@ impl From<u8> for FitFieldTone {
             1 => FitFieldTone::Tone,
             2 => FitFieldTone::Vibrate,
             3 => FitFieldTone::ToneAndVibrate,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTone", invalid_field_num))
+            _ => FitFieldTone::UnknownToSdk
         }
     }
 }
@@ -4662,6 +4772,7 @@ pub enum FitFieldAutolapTrigger { // fit base type: enum
     PositionWaypoint = 4,
     PositionMarked = 5,
     Off = 6,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAutolapTrigger {
@@ -4681,7 +4792,7 @@ impl From<u8> for FitFieldAutolapTrigger {
             4 => FitFieldAutolapTrigger::PositionWaypoint,
             5 => FitFieldAutolapTrigger::PositionMarked,
             6 => FitFieldAutolapTrigger::Off,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAutolapTrigger", invalid_field_num))
+            _ => FitFieldAutolapTrigger::UnknownToSdk
         }
     }
 }
@@ -4700,6 +4811,7 @@ pub enum FitFieldBacklightMode { // fit base type: enum
     SmartNotifications = 4,
     KeyAndMessagesNight = 5,
     KeyAndMessagesAndSmartNotifications = 6,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBacklightMode {
@@ -4719,7 +4831,7 @@ impl From<u8> for FitFieldBacklightMode {
             4 => FitFieldBacklightMode::SmartNotifications,
             5 => FitFieldBacklightMode::KeyAndMessagesNight,
             6 => FitFieldBacklightMode::KeyAndMessagesAndSmartNotifications,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBacklightMode", invalid_field_num))
+            _ => FitFieldBacklightMode::UnknownToSdk
         }
     }
 }
@@ -4736,6 +4848,7 @@ pub enum FitFieldDisplayOrientation { // fit base type: enum
     Landscape = 2,
     PortraitFlipped = 3,  // portrait mode but rotated 180 degrees
     LandscapeFlipped = 4,  // landscape mode but rotated 180 degrees
+    UnknownToSdk = -1
 }
 
 impl FitFieldDisplayOrientation {
@@ -4753,7 +4866,7 @@ impl From<u8> for FitFieldDisplayOrientation {
             2 => FitFieldDisplayOrientation::Landscape,
             3 => FitFieldDisplayOrientation::PortraitFlipped,
             4 => FitFieldDisplayOrientation::LandscapeFlipped,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDisplayOrientation", invalid_field_num))
+            _ => FitFieldDisplayOrientation::UnknownToSdk
         }
     }
 }
@@ -4815,6 +4928,7 @@ pub enum FitFieldHipRaiseExerciseName { // fit base type: uint16
     LegCircles = 47,
     LegLift = 48,
     LegLiftInExternalRotation = 49,
+    UnknownToSdk = -1
 }
 
 impl FitFieldHipRaiseExerciseName {
@@ -4877,7 +4991,7 @@ impl From<u16> for FitFieldHipRaiseExerciseName {
             47 => FitFieldHipRaiseExerciseName::LegCircles,
             48 => FitFieldHipRaiseExerciseName::LegLift,
             49 => FitFieldHipRaiseExerciseName::LegLiftInExternalRotation,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHipRaiseExerciseName", invalid_field_num))
+            _ => FitFieldHipRaiseExerciseName::UnknownToSdk
         }
     }
 }
@@ -4898,6 +5012,7 @@ pub enum FitFieldLapTrigger { // fit base type: enum
     PositionMarked = 6,
     SessionEnd = 7,
     FitnessEquipment = 8,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLapTrigger {
@@ -4919,7 +5034,7 @@ impl From<u8> for FitFieldLapTrigger {
             6 => FitFieldLapTrigger::PositionMarked,
             7 => FitFieldLapTrigger::SessionEnd,
             8 => FitFieldLapTrigger::FitnessEquipment,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLapTrigger", invalid_field_num))
+            _ => FitFieldLapTrigger::UnknownToSdk
         }
     }
 }
@@ -4935,6 +5050,7 @@ pub enum FitFieldWaterType { // fit base type: enum
     Salt = 1,
     En13319 = 2,
     Custom = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWaterType {
@@ -4951,7 +5067,7 @@ impl From<u8> for FitFieldWaterType {
             1 => FitFieldWaterType::Salt,
             2 => FitFieldWaterType::En13319,
             3 => FitFieldWaterType::Custom,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWaterType", invalid_field_num))
+            _ => FitFieldWaterType::UnknownToSdk
         }
     }
 }
@@ -4974,6 +5090,7 @@ pub enum FitFieldCourseCapabilities { // fit base type: uint32z
     Training = 256,
     Navigation = 512,
     Bikeway = 1024,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCourseCapabilities {
@@ -5001,7 +5118,7 @@ impl From<u32> for FitFieldCourseCapabilities {
             256 => FitFieldCourseCapabilities::Training,
             512 => FitFieldCourseCapabilities::Navigation,
             1024 => FitFieldCourseCapabilities::Bikeway,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCourseCapabilities", invalid_field_num))
+            _ => FitFieldCourseCapabilities::UnknownToSdk
         }
     }
 }
@@ -5054,6 +5171,7 @@ pub enum FitFieldTricepsExtensionExerciseName { // fit base type: uint16
     TricepsExtensionOnFloor = 38,
     TricepsPressdown = 39,
     WeightedDip = 40,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTricepsExtensionExerciseName {
@@ -5107,7 +5225,7 @@ impl From<u16> for FitFieldTricepsExtensionExerciseName {
             38 => FitFieldTricepsExtensionExerciseName::TricepsExtensionOnFloor,
             39 => FitFieldTricepsExtensionExerciseName::TricepsPressdown,
             40 => FitFieldTricepsExtensionExerciseName::WeightedDip,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTricepsExtensionExerciseName", invalid_field_num))
+            _ => FitFieldTricepsExtensionExerciseName::UnknownToSdk
         }
     }
 }
@@ -5125,6 +5243,7 @@ pub enum FitFieldTimeMode { // fit base type: enum
     Hour12WithSeconds = 3,
     Hour24WithSeconds = 4,
     Utc = 5,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTimeMode {
@@ -5143,7 +5262,7 @@ impl From<u8> for FitFieldTimeMode {
             3 => FitFieldTimeMode::Hour12WithSeconds,
             4 => FitFieldTimeMode::Hour24WithSeconds,
             5 => FitFieldTimeMode::Utc,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTimeMode", invalid_field_num))
+            _ => FitFieldTimeMode::UnknownToSdk
         }
     }
 }
@@ -5199,6 +5318,7 @@ pub enum FitFieldExdQualifiers { // fit base type: enum
     Zone3 = 248,
     Zone2 = 249,
     Zone1 = 250,
+    UnknownToSdk = -1
 }
 
 impl FitFieldExdQualifiers {
@@ -5255,7 +5375,7 @@ impl From<u8> for FitFieldExdQualifiers {
             248 => FitFieldExdQualifiers::Zone3,
             249 => FitFieldExdQualifiers::Zone2,
             250 => FitFieldExdQualifiers::Zone1,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdQualifiers", invalid_field_num))
+            _ => FitFieldExdQualifiers::UnknownToSdk
         }
     }
 }
@@ -5270,6 +5390,7 @@ pub enum FitFieldGoalSource { // fit base type: enum
     Auto = 0,  // Device generated
     Community = 1,  // Social network sourced goal
     User = 2,  // Manually generated
+    UnknownToSdk = -1
 }
 
 impl FitFieldGoalSource {
@@ -5285,7 +5406,7 @@ impl From<u8> for FitFieldGoalSource {
             0 => FitFieldGoalSource::Auto,
             1 => FitFieldGoalSource::Community,
             2 => FitFieldGoalSource::User,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldGoalSource", invalid_field_num))
+            _ => FitFieldGoalSource::UnknownToSdk
         }
     }
 }
@@ -5299,6 +5420,7 @@ impl From<u8> for FitFieldGoalSource {
 pub enum FitFieldDateMode { // fit base type: enum
     DayMonth = 0,
     MonthDay = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDateMode {
@@ -5313,7 +5435,7 @@ impl From<u8> for FitFieldDateMode {
         match code {
             0 => FitFieldDateMode::DayMonth,
             1 => FitFieldDateMode::MonthDay,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDateMode", invalid_field_num))
+            _ => FitFieldDateMode::UnknownToSdk
         }
     }
 }
@@ -5386,6 +5508,7 @@ pub enum FitFieldSubSport { // fit base type: enum
     VirtualActivity = 58,
     Obstacle = 59,  // Used for events where participants run, crawl through mud, climb over walls, etc.
     All = 254,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSubSport {
@@ -5459,7 +5582,7 @@ impl From<u8> for FitFieldSubSport {
             58 => FitFieldSubSport::VirtualActivity,
             59 => FitFieldSubSport::Obstacle,
             254 => FitFieldSubSport::All,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSubSport", invalid_field_num))
+            _ => FitFieldSubSport::UnknownToSdk
         }
     }
 }
@@ -5505,6 +5628,7 @@ pub enum FitFieldExerciseCategory { // fit base type: uint16
     WarmUp = 31,
     Run = 32,
     Unknown = 65534,
+    UnknownToSdk = -1
 }
 
 impl FitFieldExerciseCategory {
@@ -5551,7 +5675,7 @@ impl From<u16> for FitFieldExerciseCategory {
             31 => FitFieldExerciseCategory::WarmUp,
             32 => FitFieldExerciseCategory::Run,
             65534 => FitFieldExerciseCategory::Unknown,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExerciseCategory", invalid_field_num))
+            _ => FitFieldExerciseCategory::UnknownToSdk
         }
     }
 }
@@ -5564,6 +5688,7 @@ impl From<u16> for FitFieldExerciseCategory {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldDeviceIndex { // fit base type: uint8
     Creator = 0,  // Creator of the file is always device index 0.
+    UnknownToSdk = -1
 }
 
 impl FitFieldDeviceIndex {
@@ -5577,7 +5702,7 @@ impl From<u8> for FitFieldDeviceIndex {
     fn from(code: u8) -> Self {
         match code {
             0 => FitFieldDeviceIndex::Creator,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDeviceIndex", invalid_field_num))
+            _ => FitFieldDeviceIndex::UnknownToSdk
         }
     }
 }
@@ -5670,6 +5795,7 @@ pub enum FitFieldLungeExerciseName { // fit base type: uint16
     WalkingLunge = 78,
     WeightedWalkingLunge = 79,
     WideGripOverheadBarbellSplitSquat = 80,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLungeExerciseName {
@@ -5763,7 +5889,7 @@ impl From<u16> for FitFieldLungeExerciseName {
             78 => FitFieldLungeExerciseName::WalkingLunge,
             79 => FitFieldLungeExerciseName::WeightedWalkingLunge,
             80 => FitFieldLungeExerciseName::WideGripOverheadBarbellSplitSquat,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLungeExerciseName", invalid_field_num))
+            _ => FitFieldLungeExerciseName::UnknownToSdk
         }
     }
 }
@@ -5783,6 +5909,7 @@ pub enum FitFieldSportBits0 { // fit base type: uint8z
     Swimming = 32,
     Basketball = 64,
     Soccer = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits0 {
@@ -5807,7 +5934,7 @@ impl From<u8> for FitFieldSportBits0 {
             32 => FitFieldSportBits0::Swimming,
             64 => FitFieldSportBits0::Basketball,
             128 => FitFieldSportBits0::Soccer,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits0", invalid_field_num))
+            _ => FitFieldSportBits0::UnknownToSdk
         }
     }
 }
@@ -5827,6 +5954,7 @@ pub enum FitFieldSportBits1 { // fit base type: uint8z
     AlpineSkiing = 32,
     Snowboarding = 64,
     Rowing = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits1 {
@@ -5851,7 +5979,7 @@ impl From<u8> for FitFieldSportBits1 {
             32 => FitFieldSportBits1::AlpineSkiing,
             64 => FitFieldSportBits1::Snowboarding,
             128 => FitFieldSportBits1::Rowing,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits1", invalid_field_num))
+            _ => FitFieldSportBits1::UnknownToSdk
         }
     }
 }
@@ -5871,6 +5999,7 @@ pub enum FitFieldSportBits2 { // fit base type: uint8z
     EBiking = 32,
     Motorcycling = 64,
     Boating = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits2 {
@@ -5895,7 +6024,7 @@ impl From<u8> for FitFieldSportBits2 {
             32 => FitFieldSportBits2::EBiking,
             64 => FitFieldSportBits2::Motorcycling,
             128 => FitFieldSportBits2::Boating,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits2", invalid_field_num))
+            _ => FitFieldSportBits2::UnknownToSdk
         }
     }
 }
@@ -5915,6 +6044,7 @@ pub enum FitFieldSportBits3 { // fit base type: uint8z
     Fishing = 32,
     InlineSkating = 64,
     RockClimbing = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits3 {
@@ -5939,7 +6069,7 @@ impl From<u8> for FitFieldSportBits3 {
             32 => FitFieldSportBits3::Fishing,
             64 => FitFieldSportBits3::InlineSkating,
             128 => FitFieldSportBits3::RockClimbing,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits3", invalid_field_num))
+            _ => FitFieldSportBits3::UnknownToSdk
         }
     }
 }
@@ -5959,6 +6089,7 @@ pub enum FitFieldSportBits4 { // fit base type: uint8z
     StandUpPaddleboarding = 32,
     Surfing = 64,
     Wakeboarding = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits4 {
@@ -5983,7 +6114,7 @@ impl From<u8> for FitFieldSportBits4 {
             32 => FitFieldSportBits4::StandUpPaddleboarding,
             64 => FitFieldSportBits4::Surfing,
             128 => FitFieldSportBits4::Wakeboarding,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits4", invalid_field_num))
+            _ => FitFieldSportBits4::UnknownToSdk
         }
     }
 }
@@ -6003,6 +6134,7 @@ pub enum FitFieldSportBits5 { // fit base type: uint8z
     Tactical = 32,
     Jumpmaster = 64,
     Boxing = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits5 {
@@ -6027,7 +6159,7 @@ impl From<u8> for FitFieldSportBits5 {
             32 => FitFieldSportBits5::Tactical,
             64 => FitFieldSportBits5::Jumpmaster,
             128 => FitFieldSportBits5::Boxing,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits5", invalid_field_num))
+            _ => FitFieldSportBits5::UnknownToSdk
         }
     }
 }
@@ -6040,6 +6172,7 @@ impl From<u8> for FitFieldSportBits5 {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldSportBits6 { // fit base type: uint8z
     FloorClimbing = 1,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSportBits6 {
@@ -6057,7 +6190,7 @@ impl From<u8> for FitFieldSportBits6 {
     fn from(code: u8) -> Self {
         match code {
             1 => FitFieldSportBits6::FloorClimbing,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSportBits6", invalid_field_num))
+            _ => FitFieldSportBits6::UnknownToSdk
         }
     }
 }
@@ -6108,6 +6241,7 @@ pub enum FitFieldPullUpExerciseName { // fit base type: uint16
     SuspendedChinUp = 36,
     WeightedSuspendedChinUp = 37,
     PullUp = 38,
+    UnknownToSdk = -1
 }
 
 impl FitFieldPullUpExerciseName {
@@ -6159,7 +6293,7 @@ impl From<u16> for FitFieldPullUpExerciseName {
             36 => FitFieldPullUpExerciseName::SuspendedChinUp,
             37 => FitFieldPullUpExerciseName::WeightedSuspendedChinUp,
             38 => FitFieldPullUpExerciseName::PullUp,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPullUpExerciseName", invalid_field_num))
+            _ => FitFieldPullUpExerciseName::UnknownToSdk
         }
     }
 }
@@ -6174,6 +6308,7 @@ pub enum FitFieldSegmentDeleteStatus { // fit base type: enum
     DoNotDelete = 0,
     DeleteOne = 1,
     DeleteAll = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSegmentDeleteStatus {
@@ -6189,7 +6324,7 @@ impl From<u8> for FitFieldSegmentDeleteStatus {
             0 => FitFieldSegmentDeleteStatus::DoNotDelete,
             1 => FitFieldSegmentDeleteStatus::DeleteOne,
             2 => FitFieldSegmentDeleteStatus::DeleteAll,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSegmentDeleteStatus", invalid_field_num))
+            _ => FitFieldSegmentDeleteStatus::UnknownToSdk
         }
     }
 }
@@ -6205,6 +6340,7 @@ pub enum FitFieldFitnessEquipmentState { // fit base type: enum
     InUse = 1,
     Paused = 2,
     Unknown = 3,  // lost connection to fitness equipment
+    UnknownToSdk = -1
 }
 
 impl FitFieldFitnessEquipmentState {
@@ -6221,7 +6357,7 @@ impl From<u8> for FitFieldFitnessEquipmentState {
             1 => FitFieldFitnessEquipmentState::InUse,
             2 => FitFieldFitnessEquipmentState::Paused,
             3 => FitFieldFitnessEquipmentState::Unknown,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFitnessEquipmentState", invalid_field_num))
+            _ => FitFieldFitnessEquipmentState::UnknownToSdk
         }
     }
 }
@@ -6240,6 +6376,7 @@ pub enum FitFieldAutoActivityDetect { // fit base type: uint32
     Walking = 8,
     Elliptical = 32,
     Sedentary = 1024,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAutoActivityDetect {
@@ -6259,7 +6396,7 @@ impl From<u32> for FitFieldAutoActivityDetect {
             8 => FitFieldAutoActivityDetect::Walking,
             32 => FitFieldAutoActivityDetect::Elliptical,
             1024 => FitFieldAutoActivityDetect::Sedentary,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAutoActivityDetect", invalid_field_num))
+            _ => FitFieldAutoActivityDetect::UnknownToSdk
         }
     }
 }
@@ -6292,6 +6429,7 @@ pub enum FitFieldCalfRaiseExerciseName { // fit base type: uint16
     StandingCalfRaise = 18,
     WeightedStandingCalfRaise = 19,
     StandingDumbbellCalfRaise = 20,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCalfRaiseExerciseName {
@@ -6325,7 +6463,7 @@ impl From<u16> for FitFieldCalfRaiseExerciseName {
             18 => FitFieldCalfRaiseExerciseName::StandingCalfRaise,
             19 => FitFieldCalfRaiseExerciseName::WeightedStandingCalfRaise,
             20 => FitFieldCalfRaiseExerciseName::StandingDumbbellCalfRaise,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCalfRaiseExerciseName", invalid_field_num))
+            _ => FitFieldCalfRaiseExerciseName::UnknownToSdk
         }
     }
 }
@@ -6341,6 +6479,7 @@ pub enum FitFieldRiderPositionType { // fit base type: enum
     Standing = 1,
     TransitionToSeated = 2,
     TransitionToStanding = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldRiderPositionType {
@@ -6357,7 +6496,7 @@ impl From<u8> for FitFieldRiderPositionType {
             1 => FitFieldRiderPositionType::Standing,
             2 => FitFieldRiderPositionType::TransitionToSeated,
             3 => FitFieldRiderPositionType::TransitionToStanding,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldRiderPositionType", invalid_field_num))
+            _ => FitFieldRiderPositionType::UnknownToSdk
         }
     }
 }
@@ -6402,6 +6541,7 @@ pub enum FitFieldPlyoExerciseName { // fit base type: uint16
     WeightedSquatJumpOntoBox = 30,
     SquatJumpsInAndOut = 31,
     WeightedSquatJumpsInAndOut = 32,
+    UnknownToSdk = -1
 }
 
 impl FitFieldPlyoExerciseName {
@@ -6447,7 +6587,7 @@ impl From<u16> for FitFieldPlyoExerciseName {
             30 => FitFieldPlyoExerciseName::WeightedSquatJumpOntoBox,
             31 => FitFieldPlyoExerciseName::SquatJumpsInAndOut,
             32 => FitFieldPlyoExerciseName::WeightedSquatJumpsInAndOut,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPlyoExerciseName", invalid_field_num))
+            _ => FitFieldPlyoExerciseName::UnknownToSdk
         }
     }
 }
@@ -6616,6 +6756,7 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     ConnectiqSimulator = 65531,
     AndroidAntplusPlugin = 65532,
     Connect = 65534,  // Garmin Connect website
+    UnknownToSdk = -1
 }
 
 impl FitFieldGarminProduct {
@@ -6785,7 +6926,7 @@ impl From<u16> for FitFieldGarminProduct {
             65531 => FitFieldGarminProduct::ConnectiqSimulator,
             65532 => FitFieldGarminProduct::AndroidAntplusPlugin,
             65534 => FitFieldGarminProduct::Connect,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldGarminProduct", invalid_field_num))
+            _ => FitFieldGarminProduct::UnknownToSdk
         }
     }
 }
@@ -6805,6 +6946,7 @@ pub enum FitFieldExdLayout { // fit base type: enum
     FullQuarterSplit = 5,
     HalfVerticalLeftSplit = 6,
     HalfHorizontalTopSplit = 7,
+    UnknownToSdk = -1
 }
 
 impl FitFieldExdLayout {
@@ -6825,7 +6967,7 @@ impl From<u8> for FitFieldExdLayout {
             5 => FitFieldExdLayout::FullQuarterSplit,
             6 => FitFieldExdLayout::HalfVerticalLeftSplit,
             7 => FitFieldExdLayout::HalfHorizontalTopSplit,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdLayout", invalid_field_num))
+            _ => FitFieldExdLayout::UnknownToSdk
         }
     }
 }
@@ -6838,6 +6980,7 @@ impl From<u8> for FitFieldExdLayout {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldWorkoutPower { // fit base type: uint32
     WattsOffset = 1000,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWorkoutPower {
@@ -6851,7 +6994,7 @@ impl From<u32> for FitFieldWorkoutPower {
     fn from(code: u32) -> Self {
         match code {
             1000 => FitFieldWorkoutPower::WattsOffset,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutPower", invalid_field_num))
+            _ => FitFieldWorkoutPower::UnknownToSdk
         }
     }
 }
@@ -6886,6 +7029,7 @@ pub enum FitFieldChopExerciseName { // fit base type: uint16
     StandingSplitRotationalChop = 20,
     StandingSplitRotationalReverseChop = 21,
     StandingStabilityReverseChop = 22,
+    UnknownToSdk = -1
 }
 
 impl FitFieldChopExerciseName {
@@ -6921,7 +7065,7 @@ impl From<u16> for FitFieldChopExerciseName {
             20 => FitFieldChopExerciseName::StandingSplitRotationalChop,
             21 => FitFieldChopExerciseName::StandingSplitRotationalReverseChop,
             22 => FitFieldChopExerciseName::StandingStabilityReverseChop,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldChopExerciseName", invalid_field_num))
+            _ => FitFieldChopExerciseName::UnknownToSdk
         }
     }
 }
@@ -6939,6 +7083,7 @@ pub enum FitFieldWorkoutEquipment { // fit base type: enum
     SwimPaddles = 3,
     SwimPullBuoy = 4,
     SwimSnorkel = 5,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWorkoutEquipment {
@@ -6957,7 +7102,7 @@ impl From<u8> for FitFieldWorkoutEquipment {
             3 => FitFieldWorkoutEquipment::SwimPaddles,
             4 => FitFieldWorkoutEquipment::SwimPullBuoy,
             5 => FitFieldWorkoutEquipment::SwimSnorkel,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutEquipment", invalid_field_num))
+            _ => FitFieldWorkoutEquipment::UnknownToSdk
         }
     }
 }
@@ -6972,6 +7117,7 @@ pub enum FitFieldWeatherReport { // fit base type: enum
     Current = 0,
     HourlyForecast = 1,
     DailyForecast = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWeatherReport {
@@ -6987,7 +7133,7 @@ impl From<u8> for FitFieldWeatherReport {
             0 => FitFieldWeatherReport::Current,
             1 => FitFieldWeatherReport::HourlyForecast,
             2 => FitFieldWeatherReport::DailyForecast,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeatherReport", invalid_field_num))
+            _ => FitFieldWeatherReport::UnknownToSdk
         }
     }
 }
@@ -7019,6 +7165,7 @@ pub enum FitFieldActivitySubtype { // fit base type: enum
     LapSwimming = 17,  // Swimming
     OpenWater = 18,  // Swimming
     All = 254,
+    UnknownToSdk = -1
 }
 
 impl FitFieldActivitySubtype {
@@ -7051,7 +7198,7 @@ impl From<u8> for FitFieldActivitySubtype {
             17 => FitFieldActivitySubtype::LapSwimming,
             18 => FitFieldActivitySubtype::OpenWater,
             254 => FitFieldActivitySubtype::All,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldActivitySubtype", invalid_field_num))
+            _ => FitFieldActivitySubtype::UnknownToSdk
         }
     }
 }
@@ -7070,6 +7217,7 @@ pub enum FitFieldDayOfWeek { // fit base type: enum
     Thursday = 4,
     Friday = 5,
     Saturday = 6,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDayOfWeek {
@@ -7089,7 +7237,7 @@ impl From<u8> for FitFieldDayOfWeek {
             4 => FitFieldDayOfWeek::Thursday,
             5 => FitFieldDayOfWeek::Friday,
             6 => FitFieldDayOfWeek::Saturday,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDayOfWeek", invalid_field_num))
+            _ => FitFieldDayOfWeek::UnknownToSdk
         }
     }
 }
@@ -7135,6 +7283,7 @@ pub enum FitFieldLateralRaiseExerciseName { // fit base type: uint16
     WeightedWallSlide = 31,
     ArmCircles = 32,
     ShavingTheHead = 33,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLateralRaiseExerciseName {
@@ -7181,7 +7330,7 @@ impl From<u16> for FitFieldLateralRaiseExerciseName {
             31 => FitFieldLateralRaiseExerciseName::WeightedWallSlide,
             32 => FitFieldLateralRaiseExerciseName::ArmCircles,
             33 => FitFieldLateralRaiseExerciseName::ShavingTheHead,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLateralRaiseExerciseName", invalid_field_num))
+            _ => FitFieldLateralRaiseExerciseName::UnknownToSdk
         }
     }
 }
@@ -7217,6 +7366,7 @@ pub enum FitFieldAntplusDeviceType { // fit base type: uint8
     BikeCadence = 122,
     BikeSpeed = 123,
     StrideSpeedDistance = 124,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAntplusDeviceType {
@@ -7253,7 +7403,7 @@ impl From<u8> for FitFieldAntplusDeviceType {
             122 => FitFieldAntplusDeviceType::BikeCadence,
             123 => FitFieldAntplusDeviceType::BikeSpeed,
             124 => FitFieldAntplusDeviceType::StrideSpeedDistance,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAntplusDeviceType", invalid_field_num))
+            _ => FitFieldAntplusDeviceType::UnknownToSdk
         }
     }
 }
@@ -7303,6 +7453,7 @@ pub enum FitFieldTurnType { // fit base type: enum
     UturnRightIdx = 35,
     IconInvIdx = 36,
     IconIdxCnt = 37,
+    UnknownToSdk = -1
 }
 
 impl FitFieldTurnType {
@@ -7353,7 +7504,7 @@ impl From<u8> for FitFieldTurnType {
             35 => FitFieldTurnType::UturnRightIdx,
             36 => FitFieldTurnType::IconInvIdx,
             37 => FitFieldTurnType::IconIdxCnt,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTurnType", invalid_field_num))
+            _ => FitFieldTurnType::UnknownToSdk
         }
     }
 }
@@ -7368,6 +7519,7 @@ pub enum FitFieldFitBaseUnit { // fit base type: uint16
     Other = 0,
     Kilogram = 1,
     Pound = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldFitBaseUnit {
@@ -7383,7 +7535,7 @@ impl From<u16> for FitFieldFitBaseUnit {
             0 => FitFieldFitBaseUnit::Other,
             1 => FitFieldFitBaseUnit::Kilogram,
             2 => FitFieldFitBaseUnit::Pound,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFitBaseUnit", invalid_field_num))
+            _ => FitFieldFitBaseUnit::UnknownToSdk
         }
     }
 }
@@ -7402,6 +7554,7 @@ pub enum FitFieldBatteryStatus { // fit base type: uint8
     Critical = 5,
     Charging = 6,
     Unknown = 7,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBatteryStatus {
@@ -7421,7 +7574,7 @@ impl From<u8> for FitFieldBatteryStatus {
             5 => FitFieldBatteryStatus::Critical,
             6 => FitFieldBatteryStatus::Charging,
             7 => FitFieldBatteryStatus::Unknown,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBatteryStatus", invalid_field_num))
+            _ => FitFieldBatteryStatus::UnknownToSdk
         }
     }
 }
@@ -7435,6 +7588,7 @@ impl From<u8> for FitFieldBatteryStatus {
 pub enum FitFieldChecksum { // fit base type: uint8
     Clear = 0,  // Allows clear of checksum for flash memory where can only write 1 to 0 without erasing sector.
     Ok = 1,  // Set to mark checksum as valid if computes to invalid values 0 or 0xFF.  Checksum can also be set to ok to save encoding computation time.
+    UnknownToSdk = -1
 }
 
 impl FitFieldChecksum {
@@ -7449,7 +7603,7 @@ impl From<u8> for FitFieldChecksum {
         match code {
             0 => FitFieldChecksum::Clear,
             1 => FitFieldChecksum::Ok,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldChecksum", invalid_field_num))
+            _ => FitFieldChecksum::UnknownToSdk
         }
     }
 }
@@ -7462,6 +7616,7 @@ impl From<u8> for FitFieldChecksum {
 #[derive(Debug, PartialEq)]
 pub enum FitFieldWorkoutHr { // fit base type: uint32
     BpmOffset = 100,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWorkoutHr {
@@ -7475,7 +7630,7 @@ impl From<u32> for FitFieldWorkoutHr {
     fn from(code: u32) -> Self {
         match code {
             100 => FitFieldWorkoutHr::BpmOffset,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWorkoutHr", invalid_field_num))
+            _ => FitFieldWorkoutHr::UnknownToSdk
         }
     }
 }
@@ -7509,6 +7664,7 @@ pub enum FitFieldLegRaiseExerciseName { // fit base type: uint16
     WeightedHangingKneeRaise = 19,
     LateralStepover = 20,
     WeightedLateralStepover = 21,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLegRaiseExerciseName {
@@ -7543,7 +7699,7 @@ impl From<u16> for FitFieldLegRaiseExerciseName {
             19 => FitFieldLegRaiseExerciseName::WeightedHangingKneeRaise,
             20 => FitFieldLegRaiseExerciseName::LateralStepover,
             21 => FitFieldLegRaiseExerciseName::WeightedLateralStepover,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLegRaiseExerciseName", invalid_field_num))
+            _ => FitFieldLegRaiseExerciseName::UnknownToSdk
         }
     }
 }
@@ -7563,6 +7719,7 @@ pub enum FitFieldLanguageBits3 { // fit base type: uint8z
     Taiwanese = 32,
     Thai = 64,
     Hebrew = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLanguageBits3 {
@@ -7587,7 +7744,7 @@ impl From<u8> for FitFieldLanguageBits3 {
             32 => FitFieldLanguageBits3::Taiwanese,
             64 => FitFieldLanguageBits3::Thai,
             128 => FitFieldLanguageBits3::Hebrew,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguageBits3", invalid_field_num))
+            _ => FitFieldLanguageBits3::UnknownToSdk
         }
     }
 }
@@ -7607,6 +7764,7 @@ pub enum FitFieldLanguageBits2 { // fit base type: uint8z
     Ukrainian = 32,
     Arabic = 64,
     Farsi = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLanguageBits2 {
@@ -7631,7 +7789,7 @@ impl From<u8> for FitFieldLanguageBits2 {
             32 => FitFieldLanguageBits2::Ukrainian,
             64 => FitFieldLanguageBits2::Arabic,
             128 => FitFieldLanguageBits2::Farsi,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguageBits2", invalid_field_num))
+            _ => FitFieldLanguageBits2::UnknownToSdk
         }
     }
 }
@@ -7651,6 +7809,7 @@ pub enum FitFieldLanguageBits1 { // fit base type: uint8z
     Polish = 32,
     Portuguese = 64,
     Slovakian = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLanguageBits1 {
@@ -7675,7 +7834,7 @@ impl From<u8> for FitFieldLanguageBits1 {
             32 => FitFieldLanguageBits1::Polish,
             64 => FitFieldLanguageBits1::Portuguese,
             128 => FitFieldLanguageBits1::Slovakian,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguageBits1", invalid_field_num))
+            _ => FitFieldLanguageBits1::UnknownToSdk
         }
     }
 }
@@ -7695,6 +7854,7 @@ pub enum FitFieldLanguageBits0 { // fit base type: uint8z
     Croatian = 32,
     Czech = 64,
     Danish = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLanguageBits0 {
@@ -7719,7 +7879,7 @@ impl From<u8> for FitFieldLanguageBits0 {
             32 => FitFieldLanguageBits0::Croatian,
             64 => FitFieldLanguageBits0::Czech,
             128 => FitFieldLanguageBits0::Danish,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguageBits0", invalid_field_num))
+            _ => FitFieldLanguageBits0::UnknownToSdk
         }
     }
 }
@@ -7741,6 +7901,7 @@ pub enum FitFieldEventType { // fit base type: enum
     EndAllDepreciated = 7,
     StopDisable = 8,
     StopDisableAll = 9,
+    UnknownToSdk = -1
 }
 
 impl FitFieldEventType {
@@ -7763,7 +7924,7 @@ impl From<u8> for FitFieldEventType {
             7 => FitFieldEventType::EndAllDepreciated,
             8 => FitFieldEventType::StopDisable,
             9 => FitFieldEventType::StopDisableAll,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldEventType", invalid_field_num))
+            _ => FitFieldEventType::UnknownToSdk
         }
     }
 }
@@ -7781,6 +7942,7 @@ pub enum FitFieldLanguageBits4 { // fit base type: uint8z
     Vietnamese = 8,
     Burmese = 16,
     Mongolian = 32,
+    UnknownToSdk = -1
 }
 
 impl FitFieldLanguageBits4 {
@@ -7803,7 +7965,7 @@ impl From<u8> for FitFieldLanguageBits4 {
             8 => FitFieldLanguageBits4::Vietnamese,
             16 => FitFieldLanguageBits4::Burmese,
             32 => FitFieldLanguageBits4::Mongolian,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldLanguageBits4", invalid_field_num))
+            _ => FitFieldLanguageBits4::UnknownToSdk
         }
     }
 }
@@ -7855,6 +8017,7 @@ pub enum FitFieldBodyLocation { // fit base type: enum
     WaistFront = 37,
     WaistLeft = 38,
     WaistRight = 39,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBodyLocation {
@@ -7907,7 +8070,7 @@ impl From<u8> for FitFieldBodyLocation {
             37 => FitFieldBodyLocation::WaistFront,
             38 => FitFieldBodyLocation::WaistLeft,
             39 => FitFieldBodyLocation::WaistRight,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBodyLocation", invalid_field_num))
+            _ => FitFieldBodyLocation::UnknownToSdk
         }
     }
 }
@@ -7939,6 +8102,7 @@ pub enum FitFieldFile { // fit base type: enum
     ExdConfiguration = 40,  // Read/write/erase. Single File. Directory=Settings
     MfgRangeMin = 247,  // 0xF7 - 0xFE reserved for manufacturer specific file types
     MfgRangeMax = 254,  // 0xF7 - 0xFE reserved for manufacturer specific file types
+    UnknownToSdk = -1
 }
 
 impl FitFieldFile {
@@ -7971,7 +8135,7 @@ impl From<u8> for FitFieldFile {
             40 => FitFieldFile::ExdConfiguration,
             247 => FitFieldFile::MfgRangeMin,
             254 => FitFieldFile::MfgRangeMax,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldFile", invalid_field_num))
+            _ => FitFieldFile::UnknownToSdk
         }
     }
 }
@@ -7986,6 +8150,7 @@ pub enum FitFieldDisplayMeasure { // fit base type: enum
     Metric = 0,
     Statute = 1,
     Nautical = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDisplayMeasure {
@@ -8001,7 +8166,7 @@ impl From<u8> for FitFieldDisplayMeasure {
             0 => FitFieldDisplayMeasure::Metric,
             1 => FitFieldDisplayMeasure::Statute,
             2 => FitFieldDisplayMeasure::Nautical,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDisplayMeasure", invalid_field_num))
+            _ => FitFieldDisplayMeasure::UnknownToSdk
         }
     }
 }
@@ -8026,6 +8191,7 @@ pub enum FitFieldCameraEventType { // fit base type: enum
     VideoSecondStreamPause = 12,
     VideoResume = 13,  // Mark when a video recording has been resumed
     VideoSecondStreamResume = 14,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCameraEventType {
@@ -8051,7 +8217,7 @@ impl From<u8> for FitFieldCameraEventType {
             12 => FitFieldCameraEventType::VideoSecondStreamPause,
             13 => FitFieldCameraEventType::VideoResume,
             14 => FitFieldCameraEventType::VideoSecondStreamResume,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCameraEventType", invalid_field_num))
+            _ => FitFieldCameraEventType::UnknownToSdk
         }
     }
 }
@@ -8068,6 +8234,7 @@ pub enum FitFieldAutoSyncFrequency { // fit base type: enum
     Frequent = 2,
     OnceADay = 3,
     Remote = 4,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAutoSyncFrequency {
@@ -8085,7 +8252,7 @@ impl From<u8> for FitFieldAutoSyncFrequency {
             2 => FitFieldAutoSyncFrequency::Frequent,
             3 => FitFieldAutoSyncFrequency::OnceADay,
             4 => FitFieldAutoSyncFrequency::Remote,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAutoSyncFrequency", invalid_field_num))
+            _ => FitFieldAutoSyncFrequency::UnknownToSdk
         }
     }
 }
@@ -8100,6 +8267,7 @@ pub enum FitFieldMessageIndex { // fit base type: uint16
     Selected = 32768,  // message is selected if set
     Reserved = 28672,  // reserved (default 0)
     Mask = 4095,  // index
+    UnknownToSdk = -1
 }
 
 impl FitFieldMessageIndex {
@@ -8115,7 +8283,7 @@ impl From<u16> for FitFieldMessageIndex {
             32768 => FitFieldMessageIndex::Selected,
             28672 => FitFieldMessageIndex::Reserved,
             4095 => FitFieldMessageIndex::Mask,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldMessageIndex", invalid_field_num))
+            _ => FitFieldMessageIndex::UnknownToSdk
         }
     }
 }
@@ -8134,6 +8302,7 @@ pub enum FitFieldGoal { // fit base type: enum
     Steps = 4,
     Ascent = 5,
     ActiveMinutes = 6,
+    UnknownToSdk = -1
 }
 
 impl FitFieldGoal {
@@ -8153,7 +8322,7 @@ impl From<u8> for FitFieldGoal {
             4 => FitFieldGoal::Steps,
             5 => FitFieldGoal::Ascent,
             6 => FitFieldGoal::ActiveMinutes,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldGoal", invalid_field_num))
+            _ => FitFieldGoal::UnknownToSdk
         }
     }
 }
@@ -8192,6 +8361,7 @@ pub enum FitFieldBenchPressExerciseName { // fit base type: uint16
     TripleStopBarbellBenchPress = 24,
     WideGripBarbellBenchPress = 25,
     AlternatingDumbbellChestPress = 26,
+    UnknownToSdk = -1
 }
 
 impl FitFieldBenchPressExerciseName {
@@ -8231,7 +8401,7 @@ impl From<u16> for FitFieldBenchPressExerciseName {
             24 => FitFieldBenchPressExerciseName::TripleStopBarbellBenchPress,
             25 => FitFieldBenchPressExerciseName::WideGripBarbellBenchPress,
             26 => FitFieldBenchPressExerciseName::AlternatingDumbbellChestPress,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldBenchPressExerciseName", invalid_field_num))
+            _ => FitFieldBenchPressExerciseName::UnknownToSdk
         }
     }
 }
@@ -8246,6 +8416,7 @@ pub enum FitFieldActivityLevel { // fit base type: enum
     Low = 0,
     Medium = 1,
     High = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldActivityLevel {
@@ -8261,7 +8432,7 @@ impl From<u8> for FitFieldActivityLevel {
             0 => FitFieldActivityLevel::Low,
             1 => FitFieldActivityLevel::Medium,
             2 => FitFieldActivityLevel::High,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldActivityLevel", invalid_field_num))
+            _ => FitFieldActivityLevel::UnknownToSdk
         }
     }
 }
@@ -8303,6 +8474,7 @@ pub enum FitFieldWktStepDuration { // fit base type: enum
     RepeatUntilTrainingPeaksTss = 27,
     RepetitionTime = 28,
     Reps = 29,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWktStepDuration {
@@ -8345,7 +8517,7 @@ impl From<u8> for FitFieldWktStepDuration {
             27 => FitFieldWktStepDuration::RepeatUntilTrainingPeaksTss,
             28 => FitFieldWktStepDuration::RepetitionTime,
             29 => FitFieldWktStepDuration::Reps,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWktStepDuration", invalid_field_num))
+            _ => FitFieldWktStepDuration::UnknownToSdk
         }
     }
 }
@@ -8362,6 +8534,7 @@ pub enum FitFieldWeatherSeverity { // fit base type: enum
     Watch = 2,
     Advisory = 3,
     Statement = 4,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWeatherSeverity {
@@ -8379,7 +8552,7 @@ impl From<u8> for FitFieldWeatherSeverity {
             2 => FitFieldWeatherSeverity::Watch,
             3 => FitFieldWeatherSeverity::Advisory,
             4 => FitFieldWeatherSeverity::Statement,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeatherSeverity", invalid_field_num))
+            _ => FitFieldWeatherSeverity::UnknownToSdk
         }
     }
 }
@@ -8526,6 +8699,7 @@ pub enum FitFieldPlankExerciseName { // fit base type: uint16
     PlankWithArmVariations = 132,
     PlankWithLegLift = 133,
     ReversePlankWithLegPull = 134,
+    UnknownToSdk = -1
 }
 
 impl FitFieldPlankExerciseName {
@@ -8673,7 +8847,7 @@ impl From<u16> for FitFieldPlankExerciseName {
             132 => FitFieldPlankExerciseName::PlankWithArmVariations,
             133 => FitFieldPlankExerciseName::PlankWithLegLift,
             134 => FitFieldPlankExerciseName::ReversePlankWithLegPull,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPlankExerciseName", invalid_field_num))
+            _ => FitFieldPlankExerciseName::UnknownToSdk
         }
     }
 }
@@ -8689,6 +8863,7 @@ pub enum FitFieldCameraOrientationType { // fit base type: enum
     CameraOrientation90 = 1,
     CameraOrientation180 = 2,
     CameraOrientation270 = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCameraOrientationType {
@@ -8705,7 +8880,7 @@ impl From<u8> for FitFieldCameraOrientationType {
             1 => FitFieldCameraOrientationType::CameraOrientation90,
             2 => FitFieldCameraOrientationType::CameraOrientation180,
             3 => FitFieldCameraOrientationType::CameraOrientation270,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCameraOrientationType", invalid_field_num))
+            _ => FitFieldCameraOrientationType::UnknownToSdk
         }
     }
 }
@@ -8738,6 +8913,7 @@ pub enum FitFieldWeatherStatus { // fit base type: enum
     LightRainSnow = 20,
     HeavyRainSnow = 21,
     Cloudy = 22,
+    UnknownToSdk = -1
 }
 
 impl FitFieldWeatherStatus {
@@ -8771,7 +8947,7 @@ impl From<u8> for FitFieldWeatherStatus {
             20 => FitFieldWeatherStatus::LightRainSnow,
             21 => FitFieldWeatherStatus::HeavyRainSnow,
             22 => FitFieldWeatherStatus::Cloudy,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldWeatherStatus", invalid_field_num))
+            _ => FitFieldWeatherStatus::UnknownToSdk
         }
     }
 }
@@ -8794,6 +8970,7 @@ pub enum FitFieldExdDisplayType { // fit base type: enum
     String = 8,
     SimpleDynamicIcon = 9,
     Gauge = 10,
+    UnknownToSdk = -1
 }
 
 impl FitFieldExdDisplayType {
@@ -8817,7 +8994,7 @@ impl From<u8> for FitFieldExdDisplayType {
             8 => FitFieldExdDisplayType::String,
             9 => FitFieldExdDisplayType::SimpleDynamicIcon,
             10 => FitFieldExdDisplayType::Gauge,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdDisplayType", invalid_field_num))
+            _ => FitFieldExdDisplayType::UnknownToSdk
         }
     }
 }
@@ -8835,6 +9012,7 @@ pub enum FitFieldSourceType { // fit base type: enum
     BluetoothLowEnergy = 3,  // External device connected with BLE
     Wifi = 4,  // External device connected with Wifi
     Local = 5,  // Onboard device
+    UnknownToSdk = -1
 }
 
 impl FitFieldSourceType {
@@ -8853,7 +9031,7 @@ impl From<u8> for FitFieldSourceType {
             3 => FitFieldSourceType::BluetoothLowEnergy,
             4 => FitFieldSourceType::Wifi,
             5 => FitFieldSourceType::Local,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSourceType", invalid_field_num))
+            _ => FitFieldSourceType::UnknownToSdk
         }
     }
 }
@@ -8868,6 +9046,7 @@ pub enum FitFieldDisplayHeart { // fit base type: enum
     Bpm = 0,
     Max = 1,
     Reserve = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDisplayHeart {
@@ -8883,7 +9062,7 @@ impl From<u8> for FitFieldDisplayHeart {
             0 => FitFieldDisplayHeart::Bpm,
             1 => FitFieldDisplayHeart::Max,
             2 => FitFieldDisplayHeart::Reserve,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDisplayHeart", invalid_field_num))
+            _ => FitFieldDisplayHeart::UnknownToSdk
         }
     }
 }
@@ -8968,6 +9147,7 @@ pub enum FitFieldCoreExerciseName { // fit base type: uint16
     Swimming = 70,
     Teaser = 71,
     TheHundred = 72,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCoreExerciseName {
@@ -9053,7 +9233,7 @@ impl From<u16> for FitFieldCoreExerciseName {
             70 => FitFieldCoreExerciseName::Swimming,
             71 => FitFieldCoreExerciseName::Teaser,
             72 => FitFieldCoreExerciseName::TheHundred,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCoreExerciseName", invalid_field_num))
+            _ => FitFieldCoreExerciseName::UnknownToSdk
         }
     }
 }
@@ -9150,6 +9330,7 @@ pub enum FitFieldCrunchExerciseName { // fit base type: uint16
     WeightedToesToBar = 82,
     Crunch = 83,
     StraightLegCrunchWithBall = 84,
+    UnknownToSdk = -1
 }
 
 impl FitFieldCrunchExerciseName {
@@ -9247,7 +9428,7 @@ impl From<u16> for FitFieldCrunchExerciseName {
             82 => FitFieldCrunchExerciseName::WeightedToesToBar,
             83 => FitFieldCrunchExerciseName::Crunch,
             84 => FitFieldCrunchExerciseName::StraightLegCrunchWithBall,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldCrunchExerciseName", invalid_field_num))
+            _ => FitFieldCrunchExerciseName::UnknownToSdk
         }
     }
 }
@@ -9259,6 +9440,7 @@ impl From<u16> for FitFieldCrunchExerciseName {
 
 #[derive(Debug, PartialEq)]
 pub enum FitFieldTimeIntoDay { // fit base type: uint32
+    UnknownToSdk = -1
 }
 
 impl FitFieldTimeIntoDay {
@@ -9271,7 +9453,7 @@ impl FitFieldTimeIntoDay {
 impl From<u32> for FitFieldTimeIntoDay {
     fn from(code: u32) -> Self {
         match code {
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldTimeIntoDay", invalid_field_num))
+            _ => FitFieldTimeIntoDay::UnknownToSdk
         }
     }
 }
@@ -9287,6 +9469,7 @@ pub enum FitFieldRunExerciseName { // fit base type: uint16
     Walk = 1,
     Jog = 2,
     Sprint = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldRunExerciseName {
@@ -9303,7 +9486,7 @@ impl From<u16> for FitFieldRunExerciseName {
             1 => FitFieldRunExerciseName::Walk,
             2 => FitFieldRunExerciseName::Jog,
             3 => FitFieldRunExerciseName::Sprint,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldRunExerciseName", invalid_field_num))
+            _ => FitFieldRunExerciseName::UnknownToSdk
         }
     }
 }
@@ -9318,6 +9501,7 @@ pub enum FitFieldHipSwingExerciseName { // fit base type: uint16
     SingleArmKettlebellSwing = 0,
     SingleArmDumbbellSwing = 1,
     StepOutSwing = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldHipSwingExerciseName {
@@ -9333,7 +9517,7 @@ impl From<u16> for FitFieldHipSwingExerciseName {
             0 => FitFieldHipSwingExerciseName::SingleArmKettlebellSwing,
             1 => FitFieldHipSwingExerciseName::SingleArmDumbbellSwing,
             2 => FitFieldHipSwingExerciseName::StepOutSwing,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldHipSwingExerciseName", invalid_field_num))
+            _ => FitFieldHipSwingExerciseName::UnknownToSdk
         }
     }
 }
@@ -9352,6 +9536,7 @@ pub enum FitFieldSwimStroke { // fit base type: enum
     Drill = 4,
     Mixed = 5,
     Im = 6,  // IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order.
+    UnknownToSdk = -1
 }
 
 impl FitFieldSwimStroke {
@@ -9371,7 +9556,7 @@ impl From<u8> for FitFieldSwimStroke {
             4 => FitFieldSwimStroke::Drill,
             5 => FitFieldSwimStroke::Mixed,
             6 => FitFieldSwimStroke::Im,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSwimStroke", invalid_field_num))
+            _ => FitFieldSwimStroke::UnknownToSdk
         }
     }
 }
@@ -9391,6 +9576,7 @@ pub enum FitFieldSupportedExdScreenLayouts { // fit base type: uint32z
     FullQuarterSplit = 32,
     HalfVerticalLeftSplit = 64,
     HalfHorizontalTopSplit = 128,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSupportedExdScreenLayouts {
@@ -9415,7 +9601,7 @@ impl From<u32> for FitFieldSupportedExdScreenLayouts {
             32 => FitFieldSupportedExdScreenLayouts::FullQuarterSplit,
             64 => FitFieldSupportedExdScreenLayouts::HalfVerticalLeftSplit,
             128 => FitFieldSupportedExdScreenLayouts::HalfHorizontalTopSplit,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSupportedExdScreenLayouts", invalid_field_num))
+            _ => FitFieldSupportedExdScreenLayouts::UnknownToSdk
         }
     }
 }
@@ -9430,6 +9616,7 @@ pub enum FitFieldSwitch { // fit base type: enum
     Off = 0,
     On = 1,
     Auto = 2,
+    UnknownToSdk = -1
 }
 
 impl FitFieldSwitch {
@@ -9445,7 +9632,7 @@ impl From<u8> for FitFieldSwitch {
             0 => FitFieldSwitch::Off,
             1 => FitFieldSwitch::On,
             2 => FitFieldSwitch::Auto,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldSwitch", invalid_field_num))
+            _ => FitFieldSwitch::UnknownToSdk
         }
     }
 }
@@ -9536,6 +9723,7 @@ pub enum FitFieldPushUpExerciseName { // fit base type: uint16
     WeightedRingPushUp = 76,
     PushUp = 77,
     PilatesPushup = 78,
+    UnknownToSdk = -1
 }
 
 impl FitFieldPushUpExerciseName {
@@ -9627,7 +9815,7 @@ impl From<u16> for FitFieldPushUpExerciseName {
             76 => FitFieldPushUpExerciseName::WeightedRingPushUp,
             77 => FitFieldPushUpExerciseName::PushUp,
             78 => FitFieldPushUpExerciseName::PilatesPushup,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldPushUpExerciseName", invalid_field_num))
+            _ => FitFieldPushUpExerciseName::UnknownToSdk
         }
     }
 }
@@ -9726,6 +9914,7 @@ pub enum FitFieldMesgNum { // fit base type: uint16
     DiveSummary = 268,
     MfgRangeMin = 65280,  // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
     MfgRangeMax = 65534,  // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
+    UnknownToSdk = -1
 }
 
 impl FitFieldMesgNum {
@@ -9825,7 +10014,7 @@ impl From<u16> for FitFieldMesgNum {
             268 => FitFieldMesgNum::DiveSummary,
             65280 => FitFieldMesgNum::MfgRangeMin,
             65534 => FitFieldMesgNum::MfgRangeMax,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldMesgNum", invalid_field_num))
+            _ => FitFieldMesgNum::UnknownToSdk
         }
     }
 }
@@ -9856,6 +10045,7 @@ pub enum FitFieldDeadliftExerciseName { // fit base type: uint16
     SumoDeadliftHighPull = 16,
     TrapBarDeadlift = 17,
     WideGripBarbellDeadlift = 18,
+    UnknownToSdk = -1
 }
 
 impl FitFieldDeadliftExerciseName {
@@ -9887,7 +10077,7 @@ impl From<u16> for FitFieldDeadliftExerciseName {
             16 => FitFieldDeadliftExerciseName::SumoDeadliftHighPull,
             17 => FitFieldDeadliftExerciseName::TrapBarDeadlift,
             18 => FitFieldDeadliftExerciseName::WideGripBarbellDeadlift,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldDeadliftExerciseName", invalid_field_num))
+            _ => FitFieldDeadliftExerciseName::UnknownToSdk
         }
     }
 }
@@ -9903,6 +10093,7 @@ pub enum FitFieldAntNetwork { // fit base type: enum
     Antplus = 1,
     Antfs = 2,
     Private = 3,
+    UnknownToSdk = -1
 }
 
 impl FitFieldAntNetwork {
@@ -9919,7 +10110,7 @@ impl From<u8> for FitFieldAntNetwork {
             1 => FitFieldAntNetwork::Antplus,
             2 => FitFieldAntNetwork::Antfs,
             3 => FitFieldAntNetwork::Private,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldAntNetwork", invalid_field_num))
+            _ => FitFieldAntNetwork::UnknownToSdk
         }
     }
 }
@@ -9981,6 +10172,7 @@ pub enum FitFieldExdDataUnits { // fit base type: enum
     MetersPerMin = 47,
     MetersPerSec = 48,
     EightCardinal = 49,
+    UnknownToSdk = -1
 }
 
 impl FitFieldExdDataUnits {
@@ -10043,7 +10235,7 @@ impl From<u8> for FitFieldExdDataUnits {
             47 => FitFieldExdDataUnits::MetersPerMin,
             48 => FitFieldExdDataUnits::MetersPerSec,
             49 => FitFieldExdDataUnits::EightCardinal,
-            invalid_field_num => panic!(format!("invalid field_num {} for FitFieldExdDataUnits", invalid_field_num))
+            _ => FitFieldExdDataUnits::UnknownToSdk
         }
     }
 }
@@ -10052,6 +10244,7 @@ pub struct FitMessageAccelerometerData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -10070,12 +10263,13 @@ pub struct FitMessageAccelerometerData {
 }
 impl FitMessageAccelerometerData {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAccelerometerData>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAccelerometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAccelerometerData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageAccelerometerData",
             timestamp: None,
@@ -10106,6 +10300,20 @@ impl FitMessageAccelerometerData {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -10336,7 +10544,13 @@ impl FitMessageAccelerometerData {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -10349,6 +10563,7 @@ pub struct FitMessageActivity {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -10363,12 +10578,13 @@ pub struct FitMessageActivity {
 }
 impl FitMessageActivity {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageActivity>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageActivity>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageActivity {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageActivity",
             timestamp: None,
@@ -10395,6 +10611,20 @@ impl FitMessageActivity {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -10557,7 +10787,13 @@ impl FitMessageActivity {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -10570,6 +10806,7 @@ pub struct FitMessageAntChannelId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub channel_number: Option<u8>,  
@@ -10581,12 +10818,13 @@ pub struct FitMessageAntChannelId {
 }
 impl FitMessageAntChannelId {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntChannelId>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntChannelId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntChannelId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageAntChannelId",
             channel_number: None,
@@ -10721,7 +10959,13 @@ impl FitMessageAntChannelId {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -10734,6 +10978,7 @@ pub struct FitMessageAntRx {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -10746,12 +10991,13 @@ pub struct FitMessageAntRx {
 }
 impl FitMessageAntRx {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntRx>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntRx>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntRx {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageAntRx",
             timestamp: None,
@@ -10776,6 +11022,20 @@ impl FitMessageAntRx {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -10913,7 +11173,13 @@ impl FitMessageAntRx {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -10926,6 +11192,7 @@ pub struct FitMessageAntTx {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -10938,12 +11205,13 @@ pub struct FitMessageAntTx {
 }
 impl FitMessageAntTx {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAntTx>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntTx>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntTx {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageAntTx",
             timestamp: None,
@@ -10968,6 +11236,20 @@ impl FitMessageAntTx {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -11105,7 +11387,13 @@ impl FitMessageAntTx {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -11118,6 +11406,7 @@ pub struct FitMessageAviationAttitude {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
@@ -11136,12 +11425,13 @@ pub struct FitMessageAviationAttitude {
 }
 impl FitMessageAviationAttitude {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageAviationAttitude>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAviationAttitude>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAviationAttitude {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageAviationAttitude",
             timestamp: None,
@@ -11172,6 +11462,20 @@ impl FitMessageAviationAttitude {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -11402,7 +11706,13 @@ impl FitMessageAviationAttitude {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -11415,6 +11725,7 @@ pub struct FitMessageBarometerData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -11425,12 +11736,13 @@ pub struct FitMessageBarometerData {
 }
 impl FitMessageBarometerData {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageBarometerData>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBarometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBarometerData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageBarometerData",
             timestamp: None,
@@ -11453,6 +11765,20 @@ impl FitMessageBarometerData {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -11547,7 +11873,13 @@ impl FitMessageBarometerData {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -11560,6 +11892,7 @@ pub struct FitMessageBikeProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -11598,12 +11931,13 @@ pub struct FitMessageBikeProfile {
 }
 impl FitMessageBikeProfile {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageBikeProfile>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBikeProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBikeProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageBikeProfile",
             message_index: None,
@@ -12224,7 +12558,13 @@ impl FitMessageBikeProfile {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -12237,6 +12577,7 @@ pub struct FitMessageBloodPressure {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -12254,12 +12595,13 @@ pub struct FitMessageBloodPressure {
 }
 impl FitMessageBloodPressure {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageBloodPressure>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBloodPressure>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBloodPressure {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageBloodPressure",
             timestamp: None,
@@ -12289,6 +12631,20 @@ impl FitMessageBloodPressure {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -12502,7 +12858,13 @@ impl FitMessageBloodPressure {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -12515,6 +12877,7 @@ pub struct FitMessageCadenceZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -12524,12 +12887,13 @@ pub struct FitMessageCadenceZone {
 }
 impl FitMessageCadenceZone {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCadenceZone>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCadenceZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCadenceZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageCadenceZone",
             message_index: None,
@@ -12628,7 +12992,13 @@ impl FitMessageCadenceZone {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -12641,6 +13011,7 @@ pub struct FitMessageCameraEvent {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
@@ -12652,12 +13023,13 @@ pub struct FitMessageCameraEvent {
 }
 impl FitMessageCameraEvent {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCameraEvent>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCameraEvent>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCameraEvent {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageCameraEvent",
             timestamp: None,
@@ -12681,6 +13053,20 @@ impl FitMessageCameraEvent {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -12792,7 +13178,13 @@ impl FitMessageCameraEvent {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -12805,6 +13197,7 @@ pub struct FitMessageCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub languages: Option<u8>,  // Use language_bits_x types where x is index of array.
@@ -12815,12 +13208,13 @@ pub struct FitMessageCapabilities {
 }
 impl FitMessageCapabilities {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCapabilities>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageCapabilities",
             languages: None,
@@ -12937,7 +13331,13 @@ impl FitMessageCapabilities {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -12950,6 +13350,7 @@ pub struct FitMessageConnectivity {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub bluetooth_enabled: Option<bool>,  // Use Bluetooth for connectivity features
@@ -12969,12 +13370,13 @@ pub struct FitMessageConnectivity {
 }
 impl FitMessageConnectivity {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageConnectivity>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageConnectivity>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageConnectivity {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageConnectivity",
             bluetooth_enabled: None,
@@ -13253,7 +13655,13 @@ impl FitMessageConnectivity {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -13266,6 +13674,7 @@ pub struct FitMessageCourse {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub sport: Option<FitFieldSport>,  
@@ -13276,12 +13685,13 @@ pub struct FitMessageCourse {
 }
 impl FitMessageCourse {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCourse>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCourse>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCourse {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageCourse",
             sport: None,
@@ -13398,7 +13808,13 @@ impl FitMessageCourse {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -13411,6 +13827,7 @@ pub struct FitMessageCoursePoint {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -13425,12 +13842,13 @@ pub struct FitMessageCoursePoint {
 }
 impl FitMessageCoursePoint {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageCoursePoint>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCoursePoint>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCoursePoint {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageCoursePoint",
             message_index: None,
@@ -13457,6 +13875,20 @@ impl FitMessageCoursePoint {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -13619,7 +14051,13 @@ impl FitMessageCoursePoint {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -13632,6 +14070,7 @@ pub struct FitMessageDeveloperDataId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub developer_id: Option<Vec<u8>>,  
@@ -13643,12 +14082,13 @@ pub struct FitMessageDeveloperDataId {
 }
 impl FitMessageDeveloperDataId {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeveloperDataId>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeveloperDataId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeveloperDataId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDeveloperDataId",
             developer_id: None,
@@ -13783,7 +14223,13 @@ impl FitMessageDeveloperDataId {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -13864,6 +14310,7 @@ pub struct FitMessageDeviceInfo {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -13888,12 +14335,13 @@ pub struct FitMessageDeviceInfo {
 }
 impl FitMessageDeviceInfo {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceInfo>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeviceInfo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeviceInfo {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDeviceInfo",
             timestamp: None,
@@ -13930,6 +14378,20 @@ impl FitMessageDeviceInfo {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -14262,7 +14724,13 @@ impl FitMessageDeviceInfo {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -14275,6 +14743,7 @@ pub struct FitMessageDeviceSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub active_time_zone: Option<u8>,  // Index into time zone arrays.
@@ -14304,12 +14773,13 @@ pub struct FitMessageDeviceSettings {
 }
 impl FitMessageDeviceSettings {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDeviceSettings>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeviceSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeviceSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDeviceSettings",
             active_time_zone: None,
@@ -14768,7 +15238,13 @@ impl FitMessageDeviceSettings {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -14781,6 +15257,7 @@ pub struct FitMessageDiveAlarm {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Index of the alarm
@@ -14794,12 +15271,13 @@ pub struct FitMessageDiveAlarm {
 }
 impl FitMessageDiveAlarm {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveAlarm>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveAlarm>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveAlarm {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDiveAlarm",
             message_index: None,
@@ -14970,7 +15448,13 @@ impl FitMessageDiveAlarm {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -14983,6 +15467,7 @@ pub struct FitMessageDiveGas {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -14993,12 +15478,13 @@ pub struct FitMessageDiveGas {
 }
 impl FitMessageDiveGas {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveGas>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveGas>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveGas {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDiveGas",
             message_index: None,
@@ -15115,7 +15601,13 @@ impl FitMessageDiveGas {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -15157,6 +15649,7 @@ pub struct FitMessageDiveSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -15185,12 +15678,13 @@ pub struct FitMessageDiveSettings {
 }
 impl FitMessageDiveSettings {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveSettings>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDiveSettings",
             message_index: None,
@@ -15631,7 +16125,13 @@ impl FitMessageDiveSettings {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -15644,6 +16144,7 @@ pub struct FitMessageDiveSummary {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -15663,12 +16164,13 @@ pub struct FitMessageDiveSummary {
 }
 impl FitMessageDiveSummary {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageDiveSummary>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveSummary>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveSummary {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageDiveSummary",
             timestamp: None,
@@ -15700,6 +16202,20 @@ impl FitMessageDiveSummary {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -15947,7 +16463,13 @@ impl FitMessageDiveSummary {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -16102,6 +16624,7 @@ pub struct FitMessageEvent {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -16121,12 +16644,13 @@ pub struct FitMessageEvent {
 }
 impl FitMessageEvent {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageEvent>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageEvent>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageEvent {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageEvent",
             timestamp: None,
@@ -16158,6 +16682,20 @@ impl FitMessageEvent {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -16406,7 +16944,13 @@ impl FitMessageEvent {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -16419,6 +16963,7 @@ pub struct FitMessageExdDataConceptConfiguration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub screen_index: Option<u8>,  
@@ -16436,12 +16981,13 @@ pub struct FitMessageExdDataConceptConfiguration {
 }
 impl FitMessageExdDataConceptConfiguration {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataConceptConfiguration>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdDataConceptConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataConceptConfiguration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageExdDataConceptConfiguration",
             screen_index: None,
@@ -16686,7 +17232,13 @@ impl FitMessageExdDataConceptConfiguration {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -16699,6 +17251,7 @@ pub struct FitMessageExdDataFieldConfiguration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub screen_index: Option<u8>,  
@@ -16711,12 +17264,13 @@ pub struct FitMessageExdDataFieldConfiguration {
 }
 impl FitMessageExdDataFieldConfiguration {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdDataFieldConfiguration>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdDataFieldConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataFieldConfiguration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageExdDataFieldConfiguration",
             screen_index: None,
@@ -16871,7 +17425,13 @@ impl FitMessageExdDataFieldConfiguration {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -16884,6 +17444,7 @@ pub struct FitMessageExdScreenConfiguration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub screen_index: Option<u8>,  
@@ -16894,12 +17455,13 @@ pub struct FitMessageExdScreenConfiguration {
 }
 impl FitMessageExdScreenConfiguration {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExdScreenConfiguration>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdScreenConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdScreenConfiguration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageExdScreenConfiguration",
             screen_index: None,
@@ -17016,7 +17578,13 @@ impl FitMessageExdScreenConfiguration {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -17029,6 +17597,7 @@ pub struct FitMessageExerciseTitle {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -17039,12 +17608,13 @@ pub struct FitMessageExerciseTitle {
 }
 impl FitMessageExerciseTitle {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageExerciseTitle>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExerciseTitle>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExerciseTitle {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageExerciseTitle",
             message_index: None,
@@ -17161,7 +17731,13 @@ impl FitMessageExerciseTitle {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -17174,6 +17750,7 @@ pub struct FitMessageFieldCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -17185,12 +17762,13 @@ pub struct FitMessageFieldCapabilities {
 }
 impl FitMessageFieldCapabilities {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldCapabilities>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFieldCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFieldCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageFieldCapabilities",
             message_index: None,
@@ -17325,7 +17903,13 @@ impl FitMessageFieldCapabilities {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -17338,6 +17922,7 @@ pub struct FitMessageFieldDescription {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub developer_data_index: Option<u8>,  
@@ -17358,12 +17943,13 @@ pub struct FitMessageFieldDescription {
 }
 impl FitMessageFieldDescription {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFieldDescription>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFieldDescription>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFieldDescription {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageFieldDescription",
             developer_data_index: None,
@@ -17660,7 +18246,13 @@ impl FitMessageFieldDescription {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -17673,6 +18265,7 @@ pub struct FitMessageFileCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -17685,12 +18278,13 @@ pub struct FitMessageFileCapabilities {
 }
 impl FitMessageFileCapabilities {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCapabilities>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageFileCapabilities",
             message_index: None,
@@ -17843,7 +18437,13 @@ impl FitMessageFileCapabilities {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -17856,6 +18456,7 @@ pub struct FitMessageFileCreator {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub software_version: Option<u16>,  
@@ -17864,12 +18465,13 @@ pub struct FitMessageFileCreator {
 }
 impl FitMessageFileCreator {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileCreator>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileCreator>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCreator {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageFileCreator",
             software_version: None,
@@ -17950,7 +18552,13 @@ impl FitMessageFileCreator {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -18002,6 +18610,7 @@ pub struct FitMessageFileId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub ftype: Option<FitFieldFile>,  
@@ -18015,12 +18624,13 @@ pub struct FitMessageFileId {
 }
 impl FitMessageFileId {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageFileId>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageFileId",
             ftype: None,
@@ -18191,7 +18801,13 @@ impl FitMessageFileId {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -18204,6 +18820,7 @@ pub struct FitMessageGoal {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -18223,12 +18840,13 @@ pub struct FitMessageGoal {
 }
 impl FitMessageGoal {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageGoal>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGoal>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGoal {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageGoal",
             message_index: None,
@@ -18507,7 +19125,13 @@ impl FitMessageGoal {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -18520,6 +19144,7 @@ pub struct FitMessageGpsMetadata {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
@@ -18535,12 +19160,13 @@ pub struct FitMessageGpsMetadata {
 }
 impl FitMessageGpsMetadata {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageGpsMetadata>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGpsMetadata>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGpsMetadata {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageGpsMetadata",
             timestamp: None,
@@ -18568,6 +19194,20 @@ impl FitMessageGpsMetadata {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -18747,7 +19387,13 @@ impl FitMessageGpsMetadata {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -18760,6 +19406,7 @@ pub struct FitMessageGyroscopeData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -18775,12 +19422,13 @@ pub struct FitMessageGyroscopeData {
 }
 impl FitMessageGyroscopeData {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageGyroscopeData>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGyroscopeData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageGyroscopeData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageGyroscopeData",
             timestamp: None,
@@ -18808,6 +19456,20 @@ impl FitMessageGyroscopeData {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -18987,7 +19649,13 @@ impl FitMessageGyroscopeData {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -19000,6 +19668,7 @@ pub struct FitMessageHr {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -19012,12 +19681,13 @@ pub struct FitMessageHr {
 }
 impl FitMessageHr {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHr>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHr>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHr {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageHr",
             timestamp: None,
@@ -19042,6 +19712,20 @@ impl FitMessageHr {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -19181,7 +19865,13 @@ impl FitMessageHr {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -19194,6 +19884,7 @@ pub struct FitMessageHrZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -19203,12 +19894,13 @@ pub struct FitMessageHrZone {
 }
 impl FitMessageHrZone {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrZone>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageHrZone",
             message_index: None,
@@ -19307,7 +19999,13 @@ impl FitMessageHrZone {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -19320,6 +20018,7 @@ pub struct FitMessageHrmProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -19331,12 +20030,13 @@ pub struct FitMessageHrmProfile {
 }
 impl FitMessageHrmProfile {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrmProfile>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrmProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrmProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageHrmProfile",
             message_index: None,
@@ -19471,7 +20171,13 @@ impl FitMessageHrmProfile {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -19484,6 +20190,7 @@ pub struct FitMessageHrv {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub time: Option<f64>,  // Time between beats
@@ -19491,12 +20198,13 @@ pub struct FitMessageHrv {
 }
 impl FitMessageHrv {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageHrv>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrv>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrv {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageHrv",
             time: None,
@@ -19559,7 +20267,13 @@ impl FitMessageHrv {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -19646,6 +20360,7 @@ pub struct FitMessageLap {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -19758,12 +20473,13 @@ pub struct FitMessageLap {
 }
 impl FitMessageLap {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageLap>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageLap>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLap {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageLap",
             message_index: None,
@@ -19888,6 +20604,20 @@ impl FitMessageLap {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -21721,7 +22451,13 @@ impl FitMessageLap {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -21734,6 +22470,7 @@ pub struct FitMessageLength {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -21758,12 +22495,13 @@ pub struct FitMessageLength {
 }
 impl FitMessageLength {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageLength>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageLength>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLength {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageLength",
             message_index: None,
@@ -21800,6 +22538,20 @@ impl FitMessageLength {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -22132,7 +22884,13 @@ impl FitMessageLength {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -22145,6 +22903,7 @@ pub struct FitMessageMagnetometerData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -22160,12 +22919,13 @@ pub struct FitMessageMagnetometerData {
 }
 impl FitMessageMagnetometerData {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMagnetometerData>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMagnetometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMagnetometerData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageMagnetometerData",
             timestamp: None,
@@ -22193,6 +22953,20 @@ impl FitMessageMagnetometerData {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -22372,7 +23146,13 @@ impl FitMessageMagnetometerData {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -22385,6 +23165,7 @@ pub struct FitMessageMemoGlob {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub part_index: Option<u32>,  // Sequence number of memo blocks
@@ -22395,12 +23176,13 @@ pub struct FitMessageMemoGlob {
 }
 impl FitMessageMemoGlob {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMemoGlob>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMemoGlob>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMemoGlob {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageMemoGlob",
             part_index: None,
@@ -22517,7 +23299,13 @@ impl FitMessageMemoGlob {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -22565,6 +23353,7 @@ pub struct FitMessageMesgCapabilities {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -22576,12 +23365,13 @@ pub struct FitMessageMesgCapabilities {
 }
 impl FitMessageMesgCapabilities {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMesgCapabilities>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMesgCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMesgCapabilities {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageMesgCapabilities",
             message_index: None,
@@ -22716,7 +23506,13 @@ impl FitMessageMesgCapabilities {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -22729,6 +23525,7 @@ pub struct FitMessageMetZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -22739,12 +23536,13 @@ pub struct FitMessageMetZone {
 }
 impl FitMessageMetZone {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMetZone>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMetZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMetZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageMetZone",
             message_index: None,
@@ -22861,7 +23659,13 @@ impl FitMessageMetZone {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -22913,6 +23717,7 @@ pub struct FitMessageMonitoring {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Must align to logging interval, for example, time must be 00:00:00 for daily log.
@@ -22948,12 +23753,13 @@ pub struct FitMessageMonitoring {
 }
 impl FitMessageMonitoring {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoring>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMonitoring>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoring {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageMonitoring",
             timestamp: None,
@@ -23001,6 +23807,20 @@ impl FitMessageMonitoring {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -23522,7 +24342,13 @@ impl FitMessageMonitoring {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -23535,6 +24361,7 @@ pub struct FitMessageMonitoringInfo {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -23547,12 +24374,13 @@ pub struct FitMessageMonitoringInfo {
 }
 impl FitMessageMonitoringInfo {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageMonitoringInfo>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMonitoringInfo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoringInfo {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageMonitoringInfo",
             timestamp: None,
@@ -23577,6 +24405,20 @@ impl FitMessageMonitoringInfo {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -23705,7 +24547,13 @@ impl FitMessageMonitoringInfo {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -23718,6 +24566,7 @@ pub struct FitMessageNmeaSentence {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
@@ -23727,12 +24576,13 @@ pub struct FitMessageNmeaSentence {
 }
 impl FitMessageNmeaSentence {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageNmeaSentence>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageNmeaSentence>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageNmeaSentence {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageNmeaSentence",
             timestamp: None,
@@ -23754,6 +24604,20 @@ impl FitMessageNmeaSentence {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -23831,7 +24695,13 @@ impl FitMessageNmeaSentence {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -23844,6 +24714,7 @@ pub struct FitMessageObdiiData {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp message was output
@@ -23859,12 +24730,13 @@ pub struct FitMessageObdiiData {
 }
 impl FitMessageObdiiData {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageObdiiData>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageObdiiData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageObdiiData {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageObdiiData",
             timestamp: None,
@@ -23892,6 +24764,20 @@ impl FitMessageObdiiData {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -24071,7 +24957,13 @@ impl FitMessageObdiiData {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -24084,6 +24976,7 @@ pub struct FitMessageOhrSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -24092,12 +24985,13 @@ pub struct FitMessageOhrSettings {
 }
 impl FitMessageOhrSettings {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageOhrSettings>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageOhrSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageOhrSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageOhrSettings",
             timestamp: None,
@@ -24118,6 +25012,20 @@ impl FitMessageOhrSettings {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -24178,7 +25086,13 @@ impl FitMessageOhrSettings {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -24214,6 +25128,7 @@ pub struct FitMessageOneDSensorCalibration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -24226,12 +25141,13 @@ pub struct FitMessageOneDSensorCalibration {
 }
 impl FitMessageOneDSensorCalibration {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageOneDSensorCalibration>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageOneDSensorCalibration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageOneDSensorCalibration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageOneDSensorCalibration",
             timestamp: None,
@@ -24256,6 +25172,20 @@ impl FitMessageOneDSensorCalibration {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -24384,7 +25314,13 @@ impl FitMessageOneDSensorCalibration {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -24397,6 +25333,7 @@ pub struct FitMessagePowerZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -24406,12 +25343,13 @@ pub struct FitMessagePowerZone {
 }
 impl FitMessagePowerZone {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessagePowerZone>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessagePowerZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessagePowerZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessagePowerZone",
             message_index: None,
@@ -24510,7 +25448,13 @@ impl FitMessagePowerZone {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -24523,6 +25467,7 @@ pub struct FitMessageRecord {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -24596,12 +25541,13 @@ pub struct FitMessageRecord {
 }
 impl FitMessageRecord {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageRecord>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageRecord>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageRecord {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageRecord",
             timestamp: None,
@@ -24687,6 +25633,20 @@ impl FitMessageRecord {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -25858,7 +26818,13 @@ impl FitMessageRecord {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -25910,6 +26876,7 @@ pub struct FitMessageSchedule {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub manufacturer: Option<FitFieldManufacturer>,  // Corresponds to file_id of scheduled workout / course.
@@ -25923,12 +26890,13 @@ pub struct FitMessageSchedule {
 }
 impl FitMessageSchedule {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSchedule>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSchedule>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSchedule {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSchedule",
             manufacturer: None,
@@ -26099,7 +27067,13 @@ impl FitMessageSchedule {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -26112,6 +27086,7 @@ pub struct FitMessageSdmProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -26126,12 +27101,13 @@ pub struct FitMessageSdmProfile {
 }
 impl FitMessageSdmProfile {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSdmProfile>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSdmProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSdmProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSdmProfile",
             message_index: None,
@@ -26320,7 +27296,13 @@ impl FitMessageSdmProfile {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -26333,6 +27315,7 @@ pub struct FitMessageSegmentFile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -26348,12 +27331,13 @@ pub struct FitMessageSegmentFile {
 }
 impl FitMessageSegmentFile {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentFile>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentFile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentFile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSegmentFile",
             message_index: None,
@@ -26560,7 +27544,13 @@ impl FitMessageSegmentFile {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -26573,6 +27563,7 @@ pub struct FitMessageSegmentId {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub name: Option<String>,  // Friendly name assigned to segment
@@ -26588,12 +27579,13 @@ pub struct FitMessageSegmentId {
 }
 impl FitMessageSegmentId {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentId>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentId {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSegmentId",
             name: None,
@@ -26800,7 +27792,13 @@ impl FitMessageSegmentId {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -26836,6 +27834,7 @@ pub struct FitMessageSegmentLap {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -26928,12 +27927,13 @@ pub struct FitMessageSegmentLap {
 }
 impl FitMessageSegmentLap {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLap>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentLap>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLap {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSegmentLap",
             message_index: None,
@@ -27038,6 +28038,20 @@ impl FitMessageSegmentLap {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -28526,7 +29540,13 @@ impl FitMessageSegmentLap {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -28539,6 +29559,7 @@ pub struct FitMessageSegmentLeaderboardEntry {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -28552,12 +29573,13 @@ pub struct FitMessageSegmentLeaderboardEntry {
 }
 impl FitMessageSegmentLeaderboardEntry {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLeaderboardEntry {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSegmentLeaderboardEntry",
             message_index: None,
@@ -28728,7 +29750,13 @@ impl FitMessageSegmentLeaderboardEntry {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -28741,6 +29769,7 @@ pub struct FitMessageSegmentPoint {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -28753,12 +29782,13 @@ pub struct FitMessageSegmentPoint {
 }
 impl FitMessageSegmentPoint {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSegmentPoint>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentPoint>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentPoint {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSegmentPoint",
             message_index: None,
@@ -28911,7 +29941,13 @@ impl FitMessageSegmentPoint {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -28998,6 +30034,7 @@ pub struct FitMessageSession {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Selected bit is set for the current session.
@@ -29123,12 +30160,13 @@ pub struct FitMessageSession {
 }
 impl FitMessageSession {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSession>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSession>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSession {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSession",
             message_index: None,
@@ -29266,6 +30304,20 @@ impl FitMessageSession {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -31320,7 +32372,13 @@ impl FitMessageSession {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -31333,6 +32391,7 @@ pub struct FitMessageSet {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Timestamp of the set
@@ -31350,12 +32409,13 @@ pub struct FitMessageSet {
 }
 impl FitMessageSet {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSet>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSet>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSet {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSet",
             timestamp: None,
@@ -31385,6 +32445,20 @@ impl FitMessageSet {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -31598,7 +32672,13 @@ impl FitMessageSet {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -31650,6 +32730,7 @@ pub struct FitMessageSlaveDevice {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub manufacturer: Option<FitFieldManufacturer>,  
@@ -31658,12 +32739,13 @@ pub struct FitMessageSlaveDevice {
 }
 impl FitMessageSlaveDevice {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSlaveDevice>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSlaveDevice>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSlaveDevice {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSlaveDevice",
             manufacturer: None,
@@ -31744,7 +32826,13 @@ impl FitMessageSlaveDevice {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -31757,6 +32845,7 @@ pub struct FitMessageSoftware {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -31766,12 +32855,13 @@ pub struct FitMessageSoftware {
 }
 impl FitMessageSoftware {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSoftware>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSoftware>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSoftware {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSoftware",
             message_index: None,
@@ -31870,7 +32960,13 @@ impl FitMessageSoftware {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -31883,6 +32979,7 @@ pub struct FitMessageSpeedZone {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -31892,12 +32989,13 @@ pub struct FitMessageSpeedZone {
 }
 impl FitMessageSpeedZone {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSpeedZone>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSpeedZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSpeedZone {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSpeedZone",
             message_index: None,
@@ -31996,7 +33094,13 @@ impl FitMessageSpeedZone {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -32009,6 +33113,7 @@ pub struct FitMessageSport {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub sport: Option<FitFieldSport>,  
@@ -32018,12 +33123,13 @@ pub struct FitMessageSport {
 }
 impl FitMessageSport {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageSport>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSport>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSport {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSport",
             sport: None,
@@ -32122,7 +33228,13 @@ impl FitMessageSport {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -32135,6 +33247,7 @@ pub struct FitMessageStressLevel {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub stress_level_value: Option<i16>,  
@@ -32143,12 +33256,13 @@ pub struct FitMessageStressLevel {
 }
 impl FitMessageStressLevel {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageStressLevel>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageStressLevel>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageStressLevel {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageStressLevel",
             stress_level_value: None,
@@ -32229,7 +33343,13 @@ impl FitMessageStressLevel {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -32271,6 +33391,7 @@ pub struct FitMessageThreeDSensorCalibration {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -32284,12 +33405,13 @@ pub struct FitMessageThreeDSensorCalibration {
 }
 impl FitMessageThreeDSensorCalibration {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageThreeDSensorCalibration>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageThreeDSensorCalibration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageThreeDSensorCalibration {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageThreeDSensorCalibration",
             timestamp: None,
@@ -32315,6 +33437,20 @@ impl FitMessageThreeDSensorCalibration {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -32460,7 +33596,13 @@ impl FitMessageThreeDSensorCalibration {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -32473,6 +33615,7 @@ pub struct FitMessageTimestampCorrelation {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of UTC timestamp at the time the system timestamp was recorded.
@@ -32486,12 +33629,13 @@ pub struct FitMessageTimestampCorrelation {
 }
 impl FitMessageTimestampCorrelation {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageTimestampCorrelation>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTimestampCorrelation>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTimestampCorrelation {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageTimestampCorrelation",
             timestamp: None,
@@ -32517,6 +33661,20 @@ impl FitMessageTimestampCorrelation {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -32662,7 +33820,13 @@ impl FitMessageTimestampCorrelation {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -32675,6 +33839,7 @@ pub struct FitMessageTotals {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -32691,12 +33856,13 @@ pub struct FitMessageTotals {
 }
 impl FitMessageTotals {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageTotals>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTotals>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTotals {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageTotals",
             message_index: None,
@@ -32725,6 +33891,20 @@ impl FitMessageTotals {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -32921,7 +34101,13 @@ impl FitMessageTotals {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -32973,6 +34159,7 @@ pub struct FitMessageTrainingFile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -32985,12 +34172,13 @@ pub struct FitMessageTrainingFile {
 }
 impl FitMessageTrainingFile {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageTrainingFile>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTrainingFile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTrainingFile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageTrainingFile",
             timestamp: None,
@@ -33015,6 +34203,20 @@ impl FitMessageTrainingFile {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -33143,7 +34345,13 @@ impl FitMessageTrainingFile {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -33156,6 +34364,7 @@ pub struct FitMessageUserProfile {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -33191,12 +34400,13 @@ pub struct FitMessageUserProfile {
 }
 impl FitMessageUserProfile {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageUserProfile>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageUserProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageUserProfile {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageUserProfile",
             message_index: None,
@@ -33763,7 +34973,13 @@ impl FitMessageUserProfile {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -33776,6 +34992,7 @@ pub struct FitMessageVideo {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub url: Option<String>,  
@@ -33785,12 +35002,13 @@ pub struct FitMessageVideo {
 }
 impl FitMessageVideo {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideo>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideo {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageVideo",
             url: None,
@@ -33889,7 +35107,13 @@ impl FitMessageVideo {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -33902,6 +35126,7 @@ pub struct FitMessageVideoClip {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub clip_number: Option<u16>,  
@@ -33915,12 +35140,13 @@ pub struct FitMessageVideoClip {
 }
 impl FitMessageVideoClip {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoClip>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoClip>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoClip {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageVideoClip",
             clip_number: None,
@@ -34091,7 +35317,13 @@ impl FitMessageVideoClip {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -34104,6 +35336,7 @@ pub struct FitMessageVideoDescription {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Long descriptions will be split into multiple parts
@@ -34113,12 +35346,13 @@ pub struct FitMessageVideoDescription {
 }
 impl FitMessageVideoDescription {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoDescription>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoDescription>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoDescription {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageVideoDescription",
             message_index: None,
@@ -34217,7 +35451,13 @@ impl FitMessageVideoDescription {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -34230,6 +35470,7 @@ pub struct FitMessageVideoFrame {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp
@@ -34239,12 +35480,13 @@ pub struct FitMessageVideoFrame {
 }
 impl FitMessageVideoFrame {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoFrame>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoFrame>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoFrame {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageVideoFrame",
             timestamp: None,
@@ -34266,6 +35508,20 @@ impl FitMessageVideoFrame {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -34343,7 +35599,13 @@ impl FitMessageVideoFrame {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -34356,6 +35618,7 @@ pub struct FitMessageVideoTitle {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  // Long titles will be split into multiple parts
@@ -34365,12 +35628,13 @@ pub struct FitMessageVideoTitle {
 }
 impl FitMessageVideoTitle {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageVideoTitle>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoTitle>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoTitle {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageVideoTitle",
             message_index: None,
@@ -34469,7 +35733,13 @@ impl FitMessageVideoTitle {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -34511,6 +35781,7 @@ pub struct FitMessageWatchfaceSettings {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -34520,12 +35791,13 @@ pub struct FitMessageWatchfaceSettings {
 }
 impl FitMessageWatchfaceSettings {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWatchfaceSettings>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWatchfaceSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWatchfaceSettings {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWatchfaceSettings",
             message_index: None,
@@ -34624,7 +35896,13 @@ impl FitMessageWatchfaceSettings {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -34637,6 +35915,7 @@ pub struct FitMessageWeatherAlert {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -34649,12 +35928,13 @@ pub struct FitMessageWeatherAlert {
 }
 impl FitMessageWeatherAlert {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherAlert>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeatherAlert>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeatherAlert {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWeatherAlert",
             timestamp: None,
@@ -34679,6 +35959,20 @@ impl FitMessageWeatherAlert {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -34807,7 +36101,13 @@ impl FitMessageWeatherAlert {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -34820,6 +36120,7 @@ pub struct FitMessageWeatherConditions {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // time of update for current conditions, else forecast time
@@ -34842,12 +36143,13 @@ pub struct FitMessageWeatherConditions {
 }
 impl FitMessageWeatherConditions {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeatherConditions>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeatherConditions>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeatherConditions {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWeatherConditions",
             timestamp: None,
@@ -34882,6 +36184,20 @@ impl FitMessageWeatherConditions {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -35180,7 +36496,13 @@ impl FitMessageWeatherConditions {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -35193,6 +36515,7 @@ pub struct FitMessageWeightScale {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
@@ -35212,12 +36535,13 @@ pub struct FitMessageWeightScale {
 }
 impl FitMessageWeightScale {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWeightScale>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeightScale>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeightScale {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWeightScale",
             timestamp: None,
@@ -35249,6 +36573,20 @@ impl FitMessageWeightScale {
             }
         };
 
+        
+        match _timestamp {
+            Some(ts) => {
+                message.timestamp = Some(ts);
+            },
+            None => {
+                match message.timestamp {
+                    Some(ts) => {
+                        parsing_state.set_last_timestamp(ts);
+                    },
+                    None => return Err(Error::missing_timestamp_field())
+                }
+            }
+        }
         
 
         let mut inp2 = o;
@@ -35496,7 +36834,13 @@ impl FitMessageWeightScale {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -35509,6 +36853,7 @@ pub struct FitMessageWorkout {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub sport: Option<FitFieldSport>,  
@@ -35522,12 +36867,13 @@ pub struct FitMessageWorkout {
 }
 impl FitMessageWorkout {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkout>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkout>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkout {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWorkout",
             sport: None,
@@ -35698,7 +37044,13 @@ impl FitMessageWorkout {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -35711,6 +37063,7 @@ pub struct FitMessageWorkoutSession {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -35724,12 +37077,13 @@ pub struct FitMessageWorkoutSession {
 }
 impl FitMessageWorkoutSession {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutSession>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkoutSession>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkoutSession {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWorkoutSession",
             message_index: None,
@@ -35900,7 +37254,13 @@ impl FitMessageWorkoutSession {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -36202,6 +37562,7 @@ pub struct FitMessageWorkoutStep {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
@@ -36223,12 +37584,13 @@ pub struct FitMessageWorkoutStep {
 }
 impl FitMessageWorkoutStep {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageWorkoutStep>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkoutStep>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkoutStep {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageWorkoutStep",
             message_index: None,
@@ -36543,7 +37905,13 @@ impl FitMessageWorkoutStep {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -36556,6 +37924,7 @@ pub struct FitMessageZonesTarget {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub max_heart_rate: Option<u8>,  
@@ -36567,12 +37936,13 @@ pub struct FitMessageZonesTarget {
 }
 impl FitMessageZonesTarget {
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(Rc<FitMessageZonesTarget>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageZonesTarget>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageZonesTarget {
             header: header,
             definition_message: Rc::clone(&definition_message),
             developer_fields: vec![],
+            unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageZonesTarget",
             max_heart_rate: None,
@@ -36707,7 +38077,13 @@ impl FitMessageZonesTarget {
                         Ok(())
                     },
                 
-                    invalid_field_num => return Err(Error::invalid_field_number(invalid_field_num))
+                    unknown_field_num => {
+                        let base_type = FitFieldFitBaseType::from(f.base_type);
+                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        message.unknown_fields.insert(unknown_field_num, val);
+                        saved_outp = outp;
+                        Ok(())
+                    }
                 };
             }
             inp = saved_outp;
@@ -36803,354 +38179,359 @@ pub enum FitDataMessage {
     WorkoutSession(Rc<FitMessageWorkoutSession>),
     WorkoutStep(Rc<FitMessageWorkoutStep>),
     ZonesTarget(Rc<FitMessageZonesTarget>),
+    UnknownToSdk(Rc<FitMessageUnknownToSdk>)
 }
 
 impl FitDataMessage {
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _offset_secs: Option<u8>) -> Result<(FitDataMessage, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             
-            FitFieldMesgNum::AccelerometerData => {
-                let (val, o) = FitMessageAccelerometerData::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::AccelerometerData(val), o))
-            },
-            FitFieldMesgNum::Activity => {
-                let (val, o) = FitMessageActivity::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Activity(val), o))
-            },
-            FitFieldMesgNum::AntChannelId => {
-                let (val, o) = FitMessageAntChannelId::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::AntChannelId(val), o))
-            },
-            FitFieldMesgNum::AntRx => {
-                let (val, o) = FitMessageAntRx::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::AntRx(val), o))
-            },
-            FitFieldMesgNum::AntTx => {
-                let (val, o) = FitMessageAntTx::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::AntTx(val), o))
-            },
-            FitFieldMesgNum::AviationAttitude => {
-                let (val, o) = FitMessageAviationAttitude::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::AviationAttitude(val), o))
-            },
-            FitFieldMesgNum::BarometerData => {
-                let (val, o) = FitMessageBarometerData::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::BarometerData(val), o))
-            },
-            FitFieldMesgNum::BikeProfile => {
-                let (val, o) = FitMessageBikeProfile::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::BikeProfile(val), o))
-            },
-            FitFieldMesgNum::BloodPressure => {
-                let (val, o) = FitMessageBloodPressure::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::BloodPressure(val), o))
-            },
-            FitFieldMesgNum::CadenceZone => {
-                let (val, o) = FitMessageCadenceZone::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::CadenceZone(val), o))
-            },
-            FitFieldMesgNum::CameraEvent => {
-                let (val, o) = FitMessageCameraEvent::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::CameraEvent(val), o))
-            },
-            FitFieldMesgNum::Capabilities => {
-                let (val, o) = FitMessageCapabilities::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Capabilities(val), o))
-            },
-            FitFieldMesgNum::Connectivity => {
-                let (val, o) = FitMessageConnectivity::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Connectivity(val), o))
-            },
-            FitFieldMesgNum::Course => {
-                let (val, o) = FitMessageCourse::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Course(val), o))
-            },
-            FitFieldMesgNum::CoursePoint => {
-                let (val, o) = FitMessageCoursePoint::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::CoursePoint(val), o))
-            },
-            FitFieldMesgNum::DeveloperDataId => {
-                let (val, o) = FitMessageDeveloperDataId::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DeveloperDataId(val), o))
-            },
-            FitFieldMesgNum::DeviceInfo => {
-                let (val, o) = FitMessageDeviceInfo::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DeviceInfo(val), o))
-            },
-            FitFieldMesgNum::DeviceSettings => {
-                let (val, o) = FitMessageDeviceSettings::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DeviceSettings(val), o))
-            },
-            FitFieldMesgNum::DiveAlarm => {
-                let (val, o) = FitMessageDiveAlarm::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DiveAlarm(val), o))
-            },
-            FitFieldMesgNum::DiveGas => {
-                let (val, o) = FitMessageDiveGas::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DiveGas(val), o))
-            },
-            FitFieldMesgNum::DiveSettings => {
-                let (val, o) = FitMessageDiveSettings::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DiveSettings(val), o))
-            },
-            FitFieldMesgNum::DiveSummary => {
-                let (val, o) = FitMessageDiveSummary::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::DiveSummary(val), o))
-            },
-            FitFieldMesgNum::Event => {
-                let (val, o) = FitMessageEvent::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Event(val), o))
-            },
-            FitFieldMesgNum::ExdDataConceptConfiguration => {
-                let (val, o) = FitMessageExdDataConceptConfiguration::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ExdDataConceptConfiguration(val), o))
-            },
-            FitFieldMesgNum::ExdDataFieldConfiguration => {
-                let (val, o) = FitMessageExdDataFieldConfiguration::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ExdDataFieldConfiguration(val), o))
-            },
-            FitFieldMesgNum::ExdScreenConfiguration => {
-                let (val, o) = FitMessageExdScreenConfiguration::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ExdScreenConfiguration(val), o))
-            },
-            FitFieldMesgNum::ExerciseTitle => {
-                let (val, o) = FitMessageExerciseTitle::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ExerciseTitle(val), o))
-            },
-            FitFieldMesgNum::FieldCapabilities => {
-                let (val, o) = FitMessageFieldCapabilities::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::FieldCapabilities(val), o))
-            },
-            FitFieldMesgNum::FieldDescription => {
-                let (val, o) = FitMessageFieldDescription::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::FieldDescription(val), o))
-            },
-            FitFieldMesgNum::FileCapabilities => {
-                let (val, o) = FitMessageFileCapabilities::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::FileCapabilities(val), o))
-            },
-            FitFieldMesgNum::FileCreator => {
-                let (val, o) = FitMessageFileCreator::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::FileCreator(val), o))
-            },
-            FitFieldMesgNum::FileId => {
-                let (val, o) = FitMessageFileId::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::FileId(val), o))
-            },
-            FitFieldMesgNum::Goal => {
-                let (val, o) = FitMessageGoal::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Goal(val), o))
-            },
-            FitFieldMesgNum::GpsMetadata => {
-                let (val, o) = FitMessageGpsMetadata::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::GpsMetadata(val), o))
-            },
-            FitFieldMesgNum::GyroscopeData => {
-                let (val, o) = FitMessageGyroscopeData::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::GyroscopeData(val), o))
-            },
-            FitFieldMesgNum::Hr => {
-                let (val, o) = FitMessageHr::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Hr(val), o))
-            },
-            FitFieldMesgNum::HrZone => {
-                let (val, o) = FitMessageHrZone::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::HrZone(val), o))
-            },
-            FitFieldMesgNum::HrmProfile => {
-                let (val, o) = FitMessageHrmProfile::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::HrmProfile(val), o))
-            },
-            FitFieldMesgNum::Hrv => {
-                let (val, o) = FitMessageHrv::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Hrv(val), o))
-            },
-            FitFieldMesgNum::Lap => {
-                let (val, o) = FitMessageLap::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Lap(val), o))
-            },
-            FitFieldMesgNum::Length => {
-                let (val, o) = FitMessageLength::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Length(val), o))
-            },
-            FitFieldMesgNum::MagnetometerData => {
-                let (val, o) = FitMessageMagnetometerData::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::MagnetometerData(val), o))
-            },
-            FitFieldMesgNum::MemoGlob => {
-                let (val, o) = FitMessageMemoGlob::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::MemoGlob(val), o))
-            },
-            FitFieldMesgNum::MesgCapabilities => {
-                let (val, o) = FitMessageMesgCapabilities::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::MesgCapabilities(val), o))
-            },
-            FitFieldMesgNum::MetZone => {
-                let (val, o) = FitMessageMetZone::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::MetZone(val), o))
-            },
-            FitFieldMesgNum::Monitoring => {
-                let (val, o) = FitMessageMonitoring::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Monitoring(val), o))
-            },
-            FitFieldMesgNum::MonitoringInfo => {
-                let (val, o) = FitMessageMonitoringInfo::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::MonitoringInfo(val), o))
-            },
-            FitFieldMesgNum::NmeaSentence => {
-                let (val, o) = FitMessageNmeaSentence::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::NmeaSentence(val), o))
-            },
-            FitFieldMesgNum::ObdiiData => {
-                let (val, o) = FitMessageObdiiData::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ObdiiData(val), o))
-            },
-            FitFieldMesgNum::OhrSettings => {
-                let (val, o) = FitMessageOhrSettings::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::OhrSettings(val), o))
-            },
-            FitFieldMesgNum::OneDSensorCalibration => {
-                let (val, o) = FitMessageOneDSensorCalibration::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::OneDSensorCalibration(val), o))
-            },
-            FitFieldMesgNum::PowerZone => {
-                let (val, o) = FitMessagePowerZone::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::PowerZone(val), o))
-            },
-            FitFieldMesgNum::Record => {
-                let (val, o) = FitMessageRecord::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Record(val), o))
-            },
-            FitFieldMesgNum::Schedule => {
-                let (val, o) = FitMessageSchedule::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Schedule(val), o))
-            },
-            FitFieldMesgNum::SdmProfile => {
-                let (val, o) = FitMessageSdmProfile::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SdmProfile(val), o))
-            },
-            FitFieldMesgNum::SegmentFile => {
-                let (val, o) = FitMessageSegmentFile::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SegmentFile(val), o))
-            },
-            FitFieldMesgNum::SegmentId => {
-                let (val, o) = FitMessageSegmentId::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SegmentId(val), o))
-            },
-            FitFieldMesgNum::SegmentLap => {
-                let (val, o) = FitMessageSegmentLap::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SegmentLap(val), o))
-            },
-            FitFieldMesgNum::SegmentLeaderboardEntry => {
-                let (val, o) = FitMessageSegmentLeaderboardEntry::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SegmentLeaderboardEntry(val), o))
-            },
-            FitFieldMesgNum::SegmentPoint => {
-                let (val, o) = FitMessageSegmentPoint::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SegmentPoint(val), o))
-            },
-            FitFieldMesgNum::Session => {
-                let (val, o) = FitMessageSession::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Session(val), o))
-            },
-            FitFieldMesgNum::Set => {
-                let (val, o) = FitMessageSet::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Set(val), o))
-            },
-            FitFieldMesgNum::SlaveDevice => {
-                let (val, o) = FitMessageSlaveDevice::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SlaveDevice(val), o))
-            },
-            FitFieldMesgNum::Software => {
-                let (val, o) = FitMessageSoftware::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Software(val), o))
-            },
-            FitFieldMesgNum::SpeedZone => {
-                let (val, o) = FitMessageSpeedZone::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::SpeedZone(val), o))
-            },
-            FitFieldMesgNum::Sport => {
-                let (val, o) = FitMessageSport::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Sport(val), o))
-            },
-            FitFieldMesgNum::StressLevel => {
-                let (val, o) = FitMessageStressLevel::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::StressLevel(val), o))
-            },
-            FitFieldMesgNum::ThreeDSensorCalibration => {
-                let (val, o) = FitMessageThreeDSensorCalibration::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ThreeDSensorCalibration(val), o))
-            },
-            FitFieldMesgNum::TimestampCorrelation => {
-                let (val, o) = FitMessageTimestampCorrelation::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::TimestampCorrelation(val), o))
-            },
-            FitFieldMesgNum::Totals => {
-                let (val, o) = FitMessageTotals::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Totals(val), o))
-            },
-            FitFieldMesgNum::TrainingFile => {
-                let (val, o) = FitMessageTrainingFile::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::TrainingFile(val), o))
-            },
-            FitFieldMesgNum::UserProfile => {
-                let (val, o) = FitMessageUserProfile::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::UserProfile(val), o))
-            },
-            FitFieldMesgNum::Video => {
-                let (val, o) = FitMessageVideo::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Video(val), o))
-            },
-            FitFieldMesgNum::VideoClip => {
-                let (val, o) = FitMessageVideoClip::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::VideoClip(val), o))
-            },
-            FitFieldMesgNum::VideoDescription => {
-                let (val, o) = FitMessageVideoDescription::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::VideoDescription(val), o))
-            },
-            FitFieldMesgNum::VideoFrame => {
-                let (val, o) = FitMessageVideoFrame::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::VideoFrame(val), o))
-            },
-            FitFieldMesgNum::VideoTitle => {
-                let (val, o) = FitMessageVideoTitle::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::VideoTitle(val), o))
-            },
-            FitFieldMesgNum::WatchfaceSettings => {
-                let (val, o) = FitMessageWatchfaceSettings::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::WatchfaceSettings(val), o))
-            },
-            FitFieldMesgNum::WeatherAlert => {
-                let (val, o) = FitMessageWeatherAlert::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::WeatherAlert(val), o))
-            },
-            FitFieldMesgNum::WeatherConditions => {
-                let (val, o) = FitMessageWeatherConditions::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::WeatherConditions(val), o))
-            },
-            FitFieldMesgNum::WeightScale => {
-                let (val, o) = FitMessageWeightScale::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::WeightScale(val), o))
-            },
-            FitFieldMesgNum::Workout => {
-                let (val, o) = FitMessageWorkout::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::Workout(val), o))
-            },
-            FitFieldMesgNum::WorkoutSession => {
-                let (val, o) = FitMessageWorkoutSession::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::WorkoutSession(val), o))
-            },
-            FitFieldMesgNum::WorkoutStep => {
-                let (val, o) = FitMessageWorkoutStep::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::WorkoutStep(val), o))
-            },
-            FitFieldMesgNum::ZonesTarget => {
-                let (val, o) = FitMessageZonesTarget::parse(input, header, parsing_state, _offset_secs)?;
-                Ok((FitDataMessage::ZonesTarget(val), o))
-            },
-            _ => Err(Error::unknown_error())
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
+                let (val, o) = FitMessageAccelerometerData::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::AccelerometerData(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Activity) => {
+                let (val, o) = FitMessageActivity::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Activity(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AntChannelId) => {
+                let (val, o) = FitMessageAntChannelId::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::AntChannelId(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AntRx) => {
+                let (val, o) = FitMessageAntRx::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::AntRx(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AntTx) => {
+                let (val, o) = FitMessageAntTx::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::AntTx(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AviationAttitude) => {
+                let (val, o) = FitMessageAviationAttitude::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::AviationAttitude(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::BarometerData) => {
+                let (val, o) = FitMessageBarometerData::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::BarometerData(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::BikeProfile) => {
+                let (val, o) = FitMessageBikeProfile::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::BikeProfile(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::BloodPressure) => {
+                let (val, o) = FitMessageBloodPressure::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::BloodPressure(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::CadenceZone) => {
+                let (val, o) = FitMessageCadenceZone::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::CadenceZone(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::CameraEvent) => {
+                let (val, o) = FitMessageCameraEvent::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::CameraEvent(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
+                let (val, o) = FitMessageCapabilities::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Capabilities(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
+                let (val, o) = FitMessageConnectivity::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Connectivity(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Course) => {
+                let (val, o) = FitMessageCourse::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Course(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::CoursePoint) => {
+                let (val, o) = FitMessageCoursePoint::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::CoursePoint(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DeveloperDataId) => {
+                let (val, o) = FitMessageDeveloperDataId::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DeveloperDataId(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceInfo) => {
+                let (val, o) = FitMessageDeviceInfo::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DeviceInfo(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceSettings) => {
+                let (val, o) = FitMessageDeviceSettings::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DeviceSettings(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveAlarm) => {
+                let (val, o) = FitMessageDiveAlarm::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DiveAlarm(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveGas) => {
+                let (val, o) = FitMessageDiveGas::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DiveGas(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSettings) => {
+                let (val, o) = FitMessageDiveSettings::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DiveSettings(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSummary) => {
+                let (val, o) = FitMessageDiveSummary::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::DiveSummary(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Event) => {
+                let (val, o) = FitMessageEvent::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Event(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataConceptConfiguration) => {
+                let (val, o) = FitMessageExdDataConceptConfiguration::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ExdDataConceptConfiguration(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataFieldConfiguration) => {
+                let (val, o) = FitMessageExdDataFieldConfiguration::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ExdDataFieldConfiguration(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExdScreenConfiguration) => {
+                let (val, o) = FitMessageExdScreenConfiguration::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ExdScreenConfiguration(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExerciseTitle) => {
+                let (val, o) = FitMessageExerciseTitle::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ExerciseTitle(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FieldCapabilities) => {
+                let (val, o) = FitMessageFieldCapabilities::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::FieldCapabilities(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription) => {
+                let (val, o) = FitMessageFieldDescription::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::FieldDescription(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FileCapabilities) => {
+                let (val, o) = FitMessageFileCapabilities::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::FileCapabilities(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FileCreator) => {
+                let (val, o) = FitMessageFileCreator::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::FileCreator(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FileId) => {
+                let (val, o) = FitMessageFileId::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::FileId(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Goal) => {
+                let (val, o) = FitMessageGoal::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Goal(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::GpsMetadata) => {
+                let (val, o) = FitMessageGpsMetadata::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::GpsMetadata(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::GyroscopeData) => {
+                let (val, o) = FitMessageGyroscopeData::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::GyroscopeData(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Hr) => {
+                let (val, o) = FitMessageHr::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Hr(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HrZone) => {
+                let (val, o) = FitMessageHrZone::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::HrZone(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HrmProfile) => {
+                let (val, o) = FitMessageHrmProfile::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::HrmProfile(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Hrv) => {
+                let (val, o) = FitMessageHrv::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Hrv(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
+                let (val, o) = FitMessageLap::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Lap(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Length) => {
+                let (val, o) = FitMessageLength::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Length(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MagnetometerData) => {
+                let (val, o) = FitMessageMagnetometerData::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::MagnetometerData(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MemoGlob) => {
+                let (val, o) = FitMessageMemoGlob::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::MemoGlob(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MesgCapabilities) => {
+                let (val, o) = FitMessageMesgCapabilities::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::MesgCapabilities(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MetZone) => {
+                let (val, o) = FitMessageMetZone::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::MetZone(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Monitoring) => {
+                let (val, o) = FitMessageMonitoring::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Monitoring(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MonitoringInfo) => {
+                let (val, o) = FitMessageMonitoringInfo::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::MonitoringInfo(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
+                let (val, o) = FitMessageNmeaSentence::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::NmeaSentence(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ObdiiData) => {
+                let (val, o) = FitMessageObdiiData::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ObdiiData(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::OhrSettings) => {
+                let (val, o) = FitMessageOhrSettings::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::OhrSettings(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::OneDSensorCalibration) => {
+                let (val, o) = FitMessageOneDSensorCalibration::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::OneDSensorCalibration(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::PowerZone) => {
+                let (val, o) = FitMessagePowerZone::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::PowerZone(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Record) => {
+                let (val, o) = FitMessageRecord::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Record(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Schedule) => {
+                let (val, o) = FitMessageSchedule::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Schedule(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SdmProfile) => {
+                let (val, o) = FitMessageSdmProfile::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SdmProfile(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentFile) => {
+                let (val, o) = FitMessageSegmentFile::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SegmentFile(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentId) => {
+                let (val, o) = FitMessageSegmentId::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SegmentId(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLap) => {
+                let (val, o) = FitMessageSegmentLap::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SegmentLap(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLeaderboardEntry) => {
+                let (val, o) = FitMessageSegmentLeaderboardEntry::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SegmentLeaderboardEntry(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentPoint) => {
+                let (val, o) = FitMessageSegmentPoint::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SegmentPoint(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Session) => {
+                let (val, o) = FitMessageSession::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Session(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Set) => {
+                let (val, o) = FitMessageSet::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Set(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
+                let (val, o) = FitMessageSlaveDevice::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SlaveDevice(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Software) => {
+                let (val, o) = FitMessageSoftware::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Software(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SpeedZone) => {
+                let (val, o) = FitMessageSpeedZone::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::SpeedZone(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Sport) => {
+                let (val, o) = FitMessageSport::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Sport(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::StressLevel) => {
+                let (val, o) = FitMessageStressLevel::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::StressLevel(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ThreeDSensorCalibration) => {
+                let (val, o) = FitMessageThreeDSensorCalibration::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ThreeDSensorCalibration(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::TimestampCorrelation) => {
+                let (val, o) = FitMessageTimestampCorrelation::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::TimestampCorrelation(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Totals) => {
+                let (val, o) = FitMessageTotals::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Totals(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingFile) => {
+                let (val, o) = FitMessageTrainingFile::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::TrainingFile(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::UserProfile) => {
+                let (val, o) = FitMessageUserProfile::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::UserProfile(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Video) => {
+                let (val, o) = FitMessageVideo::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Video(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoClip) => {
+                let (val, o) = FitMessageVideoClip::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::VideoClip(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoDescription) => {
+                let (val, o) = FitMessageVideoDescription::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::VideoDescription(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoFrame) => {
+                let (val, o) = FitMessageVideoFrame::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::VideoFrame(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoTitle) => {
+                let (val, o) = FitMessageVideoTitle::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::VideoTitle(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WatchfaceSettings) => {
+                let (val, o) = FitMessageWatchfaceSettings::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::WatchfaceSettings(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherAlert) => {
+                let (val, o) = FitMessageWeatherAlert::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::WeatherAlert(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherConditions) => {
+                let (val, o) = FitMessageWeatherConditions::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::WeatherConditions(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WeightScale) => {
+                let (val, o) = FitMessageWeightScale::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::WeightScale(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Workout) => {
+                let (val, o) = FitMessageWorkout::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::Workout(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutSession) => {
+                let (val, o) = FitMessageWorkoutSession::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::WorkoutSession(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutStep) => {
+                let (val, o) = FitMessageWorkoutStep::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::WorkoutStep(val)), o))
+            },
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ZonesTarget) => {
+                let (val, o) = FitMessageZonesTarget::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::ZonesTarget(val)), o))
+            },
+            FitGlobalMesgNum::Unknown(number) => {
+                let (val, o) = FitMessageUnknownToSdk::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::UnknownToSdk(val)), o))
+            }
+            _ => Ok((None, &input[definition_message.message_size..]))
         }
     }
 }

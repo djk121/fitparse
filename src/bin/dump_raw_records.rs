@@ -54,13 +54,17 @@ fn main() {
         println!("message #{}", num);
         num = num + 1;
         match fitparse::parse_fit_message(inp, ps) {
-            Ok((_fm, out)) => {
+            Ok((Some(_fm), out)) => {
                 //println!("fm: {:#?}", _fm);
                 messages.push(_fm);
                 inp = out;
                 //println!("len: {:?}", inp.len());
                 //println!("after: inp[0..5]: {:?}, out[0..5]: {:?}", &inp[0..5], &out[0..5]);
 
+            },
+            Ok((None,out)) => {
+                println!("unknown message");
+                inp = out;
             },
             Err(e) => { println!("{}", e); break; }
         }
