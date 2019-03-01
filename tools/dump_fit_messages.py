@@ -67,20 +67,18 @@ pub enum {{ type_name }} { // fit base type: {{ base_type }}
     {{ rustify_name(field["value_name"]) }} = {{ field["value"]}},
     {%- if field["comment"] %}  // {{ field["comment"] }}{% endif %}
 {%- endfor %}
-    UnknownToSdk = -1
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2
 }
 
 impl {{ type_name }} {
     pub fn parse(input: &[u8]{{ endianness_clause_full}}) -> Result<({{ type_name }}, &[u8])> {
         let (val, o) = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
-        {% if base_type[-1] == 'z' -%}
         match val {
-            Some(nonzero_val) => Ok(({{ type_name }}::from(nonzero_val), o)),
-            None => Err(Error::parse_zero())
+            Some(valid_val) => Ok(({{ type_name }}::from(valid_val), o)),
+            None => Ok(({{ type_name }}::InvalidFieldValue, o))
+            //None => Err(Error::invalid_fit_base_type_parse())
         }
-        {% else -%}
-        Ok(({{ type_name }}::from(val), o))
-        {%- endif %}
     }
 }
 
@@ -165,11 +163,21 @@ pub struct FitFieldDateTime {
 
 impl FitFieldDateTime {
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldDateTime, &[u8])> {
-        let (dt, garmin_epoch_offset, o) = parse_date_time(input, endianness)?;
+        let (utc_dt, garmin_epoch_offset, o) = parse_date_time(input, endianness)?;
         Ok((FitFieldDateTime{
             seconds_since_garmin_epoch: garmin_epoch_offset,
-            rust_time: dt
+            rust_time: utc_dt
         }, o))
+
+        //match result {
+        //    Some(dt, garmin_epoch_offset) => {
+        //        Ok((FitFieldDateTime{
+        //            seconds_since_garmin_epoch: garmin_epoch_offset,
+        //            rust_time: dt
+        //        }, o))
+        //    },
+        //    None => Err(Error::invalid_fit_base_type_parse())
+        //}
     }
 
     #[allow(dead_code)]
@@ -194,21 +202,9 @@ impl FitFieldDateTime {
 
         let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
 
-        let (ffdt, _) = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
-        Ok(ffdt)
+        let (result, _) = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
+        Ok(result)
     }
-
-    #[allow(dead_code)]
-    pub fn new_from_offset(&self, _offset_secs: u8) -> FitFieldDateTime {
-        let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
-        let garmin_epoch_offset = self.seconds_since_garmin_epoch + (_offset_secs as u32);
-        let rust_time = garmin_epoch + Duration::seconds(garmin_epoch_offset.into());
-        FitFieldDateTime{
-            seconds_since_garmin_epoch: garmin_epoch_offset,
-            rust_time: rust_time,
-        }
-    }
-
 }
 
 #[derive(Debug)]
@@ -220,7 +216,11 @@ pub struct FitFieldLocalDateTime {
 impl FitFieldLocalDateTime {
     fn parse(input: &[u8], endianness: Endianness, _offset_secs: f64) -> Result<(FitFieldLocalDateTime, &[u8])> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
-        let (garmin_epoch_offset, o) = parse_uint32(input, endianness)?;
+        let (result, o) = parse_uint32(input, endianness)?;
+        let garmin_epoch_offset = match result {
+            Some(geo) => geo,
+            None => return Err(Error::invalid_fit_base_type_parse())
+        };
         let local_dt = FixedOffset::east(_offset_secs as i32).timestamp(
             (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
             0 // nanosecs
@@ -232,8 +232,6 @@ impl FitFieldLocalDateTime {
         }, o))
     }
 }
-
-
 """
 
     sys.stdout.write(special_types)
@@ -340,6 +338,15 @@ impl FitDataMessage {
                 Ok((Some(FitDataMessage::UnknownToSdk(val)), o))
             }
             _ => Ok((None, &input[definition_message.message_size..]))
+        }
+    }
+
+    pub fn message_name(&self) -> &'static str {
+        match self {
+            {% for mn in message_names %}
+            FitDataMessage::{{ mn }}(_) => "{{ mn }}",
+            {%- endfor %}
+            FitDataMessage::UnknownToSdk(_) => "UnknownToSdk"
         }
     }
 }
@@ -466,7 +473,7 @@ impl {{ message_name }} {
                                 {% else %}
                                 let (val, _) = {{ field.output_field_parser('&bytes') }}?;
                                 {% endif %}
-                                {{ field.output_parsed_field_assignment() }};
+                                {{ field.output_parsed_field_assignment() }}
                             },
                             None => {
                                 {% if field.array %}
@@ -484,7 +491,7 @@ impl {{ message_name }} {
                                 let (val, outp) = {{ field.output_field_parser('inp') }}?;
                                 saved_outp = outp;
                                 {% endif %}
-                                {{ field.output_parsed_field_assignment() }};
+                                {{ field.output_parsed_field_assignment() }}
                             }
                         }
 
@@ -575,9 +582,21 @@ impl {{ message_name }} {
             sys.stdout.write(field.output_subfield_definition())
 
 
+SCALE_AND_OFFSET_TEMPLATE = """
+                                match val {
+                                    Some(result) => {
+                                       message.{{ field_name }} = Some(result as f64 / {{ scale }} as f64)
+                                    },
+                                    None => message.{{ field_name }} = None
+                                }"""
+
+#SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.iter().map(|i| (*i as f64 / {{ scale }} as f64){{ offset }}).collect());"""
+SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64)).collect());"""
+
+
 class Field(object):
     FIELD_OPTION_SUBFIELD = """Option<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
-    FIELD_OPTION_BASE_TYPE = """Option<{% if is_vec %}Vec<{% endif %}{{ fit_type }}{% if is_vec %}>{% endif %}>"""
+    FIELD_OPTION_BASE_TYPE = """Option<{% if is_vec %}Vec<Option<{% endif %}{{ fit_type }}{% if is_vec %}>>{% endif %}>"""
     FIELD_OPTION_FIT_TYPE = """Option<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
 
     def __init__(self, number, name, type, array, components, bits, scale, offset, comment, types):
@@ -688,17 +707,17 @@ class Field(object):
         elif self.type != 'enum' and self.type in FIT_TYPE_MAP.keys():
             if self.scale and self.type != 'byte':
                 if self.array:
-                    content = "Option<Vec<f64>>"
+                    content = "Option<Vec<Option<f64>>>"
                 else:
                     content = "Option<f64>"
 
             else:
-                if self.name == 'bottom_time':
-                    print >>sys.stderr, "bottom_time is_vec: {}".format(self.array)
+                #if self.name == 'bottom_time':
+                #    print >>sys.stderr, "bottom_time is_vec: {}".format(self.array)
 
                 fit_type = FIT_TYPE_MAP[self.type]
-                if self.type[-1] == 'z' and self.array:
-                    fit_type = "Option<{}>".format(fit_type)
+                #if self.type[-1] == 'z' and self.array:
+                #    fit_type = "Option<{}>".format(fit_type)
 
                 template = Environment().from_string(self.FIELD_OPTION_BASE_TYPE,
                                                      globals={'fit_type': fit_type,
@@ -714,33 +733,60 @@ class Field(object):
         return content
 
     def output_parsed_field_assignment(self):
-        if self.type[-1] == 'z' and not self.array:
-            return "message.{} = val".format(self.name)
+
+
+
+        #if self.type[-1] == 'z' and not self.array:
+        #    return "message.{} = val".format(self.name)
             #else:
                 #return "message.{} = Some(val)".for
 
         if self.scale and is_fit_base_type(self.type) and not self.subfields and self.type != 'byte':
 
+            offset = ''
+            if self.offset:
+                offset = " - ({} as f64)".format(self.offset)
+
+            if self.array:
+                template = Environment().from_string(SCALE_AND_OFFSET_ARRAY_TEMPLATE,
+                                                     globals={'field_name': self.name,
+                                                              'scale': self.scale,
+                                                              'offset': offset})
+            else:
+                template = Environment().from_string(SCALE_AND_OFFSET_TEMPLATE,
+                                                    globals={'field_name': self.name,
+                                                             'scale': self.scale,
+                                                             'offset': offset})
+            return template.render()
+
+        if self.array or is_fit_base_type(self.type) is False or self.has_subfields:
+            return "message.{} = Some(val);".format(self.name)
+
+        else:
+            #if self.type == 'byte':
+            #    return "message.{} = Some(val);".format(self.name)
+            return "message.{} = val;".format(self.name)
+
             #if self.array:
             #    return "message.{} = Some(val)".format(self.name)
 
-            if self.offset:
-                if not self.array:
-                    return "message.{} = Some((val as f64 / {} as f64) - ({} as f64))".format(self.name, self.scale, self.offset)
-                else:
-                    return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64) - ({} as f64)).collect())".format(self.name, self.scale, self.offset)
-            else:
-                if not self.array:
-                    return "message.{} = Some(val as f64 / {} as f64)".format(self.name, self.scale)
-                else:
-                    return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64)).collect())".format(self.name, self.scale)
+            #if self.offset:
+            #    if not self.array:
+            #        return "message.{} = Some((val as f64 / {} as f64) - ({} as f64))".format(self.name, self.scale, self.offset)
+            #    else:
+            #        return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64) - ({} as f64)).collect())".format(self.name, self.scale, self.offset)
+            #else:
+            #    if not self.array:
+            #        return "message.{} = Some(val as f64 / {} as f64)".format(self.name, self.scale)
+            #    else:
+            #        return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64)).collect())".format(self.name, self.scale)
 
-        return "message.{} = Some(val)".format(self.name)
+        #return "message.{} = Some(val)".format(self.name)
 
     SUBFIELD_TEMPLATE = """
 #[derive(Debug)]
 pub enum {{ subfield_name }} {
-    Default({{ subfield_default_option }}),
+    Default(Option<{{ subfield_default_option }}>),
     {%- for sf in subfield_enum_options %}
     {{ sf[0] }}({{ sf[1] }}),
     {%- endfor %}
@@ -753,7 +799,11 @@ impl {{ subfield_name }} {
         {% for sf in subfield_options[sf_name] %}
             Some(FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }}) => {
                 let (val, o) = {{ sf.output_field_parser(field.types, field.message.rustified_name) }}?;
+                {% if sf.is_fit_base_type %}
                 return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(val), o))
+                {% else %}
+                return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(Some(val)), o))
+                {% endif -%}
             },
         {% endfor %}
             _ => (),
@@ -775,23 +825,13 @@ impl {{ subfield_name }} {
         subfield_default_parser = self.output_field_parser('inp', only_default_case=True, field_variable_name='_field')
         subfield_enum_options = []
         for sf in self.subfields:
-            ftn = sf.field_type_name
+            ftn = "Option<{}>".format(sf.field_type_name)
             if sf.type == 'byte':
-                ftn = "Vec<u8>"
+                ftn = "Option<Vec<u8>>"
                 #ftn += "<'a>"
             subfield_enum_options.append((sf.field_name_rustified, ftn))
 
         lifetime_spec = ''
-        # FIXME: this should recurse to all of the base types
-
-        #if self.type == 'byte':
-        #    lifetime_spec = "<'a>"
-        #else:
-        #    for sf in self.subfields:
-        #        if sf.ref_field_type == 'byte':
-        #            lifetime_spec = "<'a>"
-        #            break
-
         if self.subfield_needs_lifetime_spec():
             lifetime_spec = "<'a>"
 
@@ -857,6 +897,10 @@ class Subfield(object):
     @property
     def ref_field_type_rustified(self):
         return rustify_name(self.ref_field_type)
+
+    @property
+    def is_fit_base_type(self):
+        return self.type in FIT_TYPE_MAP.keys()
 
     @property
     def ref_field_value_rustified(self):

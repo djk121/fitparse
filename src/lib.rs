@@ -100,12 +100,15 @@ pub struct FitFileHeader {
 
 impl FitFileHeader {
     pub fn parse(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
-        parse_fit_file_header(input)
+        match parse_fit_file_header(input)? {
+            (Some(ffh), o) => Ok((ffh, o)),
+            _ => Err(Error::parse_error("error parsing FitFileHeader"))
+        }
     }
 }
 
-fn parse_fit_file_header(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
-    nom_internal_parser!(parse_fit_file_header_internal, input)
+fn parse_fit_file_header(input: &[u8]) -> Result<(Option<FitFileHeader>, &[u8])> {
+    nom_basic_internal_parser!(parse_fit_file_header_internal, input)
 }
 
 named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
@@ -135,9 +138,19 @@ pub enum FitMessage {
 
 pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingState) -> Result<(Option<FitMessage>, &'a [u8])> {
     // get the header first
-    println!("header: {:08b}", input[0]);
-    let (header, o) = parse_record_header(input)?;
-    println!("header: {:#?}", header);
+    //println!("header: {:08b}", input[0]);
+    //match parse_record_header(input)? {
+    //    Ok((Some(header), o)
+    //}
+
+    let (header, o) = match parse_record_header(input) {
+        Ok((Some(header), o)) => (header, o),
+        Err(e) => return Err(e),
+        _ => return Err(Error::parse_error("error parsing header"))
+    };
+
+    //let (Some(header), o) = parse_record_header(input)?;
+    //println!("header: {:#?}", header);
 
     let (fit_message, out) = match header {
         FitRecordHeader::Normal(normal_header) => {
@@ -182,7 +195,10 @@ pub fn parse_fit_message<'a>(input: &'a [u8], parsing_state: &mut FitParsingStat
                             // so a value of +15 = (15 increments * 15 minutes * 60 seconds) =
                             // = +13500 seconds
                             if let Some(tzo) = time_zone_offset {
-                                parsing_state.set_timezone_offset((tzo[0] * 15.0 * 60.0).into());
+                                match tzo[0] {
+                                    Some(first_offset) => parsing_state.set_timezone_offset((first_offset * 15.0 * 60.0).into()),
+                                    _ => ()
+                                }
                             }
                         }
                     }
@@ -271,7 +287,12 @@ enum FitGlobalMesgNum {
 
 impl FitGlobalMesgNum {
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
-        let (raw_num, o) = parse_uint16(input, endianness)?;
+        let (raw_num, o) = match parse_uint16(input, endianness)? {
+            (Some(raw_num), o) => (raw_num, o),
+            _ => return Err(Error::parse_error("error parsing FitGlobalMesgNum"))
+        };
+
+        //let (Some(raw_num), o) = parse_uint16(input, endianness)?;
         match FitFieldMesgNum::from(raw_num) {
             FitFieldMesgNum::UnknownToSdk => {
                 Ok((FitGlobalMesgNum::Unknown(raw_num), o))
@@ -355,8 +376,11 @@ pub struct FitDefinitionMessage {
 
 impl FitDefinitionMessage {
     fn parse(input: &[u8], header: FitNormalRecordHeader) -> Result<(Rc<FitDefinitionMessage>, &[u8])> {
-        let (definition_message, o) = parse_definition_message(input, header)?;
-        Ok((Rc::new(definition_message), o))
+        match parse_definition_message(input, header) {
+            Ok((Some(fdm), o)) => Ok((Rc::new(fdm), o)),
+            Err(e) => Err(e),
+            _ => Err(Error::parse_error("error parsing definition message"))
+        }
     }
 }
 
@@ -375,8 +399,8 @@ impl FitRecordHeader {
     }
 }
 
-fn parse_record_header(input: &[u8]) -> Result<(FitRecordHeader, &[u8])> {
-    nom_internal_parser!(parse_record_header_internal, input)
+fn parse_record_header(input: &[u8]) -> Result<(Option<FitRecordHeader>, &[u8])> {
+    nom_basic_internal_parser!(parse_record_header_internal, input)
 }
 
 named!(parse_record_header_internal<&[u8], FitRecordHeader>,
@@ -434,8 +458,8 @@ named!(developer_field_definition<&[u8], FitDeveloperFieldDefinition>,
     )
 );
 
-fn parse_definition_message(input: &[u8], header: FitNormalRecordHeader) -> Result<(FitDefinitionMessage, &[u8])> {
-    nom_internal_parser!(parse_definition_message_internal, input, header)
+fn parse_definition_message(input: &[u8], header: FitNormalRecordHeader) -> Result<(Option<FitDefinitionMessage>, &[u8])> {
+    nom_basic_internal_parser!(parse_definition_message_internal, input, header)
 }
 
 //trace_macros!(true);
@@ -523,38 +547,38 @@ impl FitDeveloperDataDefinition {
 
 #[derive(Debug, PartialEq)]
 enum FitBaseValue {
-    Enum(u8),
-    EnumVec(Vec<u8>),
-    Sint8(i8),
-    Sint8Vec(Vec<i8>),
-    Uint8(u8),
-    Uint8Vec(Vec<u8>),
+    Enum(Option<u8>),
+    EnumVec(Vec<Option<u8>>),
+    Sint8(Option<i8>),
+    Sint8Vec(Vec<Option<i8>>),
+    Uint8(Option<u8>),
+    Uint8Vec(Vec<Option<u8>>),
     Uint8z(Option<u8>),
     Uint8zVec(Vec<Option<u8>>),
-    Sint16(i16),
-    Sint16Vec(Vec<i16>),
-    Uint16(u16),
-    Uint16Vec(Vec<u16>),
+    Sint16(Option<i16>),
+    Sint16Vec(Vec<Option<i16>>),
+    Uint16(Option<u16>),
+    Uint16Vec(Vec<Option<u16>>),
     Uint16z(Option<u16>),
     Uint16zVec(Vec<Option<u16>>),
-    Sint32(i32),
-    Sint32Vec(Vec<i32>),
-    Uint32(u32),
-    Uint32Vec(Vec<u32>),
+    Sint32(Option<i32>),
+    Sint32Vec(Vec<Option<i32>>),
+    Uint32(Option<u32>),
+    Uint32Vec(Vec<Option<u32>>),
     Uint32z(Option<u32>),
     Uint32zVec(Vec<Option<u32>>),
-    Float32(f32),
-    Float32Vec(Vec<f32>),
-    Sint64(i64),
-    Sint64Vec(Vec<i64>),
-    Uint64(u64),
-    Uint64Vec(Vec<u64>),
+    Float32(Option<f32>),
+    Float32Vec(Vec<Option<f32>>),
+    Sint64(Option<i64>),
+    Sint64Vec(Vec<Option<i64>>),
+    Uint64(Option<u64>),
+    Uint64Vec(Vec<Option<u64>>),
     Uint64z(Option<u64>),
     Uint64zVec(Vec<Option<u64>>),
-    Float64(f64),
-    Float64Vec(Vec<f64>),
-    String(String),
-    Byte(Vec<u8>)
+    Float64(Option<f64>),
+    Float64Vec(Vec<Option<f64>>),
+    String(Option<String>),
+    Byte(Option<Vec<u8>>)
 }
 
 impl FitBaseValue {
@@ -695,7 +719,7 @@ impl FitBaseValue {
                 }
             },
             FitFieldFitBaseType::String => {
-                println!("bytes: {:?}", &input[0..size]);
+                //println!("bytes: {:?}", &input[0..size]);
                 let (val, o) = parse_string(input, size)?;
                 Ok((FitBaseValue::String(val), o))
             },
@@ -799,7 +823,7 @@ impl FitBaseValue {
             },
             FitFieldFitBaseType::Byte => {
                 let (val, o) = parse_byte(input, size)?;
-                Ok((FitBaseValue::Byte(val.to_vec()), o))
+                Ok((FitBaseValue::Byte(val), o))
             },
             FitFieldFitBaseType::Sint64 => {
                 let mut num_to_parse = size / 8;
@@ -954,7 +978,7 @@ mod tests {
         };
 
         let (_, rh) = normal_record_header(&record_header_data).unwrap();
-        println!("{:?}", rh);
+        //println!("{:?}", rh);
 
         assert_eq!(rh, FitRecordHeader::Normal(expected));
     }

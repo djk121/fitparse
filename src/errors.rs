@@ -125,6 +125,11 @@ impl Error {
     pub(crate) fn field_definition_number_not_found(fdn: u8) -> Error {
         Error::from(ErrorKind::FieldDefinitionNumberNotFound(fdn))
     }
+
+    #[allow(dead_code)]
+    pub(crate) fn invalid_fit_base_type_parse() -> Error {
+        Error::from(ErrorKind::InvalidFitBaseTypeParse)
+    }
 }
 
 impl Fail for Error {
@@ -168,6 +173,7 @@ pub enum ErrorKind {
     InsufficientDataForShift,
     IncorrectShiftInput,
     FieldDefinitionNumberNotFound(u8),
+    InvalidFitBaseTypeParse,
 }
 
 impl fmt::Display for ErrorKind {
@@ -239,7 +245,9 @@ impl fmt::Display for ErrorKind {
             ErrorKind::FieldDefinitionNumberNotFound(ref fdn) => {
                 write!(f, "field definition number not found: {:?}", fdn)
             },
-
+            ErrorKind::InvalidFitBaseTypeParse => {
+                write!(f, "invalid fit base type parse result")
+            },
         }
     }
 }
