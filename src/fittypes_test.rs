@@ -38,7 +38,7 @@ fn make_field_definitions(definitions: Vec<(u8, usize, u8)>) -> Vec<FitFieldDefi
                       .collect()
 }
 
-fn make_field_description(field_name: String, units: String, field_definition_number: u8, native_mesg_num: Option<FitFieldMesgNum>, fit_base_type_id: FitFieldFitBaseType, field_definitions: Vec<(u8, usize, u8)>) -> Rc<FitMessageFieldDescription> {
+fn make_field_description(field_name: Vec<Option<String>>, units: Vec<Option<String>>, field_definition_number: u8, native_mesg_num: Option<FitFieldMesgNum>, fit_base_type_id: FitFieldFitBaseType, field_definitions: Vec<(u8, usize, u8)>) -> Rc<FitMessageFieldDescription> {
     Rc::new(
         FitMessageFieldDescription {
             header: FitRecordHeader::Normal(
@@ -153,26 +153,26 @@ fn fit_message_record_with_developer_fields() {
     parsing_state.add(0, definition_message_final.clone());
 
     let developer_field_descriptions = vec![
-        ("Form Power".to_string(),
-         "Watts".to_string(),
+        (vec![Some("Form Power".to_string())],
+         vec![Some("Watts".to_string())],
          8,
          None,
          FitFieldFitBaseType::Uint16,
          vec![(0,1,2), (1,1,2), (2,1,2), (3,11,7), (8,6,7)]),
-        ("Leg Spring Stiffness".to_string(),
-         "KN/m".to_string(),
+        (vec![Some("Leg Spring Stiffness".to_string())],
+         vec![Some("KN/m".to_string())],
          9,
          None,
          FitFieldFitBaseType::Float32,
          vec![(0,1,2), (1,1,2), (2,1,2), (3,21,7), (8,5,7)]),
-        ("Distance".to_string(),
-         "Meters".to_string(),
+        (vec![Some("Distance".to_string())],
+         vec![Some("Meters".to_string())],
          6,
          Some(FitFieldMesgNum::SdmProfile),
          FitFieldFitBaseType::Uint32,
          vec![(0,1,2), (1,1,2), (14,2,4), (2,1,2), (3,9,7), (8,7,7)]),
-        ("Speed".to_string(),
-         "M/S".to_string(),
+        (vec![Some("Speed".to_string())],
+         vec![Some("M/S".to_string())],
          5,
          Some(FitFieldMesgNum::BikeProfile),
          FitFieldFitBaseType::Float32,
@@ -198,13 +198,13 @@ fn fit_message_record_with_developer_fields() {
     assert_eq!(rec.heart_rate, Some(151));
     assert_eq!(rec.power, Some(209));
 
-    let fp_field_name = "Form Power".to_string();
+    let fp_field_name = Some("Form Power".to_string());
 
     for ffdd in &rec.developer_fields {
         match ffdd.field_description.field_name {
-            Some(ref field_name) => {
-                if *field_name == fp_field_name {
-                    assert_eq!(ffdd.value, FitBaseValue::Uint16(57));
+            Some(ref field_names) => {
+                if field_names[0] == fp_field_name {
+                    assert_eq!(ffdd.value, FitBaseValue::Uint16(Some(57)));
                     return
                 }
             },

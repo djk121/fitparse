@@ -1039,7 +1039,7 @@ mod tests {
 
         let (res, _) = parse_definition_message(&defintion_message_data, rh).unwrap();
         //let res = definition_message(&defintion_message_data);
-        assert_eq!(res, expected);
+        assert_eq!(res, Some(expected));
     }
 
 }

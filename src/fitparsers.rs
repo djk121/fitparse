@@ -100,6 +100,7 @@ fn parse_date_time_internal(input: &[u8], endianness: nom::Endianness) -> Result
     }
 }
 
+#[allow(overflowing_literals)]
 #[macro_export]
 macro_rules! nom_basic_internal_parser {
     ($func:ident, $input:expr, $endianness:expr) => (

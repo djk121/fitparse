@@ -8,8 +8,6 @@ use clap::{App, Arg};
 
 use fitparse::fitparsingstate::FitParsingState;
 use fitparse::FitMessage;
-use fitparse::fittypes::FitDataMessage;
-
 
 fn main() {
     let matches = App::new("fitparse")
@@ -55,7 +53,7 @@ fn main() {
     let mut messages = vec![];
 
     while inp.len() > 2 {
-        println!("message #{}", num);
+        //println!("message #{}", num);
         match fitparse::parse_fit_message(inp, ps) {
             Ok((Some(_fm), out)) => {
                 messages.push(_fm);
