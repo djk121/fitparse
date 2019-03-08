@@ -1,7 +1,6 @@
-
+use failure::{Backtrace, Context, Fail};
 use std::fmt;
 use std::result;
-use failure::{Backtrace, Context, Fail};
 
 pub type Result<T> = result::Result<T, Error>;
 
@@ -179,75 +178,71 @@ pub enum ErrorKind {
 impl fmt::Display for ErrorKind {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            ErrorKind::ParseIncomplete(ref pi) => {
-                write!(f, "insufficient data to finish parse, needed {:?} bytes", pi)
-            },
-            ErrorKind::ParseIncompleteUnknown => {
-                write!(f, "insufficient data to finish parse, unknown amount needed")
-            },
-            ErrorKind::ParseError(ref pe) => {
-                write!(f, "error during parse: {:?}", pe)
-            },
-            ErrorKind::ParseZero => {
-                write!(f, "zero value found for type requiring non-zero")
-            },
+            ErrorKind::ParseIncomplete(ref pi) => write!(
+                f,
+                "insufficient data to finish parse, needed {:?} bytes",
+                pi,
+            ),
+            ErrorKind::ParseIncompleteUnknown => write!(
+                f,
+                "insufficient data to finish parse, unknown amount needed",
+            ),
+            ErrorKind::ParseError(ref pe) => write!(f, "error during parse: {:?}", pe),
+            ErrorKind::ParseZero => write!(f, "zero value found for type requiring non-zero",),
             ErrorKind::UnsupportedRelativetimestamp => {
-                write!(f, "timestamp relative to device power-on not supported")
-            },
+                write!(f, "timestamp relative to device power-on not supported",)
+            }
             ErrorKind::InvalidFieldValue(ref fv) => {
-                write!(f, "invalid value supplied for Field: {:?}", fv)
-            },
-            ErrorKind::InvalidLocalMesgNum(ref ilmn) => {
-                write!(f, "missing local -> global mesg_num mapping for local mesg num {:?}", ilmn)
-            },
-            ErrorKind::TimestampBaseNotSet => {
-                write!(f, "timestamp requested from ParsingState, but one hasn't been set")
-            },
-            ErrorKind::TimezoneOffsetNotSet => {
-                write!(f, "timezone offset requested from ParsingState, but one hasn't been set")
-            },
-            ErrorKind::WrongHeaderType => {
-                write!(f, "incorrect header type supplied")
-            },
-            ErrorKind::UnknownError => {
-                write!(f, "unknown error")
-            },
-            ErrorKind::TimestampNotSetOnMessage => {
-                write!(f, "get_timestamp called for message which doesn't have timestamp set")
-            },
-            ErrorKind::MissingTimestampField => {
-                write!(f, "message with timestamp field ended parsing without timestamp being set")
-            },
-            ErrorKind::InvalidFieldNumber(ref ifn) => {
-                write!(f, "attempt to parse field number not present in defintion message: {:?}", ifn)
-            },
-            ErrorKind::MessageParseFailed(ref fm) => {
-                write!(f, "MessageParseFailed: {:?}", fm)
-            },
-            ErrorKind::MissingFitBaseType => {
-                write!(f, "fit_base_type_id not supplied; can't parse developer data")
-            },
+                write!(f, "invalid value supplied for Field: {:?}", fv,)
+            }
+            ErrorKind::InvalidLocalMesgNum(ref ilmn) => write!(
+                f,
+                "missing local -> global mesg_num mapping for local mesg num {:?}",
+                ilmn,
+            ),
+            ErrorKind::TimestampBaseNotSet => write!(
+                f,
+                "timestamp requested from ParsingState, but one hasn't been set",
+            ),
+            ErrorKind::TimezoneOffsetNotSet => write!(
+                f,
+                "timezone offset requested from ParsingState, but one hasn't been set",
+            ),
+            ErrorKind::WrongHeaderType => write!(f, "incorrect header type supplied"),
+            ErrorKind::UnknownError => write!(f, "unknown error"),
+            ErrorKind::TimestampNotSetOnMessage => write!(
+                f,
+                "get_timestamp called for message which doesn't have timestamp set",
+            ),
+            ErrorKind::MissingTimestampField => write!(
+                f,
+                "message with timestamp field ended parsing without timestamp being set"
+            ),
+            ErrorKind::InvalidFieldNumber(ref ifn) => write!(
+                f,
+                "attempt to parse field number not present in defintion message: {:?}",
+                ifn,
+            ),
+            ErrorKind::MessageParseFailed(ref fm) => write!(f, "MessageParseFailed: {:?}", fm),
+            ErrorKind::MissingFitBaseType => write!(
+                f,
+                "fit_base_type_id not supplied; can't parse developer data"
+            ),
             ErrorKind::ParseUnknownBaseValue => {
                 write!(f, "attempt to parse uncovered base value variant")
-            },
+            }
             ErrorKind::DeveloperDataDefinitionNotFound(ref dddn) => {
                 write!(f, "developer data definition number not found: {:?}", dddn)
-            },
+            }
             ErrorKind::DeveloperFieldDescriptionNotFound(ref dfn) => {
                 write!(f, "developer field number not found: {:?}", dfn)
-            },
-            ErrorKind::InsufficientDataForShift => {
-                write!(f, "insufficient data for shift")
-            },
-            ErrorKind::IncorrectShiftInput => {
-                write!(f, "bad inputs for shift operation")
-            },
+            }
+            ErrorKind::InsufficientDataForShift => write!(f, "insufficient data for shift"),
+            ErrorKind::IncorrectShiftInput => write!(f, "bad inputs for shift operation"),
             ErrorKind::FieldDefinitionNumberNotFound(ref fdn) => {
                 write!(f, "field definition number not found: {:?}", fdn)
-            },
-            ErrorKind::InvalidFitBaseTypeParse => {
-                write!(f, "invalid fit base type parse result")
-            },
+            }
+            ErrorKind::InvalidFitBaseTypeParse => write!(f, "invalid fit base type parse result"),
         }
     }
 }

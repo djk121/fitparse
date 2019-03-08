@@ -68,7 +68,7 @@ pub enum {{ type_name }} { // fit base type: {{ base_type }}
     {%- if field["comment"] %}  // {{ field["comment"] }}{% endif %}
 {%- endfor %}
     InvalidFieldValue = -1,
-    UnknownToSdk = -2
+    UnknownToSdk = -2,
 }
 
 impl {{ type_name }} {
@@ -76,7 +76,7 @@ impl {{ type_name }} {
         let (val, o) = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
         match val {
             Some(valid_val) => Ok(({{ type_name }}::from(valid_val), o)),
-            None => Ok(({{ type_name }}::InvalidFieldValue, o))
+            None => Ok(({{ type_name }}::InvalidFieldValue, o)),
             //None => Err(Error::invalid_fit_base_type_parse())
         }
     }
@@ -88,7 +88,7 @@ impl From<{{ base_rust_type }}> for {{ type_name }} {
         {%- for field in fields %}
             {{ field['value'] }} => {{ type_name }}::{{ field['rustified_value_name'] }},
         {%- endfor %}
-            _ => {{ type_name }}::UnknownToSdk
+            _ => {{ type_name }}::UnknownToSdk,
         }
     }
 }
@@ -320,7 +320,7 @@ pub enum FitDataMessage {
     {% for mn in message_names %}
     {{ mn }}(Rc<FitMessage{{ mn }}>),
     {%- endfor %}
-    UnknownToSdk(Rc<FitMessageUnknownToSdk>)
+    UnknownToSdk(Rc<FitMessageUnknownToSdk>),
 }
 
 impl FitDataMessage {
@@ -329,15 +329,16 @@ impl FitDataMessage {
         match definition_message.global_mesg_num {
             {% for mesg in mesgs %}
             FitGlobalMesgNum::Known(FitFieldMesgNum::{{ mesg }}) => {
-                let (val, o) = FitMessage{{ mesg }}::parse(input, header, parsing_state, timestamp)?;
+                let (val, o) =
+                    FitMessage{{ mesg }}::parse(input, header, parsing_state, timestamp)?;
                 Ok((Some(FitDataMessage::{{ mesg }}(val)), o))
-            },
+            }
             {%- endfor %}
             FitGlobalMesgNum::Unknown(number) => {
-                let (val, o) = FitMessageUnknownToSdk::parse(input, header, parsing_state, timestamp)?;
+                let (val, o) = FitMessageUnknownToSdk::parse(number, input, header, parsing_state, timestamp)?;
                 Ok((Some(FitDataMessage::UnknownToSdk(val)), o))
             }
-            _ => Ok((None, &input[definition_message.message_size..]))
+            _ => Ok((None, &input[definition_message.message_size..])),
         }
     }
 
@@ -346,7 +347,7 @@ impl FitDataMessage {
             {% for mn in message_names %}
             FitDataMessage::{{ mn }}(_) => "{{ mn }}",
             {%- endfor %}
-            FitDataMessage::UnknownToSdk(_) => "UnknownToSdk"
+            FitDataMessage::UnknownToSdk(_) => "UnknownToSdk",
         }
     }
 }

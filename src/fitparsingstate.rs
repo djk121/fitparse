@@ -1,12 +1,11 @@
-
-use std::rc::Rc;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use FitDefinitionMessage;
 use FitDeveloperDataDefinition;
 
-use fittypes::{FitDataMessage, FitFieldDateTime};
 use errors::{Error, Result};
+use fittypes::{FitDataMessage, FitFieldDateTime};
 
 pub struct FitParsingState {
     map: HashMap<u16, Rc<FitDefinitionMessage>>,
@@ -17,7 +16,7 @@ pub struct FitParsingState {
 
 impl FitParsingState {
     pub fn new() -> FitParsingState {
-        FitParsingState{
+        FitParsingState {
             map: HashMap::new(),
             last_timestamp: None,
             timezone_offset_secs: None,
@@ -33,7 +32,7 @@ impl FitParsingState {
     pub fn get(&self, local_num: u16) -> Result<Rc<FitDefinitionMessage>> {
         match self.map.get(&local_num) {
             Some(def) => Ok(Rc::clone(def)),
-            None => Err(Error::invalid_local_mesg_num(local_num.to_string()))
+            None => Err(Error::invalid_local_mesg_num(local_num.to_string())),
         }
     }
 
@@ -44,7 +43,7 @@ impl FitParsingState {
     pub fn get_last_timestamp(&self) -> Result<FitFieldDateTime> {
         match self.last_timestamp {
             Some(ts) => Ok(ts),
-            None => Err(Error::timestamp_base_not_set())
+            None => Err(Error::timestamp_base_not_set()),
         }
     }
 
@@ -56,19 +55,27 @@ impl FitParsingState {
         match self.timezone_offset_secs {
             Some(tzos) => tzos,
             //None => Err(Error::timezone_offset_not_set())
-            None => 0.0
+            None => 0.0,
         }
     }
 
     pub fn set_developer_data_definition(&mut self, developer_data_index: u8, dd: FitDataMessage) {
-        let p = self.developer_data_definitions.entry(developer_data_index).or_insert(FitDeveloperDataDefinition::new());
+        let p = self
+            .developer_data_definitions
+            .entry(developer_data_index)
+            .or_insert(FitDeveloperDataDefinition::new());
         p.add(dd);
     }
 
-    pub fn get_developer_data_definition(&self, developer_data_index: u8) -> Result<&FitDeveloperDataDefinition> {
+    pub fn get_developer_data_definition(
+        &self,
+        developer_data_index: u8,
+    ) -> Result<&FitDeveloperDataDefinition> {
         match self.developer_data_definitions.get(&developer_data_index) {
             Some(ddd) => Ok(ddd),
-            None => Err(Error::developer_data_definition_not_found(developer_data_index))
+            None => Err(Error::developer_data_definition_not_found(
+                developer_data_index,
+            )),
         }
     }
 }
