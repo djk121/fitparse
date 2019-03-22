@@ -4,9 +4,8 @@ extern crate fitparse;
 
 use clap::{App, Arg};
 use std::fs::File;
-use std::io::prelude::*;
 
-use fitparse::fitparsingstate::FitParsingState;
+use fitparse::fitfile::FitFile;
 use fitparse::FitMessage;
 
 fn main() {
@@ -26,55 +25,39 @@ fn main() {
                 .required(true)
                 .index(2),
         )
+        .arg(
+            Arg::with_name("unknowns")
+                .help("print messages not in the fit profile")
+                .short("u")
+                .long("unknowns")
+                .takes_value(false),
+        )
         .get_matches();
 
     let fname = matches.value_of("input").unwrap();
     let record_name = matches.value_of("record_name").unwrap();
+    let unknowns = matches.is_present("unknowns");
 
     let mut f = match File::open(fname) {
         Ok(fi) => fi,
         _ => panic!("boo"),
     };
-    let mut v = vec![];
-    match f.read_to_end(&mut v) {
-        Ok(_) => (),
-        Err(e) => panic!("error reading file: {:?}", e),
+
+    let mut ff = FitFile::new(1024 * 1024 * 10, true);
+    match ff.parse(&mut f) {
+        Err(e) => panic!("failed to parse file: {:?}", e),
+        _ => (),
     }
-
-    let (file_header, o) = match fitparse::FitFileHeader::parse(&v) {
-        Ok((ffh, o)) => (ffh, o),
-        _ => panic!("unable to read header"),
-    };
-    let mut parsing_state = FitParsingState::new();
-
-    println!("WUT: {:?}", file_header);
-    let mut inp = o;
-    println!("len: {:?}", inp.len());
-    let mut num = 0;
-    let ps = &mut parsing_state;
-
-    let mut messages = vec![];
-
-    while inp.len() > 2 {
-        //println!("message #{}", num);
-        match fitparse::parse_fit_message(inp, ps) {
-            Ok((Some(_fm), out)) => {
-                messages.push(_fm);
-                inp = out;
-            }
-            Ok((None, out)) => {
-                println!("index #{}: unknown message", num);
-                inp = out;
-            }
-            Err(e) => {
-                println!("{}", e);
-                break;
-            }
+    
+    println!("Parsed num messages: {}", ff.messages.len());
+    for message in ff.iter() {
+        if unknowns == true {
+            //if message.message_name() == "Unknown" {
+            //    println!("{:#?}", message);
+            //}
+            continue;
         }
-        num = num + 1;
-    }
-    println!("Parsed num messages: {}", messages.len());
-    for message in messages {
+
         match message {
             FitMessage::Data(ref dm) => {
                 if dm.message_name() == record_name {

@@ -4,9 +4,8 @@ extern crate fitparse;
 
 use clap::{App, Arg};
 use std::fs::File;
-use std::io::prelude::*;
 
-use fitparse::fitparsingstate::FitParsingState;
+use fitparse::fitfile::FitFile;
 use fitparse::fittypes::FitDataMessage;
 use fitparse::FitMessage;
 
@@ -29,58 +28,16 @@ fn main() {
         Ok(fi) => fi,
         _ => panic!("boo"),
     };
-    let mut v = vec![];
-    match f.read_to_end(&mut v) {
-        Ok(_) => (),
-        Err(e) => panic!("error reading file: {:?}", e),
+
+    let mut ff = FitFile::new(1024 * 1024 * 10, true);
+    match ff.parse(&mut f) {
+        Err(e) => panic!("failed to parse file: {:?}", e),
+        _ => (),
     }
 
-    let (file_header, o) = match fitparse::FitFileHeader::parse(&v) {
-        Ok((ffh, o)) => (ffh, o),
-        _ => panic!("unable to read header"),
-    };
-    let mut parsing_state = FitParsingState::new();
-
-    println!("WUT: {:?}", file_header);
-    let mut inp = o;
-    println!("len: {:?}", inp.len());
-    let mut num = 0;
-    let ps = &mut parsing_state;
-
-    let mut messages = vec![];
-
-    while inp.len() > 2 {
-        println!("message #{}", num);
-        num = num + 1;
-        match fitparse::parse_fit_message(inp, ps) {
-            Ok((Some(_fm), out)) => {
-                messages.push(_fm);
-                inp = out;
-            }
-            Ok((None, out)) => {
-                println!("unknown message");
-                inp = out;
-            }
-            Err(e) => {
-                println!("{}", e);
-                break;
-            }
+    for rec in ff.iter_message_name("Record") {
+        if let FitMessage::Data(FitDataMessage::Record(ref r)) = *rec {
+            println!("distance: {:?}", r.distance);
         }
     }
-    println!("Messages: {}", messages.len());
-    for rec in messages {
-        match rec {
-            FitMessage::Data(dm) => match dm {
-                FitDataMessage::Record(r) => println!("distance: {:?}", r.distance),
-                _ => (),
-            },
-            _ => (),
-        }
-        //let FitMessage::Data{dm: FitDataMessage } = rec;
-        //println!("Record: {:?}", &rec.header)
-    }
-
-    println!("inp.len() = {:?}", inp.len());
-    println!("ffh: {:?}", file_header);
-    println!("last 2 bytes: {:?}", &inp[inp.len() - 2..]);
 }

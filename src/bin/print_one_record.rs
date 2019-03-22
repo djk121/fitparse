@@ -4,9 +4,8 @@ extern crate fitparse;
 
 use clap::{App, Arg};
 use std::fs::File;
-use std::io::prelude::*;
 
-use fitparse::fitparsingstate::FitParsingState;
+use fitparse::fitfile::FitFile;
 
 fn main() {
     let matches = App::new("fitparse")
@@ -34,44 +33,14 @@ fn main() {
         Ok(fi) => fi,
         _ => panic!("boo"),
     };
-    let mut v = vec![];
-    match f.read_to_end(&mut v) {
-        Ok(_) => (),
-        Err(e) => panic!("error reading file: {:?}", e),
+
+    let mut ff = FitFile::new(1024 * 1024 * 10, true);
+
+    match ff.parse(&mut f) {
+        Err(e) => panic!("failed to parse file: {:?}", e),
+        _ => (),
     }
 
-    let (file_header, o) = match fitparse::FitFileHeader::parse(&v) {
-        Ok((ffh, o)) => (ffh, o),
-        _ => panic!("unable to read header"),
-    };
-    let mut parsing_state = FitParsingState::new();
-
-    println!("WUT: {:?}", file_header);
-    let mut inp = o;
-    println!("len: {:?}", inp.len());
-    let mut num = 0;
-    let ps = &mut parsing_state;
-
-    let mut messages = vec![];
-
-    while inp.len() > 2 {
-        println!("message #{}", num);
-        match fitparse::parse_fit_message(inp, ps) {
-            Ok((Some(_fm), out)) => {
-                messages.push(_fm);
-                inp = out;
-            }
-            Ok((None, out)) => {
-                println!("index #{}: unknown message", num);
-                inp = out;
-            }
-            Err(e) => {
-                println!("{}", e);
-                break;
-            }
-        }
-        num = num + 1;
-    }
-    println!("Parsed num messages: {}", messages.len());
-    println!("{:#?}", messages[index]);
+    println!("Parsed num messages: {}", ff.messages.len());
+    println!("{:#?}", ff.messages[index]);
 }

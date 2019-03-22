@@ -141,6 +141,7 @@ use nom::Endianness;
 
 use chrono::{DateTime, UTC, FixedOffset, TimeZone, Duration};
 
+use FitRecord;
 use FitRecordHeader;
 use FitDefinitionMessage;
 use FitFieldDefinition;
@@ -317,8 +318,8 @@ def field_name(field):
 FDM_TEMPLATE = """
 #[derive(Debug)]
 pub enum FitDataMessage {
-    {% for mn in message_names %}
-    {{ mn }}(Rc<FitMessage{{ mn }}>),
+    {% for message in messages %}
+    {{ message.short_name }}(Rc<{{ message.full_name }}>),
     {%- endfor %}
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
 }
@@ -327,11 +328,11 @@ impl FitDataMessage {
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
-            {% for mesg in mesgs %}
-            FitGlobalMesgNum::Known(FitFieldMesgNum::{{ mesg }}) => {
+            {% for message in messages %}
+            FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
                 let (val, o) =
-                    FitMessage{{ mesg }}::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::{{ mesg }}(val)), o))
+                    {{ message.full_name }}::parse(input, header, parsing_state, timestamp)?;
+                Ok((Some(FitDataMessage::{{ message.short_name }}(val)), o))
             }
             {%- endfor %}
             FitGlobalMesgNum::Unknown(number) => {
@@ -344,10 +345,26 @@ impl FitDataMessage {
 
     pub fn message_name(&self) -> &'static str {
         match self {
-            {% for mn in message_names %}
-            FitDataMessage::{{ mn }}(_) => "{{ mn }}",
-            {%- endfor %}
+            {%- for message in messages -%}
+            FitDataMessage::{{ message.short_name }}(_) => "{{ message.short_name }}",
+            {% endfor -%}
             FitDataMessage::UnknownToSdk(_) => "UnknownToSdk",
+        }
+    }
+
+    {% for message in messages %}
+    pub fn is_{{ message.profile_name }}(&self) -> bool {
+        match *self {
+            FitDataMessage::{{ message.short_name }}(_) => true,
+            _ => false,
+        }
+    }
+    {% endfor %}
+
+    pub fn is_unknown(&self) -> bool {
+        match *self {
+            FitDataMessage::UnknownToSdk(_) => true,
+            _ => false,
         }
     }
 }
@@ -366,8 +383,9 @@ def output_messages(messages, types):
     message_names = sorted([m[1].rustified_name for m in messages])
     mesgs = sorted([rustify_name(mnf['value_name']) for mnf in types['mesg_num']['fields'] if mnf['value_name'] not in ('mfg_range_min', 'mfg_range_max')])
     template = Environment().from_string(FDM_TEMPLATE,
-                                         globals={'message_names': message_names,
-                                                  'mesgs': mesgs})
+                                         globals={'messages': [x[1] for x in messages]})
+                                         #globals={'message_names': message_names,
+                                         #         'mesgs': mesgs})
     sys.stdout.write(template.render())
 
 class Message(object):
@@ -516,6 +534,13 @@ impl {{ message_name }} {
         Ok(inp)
     }
 }
+
+impl FitRecord for {{ message_name }} {
+    fn message_name(&self) -> &'static str {
+        return "{{ message_name }}";
+    }
+}
+
 """
 
     def __init__(self, name, comment):
@@ -539,6 +564,18 @@ impl {{ message_name }} {
     @property
     def message_name(self):
         return "FitMessage{}".format(rustify_name(self.name))
+
+    @property
+    def full_name(self):
+        return "FitMessage{}".format(rustify_name(self.name))
+
+    @property
+    def short_name(self):
+        return rustify_name(self.name)
+
+    @property
+    def profile_name(self):
+        return self.name
 
     @property
     def rustified_name(self):

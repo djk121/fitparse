@@ -19,6 +19,7 @@ use FitFieldDefinition;
 use FitFieldDeveloperData;
 use FitGlobalMesgNum;
 use FitMessageUnknownToSdk;
+use FitRecord;
 use FitRecordHeader;
 
 use subset_with_pad;
@@ -11096,6 +11097,13 @@ impl FitMessageAccelerometerData {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageAccelerometerData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageAccelerometerData";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageActivity {
     header: FitRecordHeader,
@@ -11447,6 +11455,13 @@ impl FitMessageActivity {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageActivity {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageActivity";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageAntChannelId {
     header: FitRecordHeader,
@@ -11679,6 +11694,13 @@ impl FitMessageAntChannelId {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageAntChannelId {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageAntChannelId";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageAntRx {
     header: FitRecordHeader,
@@ -12040,6 +12062,13 @@ impl FitMessageAntRx {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageAntRx {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageAntRx";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageAntTx {
     header: FitRecordHeader,
@@ -12401,6 +12430,13 @@ impl FitMessageAntTx {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageAntTx {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageAntTx";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageAviationAttitude {
     header: FitRecordHeader,
@@ -13080,6 +13116,13 @@ impl FitMessageAviationAttitude {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageAviationAttitude {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageAviationAttitude";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageBarometerData {
     header: FitRecordHeader,
@@ -13339,6 +13382,13 @@ impl FitMessageBarometerData {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageBarometerData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageBarometerData";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageBikeProfile {
     header: FitRecordHeader,
@@ -14414,6 +14464,13 @@ impl FitMessageBikeProfile {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageBikeProfile {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageBikeProfile";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageBloodPressure {
     header: FitRecordHeader,
@@ -14842,6 +14899,13 @@ impl FitMessageBloodPressure {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageBloodPressure {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageBloodPressure";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageCadenceZone {
     header: FitRecordHeader,
@@ -15024,6 +15088,13 @@ impl FitMessageCadenceZone {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageCadenceZone {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageCadenceZone";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageCameraEvent {
     header: FitRecordHeader,
@@ -15274,6 +15345,13 @@ impl FitMessageCameraEvent {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageCameraEvent {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageCameraEvent";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageCapabilities {
     header: FitRecordHeader,
@@ -15521,6 +15599,13 @@ impl FitMessageCapabilities {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageCapabilities {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageCapabilities";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageConnectivity {
     header: FitRecordHeader,
@@ -15967,6 +16052,13 @@ impl FitMessageConnectivity {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageConnectivity {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageConnectivity";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageCourse {
     header: FitRecordHeader,
@@ -16176,6 +16268,13 @@ impl FitMessageCourse {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageCourse {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageCourse";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageCoursePoint {
     header: FitRecordHeader,
@@ -16527,6 +16626,13 @@ impl FitMessageCoursePoint {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageCoursePoint {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageCoursePoint";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageDeveloperDataId {
     header: FitRecordHeader,
@@ -16765,6 +16871,13 @@ impl FitMessageDeveloperDataId {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDeveloperDataId {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDeveloperDataId";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     Default(Option<u8>),
@@ -17510,6 +17623,13 @@ impl FitMessageDeviceInfo {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDeviceInfo {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDeviceInfo";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageDeviceSettings {
     header: FitRecordHeader,
@@ -18340,6 +18460,13 @@ impl FitMessageDeviceSettings {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDeviceSettings {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDeviceSettings";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageDiveAlarm {
     header: FitRecordHeader,
@@ -18666,6 +18793,13 @@ impl FitMessageDiveAlarm {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDiveAlarm {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDiveAlarm";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageDiveGas {
     header: FitRecordHeader,
@@ -18875,6 +19009,13 @@ impl FitMessageDiveGas {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDiveGas {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDiveGas";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     Default(Option<u8>),
@@ -19687,6 +19828,13 @@ impl FitMessageDiveSettings {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDiveSettings {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDiveSettings";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageDiveSummary {
     header: FitRecordHeader,
@@ -20255,6 +20403,13 @@ impl FitMessageDiveSummary {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageDiveSummary {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageDiveSummary";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageEventSubfieldData {
     Default(Option<u32>),
@@ -20908,6 +21063,13 @@ impl FitMessageEvent {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageEvent {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageEvent";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageExdDataConceptConfiguration {
     header: FitRecordHeader,
@@ -21321,6 +21483,13 @@ impl FitMessageExdDataConceptConfiguration {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageExdDataConceptConfiguration {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageExdDataConceptConfiguration";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageExdDataFieldConfiguration {
     header: FitRecordHeader,
@@ -21615,6 +21784,13 @@ impl FitMessageExdDataFieldConfiguration {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageExdDataFieldConfiguration {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageExdDataFieldConfiguration";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageExdScreenConfiguration {
     header: FitRecordHeader,
@@ -21823,6 +21999,13 @@ impl FitMessageExdScreenConfiguration {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageExdScreenConfiguration {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageExdScreenConfiguration";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageExerciseTitle {
     header: FitRecordHeader,
@@ -22056,6 +22239,13 @@ impl FitMessageExerciseTitle {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageExerciseTitle {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageExerciseTitle";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageFieldCapabilities {
     header: FitRecordHeader,
@@ -22300,6 +22490,13 @@ impl FitMessageFieldCapabilities {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageFieldCapabilities {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageFieldCapabilities";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageFieldDescription {
     header: FitRecordHeader,
@@ -22817,6 +23014,13 @@ impl FitMessageFieldDescription {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageFieldDescription {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageFieldDescription";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageFileCapabilities {
     header: FitRecordHeader,
@@ -23084,6 +23288,13 @@ impl FitMessageFileCapabilities {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageFileCapabilities {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageFileCapabilities";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageFileCreator {
     header: FitRecordHeader,
@@ -23235,6 +23446,13 @@ impl FitMessageFileCreator {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageFileCreator {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageFileCreator";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageFileIdSubfieldProduct {
     Default(Option<u16>),
@@ -23589,6 +23807,13 @@ impl FitMessageFileId {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageFileId {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageFileId";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageGoal {
     header: FitRecordHeader,
@@ -24059,6 +24284,13 @@ impl FitMessageGoal {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageGoal {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageGoal";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageGpsMetadata {
     header: FitRecordHeader,
@@ -24491,6 +24723,13 @@ impl FitMessageGpsMetadata {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageGpsMetadata {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageGpsMetadata";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageGyroscopeData {
     header: FitRecordHeader,
@@ -24987,6 +25226,13 @@ impl FitMessageGyroscopeData {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageGyroscopeData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageGyroscopeData";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageHr {
     header: FitRecordHeader,
@@ -25418,6 +25664,13 @@ impl FitMessageHr {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageHr {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHr";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageHrZone {
     header: FitRecordHeader,
@@ -25600,6 +25853,13 @@ impl FitMessageHrZone {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageHrZone {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHrZone";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageHrmProfile {
     header: FitRecordHeader,
@@ -25838,6 +26098,13 @@ impl FitMessageHrmProfile {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageHrmProfile {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHrmProfile";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageHrv {
     header: FitRecordHeader,
@@ -25988,6 +26255,13 @@ impl FitMessageHrv {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageHrv {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHrv";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageLapSubfieldTotalCycles {
     Default(Option<u32>),
@@ -30180,6 +30454,13 @@ impl FitMessageLap {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageLap {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageLap";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageLength {
     header: FitRecordHeader,
@@ -30873,6 +31154,13 @@ impl FitMessageLength {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageLength {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageLength";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageMagnetometerData {
     header: FitRecordHeader,
@@ -31369,6 +31657,13 @@ impl FitMessageMagnetometerData {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageMagnetometerData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageMagnetometerData";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageMemoGlob {
     header: FitRecordHeader,
@@ -31582,6 +31877,13 @@ impl FitMessageMemoGlob {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageMemoGlob {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageMemoGlob";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     Default(Option<u16>),
@@ -31872,6 +32174,13 @@ impl FitMessageMesgCapabilities {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageMesgCapabilities {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageMesgCapabilities";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageMetZone {
     header: FitRecordHeader,
@@ -32103,6 +32412,13 @@ impl FitMessageMetZone {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageMetZone {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageMetZone";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageMonitoringSubfieldCycles {
     Default(Option<u32>),
@@ -33205,6 +33521,13 @@ impl FitMessageMonitoring {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageMonitoring {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageMonitoring";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageMonitoringInfo {
     header: FitRecordHeader,
@@ -33562,6 +33885,13 @@ impl FitMessageMonitoringInfo {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageMonitoringInfo {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageMonitoringInfo";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageNmeaSentence {
     header: FitRecordHeader,
@@ -33758,6 +34088,13 @@ impl FitMessageNmeaSentence {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageNmeaSentence {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageNmeaSentence";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageObdiiData {
     header: FitRecordHeader,
@@ -34176,6 +34513,13 @@ impl FitMessageObdiiData {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageObdiiData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageObdiiData";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageOhrSettings {
     header: FitRecordHeader,
@@ -34343,6 +34687,13 @@ impl FitMessageOhrSettings {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageOhrSettings {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageOhrSettings";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
     Default(Option<u32>),
@@ -34662,6 +35013,13 @@ impl FitMessageOneDSensorCalibration {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageOneDSensorCalibration {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageOneDSensorCalibration";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessagePowerZone {
     header: FitRecordHeader,
@@ -34846,6 +35204,13 @@ impl FitMessagePowerZone {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessagePowerZone {
+    fn message_name(&self) -> &'static str {
+        return "FitMessagePowerZone";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageRecord {
     header: FitRecordHeader,
@@ -37420,6 +37785,13 @@ impl FitMessageRecord {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageRecord {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageRecord";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageScheduleSubfieldProduct {
     Default(Option<u16>),
@@ -37792,6 +38164,13 @@ impl FitMessageSchedule {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSchedule {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSchedule";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSdmProfile {
     header: FitRecordHeader,
@@ -38135,6 +38514,13 @@ impl FitMessageSdmProfile {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSdmProfile {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSdmProfile";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSegmentFile {
     header: FitRecordHeader,
@@ -38549,6 +38935,13 @@ impl FitMessageSegmentFile {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSegmentFile {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSegmentFile";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSegmentId {
     header: FitRecordHeader,
@@ -38891,6 +39284,13 @@ impl FitMessageSegmentId {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSegmentId {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSegmentId";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageSegmentLapSubfieldTotalCycles {
     Default(Option<u32>),
@@ -42062,6 +42462,13 @@ impl FitMessageSegmentLap {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSegmentLap {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSegmentLap";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSegmentLeaderboardEntry {
     header: FitRecordHeader,
@@ -42371,6 +42778,13 @@ impl FitMessageSegmentLeaderboardEntry {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSegmentLeaderboardEntry {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSegmentLeaderboardEntry";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSegmentPoint {
     header: FitRecordHeader,
@@ -42690,6 +43104,13 @@ impl FitMessageSegmentPoint {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSegmentPoint {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSegmentPoint";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageSessionSubfieldTotalCycles {
     Default(Option<u32>),
@@ -47349,6 +47770,13 @@ impl FitMessageSession {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSession {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSession";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSet {
     header: FitRecordHeader,
@@ -47849,6 +48277,13 @@ impl FitMessageSet {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSet {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSet";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     Default(Option<u16>),
@@ -48070,6 +48505,13 @@ impl FitMessageSlaveDevice {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSlaveDevice {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSlaveDevice";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSoftware {
     header: FitRecordHeader,
@@ -48264,6 +48706,13 @@ impl FitMessageSoftware {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSoftware {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSoftware";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSpeedZone {
     header: FitRecordHeader,
@@ -48458,6 +48907,13 @@ impl FitMessageSpeedZone {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSpeedZone {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSpeedZone";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageSport {
     header: FitRecordHeader,
@@ -48634,6 +49090,13 @@ impl FitMessageSport {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageSport {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSport";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageStressLevel {
     header: FitRecordHeader,
@@ -48791,6 +49254,13 @@ impl FitMessageStressLevel {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageStressLevel {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageStressLevel";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     Default(Option<u32>),
@@ -49192,6 +49662,13 @@ impl FitMessageThreeDSensorCalibration {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageThreeDSensorCalibration {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageThreeDSensorCalibration";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageTimestampCorrelation {
     header: FitRecordHeader,
@@ -49541,6 +50018,13 @@ impl FitMessageTimestampCorrelation {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageTimestampCorrelation {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageTimestampCorrelation";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageTotals {
     header: FitRecordHeader,
@@ -49942,6 +50426,13 @@ impl FitMessageTotals {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageTotals {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageTotals";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageTrainingFileSubfieldProduct {
     Default(Option<u16>),
@@ -50297,6 +50788,13 @@ impl FitMessageTrainingFile {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageTrainingFile {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageTrainingFile";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageUserProfile {
     header: FitRecordHeader,
@@ -51251,6 +51749,13 @@ impl FitMessageUserProfile {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageUserProfile {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageUserProfile";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageVideo {
     header: FitRecordHeader,
@@ -51429,6 +51934,13 @@ impl FitMessageVideo {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageVideo {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageVideo";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageVideoClip {
     header: FitRecordHeader,
@@ -51735,6 +52247,13 @@ impl FitMessageVideoClip {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageVideoClip {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageVideoClip";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageVideoDescription {
     header: FitRecordHeader,
@@ -51919,6 +52438,13 @@ impl FitMessageVideoDescription {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageVideoDescription {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageVideoDescription";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageVideoFrame {
     header: FitRecordHeader,
@@ -52117,6 +52643,13 @@ impl FitMessageVideoFrame {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageVideoFrame {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageVideoFrame";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageVideoTitle {
     header: FitRecordHeader,
@@ -52301,6 +52834,13 @@ impl FitMessageVideoTitle {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageVideoTitle {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageVideoTitle";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     Default(Option<Vec<u8>>),
@@ -52527,6 +53067,13 @@ impl FitMessageWatchfaceSettings {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWatchfaceSettings {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWatchfaceSettings";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageWeatherAlert {
     header: FitRecordHeader,
@@ -52814,6 +53361,13 @@ impl FitMessageWeatherAlert {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWeatherAlert {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWeatherAlert";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageWeatherConditions {
     header: FitRecordHeader,
@@ -53383,6 +53937,13 @@ impl FitMessageWeatherConditions {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWeatherConditions {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWeatherConditions";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageWeightScale {
     header: FitRecordHeader,
@@ -53943,6 +54504,13 @@ impl FitMessageWeightScale {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWeightScale {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWeightScale";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageWorkout {
     header: FitRecordHeader,
@@ -54247,6 +54815,13 @@ impl FitMessageWorkout {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWorkout {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWorkout";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageWorkoutSession {
     header: FitRecordHeader,
@@ -54553,6 +55128,13 @@ impl FitMessageWorkoutSession {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWorkoutSession {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWorkoutSession";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     Default(Option<u32>),
@@ -55583,6 +56165,13 @@ impl FitMessageWorkoutStep {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageWorkoutStep {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageWorkoutStep";
+    }
+}
+
 #[derive(Debug)]
 pub struct FitMessageZonesTarget {
     header: FitRecordHeader,
@@ -55815,6 +56404,13 @@ impl FitMessageZonesTarget {
         Ok(inp)
     }
 }
+
+impl FitRecord for FitMessageZonesTarget {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageZonesTarget";
+    }
+}
+
 #[derive(Debug)]
 pub enum FitDataMessage {
     AccelerometerData(Rc<FitMessageAccelerometerData>),
@@ -56430,6 +57026,608 @@ impl FitDataMessage {
             FitDataMessage::WorkoutStep(_) => "WorkoutStep",
             FitDataMessage::ZonesTarget(_) => "ZonesTarget",
             FitDataMessage::UnknownToSdk(_) => "UnknownToSdk",
+        }
+    }
+
+    pub fn is_accelerometer_data(&self) -> bool {
+        match *self {
+            FitDataMessage::AccelerometerData(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_activity(&self) -> bool {
+        match *self {
+            FitDataMessage::Activity(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_ant_channel_id(&self) -> bool {
+        match *self {
+            FitDataMessage::AntChannelId(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_ant_rx(&self) -> bool {
+        match *self {
+            FitDataMessage::AntRx(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_ant_tx(&self) -> bool {
+        match *self {
+            FitDataMessage::AntTx(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_aviation_attitude(&self) -> bool {
+        match *self {
+            FitDataMessage::AviationAttitude(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_barometer_data(&self) -> bool {
+        match *self {
+            FitDataMessage::BarometerData(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_bike_profile(&self) -> bool {
+        match *self {
+            FitDataMessage::BikeProfile(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_blood_pressure(&self) -> bool {
+        match *self {
+            FitDataMessage::BloodPressure(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_cadence_zone(&self) -> bool {
+        match *self {
+            FitDataMessage::CadenceZone(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_camera_event(&self) -> bool {
+        match *self {
+            FitDataMessage::CameraEvent(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_capabilities(&self) -> bool {
+        match *self {
+            FitDataMessage::Capabilities(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_connectivity(&self) -> bool {
+        match *self {
+            FitDataMessage::Connectivity(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_course(&self) -> bool {
+        match *self {
+            FitDataMessage::Course(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_course_point(&self) -> bool {
+        match *self {
+            FitDataMessage::CoursePoint(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_developer_data_id(&self) -> bool {
+        match *self {
+            FitDataMessage::DeveloperDataId(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_device_info(&self) -> bool {
+        match *self {
+            FitDataMessage::DeviceInfo(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_device_settings(&self) -> bool {
+        match *self {
+            FitDataMessage::DeviceSettings(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_dive_alarm(&self) -> bool {
+        match *self {
+            FitDataMessage::DiveAlarm(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_dive_gas(&self) -> bool {
+        match *self {
+            FitDataMessage::DiveGas(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_dive_settings(&self) -> bool {
+        match *self {
+            FitDataMessage::DiveSettings(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_dive_summary(&self) -> bool {
+        match *self {
+            FitDataMessage::DiveSummary(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_event(&self) -> bool {
+        match *self {
+            FitDataMessage::Event(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_exd_data_concept_configuration(&self) -> bool {
+        match *self {
+            FitDataMessage::ExdDataConceptConfiguration(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_exd_data_field_configuration(&self) -> bool {
+        match *self {
+            FitDataMessage::ExdDataFieldConfiguration(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_exd_screen_configuration(&self) -> bool {
+        match *self {
+            FitDataMessage::ExdScreenConfiguration(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_exercise_title(&self) -> bool {
+        match *self {
+            FitDataMessage::ExerciseTitle(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_field_capabilities(&self) -> bool {
+        match *self {
+            FitDataMessage::FieldCapabilities(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_field_description(&self) -> bool {
+        match *self {
+            FitDataMessage::FieldDescription(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_file_capabilities(&self) -> bool {
+        match *self {
+            FitDataMessage::FileCapabilities(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_file_creator(&self) -> bool {
+        match *self {
+            FitDataMessage::FileCreator(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_file_id(&self) -> bool {
+        match *self {
+            FitDataMessage::FileId(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_goal(&self) -> bool {
+        match *self {
+            FitDataMessage::Goal(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_gps_metadata(&self) -> bool {
+        match *self {
+            FitDataMessage::GpsMetadata(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_gyroscope_data(&self) -> bool {
+        match *self {
+            FitDataMessage::GyroscopeData(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_hr(&self) -> bool {
+        match *self {
+            FitDataMessage::Hr(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_hr_zone(&self) -> bool {
+        match *self {
+            FitDataMessage::HrZone(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_hrm_profile(&self) -> bool {
+        match *self {
+            FitDataMessage::HrmProfile(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_hrv(&self) -> bool {
+        match *self {
+            FitDataMessage::Hrv(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_lap(&self) -> bool {
+        match *self {
+            FitDataMessage::Lap(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_length(&self) -> bool {
+        match *self {
+            FitDataMessage::Length(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_magnetometer_data(&self) -> bool {
+        match *self {
+            FitDataMessage::MagnetometerData(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_memo_glob(&self) -> bool {
+        match *self {
+            FitDataMessage::MemoGlob(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_mesg_capabilities(&self) -> bool {
+        match *self {
+            FitDataMessage::MesgCapabilities(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_met_zone(&self) -> bool {
+        match *self {
+            FitDataMessage::MetZone(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_monitoring(&self) -> bool {
+        match *self {
+            FitDataMessage::Monitoring(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_monitoring_info(&self) -> bool {
+        match *self {
+            FitDataMessage::MonitoringInfo(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_nmea_sentence(&self) -> bool {
+        match *self {
+            FitDataMessage::NmeaSentence(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_obdii_data(&self) -> bool {
+        match *self {
+            FitDataMessage::ObdiiData(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_ohr_settings(&self) -> bool {
+        match *self {
+            FitDataMessage::OhrSettings(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_one_d_sensor_calibration(&self) -> bool {
+        match *self {
+            FitDataMessage::OneDSensorCalibration(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_power_zone(&self) -> bool {
+        match *self {
+            FitDataMessage::PowerZone(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_record(&self) -> bool {
+        match *self {
+            FitDataMessage::Record(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_schedule(&self) -> bool {
+        match *self {
+            FitDataMessage::Schedule(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_sdm_profile(&self) -> bool {
+        match *self {
+            FitDataMessage::SdmProfile(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_segment_file(&self) -> bool {
+        match *self {
+            FitDataMessage::SegmentFile(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_segment_id(&self) -> bool {
+        match *self {
+            FitDataMessage::SegmentId(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_segment_lap(&self) -> bool {
+        match *self {
+            FitDataMessage::SegmentLap(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_segment_leaderboard_entry(&self) -> bool {
+        match *self {
+            FitDataMessage::SegmentLeaderboardEntry(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_segment_point(&self) -> bool {
+        match *self {
+            FitDataMessage::SegmentPoint(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_session(&self) -> bool {
+        match *self {
+            FitDataMessage::Session(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_set(&self) -> bool {
+        match *self {
+            FitDataMessage::Set(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_slave_device(&self) -> bool {
+        match *self {
+            FitDataMessage::SlaveDevice(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_software(&self) -> bool {
+        match *self {
+            FitDataMessage::Software(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_speed_zone(&self) -> bool {
+        match *self {
+            FitDataMessage::SpeedZone(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_sport(&self) -> bool {
+        match *self {
+            FitDataMessage::Sport(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_stress_level(&self) -> bool {
+        match *self {
+            FitDataMessage::StressLevel(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_three_d_sensor_calibration(&self) -> bool {
+        match *self {
+            FitDataMessage::ThreeDSensorCalibration(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_timestamp_correlation(&self) -> bool {
+        match *self {
+            FitDataMessage::TimestampCorrelation(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_totals(&self) -> bool {
+        match *self {
+            FitDataMessage::Totals(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_training_file(&self) -> bool {
+        match *self {
+            FitDataMessage::TrainingFile(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_user_profile(&self) -> bool {
+        match *self {
+            FitDataMessage::UserProfile(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_video(&self) -> bool {
+        match *self {
+            FitDataMessage::Video(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_video_clip(&self) -> bool {
+        match *self {
+            FitDataMessage::VideoClip(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_video_description(&self) -> bool {
+        match *self {
+            FitDataMessage::VideoDescription(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_video_frame(&self) -> bool {
+        match *self {
+            FitDataMessage::VideoFrame(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_video_title(&self) -> bool {
+        match *self {
+            FitDataMessage::VideoTitle(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_watchface_settings(&self) -> bool {
+        match *self {
+            FitDataMessage::WatchfaceSettings(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_weather_alert(&self) -> bool {
+        match *self {
+            FitDataMessage::WeatherAlert(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_weather_conditions(&self) -> bool {
+        match *self {
+            FitDataMessage::WeatherConditions(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_weight_scale(&self) -> bool {
+        match *self {
+            FitDataMessage::WeightScale(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_workout(&self) -> bool {
+        match *self {
+            FitDataMessage::Workout(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_workout_session(&self) -> bool {
+        match *self {
+            FitDataMessage::WorkoutSession(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_workout_step(&self) -> bool {
+        match *self {
+            FitDataMessage::WorkoutStep(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_zones_target(&self) -> bool {
+        match *self {
+            FitDataMessage::ZonesTarget(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_unknown(&self) -> bool {
+        match *self {
+            FitDataMessage::UnknownToSdk(_) => true,
+            _ => false,
         }
     }
 }

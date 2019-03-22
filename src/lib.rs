@@ -122,7 +122,10 @@ named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
         profile_version: u16!(Endianness::Little) >>
         data_size: u32!(Endianness::Little) >>
         tag!(".FIT") >>
-        crc: take!(2) >>
+        crc: switch!(value!(header_size[0] == 14),
+            true => map!(take!(2), |x| x.to_vec()) |
+            _ => value!(Vec::new())) >>
+        //crc: take!(2) >>
         (FitFileHeader {
             header_size: header_size[0],
             protocol_version: protocol_version[0],
@@ -133,10 +136,23 @@ named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
     )
 );
 
+trait FitRecord {
+    fn message_name(&self) -> &'static str;
+}
+
 #[derive(Debug)]
 pub enum FitMessage {
     Data(FitDataMessage),
     Definition(Rc<FitDefinitionMessage>),
+}
+
+impl FitMessage {
+    pub fn message_name(&self) -> &'static str {
+        match self {
+            &FitMessage::Data(ref m) => m.message_name(),
+            &FitMessage::Definition(_) => "Definition",
+        }
+    }
 }
 
 pub fn parse_fit_message<'a>(
@@ -1070,4 +1086,5 @@ pub mod fittypes;
 #[macro_use]
 mod fitparsers;
 mod errors;
+pub mod fitfile;
 pub mod fitparsingstate;

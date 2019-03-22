@@ -129,6 +129,11 @@ impl Error {
     pub(crate) fn invalid_fit_base_type_parse() -> Error {
         Error::from(ErrorKind::InvalidFitBaseTypeParse)
     }
+
+    #[allow(dead_code)]
+    pub(crate) fn fit_file_too_large(max_allowed: usize, attempted: usize) -> Error {
+        Error::from(ErrorKind::FitFileTooLarge((max_allowed, attempted)))
+    }
 }
 
 impl Fail for Error {
@@ -173,6 +178,7 @@ pub enum ErrorKind {
     IncorrectShiftInput,
     FieldDefinitionNumberNotFound(u8),
     InvalidFitBaseTypeParse,
+    FitFileTooLarge((usize, usize)),
 }
 
 impl fmt::Display for ErrorKind {
@@ -243,6 +249,11 @@ impl fmt::Display for ErrorKind {
                 write!(f, "field definition number not found: {:?}", fdn)
             }
             ErrorKind::InvalidFitBaseTypeParse => write!(f, "invalid fit base type parse result"),
+            ErrorKind::FitFileTooLarge(ref fftl) => write!(
+                f,
+                "fit file too large, max_allowed: {:?}, attempted: {:?}",
+                fftl.0, fftl.1
+            ),
         }
     }
 }
