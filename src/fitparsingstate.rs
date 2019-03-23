@@ -9,6 +9,7 @@ use fittypes::{FitDataMessage, FitFieldDateTime};
 
 pub struct FitParsingState {
     map: HashMap<u16, Rc<FitDefinitionMessage>>,
+    pub retain_bytes: bool,
     last_timestamp: Option<FitFieldDateTime>,
     timezone_offset_secs: Option<f64>,
     developer_data_definitions: HashMap<u8, FitDeveloperDataDefinition>,
@@ -18,6 +19,7 @@ impl FitParsingState {
     pub fn new() -> FitParsingState {
         FitParsingState {
             map: HashMap::new(),
+            retain_bytes: false,
             last_timestamp: None,
             timezone_offset_secs: None,
             developer_data_definitions: HashMap::new(),

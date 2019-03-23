@@ -34,7 +34,6 @@ impl FitFile {
             Err(e) => panic!("unable to parse header: {:?}", e),
         };
 
-        println!("file_header: {:?}", file_header);
         if file_header.data_size as usize > self.max_file_size {
             return Err(Error::fit_file_too_large(
                 self.max_file_size,
@@ -57,6 +56,7 @@ impl FitFile {
         }
 
         let mut parsing_state = FitParsingState::new();
+        parsing_state.retain_bytes = self.retain_bytes;
 
         let mut inp = &record_bytes[0..];
         let mut num = 0;

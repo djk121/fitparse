@@ -10517,10 +10517,12 @@ impl FitMessageAccelerometerData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAccelerometerData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11147,10 +11149,12 @@ impl FitMessageActivity {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageActivity::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11499,10 +11503,12 @@ impl FitMessageAntChannelId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAntChannelId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -11740,10 +11746,12 @@ impl FitMessageAntRx {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAntRx::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12108,10 +12116,12 @@ impl FitMessageAntTx {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAntTx::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -12488,10 +12498,12 @@ impl FitMessageAviationAttitude {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageAviationAttitude::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13158,10 +13170,12 @@ impl FitMessageBarometerData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageBarometerData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -13480,10 +13494,12 @@ impl FitMessageBikeProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageBikeProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -14520,10 +14536,12 @@ impl FitMessageBloodPressure {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageBloodPressure::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -14939,10 +14957,12 @@ impl FitMessageCadenceZone {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCadenceZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -15132,10 +15152,12 @@ impl FitMessageCameraEvent {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCameraEvent::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -15387,10 +15409,12 @@ impl FitMessageCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -15659,10 +15683,12 @@ impl FitMessageConnectivity {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageConnectivity::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16094,10 +16120,12 @@ impl FitMessageCourse {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCourse::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16318,10 +16346,12 @@ impl FitMessageCoursePoint {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageCoursePoint::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -16670,10 +16700,12 @@ impl FitMessageDeveloperDataId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDeveloperDataId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -17043,10 +17075,12 @@ impl FitMessageDeviceInfo {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDeviceInfo::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -17703,10 +17737,12 @@ impl FitMessageDeviceSettings {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDeviceSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18508,10 +18544,12 @@ impl FitMessageDiveAlarm {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDiveAlarm::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -18835,10 +18873,12 @@ impl FitMessageDiveGas {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDiveGas::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -19134,10 +19174,12 @@ impl FitMessageDiveSettings {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDiveSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -19888,10 +19930,12 @@ impl FitMessageDiveSummary {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageDiveSummary::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -20634,10 +20678,12 @@ impl FitMessageEvent {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageEvent::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -21119,10 +21165,12 @@ impl FitMessageExdDataConceptConfiguration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExdDataConceptConfiguration::parse_internal(
             &mut message,
@@ -21529,10 +21577,12 @@ impl FitMessageExdDataFieldConfiguration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExdDataFieldConfiguration::parse_internal(
             &mut message,
@@ -21826,10 +21876,12 @@ impl FitMessageExdScreenConfiguration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExdScreenConfiguration::parse_internal(
             &mut message,
@@ -22041,10 +22093,12 @@ impl FitMessageExerciseTitle {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageExerciseTitle::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -22283,10 +22337,12 @@ impl FitMessageFieldCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFieldCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -22552,10 +22608,12 @@ impl FitMessageFieldDescription {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFieldDescription::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -23060,10 +23118,12 @@ impl FitMessageFileCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFileCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -23326,10 +23386,12 @@ impl FitMessageFileCreator {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFileCreator::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -23544,10 +23606,12 @@ impl FitMessageFileId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageFileId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -23867,10 +23931,12 @@ impl FitMessageGoal {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageGoal::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -24336,10 +24402,12 @@ impl FitMessageGpsMetadata {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageGpsMetadata::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -24775,10 +24843,12 @@ impl FitMessageGyroscopeData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageGyroscopeData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25272,10 +25342,12 @@ impl FitMessageHr {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHr::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25704,10 +25776,12 @@ impl FitMessageHrZone {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHrZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -25897,10 +25971,12 @@ impl FitMessageHrmProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHrmProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -26134,10 +26210,12 @@ impl FitMessageHrv {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageHrv::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -26588,10 +26666,12 @@ impl FitMessageLap {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageLap::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -30524,10 +30604,12 @@ impl FitMessageLength {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageLength::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -31206,10 +31288,12 @@ impl FitMessageMagnetometerData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMagnetometerData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -31699,10 +31783,12 @@ impl FitMessageMemoGlob {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMemoGlob::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -31965,10 +32051,12 @@ impl FitMessageMesgCapabilities {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMesgCapabilities::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -32216,10 +32304,12 @@ impl FitMessageMetZone {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMetZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -32550,10 +32640,12 @@ impl FitMessageMonitoring {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMonitoring::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -33567,10 +33659,12 @@ impl FitMessageMonitoringInfo {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageMonitoringInfo::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -33925,10 +34019,12 @@ impl FitMessageNmeaSentence {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageNmeaSentence::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -34140,10 +34236,12 @@ impl FitMessageObdiiData {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageObdiiData::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -34551,10 +34649,12 @@ impl FitMessageOhrSettings {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageOhrSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -34769,10 +34869,12 @@ impl FitMessageOneDSensorCalibration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o =
             match FitMessageOneDSensorCalibration::parse_internal(&mut message, input, tz_offset) {
@@ -35053,10 +35155,12 @@ impl FitMessagePowerZone {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessagePowerZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -35372,10 +35476,12 @@ impl FitMessageRecord {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageRecord::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -37895,10 +38001,12 @@ impl FitMessageSchedule {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSchedule::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -38214,10 +38322,12 @@ impl FitMessageSdmProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSdmProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -38566,10 +38676,12 @@ impl FitMessageSegmentFile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentFile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -38987,10 +39099,12 @@ impl FitMessageSegmentId {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentId::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -39520,10 +39634,12 @@ impl FitMessageSegmentLap {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentLap::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -42510,10 +42626,12 @@ impl FitMessageSegmentLeaderboardEntry {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o =
             match FitMessageSegmentLeaderboardEntry::parse_internal(&mut message, input, tz_offset)
@@ -42824,10 +42942,12 @@ impl FitMessageSegmentPoint {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSegmentPoint::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -43469,10 +43589,12 @@ impl FitMessageSession {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSession::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -47826,10 +47948,12 @@ impl FitMessageSet {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSet::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -48377,10 +48501,12 @@ impl FitMessageSlaveDevice {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSlaveDevice::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -48545,10 +48671,12 @@ impl FitMessageSoftware {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSoftware::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -48746,10 +48874,12 @@ impl FitMessageSpeedZone {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSpeedZone::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -48947,10 +49077,12 @@ impl FitMessageSport {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageSport::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -49128,10 +49260,12 @@ impl FitMessageStressLevel {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageStressLevel::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -49348,10 +49482,12 @@ impl FitMessageThreeDSensorCalibration {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o =
             match FitMessageThreeDSensorCalibration::parse_internal(&mut message, input, tz_offset)
@@ -49710,10 +49846,12 @@ impl FitMessageTimestampCorrelation {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageTimestampCorrelation::parse_internal(&mut message, input, tz_offset)
         {
@@ -50072,10 +50210,12 @@ impl FitMessageTotals {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageTotals::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -50534,10 +50674,12 @@ impl FitMessageTrainingFile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageTrainingFile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -50880,10 +51022,12 @@ impl FitMessageUserProfile {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageUserProfile::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -51789,10 +51933,12 @@ impl FitMessageVideo {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideo::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -51982,10 +52128,12 @@ impl FitMessageVideoClip {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoClip::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -52287,10 +52435,12 @@ impl FitMessageVideoDescription {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoDescription::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -52478,10 +52628,12 @@ impl FitMessageVideoFrame {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoFrame::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -52683,10 +52835,12 @@ impl FitMessageVideoTitle {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageVideoTitle::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -52914,10 +53068,12 @@ impl FitMessageWatchfaceSettings {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWatchfaceSettings::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -53113,10 +53269,12 @@ impl FitMessageWeatherAlert {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWeatherAlert::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -53427,10 +53585,12 @@ impl FitMessageWeatherConditions {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWeatherConditions::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -53997,10 +54157,12 @@ impl FitMessageWeightScale {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWeightScale::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -54552,10 +54714,12 @@ impl FitMessageWorkout {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWorkout::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -54863,10 +55027,12 @@ impl FitMessageWorkoutSession {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWorkoutSession::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -55669,10 +55835,12 @@ impl FitMessageWorkoutStep {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageWorkoutStep::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
@@ -56209,10 +56377,12 @@ impl FitMessageZonesTarget {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message
-            .raw_bytes
-            .resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message
+                .raw_bytes
+                .resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match FitMessageZonesTarget::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,

@@ -422,8 +422,10 @@ impl {{ message_name }} {
         };
 
         let inp = &input[..(message.definition_message.message_size)];
-        message.raw_bytes.resize(message.definition_message.message_size, 0);
-        message.raw_bytes.copy_from_slice(inp);
+        if parsing_state.retain_bytes == true {
+            message.raw_bytes.resize(message.definition_message.message_size, 0);
+            message.raw_bytes.copy_from_slice(inp);
+        }
         let tz_offset = parsing_state.get_timezone_offset();
         let o = match {{ message_name }}::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,

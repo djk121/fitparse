@@ -20,9 +20,17 @@ fn main() {
                 .required(true)
                 .index(1),
         )
+        .arg(
+            Arg::with_name("silent")
+                .help("don't print to stdout")
+                .short("s")
+                .long("silent")
+                .takes_value(false),
+        )
         .get_matches();
 
     let fname = matches.value_of("input").unwrap();
+    let silent = matches.is_present("silent");
 
     let mut f = match File::open(fname) {
         Ok(fi) => fi,
@@ -37,7 +45,9 @@ fn main() {
 
     for rec in ff.iter_message_name("Record") {
         if let FitMessage::Data(FitDataMessage::Record(ref r)) = *rec {
-            println!("distance: {:?}", r.distance);
+            if silent == false {
+                println!("distance: {:?}", r.distance);
+            }
         }
     }
 }
