@@ -112,7 +112,7 @@ impl FitFileHeader {
 }
 
 fn parse_fit_file_header(input: &[u8]) -> Result<(Option<FitFileHeader>, &[u8])> {
-    nom_basic_internal_parser!(parse_fit_file_header_internal, input)
+    nom_returning_internal_parser!(parse_fit_file_header_internal, input)
 }
 
 named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
@@ -321,13 +321,13 @@ impl FitMessageUnknownToSdk {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
             let base_type = FitFieldFitBaseType::from(field.base_type);
-            let (val, outp) = FitBaseValue::parse(
+            let val = FitBaseValue::parse(
                 inp,
                 &base_type,
                 message.definition_message.endianness,
                 field.field_size,
             )?;
-            inp = outp;
+            inp = &inp[field.field_size..];
             message.unknown_fields.insert(field.definition_number, val);
         }
         Ok(inp)
@@ -343,7 +343,7 @@ enum FitGlobalMesgNum {
 impl FitGlobalMesgNum {
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
         let (raw_num, o) = match parse_uint16(input, endianness)? {
-            (Some(raw_num), o) => (raw_num, o),
+            Some(raw_num) => (raw_num, &input[2..]),
             _ => return Err(Error::parse_error("error parsing FitGlobalMesgNum")),
         };
 
@@ -442,7 +442,7 @@ impl FitRecordHeader {
 }
 
 fn parse_record_header(input: &[u8]) -> Result<(Option<FitRecordHeader>, &[u8])> {
-    nom_basic_internal_parser!(parse_record_header_internal, input)
+    nom_returning_internal_parser!(parse_record_header_internal, input)
 }
 
 named!(parse_record_header_internal<&[u8], FitRecordHeader>,
@@ -484,7 +484,7 @@ fn parse_definition_message(
     input: &[u8],
     header: FitNormalRecordHeader,
 ) -> Result<(Option<FitDefinitionMessage>, &[u8])> {
-    nom_basic_internal_parser!(parse_definition_message_internal, input, header)
+    nom_returning_internal_parser!(parse_definition_message_internal, input, header)
 }
 
 //trace_macros!(true);
@@ -610,7 +610,7 @@ impl FitBaseValue {
         variant: &FitFieldFitBaseType,
         endianness: Endianness,
         size: usize,
-    ) -> Result<(FitBaseValue, &'a [u8])> {
+    ) -> Result<FitBaseValue> {
         match variant {
             FitFieldFitBaseType::Enum => {
                 if size > 1 {
@@ -619,15 +619,15 @@ impl FitBaseValue {
                     let mut i = size;
 
                     while i > 0 {
-                        let (val, o) = parse_enum(outp)?;
-                        outp = o;
+                        let val = parse_enum(outp)?;
+                        outp = &outp[1..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::EnumVec(v), outp))
+                    Ok(FitBaseValue::EnumVec(v))
                 } else {
-                    let (val, o) = parse_enum(input)?;
-                    Ok((FitBaseValue::Enum(val), o))
+                    let val = parse_enum(input)?;
+                    Ok(FitBaseValue::Enum(val))
                 }
             }
             FitFieldFitBaseType::Sint8 => {
@@ -637,15 +637,15 @@ impl FitBaseValue {
                     let mut i = size;
 
                     while i > 0 {
-                        let (val, o) = parse_sint8(outp)?;
-                        outp = o;
+                        let val = parse_sint8(outp)?;
+                        outp = &outp[1..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Sint8Vec(v), outp))
+                    Ok(FitBaseValue::Sint8Vec(v))
                 } else {
-                    let (val, o) = parse_sint8(input)?;
-                    Ok((FitBaseValue::Sint8(val), o))
+                    let val = parse_sint8(input)?;
+                    Ok(FitBaseValue::Sint8(val))
                 }
             }
             FitFieldFitBaseType::Uint8 => {
@@ -655,15 +655,15 @@ impl FitBaseValue {
                     let mut i = size;
 
                     while i > 0 {
-                        let (val, o) = parse_uint8(outp)?;
-                        outp = o;
+                        let val = parse_uint8(outp)?;
+                        outp = &outp[1..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint8Vec(v), outp))
+                    Ok(FitBaseValue::Uint8Vec(v))
                 } else {
-                    let (val, o) = parse_uint8(input)?;
-                    Ok((FitBaseValue::Uint8(val), o))
+                    let val = parse_uint8(input)?;
+                    Ok(FitBaseValue::Uint8(val))
                 }
             }
             FitFieldFitBaseType::Sint16 => {
@@ -675,15 +675,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_sint16(outp, endianness)?;
-                        outp = o;
+                        let val = parse_sint16(outp, endianness)?;
+                        outp = &outp[2..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Sint16Vec(v), outp))
+                    Ok(FitBaseValue::Sint16Vec(v))
                 } else {
-                    let (val, o) = parse_sint16(input, endianness)?;
-                    Ok((FitBaseValue::Sint16(val), o))
+                    let val = parse_sint16(input, endianness)?;
+                    Ok(FitBaseValue::Sint16(val))
                 }
             }
             FitFieldFitBaseType::Uint16 => {
@@ -695,15 +695,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_uint16(outp, endianness)?;
-                        outp = o;
+                        let val = parse_uint16(outp, endianness)?;
+                        outp = &outp[2..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint16Vec(v), outp))
+                    Ok(FitBaseValue::Uint16Vec(v))
                 } else {
-                    let (val, o) = parse_uint16(input, endianness)?;
-                    Ok((FitBaseValue::Uint16(val), o))
+                    let val = parse_uint16(input, endianness)?;
+                    Ok(FitBaseValue::Uint16(val))
                 }
             }
             FitFieldFitBaseType::Sint32 => {
@@ -715,15 +715,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_sint32(outp, endianness)?;
-                        outp = o;
+                        let val = parse_sint32(outp, endianness)?;
+                        outp = &outp[4..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Sint32Vec(v), outp))
+                    Ok(FitBaseValue::Sint32Vec(v))
                 } else {
-                    let (val, o) = parse_sint32(input, endianness)?;
-                    Ok((FitBaseValue::Sint32(val), o))
+                    let val = parse_sint32(input, endianness)?;
+                    Ok(FitBaseValue::Sint32(val))
                 }
             }
             FitFieldFitBaseType::Uint32 => {
@@ -735,21 +735,20 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_uint32(outp, endianness)?;
-                        outp = o;
+                        let val = parse_uint32(outp, endianness)?;
+                        outp = &outp[4..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint32Vec(v), outp))
+                    Ok(FitBaseValue::Uint32Vec(v))
                 } else {
-                    let (val, o) = parse_uint32(input, endianness)?;
-                    Ok((FitBaseValue::Uint32(val), o))
+                    let val = parse_uint32(input, endianness)?;
+                    Ok(FitBaseValue::Uint32(val))
                 }
             }
             FitFieldFitBaseType::String => {
-                //println!("bytes: {:?}", &input[0..size]);
-                let (val, o) = parse_string(input, size)?;
-                Ok((FitBaseValue::String(val), o))
+                let val = parse_string(input, size)?;
+                Ok(FitBaseValue::String(val))
             }
             FitFieldFitBaseType::Float32 => {
                 let mut num_to_parse = size / 4;
@@ -760,15 +759,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_float32(outp, endianness)?;
-                        outp = o;
+                        let val = parse_float32(outp, endianness)?;
+                        outp = &outp[4..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Float32Vec(v), outp))
+                    Ok(FitBaseValue::Float32Vec(v))
                 } else {
-                    let (val, o) = parse_float32(input, endianness)?;
-                    Ok((FitBaseValue::Float32(val), o))
+                    let val = parse_float32(input, endianness)?;
+                    Ok(FitBaseValue::Float32(val))
                 }
             }
             FitFieldFitBaseType::Float64 => {
@@ -780,15 +779,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_float64(outp, endianness)?;
-                        outp = o;
+                        let val = parse_float64(outp, endianness)?;
+                        outp = &outp[8..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Float64Vec(v), outp))
+                    Ok(FitBaseValue::Float64Vec(v))
                 } else {
-                    let (val, o) = parse_float64(input, endianness)?;
-                    Ok((FitBaseValue::Float64(val), o))
+                    let val = parse_float64(input, endianness)?;
+                    Ok(FitBaseValue::Float64(val))
                 }
             }
             FitFieldFitBaseType::Uint8z => {
@@ -798,15 +797,15 @@ impl FitBaseValue {
                     let mut i = size;
 
                     while i > 0 {
-                        let (val, o) = parse_uint8z(outp)?;
-                        outp = o;
+                        let val = parse_uint8z(outp)?;
+                        outp = &outp[1..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint8zVec(v), outp))
+                    Ok(FitBaseValue::Uint8zVec(v))
                 } else {
-                    let (val, o) = parse_uint8z(input)?;
-                    Ok((FitBaseValue::Uint8z(val), o))
+                    let val = parse_uint8z(input)?;
+                    Ok(FitBaseValue::Uint8z(val))
                 }
             }
             FitFieldFitBaseType::Uint16z => {
@@ -818,15 +817,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_uint16z(outp, endianness)?;
-                        outp = o;
+                        let val = parse_uint16z(outp, endianness)?;
+                        outp = &outp[2..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint16zVec(v), outp))
+                    Ok(FitBaseValue::Uint16zVec(v))
                 } else {
-                    let (val, o) = parse_uint16z(input, endianness)?;
-                    Ok((FitBaseValue::Uint16z(val), o))
+                    let val = parse_uint16z(input, endianness)?;
+                    Ok(FitBaseValue::Uint16z(val))
                 }
             }
             FitFieldFitBaseType::Uint32z => {
@@ -838,20 +837,20 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_uint32z(outp, endianness)?;
-                        outp = o;
+                        let val = parse_uint32z(outp, endianness)?;
+                        outp = &outp[4..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint32zVec(v), outp))
+                    Ok(FitBaseValue::Uint32zVec(v))
                 } else {
-                    let (val, o) = parse_uint32z(input, endianness)?;
-                    Ok((FitBaseValue::Uint32z(val), o))
+                    let val = parse_uint32z(input, endianness)?;
+                    Ok(FitBaseValue::Uint32z(val))
                 }
             }
             FitFieldFitBaseType::Byte => {
-                let (val, o) = parse_byte(input, size)?;
-                Ok((FitBaseValue::Byte(val), o))
+                let val = parse_byte(input, size)?;
+                Ok(FitBaseValue::Byte(val))
             }
             FitFieldFitBaseType::Sint64 => {
                 let mut num_to_parse = size / 8;
@@ -862,15 +861,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_sint64(outp, endianness)?;
-                        outp = o;
+                        let val = parse_sint64(outp, endianness)?;
+                        outp = &outp[8..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Sint64Vec(v), outp))
+                    Ok(FitBaseValue::Sint64Vec(v))
                 } else {
-                    let (val, o) = parse_sint64(input, endianness)?;
-                    Ok((FitBaseValue::Sint64(val), o))
+                    let val = parse_sint64(input, endianness)?;
+                    Ok(FitBaseValue::Sint64(val))
                 }
             }
             FitFieldFitBaseType::Uint64 => {
@@ -882,15 +881,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_uint64(outp, endianness)?;
-                        outp = o;
+                        let val = parse_uint64(outp, endianness)?;
+                        outp = &outp[8..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint64Vec(v), outp))
+                    Ok(FitBaseValue::Uint64Vec(v))
                 } else {
-                    let (val, o) = parse_uint64(input, endianness)?;
-                    Ok((FitBaseValue::Uint64(val), o))
+                    let val = parse_uint64(input, endianness)?;
+                    Ok(FitBaseValue::Uint64(val))
                 }
             }
             FitFieldFitBaseType::Uint64z => {
@@ -902,15 +901,15 @@ impl FitBaseValue {
                     let mut i = num_to_parse;
 
                     while i > 0 {
-                        let (val, o) = parse_uint64z(outp, endianness)?;
-                        outp = o;
+                        let val = parse_uint64z(outp, endianness)?;
+                        outp = &outp[8..];
                         v.push(val);
                         i = i - 1;
                     }
-                    Ok((FitBaseValue::Uint64zVec(v), outp))
+                    Ok(FitBaseValue::Uint64zVec(v))
                 } else {
-                    let (val, o) = parse_uint64z(input, endianness)?;
-                    Ok((FitBaseValue::Uint64z(val), o))
+                    let val = parse_uint64z(input, endianness)?;
+                    Ok(FitBaseValue::Uint64z(val))
                 }
             }
             _ => Err(Error::parse_unknown_base_value()),
@@ -936,13 +935,13 @@ impl FitFieldDeveloperData {
             None => return Err(Error::missing_fit_base_type()),
         };
 
-        let (val, o) = FitBaseValue::parse(input, base_type_id, endianness, field_size)?;
+        let val = FitBaseValue::parse(input, base_type_id, endianness, field_size)?;
         Ok((
             FitFieldDeveloperData {
                 field_description: field_description.clone(),
                 value: val,
             },
-            o,
+            &input[field_size..],
         ))
     }
 }

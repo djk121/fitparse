@@ -47,8 +47,7 @@ RUST_TYPE_SIZE_MAP = {
 FIT_BASE_TYPES = ['uint8', 'uint8z', 'uint16', 'uint16z', 'uint32', 'uint32z', 'sint8', 'sint16', 'sint32', 'float32', 'float64', 'string', 'byte']
 FIT_BASE_NUMERIC_TYPES = ['uint8', 'uint8z', 'uint16', 'uint16z', 'uint32', 'uint32z', 'sint8', 'sint16', 'sint32', 'float32', 'float64']
 
-
-TYPE_TEMPLATE = """
+ENUM_TYPE_TEMPLATE = """
 {% set base_type = types[this_type]["base_type"] %}
 {% set base_rust_type = fit_type_map[base_type] %}
 {% set fields = types[this_type]["fields"] %}
@@ -72,12 +71,66 @@ pub enum {{ type_name }} { // fit base type: {{ base_type }}
 }
 
 impl {{ type_name }} {
-    pub fn parse(input: &[u8]{{ endianness_clause_full}}) -> Result<({{ type_name }}, &[u8])> {
-        let (val, o) = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
+    pub fn parse(input: &[u8]{{ endianness_clause_full}}) -> Result<{{ type_name }}> {
+        let val = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
         match val {
-            Some(valid_val) => Ok(({{ type_name }}::from(valid_val), o)),
-            None => Ok(({{ type_name }}::InvalidFieldValue, o)),
+            Some(valid_val) => Ok({{ type_name }}::from(valid_val)),
+            None => Ok({{ type_name }}::InvalidFieldValue),
             //None => Err(Error::invalid_fit_base_type_parse())
+        }
+    }
+}
+
+impl From<{{ base_rust_type }}> for {{ type_name }} {
+    fn from(code: {{ base_rust_type }}) -> Self {
+        match code {
+        {%- for field in fields %}
+            {{ field['value'] }} => {{ type_name }}::{{ field['rustified_value_name'] }},
+        {%- endfor %}
+            _ => {{ type_name }}::UnknownToSdk,
+        }
+    }
+}
+"""
+
+
+NON_ENUM_TYPE_TEMPLATE = """
+{% set base_type = types[this_type]["base_type"] %}
+{% set base_rust_type = fit_type_map[base_type] %}
+{% set fields = types[this_type]["fields"] %}
+
+{% if base_type not in ['string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8'] -%}
+    {% set endianness_clause_full = ', endianness: Endianness' -%}
+    {% set endianness_clause_pass = ', endianness' -%}
+{% else -%}
+    {% set endianness_clause_full = '' -%}
+    {% set endianness_clause_pass = '' -%}
+{% endif %}
+
+#[derive(Debug, PartialEq)]
+pub enum {{ type_name }} { // fit base type: {{ base_type }}
+{%- for field in fields if not field["value_name"][0].isdigit() %}
+    {{ rustify_name(field["value_name"]) }}, // {{ field["value"] }}
+    {%- if field["comment"] %}  {{ field["comment"] }}{% endif %}
+{%- endfor %}
+    {{ rustify_name(this_type) }}({{ fit_type_map[base_type] }}),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl {{ type_name }} {
+    pub fn parse(input: &[u8]{{ endianness_clause_full}}) -> Result<{{ type_name }}> {
+        let val = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
+        match val {
+            Some(valid_val) => {
+                match valid_val {
+                    {% for field in fields if not field["value_name"][0].isdigit() %}
+                    {{ field["value"] }} => Ok({{ type_name }}::from(valid_val)),
+                    {% endfor %}
+                    v => Ok({{ type_name }}::{{ rustify_name(this_type) }}(v)),
+                }
+            },
+            None => Ok({{ type_name }}::InvalidFieldValue),
         }
     }
 }
@@ -163,22 +216,12 @@ pub struct FitFieldDateTime {
 }
 
 impl FitFieldDateTime {
-    fn parse(input: &[u8], endianness: Endianness) -> Result<(FitFieldDateTime, &[u8])> {
-        let (utc_dt, garmin_epoch_offset, o) = parse_date_time(input, endianness)?;
-        Ok((FitFieldDateTime{
+    fn parse(input: &[u8], endianness: Endianness) -> Result<FitFieldDateTime> {
+        let (utc_dt, garmin_epoch_offset) = parse_date_time(input, endianness)?;
+        Ok(FitFieldDateTime{
             seconds_since_garmin_epoch: garmin_epoch_offset,
             rust_time: utc_dt
-        }, o))
-
-        //match result {
-        //    Some(dt, garmin_epoch_offset) => {
-        //        Ok((FitFieldDateTime{
-        //            seconds_since_garmin_epoch: garmin_epoch_offset,
-        //            rust_time: dt
-        //        }, o))
-        //    },
-        //    None => Err(Error::invalid_fit_base_type_parse())
-        //}
+        })
     }
 
     #[allow(dead_code)]
@@ -203,7 +246,7 @@ impl FitFieldDateTime {
 
         let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
 
-        let (result, _) = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
+        let result = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
         Ok(result)
     }
 }
@@ -215,9 +258,9 @@ pub struct FitFieldLocalDateTime {
 }
 
 impl FitFieldLocalDateTime {
-    fn parse(input: &[u8], endianness: Endianness, _offset_secs: f64) -> Result<(FitFieldLocalDateTime, &[u8])> {
+    fn parse(input: &[u8], endianness: Endianness, _offset_secs: f64) -> Result<FitFieldLocalDateTime> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
-        let (result, o) = parse_uint32(input, endianness)?;
+        let result = parse_uint32(input, endianness)?;
         let garmin_epoch_offset = match result {
             Some(geo) => geo,
             None => return Err(Error::invalid_fit_base_type_parse())
@@ -227,10 +270,10 @@ impl FitFieldLocalDateTime {
             0 // nanosecs
         );
 
-        Ok((FitFieldLocalDateTime{
+        Ok(FitFieldLocalDateTime{
             seconds_since_garmin_epoch: garmin_epoch_offset,
             rust_time: local_dt
-        }, o))
+        })
     }
 }
 """
@@ -245,7 +288,12 @@ impl FitFieldLocalDateTime {
 
         type_name = "FitField{}".format(rustify_name(this_type))
 
-        template = Environment().from_string(TYPE_TEMPLATE, globals={'rustify_name': rustify_name, 'field_name': field_name})
+        template = None,
+        if types[this_type]['base_type'] == 'enum':
+            template = Environment().from_string(ENUM_TYPE_TEMPLATE, globals={'rustify_name': rustify_name, 'field_name': field_name})
+        else:
+            template = Environment().from_string(NON_ENUM_TYPE_TEMPLATE, globals={'rustify_name': rustify_name, 'field_name': field_name})
+
         content = template.render(this_type=this_type, type_name=type_name, types=types, fit_type_map=FIT_TYPE_MAP)
         sys.stdout.write(content)
 
@@ -486,31 +534,30 @@ impl {{ message_name }} {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let (v, outp) = {{ field.output_field_parser('tempp') }}?;
-                                    tempp = outp;
+                                    let v = {{ field.output_field_parser('tempp') }}?;
+                                    tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
                                 }
                                 {% else %}
-                                let (val, _) = {{ field.output_field_parser('&bytes') }}?;
+                                let val = {{ field.output_field_parser('&bytes') }}?;
                                 {% endif %}
                                 {{ field.output_parsed_field_assignment() }}
                             },
                             None => {
+                                saved_outp = &inp[f.field_size..];
                                 {% if field.array %}
                                 let mut array_size = field.field_size / field.base_type_size();
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let (v, outp) = {{ field.output_field_parser('tempp') }}?;
-                                    tempp = outp;
+                                    let v = {{ field.output_field_parser('tempp') }}?;
+                                    tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
                                 }
-                                saved_outp = tempp;
                                 {% else %}
-                                let (val, outp) = {{ field.output_field_parser('inp') }}?;
-                                saved_outp = outp;
+                                let val = {{ field.output_field_parser('inp') }}?;
                                 {% endif %}
                                 {{ field.output_parsed_field_assignment() }}
                             }
@@ -524,9 +571,9 @@ impl {{ message_name }} {
                 {% endfor %}
                     unknown_field_num => {
                         let base_type = FitFieldFitBaseType::from(f.base_type);
-                        let (val, outp) = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        let val = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        saved_outp = outp;
+                        saved_outp = &inp[f.field_size..];
                         Ok(())
                     }
                 };
@@ -833,24 +880,24 @@ pub enum {{ subfield_name }} {
 }
 
 impl {{ subfield_name }} {
-    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], _field: &FitFieldDefinition, _tz_offset: f64) -> Result<({{ subfield_name }},  &'a [u8])> {
+    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], f: &FitFieldDefinition, _tz_offset: f64) -> Result<{{ subfield_name }}> {
         {% for sf_name in subfield_ref_names %}
         match message.{{ sf_name }} {
         {% for sf in subfield_options[sf_name] %}
             Some(FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }}) => {
-                let (val, o) = {{ sf.output_field_parser(field.types, field.message.rustified_name) }}?;
+                let val = {{ sf.output_field_parser(field.types, field.message.rustified_name) }}?;
                 {% if sf.is_fit_base_type %}
-                return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(val), o))
+                return Ok({{ subfield_name }}::{{ sf.field_name_rustified }}(val))
                 {% else %}
-                return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(Some(val)), o))
+                return Ok({{ subfield_name }}::{{ sf.field_name_rustified }}(Some(val)))
                 {% endif -%}
             },
         {% endfor %}
             _ => (),
         }
         {% endfor %}
-        let (val, o) = {{ subfield_default_parser }}?;
-        Ok(({{ subfield_name }}::Default(val),o))
+        let val = {{ subfield_default_parser }}?;
+        Ok({{ subfield_name }}::Default(val))
     }
 }
 """
@@ -862,7 +909,7 @@ impl {{ subfield_name }} {
         for srn in subfield_ref_names:
             subfield_options[srn] = [sf for sf in self.subfields if sf.ref_field_name == srn]
 
-        subfield_default_parser = self.output_field_parser('inp', only_default_case=True, field_variable_name='_field')
+        subfield_default_parser = self.output_field_parser('inp', only_default_case=True, field_variable_name='f')
         subfield_enum_options = []
         for sf in self.subfields:
             ftn = "Option<{}>".format(sf.field_type_name)
@@ -898,12 +945,12 @@ impl {{ subfield_name }} {
 
         return False
 
-FIELD_PARSER_BASE_TYPE = """parse_{{ field_type }}({{ bytes_from }}
+FIELD_PARSER_BASE_TYPE = """parse_{{ field_type }}(&{{ bytes_from }}[0..f.field_size]
 {%- if field_size -%}, {{ field_name }}.field_size{%- endif -%}
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
 )"""
 
-FIELD_PARSER_FIT_TYPE = """FitField{{ field_type }}::parse({{ bytes_from }}
+FIELD_PARSER_FIT_TYPE = """FitField{{ field_type }}::parse(&{{ bytes_from }}[0..f.field_size]
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
 {%- if local_date_time -%}, _tz_offset{%- endif -%}
 )"""

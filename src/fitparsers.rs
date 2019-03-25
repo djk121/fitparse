@@ -87,17 +87,17 @@ named_args!(parse_byte_internal(num_bytes: usize)<Vec<u8>>,
 fn parse_date_time_internal(
     input: &[u8],
     endianness: nom::Endianness,
-) -> Result<(DateTime<UTC>, u32, &[u8])> {
+) -> Result<(DateTime<UTC>, u32)> {
     // if the value is < 0x10000000, it's relative to device power on, else
     // it's a normal unix timestamp, relative to the garmin epoch time
     match parse_uint32(input, endianness)? {
-        (Some(garmin_epoch_offset), o) => {
+        Some(garmin_epoch_offset) => {
             let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
             match garmin_epoch_offset < 0x10000000 {
                 true => Err(Error::unsupported_relative_timestamp()),
                 false => {
                     let utc_dt = garmin_epoch + Duration::seconds(garmin_epoch_offset.into());
-                    Ok((utc_dt, garmin_epoch_offset, o))
+                    Ok((utc_dt, garmin_epoch_offset))
                 }
             }
         }
@@ -105,9 +105,30 @@ fn parse_date_time_internal(
     }
 }
 
-#[allow(overflowing_literals)]
+fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> {
+    let mut res = std::vec::from_elem(0, desired_size);
+    let mut len = input.len() - 1;
+
+    if endianness == Endianness::Big {
+        let mut spot = desired_size;
+        while len > 0 {
+            res[spot] = input[len];
+            len = len - 1;
+            spot = spot - 1
+        }
+    } else {
+        let mut idx = 0;
+        while idx < len {
+            res[idx] = input[idx];
+            idx = idx + 1;
+        }
+    }
+
+    res
+}
+
 #[macro_export]
-macro_rules! nom_basic_internal_parser {
+macro_rules! nom_returning_internal_parser {
     ($func:ident, $input:expr, $endianness:expr) => {
         match $func($input, $endianness) {
             nom::IResult::Done(o, f) => Ok((Some(f), o)),
@@ -135,12 +156,40 @@ macro_rules! nom_basic_internal_parser {
 }
 
 #[macro_export]
+macro_rules! nom_basic_internal_parser {
+    ($func:ident, $input:expr, $endianness:expr) => {
+        match $func($input, $endianness) {
+            nom::IResult::Done(_, f) => Ok(Some(f)),
+            nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
+                Err(Error::parse_incomplete(amount))
+            }
+            nom::IResult::Incomplete(nom::Needed::Unknown) => {
+                Err(Error::parse_incomplete_unknown())
+            }
+            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+        }
+    };
+    ($func:ident, $input:expr) => {
+        match $func($input) {
+            nom::IResult::Done(_, f) => Ok(Some(f)),
+            nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
+                Err(Error::parse_incomplete(amount))
+            }
+            nom::IResult::Incomplete(nom::Needed::Unknown) => {
+                Err(Error::parse_incomplete_unknown())
+            }
+            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! nom_internal_parser {
     ($func:ident, $input:expr, $invalid_field_value:expr, $endianness:expr) => {
         match $func($input, $endianness) {
-            nom::IResult::Done(o, f) => match f == $invalid_field_value {
-                true => Ok((None, o)),
-                false => Ok((Some(f), o)),
+            nom::IResult::Done(_, f) => match f == $invalid_field_value {
+                true => Ok(None),
+                false => Ok(Some(f)),
             },
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
                 Err(Error::parse_incomplete(amount))
@@ -153,9 +202,9 @@ macro_rules! nom_internal_parser {
     };
     ($func:ident, $input:expr, $invalid_field_value:expr) => {
         match $func($input) {
-            nom::IResult::Done(o, f) => match f == $invalid_field_value {
-                true => Ok((None, o)),
-                false => Ok((Some(f), o)),
+            nom::IResult::Done(_, f) => match f == $invalid_field_value {
+                true => Ok(None),
+                false => Ok(Some(f)),
             },
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
                 Err(Error::parse_incomplete(amount))
@@ -172,20 +221,20 @@ macro_rules! nom_internal_parser {
 macro_rules! nom_internal_nonzero_parser {
     ($func:ident, $input:expr) => {
         match nom_internal_parser!($func, $input)? {
-            (num, o) => {
+            (num, _) => {
                 match num {
                     //0 => Err(Error::parse_zero()),
-                    0 => Ok((None, o)),
-                    _ => Ok((Some(num), o)),
+                    0 => Ok(None),
+                    _ => Ok(Some(num)),
                 }
             }
         }
     };
     ($func:ident, $input:expr, $endianness:expr) => {
         match nom_internal_parser!($func, $input, $endianness)? {
-            (num, o) => match num {
-                0 => Ok((None, o)),
-                _ => Ok((Some(num), o)),
+            (num, _) => match num {
+                0 => Ok(None),
+                _ => Ok(Some(num)),
             },
         }
     };
@@ -193,92 +242,147 @@ macro_rules! nom_internal_nonzero_parser {
 
 macro_rules! nom_parser {
     ("bool") => {
-        pub fn parse_bool(input: &[u8]) -> Result<(Option<bool>, &[u8])> {
+        pub fn parse_bool(input: &[u8]) -> Result<Option<bool>> {
             nom_basic_internal_parser!(parse_bool_internal, input)
         }
     };
     ("enum") => {
-        pub fn parse_enum(input: &[u8]) -> Result<(Option<u8>, &[u8])> {
+        pub fn parse_enum(input: &[u8]) -> Result<Option<u8>> {
             nom_internal_parser!(parse_uint8_internal, input, 0xFF)
         }
     };
     ("sint8") => {
-        pub fn parse_sint8(input: &[u8]) -> Result<(Option<i8>, &[u8])> {
+        pub fn parse_sint8(input: &[u8]) -> Result<Option<i8>> {
             nom_internal_parser!(parse_sint8_internal, input, 0x7F)
         }
     };
     ("uint8") => {
-        pub fn parse_uint8(input: &[u8]) -> Result<(Option<u8>, &[u8])> {
+        pub fn parse_uint8(input: &[u8]) -> Result<Option<u8>> {
             nom_internal_parser!(parse_uint8_internal, input, 0xFF)
         }
     };
     ("uint8z") => {
-        pub fn parse_uint8z(input: &[u8]) -> Result<(Option<u8>, &[u8])> {
+        pub fn parse_uint8z(input: &[u8]) -> Result<Option<u8>> {
             nom_internal_parser!(parse_uint8_internal, input, 0x00)
         }
     };
     ("sint16") => {
-        pub fn parse_sint16(input: &[u8], endianness: Endianness) -> Result<(Option<i16>, &[u8])> {
-            nom_internal_parser!(parse_sint16_internal, input, 0x7FFF, endianness)
+        pub fn parse_sint16(input: &[u8], endianness: Endianness) -> Result<Option<i16>> {
+            if input.len() < 2 {
+                let inp = buffer(input, 2, endianness);
+                nom_internal_parser!(parse_sint16_internal, &inp, 0x7FFF, endianness)
+            } else {
+                nom_internal_parser!(parse_sint16_internal, input, 0x7FFF, endianness)
+            }
         }
     };
     ("uint16") => {
-        pub fn parse_uint16(input: &[u8], endianness: Endianness) -> Result<(Option<u16>, &[u8])> {
-            nom_internal_parser!(parse_uint16_internal, input, 0xFFFF, endianness)
+        pub fn parse_uint16(input: &[u8], endianness: Endianness) -> Result<Option<u16>> {
+            if input.len() < 2 {
+                let inp = buffer(input, 2, endianness);
+                nom_internal_parser!(parse_uint16_internal, &inp, 0xFFFF, endianness)
+            } else {
+                nom_internal_parser!(parse_uint16_internal, input, 0xFFFF, endianness)
+            }
         }
     };
     ("uint16z") => {
-        pub fn parse_uint16z(input: &[u8], endianness: Endianness) -> Result<(Option<u16>, &[u8])> {
-            nom_internal_parser!(parse_uint16_internal, input, 0x0000, endianness)
+        pub fn parse_uint16z(input: &[u8], endianness: Endianness) -> Result<Option<u16>> {
+            if input.len() < 2 {
+                let inp = buffer(input, 2, endianness);
+                nom_internal_parser!(parse_uint16_internal, &inp, 0x0000, endianness)
+            } else {
+                nom_internal_parser!(parse_uint16_internal, input, 0x0000, endianness)
+            }
         }
     };
     ("sint32") => {
-        pub fn parse_sint32(input: &[u8], endianness: Endianness) -> Result<(Option<i32>, &[u8])> {
-            nom_internal_parser!(parse_sint32_internal, input, 0x7FFFFFFF, endianness)
+        pub fn parse_sint32(input: &[u8], endianness: Endianness) -> Result<Option<i32>> {
+            if input.len() < 4 {
+                let inp = buffer(input, 4, endianness);
+                nom_internal_parser!(parse_sint32_internal, &inp, 0x7FFFFFFF, endianness)
+            } else {
+                nom_internal_parser!(parse_sint32_internal, input, 0x7FFFFFFF, endianness)
+            }
         }
     };
     ("uint32") => {
-        pub fn parse_uint32(input: &[u8], endianness: Endianness) -> Result<(Option<u32>, &[u8])> {
-            nom_internal_parser!(parse_uint32_internal, input, 0xFFFFFFFF, endianness)
+        pub fn parse_uint32(input: &[u8], endianness: Endianness) -> Result<Option<u32>> {
+            if input.len() < 4 {
+                let inp = buffer(input, 4, endianness);
+                nom_internal_parser!(parse_uint32_internal, &inp, 0xFFFFFFFF, endianness)
+            } else {
+                nom_internal_parser!(parse_uint32_internal, input, 0xFFFFFFFF, endianness)
+            }
         }
     };
     ("uint32z") => {
-        pub fn parse_uint32z(input: &[u8], endianness: Endianness) -> Result<(Option<u32>, &[u8])> {
-            nom_internal_parser!(parse_uint32_internal, input, 0x00000000, endianness)
+        pub fn parse_uint32z(input: &[u8], endianness: Endianness) -> Result<Option<u32>> {
+            if input.len() < 4 {
+                let inp = buffer(input, 4, endianness);
+                nom_internal_parser!(parse_uint32_internal, &inp, 0x00000000, endianness)
+            } else {
+                nom_internal_parser!(parse_uint32_internal, input, 0x00000000, endianness)
+            }
         }
     };
     ("float32") => {
-        pub fn parse_float32(input: &[u8], endianness: Endianness) -> Result<(Option<f32>, &[u8])> {
-            nom_basic_internal_parser!(parse_float32_internal, input, endianness)
+        pub fn parse_float32(input: &[u8], endianness: Endianness) -> Result<Option<f32>> {
+            if input.len() < 4 {
+                let inp = buffer(input, 4, endianness);
+                nom_basic_internal_parser!(parse_float32_internal, &inp, endianness)
+            } else {
+                nom_basic_internal_parser!(parse_float32_internal, input, endianness)
+            }
         }
     };
     ("sint64") => {
-        pub fn parse_sint64(input: &[u8], endianness: Endianness) -> Result<(Option<i64>, &[u8])> {
-            nom_basic_internal_parser!(parse_sint64_internal, input, endianness)
+        pub fn parse_sint64(input: &[u8], endianness: Endianness) -> Result<Option<i64>> {
+            if input.len() < 8 {
+                let inp = buffer(input, 8, endianness);
+                nom_basic_internal_parser!(parse_sint64_internal, &inp, endianness)
+            } else {
+                nom_basic_internal_parser!(parse_sint64_internal, input, endianness)
+            }
         }
     };
     ("uint64") => {
-        pub fn parse_uint64(input: &[u8], endianness: Endianness) -> Result<(Option<u64>, &[u8])> {
-            nom_basic_internal_parser!(parse_uint64_internal, input, endianness)
+        pub fn parse_uint64(input: &[u8], endianness: Endianness) -> Result<Option<u64>> {
+            if input.len() < 8 {
+                let inp = buffer(input, 8, endianness);
+                nom_basic_internal_parser!(parse_uint64_internal, &inp, endianness)
+            } else {
+                nom_basic_internal_parser!(parse_uint64_internal, input, endianness)
+            }
         }
     };
     ("uint64z") => {
-        pub fn parse_uint64z(input: &[u8], endianness: Endianness) -> Result<(Option<u64>, &[u8])> {
-            nom_internal_parser!(parse_uint64_internal, input, 0x0000000000000000, endianness)
+        pub fn parse_uint64z(input: &[u8], endianness: Endianness) -> Result<Option<u64>> {
+            if input.len() < 8 {
+                let inp = buffer(input, 8, endianness);
+                nom_internal_parser!(parse_uint64_internal, &inp, 0x0000000000000000, endianness)
+            } else {
+                nom_internal_parser!(parse_uint64_internal, input, 0x0000000000000000, endianness)
+            }
         }
     };
     ("float64") => {
-        pub fn parse_float64(input: &[u8], endianness: Endianness) -> Result<(Option<f64>, &[u8])> {
-            nom_basic_internal_parser!(parse_float64_internal, input, endianness)
+        pub fn parse_float64(input: &[u8], endianness: Endianness) -> Result<Option<f64>> {
+            if input.len() < 8 {
+                let inp = buffer(input, 8, endianness);
+                nom_basic_internal_parser!(parse_float64_internal, &inp, endianness)
+            } else {
+                nom_basic_internal_parser!(parse_float64_internal, input, endianness)
+            }
         }
     };
     ("string") => {
-        pub fn parse_string(input: &[u8], num_bytes: usize) -> Result<(Option<String>, &[u8])> {
+        pub fn parse_string(input: &[u8], num_bytes: usize) -> Result<Option<String>> {
             nom_basic_internal_parser!(parse_string_internal, input, num_bytes)
         }
     };
     ("byte") => {
-        pub fn parse_byte(input: &[u8], num_bytes: usize) -> Result<(Option<Vec<u8>>, &[u8])> {
+        pub fn parse_byte(input: &[u8], num_bytes: usize) -> Result<Option<Vec<u8>>> {
             nom_basic_internal_parser!(parse_byte_internal, input, num_bytes)
         }
     };
@@ -286,7 +390,7 @@ macro_rules! nom_parser {
         pub fn parse_date_time(
             input: &[u8],
             endianness: Endianness,
-        ) -> Result<(DateTime<UTC>, u32, &[u8])> {
+        ) -> Result<(DateTime<UTC>, u32)> {
             parse_date_time_internal(input, endianness)
         }
     };
