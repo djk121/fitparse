@@ -6,13 +6,7 @@ extern crate itertools;
 use clap::{App, Arg};
 use std::fs::File;
 
-use itertools::Itertools;
-
-use fitparse::fitparsingstate::FitParsingState;
-use fitparse::fittypes::FitDataMessage;
-use fitparse::FitMessage;
 use fitparse::fitfile::FitFile;
-
 
 fn main() {
     let matches = App::new("dfr")

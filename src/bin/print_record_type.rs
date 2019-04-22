@@ -48,7 +48,7 @@ fn main() {
         Err(e) => panic!("failed to parse file: {:?}", e),
         _ => (),
     }
-    
+
     println!("Parsed num messages: {}", ff.messages.len());
     for message in ff.iter() {
         if unknowns == true {

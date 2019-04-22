@@ -447,6 +447,9 @@ pub struct {{ message_name }} {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     {% for field in fields -%}
+    {%- if field.has_subfields -%}
+    pub {{ field.name }}_subfield_bytes: Vec<u8>,
+    {% endif -%}
     pub {{ field.name }}: {{ field.output_field_option() }},  {% if field.comment %}// {{ field.comment }}{% endif %}
     {% endfor %}
 }
@@ -465,6 +468,9 @@ impl {{ message_name }} {
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "{{ message_name }}",
             {%- for field in fields %}
+            {%- if field.has_subfields -%}
+            {{ field.name }}_subfield_bytes: vec![],
+            {% endif -%}
             {{ field.name }}: None,
             {%- endfor %}
         };
@@ -484,6 +490,17 @@ impl {{ message_name }} {
                 return Err(Error::message_parse_failed(err_string))
             }
         };
+
+        {% if has_subfields %}
+        match {{ message_name }}::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string = String::from("Error parsing subfields for {{ message_name }}:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string))
+            },
+            Ok(_) => (),
+        }
+        {% endif %}
 
         {% if has_timestamp_field %}
         match _timestamp {
@@ -512,6 +529,23 @@ impl {{ message_name }} {
 
         Ok((Rc::new(message), inp2))
     }
+
+    {% if has_subfields %}
+    fn parse_subfields(message: &mut {{ message_name }}, _tz_offset: f64) -> Result<()> {
+        {%- for field in fields -%}
+        {%- if field.has_subfields %}
+        let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == {{ field.number }}).collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = {{ field.output_subfield_parser()}}?;
+            message.{{ field.name }} = Some(val);
+        }
+        {%- endif -%}
+        {%- endfor %}
+
+        Ok(())
+    }
+    {% endif %}
 
     fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
@@ -596,6 +630,7 @@ impl FitRecord for {{ message_name }} {
         self.name = name
         self.comment = comment
         self.fields = []
+        self.has_subfields = False
 
     @property
     def lifetime_spec(self):
@@ -640,10 +675,12 @@ impl FitRecord for {{ message_name }} {
 
     def add_subfield(self, subfield):
         self.fields[-1].subfields.append(subfield)
+        self.has_subfields = True
 
     def output(self):
+        if self.has_subfields:
+            self.output_subfields()
 
-        self.output_subfields()
         self.output_struct()
         self.output_impl()
 
@@ -658,7 +695,8 @@ impl FitRecord for {{ message_name }} {
         template = Environment().from_string(self.IMPL_TEMPLATE,
                                              globals={'message_name': self.message_name,
                                                       'fields': self.fields,
-                                                      'has_timestamp_field': self.has_timestamp_field})
+                                                      'has_timestamp_field': self.has_timestamp_field,
+                                                      'has_subfields': self.has_subfields})
         sys.stdout.write(template.render())
 
     def output_subfields(self):
@@ -722,11 +760,22 @@ class Field(object):
         return field_name(self)
 
 
-    FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, _tz_offset)"""
+    #FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, _tz_offset)"""
+    FIELD_PARSER_SUBFIELD_BYTES = """parse_byte({{ bytes_from }}, field.field_size)"""
+    FIELD_PARSER_SUBFIELD = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, _tz_offset)"""
+
+
+    def output_subfield_parser(self):
+        bytes_from = "&message.{}_subfield_bytes".format(self.name)
+        template = Environment().from_string(self.FIELD_PARSER_SUBFIELD,
+                                             globals={'message_name': self.message.rustified_name,
+                                                      'field_name': self.rustified_name,
+                                                      'bytes_from': bytes_from})
+        return template.render()
 
     def output_field_parser(self, bytes_from, only_default_case=False, field_variable_name='field'):
         if self.subfields and not only_default_case:
-            template = Environment().from_string(self.FIELD_PARSER_SUBFIELDS,
+            template = Environment().from_string(self.FIELD_PARSER_SUBFIELD_BYTES,
                                                  globals={'message_name': self.message.rustified_name,
                                                           'field_name': self.rustified_name,
                                                           'bytes_from': bytes_from})
@@ -827,6 +876,11 @@ class Field(object):
         #    return "message.{} = val".format(self.name)
             #else:
                 #return "message.{} = Some(val)".for
+
+        # we're just capturing the bytes here, the parse will happpen
+        # after the rest of the message has been parsed.
+        if self.has_subfields:
+            return "if let Some(v) = val {{ message.{}_subfield_bytes = v.into(); }}".format(self.name)
 
         if self.scale and is_fit_base_type(self.type) and not self.subfields and self.type != 'byte':
 

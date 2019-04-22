@@ -21253,9 +21253,11 @@ pub struct FitMessageDeviceInfo {
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,
     pub device_index: Option<FitFieldDeviceIndex>,
+    pub device_type_subfield_bytes: Vec<u8>,
     pub device_type: Option<FitMessageDeviceInfoSubfieldDeviceType>,
     pub manufacturer: Option<FitFieldManufacturer>,
     pub serial_number: Option<u32>,
+    pub product_subfield_bytes: Vec<u8>,
     pub product: Option<FitMessageDeviceInfoSubfieldProduct>,
     pub software_version: Option<f64>,
     pub hardware_version: Option<u8>,
@@ -21287,9 +21289,11 @@ impl FitMessageDeviceInfo {
             message_name: "FitMessageDeviceInfo",
             timestamp: None,
             device_index: None,
+            device_type_subfield_bytes: vec![],
             device_type: None,
             manufacturer: None,
             serial_number: None,
+            product_subfield_bytes: vec![],
             product: None,
             software_version: None,
             hardware_version: None,
@@ -21323,6 +21327,16 @@ impl FitMessageDeviceInfo {
             }
         };
 
+        match FitMessageDeviceInfo::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageDeviceInfo:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         match _timestamp {
             Some(ts) => {
                 message.timestamp = Some(ts);
@@ -21352,6 +21366,43 @@ impl FitMessageDeviceInfo {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageDeviceInfo, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 1)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageDeviceInfoSubfieldDeviceType::parse(
+                message,
+                &message.device_type_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.device_type = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 4)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageDeviceInfoSubfieldProduct::parse(
+                message,
+                &message.product_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.product = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -21437,20 +21488,20 @@ impl FitMessageDeviceInfo {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageDeviceInfoSubfieldDeviceType::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.device_type = Some(val);
+                                if let Some(v) = val {
+                                    message.device_type_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageDeviceInfoSubfieldDeviceType::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.device_type = Some(val);
+                                if let Some(v) = val {
+                                    message.device_type_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -21531,20 +21582,20 @@ impl FitMessageDeviceInfo {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageDeviceInfoSubfieldProduct::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageDeviceInfoSubfieldProduct::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -23465,6 +23516,7 @@ pub struct FitMessageDiveSettings {
     pub repeat_dive_interval: Option<f64>, // Time between surfacing and ending the activity
     pub safety_stop_time: Option<f64>,     // Time at safety stop (if enabled)
     pub heart_rate_source_type: Option<FitFieldSourceType>,
+    pub heart_rate_source_subfield_bytes: Vec<u8>,
     pub heart_rate_source: Option<FitMessageDiveSettingsSubfieldHeartRateSource>,
 }
 impl FitMessageDiveSettings {
@@ -23503,6 +23555,7 @@ impl FitMessageDiveSettings {
             repeat_dive_interval: None,
             safety_stop_time: None,
             heart_rate_source_type: None,
+            heart_rate_source_subfield_bytes: vec![],
             heart_rate_source: None,
         };
 
@@ -23524,6 +23577,16 @@ impl FitMessageDiveSettings {
             }
         };
 
+        match FitMessageDiveSettings::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageDiveSettings:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -23541,6 +23604,27 @@ impl FitMessageDiveSettings {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageDiveSettings, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 20)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageDiveSettingsSubfieldHeartRateSource::parse(
+                message,
+                &message.heart_rate_source_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.heart_rate_source = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -24210,20 +24294,20 @@ impl FitMessageDiveSettings {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageDiveSettingsSubfieldHeartRateSource::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.heart_rate_source = Some(val);
+                                if let Some(v) = val {
+                                    message.heart_rate_source_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageDiveSettingsSubfieldHeartRateSource::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.heart_rate_source = Some(val);
+                                if let Some(v) = val {
+                                    message.heart_rate_source_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -25078,6 +25162,7 @@ pub struct FitMessageEvent {
     pub event: Option<FitFieldEvent>,
     pub event_type: Option<FitFieldEventType>,
     pub data16: Option<u16>,
+    pub data_subfield_bytes: Vec<u8>,
     pub data: Option<FitMessageEventSubfieldData>,
     pub event_group: Option<u8>,
     pub score: Option<u16>, // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
@@ -25107,6 +25192,7 @@ impl FitMessageEvent {
             event: None,
             event_type: None,
             data16: None,
+            data_subfield_bytes: vec![],
             data: None,
             event_group: None,
             score: None,
@@ -25135,6 +25221,15 @@ impl FitMessageEvent {
                 return Err(Error::message_parse_failed(err_string));
             }
         };
+
+        match FitMessageEvent::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string = String::from("Error parsing subfields for FitMessageEvent:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
 
         match _timestamp {
             Some(ts) => {
@@ -25165,6 +25260,27 @@ impl FitMessageEvent {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageEvent, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 3)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageEventSubfieldData::parse(
+                message,
+                &message.data_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.data = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -25316,20 +25432,20 @@ impl FitMessageEvent {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageEventSubfieldData::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.data = Some(val);
+                                if let Some(v) = val {
+                                    message.data_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageEventSubfieldData::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.data = Some(val);
+                                if let Some(v) = val {
+                                    message.data_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -28129,6 +28245,7 @@ pub struct FitMessageFileId {
     pub message_name: &'static str,
     pub ftype: Option<FitFieldFile>,
     pub manufacturer: Option<FitFieldManufacturer>,
+    pub product_subfield_bytes: Vec<u8>,
     pub product: Option<FitMessageFileIdSubfieldProduct>,
     pub serial_number: Option<u32>,
     pub time_created: Option<FitFieldDateTime>, // Only set for files that are can be created/erased.
@@ -28152,6 +28269,7 @@ impl FitMessageFileId {
             message_name: "FitMessageFileId",
             ftype: None,
             manufacturer: None,
+            product_subfield_bytes: vec![],
             product: None,
             serial_number: None,
             time_created: None,
@@ -28177,6 +28295,15 @@ impl FitMessageFileId {
             }
         };
 
+        match FitMessageFileId::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string = String::from("Error parsing subfields for FitMessageFileId:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -28194,6 +28321,27 @@ impl FitMessageFileId {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageFileId, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 2)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageFileIdSubfieldProduct::parse(
+                message,
+                &message.product_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.product = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -28279,20 +28427,20 @@ impl FitMessageFileId {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageFileIdSubfieldProduct::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageFileIdSubfieldProduct::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -31140,6 +31288,7 @@ pub struct FitMessageLap {
     pub total_elapsed_time: Option<f64>, // Time (includes pauses)
     pub total_timer_time: Option<f64>,   // Timer Time (excludes pauses)
     pub total_distance: Option<f64>,
+    pub total_cycles_subfield_bytes: Vec<u8>,
     pub total_cycles: Option<FitMessageLapSubfieldTotalCycles>,
     pub total_calories: Option<u16>,
     pub total_fat_calories: Option<u16>, // If New Leaf
@@ -31147,7 +31296,9 @@ pub struct FitMessageLap {
     pub max_speed: Option<f64>,
     pub avg_heart_rate: Option<u8>,
     pub max_heart_rate: Option<u8>,
+    pub avg_cadence_subfield_bytes: Vec<u8>,
     pub avg_cadence: Option<FitMessageLapSubfieldAvgCadence>, // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
+    pub max_cadence_subfield_bytes: Vec<u8>,
     pub max_cadence: Option<FitMessageLapSubfieldMaxCadence>,
     pub avg_power: Option<u16>, // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
     pub max_power: Option<u16>,
@@ -31262,6 +31413,7 @@ impl FitMessageLap {
             total_elapsed_time: None,
             total_timer_time: None,
             total_distance: None,
+            total_cycles_subfield_bytes: vec![],
             total_cycles: None,
             total_calories: None,
             total_fat_calories: None,
@@ -31269,7 +31421,9 @@ impl FitMessageLap {
             max_speed: None,
             avg_heart_rate: None,
             max_heart_rate: None,
+            avg_cadence_subfield_bytes: vec![],
             avg_cadence: None,
+            max_cadence_subfield_bytes: vec![],
             max_cadence: None,
             avg_power: None,
             max_power: None,
@@ -31376,6 +31530,15 @@ impl FitMessageLap {
             }
         };
 
+        match FitMessageLap::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string = String::from("Error parsing subfields for FitMessageLap:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         match _timestamp {
             Some(ts) => {
                 message.timestamp = Some(ts);
@@ -31405,6 +31568,59 @@ impl FitMessageLap {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageLap, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 10)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageLapSubfieldTotalCycles::parse(
+                message,
+                &message.total_cycles_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.total_cycles = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 17)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageLapSubfieldAvgCadence::parse(
+                message,
+                &message.avg_cadence_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.avg_cadence = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 18)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageLapSubfieldMaxCadence::parse(
+                message,
+                &message.max_cadence_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.max_cadence = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -31836,20 +32052,20 @@ impl FitMessageLap {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageLapSubfieldTotalCycles::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.total_cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.total_cycles_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageLapSubfieldTotalCycles::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.total_cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.total_cycles_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -32082,20 +32298,20 @@ impl FitMessageLap {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageLapSubfieldAvgCadence::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.avg_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.avg_cadence_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageLapSubfieldAvgCadence::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.avg_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.avg_cadence_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -32112,20 +32328,20 @@ impl FitMessageLap {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageLapSubfieldMaxCadence::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.max_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.max_cadence_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageLapSubfieldMaxCadence::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.max_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.max_cadence_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -37188,6 +37404,7 @@ pub struct FitMessageMesgCapabilities {
     pub file: Option<FitFieldFile>,
     pub mesg_num: Option<FitFieldMesgNum>,
     pub count_type: Option<FitFieldMesgCount>,
+    pub count_subfield_bytes: Vec<u8>,
     pub count: Option<FitMessageMesgCapabilitiesSubfieldCount>,
 }
 impl FitMessageMesgCapabilities {
@@ -37209,6 +37426,7 @@ impl FitMessageMesgCapabilities {
             file: None,
             mesg_num: None,
             count_type: None,
+            count_subfield_bytes: vec![],
             count: None,
         };
 
@@ -37230,6 +37448,16 @@ impl FitMessageMesgCapabilities {
             }
         };
 
+        match FitMessageMesgCapabilities::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageMesgCapabilities:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -37247,6 +37475,27 @@ impl FitMessageMesgCapabilities {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageMesgCapabilities, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 3)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageMesgCapabilitiesSubfieldCount::parse(
+                message,
+                &message.count_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.count = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -37390,20 +37639,20 @@ impl FitMessageMesgCapabilities {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageMesgCapabilitiesSubfieldCount::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.count = Some(val);
+                                if let Some(v) = val {
+                                    message.count_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageMesgCapabilitiesSubfieldCount::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.count = Some(val);
+                                if let Some(v) = val {
+                                    message.count_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -37746,6 +37995,7 @@ pub struct FitMessageMonitoring {
     pub device_index: Option<FitFieldDeviceIndex>, // Associates this data to device_info message.  Not required for file with single device (sensor).
     pub calories: Option<u16>, // Accumulated total calories.  Maintained by MonitoringReader for each activity_type.  See SDK documentation
     pub distance: Option<f64>, // Accumulated distance.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
+    pub cycles_subfield_bytes: Vec<u8>,
     pub cycles: Option<FitMessageMonitoringSubfieldCycles>, // Accumulated cycles.  Maintained by MonitoringReader for each activity_type.  See SDK documentation.
     pub active_time: Option<f64>,
     pub activity_type: Option<FitFieldActivityType>,
@@ -37791,6 +38041,7 @@ impl FitMessageMonitoring {
             device_index: None,
             calories: None,
             distance: None,
+            cycles_subfield_bytes: vec![],
             cycles: None,
             active_time: None,
             activity_type: None,
@@ -37836,6 +38087,16 @@ impl FitMessageMonitoring {
             }
         };
 
+        match FitMessageMonitoring::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageMonitoring:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         match _timestamp {
             Some(ts) => {
                 message.timestamp = Some(ts);
@@ -37865,6 +38126,27 @@ impl FitMessageMonitoring {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageMonitoring, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 3)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageMonitoringSubfieldCycles::parse(
+                message,
+                &message.cycles_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.cycles = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -38024,20 +38306,20 @@ impl FitMessageMonitoring {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageMonitoringSubfieldCycles::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.cycles_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageMonitoringSubfieldCycles::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.cycles_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -40166,6 +40448,7 @@ pub struct FitMessageOneDSensorCalibration {
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>, // Whole second part of the timestamp
     pub sensor_type: Option<FitFieldSensorType>, // Indicates which sensor the calibration is for
+    pub calibration_factor_subfield_bytes: Vec<u8>,
     pub calibration_factor: Option<FitMessageOneDSensorCalibrationSubfieldCalibrationFactor>, // Calibration factor used to convert from raw ADC value to degrees, g,  etc.
     pub calibration_divisor: Option<u32>, // Calibration factor divisor
     pub level_shift: Option<u32>, // Level shift value used to shift the ADC value back into range
@@ -40188,6 +40471,7 @@ impl FitMessageOneDSensorCalibration {
             message_name: "FitMessageOneDSensorCalibration",
             timestamp: None,
             sensor_type: None,
+            calibration_factor_subfield_bytes: vec![],
             calibration_factor: None,
             calibration_divisor: None,
             level_shift: None,
@@ -40213,6 +40497,16 @@ impl FitMessageOneDSensorCalibration {
                     return Err(Error::message_parse_failed(err_string));
                 }
             };
+
+        match FitMessageOneDSensorCalibration::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageOneDSensorCalibration:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
 
         match _timestamp {
             Some(ts) => {
@@ -40243,6 +40537,30 @@ impl FitMessageOneDSensorCalibration {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(
+        message: &mut FitMessageOneDSensorCalibration,
+        _tz_offset: f64,
+    ) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 1)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::parse(
+                message,
+                &message.calibration_factor_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.calibration_factor = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -40328,16 +40646,20 @@ impl FitMessageOneDSensorCalibration {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::parse(message, &bytes, &field, _tz_offset)?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.calibration_factor = Some(val);
+                                if let Some(v) = val {
+                                    message.calibration_factor_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::parse(message, inp, &field, _tz_offset)?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.calibration_factor = Some(val);
+                                if let Some(v) = val {
+                                    message.calibration_factor_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -43532,6 +43854,7 @@ pub struct FitMessageSchedule {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub manufacturer: Option<FitFieldManufacturer>, // Corresponds to file_id of scheduled workout / course.
+    pub product_subfield_bytes: Vec<u8>,
     pub product: Option<FitMessageScheduleSubfieldProduct>, // Corresponds to file_id of scheduled workout / course.
     pub serial_number: Option<u32>, // Corresponds to file_id of scheduled workout / course.
     pub time_created: Option<FitFieldDateTime>, // Corresponds to file_id of scheduled workout / course.
@@ -43555,6 +43878,7 @@ impl FitMessageSchedule {
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSchedule",
             manufacturer: None,
+            product_subfield_bytes: vec![],
             product: None,
             serial_number: None,
             time_created: None,
@@ -43581,6 +43905,16 @@ impl FitMessageSchedule {
             }
         };
 
+        match FitMessageSchedule::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageSchedule:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -43598,6 +43932,27 @@ impl FitMessageSchedule {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageSchedule, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 1)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageScheduleSubfieldProduct::parse(
+                message,
+                &message.product_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.product = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -43657,20 +44012,20 @@ impl FitMessageSchedule {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageScheduleSubfieldProduct::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageScheduleSubfieldProduct::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -45095,6 +45450,7 @@ pub struct FitMessageSegmentLap {
     pub total_elapsed_time: Option<f64>, // Time (includes pauses)
     pub total_timer_time: Option<f64>,   // Timer Time (excludes pauses)
     pub total_distance: Option<f64>,
+    pub total_cycles_subfield_bytes: Vec<u8>,
     pub total_cycles: Option<FitMessageSegmentLapSubfieldTotalCycles>,
     pub total_calories: Option<u16>,
     pub total_fat_calories: Option<u16>, // If New Leaf
@@ -45197,6 +45553,7 @@ impl FitMessageSegmentLap {
             total_elapsed_time: None,
             total_timer_time: None,
             total_distance: None,
+            total_cycles_subfield_bytes: vec![],
             total_cycles: None,
             total_calories: None,
             total_fat_calories: None,
@@ -45291,6 +45648,16 @@ impl FitMessageSegmentLap {
             }
         };
 
+        match FitMessageSegmentLap::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageSegmentLap:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         match _timestamp {
             Some(ts) => {
                 message.timestamp = Some(ts);
@@ -45320,6 +45687,27 @@ impl FitMessageSegmentLap {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageSegmentLap, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 10)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageSegmentLapSubfieldTotalCycles::parse(
+                message,
+                &message.total_cycles_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.total_cycles = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -45751,20 +46139,20 @@ impl FitMessageSegmentLap {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageSegmentLapSubfieldTotalCycles::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.total_cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.total_cycles_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageSegmentLapSubfieldTotalCycles::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.total_cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.total_cycles_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -49299,6 +49687,7 @@ pub struct FitMessageSession {
     pub total_elapsed_time: Option<f64>, // Time (includes pauses)
     pub total_timer_time: Option<f64>,   // Timer Time (excludes pauses)
     pub total_distance: Option<f64>,
+    pub total_cycles_subfield_bytes: Vec<u8>,
     pub total_cycles: Option<FitMessageSessionSubfieldTotalCycles>,
     pub total_calories: Option<u16>,
     pub total_fat_calories: Option<u16>,
@@ -49306,7 +49695,9 @@ pub struct FitMessageSession {
     pub max_speed: Option<f64>,
     pub avg_heart_rate: Option<u8>, // average heart rate (excludes pause time)
     pub max_heart_rate: Option<u8>,
+    pub avg_cadence_subfield_bytes: Vec<u8>,
     pub avg_cadence: Option<FitMessageSessionSubfieldAvgCadence>, // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
+    pub max_cadence_subfield_bytes: Vec<u8>,
     pub max_cadence: Option<FitMessageSessionSubfieldMaxCadence>,
     pub avg_power: Option<u16>, // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
     pub max_power: Option<u16>,
@@ -49434,6 +49825,7 @@ impl FitMessageSession {
             total_elapsed_time: None,
             total_timer_time: None,
             total_distance: None,
+            total_cycles_subfield_bytes: vec![],
             total_cycles: None,
             total_calories: None,
             total_fat_calories: None,
@@ -49441,7 +49833,9 @@ impl FitMessageSession {
             max_speed: None,
             avg_heart_rate: None,
             max_heart_rate: None,
+            avg_cadence_subfield_bytes: vec![],
             avg_cadence: None,
+            max_cadence_subfield_bytes: vec![],
             max_cadence: None,
             avg_power: None,
             max_power: None,
@@ -49561,6 +49955,15 @@ impl FitMessageSession {
             }
         };
 
+        match FitMessageSession::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string = String::from("Error parsing subfields for FitMessageSession:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         match _timestamp {
             Some(ts) => {
                 message.timestamp = Some(ts);
@@ -49590,6 +49993,59 @@ impl FitMessageSession {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageSession, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 10)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageSessionSubfieldTotalCycles::parse(
+                message,
+                &message.total_cycles_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.total_cycles = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 18)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageSessionSubfieldAvgCadence::parse(
+                message,
+                &message.avg_cadence_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.avg_cadence = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 19)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageSessionSubfieldMaxCadence::parse(
+                message,
+                &message.max_cadence_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.max_cadence = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -50009,20 +50465,20 @@ impl FitMessageSession {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageSessionSubfieldTotalCycles::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.total_cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.total_cycles_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageSessionSubfieldTotalCycles::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.total_cycles = Some(val);
+                                if let Some(v) = val {
+                                    message.total_cycles_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -50255,20 +50711,20 @@ impl FitMessageSession {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageSessionSubfieldAvgCadence::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.avg_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.avg_cadence_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageSessionSubfieldAvgCadence::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.avg_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.avg_cadence_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -50285,20 +50741,20 @@ impl FitMessageSession {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageSessionSubfieldMaxCadence::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.max_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.max_cadence_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageSessionSubfieldMaxCadence::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.max_cadence = Some(val);
+                                if let Some(v) = val {
+                                    message.max_cadence_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -54892,6 +55348,7 @@ pub struct FitMessageSlaveDevice {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub manufacturer: Option<FitFieldManufacturer>,
+    pub product_subfield_bytes: Vec<u8>,
     pub product: Option<FitMessageSlaveDeviceSubfieldProduct>,
 }
 impl FitMessageSlaveDevice {
@@ -54910,6 +55367,7 @@ impl FitMessageSlaveDevice {
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSlaveDevice",
             manufacturer: None,
+            product_subfield_bytes: vec![],
             product: None,
         };
 
@@ -54931,6 +55389,16 @@ impl FitMessageSlaveDevice {
             }
         };
 
+        match FitMessageSlaveDevice::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageSlaveDevice:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -54948,6 +55416,27 @@ impl FitMessageSlaveDevice {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageSlaveDevice, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 1)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageSlaveDeviceSubfieldProduct::parse(
+                message,
+                &message.product_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.product = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -55007,20 +55496,20 @@ impl FitMessageSlaveDevice {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageSlaveDeviceSubfieldProduct::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageSlaveDeviceSubfieldProduct::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -55883,6 +56372,7 @@ pub struct FitMessageThreeDSensorCalibration {
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>, // Whole second part of the timestamp
     pub sensor_type: Option<FitFieldSensorType>, // Indicates which sensor the calibration is for
+    pub calibration_factor_subfield_bytes: Vec<u8>,
     pub calibration_factor: Option<FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor>, // Calibration factor used to convert from raw ADC value to degrees, g,  etc.
     pub calibration_divisor: Option<u32>, // Calibration factor divisor
     pub level_shift: Option<u32>, // Level shift value used to shift the ADC value back into range
@@ -55906,6 +56396,7 @@ impl FitMessageThreeDSensorCalibration {
             message_name: "FitMessageThreeDSensorCalibration",
             timestamp: None,
             sensor_type: None,
+            calibration_factor_subfield_bytes: vec![],
             calibration_factor: None,
             calibration_divisor: None,
             level_shift: None,
@@ -55933,6 +56424,16 @@ impl FitMessageThreeDSensorCalibration {
                     return Err(Error::message_parse_failed(err_string));
                 }
             };
+
+        match FitMessageThreeDSensorCalibration::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageThreeDSensorCalibration:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
 
         match _timestamp {
             Some(ts) => {
@@ -55963,6 +56464,30 @@ impl FitMessageThreeDSensorCalibration {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(
+        message: &mut FitMessageThreeDSensorCalibration,
+        _tz_offset: f64,
+    ) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 1)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::parse(
+                message,
+                &message.calibration_factor_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.calibration_factor = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -56048,16 +56573,20 @@ impl FitMessageThreeDSensorCalibration {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::parse(message, &bytes, &field, _tz_offset)?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.calibration_factor = Some(val);
+                                if let Some(v) = val {
+                                    message.calibration_factor_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::parse(message, inp, &field, _tz_offset)?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.calibration_factor = Some(val);
+                                if let Some(v) = val {
+                                    message.calibration_factor_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -57162,6 +57691,7 @@ pub struct FitMessageTrainingFile {
     pub timestamp: Option<FitFieldDateTime>,
     pub ftype: Option<FitFieldFile>,
     pub manufacturer: Option<FitFieldManufacturer>,
+    pub product_subfield_bytes: Vec<u8>,
     pub product: Option<FitMessageTrainingFileSubfieldProduct>,
     pub serial_number: Option<u32>,
     pub time_created: Option<FitFieldDateTime>,
@@ -57184,6 +57714,7 @@ impl FitMessageTrainingFile {
             timestamp: None,
             ftype: None,
             manufacturer: None,
+            product_subfield_bytes: vec![],
             product: None,
             serial_number: None,
             time_created: None,
@@ -57206,6 +57737,16 @@ impl FitMessageTrainingFile {
                 return Err(Error::message_parse_failed(err_string));
             }
         };
+
+        match FitMessageTrainingFile::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageTrainingFile:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
 
         match _timestamp {
             Some(ts) => {
@@ -57236,6 +57777,27 @@ impl FitMessageTrainingFile {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageTrainingFile, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 2)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageTrainingFileSubfieldProduct::parse(
+                message,
+                &message.product_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.product = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -57353,20 +57915,20 @@ impl FitMessageTrainingFile {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageTrainingFileSubfieldProduct::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageTrainingFileSubfieldProduct::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.product = Some(val);
+                                if let Some(v) = val {
+                                    message.product_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -59673,6 +60235,7 @@ pub struct FitMessageWatchfaceSettings {
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,
     pub mode: Option<FitFieldWatchfaceMode>,
+    pub layout_subfield_bytes: Vec<u8>,
     pub layout: Option<FitMessageWatchfaceSettingsSubfieldLayout>,
 }
 impl FitMessageWatchfaceSettings {
@@ -59692,6 +60255,7 @@ impl FitMessageWatchfaceSettings {
             message_name: "FitMessageWatchfaceSettings",
             message_index: None,
             mode: None,
+            layout_subfield_bytes: vec![],
             layout: None,
         };
 
@@ -59713,6 +60277,16 @@ impl FitMessageWatchfaceSettings {
             }
         };
 
+        match FitMessageWatchfaceSettings::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageWatchfaceSettings:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -59730,6 +60304,27 @@ impl FitMessageWatchfaceSettings {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageWatchfaceSettings, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 1)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageWatchfaceSettingsSubfieldLayout::parse(
+                message,
+                &message.layout_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.layout = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -59815,20 +60410,20 @@ impl FitMessageWatchfaceSettings {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageWatchfaceSettingsSubfieldLayout::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.layout = Some(val);
+                                if let Some(v) = val {
+                                    message.layout_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageWatchfaceSettingsSubfieldLayout::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.layout = Some(val);
+                                if let Some(v) = val {
+                                    message.layout_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -62536,10 +63131,14 @@ pub struct FitMessageWorkoutStep {
     pub message_index: Option<FitFieldMessageIndex>,
     pub wkt_step_name: Option<String>,
     pub duration_type: Option<FitFieldWktStepDuration>,
+    pub duration_value_subfield_bytes: Vec<u8>,
     pub duration_value: Option<FitMessageWorkoutStepSubfieldDurationValue>,
     pub target_type: Option<FitFieldWktStepTarget>,
+    pub target_value_subfield_bytes: Vec<u8>,
     pub target_value: Option<FitMessageWorkoutStepSubfieldTargetValue>,
+    pub custom_target_value_low_subfield_bytes: Vec<u8>,
     pub custom_target_value_low: Option<FitMessageWorkoutStepSubfieldCustomTargetValueLow>,
+    pub custom_target_value_high_subfield_bytes: Vec<u8>,
     pub custom_target_value_high: Option<FitMessageWorkoutStepSubfieldCustomTargetValueHigh>,
     pub intensity: Option<FitFieldIntensity>,
     pub notes: Option<String>,
@@ -62567,10 +63166,14 @@ impl FitMessageWorkoutStep {
             message_index: None,
             wkt_step_name: None,
             duration_type: None,
+            duration_value_subfield_bytes: vec![],
             duration_value: None,
             target_type: None,
+            target_value_subfield_bytes: vec![],
             target_value: None,
+            custom_target_value_low_subfield_bytes: vec![],
             custom_target_value_low: None,
+            custom_target_value_high_subfield_bytes: vec![],
             custom_target_value_high: None,
             intensity: None,
             notes: None,
@@ -62599,6 +63202,16 @@ impl FitMessageWorkoutStep {
             }
         };
 
+        match FitMessageWorkoutStep::parse_subfields(&mut message, tz_offset) {
+            Err(e) => {
+                let mut err_string =
+                    String::from("Error parsing subfields for FitMessageWorkoutStep:");
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
             let dev_data_definition =
@@ -62616,6 +63229,75 @@ impl FitMessageWorkoutStep {
         }
 
         Ok((Rc::new(message), inp2))
+    }
+
+    fn parse_subfields(message: &mut FitMessageWorkoutStep, _tz_offset: f64) -> Result<()> {
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 2)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageWorkoutStepSubfieldDurationValue::parse(
+                message,
+                &message.duration_value_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.duration_value = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 4)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageWorkoutStepSubfieldTargetValue::parse(
+                message,
+                &message.target_value_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.target_value = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 5)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageWorkoutStepSubfieldCustomTargetValueLow::parse(
+                message,
+                &message.custom_target_value_low_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.custom_target_value_low = Some(val);
+        }
+        let fds: Vec<_> = message
+            .definition_message
+            .field_definitions
+            .iter()
+            .filter(|f| f.definition_number == 6)
+            .collect();
+        if fds.len() == 1 {
+            let field = fds[0];
+            let val = FitMessageWorkoutStepSubfieldCustomTargetValueHigh::parse(
+                message,
+                &message.custom_target_value_high_subfield_bytes,
+                &field,
+                _tz_offset,
+            )?;
+            message.custom_target_value_high = Some(val);
+        }
+
+        Ok(())
     }
 
     fn parse_internal<'a>(
@@ -62727,20 +63409,20 @@ impl FitMessageWorkoutStep {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageWorkoutStepSubfieldDurationValue::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.duration_value = Some(val);
+                                if let Some(v) = val {
+                                    message.duration_value_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageWorkoutStepSubfieldDurationValue::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.duration_value = Some(val);
+                                if let Some(v) = val {
+                                    message.duration_value_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -62783,20 +63465,20 @@ impl FitMessageWorkoutStep {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageWorkoutStepSubfieldTargetValue::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.target_value = Some(val);
+                                if let Some(v) = val {
+                                    message.target_value_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageWorkoutStepSubfieldTargetValue::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.target_value = Some(val);
+                                if let Some(v) = val {
+                                    message.target_value_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -62813,20 +63495,20 @@ impl FitMessageWorkoutStep {
                                     num_bits,
                                 )?;
 
-                                let val = FitMessageWorkoutStepSubfieldCustomTargetValueLow::parse(
-                                    message, &bytes, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.custom_target_value_low = Some(val);
+                                if let Some(v) = val {
+                                    message.custom_target_value_low_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitMessageWorkoutStepSubfieldCustomTargetValueLow::parse(
-                                    message, inp, &field, _tz_offset,
-                                )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.custom_target_value_low = Some(val);
+                                if let Some(v) = val {
+                                    message.custom_target_value_low_subfield_bytes = v.into();
+                                }
                             }
                         }
 
@@ -62843,22 +63525,20 @@ impl FitMessageWorkoutStep {
                                     num_bits,
                                 )?;
 
-                                let val =
-                                    FitMessageWorkoutStepSubfieldCustomTargetValueHigh::parse(
-                                        message, &bytes, &field, _tz_offset,
-                                    )?;
+                                let val = parse_byte(&bytes, field.field_size)?;
 
-                                message.custom_target_value_high = Some(val);
+                                if let Some(v) = val {
+                                    message.custom_target_value_high_subfield_bytes = v.into();
+                                }
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val =
-                                    FitMessageWorkoutStepSubfieldCustomTargetValueHigh::parse(
-                                        message, inp, &field, _tz_offset,
-                                    )?;
+                                let val = parse_byte(inp, field.field_size)?;
 
-                                message.custom_target_value_high = Some(val);
+                                if let Some(v) = val {
+                                    message.custom_target_value_high_subfield_bytes = v.into();
+                                }
                             }
                         }
 
