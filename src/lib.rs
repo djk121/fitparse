@@ -1,8 +1,9 @@
-#![feature(trace_macros)]
-
 use std::collections::HashMap;
-use std::ops::Deref;
+use std::ops::{Deref, Shr};
 use std::rc::Rc;
+
+extern crate byteorder;
+use byteorder::{LittleEndian, BigEndian, ReadBytesExt};
 
 extern crate bit_vec;
 use bit_vec::BitVec;
@@ -667,7 +668,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Sint16 => {
-                let mut num_to_parse = size / 2;
+                let num_to_parse = size / 2;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -687,7 +688,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Uint16 => {
-                let mut num_to_parse = size / 2;
+                let num_to_parse = size / 2;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -707,7 +708,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Sint32 => {
-                let mut num_to_parse = size / 4;
+                let num_to_parse = size / 4;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -727,7 +728,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Uint32 => {
-                let mut num_to_parse = size / 4;
+                let num_to_parse = size / 4;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -751,7 +752,7 @@ impl FitBaseValue {
                 Ok(FitBaseValue::String(val))
             }
             FitFieldFitBaseType::Float32 => {
-                let mut num_to_parse = size / 4;
+                let num_to_parse = size / 4;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -771,7 +772,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Float64 => {
-                let mut num_to_parse = size / 8;
+                let num_to_parse = size / 8;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -809,7 +810,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Uint16z => {
-                let mut num_to_parse = size / 2;
+                let num_to_parse = size / 2;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -829,7 +830,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Uint32z => {
-                let mut num_to_parse = size / 4;
+                let num_to_parse = size / 4;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -853,7 +854,7 @@ impl FitBaseValue {
                 Ok(FitBaseValue::Byte(val))
             }
             FitFieldFitBaseType::Sint64 => {
-                let mut num_to_parse = size / 8;
+                let num_to_parse = size / 8;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -873,7 +874,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Uint64 => {
-                let mut num_to_parse = size / 8;
+                let num_to_parse = size / 8;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -893,7 +894,7 @@ impl FitBaseValue {
                 }
             }
             FitFieldFitBaseType::Uint64z => {
-                let mut num_to_parse = size / 8;
+                let num_to_parse = size / 8;
 
                 if num_to_parse > 1 {
                     let mut outp = input;
@@ -946,15 +947,82 @@ impl FitFieldDeveloperData {
     }
 }
 
-pub fn subset_with_pad(inp: &[u8], start: usize, num_bits: usize) -> Result<Vec<u8>> {
-    let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits)?;
+
+pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
+    if inp.len() > 8 {
+        return Err(Error::incorrect_shift_input())
+    }
+
+    let mut buf = inp.to_vec();
+    if buf.len() < 8 {
+        let mut to_add = 8 - inp.len();
+        while to_add > 0 {
+            match big_endian {
+                true => buf.push(0),
+                false => buf.insert(0, 0),
+            }
+            to_add = to_add - 1;
+        }
+    }
+
+    let as_u64 = match big_endian {
+        true => (&*buf).read_u64::<BigEndian>().unwrap(),
+        false => (&*buf).read_u64::<LittleEndian>().unwrap(),
+    };
+
+    // now we can right shift
+    // first, shift off stuff up to start
+    let s = match start {
+        0 => as_u64,
+        _amt => as_u64.shr(start),
+    };
+    // now mask off everything else
+    // let's say num_bits is 12
+
+    let masks = [
+        0b0000_0000, 0b0000_0001, 0b0000_0011, 0b0000_0111, 0b0000_1111,
+        0b0001_1111, 0b0011_1111, 0b0111_1111, 0b0111_1111, 0b1111_1111,
+    ];
+
+    let mut as_bytes = s.to_be_bytes();
+    let mut byte_index = 7;
+    while num_bits > 8 {
+        num_bits = num_bits - 8;
+        byte_index = byte_index - 1;
+    }
+
+    // now start zeroing bits
+    as_bytes[byte_index] &= masks[num_bits];
+    byte_index = byte_index - 1;
+    while byte_index > 0 {
+        as_bytes[byte_index] = 0;
+        byte_index = byte_index - 1;
+    }
+
+    match big_endian {
+        true => Ok(as_bytes.to_vec()),
+        false => {
+            let mut ret = as_bytes.to_vec();
+            ret.reverse();
+            Ok(ret)
+        }
+    }
+}
+
+
+pub fn subset_with_pad(inp: &[u8], start: usize, num_bits: usize, endianness: Endianness) -> Result<Vec<u8>> {
+    let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
     while bytes.len() < 8 {
-        bytes.push(0);
+        match endianness {
+            nom::Endianness::Big => bytes.push(0),
+            nom::Endianness::Little => bytes.insert(0, 0),
+        }
     }
 
     Ok(bytes)
 }
 
+/*
 pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u8>> {
     let input = BitVec::from_bytes(inp);
     let mut new = BitVec::new();
@@ -970,6 +1038,7 @@ pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u
 
     Ok(new.to_bytes())
 }
+*/
 
 pub fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
     if inp.len() > 4 || num_bits > 32 {

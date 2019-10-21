@@ -562,7 +562,7 @@ impl {{ message_name }} {
                     {{ field.number }} => {  // {{ field.name }}
                         match components_bit_range {
                             Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits)?;
+                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits, message.definition_message.endianness)?;
                                 {% if field.array %}
                                 let mut array_size = field.field_size / field.base_type_size();
                                 let mut val = Vec::with_capacity(array_size);

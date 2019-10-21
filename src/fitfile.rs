@@ -19,7 +19,7 @@ impl FitFile {
         }
     }
 
-    pub fn parse(&mut self, byte_source: &mut io::Read) -> Result<()> {
+    pub fn parse(&mut self, byte_source: &mut dyn io::Read) -> Result<()> {
         //let mut header_bytes = Vec::with_capacity(14);
         let mut header_bytes = std::vec::from_elem(0, 14);
 
