@@ -1,12 +1,9 @@
 use std::collections::HashMap;
-use std::ops::{Deref, Shr};
+use std::ops::Deref;
 use std::rc::Rc;
 
-extern crate byteorder;
-use byteorder::{LittleEndian, BigEndian, ReadBytesExt};
-
-extern crate bit_vec;
-use bit_vec::BitVec;
+extern crate bitvec;
+use bitvec::prelude as bv;
 
 extern crate chrono;
 extern crate failure;
@@ -947,127 +944,86 @@ impl FitFieldDeveloperData {
     }
 }
 
-
-pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
-    if inp.len() > 8 {
-        return Err(Error::incorrect_shift_input())
+fn format_bits(input: &Vec<u8>) -> String {
+    let mut s = String::new();
+    for item in input {
+        s.push_str(&format!("{:08b}, ", item));
     }
 
-    let mut buf = inp.to_vec();
-    if buf.len() < 8 {
-        let mut to_add = 8 - inp.len();
-        while to_add > 0 {
-            match big_endian {
-                true => buf.push(0),
-                false => buf.insert(0, 0),
-            }
-            to_add = to_add - 1;
-        }
-    }
-
-    let as_u64 = match big_endian {
-        true => (&*buf).read_u64::<BigEndian>().unwrap(),
-        false => (&*buf).read_u64::<LittleEndian>().unwrap(),
-    };
-
-    // now we can right shift
-    // first, shift off stuff up to start
-    let s = match start {
-        0 => as_u64,
-        _amt => as_u64.shr(start),
-    };
-    // now mask off everything else
-    // let's say num_bits is 12
-
-    let masks = [
-        0b0000_0000, 0b0000_0001, 0b0000_0011, 0b0000_0111, 0b0000_1111,
-        0b0001_1111, 0b0011_1111, 0b0111_1111, 0b0111_1111, 0b1111_1111,
-    ];
-
-    let mut as_bytes = s.to_be_bytes();
-    let mut byte_index = 7;
-    while num_bits > 8 {
-        num_bits = num_bits - 8;
-        byte_index = byte_index - 1;
-    }
-
-    // now start zeroing bits
-    as_bytes[byte_index] &= masks[num_bits];
-    byte_index = byte_index - 1;
-    while byte_index > 0 {
-        as_bytes[byte_index] = 0;
-        byte_index = byte_index - 1;
-    }
-
-    match big_endian {
-        true => Ok(as_bytes.to_vec()),
-        false => {
-            let mut ret = as_bytes.to_vec();
-            ret.reverse();
-            Ok(ret)
-        }
-    }
+    s
 }
 
+pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
+    //println!("bit_subset");
+
+    // 1. Figure out how many bytes we need from the input, get rid of excess
+    let mut desired_byte_length = num_bits / 8;
+    //println!("desired_byte_length: {}", desired_byte_length);
+    let remainder = num_bits % 8;
+    if remainder != 0 {
+        desired_byte_length = desired_byte_length + 1;
+    } 
+
+    let mut raw_input = inp.to_vec();
+    //println!("raw_input: {}", format_bits(&raw_input));
+
+    while raw_input.len() > desired_byte_length {
+        //println!("raw_input (shrinking): {}", format_bits(&raw_input));
+        raw_input.remove(raw_input.len()-1);
+    }
+
+    // 2. flip endianness if need be
+    //println!("raw_input: {}", format_bits(&raw_input));
+    if big_endian == false {
+        //println!("little_endian input, flipping raw_input");
+        raw_input.reverse();
+    }
+
+    // 2. make the bit vector, shift as needed
+    let mut bv = bv::BitVec::<bv::BigEndian, u8>::from_vec(raw_input);
+    bv.rotate_left(start);
+    //println!("post_rotation: {}", format_bits(&bv.as_slice().to_vec()));
+
+    // 3. zero out the bits after the range we're interested in
+    let bit_length = inp.len() * 8;
+    let mut bit_zeroing_index = bit_length;
+    while bit_zeroing_index < bit_length {
+        bv.set(bit_zeroing_index, false);
+        bit_zeroing_index = bit_zeroing_index + 1;
+    }
+
+    let mut ret = bv.as_slice().to_vec();
+
+    // 5. if little-endian, reverse
+    if big_endian == false {
+        ret.reverse();
+    }
+
+    return Ok(ret)
+
+}
 
 pub fn subset_with_pad(inp: &[u8], start: usize, num_bits: usize, endianness: Endianness) -> Result<Vec<u8>> {
+    
+    // we're passed however many bytes the output should end up being
+    let output_size = inp.len();
+    // bit_subset should return us an even number of bytes
+    let mut subset_bytes = num_bits / 8;
+
     let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
-    while bytes.len() < 8 {
+    //println!("subset_with_pad: len(input): {}, len(bytes): {}", inp.len(), bytes.len());
+    while subset_bytes < output_size {
+        subset_bytes = subset_bytes + 1;
         match endianness {
-            nom::Endianness::Big => bytes.push(0),
-            nom::Endianness::Little => bytes.insert(0, 0),
+            nom::Endianness::Big => bytes.insert(0, 0),
+            nom::Endianness::Little => bytes.push(0)
         }
     }
 
+    //println!("subset_with_pad output: {}", format_bits(&bytes));
     Ok(bytes)
 }
 
-/*
-pub fn bit_subset(inp: &[u8], start: usize, mut num_bits: usize) -> Result<Vec<u8>> {
-    let input = BitVec::from_bytes(inp);
-    let mut new = BitVec::new();
-    let mut to_copy = start;
-    while num_bits > 0 {
-        match input.get(to_copy) {
-            Some(next) => new.push(next),
-            None => return Err(Error::incorrect_shift_input()),
-        }
-        to_copy = to_copy + 1;
-        num_bits = num_bits - 1;
-    }
-
-    Ok(new.to_bytes())
-}
-*/
-
-pub fn shift_right(inp: &[u8], num_bits: usize) -> Result<(Vec<u8>, Vec<u8>)> {
-    if inp.len() > 4 || num_bits > 32 {
-        return Err(Error::incorrect_shift_input());
-    }
-
-    let input = BitVec::from_bytes(inp);
-
-    let mut left = BitVec::from_elem(32, false);
-    let mut right = BitVec::from_elem(32, false);
-
-    let mut to_copy = num_bits;
-    let mut input_ind = input.len() - 1;
-    let mut right_ind = right.len() - 1;
-
-    // copy num_bits to the result BV
-    while to_copy > 0 {
-        right.set(right_ind, input[input_ind]);
-        input_ind = input_ind - 1;
-        right_ind = right_ind - 1;
-        to_copy = to_copy - 1;
-    }
-
-    for i in 0..(input.len() - num_bits) {
-        left.set(i + num_bits, input[i]);
-    }
-
-    return Ok((left.to_bytes(), right.to_bytes()));
-}
 
 #[cfg(test)]
 mod tests {

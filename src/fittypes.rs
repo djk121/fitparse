@@ -15868,7 +15868,7 @@ impl FitMessageActivity {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -15881,7 +15881,7 @@ impl FitMessageActivity {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -16358,7 +16358,7 @@ impl FitMessageAntRx {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -16371,7 +16371,7 @@ impl FitMessageAntRx {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -16615,7 +16615,7 @@ impl FitMessageAntTx {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -16628,7 +16628,7 @@ impl FitMessageAntTx {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -17699,7 +17699,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.odometer = Some(result as f64 / 100 as f64)
+                                       message.odometer = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.odometer = None
                                 }
@@ -17712,7 +17712,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.odometer = Some(result as f64 / 100 as f64)
+                                       message.odometer = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.odometer = None
                                 }
@@ -17816,7 +17816,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.custom_wheelsize = Some(result as f64 / 1000 as f64)
+                                       message.custom_wheelsize = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.custom_wheelsize = None
                                 }
@@ -17829,7 +17829,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.custom_wheelsize = Some(result as f64 / 1000 as f64)
+                                       message.custom_wheelsize = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.custom_wheelsize = None
                                 }
@@ -17849,7 +17849,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.auto_wheelsize = Some(result as f64 / 1000 as f64)
+                                       message.auto_wheelsize = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.auto_wheelsize = None
                                 }
@@ -17862,7 +17862,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.auto_wheelsize = Some(result as f64 / 1000 as f64)
+                                       message.auto_wheelsize = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.auto_wheelsize = None
                                 }
@@ -17882,7 +17882,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.bike_weight = Some(result as f64 / 10 as f64)
+                                       message.bike_weight = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.bike_weight = None
                                 }
@@ -17895,7 +17895,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.bike_weight = Some(result as f64 / 10 as f64)
+                                       message.bike_weight = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.bike_weight = None
                                 }
@@ -17915,7 +17915,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.power_cal_factor = Some(result as f64 / 10 as f64)
+                                       message.power_cal_factor = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.power_cal_factor = None
                                 }
@@ -17928,7 +17928,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.power_cal_factor = Some(result as f64 / 10 as f64)
+                                       message.power_cal_factor = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.power_cal_factor = None
                                 }
@@ -18095,7 +18095,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.crank_length = Some(result as f64 / 2 as f64)
+                                       message.crank_length = Some((result as f64 / 2 as f64) - (-110 as f64)) 
                                     },
                                     None => message.crank_length = None
                                 }
@@ -18108,7 +18108,7 @@ impl FitMessageBikeProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.crank_length = Some(result as f64 / 2 as f64)
+                                       message.crank_length = Some((result as f64 / 2 as f64) - (-110 as f64)) 
                                     },
                                     None => message.crank_length = None
                                 }
@@ -19892,8 +19892,8 @@ pub struct FitMessageCoursePoint {
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
     pub timestamp: Option<FitFieldDateTime>,  
-    pub position_lat: Option<i32>,  
-    pub position_long: Option<i32>,  
+    pub position_lat: Option<f64>,  
+    pub position_long: Option<f64>,  
     pub distance: Option<f64>,  
     pub ftype: Option<FitFieldCoursePoint>,  
     pub name: Option<String>,  
@@ -20022,14 +20022,14 @@ impl FitMessageCoursePoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -20043,14 +20043,14 @@ impl FitMessageCoursePoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -20067,7 +20067,7 @@ impl FitMessageCoursePoint {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -20080,7 +20080,7 @@ impl FitMessageCoursePoint {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -20715,7 +20715,7 @@ impl FitMessageDeviceInfo {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.software_version = Some(result as f64 / 100 as f64)
+                                       message.software_version = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.software_version = None
                                 }
@@ -20728,7 +20728,7 @@ impl FitMessageDeviceInfo {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.software_version = Some(result as f64 / 100 as f64)
+                                       message.software_version = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.software_version = None
                                 }
@@ -20790,7 +20790,7 @@ impl FitMessageDeviceInfo {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.battery_voltage = Some(result as f64 / 256 as f64)
+                                       message.battery_voltage = Some((result as f64 / 256 as f64)) 
                                     },
                                     None => message.battery_voltage = None
                                 }
@@ -20803,7 +20803,7 @@ impl FitMessageDeviceInfo {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.battery_voltage = Some(result as f64 / 256 as f64)
+                                       message.battery_voltage = Some((result as f64 / 256 as f64)) 
                                     },
                                     None => message.battery_voltage = None
                                 }
@@ -21785,7 +21785,7 @@ impl FitMessageDiveAlarm {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.depth = Some(result as f64 / 1000 as f64)
+                                       message.depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.depth = None
                                 }
@@ -21798,7 +21798,7 @@ impl FitMessageDiveAlarm {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.depth = Some(result as f64 / 1000 as f64)
+                                       message.depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.depth = None
                                 }
@@ -21818,7 +21818,7 @@ impl FitMessageDiveAlarm {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time = Some(result as f64 / 1 as f64)
+                                       message.time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.time = None
                                 }
@@ -21831,7 +21831,7 @@ impl FitMessageDiveAlarm {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time = Some(result as f64 / 1 as f64)
+                                       message.time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.time = None
                                 }
@@ -22441,7 +22441,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.po2_warn = Some(result as f64 / 100 as f64)
+                                       message.po2_warn = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.po2_warn = None
                                 }
@@ -22454,7 +22454,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.po2_warn = Some(result as f64 / 100 as f64)
+                                       message.po2_warn = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.po2_warn = None
                                 }
@@ -22474,7 +22474,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.po2_critical = Some(result as f64 / 100 as f64)
+                                       message.po2_critical = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.po2_critical = None
                                 }
@@ -22487,7 +22487,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.po2_critical = Some(result as f64 / 100 as f64)
+                                       message.po2_critical = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.po2_critical = None
                                 }
@@ -22507,7 +22507,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.po2_deco = Some(result as f64 / 100 as f64)
+                                       message.po2_deco = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.po2_deco = None
                                 }
@@ -22520,7 +22520,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.po2_deco = Some(result as f64 / 100 as f64)
+                                       message.po2_deco = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.po2_deco = None
                                 }
@@ -22708,7 +22708,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.repeat_dive_interval = Some(result as f64 / 1 as f64)
+                                       message.repeat_dive_interval = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.repeat_dive_interval = None
                                 }
@@ -22721,7 +22721,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.repeat_dive_interval = Some(result as f64 / 1 as f64)
+                                       message.repeat_dive_interval = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.repeat_dive_interval = None
                                 }
@@ -22741,7 +22741,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.safety_stop_time = Some(result as f64 / 1 as f64)
+                                       message.safety_stop_time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.safety_stop_time = None
                                 }
@@ -22754,7 +22754,7 @@ impl FitMessageDiveSettings {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.safety_stop_time = Some(result as f64 / 1 as f64)
+                                       message.safety_stop_time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.safety_stop_time = None
                                 }
@@ -22996,7 +22996,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_depth = Some(result as f64 / 1000 as f64)
+                                       message.avg_depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_depth = None
                                 }
@@ -23009,7 +23009,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_depth = Some(result as f64 / 1000 as f64)
+                                       message.avg_depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_depth = None
                                 }
@@ -23029,7 +23029,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_depth = Some(result as f64 / 1000 as f64)
+                                       message.max_depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_depth = None
                                 }
@@ -23042,7 +23042,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_depth = Some(result as f64 / 1000 as f64)
+                                       message.max_depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_depth = None
                                 }
@@ -23062,7 +23062,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.surface_interval = Some(result as f64 / 1 as f64)
+                                       message.surface_interval = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.surface_interval = None
                                 }
@@ -23075,7 +23075,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.surface_interval = Some(result as f64 / 1 as f64)
+                                       message.surface_interval = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.surface_interval = None
                                 }
@@ -23095,7 +23095,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.start_cns = Some(result as f64 / 1 as f64)
+                                       message.start_cns = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.start_cns = None
                                 }
@@ -23108,7 +23108,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.start_cns = Some(result as f64 / 1 as f64)
+                                       message.start_cns = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.start_cns = None
                                 }
@@ -23128,7 +23128,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.end_cns = Some(result as f64 / 1 as f64)
+                                       message.end_cns = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.end_cns = None
                                 }
@@ -23141,7 +23141,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.end_cns = Some(result as f64 / 1 as f64)
+                                       message.end_cns = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.end_cns = None
                                 }
@@ -23161,7 +23161,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.start_n2 = Some(result as f64 / 1 as f64)
+                                       message.start_n2 = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.start_n2 = None
                                 }
@@ -23174,7 +23174,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.start_n2 = Some(result as f64 / 1 as f64)
+                                       message.start_n2 = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.start_n2 = None
                                 }
@@ -23194,7 +23194,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.end_n2 = Some(result as f64 / 1 as f64)
+                                       message.end_n2 = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.end_n2 = None
                                 }
@@ -23207,7 +23207,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.end_n2 = Some(result as f64 / 1 as f64)
+                                       message.end_n2 = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.end_n2 = None
                                 }
@@ -23269,7 +23269,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.bottom_time = Some(result as f64 / 1000 as f64)
+                                       message.bottom_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.bottom_time = None
                                 }
@@ -23282,7 +23282,7 @@ impl FitMessageDiveSummary {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.bottom_time = Some(result as f64 / 1000 as f64)
+                                       message.bottom_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.bottom_time = None
                                 }
@@ -26516,8 +26516,8 @@ pub struct FitMessageGpsMetadata {
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  // Whole second part of the timestamp.
     pub timestamp_ms: Option<u16>,  // Millisecond part of the timestamp.
-    pub position_lat: Option<i32>,  
-    pub position_long: Option<i32>,  
+    pub position_lat: Option<f64>,  
+    pub position_long: Option<f64>,  
     pub enhanced_altitude: Option<f64>,  
     pub enhanced_speed: Option<f64>,  
     pub heading: Option<f64>,  
@@ -26647,14 +26647,14 @@ impl FitMessageGpsMetadata {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -26668,14 +26668,14 @@ impl FitMessageGpsMetadata {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -26692,7 +26692,7 @@ impl FitMessageGpsMetadata {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_altitude = None
                                 }
@@ -26705,7 +26705,7 @@ impl FitMessageGpsMetadata {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_altitude = None
                                 }
@@ -26725,7 +26725,7 @@ impl FitMessageGpsMetadata {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_speed = None
                                 }
@@ -26738,7 +26738,7 @@ impl FitMessageGpsMetadata {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_speed = None
                                 }
@@ -26758,7 +26758,7 @@ impl FitMessageGpsMetadata {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.heading = Some(result as f64 / 100 as f64)
+                                       message.heading = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.heading = None
                                 }
@@ -26771,7 +26771,7 @@ impl FitMessageGpsMetadata {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.heading = Some(result as f64 / 100 as f64)
+                                       message.heading = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.heading = None
                                 }
@@ -27394,7 +27394,7 @@ impl FitMessageHr {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -27407,7 +27407,7 @@ impl FitMessageHr {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -27427,7 +27427,7 @@ impl FitMessageHr {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time256 = Some(result as f64 / 256 as f64)
+                                       message.time256 = Some((result as f64 / 256 as f64)) 
                                     },
                                     None => message.time256 = None
                                 }
@@ -27440,7 +27440,7 @@ impl FitMessageHr {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time256 = Some(result as f64 / 256 as f64)
+                                       message.time256 = Some((result as f64 / 256 as f64)) 
                                     },
                                     None => message.time256 = None
                                 }
@@ -28152,10 +28152,10 @@ pub struct FitMessageLap {
     pub event: Option<FitFieldEvent>,  
     pub event_type: Option<FitFieldEventType>,  
     pub start_time: Option<FitFieldDateTime>,  
-    pub start_position_lat: Option<i32>,  
-    pub start_position_long: Option<i32>,  
-    pub end_position_lat: Option<i32>,  
-    pub end_position_long: Option<i32>,  
+    pub start_position_lat: Option<f64>,  
+    pub start_position_long: Option<f64>,  
+    pub end_position_lat: Option<f64>,  
+    pub end_position_long: Option<f64>,  
     pub total_elapsed_time: Option<f64>,  // Time (includes pauses)
     pub total_timer_time: Option<f64>,  // Timer Time (excludes pauses)
     pub total_distance: Option<f64>,  
@@ -28478,14 +28478,14 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = val;
+                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = val;
+                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -28499,14 +28499,14 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = val;
+                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = val;
+                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -28520,14 +28520,14 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = val;
+                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = val;
+                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -28541,14 +28541,14 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = val;
+                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = val;
+                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -28565,7 +28565,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -28578,7 +28578,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -28598,7 +28598,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -28611,7 +28611,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -28631,7 +28631,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_distance = Some(result as f64 / 100 as f64)
+                                       message.total_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_distance = None
                                 }
@@ -28644,7 +28644,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_distance = Some(result as f64 / 100 as f64)
+                                       message.total_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_distance = None
                                 }
@@ -28727,7 +28727,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -28740,7 +28740,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -28761,7 +28761,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_speed = None
                                 }
@@ -28774,7 +28774,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_speed = None
                                 }
@@ -29131,7 +29131,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stroke_distance = Some(result as f64 / 100 as f64)
+                                       message.avg_stroke_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stroke_distance = None
                                 }
@@ -29144,7 +29144,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stroke_distance = Some(result as f64 / 100 as f64)
+                                       message.avg_stroke_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stroke_distance = None
                                 }
@@ -29248,7 +29248,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.avg_altitude = None
                                 }
@@ -29261,7 +29261,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.avg_altitude = None
                                 }
@@ -29282,7 +29282,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_altitude = Some(result as f64 / 5 as f64)
+                                       message.max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.max_altitude = None
                                 }
@@ -29295,7 +29295,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_altitude = Some(result as f64 / 5 as f64)
+                                       message.max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.max_altitude = None
                                 }
@@ -29337,7 +29337,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_grade = None
                                 }
@@ -29350,7 +29350,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_grade = None
                                 }
@@ -29370,7 +29370,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_pos_grade = None
                                 }
@@ -29383,7 +29383,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_pos_grade = None
                                 }
@@ -29403,7 +29403,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_neg_grade = None
                                 }
@@ -29416,7 +29416,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_neg_grade = None
                                 }
@@ -29436,7 +29436,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.max_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_pos_grade = None
                                 }
@@ -29449,7 +29449,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.max_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_pos_grade = None
                                 }
@@ -29469,7 +29469,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.max_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_neg_grade = None
                                 }
@@ -29482,7 +29482,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.max_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_neg_grade = None
                                 }
@@ -29544,7 +29544,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_moving_time = Some(result as f64 / 1000 as f64)
+                                       message.total_moving_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_moving_time = None
                                 }
@@ -29557,7 +29557,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_moving_time = Some(result as f64 / 1000 as f64)
+                                       message.total_moving_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_moving_time = None
                                 }
@@ -29577,7 +29577,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_pos_vertical_speed = None
                                 }
@@ -29590,7 +29590,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_pos_vertical_speed = None
                                 }
@@ -29610,7 +29610,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_neg_vertical_speed = None
                                 }
@@ -29623,7 +29623,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_neg_vertical_speed = None
                                 }
@@ -29643,7 +29643,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_pos_vertical_speed = None
                                 }
@@ -29656,7 +29656,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_pos_vertical_speed = None
                                 }
@@ -29676,7 +29676,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_neg_vertical_speed = None
                                 }
@@ -29689,7 +29689,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_neg_vertical_speed = None
                                 }
@@ -29878,7 +29878,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.min_altitude = Some(result as f64 / 5 as f64)
+                                       message.min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.min_altitude = None
                                 }
@@ -29891,7 +29891,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.min_altitude = Some(result as f64 / 5 as f64)
+                                       message.min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.min_altitude = None
                                 }
@@ -30049,7 +30049,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_oscillation = Some(result as f64 / 10 as f64)
+                                       message.avg_vertical_oscillation = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_vertical_oscillation = None
                                 }
@@ -30062,7 +30062,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_oscillation = Some(result as f64 / 10 as f64)
+                                       message.avg_vertical_oscillation = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_vertical_oscillation = None
                                 }
@@ -30082,7 +30082,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_percent = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_percent = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_percent = None
                                 }
@@ -30095,7 +30095,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_percent = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_percent = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_percent = None
                                 }
@@ -30115,7 +30115,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time = Some(result as f64 / 10 as f64)
+                                       message.avg_stance_time = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_stance_time = None
                                 }
@@ -30128,7 +30128,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time = Some(result as f64 / 10 as f64)
+                                       message.avg_stance_time = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_stance_time = None
                                 }
@@ -30148,7 +30148,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.avg_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.avg_fractional_cadence = None
                                 }
@@ -30161,7 +30161,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.avg_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.avg_fractional_cadence = None
                                 }
@@ -30181,7 +30181,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.max_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.max_fractional_cadence = None
                                 }
@@ -30194,7 +30194,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.max_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.max_fractional_cadence = None
                                 }
@@ -30214,7 +30214,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_fractional_cycles = Some(result as f64 / 128 as f64)
+                                       message.total_fractional_cycles = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.total_fractional_cycles = None
                                 }
@@ -30227,7 +30227,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_fractional_cycles = Some(result as f64 / 128 as f64)
+                                       message.total_fractional_cycles = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.total_fractional_cycles = None
                                 }
@@ -30490,7 +30490,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_torque_effectiveness = None
                                 }
@@ -30503,7 +30503,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_torque_effectiveness = None
                                 }
@@ -30523,7 +30523,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_torque_effectiveness = None
                                 }
@@ -30536,7 +30536,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_torque_effectiveness = None
                                 }
@@ -30556,7 +30556,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_pedal_smoothness = None
                                 }
@@ -30569,7 +30569,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_pedal_smoothness = None
                                 }
@@ -30589,7 +30589,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_pedal_smoothness = None
                                 }
@@ -30602,7 +30602,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_pedal_smoothness = None
                                 }
@@ -30622,7 +30622,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_combined_pedal_smoothness = None
                                 }
@@ -30635,7 +30635,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_combined_pedal_smoothness = None
                                 }
@@ -30655,7 +30655,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_standing = Some(result as f64 / 1000 as f64)
+                                       message.time_standing = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_standing = None
                                 }
@@ -30668,7 +30668,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_standing = Some(result as f64 / 1000 as f64)
+                                       message.time_standing = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_standing = None
                                 }
@@ -31047,7 +31047,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_avg_speed = None
                                 }
@@ -31060,7 +31060,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_avg_speed = None
                                 }
@@ -31080,7 +31080,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_max_speed = None
                                 }
@@ -31093,7 +31093,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_max_speed = None
                                 }
@@ -31113,7 +31113,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_avg_altitude = None
                                 }
@@ -31126,7 +31126,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_avg_altitude = None
                                 }
@@ -31146,7 +31146,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_min_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_min_altitude = None
                                 }
@@ -31159,7 +31159,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_min_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_min_altitude = None
                                 }
@@ -31179,7 +31179,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_max_altitude = None
                                 }
@@ -31192,7 +31192,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_max_altitude = None
                                 }
@@ -31254,7 +31254,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.lev_battery_consumption = Some(result as f64 / 2 as f64)
+                                       message.lev_battery_consumption = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.lev_battery_consumption = None
                                 }
@@ -31267,7 +31267,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.lev_battery_consumption = Some(result as f64 / 2 as f64)
+                                       message.lev_battery_consumption = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.lev_battery_consumption = None
                                 }
@@ -31287,7 +31287,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_ratio = Some(result as f64 / 100 as f64)
+                                       message.avg_vertical_ratio = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_vertical_ratio = None
                                 }
@@ -31300,7 +31300,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_ratio = Some(result as f64 / 100 as f64)
+                                       message.avg_vertical_ratio = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_vertical_ratio = None
                                 }
@@ -31320,7 +31320,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_balance = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_balance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_balance = None
                                 }
@@ -31333,7 +31333,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_balance = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_balance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_balance = None
                                 }
@@ -31353,7 +31353,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_step_length = Some(result as f64 / 10 as f64)
+                                       message.avg_step_length = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_step_length = None
                                 }
@@ -31366,7 +31366,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_step_length = Some(result as f64 / 10 as f64)
+                                       message.avg_step_length = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_step_length = None
                                 }
@@ -31386,7 +31386,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vam = Some(result as f64 / 1000 as f64)
+                                       message.avg_vam = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_vam = None
                                 }
@@ -31399,7 +31399,7 @@ impl FitMessageLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vam = Some(result as f64 / 1000 as f64)
+                                       message.avg_vam = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_vam = None
                                 }
@@ -31646,7 +31646,7 @@ impl FitMessageLength {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -31659,7 +31659,7 @@ impl FitMessageLength {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -31679,7 +31679,7 @@ impl FitMessageLength {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -31692,7 +31692,7 @@ impl FitMessageLength {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -31733,7 +31733,7 @@ impl FitMessageLength {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -31746,7 +31746,7 @@ impl FitMessageLength {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -32975,7 +32975,7 @@ impl FitMessageMetZone {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.calories = Some(result as f64 / 10 as f64)
+                                       message.calories = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.calories = None
                                 }
@@ -32988,7 +32988,7 @@ impl FitMessageMetZone {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.calories = Some(result as f64 / 10 as f64)
+                                       message.calories = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.calories = None
                                 }
@@ -33008,7 +33008,7 @@ impl FitMessageMetZone {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fat_calories = Some(result as f64 / 10 as f64)
+                                       message.fat_calories = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.fat_calories = None
                                 }
@@ -33021,7 +33021,7 @@ impl FitMessageMetZone {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fat_calories = Some(result as f64 / 10 as f64)
+                                       message.fat_calories = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.fat_calories = None
                                 }
@@ -33302,7 +33302,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -33315,7 +33315,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -33356,7 +33356,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.active_time = Some(result as f64 / 1000 as f64)
+                                       message.active_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.active_time = None
                                 }
@@ -33369,7 +33369,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.active_time = Some(result as f64 / 1000 as f64)
+                                       message.active_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.active_time = None
                                 }
@@ -33536,7 +33536,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.temperature = Some(result as f64 / 100 as f64)
+                                       message.temperature = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.temperature = None
                                 }
@@ -33549,7 +33549,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.temperature = Some(result as f64 / 100 as f64)
+                                       message.temperature = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.temperature = None
                                 }
@@ -33569,7 +33569,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.temperature_min = Some(result as f64 / 100 as f64)
+                                       message.temperature_min = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.temperature_min = None
                                 }
@@ -33582,7 +33582,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.temperature_min = Some(result as f64 / 100 as f64)
+                                       message.temperature_min = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.temperature_min = None
                                 }
@@ -33602,7 +33602,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.temperature_max = Some(result as f64 / 100 as f64)
+                                       message.temperature_max = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.temperature_max = None
                                 }
@@ -33615,7 +33615,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.temperature_max = Some(result as f64 / 100 as f64)
+                                       message.temperature_max = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.temperature_max = None
                                 }
@@ -33779,7 +33779,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.intensity = Some(result as f64 / 10 as f64)
+                                       message.intensity = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.intensity = None
                                 }
@@ -33792,7 +33792,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.intensity = Some(result as f64 / 10 as f64)
+                                       message.intensity = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.intensity = None
                                 }
@@ -33854,7 +33854,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.ascent = Some(result as f64 / 1000 as f64)
+                                       message.ascent = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.ascent = None
                                 }
@@ -33867,7 +33867,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.ascent = Some(result as f64 / 1000 as f64)
+                                       message.ascent = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.ascent = None
                                 }
@@ -33887,7 +33887,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.descent = Some(result as f64 / 1000 as f64)
+                                       message.descent = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.descent = None
                                 }
@@ -33900,7 +33900,7 @@ impl FitMessageMonitoring {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.descent = Some(result as f64 / 1000 as f64)
+                                       message.descent = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.descent = None
                                 }
@@ -35372,8 +35372,8 @@ pub struct FitMessageRecord {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: Option<FitFieldDateTime>,  
-    pub position_lat: Option<i32>,  
-    pub position_long: Option<i32>,  
+    pub position_lat: Option<f64>,  
+    pub position_long: Option<f64>,  
     pub altitude: Option<f64>,  
     pub heart_rate: Option<u8>,  
     pub cadence: Option<u8>,  
@@ -35541,14 +35541,14 @@ impl FitMessageRecord {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -35562,14 +35562,14 @@ impl FitMessageRecord {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -35586,7 +35586,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.altitude = Some(result as f64 / 5 as f64)
+                                       message.altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.altitude = None
                                 }
@@ -35599,7 +35599,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.altitude = Some(result as f64 / 5 as f64)
+                                       message.altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.altitude = None
                                 }
@@ -35662,7 +35662,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -35675,7 +35675,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -35695,7 +35695,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.speed = Some(result as f64 / 1000 as f64)
+                                       message.speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.speed = None
                                 }
@@ -35708,7 +35708,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.speed = Some(result as f64 / 1000 as f64)
+                                       message.speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.speed = None
                                 }
@@ -35773,7 +35773,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.grade = Some(result as f64 / 100 as f64)
+                                       message.grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.grade = None
                                 }
@@ -35786,7 +35786,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.grade = Some(result as f64 / 100 as f64)
+                                       message.grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.grade = None
                                 }
@@ -35827,7 +35827,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_from_course = Some(result as f64 / 1000 as f64)
+                                       message.time_from_course = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_from_course = None
                                 }
@@ -35840,7 +35840,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_from_course = Some(result as f64 / 1000 as f64)
+                                       message.time_from_course = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_from_course = None
                                 }
@@ -35860,7 +35860,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.cycle_length = Some(result as f64 / 100 as f64)
+                                       message.cycle_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.cycle_length = None
                                 }
@@ -35873,7 +35873,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.cycle_length = Some(result as f64 / 100 as f64)
+                                       message.cycle_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.cycle_length = None
                                 }
@@ -36079,7 +36079,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.vertical_speed = None
                                 }
@@ -36092,7 +36092,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.vertical_speed = None
                                 }
@@ -36133,7 +36133,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.vertical_oscillation = Some(result as f64 / 10 as f64)
+                                       message.vertical_oscillation = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.vertical_oscillation = None
                                 }
@@ -36146,7 +36146,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.vertical_oscillation = Some(result as f64 / 10 as f64)
+                                       message.vertical_oscillation = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.vertical_oscillation = None
                                 }
@@ -36166,7 +36166,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.stance_time_percent = Some(result as f64 / 100 as f64)
+                                       message.stance_time_percent = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.stance_time_percent = None
                                 }
@@ -36179,7 +36179,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.stance_time_percent = Some(result as f64 / 100 as f64)
+                                       message.stance_time_percent = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.stance_time_percent = None
                                 }
@@ -36199,7 +36199,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.stance_time = Some(result as f64 / 10 as f64)
+                                       message.stance_time = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.stance_time = None
                                 }
@@ -36212,7 +36212,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.stance_time = Some(result as f64 / 10 as f64)
+                                       message.stance_time = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.stance_time = None
                                 }
@@ -36253,7 +36253,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.left_torque_effectiveness = None
                                 }
@@ -36266,7 +36266,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.left_torque_effectiveness = None
                                 }
@@ -36286,7 +36286,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.right_torque_effectiveness = None
                                 }
@@ -36299,7 +36299,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.right_torque_effectiveness = None
                                 }
@@ -36319,7 +36319,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.left_pedal_smoothness = None
                                 }
@@ -36332,7 +36332,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.left_pedal_smoothness = None
                                 }
@@ -36352,7 +36352,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.right_pedal_smoothness = None
                                 }
@@ -36365,7 +36365,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.right_pedal_smoothness = None
                                 }
@@ -36385,7 +36385,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.combined_pedal_smoothness = None
                                 }
@@ -36398,7 +36398,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.combined_pedal_smoothness = None
                                 }
@@ -36418,7 +36418,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time128 = Some(result as f64 / 128 as f64)
+                                       message.time128 = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.time128 = None
                                 }
@@ -36431,7 +36431,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time128 = Some(result as f64 / 128 as f64)
+                                       message.time128 = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.time128 = None
                                 }
@@ -36493,7 +36493,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.ball_speed = Some(result as f64 / 100 as f64)
+                                       message.ball_speed = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.ball_speed = None
                                 }
@@ -36506,7 +36506,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.ball_speed = Some(result as f64 / 100 as f64)
+                                       message.ball_speed = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.ball_speed = None
                                 }
@@ -36526,7 +36526,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.cadence256 = Some(result as f64 / 256 as f64)
+                                       message.cadence256 = Some((result as f64 / 256 as f64)) 
                                     },
                                     None => message.cadence256 = None
                                 }
@@ -36539,7 +36539,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.cadence256 = Some(result as f64 / 256 as f64)
+                                       message.cadence256 = Some((result as f64 / 256 as f64)) 
                                     },
                                     None => message.cadence256 = None
                                 }
@@ -36559,7 +36559,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.fractional_cadence = None
                                 }
@@ -36572,7 +36572,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.fractional_cadence = None
                                 }
@@ -36592,7 +36592,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_hemoglobin_conc = Some(result as f64 / 100 as f64)
+                                       message.total_hemoglobin_conc = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_hemoglobin_conc = None
                                 }
@@ -36605,7 +36605,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_hemoglobin_conc = Some(result as f64 / 100 as f64)
+                                       message.total_hemoglobin_conc = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_hemoglobin_conc = None
                                 }
@@ -36625,7 +36625,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_hemoglobin_conc_min = Some(result as f64 / 100 as f64)
+                                       message.total_hemoglobin_conc_min = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_hemoglobin_conc_min = None
                                 }
@@ -36638,7 +36638,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_hemoglobin_conc_min = Some(result as f64 / 100 as f64)
+                                       message.total_hemoglobin_conc_min = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_hemoglobin_conc_min = None
                                 }
@@ -36658,7 +36658,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_hemoglobin_conc_max = Some(result as f64 / 100 as f64)
+                                       message.total_hemoglobin_conc_max = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_hemoglobin_conc_max = None
                                 }
@@ -36671,7 +36671,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_hemoglobin_conc_max = Some(result as f64 / 100 as f64)
+                                       message.total_hemoglobin_conc_max = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_hemoglobin_conc_max = None
                                 }
@@ -36691,7 +36691,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.saturated_hemoglobin_percent = Some(result as f64 / 10 as f64)
+                                       message.saturated_hemoglobin_percent = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.saturated_hemoglobin_percent = None
                                 }
@@ -36704,7 +36704,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.saturated_hemoglobin_percent = Some(result as f64 / 10 as f64)
+                                       message.saturated_hemoglobin_percent = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.saturated_hemoglobin_percent = None
                                 }
@@ -36724,7 +36724,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.saturated_hemoglobin_percent_min = Some(result as f64 / 10 as f64)
+                                       message.saturated_hemoglobin_percent_min = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.saturated_hemoglobin_percent_min = None
                                 }
@@ -36737,7 +36737,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.saturated_hemoglobin_percent_min = Some(result as f64 / 10 as f64)
+                                       message.saturated_hemoglobin_percent_min = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.saturated_hemoglobin_percent_min = None
                                 }
@@ -36757,7 +36757,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.saturated_hemoglobin_percent_max = Some(result as f64 / 10 as f64)
+                                       message.saturated_hemoglobin_percent_max = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.saturated_hemoglobin_percent_max = None
                                 }
@@ -36770,7 +36770,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.saturated_hemoglobin_percent_max = Some(result as f64 / 10 as f64)
+                                       message.saturated_hemoglobin_percent_max = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.saturated_hemoglobin_percent_max = None
                                 }
@@ -37001,7 +37001,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_speed = None
                                 }
@@ -37014,7 +37014,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_speed = None
                                 }
@@ -37034,7 +37034,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_altitude = None
                                 }
@@ -37047,7 +37047,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_altitude = None
                                 }
@@ -37067,7 +37067,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.battery_soc = Some(result as f64 / 2 as f64)
+                                       message.battery_soc = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.battery_soc = None
                                 }
@@ -37080,7 +37080,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.battery_soc = Some(result as f64 / 2 as f64)
+                                       message.battery_soc = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.battery_soc = None
                                 }
@@ -37121,7 +37121,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.vertical_ratio = Some(result as f64 / 100 as f64)
+                                       message.vertical_ratio = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.vertical_ratio = None
                                 }
@@ -37134,7 +37134,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.vertical_ratio = Some(result as f64 / 100 as f64)
+                                       message.vertical_ratio = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.vertical_ratio = None
                                 }
@@ -37154,7 +37154,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.stance_time_balance = Some(result as f64 / 100 as f64)
+                                       message.stance_time_balance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.stance_time_balance = None
                                 }
@@ -37167,7 +37167,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.stance_time_balance = Some(result as f64 / 100 as f64)
+                                       message.stance_time_balance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.stance_time_balance = None
                                 }
@@ -37187,7 +37187,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.step_length = Some(result as f64 / 10 as f64)
+                                       message.step_length = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.step_length = None
                                 }
@@ -37200,7 +37200,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.step_length = Some(result as f64 / 10 as f64)
+                                       message.step_length = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.step_length = None
                                 }
@@ -37241,7 +37241,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.depth = Some(result as f64 / 1000 as f64)
+                                       message.depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.depth = None
                                 }
@@ -37254,7 +37254,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.depth = Some(result as f64 / 1000 as f64)
+                                       message.depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.depth = None
                                 }
@@ -37274,7 +37274,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.next_stop_depth = Some(result as f64 / 1000 as f64)
+                                       message.next_stop_depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.next_stop_depth = None
                                 }
@@ -37287,7 +37287,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.next_stop_depth = Some(result as f64 / 1000 as f64)
+                                       message.next_stop_depth = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.next_stop_depth = None
                                 }
@@ -37307,7 +37307,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.next_stop_time = Some(result as f64 / 1 as f64)
+                                       message.next_stop_time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.next_stop_time = None
                                 }
@@ -37320,7 +37320,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.next_stop_time = Some(result as f64 / 1 as f64)
+                                       message.next_stop_time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.next_stop_time = None
                                 }
@@ -37340,7 +37340,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_to_surface = Some(result as f64 / 1 as f64)
+                                       message.time_to_surface = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.time_to_surface = None
                                 }
@@ -37353,7 +37353,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_to_surface = Some(result as f64 / 1 as f64)
+                                       message.time_to_surface = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.time_to_surface = None
                                 }
@@ -37373,7 +37373,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.ndl_time = Some(result as f64 / 1 as f64)
+                                       message.ndl_time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.ndl_time = None
                                 }
@@ -37386,7 +37386,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.ndl_time = Some(result as f64 / 1 as f64)
+                                       message.ndl_time = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.ndl_time = None
                                 }
@@ -37427,7 +37427,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.n2_load = Some(result as f64 / 1 as f64)
+                                       message.n2_load = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.n2_load = None
                                 }
@@ -37440,7 +37440,7 @@ impl FitMessageRecord {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.n2_load = Some(result as f64 / 1 as f64)
+                                       message.n2_load = Some((result as f64 / 1 as f64)) 
                                     },
                                     None => message.n2_load = None
                                 }
@@ -37930,7 +37930,7 @@ impl FitMessageSdmProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.sdm_cal_factor = Some(result as f64 / 10 as f64)
+                                       message.sdm_cal_factor = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.sdm_cal_factor = None
                                 }
@@ -37943,7 +37943,7 @@ impl FitMessageSdmProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.sdm_cal_factor = Some(result as f64 / 10 as f64)
+                                       message.sdm_cal_factor = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.sdm_cal_factor = None
                                 }
@@ -37963,7 +37963,7 @@ impl FitMessageSdmProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.odometer = Some(result as f64 / 100 as f64)
+                                       message.odometer = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.odometer = None
                                 }
@@ -37976,7 +37976,7 @@ impl FitMessageSdmProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.odometer = Some(result as f64 / 100 as f64)
+                                       message.odometer = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.odometer = None
                                 }
@@ -38747,10 +38747,10 @@ pub struct FitMessageSegmentLap {
     pub event: Option<FitFieldEvent>,  
     pub event_type: Option<FitFieldEventType>,  
     pub start_time: Option<FitFieldDateTime>,  
-    pub start_position_lat: Option<i32>,  
-    pub start_position_long: Option<i32>,  
-    pub end_position_lat: Option<i32>,  
-    pub end_position_long: Option<i32>,  
+    pub start_position_lat: Option<f64>,  
+    pub start_position_long: Option<f64>,  
+    pub end_position_lat: Option<f64>,  
+    pub end_position_long: Option<f64>,  
     pub total_elapsed_time: Option<f64>,  // Time (includes pauses)
     pub total_timer_time: Option<f64>,  // Timer Time (excludes pauses)
     pub total_distance: Option<f64>,  
@@ -38770,10 +38770,10 @@ pub struct FitMessageSegmentLap {
     pub total_descent: Option<u16>,  
     pub sport: Option<FitFieldSport>,  
     pub event_group: Option<u8>,  
-    pub nec_lat: Option<i32>,  // North east corner latitude.
-    pub nec_long: Option<i32>,  // North east corner longitude.
-    pub swc_lat: Option<i32>,  // South west corner latitude.
-    pub swc_long: Option<i32>,  // South west corner latitude.
+    pub nec_lat: Option<f64>,  // North east corner latitude.
+    pub nec_long: Option<f64>,  // North east corner longitude.
+    pub swc_lat: Option<f64>,  // South west corner latitude.
+    pub swc_long: Option<f64>,  // South west corner latitude.
     pub name: Option<String>,  
     pub normalized_power: Option<u16>,  
     pub left_right_balance: Option<FitFieldLeftRightBalance100>,  
@@ -39037,14 +39037,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = val;
+                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = val;
+                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39058,14 +39058,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = val;
+                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = val;
+                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39079,14 +39079,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = val;
+                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = val;
+                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39100,14 +39100,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = val;
+                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = val;
+                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39124,7 +39124,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -39137,7 +39137,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -39157,7 +39157,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -39170,7 +39170,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -39190,7 +39190,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_distance = Some(result as f64 / 100 as f64)
+                                       message.total_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_distance = None
                                 }
@@ -39203,7 +39203,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_distance = Some(result as f64 / 100 as f64)
+                                       message.total_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_distance = None
                                 }
@@ -39286,7 +39286,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -39299,7 +39299,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -39319,7 +39319,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_speed = None
                                 }
@@ -39332,7 +39332,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_speed = None
                                 }
@@ -39559,14 +39559,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = val;
+                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = val;
+                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39580,14 +39580,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = val;
+                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = val;
+                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39601,14 +39601,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = val;
+                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = val;
+                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39622,14 +39622,14 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = val;
+                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = val;
+                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -39751,7 +39751,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.avg_altitude = None
                                 }
@@ -39764,7 +39764,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.avg_altitude = None
                                 }
@@ -39784,7 +39784,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_altitude = Some(result as f64 / 5 as f64)
+                                       message.max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.max_altitude = None
                                 }
@@ -39797,7 +39797,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_altitude = Some(result as f64 / 5 as f64)
+                                       message.max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.max_altitude = None
                                 }
@@ -39838,7 +39838,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_grade = None
                                 }
@@ -39851,7 +39851,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_grade = None
                                 }
@@ -39871,7 +39871,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_pos_grade = None
                                 }
@@ -39884,7 +39884,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_pos_grade = None
                                 }
@@ -39904,7 +39904,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_neg_grade = None
                                 }
@@ -39917,7 +39917,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_neg_grade = None
                                 }
@@ -39937,7 +39937,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.max_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_pos_grade = None
                                 }
@@ -39950,7 +39950,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.max_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_pos_grade = None
                                 }
@@ -39970,7 +39970,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.max_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_neg_grade = None
                                 }
@@ -39983,7 +39983,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.max_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_neg_grade = None
                                 }
@@ -40045,7 +40045,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_moving_time = Some(result as f64 / 1000 as f64)
+                                       message.total_moving_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_moving_time = None
                                 }
@@ -40058,7 +40058,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_moving_time = Some(result as f64 / 1000 as f64)
+                                       message.total_moving_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_moving_time = None
                                 }
@@ -40078,7 +40078,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_pos_vertical_speed = None
                                 }
@@ -40091,7 +40091,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_pos_vertical_speed = None
                                 }
@@ -40111,7 +40111,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_neg_vertical_speed = None
                                 }
@@ -40124,7 +40124,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_neg_vertical_speed = None
                                 }
@@ -40144,7 +40144,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_pos_vertical_speed = None
                                 }
@@ -40157,7 +40157,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_pos_vertical_speed = None
                                 }
@@ -40177,7 +40177,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_neg_vertical_speed = None
                                 }
@@ -40190,7 +40190,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_neg_vertical_speed = None
                                 }
@@ -40379,7 +40379,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.min_altitude = Some(result as f64 / 5 as f64)
+                                       message.min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.min_altitude = None
                                 }
@@ -40392,7 +40392,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.min_altitude = Some(result as f64 / 5 as f64)
+                                       message.min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.min_altitude = None
                                 }
@@ -40433,7 +40433,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.active_time = Some(result as f64 / 1000 as f64)
+                                       message.active_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.active_time = None
                                 }
@@ -40446,7 +40446,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.active_time = Some(result as f64 / 1000 as f64)
+                                       message.active_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.active_time = None
                                 }
@@ -40508,7 +40508,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_torque_effectiveness = None
                                 }
@@ -40521,7 +40521,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_torque_effectiveness = None
                                 }
@@ -40541,7 +40541,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_torque_effectiveness = None
                                 }
@@ -40554,7 +40554,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_torque_effectiveness = None
                                 }
@@ -40574,7 +40574,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_pedal_smoothness = None
                                 }
@@ -40587,7 +40587,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_pedal_smoothness = None
                                 }
@@ -40607,7 +40607,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_pedal_smoothness = None
                                 }
@@ -40620,7 +40620,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_pedal_smoothness = None
                                 }
@@ -40640,7 +40640,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_combined_pedal_smoothness = None
                                 }
@@ -40653,7 +40653,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_combined_pedal_smoothness = None
                                 }
@@ -40715,7 +40715,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.avg_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.avg_fractional_cadence = None
                                 }
@@ -40728,7 +40728,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.avg_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.avg_fractional_cadence = None
                                 }
@@ -40748,7 +40748,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.max_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.max_fractional_cadence = None
                                 }
@@ -40761,7 +40761,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.max_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.max_fractional_cadence = None
                                 }
@@ -40781,7 +40781,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_fractional_cycles = Some(result as f64 / 128 as f64)
+                                       message.total_fractional_cycles = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.total_fractional_cycles = None
                                 }
@@ -40794,7 +40794,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_fractional_cycles = Some(result as f64 / 128 as f64)
+                                       message.total_fractional_cycles = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.total_fractional_cycles = None
                                 }
@@ -40856,7 +40856,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_standing = Some(result as f64 / 1000 as f64)
+                                       message.time_standing = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_standing = None
                                 }
@@ -40869,7 +40869,7 @@ impl FitMessageSegmentLap {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_standing = Some(result as f64 / 1000 as f64)
+                                       message.time_standing = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_standing = None
                                 }
@@ -41471,7 +41471,7 @@ impl FitMessageSegmentLeaderboardEntry {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.segment_time = Some(result as f64 / 1000 as f64)
+                                       message.segment_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.segment_time = None
                                 }
@@ -41484,7 +41484,7 @@ impl FitMessageSegmentLeaderboardEntry {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.segment_time = Some(result as f64 / 1000 as f64)
+                                       message.segment_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.segment_time = None
                                 }
@@ -41545,8 +41545,8 @@ pub struct FitMessageSegmentPoint {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: Option<FitFieldMessageIndex>,  
-    pub position_lat: Option<i32>,  
-    pub position_long: Option<i32>,  
+    pub position_lat: Option<f64>,  
+    pub position_long: Option<f64>,  
     pub distance: Option<f64>,  // Accumulated distance along the segment at the described point
     pub altitude: Option<f64>,  // Accumulated altitude along the segment at the described point
     pub leader_time: Option<Vec<Option<f64>>>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
@@ -41639,14 +41639,14 @@ impl FitMessageSegmentPoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = val;
+                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -41660,14 +41660,14 @@ impl FitMessageSegmentPoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = val;
+                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -41684,7 +41684,7 @@ impl FitMessageSegmentPoint {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -41697,7 +41697,7 @@ impl FitMessageSegmentPoint {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.distance = Some(result as f64 / 100 as f64)
+                                       message.distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.distance = None
                                 }
@@ -41717,7 +41717,7 @@ impl FitMessageSegmentPoint {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.altitude = Some(result as f64 / 5 as f64)
+                                       message.altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.altitude = None
                                 }
@@ -41730,7 +41730,7 @@ impl FitMessageSegmentPoint {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.altitude = Some(result as f64 / 5 as f64)
+                                       message.altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.altitude = None
                                 }
@@ -41889,8 +41889,8 @@ pub struct FitMessageSession {
     pub event: Option<FitFieldEvent>,  // session
     pub event_type: Option<FitFieldEventType>,  // stop
     pub start_time: Option<FitFieldDateTime>,  
-    pub start_position_lat: Option<i32>,  
-    pub start_position_long: Option<i32>,  
+    pub start_position_lat: Option<f64>,  
+    pub start_position_long: Option<f64>,  
     pub sport: Option<FitFieldSport>,  
     pub sub_sport: Option<FitFieldSubSport>,  
     pub total_elapsed_time: Option<f64>,  // Time (includes pauses)
@@ -41917,10 +41917,10 @@ pub struct FitMessageSession {
     pub num_laps: Option<u16>,  
     pub event_group: Option<u8>,  
     pub trigger: Option<FitFieldSessionTrigger>,  
-    pub nec_lat: Option<i32>,  
-    pub nec_long: Option<i32>,  
-    pub swc_lat: Option<i32>,  
-    pub swc_long: Option<i32>,  
+    pub nec_lat: Option<f64>,  
+    pub nec_long: Option<f64>,  
+    pub swc_lat: Option<f64>,  
+    pub swc_long: Option<f64>,  
     pub normalized_power: Option<u16>,  
     pub training_stress_score: Option<f64>,  
     pub intensity_factor: Option<f64>,  
@@ -42228,14 +42228,14 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = val;
+                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = val;
+                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -42249,14 +42249,14 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = val;
+                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = val;
+                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -42315,7 +42315,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -42328,7 +42328,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_elapsed_time = Some(result as f64 / 1000 as f64)
+                                       message.total_elapsed_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_elapsed_time = None
                                 }
@@ -42348,7 +42348,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -42361,7 +42361,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_timer_time = Some(result as f64 / 1000 as f64)
+                                       message.total_timer_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_timer_time = None
                                 }
@@ -42381,7 +42381,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_distance = Some(result as f64 / 100 as f64)
+                                       message.total_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_distance = None
                                 }
@@ -42394,7 +42394,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_distance = Some(result as f64 / 100 as f64)
+                                       message.total_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.total_distance = None
                                 }
@@ -42477,7 +42477,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -42490,7 +42490,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_speed = None
                                 }
@@ -42511,7 +42511,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_speed = None
                                 }
@@ -42524,7 +42524,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_speed = None
                                 }
@@ -42713,7 +42713,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_training_effect = Some(result as f64 / 10 as f64)
+                                       message.total_training_effect = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.total_training_effect = None
                                 }
@@ -42726,7 +42726,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_training_effect = Some(result as f64 / 10 as f64)
+                                       message.total_training_effect = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.total_training_effect = None
                                 }
@@ -42827,14 +42827,14 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = val;
+                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = val;
+                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -42848,14 +42848,14 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = val;
+                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = val;
+                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -42869,14 +42869,14 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = val;
+                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = val;
+                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -42890,14 +42890,14 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = val;
+                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = val;
+                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -42935,7 +42935,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.training_stress_score = Some(result as f64 / 10 as f64)
+                                       message.training_stress_score = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.training_stress_score = None
                                 }
@@ -42948,7 +42948,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.training_stress_score = Some(result as f64 / 10 as f64)
+                                       message.training_stress_score = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.training_stress_score = None
                                 }
@@ -42968,7 +42968,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.intensity_factor = Some(result as f64 / 1000 as f64)
+                                       message.intensity_factor = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.intensity_factor = None
                                 }
@@ -42981,7 +42981,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.intensity_factor = Some(result as f64 / 1000 as f64)
+                                       message.intensity_factor = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.intensity_factor = None
                                 }
@@ -43022,7 +43022,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stroke_count = Some(result as f64 / 10 as f64)
+                                       message.avg_stroke_count = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_stroke_count = None
                                 }
@@ -43035,7 +43035,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stroke_count = Some(result as f64 / 10 as f64)
+                                       message.avg_stroke_count = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_stroke_count = None
                                 }
@@ -43055,7 +43055,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stroke_distance = Some(result as f64 / 100 as f64)
+                                       message.avg_stroke_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stroke_distance = None
                                 }
@@ -43068,7 +43068,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stroke_distance = Some(result as f64 / 100 as f64)
+                                       message.avg_stroke_distance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stroke_distance = None
                                 }
@@ -43109,7 +43109,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.pool_length = Some(result as f64 / 100 as f64)
+                                       message.pool_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.pool_length = None
                                 }
@@ -43122,7 +43122,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.pool_length = Some(result as f64 / 100 as f64)
+                                       message.pool_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.pool_length = None
                                 }
@@ -43226,7 +43226,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.avg_altitude = None
                                 }
@@ -43239,7 +43239,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.avg_altitude = None
                                 }
@@ -43260,7 +43260,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_altitude = Some(result as f64 / 5 as f64)
+                                       message.max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.max_altitude = None
                                 }
@@ -43273,7 +43273,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_altitude = Some(result as f64 / 5 as f64)
+                                       message.max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.max_altitude = None
                                 }
@@ -43315,7 +43315,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_grade = None
                                 }
@@ -43328,7 +43328,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_grade = None
                                 }
@@ -43348,7 +43348,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_pos_grade = None
                                 }
@@ -43361,7 +43361,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_pos_grade = None
                                 }
@@ -43381,7 +43381,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_neg_grade = None
                                 }
@@ -43394,7 +43394,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.avg_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_neg_grade = None
                                 }
@@ -43414,7 +43414,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.max_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_pos_grade = None
                                 }
@@ -43427,7 +43427,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_grade = Some(result as f64 / 100 as f64)
+                                       message.max_pos_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_pos_grade = None
                                 }
@@ -43447,7 +43447,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.max_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_neg_grade = None
                                 }
@@ -43460,7 +43460,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_grade = Some(result as f64 / 100 as f64)
+                                       message.max_neg_grade = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_neg_grade = None
                                 }
@@ -43522,7 +43522,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_moving_time = Some(result as f64 / 1000 as f64)
+                                       message.total_moving_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_moving_time = None
                                 }
@@ -43535,7 +43535,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_moving_time = Some(result as f64 / 1000 as f64)
+                                       message.total_moving_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.total_moving_time = None
                                 }
@@ -43555,7 +43555,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_pos_vertical_speed = None
                                 }
@@ -43568,7 +43568,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_pos_vertical_speed = None
                                 }
@@ -43588,7 +43588,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_neg_vertical_speed = None
                                 }
@@ -43601,7 +43601,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.avg_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_neg_vertical_speed = None
                                 }
@@ -43621,7 +43621,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_pos_vertical_speed = None
                                 }
@@ -43634,7 +43634,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_pos_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_pos_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_pos_vertical_speed = None
                                 }
@@ -43654,7 +43654,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_neg_vertical_speed = None
                                 }
@@ -43667,7 +43667,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_neg_vertical_speed = Some(result as f64 / 1000 as f64)
+                                       message.max_neg_vertical_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.max_neg_vertical_speed = None
                                 }
@@ -43856,7 +43856,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_lap_time = Some(result as f64 / 1000 as f64)
+                                       message.avg_lap_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_lap_time = None
                                 }
@@ -43869,7 +43869,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_lap_time = Some(result as f64 / 1000 as f64)
+                                       message.avg_lap_time = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_lap_time = None
                                 }
@@ -43910,7 +43910,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.min_altitude = Some(result as f64 / 5 as f64)
+                                       message.min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.min_altitude = None
                                 }
@@ -43923,7 +43923,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.min_altitude = Some(result as f64 / 5 as f64)
+                                       message.min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.min_altitude = None
                                 }
@@ -44081,7 +44081,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_ball_speed = Some(result as f64 / 100 as f64)
+                                       message.max_ball_speed = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_ball_speed = None
                                 }
@@ -44094,7 +44094,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_ball_speed = Some(result as f64 / 100 as f64)
+                                       message.max_ball_speed = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.max_ball_speed = None
                                 }
@@ -44114,7 +44114,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_ball_speed = Some(result as f64 / 100 as f64)
+                                       message.avg_ball_speed = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_ball_speed = None
                                 }
@@ -44127,7 +44127,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_ball_speed = Some(result as f64 / 100 as f64)
+                                       message.avg_ball_speed = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_ball_speed = None
                                 }
@@ -44147,7 +44147,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_oscillation = Some(result as f64 / 10 as f64)
+                                       message.avg_vertical_oscillation = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_vertical_oscillation = None
                                 }
@@ -44160,7 +44160,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_oscillation = Some(result as f64 / 10 as f64)
+                                       message.avg_vertical_oscillation = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_vertical_oscillation = None
                                 }
@@ -44180,7 +44180,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_percent = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_percent = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_percent = None
                                 }
@@ -44193,7 +44193,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_percent = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_percent = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_percent = None
                                 }
@@ -44213,7 +44213,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time = Some(result as f64 / 10 as f64)
+                                       message.avg_stance_time = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_stance_time = None
                                 }
@@ -44226,7 +44226,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time = Some(result as f64 / 10 as f64)
+                                       message.avg_stance_time = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_stance_time = None
                                 }
@@ -44246,7 +44246,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.avg_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.avg_fractional_cadence = None
                                 }
@@ -44259,7 +44259,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.avg_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.avg_fractional_cadence = None
                                 }
@@ -44279,7 +44279,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.max_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.max_fractional_cadence = None
                                 }
@@ -44292,7 +44292,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.max_fractional_cadence = Some(result as f64 / 128 as f64)
+                                       message.max_fractional_cadence = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.max_fractional_cadence = None
                                 }
@@ -44312,7 +44312,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_fractional_cycles = Some(result as f64 / 128 as f64)
+                                       message.total_fractional_cycles = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.total_fractional_cycles = None
                                 }
@@ -44325,7 +44325,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_fractional_cycles = Some(result as f64 / 128 as f64)
+                                       message.total_fractional_cycles = Some((result as f64 / 128 as f64)) 
                                     },
                                     None => message.total_fractional_cycles = None
                                 }
@@ -44567,7 +44567,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_torque_effectiveness = None
                                 }
@@ -44580,7 +44580,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_torque_effectiveness = None
                                 }
@@ -44600,7 +44600,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_torque_effectiveness = None
                                 }
@@ -44613,7 +44613,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_torque_effectiveness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_torque_effectiveness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_torque_effectiveness = None
                                 }
@@ -44633,7 +44633,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_pedal_smoothness = None
                                 }
@@ -44646,7 +44646,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_left_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_left_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_left_pedal_smoothness = None
                                 }
@@ -44666,7 +44666,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_pedal_smoothness = None
                                 }
@@ -44679,7 +44679,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_right_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_right_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_right_pedal_smoothness = None
                                 }
@@ -44699,7 +44699,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_combined_pedal_smoothness = None
                                 }
@@ -44712,7 +44712,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_combined_pedal_smoothness = Some(result as f64 / 2 as f64)
+                                       message.avg_combined_pedal_smoothness = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.avg_combined_pedal_smoothness = None
                                 }
@@ -44753,7 +44753,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_standing = Some(result as f64 / 1000 as f64)
+                                       message.time_standing = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_standing = None
                                 }
@@ -44766,7 +44766,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.time_standing = Some(result as f64 / 1000 as f64)
+                                       message.time_standing = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.time_standing = None
                                 }
@@ -45145,7 +45145,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_avg_speed = None
                                 }
@@ -45158,7 +45158,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_avg_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_avg_speed = None
                                 }
@@ -45178,7 +45178,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_max_speed = None
                                 }
@@ -45191,7 +45191,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_speed = Some(result as f64 / 1000 as f64)
+                                       message.enhanced_max_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.enhanced_max_speed = None
                                 }
@@ -45211,7 +45211,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_avg_altitude = None
                                 }
@@ -45224,7 +45224,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_avg_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_avg_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_avg_altitude = None
                                 }
@@ -45244,7 +45244,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_min_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_min_altitude = None
                                 }
@@ -45257,7 +45257,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_min_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_min_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_min_altitude = None
                                 }
@@ -45277,7 +45277,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_max_altitude = None
                                 }
@@ -45290,7 +45290,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.enhanced_max_altitude = Some(result as f64 / 5 as f64)
+                                       message.enhanced_max_altitude = Some((result as f64 / 5 as f64) - (500 as f64)) 
                                     },
                                     None => message.enhanced_max_altitude = None
                                 }
@@ -45352,7 +45352,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.lev_battery_consumption = Some(result as f64 / 2 as f64)
+                                       message.lev_battery_consumption = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.lev_battery_consumption = None
                                 }
@@ -45365,7 +45365,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.lev_battery_consumption = Some(result as f64 / 2 as f64)
+                                       message.lev_battery_consumption = Some((result as f64 / 2 as f64)) 
                                     },
                                     None => message.lev_battery_consumption = None
                                 }
@@ -45385,7 +45385,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_ratio = Some(result as f64 / 100 as f64)
+                                       message.avg_vertical_ratio = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_vertical_ratio = None
                                 }
@@ -45398,7 +45398,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vertical_ratio = Some(result as f64 / 100 as f64)
+                                       message.avg_vertical_ratio = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_vertical_ratio = None
                                 }
@@ -45418,7 +45418,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_balance = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_balance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_balance = None
                                 }
@@ -45431,7 +45431,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_stance_time_balance = Some(result as f64 / 100 as f64)
+                                       message.avg_stance_time_balance = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.avg_stance_time_balance = None
                                 }
@@ -45451,7 +45451,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_step_length = Some(result as f64 / 10 as f64)
+                                       message.avg_step_length = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_step_length = None
                                 }
@@ -45464,7 +45464,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_step_length = Some(result as f64 / 10 as f64)
+                                       message.avg_step_length = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.avg_step_length = None
                                 }
@@ -45484,7 +45484,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_anaerobic_training_effect = Some(result as f64 / 10 as f64)
+                                       message.total_anaerobic_training_effect = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.total_anaerobic_training_effect = None
                                 }
@@ -45497,7 +45497,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.total_anaerobic_training_effect = Some(result as f64 / 10 as f64)
+                                       message.total_anaerobic_training_effect = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.total_anaerobic_training_effect = None
                                 }
@@ -45517,7 +45517,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vam = Some(result as f64 / 1000 as f64)
+                                       message.avg_vam = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_vam = None
                                 }
@@ -45530,7 +45530,7 @@ impl FitMessageSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.avg_vam = Some(result as f64 / 1000 as f64)
+                                       message.avg_vam = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.avg_vam = None
                                 }
@@ -45686,7 +45686,7 @@ impl FitMessageSet {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.duration = Some(result as f64 / 1000 as f64)
+                                       message.duration = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.duration = None
                                 }
@@ -45699,7 +45699,7 @@ impl FitMessageSet {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.duration = Some(result as f64 / 1000 as f64)
+                                       message.duration = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.duration = None
                                 }
@@ -45740,7 +45740,7 @@ impl FitMessageSet {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.weight = Some(result as f64 / 16 as f64)
+                                       message.weight = Some((result as f64 / 16 as f64)) 
                                     },
                                     None => message.weight = None
                                 }
@@ -45753,7 +45753,7 @@ impl FitMessageSet {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.weight = Some(result as f64 / 16 as f64)
+                                       message.weight = Some((result as f64 / 16 as f64)) 
                                     },
                                     None => message.weight = None
                                 }
@@ -46265,7 +46265,7 @@ impl FitMessageSoftware {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.version = Some(result as f64 / 100 as f64)
+                                       message.version = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.version = None
                                 }
@@ -46278,7 +46278,7 @@ impl FitMessageSoftware {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.version = Some(result as f64 / 100 as f64)
+                                       message.version = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.version = None
                                 }
@@ -46433,7 +46433,7 @@ impl FitMessageSpeedZone {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.high_value = Some(result as f64 / 1000 as f64)
+                                       message.high_value = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.high_value = None
                                 }
@@ -46446,7 +46446,7 @@ impl FitMessageSpeedZone {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.high_value = Some(result as f64 / 1000 as f64)
+                                       message.high_value = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.high_value = None
                                 }
@@ -47252,7 +47252,7 @@ impl FitMessageTimestampCorrelation {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -47265,7 +47265,7 @@ impl FitMessageTimestampCorrelation {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_timestamp = None
                                 }
@@ -47306,7 +47306,7 @@ impl FitMessageTimestampCorrelation {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_system_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_system_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_system_timestamp = None
                                 }
@@ -47319,7 +47319,7 @@ impl FitMessageTimestampCorrelation {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.fractional_system_timestamp = Some(result as f64 / 32768 as f64)
+                                       message.fractional_system_timestamp = Some((result as f64 / 32768 as f64)) 
                                     },
                                     None => message.fractional_system_timestamp = None
                                 }
@@ -48230,7 +48230,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.height = Some(result as f64 / 100 as f64)
+                                       message.height = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.height = None
                                 }
@@ -48243,7 +48243,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.height = Some(result as f64 / 100 as f64)
+                                       message.height = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.height = None
                                 }
@@ -48263,7 +48263,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.weight = Some(result as f64 / 10 as f64)
+                                       message.weight = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.weight = None
                                 }
@@ -48276,7 +48276,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.weight = Some(result as f64 / 10 as f64)
+                                       message.weight = Some((result as f64 / 10 as f64)) 
                                     },
                                     None => message.weight = None
                                 }
@@ -48695,7 +48695,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.user_running_step_length = Some(result as f64 / 1000 as f64)
+                                       message.user_running_step_length = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.user_running_step_length = None
                                 }
@@ -48708,7 +48708,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.user_running_step_length = Some(result as f64 / 1000 as f64)
+                                       message.user_running_step_length = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.user_running_step_length = None
                                 }
@@ -48728,7 +48728,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.user_walking_step_length = Some(result as f64 / 1000 as f64)
+                                       message.user_walking_step_length = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.user_walking_step_length = None
                                 }
@@ -48741,7 +48741,7 @@ impl FitMessageUserProfile {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.user_walking_step_length = Some(result as f64 / 1000 as f64)
+                                       message.user_walking_step_length = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.user_walking_step_length = None
                                 }
@@ -50160,8 +50160,8 @@ pub struct FitMessageWeatherConditions {
     pub relative_humidity: Option<u8>,  
     pub location: Option<String>,  // string corresponding to GCS response location string
     pub observed_at_time: Option<FitFieldDateTime>,  
-    pub observed_location_lat: Option<i32>,  
-    pub observed_location_long: Option<i32>,  
+    pub observed_location_lat: Option<f64>,  
+    pub observed_location_long: Option<f64>,  
     pub day_of_week: Option<FitFieldDayOfWeek>,  
     pub high_temperature: Option<i8>,  
     pub low_temperature: Option<i8>,  
@@ -50355,7 +50355,7 @@ impl FitMessageWeatherConditions {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.wind_speed = Some(result as f64 / 1000 as f64)
+                                       message.wind_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.wind_speed = None
                                 }
@@ -50368,7 +50368,7 @@ impl FitMessageWeatherConditions {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.wind_speed = Some(result as f64 / 1000 as f64)
+                                       message.wind_speed = Some((result as f64 / 1000 as f64)) 
                                     },
                                     None => message.wind_speed = None
                                 }
@@ -50490,14 +50490,14 @@ impl FitMessageWeatherConditions {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_lat = val;
+                                message.observed_location_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_lat = val;
+                                message.observed_location_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -50511,14 +50511,14 @@ impl FitMessageWeatherConditions {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_long = val;
+                                message.observed_location_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_long = val;
+                                message.observed_location_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                             }
                         }
 
@@ -50757,7 +50757,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.percent_fat = Some(result as f64 / 100 as f64)
+                                       message.percent_fat = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.percent_fat = None
                                 }
@@ -50770,7 +50770,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.percent_fat = Some(result as f64 / 100 as f64)
+                                       message.percent_fat = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.percent_fat = None
                                 }
@@ -50790,7 +50790,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.percent_hydration = Some(result as f64 / 100 as f64)
+                                       message.percent_hydration = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.percent_hydration = None
                                 }
@@ -50803,7 +50803,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.percent_hydration = Some(result as f64 / 100 as f64)
+                                       message.percent_hydration = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.percent_hydration = None
                                 }
@@ -50823,7 +50823,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.visceral_fat_mass = Some(result as f64 / 100 as f64)
+                                       message.visceral_fat_mass = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.visceral_fat_mass = None
                                 }
@@ -50836,7 +50836,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.visceral_fat_mass = Some(result as f64 / 100 as f64)
+                                       message.visceral_fat_mass = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.visceral_fat_mass = None
                                 }
@@ -50856,7 +50856,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.bone_mass = Some(result as f64 / 100 as f64)
+                                       message.bone_mass = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.bone_mass = None
                                 }
@@ -50869,7 +50869,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.bone_mass = Some(result as f64 / 100 as f64)
+                                       message.bone_mass = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.bone_mass = None
                                 }
@@ -50889,7 +50889,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.muscle_mass = Some(result as f64 / 100 as f64)
+                                       message.muscle_mass = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.muscle_mass = None
                                 }
@@ -50902,7 +50902,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.muscle_mass = Some(result as f64 / 100 as f64)
+                                       message.muscle_mass = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.muscle_mass = None
                                 }
@@ -50922,7 +50922,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.basal_met = Some(result as f64 / 4 as f64)
+                                       message.basal_met = Some((result as f64 / 4 as f64)) 
                                     },
                                     None => message.basal_met = None
                                 }
@@ -50935,7 +50935,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.basal_met = Some(result as f64 / 4 as f64)
+                                       message.basal_met = Some((result as f64 / 4 as f64)) 
                                     },
                                     None => message.basal_met = None
                                 }
@@ -50976,7 +50976,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.active_met = Some(result as f64 / 4 as f64)
+                                       message.active_met = Some((result as f64 / 4 as f64)) 
                                     },
                                     None => message.active_met = None
                                 }
@@ -50989,7 +50989,7 @@ impl FitMessageWeightScale {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.active_met = Some(result as f64 / 4 as f64)
+                                       message.active_met = Some((result as f64 / 4 as f64)) 
                                     },
                                     None => message.active_met = None
                                 }
@@ -51274,7 +51274,7 @@ impl FitMessageWorkout {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.pool_length = Some(result as f64 / 100 as f64)
+                                       message.pool_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.pool_length = None
                                 }
@@ -51287,7 +51287,7 @@ impl FitMessageWorkout {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.pool_length = Some(result as f64 / 100 as f64)
+                                       message.pool_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.pool_length = None
                                 }
@@ -51530,7 +51530,7 @@ impl FitMessageWorkoutSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.pool_length = Some(result as f64 / 100 as f64)
+                                       message.pool_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.pool_length = None
                                 }
@@ -51543,7 +51543,7 @@ impl FitMessageWorkoutSession {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.pool_length = Some(result as f64 / 100 as f64)
+                                       message.pool_length = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.pool_length = None
                                 }
@@ -52335,7 +52335,7 @@ impl FitMessageWorkoutStep {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.exercise_weight = Some(result as f64 / 100 as f64)
+                                       message.exercise_weight = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.exercise_weight = None
                                 }
@@ -52348,7 +52348,7 @@ impl FitMessageWorkoutStep {
                                 
                                 match val {
                                     Some(result) => {
-                                       message.exercise_weight = Some(result as f64 / 100 as f64)
+                                       message.exercise_weight = Some((result as f64 / 100 as f64)) 
                                     },
                                     None => message.exercise_weight = None
                                 }

@@ -123,8 +123,8 @@ fn fit_message_record() {
     });
 
     let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
-    assert_eq!(rec.position_lat, Some(507869600));
-    assert_eq!(rec.position_long, Some(-847348288));
+    assert_eq!(rec.position_lat, Some(42.56913810968399));
+    assert_eq!(rec.position_long, Some(-71.02391302585602));
     assert_eq!(rec.heart_rate, Some(151));
     assert_eq!(rec.power, Some(209));
 }
@@ -236,8 +236,8 @@ fn fit_message_record_with_developer_fields() {
     });
 
     let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
-    assert_eq!(rec.position_lat, Some(507869600));
-    assert_eq!(rec.position_long, Some(-847348288));
+    assert_eq!(rec.position_lat, Some(42.56913810968399));
+    assert_eq!(rec.position_long, Some(-71.02391302585602));
     assert_eq!(rec.heart_rate, Some(151));
     assert_eq!(rec.power, Some(209));
 

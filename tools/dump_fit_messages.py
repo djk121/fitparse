@@ -710,13 +710,13 @@ impl FitRecord for {{ message_name }} {
 SCALE_AND_OFFSET_TEMPLATE = """
                                 match val {
                                     Some(result) => {
-                                       message.{{ field_name }} = Some(result as f64 / {{ scale }} as f64)
+                                       message.{{ field_name }} = Some((result as f64 / {{ scale }} as f64){{ offset }}) 
                                     },
                                     None => message.{{ field_name }} = None
                                 }"""
 
 #SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.iter().map(|i| (*i as f64 / {{ scale }} as f64){{ offset }}).collect());"""
-SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64)).collect());"""
+SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64){{ offset }}).collect());"""
 
 
 class Field(object):
@@ -724,7 +724,7 @@ class Field(object):
     FIELD_OPTION_BASE_TYPE = """Option<{% if is_vec %}Vec<Option<{% endif %}{{ fit_type }}{% if is_vec %}>>{% endif %}>"""
     FIELD_OPTION_FIT_TYPE = """Option<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
 
-    def __init__(self, number, name, type, array, components, bits, scale, offset, comment, types):
+    def __init__(self, number, name, type, array, components, bits, scale, offset, units, comment, types):
         self.number = int(number)
         self.name = name
         self.type = type
@@ -733,6 +733,7 @@ class Field(object):
         self.bits = bits
         self.scale = scale
         self.offset = offset
+        self.units = units
         self.comment = comment
         self.subfields = []
         self.message = None
@@ -847,6 +848,8 @@ class Field(object):
                 else:
                     content = "Option<f64>"
 
+            elif self.units == 'semicircles':
+                content = "Option<f64>"
             else:
                 #if self.name == 'bottom_time':
                 #    print >>sys.stderr, "bottom_time is_vec: {}".format(self.array)
@@ -869,14 +872,6 @@ class Field(object):
         return content
 
     def output_parsed_field_assignment(self):
-
-
-
-        #if self.type[-1] == 'z' and not self.array:
-        #    return "message.{} = val".format(self.name)
-            #else:
-                #return "message.{} = Some(val)".for
-
         # we're just capturing the bytes here, the parse will happpen
         # after the rest of the message has been parsed.
         if self.has_subfields:
@@ -904,25 +899,10 @@ class Field(object):
             return "message.{} = Some(val);".format(self.name)
 
         else:
-            #if self.type == 'byte':
-            #    return "message.{} = Some(val);".format(self.name)
+            if self.units == 'semicircles':
+                return "message.{} = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))".format(self.name)
             return "message.{} = val;".format(self.name)
 
-            #if self.array:
-            #    return "message.{} = Some(val)".format(self.name)
-
-            #if self.offset:
-            #    if not self.array:
-            #        return "message.{} = Some((val as f64 / {} as f64) - ({} as f64))".format(self.name, self.scale, self.offset)
-            #    else:
-            #        return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64) - ({} as f64)).collect())".format(self.name, self.scale, self.offset)
-            #else:
-            #    if not self.array:
-            #        return "message.{} = Some(val as f64 / {} as f64)".format(self.name, self.scale)
-            #    else:
-            #        return "message.{} = Some(val.iter().map(|i| (*i as f64 / {} as f64)).collect())".format(self.name, self.scale)
-
-        #return "message.{} = Some(val)".format(self.name)
 
     SUBFIELD_TEMPLATE = """
 #[derive(Debug)]
@@ -1169,7 +1149,7 @@ def parse_messages_file(messages_file_name, types):
                 print >> sys.stderr, "bottom_time array: '{}'".format(array)
 
             messages[current_message].add_field(
-                Field(field_number, field_name, field_type, array.strip(), parsed_components, parsed_bits, scale, offset, comment, types)
+                Field(field_number, field_name, field_type, array.strip(), parsed_components, parsed_bits, scale, offset, units, comment, types)
             )
 
             #messages[current_message]["fields"].append({
