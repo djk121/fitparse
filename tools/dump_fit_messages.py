@@ -710,13 +710,12 @@ impl FitRecord for {{ message_name }} {
 SCALE_AND_OFFSET_TEMPLATE = """
                                 match val {
                                     Some(result) => {
-                                       message.{{ field_name }} = Some((result as f64 / {{ scale }} as f64){{ offset }}) 
+                                       message.{{ field_name }} = Some(result as f64 / {{ scale }} as f64{{ offset }}) 
                                     },
                                     None => message.{{ field_name }} = None
                                 }"""
 
-#SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.iter().map(|i| (*i as f64 / {{ scale }} as f64){{ offset }}).collect());"""
-SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64){{ offset }}).collect());"""
+SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64{{ offset }})).collect());"""
 
 
 class Field(object):
