@@ -471,13 +471,13 @@ pub struct {{ message_name }} {
 
 impl fmt::Display for {{ message_name }} {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "{{ message_name}}");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        writeln!(f, "{{ message_name}}")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         {% for field in fields -%}
         {%- if field.has_subfields -%}
-        writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes);
+        writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
         {% endif -%}
-        if let Some(v) = &self.{{ field.name }} { writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", v); }
+        if let Some(v) = &self.{{ field.name }} { writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", v)?; }
         {% endfor %}
         Ok(())
     }

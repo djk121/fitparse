@@ -15320,20 +15320,20 @@ pub struct FitMessageAccelerometerData {
 
 impl fmt::Display for FitMessageAccelerometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageAccelerometerData");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
-        if let Some(v) = &self.accel_x { writeln!(f, "  {: >28}: {:?}", "accel_x", v); }
-        if let Some(v) = &self.accel_y { writeln!(f, "  {: >28}: {:?}", "accel_y", v); }
-        if let Some(v) = &self.accel_z { writeln!(f, "  {: >28}: {:?}", "accel_z", v); }
-        if let Some(v) = &self.calibrated_accel_x { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_x", v); }
-        if let Some(v) = &self.calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_y", v); }
-        if let Some(v) = &self.calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_z", v); }
-        if let Some(v) = &self.compressed_calibrated_accel_x { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_x", v); }
-        if let Some(v) = &self.compressed_calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_y", v); }
-        if let Some(v) = &self.compressed_calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_z", v); }
+        writeln!(f, "FitMessageAccelerometerData")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
+        if let Some(v) = &self.accel_x { writeln!(f, "  {: >28}: {:?}", "accel_x", v)?; }
+        if let Some(v) = &self.accel_y { writeln!(f, "  {: >28}: {:?}", "accel_y", v)?; }
+        if let Some(v) = &self.accel_z { writeln!(f, "  {: >28}: {:?}", "accel_z", v)?; }
+        if let Some(v) = &self.calibrated_accel_x { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_x", v)?; }
+        if let Some(v) = &self.calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_y", v)?; }
+        if let Some(v) = &self.calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_z", v)?; }
+        if let Some(v) = &self.compressed_calibrated_accel_x { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_x", v)?; }
+        if let Some(v) = &self.compressed_calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_y", v)?; }
+        if let Some(v) = &self.compressed_calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_z", v)?; }
         
         Ok(())
     }
@@ -15866,16 +15866,16 @@ pub struct FitMessageActivity {
 
 impl fmt::Display for FitMessageActivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageActivity");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
-        if let Some(v) = &self.num_sessions { writeln!(f, "  {: >28}: {:?}", "num_sessions", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
-        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
-        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
-        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        writeln!(f, "FitMessageActivity")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v)?; }
+        if let Some(v) = &self.num_sessions { writeln!(f, "  {: >28}: {:?}", "num_sessions", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v)?; }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
         
         Ok(())
     }
@@ -16173,13 +16173,13 @@ pub struct FitMessageAntChannelId {
 
 impl fmt::Display for FitMessageAntChannelId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageAntChannelId");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v); }
-        if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v); }
-        if let Some(v) = &self.device_number { writeln!(f, "  {: >28}: {:?}", "device_number", v); }
-        if let Some(v) = &self.transmission_type { writeln!(f, "  {: >28}: {:?}", "transmission_type", v); }
-        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        writeln!(f, "FitMessageAntChannelId")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v)?; }
+        if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v)?; }
+        if let Some(v) = &self.device_number { writeln!(f, "  {: >28}: {:?}", "device_number", v)?; }
+        if let Some(v) = &self.transmission_type { writeln!(f, "  {: >28}: {:?}", "transmission_type", v)?; }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
         
         Ok(())
     }
@@ -16389,14 +16389,14 @@ pub struct FitMessageAntRx {
 
 impl fmt::Display for FitMessageAntRx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageAntRx");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
-        if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v); }
-        if let Some(v) = &self.mesg_data { writeln!(f, "  {: >28}: {:?}", "mesg_data", v); }
-        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v); }
-        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v); }
+        writeln!(f, "FitMessageAntRx")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
+        if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v)?; }
+        if let Some(v) = &self.mesg_data { writeln!(f, "  {: >28}: {:?}", "mesg_data", v)?; }
+        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v)?; }
+        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v)?; }
         
         Ok(())
     }
@@ -16662,14 +16662,14 @@ pub struct FitMessageAntTx {
 
 impl fmt::Display for FitMessageAntTx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageAntTx");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
-        if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v); }
-        if let Some(v) = &self.mesg_data { writeln!(f, "  {: >28}: {:?}", "mesg_data", v); }
-        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v); }
-        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v); }
+        writeln!(f, "FitMessageAntTx")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
+        if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v)?; }
+        if let Some(v) = &self.mesg_data { writeln!(f, "  {: >28}: {:?}", "mesg_data", v)?; }
+        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v)?; }
+        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v)?; }
         
         Ok(())
     }
@@ -16941,20 +16941,20 @@ pub struct FitMessageAviationAttitude {
 
 impl fmt::Display for FitMessageAviationAttitude {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageAviationAttitude");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v); }
-        if let Some(v) = &self.pitch { writeln!(f, "  {: >28}: {:?}", "pitch", v); }
-        if let Some(v) = &self.roll { writeln!(f, "  {: >28}: {:?}", "roll", v); }
-        if let Some(v) = &self.accel_lateral { writeln!(f, "  {: >28}: {:?}", "accel_lateral", v); }
-        if let Some(v) = &self.accel_normal { writeln!(f, "  {: >28}: {:?}", "accel_normal", v); }
-        if let Some(v) = &self.turn_rate { writeln!(f, "  {: >28}: {:?}", "turn_rate", v); }
-        if let Some(v) = &self.stage { writeln!(f, "  {: >28}: {:?}", "stage", v); }
-        if let Some(v) = &self.attitude_stage_complete { writeln!(f, "  {: >28}: {:?}", "attitude_stage_complete", v); }
-        if let Some(v) = &self.track { writeln!(f, "  {: >28}: {:?}", "track", v); }
-        if let Some(v) = &self.validity { writeln!(f, "  {: >28}: {:?}", "validity", v); }
+        writeln!(f, "FitMessageAviationAttitude")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v)?; }
+        if let Some(v) = &self.pitch { writeln!(f, "  {: >28}: {:?}", "pitch", v)?; }
+        if let Some(v) = &self.roll { writeln!(f, "  {: >28}: {:?}", "roll", v)?; }
+        if let Some(v) = &self.accel_lateral { writeln!(f, "  {: >28}: {:?}", "accel_lateral", v)?; }
+        if let Some(v) = &self.accel_normal { writeln!(f, "  {: >28}: {:?}", "accel_normal", v)?; }
+        if let Some(v) = &self.turn_rate { writeln!(f, "  {: >28}: {:?}", "turn_rate", v)?; }
+        if let Some(v) = &self.stage { writeln!(f, "  {: >28}: {:?}", "stage", v)?; }
+        if let Some(v) = &self.attitude_stage_complete { writeln!(f, "  {: >28}: {:?}", "attitude_stage_complete", v)?; }
+        if let Some(v) = &self.track { writeln!(f, "  {: >28}: {:?}", "track", v)?; }
+        if let Some(v) = &self.validity { writeln!(f, "  {: >28}: {:?}", "validity", v)?; }
         
         Ok(())
     }
@@ -17483,12 +17483,12 @@ pub struct FitMessageBarometerData {
 
 impl fmt::Display for FitMessageBarometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageBarometerData");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
-        if let Some(v) = &self.baro_pres { writeln!(f, "  {: >28}: {:?}", "baro_pres", v); }
+        writeln!(f, "FitMessageBarometerData")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
+        if let Some(v) = &self.baro_pres { writeln!(f, "  {: >28}: {:?}", "baro_pres", v)?; }
         
         Ok(())
     }
@@ -17749,40 +17749,40 @@ pub struct FitMessageBikeProfile {
 
 impl fmt::Display for FitMessageBikeProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageBikeProfile");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.odometer { writeln!(f, "  {: >28}: {:?}", "odometer", v); }
-        if let Some(v) = &self.bike_spd_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_spd_ant_id", v); }
-        if let Some(v) = &self.bike_cad_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_cad_ant_id", v); }
-        if let Some(v) = &self.bike_spdcad_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_spdcad_ant_id", v); }
-        if let Some(v) = &self.bike_power_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_power_ant_id", v); }
-        if let Some(v) = &self.custom_wheelsize { writeln!(f, "  {: >28}: {:?}", "custom_wheelsize", v); }
-        if let Some(v) = &self.auto_wheelsize { writeln!(f, "  {: >28}: {:?}", "auto_wheelsize", v); }
-        if let Some(v) = &self.bike_weight { writeln!(f, "  {: >28}: {:?}", "bike_weight", v); }
-        if let Some(v) = &self.power_cal_factor { writeln!(f, "  {: >28}: {:?}", "power_cal_factor", v); }
-        if let Some(v) = &self.auto_wheel_cal { writeln!(f, "  {: >28}: {:?}", "auto_wheel_cal", v); }
-        if let Some(v) = &self.auto_power_zero { writeln!(f, "  {: >28}: {:?}", "auto_power_zero", v); }
-        if let Some(v) = &self.id { writeln!(f, "  {: >28}: {:?}", "id", v); }
-        if let Some(v) = &self.spd_enabled { writeln!(f, "  {: >28}: {:?}", "spd_enabled", v); }
-        if let Some(v) = &self.cad_enabled { writeln!(f, "  {: >28}: {:?}", "cad_enabled", v); }
-        if let Some(v) = &self.spdcad_enabled { writeln!(f, "  {: >28}: {:?}", "spdcad_enabled", v); }
-        if let Some(v) = &self.power_enabled { writeln!(f, "  {: >28}: {:?}", "power_enabled", v); }
-        if let Some(v) = &self.crank_length { writeln!(f, "  {: >28}: {:?}", "crank_length", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.bike_spd_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_spd_ant_id_trans_type", v); }
-        if let Some(v) = &self.bike_cad_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_cad_ant_id_trans_type", v); }
-        if let Some(v) = &self.bike_spdcad_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_spdcad_ant_id_trans_type", v); }
-        if let Some(v) = &self.bike_power_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_power_ant_id_trans_type", v); }
-        if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v); }
-        if let Some(v) = &self.front_gear_num { writeln!(f, "  {: >28}: {:?}", "front_gear_num", v); }
-        if let Some(v) = &self.front_gear { writeln!(f, "  {: >28}: {:?}", "front_gear", v); }
-        if let Some(v) = &self.rear_gear_num { writeln!(f, "  {: >28}: {:?}", "rear_gear_num", v); }
-        if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v); }
-        if let Some(v) = &self.shimano_di2_enabled { writeln!(f, "  {: >28}: {:?}", "shimano_di2_enabled", v); }
+        writeln!(f, "FitMessageBikeProfile")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.odometer { writeln!(f, "  {: >28}: {:?}", "odometer", v)?; }
+        if let Some(v) = &self.bike_spd_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_spd_ant_id", v)?; }
+        if let Some(v) = &self.bike_cad_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_cad_ant_id", v)?; }
+        if let Some(v) = &self.bike_spdcad_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_spdcad_ant_id", v)?; }
+        if let Some(v) = &self.bike_power_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_power_ant_id", v)?; }
+        if let Some(v) = &self.custom_wheelsize { writeln!(f, "  {: >28}: {:?}", "custom_wheelsize", v)?; }
+        if let Some(v) = &self.auto_wheelsize { writeln!(f, "  {: >28}: {:?}", "auto_wheelsize", v)?; }
+        if let Some(v) = &self.bike_weight { writeln!(f, "  {: >28}: {:?}", "bike_weight", v)?; }
+        if let Some(v) = &self.power_cal_factor { writeln!(f, "  {: >28}: {:?}", "power_cal_factor", v)?; }
+        if let Some(v) = &self.auto_wheel_cal { writeln!(f, "  {: >28}: {:?}", "auto_wheel_cal", v)?; }
+        if let Some(v) = &self.auto_power_zero { writeln!(f, "  {: >28}: {:?}", "auto_power_zero", v)?; }
+        if let Some(v) = &self.id { writeln!(f, "  {: >28}: {:?}", "id", v)?; }
+        if let Some(v) = &self.spd_enabled { writeln!(f, "  {: >28}: {:?}", "spd_enabled", v)?; }
+        if let Some(v) = &self.cad_enabled { writeln!(f, "  {: >28}: {:?}", "cad_enabled", v)?; }
+        if let Some(v) = &self.spdcad_enabled { writeln!(f, "  {: >28}: {:?}", "spdcad_enabled", v)?; }
+        if let Some(v) = &self.power_enabled { writeln!(f, "  {: >28}: {:?}", "power_enabled", v)?; }
+        if let Some(v) = &self.crank_length { writeln!(f, "  {: >28}: {:?}", "crank_length", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.bike_spd_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_spd_ant_id_trans_type", v)?; }
+        if let Some(v) = &self.bike_cad_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_cad_ant_id_trans_type", v)?; }
+        if let Some(v) = &self.bike_spdcad_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_spdcad_ant_id_trans_type", v)?; }
+        if let Some(v) = &self.bike_power_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_power_ant_id_trans_type", v)?; }
+        if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v)?; }
+        if let Some(v) = &self.front_gear_num { writeln!(f, "  {: >28}: {:?}", "front_gear_num", v)?; }
+        if let Some(v) = &self.front_gear { writeln!(f, "  {: >28}: {:?}", "front_gear", v)?; }
+        if let Some(v) = &self.rear_gear_num { writeln!(f, "  {: >28}: {:?}", "rear_gear_num", v)?; }
+        if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v)?; }
+        if let Some(v) = &self.shimano_di2_enabled { writeln!(f, "  {: >28}: {:?}", "shimano_di2_enabled", v)?; }
         
         Ok(())
     }
@@ -18668,19 +18668,19 @@ pub struct FitMessageBloodPressure {
 
 impl fmt::Display for FitMessageBloodPressure {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageBloodPressure");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.systolic_pressure { writeln!(f, "  {: >28}: {:?}", "systolic_pressure", v); }
-        if let Some(v) = &self.diastolic_pressure { writeln!(f, "  {: >28}: {:?}", "diastolic_pressure", v); }
-        if let Some(v) = &self.mean_arterial_pressure { writeln!(f, "  {: >28}: {:?}", "mean_arterial_pressure", v); }
-        if let Some(v) = &self.map_3_sample_mean { writeln!(f, "  {: >28}: {:?}", "map_3_sample_mean", v); }
-        if let Some(v) = &self.map_morning_values { writeln!(f, "  {: >28}: {:?}", "map_morning_values", v); }
-        if let Some(v) = &self.map_evening_values { writeln!(f, "  {: >28}: {:?}", "map_evening_values", v); }
-        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v); }
-        if let Some(v) = &self.heart_rate_type { writeln!(f, "  {: >28}: {:?}", "heart_rate_type", v); }
-        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v); }
-        if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v); }
+        writeln!(f, "FitMessageBloodPressure")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.systolic_pressure { writeln!(f, "  {: >28}: {:?}", "systolic_pressure", v)?; }
+        if let Some(v) = &self.diastolic_pressure { writeln!(f, "  {: >28}: {:?}", "diastolic_pressure", v)?; }
+        if let Some(v) = &self.mean_arterial_pressure { writeln!(f, "  {: >28}: {:?}", "mean_arterial_pressure", v)?; }
+        if let Some(v) = &self.map_3_sample_mean { writeln!(f, "  {: >28}: {:?}", "map_3_sample_mean", v)?; }
+        if let Some(v) = &self.map_morning_values { writeln!(f, "  {: >28}: {:?}", "map_morning_values", v)?; }
+        if let Some(v) = &self.map_evening_values { writeln!(f, "  {: >28}: {:?}", "map_evening_values", v)?; }
+        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v)?; }
+        if let Some(v) = &self.heart_rate_type { writeln!(f, "  {: >28}: {:?}", "heart_rate_type", v)?; }
+        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v)?; }
+        if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v)?; }
         
         Ok(())
     }
@@ -19027,11 +19027,11 @@ pub struct FitMessageCadenceZone {
 
 impl fmt::Display for FitMessageCadenceZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageCadenceZone");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        writeln!(f, "FitMessageCadenceZone")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
         Ok(())
     }
@@ -19198,13 +19198,13 @@ pub struct FitMessageCameraEvent {
 
 impl fmt::Display for FitMessageCameraEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageCameraEvent");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.camera_event_type { writeln!(f, "  {: >28}: {:?}", "camera_event_type", v); }
-        if let Some(v) = &self.camera_file_uuid { writeln!(f, "  {: >28}: {:?}", "camera_file_uuid", v); }
-        if let Some(v) = &self.camera_orientation { writeln!(f, "  {: >28}: {:?}", "camera_orientation", v); }
+        writeln!(f, "FitMessageCameraEvent")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.camera_event_type { writeln!(f, "  {: >28}: {:?}", "camera_event_type", v)?; }
+        if let Some(v) = &self.camera_file_uuid { writeln!(f, "  {: >28}: {:?}", "camera_file_uuid", v)?; }
+        if let Some(v) = &self.camera_orientation { writeln!(f, "  {: >28}: {:?}", "camera_orientation", v)?; }
         
         Ok(())
     }
@@ -19426,12 +19426,12 @@ pub struct FitMessageCapabilities {
 
 impl fmt::Display for FitMessageCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageCapabilities");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.languages { writeln!(f, "  {: >28}: {:?}", "languages", v); }
-        if let Some(v) = &self.sports { writeln!(f, "  {: >28}: {:?}", "sports", v); }
-        if let Some(v) = &self.workouts_supported { writeln!(f, "  {: >28}: {:?}", "workouts_supported", v); }
-        if let Some(v) = &self.connectivity_supported { writeln!(f, "  {: >28}: {:?}", "connectivity_supported", v); }
+        writeln!(f, "FitMessageCapabilities")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.languages { writeln!(f, "  {: >28}: {:?}", "languages", v)?; }
+        if let Some(v) = &self.sports { writeln!(f, "  {: >28}: {:?}", "sports", v)?; }
+        if let Some(v) = &self.workouts_supported { writeln!(f, "  {: >28}: {:?}", "workouts_supported", v)?; }
+        if let Some(v) = &self.connectivity_supported { writeln!(f, "  {: >28}: {:?}", "connectivity_supported", v)?; }
         
         Ok(())
     }
@@ -19659,21 +19659,21 @@ pub struct FitMessageConnectivity {
 
 impl fmt::Display for FitMessageConnectivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageConnectivity");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.bluetooth_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_enabled", v); }
-        if let Some(v) = &self.bluetooth_le_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_le_enabled", v); }
-        if let Some(v) = &self.ant_enabled { writeln!(f, "  {: >28}: {:?}", "ant_enabled", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.live_tracking_enabled { writeln!(f, "  {: >28}: {:?}", "live_tracking_enabled", v); }
-        if let Some(v) = &self.weather_conditions_enabled { writeln!(f, "  {: >28}: {:?}", "weather_conditions_enabled", v); }
-        if let Some(v) = &self.weather_alerts_enabled { writeln!(f, "  {: >28}: {:?}", "weather_alerts_enabled", v); }
-        if let Some(v) = &self.auto_activity_upload_enabled { writeln!(f, "  {: >28}: {:?}", "auto_activity_upload_enabled", v); }
-        if let Some(v) = &self.course_download_enabled { writeln!(f, "  {: >28}: {:?}", "course_download_enabled", v); }
-        if let Some(v) = &self.workout_download_enabled { writeln!(f, "  {: >28}: {:?}", "workout_download_enabled", v); }
-        if let Some(v) = &self.gps_ephemeris_download_enabled { writeln!(f, "  {: >28}: {:?}", "gps_ephemeris_download_enabled", v); }
-        if let Some(v) = &self.incident_detection_enabled { writeln!(f, "  {: >28}: {:?}", "incident_detection_enabled", v); }
-        if let Some(v) = &self.grouptrack_enabled { writeln!(f, "  {: >28}: {:?}", "grouptrack_enabled", v); }
+        writeln!(f, "FitMessageConnectivity")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.bluetooth_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_enabled", v)?; }
+        if let Some(v) = &self.bluetooth_le_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_le_enabled", v)?; }
+        if let Some(v) = &self.ant_enabled { writeln!(f, "  {: >28}: {:?}", "ant_enabled", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.live_tracking_enabled { writeln!(f, "  {: >28}: {:?}", "live_tracking_enabled", v)?; }
+        if let Some(v) = &self.weather_conditions_enabled { writeln!(f, "  {: >28}: {:?}", "weather_conditions_enabled", v)?; }
+        if let Some(v) = &self.weather_alerts_enabled { writeln!(f, "  {: >28}: {:?}", "weather_alerts_enabled", v)?; }
+        if let Some(v) = &self.auto_activity_upload_enabled { writeln!(f, "  {: >28}: {:?}", "auto_activity_upload_enabled", v)?; }
+        if let Some(v) = &self.course_download_enabled { writeln!(f, "  {: >28}: {:?}", "course_download_enabled", v)?; }
+        if let Some(v) = &self.workout_download_enabled { writeln!(f, "  {: >28}: {:?}", "workout_download_enabled", v)?; }
+        if let Some(v) = &self.gps_ephemeris_download_enabled { writeln!(f, "  {: >28}: {:?}", "gps_ephemeris_download_enabled", v)?; }
+        if let Some(v) = &self.incident_detection_enabled { writeln!(f, "  {: >28}: {:?}", "incident_detection_enabled", v)?; }
+        if let Some(v) = &self.grouptrack_enabled { writeln!(f, "  {: >28}: {:?}", "grouptrack_enabled", v)?; }
         
         Ok(())
     }
@@ -20049,12 +20049,12 @@ pub struct FitMessageCourse {
 
 impl fmt::Display for FitMessageCourse {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageCourse");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        writeln!(f, "FitMessageCourse")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
         
         Ok(())
     }
@@ -20245,16 +20245,16 @@ pub struct FitMessageCoursePoint {
 
 impl fmt::Display for FitMessageCoursePoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageCoursePoint");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
-        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
-        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.favorite { writeln!(f, "  {: >28}: {:?}", "favorite", v); }
+        writeln!(f, "FitMessageCoursePoint")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v)?; }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.favorite { writeln!(f, "  {: >28}: {:?}", "favorite", v)?; }
         
         Ok(())
     }
@@ -20576,13 +20576,13 @@ pub struct FitMessageDeveloperDataId {
 
 impl fmt::Display for FitMessageDeveloperDataId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDeveloperDataId");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.developer_id { writeln!(f, "  {: >28}: {:?}", "developer_id", v); }
-        if let Some(v) = &self.application_id { writeln!(f, "  {: >28}: {:?}", "application_id", v); }
-        if let Some(v) = &self.manufacturer_id { writeln!(f, "  {: >28}: {:?}", "manufacturer_id", v); }
-        if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v); }
-        if let Some(v) = &self.application_version { writeln!(f, "  {: >28}: {:?}", "application_version", v); }
+        writeln!(f, "FitMessageDeveloperDataId")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.developer_id { writeln!(f, "  {: >28}: {:?}", "developer_id", v)?; }
+        if let Some(v) = &self.application_id { writeln!(f, "  {: >28}: {:?}", "application_id", v)?; }
+        if let Some(v) = &self.manufacturer_id { writeln!(f, "  {: >28}: {:?}", "manufacturer_id", v)?; }
+        if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v)?; }
+        if let Some(v) = &self.application_version { writeln!(f, "  {: >28}: {:?}", "application_version", v)?; }
         
         Ok(())
     }
@@ -20880,28 +20880,28 @@ pub struct FitMessageDeviceInfo {
 
 impl fmt::Display for FitMessageDeviceInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDeviceInfo");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
-        writeln!(f, "  {: >28}: {:?}", "device_type_subfield_bytes", self.device_type_subfield_bytes);
-        if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v); }
-        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
-        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
-        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
-        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
-        if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v); }
-        if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v); }
-        if let Some(v) = &self.cum_operating_time { writeln!(f, "  {: >28}: {:?}", "cum_operating_time", v); }
-        if let Some(v) = &self.battery_voltage { writeln!(f, "  {: >28}: {:?}", "battery_voltage", v); }
-        if let Some(v) = &self.battery_status { writeln!(f, "  {: >28}: {:?}", "battery_status", v); }
-        if let Some(v) = &self.sensor_position { writeln!(f, "  {: >28}: {:?}", "sensor_position", v); }
-        if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v); }
-        if let Some(v) = &self.ant_transmission_type { writeln!(f, "  {: >28}: {:?}", "ant_transmission_type", v); }
-        if let Some(v) = &self.ant_device_number { writeln!(f, "  {: >28}: {:?}", "ant_device_number", v); }
-        if let Some(v) = &self.ant_network { writeln!(f, "  {: >28}: {:?}", "ant_network", v); }
-        if let Some(v) = &self.source_type { writeln!(f, "  {: >28}: {:?}", "source_type", v); }
-        if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v); }
+        writeln!(f, "FitMessageDeviceInfo")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "device_type_subfield_bytes", self.device_type_subfield_bytes)?;
+        if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v)?; }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
+        if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v)?; }
+        if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v)?; }
+        if let Some(v) = &self.cum_operating_time { writeln!(f, "  {: >28}: {:?}", "cum_operating_time", v)?; }
+        if let Some(v) = &self.battery_voltage { writeln!(f, "  {: >28}: {:?}", "battery_voltage", v)?; }
+        if let Some(v) = &self.battery_status { writeln!(f, "  {: >28}: {:?}", "battery_status", v)?; }
+        if let Some(v) = &self.sensor_position { writeln!(f, "  {: >28}: {:?}", "sensor_position", v)?; }
+        if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v)?; }
+        if let Some(v) = &self.ant_transmission_type { writeln!(f, "  {: >28}: {:?}", "ant_transmission_type", v)?; }
+        if let Some(v) = &self.ant_device_number { writeln!(f, "  {: >28}: {:?}", "ant_device_number", v)?; }
+        if let Some(v) = &self.ant_network { writeln!(f, "  {: >28}: {:?}", "ant_network", v)?; }
+        if let Some(v) = &self.source_type { writeln!(f, "  {: >28}: {:?}", "source_type", v)?; }
+        if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v)?; }
         
         Ok(())
     }
@@ -21467,31 +21467,31 @@ pub struct FitMessageDeviceSettings {
 
 impl fmt::Display for FitMessageDeviceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDeviceSettings");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.active_time_zone { writeln!(f, "  {: >28}: {:?}", "active_time_zone", v); }
-        if let Some(v) = &self.utc_offset { writeln!(f, "  {: >28}: {:?}", "utc_offset", v); }
-        if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v); }
-        if let Some(v) = &self.time_mode { writeln!(f, "  {: >28}: {:?}", "time_mode", v); }
-        if let Some(v) = &self.time_zone_offset { writeln!(f, "  {: >28}: {:?}", "time_zone_offset", v); }
-        if let Some(v) = &self.backlight_mode { writeln!(f, "  {: >28}: {:?}", "backlight_mode", v); }
-        if let Some(v) = &self.activity_tracker_enabled { writeln!(f, "  {: >28}: {:?}", "activity_tracker_enabled", v); }
-        if let Some(v) = &self.clock_time { writeln!(f, "  {: >28}: {:?}", "clock_time", v); }
-        if let Some(v) = &self.pages_enabled { writeln!(f, "  {: >28}: {:?}", "pages_enabled", v); }
-        if let Some(v) = &self.move_alert_enabled { writeln!(f, "  {: >28}: {:?}", "move_alert_enabled", v); }
-        if let Some(v) = &self.date_mode { writeln!(f, "  {: >28}: {:?}", "date_mode", v); }
-        if let Some(v) = &self.display_orientation { writeln!(f, "  {: >28}: {:?}", "display_orientation", v); }
-        if let Some(v) = &self.mounting_side { writeln!(f, "  {: >28}: {:?}", "mounting_side", v); }
-        if let Some(v) = &self.default_page { writeln!(f, "  {: >28}: {:?}", "default_page", v); }
-        if let Some(v) = &self.autosync_min_steps { writeln!(f, "  {: >28}: {:?}", "autosync_min_steps", v); }
-        if let Some(v) = &self.autosync_min_time { writeln!(f, "  {: >28}: {:?}", "autosync_min_time", v); }
-        if let Some(v) = &self.lactate_threshold_autodetect_enabled { writeln!(f, "  {: >28}: {:?}", "lactate_threshold_autodetect_enabled", v); }
-        if let Some(v) = &self.ble_auto_upload_enabled { writeln!(f, "  {: >28}: {:?}", "ble_auto_upload_enabled", v); }
-        if let Some(v) = &self.auto_sync_frequency { writeln!(f, "  {: >28}: {:?}", "auto_sync_frequency", v); }
-        if let Some(v) = &self.auto_activity_detect { writeln!(f, "  {: >28}: {:?}", "auto_activity_detect", v); }
-        if let Some(v) = &self.number_of_screens { writeln!(f, "  {: >28}: {:?}", "number_of_screens", v); }
-        if let Some(v) = &self.smart_notification_display_orientation { writeln!(f, "  {: >28}: {:?}", "smart_notification_display_orientation", v); }
-        if let Some(v) = &self.tap_interface { writeln!(f, "  {: >28}: {:?}", "tap_interface", v); }
+        writeln!(f, "FitMessageDeviceSettings")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.active_time_zone { writeln!(f, "  {: >28}: {:?}", "active_time_zone", v)?; }
+        if let Some(v) = &self.utc_offset { writeln!(f, "  {: >28}: {:?}", "utc_offset", v)?; }
+        if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v)?; }
+        if let Some(v) = &self.time_mode { writeln!(f, "  {: >28}: {:?}", "time_mode", v)?; }
+        if let Some(v) = &self.time_zone_offset { writeln!(f, "  {: >28}: {:?}", "time_zone_offset", v)?; }
+        if let Some(v) = &self.backlight_mode { writeln!(f, "  {: >28}: {:?}", "backlight_mode", v)?; }
+        if let Some(v) = &self.activity_tracker_enabled { writeln!(f, "  {: >28}: {:?}", "activity_tracker_enabled", v)?; }
+        if let Some(v) = &self.clock_time { writeln!(f, "  {: >28}: {:?}", "clock_time", v)?; }
+        if let Some(v) = &self.pages_enabled { writeln!(f, "  {: >28}: {:?}", "pages_enabled", v)?; }
+        if let Some(v) = &self.move_alert_enabled { writeln!(f, "  {: >28}: {:?}", "move_alert_enabled", v)?; }
+        if let Some(v) = &self.date_mode { writeln!(f, "  {: >28}: {:?}", "date_mode", v)?; }
+        if let Some(v) = &self.display_orientation { writeln!(f, "  {: >28}: {:?}", "display_orientation", v)?; }
+        if let Some(v) = &self.mounting_side { writeln!(f, "  {: >28}: {:?}", "mounting_side", v)?; }
+        if let Some(v) = &self.default_page { writeln!(f, "  {: >28}: {:?}", "default_page", v)?; }
+        if let Some(v) = &self.autosync_min_steps { writeln!(f, "  {: >28}: {:?}", "autosync_min_steps", v)?; }
+        if let Some(v) = &self.autosync_min_time { writeln!(f, "  {: >28}: {:?}", "autosync_min_time", v)?; }
+        if let Some(v) = &self.lactate_threshold_autodetect_enabled { writeln!(f, "  {: >28}: {:?}", "lactate_threshold_autodetect_enabled", v)?; }
+        if let Some(v) = &self.ble_auto_upload_enabled { writeln!(f, "  {: >28}: {:?}", "ble_auto_upload_enabled", v)?; }
+        if let Some(v) = &self.auto_sync_frequency { writeln!(f, "  {: >28}: {:?}", "auto_sync_frequency", v)?; }
+        if let Some(v) = &self.auto_activity_detect { writeln!(f, "  {: >28}: {:?}", "auto_activity_detect", v)?; }
+        if let Some(v) = &self.number_of_screens { writeln!(f, "  {: >28}: {:?}", "number_of_screens", v)?; }
+        if let Some(v) = &self.smart_notification_display_orientation { writeln!(f, "  {: >28}: {:?}", "smart_notification_display_orientation", v)?; }
+        if let Some(v) = &self.tap_interface { writeln!(f, "  {: >28}: {:?}", "tap_interface", v)?; }
         
         Ok(())
     }
@@ -22160,15 +22160,15 @@ pub struct FitMessageDiveAlarm {
 
 impl fmt::Display for FitMessageDiveAlarm {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDiveAlarm");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v); }
-        if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.alarm_type { writeln!(f, "  {: >28}: {:?}", "alarm_type", v); }
-        if let Some(v) = &self.sound { writeln!(f, "  {: >28}: {:?}", "sound", v); }
-        if let Some(v) = &self.dive_types { writeln!(f, "  {: >28}: {:?}", "dive_types", v); }
+        writeln!(f, "FitMessageDiveAlarm")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v)?; }
+        if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.alarm_type { writeln!(f, "  {: >28}: {:?}", "alarm_type", v)?; }
+        if let Some(v) = &self.sound { writeln!(f, "  {: >28}: {:?}", "sound", v)?; }
+        if let Some(v) = &self.dive_types { writeln!(f, "  {: >28}: {:?}", "dive_types", v)?; }
         
         Ok(())
     }
@@ -22458,12 +22458,12 @@ pub struct FitMessageDiveGas {
 
 impl fmt::Display for FitMessageDiveGas {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDiveGas");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.helium_content { writeln!(f, "  {: >28}: {:?}", "helium_content", v); }
-        if let Some(v) = &self.oxygen_content { writeln!(f, "  {: >28}: {:?}", "oxygen_content", v); }
-        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v); }
+        writeln!(f, "FitMessageDiveGas")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.helium_content { writeln!(f, "  {: >28}: {:?}", "helium_content", v)?; }
+        if let Some(v) = &self.oxygen_content { writeln!(f, "  {: >28}: {:?}", "oxygen_content", v)?; }
+        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v)?; }
         
         Ok(())
     }
@@ -22700,31 +22700,31 @@ pub struct FitMessageDiveSettings {
 
 impl fmt::Display for FitMessageDiveSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDiveSettings");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.model { writeln!(f, "  {: >28}: {:?}", "model", v); }
-        if let Some(v) = &self.gf_low { writeln!(f, "  {: >28}: {:?}", "gf_low", v); }
-        if let Some(v) = &self.gf_high { writeln!(f, "  {: >28}: {:?}", "gf_high", v); }
-        if let Some(v) = &self.water_type { writeln!(f, "  {: >28}: {:?}", "water_type", v); }
-        if let Some(v) = &self.water_density { writeln!(f, "  {: >28}: {:?}", "water_density", v); }
-        if let Some(v) = &self.po2_warn { writeln!(f, "  {: >28}: {:?}", "po2_warn", v); }
-        if let Some(v) = &self.po2_critical { writeln!(f, "  {: >28}: {:?}", "po2_critical", v); }
-        if let Some(v) = &self.po2_deco { writeln!(f, "  {: >28}: {:?}", "po2_deco", v); }
-        if let Some(v) = &self.safety_stop_enabled { writeln!(f, "  {: >28}: {:?}", "safety_stop_enabled", v); }
-        if let Some(v) = &self.bottom_depth { writeln!(f, "  {: >28}: {:?}", "bottom_depth", v); }
-        if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v); }
-        if let Some(v) = &self.apnea_countdown_enabled { writeln!(f, "  {: >28}: {:?}", "apnea_countdown_enabled", v); }
-        if let Some(v) = &self.apnea_countdown_time { writeln!(f, "  {: >28}: {:?}", "apnea_countdown_time", v); }
-        if let Some(v) = &self.backlight_mode { writeln!(f, "  {: >28}: {:?}", "backlight_mode", v); }
-        if let Some(v) = &self.backlight_brightness { writeln!(f, "  {: >28}: {:?}", "backlight_brightness", v); }
-        if let Some(v) = &self.backlight_timeout { writeln!(f, "  {: >28}: {:?}", "backlight_timeout", v); }
-        if let Some(v) = &self.repeat_dive_interval { writeln!(f, "  {: >28}: {:?}", "repeat_dive_interval", v); }
-        if let Some(v) = &self.safety_stop_time { writeln!(f, "  {: >28}: {:?}", "safety_stop_time", v); }
-        if let Some(v) = &self.heart_rate_source_type { writeln!(f, "  {: >28}: {:?}", "heart_rate_source_type", v); }
-        writeln!(f, "  {: >28}: {:?}", "heart_rate_source_subfield_bytes", self.heart_rate_source_subfield_bytes);
-        if let Some(v) = &self.heart_rate_source { writeln!(f, "  {: >28}: {:?}", "heart_rate_source", v); }
+        writeln!(f, "FitMessageDiveSettings")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.model { writeln!(f, "  {: >28}: {:?}", "model", v)?; }
+        if let Some(v) = &self.gf_low { writeln!(f, "  {: >28}: {:?}", "gf_low", v)?; }
+        if let Some(v) = &self.gf_high { writeln!(f, "  {: >28}: {:?}", "gf_high", v)?; }
+        if let Some(v) = &self.water_type { writeln!(f, "  {: >28}: {:?}", "water_type", v)?; }
+        if let Some(v) = &self.water_density { writeln!(f, "  {: >28}: {:?}", "water_density", v)?; }
+        if let Some(v) = &self.po2_warn { writeln!(f, "  {: >28}: {:?}", "po2_warn", v)?; }
+        if let Some(v) = &self.po2_critical { writeln!(f, "  {: >28}: {:?}", "po2_critical", v)?; }
+        if let Some(v) = &self.po2_deco { writeln!(f, "  {: >28}: {:?}", "po2_deco", v)?; }
+        if let Some(v) = &self.safety_stop_enabled { writeln!(f, "  {: >28}: {:?}", "safety_stop_enabled", v)?; }
+        if let Some(v) = &self.bottom_depth { writeln!(f, "  {: >28}: {:?}", "bottom_depth", v)?; }
+        if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v)?; }
+        if let Some(v) = &self.apnea_countdown_enabled { writeln!(f, "  {: >28}: {:?}", "apnea_countdown_enabled", v)?; }
+        if let Some(v) = &self.apnea_countdown_time { writeln!(f, "  {: >28}: {:?}", "apnea_countdown_time", v)?; }
+        if let Some(v) = &self.backlight_mode { writeln!(f, "  {: >28}: {:?}", "backlight_mode", v)?; }
+        if let Some(v) = &self.backlight_brightness { writeln!(f, "  {: >28}: {:?}", "backlight_brightness", v)?; }
+        if let Some(v) = &self.backlight_timeout { writeln!(f, "  {: >28}: {:?}", "backlight_timeout", v)?; }
+        if let Some(v) = &self.repeat_dive_interval { writeln!(f, "  {: >28}: {:?}", "repeat_dive_interval", v)?; }
+        if let Some(v) = &self.safety_stop_time { writeln!(f, "  {: >28}: {:?}", "safety_stop_time", v)?; }
+        if let Some(v) = &self.heart_rate_source_type { writeln!(f, "  {: >28}: {:?}", "heart_rate_source_type", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "heart_rate_source_subfield_bytes", self.heart_rate_source_subfield_bytes)?;
+        if let Some(v) = &self.heart_rate_source { writeln!(f, "  {: >28}: {:?}", "heart_rate_source", v)?; }
         
         Ok(())
     }
@@ -23379,21 +23379,21 @@ pub struct FitMessageDiveSummary {
 
 impl fmt::Display for FitMessageDiveSummary {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageDiveSummary");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.reference_mesg { writeln!(f, "  {: >28}: {:?}", "reference_mesg", v); }
-        if let Some(v) = &self.reference_index { writeln!(f, "  {: >28}: {:?}", "reference_index", v); }
-        if let Some(v) = &self.avg_depth { writeln!(f, "  {: >28}: {:?}", "avg_depth", v); }
-        if let Some(v) = &self.max_depth { writeln!(f, "  {: >28}: {:?}", "max_depth", v); }
-        if let Some(v) = &self.surface_interval { writeln!(f, "  {: >28}: {:?}", "surface_interval", v); }
-        if let Some(v) = &self.start_cns { writeln!(f, "  {: >28}: {:?}", "start_cns", v); }
-        if let Some(v) = &self.end_cns { writeln!(f, "  {: >28}: {:?}", "end_cns", v); }
-        if let Some(v) = &self.start_n2 { writeln!(f, "  {: >28}: {:?}", "start_n2", v); }
-        if let Some(v) = &self.end_n2 { writeln!(f, "  {: >28}: {:?}", "end_n2", v); }
-        if let Some(v) = &self.o2_toxicity { writeln!(f, "  {: >28}: {:?}", "o2_toxicity", v); }
-        if let Some(v) = &self.dive_number { writeln!(f, "  {: >28}: {:?}", "dive_number", v); }
-        if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v); }
+        writeln!(f, "FitMessageDiveSummary")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.reference_mesg { writeln!(f, "  {: >28}: {:?}", "reference_mesg", v)?; }
+        if let Some(v) = &self.reference_index { writeln!(f, "  {: >28}: {:?}", "reference_index", v)?; }
+        if let Some(v) = &self.avg_depth { writeln!(f, "  {: >28}: {:?}", "avg_depth", v)?; }
+        if let Some(v) = &self.max_depth { writeln!(f, "  {: >28}: {:?}", "max_depth", v)?; }
+        if let Some(v) = &self.surface_interval { writeln!(f, "  {: >28}: {:?}", "surface_interval", v)?; }
+        if let Some(v) = &self.start_cns { writeln!(f, "  {: >28}: {:?}", "start_cns", v)?; }
+        if let Some(v) = &self.end_cns { writeln!(f, "  {: >28}: {:?}", "end_cns", v)?; }
+        if let Some(v) = &self.start_n2 { writeln!(f, "  {: >28}: {:?}", "start_n2", v)?; }
+        if let Some(v) = &self.end_n2 { writeln!(f, "  {: >28}: {:?}", "end_n2", v)?; }
+        if let Some(v) = &self.o2_toxicity { writeln!(f, "  {: >28}: {:?}", "o2_toxicity", v)?; }
+        if let Some(v) = &self.dive_number { writeln!(f, "  {: >28}: {:?}", "dive_number", v)?; }
+        if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v)?; }
         
         Ok(())
     }
@@ -24052,22 +24052,22 @@ pub struct FitMessageEvent {
 
 impl fmt::Display for FitMessageEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageEvent");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
-        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
-        if let Some(v) = &self.data16 { writeln!(f, "  {: >28}: {:?}", "data16", v); }
-        writeln!(f, "  {: >28}: {:?}", "data_subfield_bytes", self.data_subfield_bytes);
-        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v); }
-        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
-        if let Some(v) = &self.score { writeln!(f, "  {: >28}: {:?}", "score", v); }
-        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
-        if let Some(v) = &self.front_gear_num { writeln!(f, "  {: >28}: {:?}", "front_gear_num", v); }
-        if let Some(v) = &self.front_gear { writeln!(f, "  {: >28}: {:?}", "front_gear", v); }
-        if let Some(v) = &self.rear_gear_num { writeln!(f, "  {: >28}: {:?}", "rear_gear_num", v); }
-        if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v); }
-        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        writeln!(f, "FitMessageEvent")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
+        if let Some(v) = &self.data16 { writeln!(f, "  {: >28}: {:?}", "data16", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "data_subfield_bytes", self.data_subfield_bytes)?;
+        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v)?; }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
+        if let Some(v) = &self.score { writeln!(f, "  {: >28}: {:?}", "score", v)?; }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v)?; }
+        if let Some(v) = &self.front_gear_num { writeln!(f, "  {: >28}: {:?}", "front_gear_num", v)?; }
+        if let Some(v) = &self.front_gear { writeln!(f, "  {: >28}: {:?}", "front_gear", v)?; }
+        if let Some(v) = &self.rear_gear_num { writeln!(f, "  {: >28}: {:?}", "rear_gear_num", v)?; }
+        if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v)?; }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
         
         Ok(())
     }
@@ -24486,19 +24486,19 @@ pub struct FitMessageExdDataConceptConfiguration {
 
 impl fmt::Display for FitMessageExdDataConceptConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageExdDataConceptConfiguration");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v); }
-        if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v); }
-        if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v); }
-        if let Some(v) = &self.concept_index { writeln!(f, "  {: >28}: {:?}", "concept_index", v); }
-        if let Some(v) = &self.data_page { writeln!(f, "  {: >28}: {:?}", "data_page", v); }
-        if let Some(v) = &self.concept_key { writeln!(f, "  {: >28}: {:?}", "concept_key", v); }
-        if let Some(v) = &self.scaling { writeln!(f, "  {: >28}: {:?}", "scaling", v); }
-        if let Some(v) = &self.data_units { writeln!(f, "  {: >28}: {:?}", "data_units", v); }
-        if let Some(v) = &self.qualifier { writeln!(f, "  {: >28}: {:?}", "qualifier", v); }
-        if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v); }
-        if let Some(v) = &self.is_signed { writeln!(f, "  {: >28}: {:?}", "is_signed", v); }
+        writeln!(f, "FitMessageExdDataConceptConfiguration")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v)?; }
+        if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v)?; }
+        if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v)?; }
+        if let Some(v) = &self.concept_index { writeln!(f, "  {: >28}: {:?}", "concept_index", v)?; }
+        if let Some(v) = &self.data_page { writeln!(f, "  {: >28}: {:?}", "data_page", v)?; }
+        if let Some(v) = &self.concept_key { writeln!(f, "  {: >28}: {:?}", "concept_key", v)?; }
+        if let Some(v) = &self.scaling { writeln!(f, "  {: >28}: {:?}", "scaling", v)?; }
+        if let Some(v) = &self.data_units { writeln!(f, "  {: >28}: {:?}", "data_units", v)?; }
+        if let Some(v) = &self.qualifier { writeln!(f, "  {: >28}: {:?}", "qualifier", v)?; }
+        if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v)?; }
+        if let Some(v) = &self.is_signed { writeln!(f, "  {: >28}: {:?}", "is_signed", v)?; }
         
         Ok(())
     }
@@ -24836,14 +24836,14 @@ pub struct FitMessageExdDataFieldConfiguration {
 
 impl fmt::Display for FitMessageExdDataFieldConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageExdDataFieldConfiguration");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v); }
-        if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v); }
-        if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v); }
-        if let Some(v) = &self.concept_count { writeln!(f, "  {: >28}: {:?}", "concept_count", v); }
-        if let Some(v) = &self.display_type { writeln!(f, "  {: >28}: {:?}", "display_type", v); }
-        if let Some(v) = &self.title { writeln!(f, "  {: >28}: {:?}", "title", v); }
+        writeln!(f, "FitMessageExdDataFieldConfiguration")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v)?; }
+        if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v)?; }
+        if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v)?; }
+        if let Some(v) = &self.concept_count { writeln!(f, "  {: >28}: {:?}", "concept_count", v)?; }
+        if let Some(v) = &self.display_type { writeln!(f, "  {: >28}: {:?}", "display_type", v)?; }
+        if let Some(v) = &self.title { writeln!(f, "  {: >28}: {:?}", "title", v)?; }
         
         Ok(())
     }
@@ -25090,12 +25090,12 @@ pub struct FitMessageExdScreenConfiguration {
 
 impl fmt::Display for FitMessageExdScreenConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageExdScreenConfiguration");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v); }
-        if let Some(v) = &self.field_count { writeln!(f, "  {: >28}: {:?}", "field_count", v); }
-        if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v); }
-        if let Some(v) = &self.screen_enabled { writeln!(f, "  {: >28}: {:?}", "screen_enabled", v); }
+        writeln!(f, "FitMessageExdScreenConfiguration")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v)?; }
+        if let Some(v) = &self.field_count { writeln!(f, "  {: >28}: {:?}", "field_count", v)?; }
+        if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v)?; }
+        if let Some(v) = &self.screen_enabled { writeln!(f, "  {: >28}: {:?}", "screen_enabled", v)?; }
         
         Ok(())
     }
@@ -25282,12 +25282,12 @@ pub struct FitMessageExerciseTitle {
 
 impl fmt::Display for FitMessageExerciseTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageExerciseTitle");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v); }
-        if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v); }
-        if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v); }
+        writeln!(f, "FitMessageExerciseTitle")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v)?; }
+        if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v)?; }
+        if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v)?; }
         
         Ok(())
     }
@@ -25491,13 +25491,13 @@ pub struct FitMessageFieldCapabilities {
 
 impl fmt::Display for FitMessageFieldCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageFieldCapabilities");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v); }
-        if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v); }
-        if let Some(v) = &self.field_num { writeln!(f, "  {: >28}: {:?}", "field_num", v); }
-        if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v); }
+        writeln!(f, "FitMessageFieldCapabilities")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v)?; }
+        if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v)?; }
+        if let Some(v) = &self.field_num { writeln!(f, "  {: >28}: {:?}", "field_num", v)?; }
+        if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v)?; }
         
         Ok(())
     }
@@ -25715,22 +25715,22 @@ pub struct FitMessageFieldDescription {
 
 impl fmt::Display for FitMessageFieldDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageFieldDescription");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v); }
-        if let Some(v) = &self.field_definition_number { writeln!(f, "  {: >28}: {:?}", "field_definition_number", v); }
-        if let Some(v) = &self.fit_base_type_id { writeln!(f, "  {: >28}: {:?}", "fit_base_type_id", v); }
-        if let Some(v) = &self.field_name { writeln!(f, "  {: >28}: {:?}", "field_name", v); }
-        if let Some(v) = &self.array { writeln!(f, "  {: >28}: {:?}", "array", v); }
-        if let Some(v) = &self.components { writeln!(f, "  {: >28}: {:?}", "components", v); }
-        if let Some(v) = &self.scale { writeln!(f, "  {: >28}: {:?}", "scale", v); }
-        if let Some(v) = &self.offset { writeln!(f, "  {: >28}: {:?}", "offset", v); }
-        if let Some(v) = &self.units { writeln!(f, "  {: >28}: {:?}", "units", v); }
-        if let Some(v) = &self.bits { writeln!(f, "  {: >28}: {:?}", "bits", v); }
-        if let Some(v) = &self.accumulate { writeln!(f, "  {: >28}: {:?}", "accumulate", v); }
-        if let Some(v) = &self.fit_base_unit_id { writeln!(f, "  {: >28}: {:?}", "fit_base_unit_id", v); }
-        if let Some(v) = &self.native_mesg_num { writeln!(f, "  {: >28}: {:?}", "native_mesg_num", v); }
-        if let Some(v) = &self.native_field_num { writeln!(f, "  {: >28}: {:?}", "native_field_num", v); }
+        writeln!(f, "FitMessageFieldDescription")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v)?; }
+        if let Some(v) = &self.field_definition_number { writeln!(f, "  {: >28}: {:?}", "field_definition_number", v)?; }
+        if let Some(v) = &self.fit_base_type_id { writeln!(f, "  {: >28}: {:?}", "fit_base_type_id", v)?; }
+        if let Some(v) = &self.field_name { writeln!(f, "  {: >28}: {:?}", "field_name", v)?; }
+        if let Some(v) = &self.array { writeln!(f, "  {: >28}: {:?}", "array", v)?; }
+        if let Some(v) = &self.components { writeln!(f, "  {: >28}: {:?}", "components", v)?; }
+        if let Some(v) = &self.scale { writeln!(f, "  {: >28}: {:?}", "scale", v)?; }
+        if let Some(v) = &self.offset { writeln!(f, "  {: >28}: {:?}", "offset", v)?; }
+        if let Some(v) = &self.units { writeln!(f, "  {: >28}: {:?}", "units", v)?; }
+        if let Some(v) = &self.bits { writeln!(f, "  {: >28}: {:?}", "bits", v)?; }
+        if let Some(v) = &self.accumulate { writeln!(f, "  {: >28}: {:?}", "accumulate", v)?; }
+        if let Some(v) = &self.fit_base_unit_id { writeln!(f, "  {: >28}: {:?}", "fit_base_unit_id", v)?; }
+        if let Some(v) = &self.native_mesg_num { writeln!(f, "  {: >28}: {:?}", "native_mesg_num", v)?; }
+        if let Some(v) = &self.native_field_num { writeln!(f, "  {: >28}: {:?}", "native_field_num", v)?; }
         
         Ok(())
     }
@@ -26161,14 +26161,14 @@ pub struct FitMessageFileCapabilities {
 
 impl fmt::Display for FitMessageFileCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageFileCapabilities");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.flags { writeln!(f, "  {: >28}: {:?}", "flags", v); }
-        if let Some(v) = &self.directory { writeln!(f, "  {: >28}: {:?}", "directory", v); }
-        if let Some(v) = &self.max_count { writeln!(f, "  {: >28}: {:?}", "max_count", v); }
-        if let Some(v) = &self.max_size { writeln!(f, "  {: >28}: {:?}", "max_size", v); }
+        writeln!(f, "FitMessageFileCapabilities")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.flags { writeln!(f, "  {: >28}: {:?}", "flags", v)?; }
+        if let Some(v) = &self.directory { writeln!(f, "  {: >28}: {:?}", "directory", v)?; }
+        if let Some(v) = &self.max_count { writeln!(f, "  {: >28}: {:?}", "max_count", v)?; }
+        if let Some(v) = &self.max_size { writeln!(f, "  {: >28}: {:?}", "max_size", v)?; }
         
         Ok(())
     }
@@ -26395,10 +26395,10 @@ pub struct FitMessageFileCreator {
 
 impl fmt::Display for FitMessageFileCreator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageFileCreator");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v); }
-        if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v); }
+        writeln!(f, "FitMessageFileCreator")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v)?; }
+        if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v)?; }
         
         Ok(())
     }
@@ -26590,16 +26590,16 @@ pub struct FitMessageFileId {
 
 impl fmt::Display for FitMessageFileId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageFileId");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
-        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
-        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
-        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
-        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v); }
-        if let Some(v) = &self.number { writeln!(f, "  {: >28}: {:?}", "number", v); }
-        if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v); }
+        writeln!(f, "FitMessageFileId")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v)?; }
+        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v)?; }
+        if let Some(v) = &self.number { writeln!(f, "  {: >28}: {:?}", "number", v)?; }
+        if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v)?; }
         
         Ok(())
     }
@@ -26879,21 +26879,21 @@ pub struct FitMessageGoal {
 
 impl fmt::Display for FitMessageGoal {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageGoal");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.start_date { writeln!(f, "  {: >28}: {:?}", "start_date", v); }
-        if let Some(v) = &self.end_date { writeln!(f, "  {: >28}: {:?}", "end_date", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.value { writeln!(f, "  {: >28}: {:?}", "value", v); }
-        if let Some(v) = &self.repeat { writeln!(f, "  {: >28}: {:?}", "repeat", v); }
-        if let Some(v) = &self.target_value { writeln!(f, "  {: >28}: {:?}", "target_value", v); }
-        if let Some(v) = &self.recurrence { writeln!(f, "  {: >28}: {:?}", "recurrence", v); }
-        if let Some(v) = &self.recurrence_value { writeln!(f, "  {: >28}: {:?}", "recurrence_value", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.source { writeln!(f, "  {: >28}: {:?}", "source", v); }
+        writeln!(f, "FitMessageGoal")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.start_date { writeln!(f, "  {: >28}: {:?}", "start_date", v)?; }
+        if let Some(v) = &self.end_date { writeln!(f, "  {: >28}: {:?}", "end_date", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.value { writeln!(f, "  {: >28}: {:?}", "value", v)?; }
+        if let Some(v) = &self.repeat { writeln!(f, "  {: >28}: {:?}", "repeat", v)?; }
+        if let Some(v) = &self.target_value { writeln!(f, "  {: >28}: {:?}", "target_value", v)?; }
+        if let Some(v) = &self.recurrence { writeln!(f, "  {: >28}: {:?}", "recurrence", v)?; }
+        if let Some(v) = &self.recurrence_value { writeln!(f, "  {: >28}: {:?}", "recurrence_value", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.source { writeln!(f, "  {: >28}: {:?}", "source", v)?; }
         
         Ok(())
     }
@@ -27274,17 +27274,17 @@ pub struct FitMessageGpsMetadata {
 
 impl fmt::Display for FitMessageGpsMetadata {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageGpsMetadata");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
-        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
-        if let Some(v) = &self.enhanced_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_altitude", v); }
-        if let Some(v) = &self.enhanced_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_speed", v); }
-        if let Some(v) = &self.heading { writeln!(f, "  {: >28}: {:?}", "heading", v); }
-        if let Some(v) = &self.utc_timestamp { writeln!(f, "  {: >28}: {:?}", "utc_timestamp", v); }
-        if let Some(v) = &self.velocity { writeln!(f, "  {: >28}: {:?}", "velocity", v); }
+        writeln!(f, "FitMessageGpsMetadata")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v)?; }
+        if let Some(v) = &self.enhanced_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_altitude", v)?; }
+        if let Some(v) = &self.enhanced_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_speed", v)?; }
+        if let Some(v) = &self.heading { writeln!(f, "  {: >28}: {:?}", "heading", v)?; }
+        if let Some(v) = &self.utc_timestamp { writeln!(f, "  {: >28}: {:?}", "utc_timestamp", v)?; }
+        if let Some(v) = &self.velocity { writeln!(f, "  {: >28}: {:?}", "velocity", v)?; }
         
         Ok(())
     }
@@ -27671,17 +27671,17 @@ pub struct FitMessageGyroscopeData {
 
 impl fmt::Display for FitMessageGyroscopeData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageGyroscopeData");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
-        if let Some(v) = &self.gyro_x { writeln!(f, "  {: >28}: {:?}", "gyro_x", v); }
-        if let Some(v) = &self.gyro_y { writeln!(f, "  {: >28}: {:?}", "gyro_y", v); }
-        if let Some(v) = &self.gyro_z { writeln!(f, "  {: >28}: {:?}", "gyro_z", v); }
-        if let Some(v) = &self.calibrated_gyro_x { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_x", v); }
-        if let Some(v) = &self.calibrated_gyro_y { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_y", v); }
-        if let Some(v) = &self.calibrated_gyro_z { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_z", v); }
+        writeln!(f, "FitMessageGyroscopeData")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
+        if let Some(v) = &self.gyro_x { writeln!(f, "  {: >28}: {:?}", "gyro_x", v)?; }
+        if let Some(v) = &self.gyro_y { writeln!(f, "  {: >28}: {:?}", "gyro_y", v)?; }
+        if let Some(v) = &self.gyro_z { writeln!(f, "  {: >28}: {:?}", "gyro_z", v)?; }
+        if let Some(v) = &self.calibrated_gyro_x { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_x", v)?; }
+        if let Some(v) = &self.calibrated_gyro_y { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_y", v)?; }
+        if let Some(v) = &self.calibrated_gyro_z { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_z", v)?; }
         
         Ok(())
     }
@@ -28101,14 +28101,14 @@ pub struct FitMessageHr {
 
 impl fmt::Display for FitMessageHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageHr");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
-        if let Some(v) = &self.time256 { writeln!(f, "  {: >28}: {:?}", "time256", v); }
-        if let Some(v) = &self.filtered_bpm { writeln!(f, "  {: >28}: {:?}", "filtered_bpm", v); }
-        if let Some(v) = &self.event_timestamp { writeln!(f, "  {: >28}: {:?}", "event_timestamp", v); }
-        if let Some(v) = &self.event_timestamp_12 { writeln!(f, "  {: >28}: {:?}", "event_timestamp_12", v); }
+        writeln!(f, "FitMessageHr")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
+        if let Some(v) = &self.time256 { writeln!(f, "  {: >28}: {:?}", "time256", v)?; }
+        if let Some(v) = &self.filtered_bpm { writeln!(f, "  {: >28}: {:?}", "filtered_bpm", v)?; }
+        if let Some(v) = &self.event_timestamp { writeln!(f, "  {: >28}: {:?}", "event_timestamp", v)?; }
+        if let Some(v) = &self.event_timestamp_12 { writeln!(f, "  {: >28}: {:?}", "event_timestamp_12", v)?; }
         
         Ok(())
     }
@@ -28417,11 +28417,11 @@ pub struct FitMessageHrZone {
 
 impl fmt::Display for FitMessageHrZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageHrZone");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        writeln!(f, "FitMessageHrZone")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
         Ok(())
     }
@@ -28588,13 +28588,13 @@ pub struct FitMessageHrmProfile {
 
 impl fmt::Display for FitMessageHrmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageHrmProfile");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.hrm_ant_id { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id", v); }
-        if let Some(v) = &self.log_hrv { writeln!(f, "  {: >28}: {:?}", "log_hrv", v); }
-        if let Some(v) = &self.hrm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id_trans_type", v); }
+        writeln!(f, "FitMessageHrmProfile")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.hrm_ant_id { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id", v)?; }
+        if let Some(v) = &self.log_hrv { writeln!(f, "  {: >28}: {:?}", "log_hrv", v)?; }
+        if let Some(v) = &self.hrm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id_trans_type", v)?; }
         
         Ok(())
     }
@@ -28799,9 +28799,9 @@ pub struct FitMessageHrv {
 
 impl fmt::Display for FitMessageHrv {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageHrv");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v); }
+        writeln!(f, "FitMessageHrv")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v)?; }
         
         Ok(())
     }
@@ -29124,117 +29124,117 @@ pub struct FitMessageLap {
 
 impl fmt::Display for FitMessageLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageLap");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
-        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
-        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
-        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v); }
-        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v); }
-        if let Some(v) = &self.end_position_lat { writeln!(f, "  {: >28}: {:?}", "end_position_lat", v); }
-        if let Some(v) = &self.end_position_long { writeln!(f, "  {: >28}: {:?}", "end_position_long", v); }
-        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
-        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
-        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v); }
-        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes);
-        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
-        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
-        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v); }
-        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
-        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v); }
-        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v); }
-        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
-        writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes);
-        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v); }
-        writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes);
-        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v); }
-        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v); }
-        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v); }
-        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v); }
-        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v); }
-        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v); }
-        if let Some(v) = &self.lap_trigger { writeln!(f, "  {: >28}: {:?}", "lap_trigger", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
-        if let Some(v) = &self.num_lengths { writeln!(f, "  {: >28}: {:?}", "num_lengths", v); }
-        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v); }
-        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
-        if let Some(v) = &self.first_length_index { writeln!(f, "  {: >28}: {:?}", "first_length_index", v); }
-        if let Some(v) = &self.avg_stroke_distance { writeln!(f, "  {: >28}: {:?}", "avg_stroke_distance", v); }
-        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.num_active_lengths { writeln!(f, "  {: >28}: {:?}", "num_active_lengths", v); }
-        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v); }
-        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v); }
-        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v); }
-        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
-        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v); }
-        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v); }
-        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v); }
-        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v); }
-        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v); }
-        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v); }
-        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v); }
-        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v); }
-        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v); }
-        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v); }
-        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v); }
-        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v); }
-        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v); }
-        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v); }
-        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v); }
-        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v); }
-        if let Some(v) = &self.repetition_num { writeln!(f, "  {: >28}: {:?}", "repetition_num", v); }
-        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v); }
-        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v); }
-        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v); }
-        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
-        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v); }
-        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v); }
-        if let Some(v) = &self.avg_vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "avg_vertical_oscillation", v); }
-        if let Some(v) = &self.avg_stance_time_percent { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_percent", v); }
-        if let Some(v) = &self.avg_stance_time { writeln!(f, "  {: >28}: {:?}", "avg_stance_time", v); }
-        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v); }
-        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v); }
-        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v); }
-        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v); }
-        if let Some(v) = &self.avg_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "avg_total_hemoglobin_conc", v); }
-        if let Some(v) = &self.min_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "min_total_hemoglobin_conc", v); }
-        if let Some(v) = &self.max_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "max_total_hemoglobin_conc", v); }
-        if let Some(v) = &self.avg_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "avg_saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.min_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "min_saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.max_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "max_saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v); }
-        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v); }
-        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v); }
-        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v); }
-        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v); }
-        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v); }
-        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v); }
-        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v); }
-        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v); }
-        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v); }
-        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v); }
-        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v); }
-        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v); }
-        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v); }
-        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v); }
-        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v); }
-        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v); }
-        if let Some(v) = &self.enhanced_avg_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_speed", v); }
-        if let Some(v) = &self.enhanced_max_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_max_speed", v); }
-        if let Some(v) = &self.enhanced_avg_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_altitude", v); }
-        if let Some(v) = &self.enhanced_min_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_min_altitude", v); }
-        if let Some(v) = &self.enhanced_max_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_max_altitude", v); }
-        if let Some(v) = &self.avg_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "avg_lev_motor_power", v); }
-        if let Some(v) = &self.max_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "max_lev_motor_power", v); }
-        if let Some(v) = &self.lev_battery_consumption { writeln!(f, "  {: >28}: {:?}", "lev_battery_consumption", v); }
-        if let Some(v) = &self.avg_vertical_ratio { writeln!(f, "  {: >28}: {:?}", "avg_vertical_ratio", v); }
-        if let Some(v) = &self.avg_stance_time_balance { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_balance", v); }
-        if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v); }
-        if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v); }
+        writeln!(f, "FitMessageLap")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v)?; }
+        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v)?; }
+        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v)?; }
+        if let Some(v) = &self.end_position_lat { writeln!(f, "  {: >28}: {:?}", "end_position_lat", v)?; }
+        if let Some(v) = &self.end_position_long { writeln!(f, "  {: >28}: {:?}", "end_position_long", v)?; }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v)?; }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v)?; }
+        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes)?;
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v)?; }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v)?; }
+        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v)?; }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v)?; }
+        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v)?; }
+        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v)?; }
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes)?;
+        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes)?;
+        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v)?; }
+        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v)?; }
+        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v)?; }
+        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v)?; }
+        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v)?; }
+        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v)?; }
+        if let Some(v) = &self.lap_trigger { writeln!(f, "  {: >28}: {:?}", "lap_trigger", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
+        if let Some(v) = &self.num_lengths { writeln!(f, "  {: >28}: {:?}", "num_lengths", v)?; }
+        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v)?; }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v)?; }
+        if let Some(v) = &self.first_length_index { writeln!(f, "  {: >28}: {:?}", "first_length_index", v)?; }
+        if let Some(v) = &self.avg_stroke_distance { writeln!(f, "  {: >28}: {:?}", "avg_stroke_distance", v)?; }
+        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.num_active_lengths { writeln!(f, "  {: >28}: {:?}", "num_active_lengths", v)?; }
+        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v)?; }
+        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v)?; }
+        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v)?; }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v)?; }
+        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v)?; }
+        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v)?; }
+        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v)?; }
+        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v)?; }
+        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v)?; }
+        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v)?; }
+        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v)?; }
+        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v)?; }
+        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v)?; }
+        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v)?; }
+        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v)?; }
+        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v)?; }
+        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v)?; }
+        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v)?; }
+        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v)?; }
+        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v)?; }
+        if let Some(v) = &self.repetition_num { writeln!(f, "  {: >28}: {:?}", "repetition_num", v)?; }
+        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v)?; }
+        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v)?; }
+        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v)?; }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v)?; }
+        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v)?; }
+        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v)?; }
+        if let Some(v) = &self.avg_vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "avg_vertical_oscillation", v)?; }
+        if let Some(v) = &self.avg_stance_time_percent { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_percent", v)?; }
+        if let Some(v) = &self.avg_stance_time { writeln!(f, "  {: >28}: {:?}", "avg_stance_time", v)?; }
+        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v)?; }
+        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v)?; }
+        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v)?; }
+        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v)?; }
+        if let Some(v) = &self.avg_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "avg_total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.min_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "min_total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.max_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "max_total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.avg_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "avg_saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.min_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "min_saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.max_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "max_saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v)?; }
+        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v)?; }
+        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v)?; }
+        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v)?; }
+        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v)?; }
+        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v)?; }
+        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v)?; }
+        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v)?; }
+        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v)?; }
+        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v)?; }
+        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v)?; }
+        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v)?; }
+        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v)?; }
+        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v)?; }
+        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v)?; }
+        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v)?; }
+        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v)?; }
+        if let Some(v) = &self.enhanced_avg_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_speed", v)?; }
+        if let Some(v) = &self.enhanced_max_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_max_speed", v)?; }
+        if let Some(v) = &self.enhanced_avg_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_altitude", v)?; }
+        if let Some(v) = &self.enhanced_min_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_min_altitude", v)?; }
+        if let Some(v) = &self.enhanced_max_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_max_altitude", v)?; }
+        if let Some(v) = &self.avg_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "avg_lev_motor_power", v)?; }
+        if let Some(v) = &self.max_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "max_lev_motor_power", v)?; }
+        if let Some(v) = &self.lev_battery_consumption { writeln!(f, "  {: >28}: {:?}", "lev_battery_consumption", v)?; }
+        if let Some(v) = &self.avg_vertical_ratio { writeln!(f, "  {: >28}: {:?}", "avg_vertical_ratio", v)?; }
+        if let Some(v) = &self.avg_stance_time_balance { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_balance", v)?; }
+        if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v)?; }
+        if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v)?; }
         
         Ok(())
     }
@@ -32491,26 +32491,26 @@ pub struct FitMessageLength {
 
 impl fmt::Display for FitMessageLength {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageLength");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
-        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
-        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
-        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
-        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
-        if let Some(v) = &self.total_strokes { writeln!(f, "  {: >28}: {:?}", "total_strokes", v); }
-        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
-        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v); }
-        if let Some(v) = &self.avg_swimming_cadence { writeln!(f, "  {: >28}: {:?}", "avg_swimming_cadence", v); }
-        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
-        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
-        if let Some(v) = &self.length_type { writeln!(f, "  {: >28}: {:?}", "length_type", v); }
-        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v); }
-        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
-        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v); }
-        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v); }
+        writeln!(f, "FitMessageLength")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v)?; }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v)?; }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v)?; }
+        if let Some(v) = &self.total_strokes { writeln!(f, "  {: >28}: {:?}", "total_strokes", v)?; }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v)?; }
+        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v)?; }
+        if let Some(v) = &self.avg_swimming_cadence { writeln!(f, "  {: >28}: {:?}", "avg_swimming_cadence", v)?; }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v)?; }
+        if let Some(v) = &self.length_type { writeln!(f, "  {: >28}: {:?}", "length_type", v)?; }
+        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v)?; }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v)?; }
+        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v)?; }
+        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v)?; }
         
         Ok(())
     }
@@ -33078,17 +33078,17 @@ pub struct FitMessageMagnetometerData {
 
 impl fmt::Display for FitMessageMagnetometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageMagnetometerData");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
-        if let Some(v) = &self.mag_x { writeln!(f, "  {: >28}: {:?}", "mag_x", v); }
-        if let Some(v) = &self.mag_y { writeln!(f, "  {: >28}: {:?}", "mag_y", v); }
-        if let Some(v) = &self.mag_z { writeln!(f, "  {: >28}: {:?}", "mag_z", v); }
-        if let Some(v) = &self.calibrated_mag_x { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_x", v); }
-        if let Some(v) = &self.calibrated_mag_y { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_y", v); }
-        if let Some(v) = &self.calibrated_mag_z { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_z", v); }
+        writeln!(f, "FitMessageMagnetometerData")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
+        if let Some(v) = &self.mag_x { writeln!(f, "  {: >28}: {:?}", "mag_x", v)?; }
+        if let Some(v) = &self.mag_y { writeln!(f, "  {: >28}: {:?}", "mag_y", v)?; }
+        if let Some(v) = &self.mag_z { writeln!(f, "  {: >28}: {:?}", "mag_z", v)?; }
+        if let Some(v) = &self.calibrated_mag_x { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_x", v)?; }
+        if let Some(v) = &self.calibrated_mag_y { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_y", v)?; }
+        if let Some(v) = &self.calibrated_mag_z { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_z", v)?; }
         
         Ok(())
     }
@@ -33506,12 +33506,12 @@ pub struct FitMessageMemoGlob {
 
 impl fmt::Display for FitMessageMemoGlob {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageMemoGlob");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.part_index { writeln!(f, "  {: >28}: {:?}", "part_index", v); }
-        if let Some(v) = &self.memo { writeln!(f, "  {: >28}: {:?}", "memo", v); }
-        if let Some(v) = &self.message_number { writeln!(f, "  {: >28}: {:?}", "message_number", v); }
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        writeln!(f, "FitMessageMemoGlob")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.part_index { writeln!(f, "  {: >28}: {:?}", "part_index", v)?; }
+        if let Some(v) = &self.memo { writeln!(f, "  {: >28}: {:?}", "memo", v)?; }
+        if let Some(v) = &self.message_number { writeln!(f, "  {: >28}: {:?}", "message_number", v)?; }
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         
         Ok(())
     }
@@ -33738,14 +33738,14 @@ pub struct FitMessageMesgCapabilities {
 
 impl fmt::Display for FitMessageMesgCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageMesgCapabilities");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v); }
-        if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v); }
-        if let Some(v) = &self.count_type { writeln!(f, "  {: >28}: {:?}", "count_type", v); }
-        writeln!(f, "  {: >28}: {:?}", "count_subfield_bytes", self.count_subfield_bytes);
-        if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v); }
+        writeln!(f, "FitMessageMesgCapabilities")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v)?; }
+        if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v)?; }
+        if let Some(v) = &self.count_type { writeln!(f, "  {: >28}: {:?}", "count_type", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "count_subfield_bytes", self.count_subfield_bytes)?;
+        if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v)?; }
         
         Ok(())
     }
@@ -33974,12 +33974,12 @@ pub struct FitMessageMetZone {
 
 impl fmt::Display for FitMessageMetZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageMetZone");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v); }
-        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
-        if let Some(v) = &self.fat_calories { writeln!(f, "  {: >28}: {:?}", "fat_calories", v); }
+        writeln!(f, "FitMessageMetZone")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v)?; }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v)?; }
+        if let Some(v) = &self.fat_calories { writeln!(f, "  {: >28}: {:?}", "fat_calories", v)?; }
         
         Ok(())
     }
@@ -34259,38 +34259,38 @@ pub struct FitMessageMonitoring {
 
 impl fmt::Display for FitMessageMonitoring {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageMonitoring");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
-        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
-        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
-        writeln!(f, "  {: >28}: {:?}", "cycles_subfield_bytes", self.cycles_subfield_bytes);
-        if let Some(v) = &self.cycles { writeln!(f, "  {: >28}: {:?}", "cycles", v); }
-        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v); }
-        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v); }
-        if let Some(v) = &self.activity_subtype { writeln!(f, "  {: >28}: {:?}", "activity_subtype", v); }
-        if let Some(v) = &self.activity_level { writeln!(f, "  {: >28}: {:?}", "activity_level", v); }
-        if let Some(v) = &self.distance_16 { writeln!(f, "  {: >28}: {:?}", "distance_16", v); }
-        if let Some(v) = &self.cycles_16 { writeln!(f, "  {: >28}: {:?}", "cycles_16", v); }
-        if let Some(v) = &self.active_time_16 { writeln!(f, "  {: >28}: {:?}", "active_time_16", v); }
-        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
-        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v); }
-        if let Some(v) = &self.temperature_min { writeln!(f, "  {: >28}: {:?}", "temperature_min", v); }
-        if let Some(v) = &self.temperature_max { writeln!(f, "  {: >28}: {:?}", "temperature_max", v); }
-        if let Some(v) = &self.activity_time { writeln!(f, "  {: >28}: {:?}", "activity_time", v); }
-        if let Some(v) = &self.active_calories { writeln!(f, "  {: >28}: {:?}", "active_calories", v); }
-        if let Some(v) = &self.current_activity_type_intensity { writeln!(f, "  {: >28}: {:?}", "current_activity_type_intensity", v); }
-        if let Some(v) = &self.timestamp_min_8 { writeln!(f, "  {: >28}: {:?}", "timestamp_min_8", v); }
-        if let Some(v) = &self.timestamp_16 { writeln!(f, "  {: >28}: {:?}", "timestamp_16", v); }
-        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v); }
-        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v); }
-        if let Some(v) = &self.duration_min { writeln!(f, "  {: >28}: {:?}", "duration_min", v); }
-        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v); }
-        if let Some(v) = &self.ascent { writeln!(f, "  {: >28}: {:?}", "ascent", v); }
-        if let Some(v) = &self.descent { writeln!(f, "  {: >28}: {:?}", "descent", v); }
-        if let Some(v) = &self.moderate_activity_minutes { writeln!(f, "  {: >28}: {:?}", "moderate_activity_minutes", v); }
-        if let Some(v) = &self.vigorous_activity_minutes { writeln!(f, "  {: >28}: {:?}", "vigorous_activity_minutes", v); }
+        writeln!(f, "FitMessageMonitoring")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v)?; }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "cycles_subfield_bytes", self.cycles_subfield_bytes)?;
+        if let Some(v) = &self.cycles { writeln!(f, "  {: >28}: {:?}", "cycles", v)?; }
+        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v)?; }
+        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v)?; }
+        if let Some(v) = &self.activity_subtype { writeln!(f, "  {: >28}: {:?}", "activity_subtype", v)?; }
+        if let Some(v) = &self.activity_level { writeln!(f, "  {: >28}: {:?}", "activity_level", v)?; }
+        if let Some(v) = &self.distance_16 { writeln!(f, "  {: >28}: {:?}", "distance_16", v)?; }
+        if let Some(v) = &self.cycles_16 { writeln!(f, "  {: >28}: {:?}", "cycles_16", v)?; }
+        if let Some(v) = &self.active_time_16 { writeln!(f, "  {: >28}: {:?}", "active_time_16", v)?; }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v)?; }
+        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v)?; }
+        if let Some(v) = &self.temperature_min { writeln!(f, "  {: >28}: {:?}", "temperature_min", v)?; }
+        if let Some(v) = &self.temperature_max { writeln!(f, "  {: >28}: {:?}", "temperature_max", v)?; }
+        if let Some(v) = &self.activity_time { writeln!(f, "  {: >28}: {:?}", "activity_time", v)?; }
+        if let Some(v) = &self.active_calories { writeln!(f, "  {: >28}: {:?}", "active_calories", v)?; }
+        if let Some(v) = &self.current_activity_type_intensity { writeln!(f, "  {: >28}: {:?}", "current_activity_type_intensity", v)?; }
+        if let Some(v) = &self.timestamp_min_8 { writeln!(f, "  {: >28}: {:?}", "timestamp_min_8", v)?; }
+        if let Some(v) = &self.timestamp_16 { writeln!(f, "  {: >28}: {:?}", "timestamp_16", v)?; }
+        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v)?; }
+        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v)?; }
+        if let Some(v) = &self.duration_min { writeln!(f, "  {: >28}: {:?}", "duration_min", v)?; }
+        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v)?; }
+        if let Some(v) = &self.ascent { writeln!(f, "  {: >28}: {:?}", "ascent", v)?; }
+        if let Some(v) = &self.descent { writeln!(f, "  {: >28}: {:?}", "descent", v)?; }
+        if let Some(v) = &self.moderate_activity_minutes { writeln!(f, "  {: >28}: {:?}", "moderate_activity_minutes", v)?; }
+        if let Some(v) = &self.vigorous_activity_minutes { writeln!(f, "  {: >28}: {:?}", "vigorous_activity_minutes", v)?; }
         
         Ok(())
     }
@@ -35153,14 +35153,14 @@ pub struct FitMessageMonitoringInfo {
 
 impl fmt::Display for FitMessageMonitoringInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageMonitoringInfo");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
-        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v); }
-        if let Some(v) = &self.cycles_to_distance { writeln!(f, "  {: >28}: {:?}", "cycles_to_distance", v); }
-        if let Some(v) = &self.cycles_to_calories { writeln!(f, "  {: >28}: {:?}", "cycles_to_calories", v); }
-        if let Some(v) = &self.resting_metabolic_rate { writeln!(f, "  {: >28}: {:?}", "resting_metabolic_rate", v); }
+        writeln!(f, "FitMessageMonitoringInfo")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v)?; }
+        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v)?; }
+        if let Some(v) = &self.cycles_to_distance { writeln!(f, "  {: >28}: {:?}", "cycles_to_distance", v)?; }
+        if let Some(v) = &self.cycles_to_calories { writeln!(f, "  {: >28}: {:?}", "cycles_to_calories", v)?; }
+        if let Some(v) = &self.resting_metabolic_rate { writeln!(f, "  {: >28}: {:?}", "resting_metabolic_rate", v)?; }
         
         Ok(())
     }
@@ -35450,11 +35450,11 @@ pub struct FitMessageNmeaSentence {
 
 impl fmt::Display for FitMessageNmeaSentence {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageNmeaSentence");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.sentence { writeln!(f, "  {: >28}: {:?}", "sentence", v); }
+        writeln!(f, "FitMessageNmeaSentence")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.sentence { writeln!(f, "  {: >28}: {:?}", "sentence", v)?; }
         
         Ok(())
     }
@@ -35639,17 +35639,17 @@ pub struct FitMessageObdiiData {
 
 impl fmt::Display for FitMessageObdiiData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageObdiiData");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v); }
-        if let Some(v) = &self.pid { writeln!(f, "  {: >28}: {:?}", "pid", v); }
-        if let Some(v) = &self.raw_data { writeln!(f, "  {: >28}: {:?}", "raw_data", v); }
-        if let Some(v) = &self.pid_data_size { writeln!(f, "  {: >28}: {:?}", "pid_data_size", v); }
-        if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v); }
-        if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v); }
-        if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v); }
+        writeln!(f, "FitMessageObdiiData")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v)?; }
+        if let Some(v) = &self.pid { writeln!(f, "  {: >28}: {:?}", "pid", v)?; }
+        if let Some(v) = &self.raw_data { writeln!(f, "  {: >28}: {:?}", "raw_data", v)?; }
+        if let Some(v) = &self.pid_data_size { writeln!(f, "  {: >28}: {:?}", "pid_data_size", v)?; }
+        if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v)?; }
+        if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v)?; }
+        if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v)?; }
         
         Ok(())
     }
@@ -36001,10 +36001,10 @@ pub struct FitMessageOhrSettings {
 
 impl fmt::Display for FitMessageOhrSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageOhrSettings");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        writeln!(f, "FitMessageOhrSettings")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
         
         Ok(())
     }
@@ -36190,15 +36190,15 @@ pub struct FitMessageOneDSensorCalibration {
 
 impl fmt::Display for FitMessageOneDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageOneDSensorCalibration");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v); }
-        writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes);
-        if let Some(v) = &self.calibration_factor { writeln!(f, "  {: >28}: {:?}", "calibration_factor", v); }
-        if let Some(v) = &self.calibration_divisor { writeln!(f, "  {: >28}: {:?}", "calibration_divisor", v); }
-        if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v); }
-        if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v); }
+        writeln!(f, "FitMessageOneDSensorCalibration")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes)?;
+        if let Some(v) = &self.calibration_factor { writeln!(f, "  {: >28}: {:?}", "calibration_factor", v)?; }
+        if let Some(v) = &self.calibration_divisor { writeln!(f, "  {: >28}: {:?}", "calibration_divisor", v)?; }
+        if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v)?; }
+        if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v)?; }
         
         Ok(())
     }
@@ -36461,11 +36461,11 @@ pub struct FitMessagePowerZone {
 
 impl fmt::Display for FitMessagePowerZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessagePowerZone");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        writeln!(f, "FitMessagePowerZone")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
         Ok(())
     }
@@ -36694,75 +36694,75 @@ pub struct FitMessageRecord {
 
 impl fmt::Display for FitMessageRecord {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageRecord");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
-        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
-        if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v); }
-        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v); }
-        if let Some(v) = &self.cadence { writeln!(f, "  {: >28}: {:?}", "cadence", v); }
-        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
-        if let Some(v) = &self.speed { writeln!(f, "  {: >28}: {:?}", "speed", v); }
-        if let Some(v) = &self.power { writeln!(f, "  {: >28}: {:?}", "power", v); }
-        if let Some(v) = &self.compressed_speed_distance { writeln!(f, "  {: >28}: {:?}", "compressed_speed_distance", v); }
-        if let Some(v) = &self.grade { writeln!(f, "  {: >28}: {:?}", "grade", v); }
-        if let Some(v) = &self.resistance { writeln!(f, "  {: >28}: {:?}", "resistance", v); }
-        if let Some(v) = &self.time_from_course { writeln!(f, "  {: >28}: {:?}", "time_from_course", v); }
-        if let Some(v) = &self.cycle_length { writeln!(f, "  {: >28}: {:?}", "cycle_length", v); }
-        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v); }
-        if let Some(v) = &self.speed_1s { writeln!(f, "  {: >28}: {:?}", "speed_1s", v); }
-        if let Some(v) = &self.cycles { writeln!(f, "  {: >28}: {:?}", "cycles", v); }
-        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
-        if let Some(v) = &self.compressed_accumulated_power { writeln!(f, "  {: >28}: {:?}", "compressed_accumulated_power", v); }
-        if let Some(v) = &self.accumulated_power { writeln!(f, "  {: >28}: {:?}", "accumulated_power", v); }
-        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
-        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
-        if let Some(v) = &self.vertical_speed { writeln!(f, "  {: >28}: {:?}", "vertical_speed", v); }
-        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
-        if let Some(v) = &self.vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "vertical_oscillation", v); }
-        if let Some(v) = &self.stance_time_percent { writeln!(f, "  {: >28}: {:?}", "stance_time_percent", v); }
-        if let Some(v) = &self.stance_time { writeln!(f, "  {: >28}: {:?}", "stance_time", v); }
-        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v); }
-        if let Some(v) = &self.left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "left_torque_effectiveness", v); }
-        if let Some(v) = &self.right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "right_torque_effectiveness", v); }
-        if let Some(v) = &self.left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "left_pedal_smoothness", v); }
-        if let Some(v) = &self.right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "right_pedal_smoothness", v); }
-        if let Some(v) = &self.combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "combined_pedal_smoothness", v); }
-        if let Some(v) = &self.time128 { writeln!(f, "  {: >28}: {:?}", "time128", v); }
-        if let Some(v) = &self.stroke_type { writeln!(f, "  {: >28}: {:?}", "stroke_type", v); }
-        if let Some(v) = &self.zone { writeln!(f, "  {: >28}: {:?}", "zone", v); }
-        if let Some(v) = &self.ball_speed { writeln!(f, "  {: >28}: {:?}", "ball_speed", v); }
-        if let Some(v) = &self.cadence256 { writeln!(f, "  {: >28}: {:?}", "cadence256", v); }
-        if let Some(v) = &self.fractional_cadence { writeln!(f, "  {: >28}: {:?}", "fractional_cadence", v); }
-        if let Some(v) = &self.total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc", v); }
-        if let Some(v) = &self.total_hemoglobin_conc_min { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc_min", v); }
-        if let Some(v) = &self.total_hemoglobin_conc_max { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc_max", v); }
-        if let Some(v) = &self.saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.saturated_hemoglobin_percent_min { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent_min", v); }
-        if let Some(v) = &self.saturated_hemoglobin_percent_max { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent_max", v); }
-        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
-        if let Some(v) = &self.left_pco { writeln!(f, "  {: >28}: {:?}", "left_pco", v); }
-        if let Some(v) = &self.right_pco { writeln!(f, "  {: >28}: {:?}", "right_pco", v); }
-        if let Some(v) = &self.left_power_phase { writeln!(f, "  {: >28}: {:?}", "left_power_phase", v); }
-        if let Some(v) = &self.left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "left_power_phase_peak", v); }
-        if let Some(v) = &self.right_power_phase { writeln!(f, "  {: >28}: {:?}", "right_power_phase", v); }
-        if let Some(v) = &self.right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "right_power_phase_peak", v); }
-        if let Some(v) = &self.enhanced_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_speed", v); }
-        if let Some(v) = &self.enhanced_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_altitude", v); }
-        if let Some(v) = &self.battery_soc { writeln!(f, "  {: >28}: {:?}", "battery_soc", v); }
-        if let Some(v) = &self.motor_power { writeln!(f, "  {: >28}: {:?}", "motor_power", v); }
-        if let Some(v) = &self.vertical_ratio { writeln!(f, "  {: >28}: {:?}", "vertical_ratio", v); }
-        if let Some(v) = &self.stance_time_balance { writeln!(f, "  {: >28}: {:?}", "stance_time_balance", v); }
-        if let Some(v) = &self.step_length { writeln!(f, "  {: >28}: {:?}", "step_length", v); }
-        if let Some(v) = &self.absolute_pressure { writeln!(f, "  {: >28}: {:?}", "absolute_pressure", v); }
-        if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v); }
-        if let Some(v) = &self.next_stop_depth { writeln!(f, "  {: >28}: {:?}", "next_stop_depth", v); }
-        if let Some(v) = &self.next_stop_time { writeln!(f, "  {: >28}: {:?}", "next_stop_time", v); }
-        if let Some(v) = &self.time_to_surface { writeln!(f, "  {: >28}: {:?}", "time_to_surface", v); }
-        if let Some(v) = &self.ndl_time { writeln!(f, "  {: >28}: {:?}", "ndl_time", v); }
-        if let Some(v) = &self.cns_load { writeln!(f, "  {: >28}: {:?}", "cns_load", v); }
-        if let Some(v) = &self.n2_load { writeln!(f, "  {: >28}: {:?}", "n2_load", v); }
+        writeln!(f, "FitMessageRecord")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v)?; }
+        if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v)?; }
+        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v)?; }
+        if let Some(v) = &self.cadence { writeln!(f, "  {: >28}: {:?}", "cadence", v)?; }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v)?; }
+        if let Some(v) = &self.speed { writeln!(f, "  {: >28}: {:?}", "speed", v)?; }
+        if let Some(v) = &self.power { writeln!(f, "  {: >28}: {:?}", "power", v)?; }
+        if let Some(v) = &self.compressed_speed_distance { writeln!(f, "  {: >28}: {:?}", "compressed_speed_distance", v)?; }
+        if let Some(v) = &self.grade { writeln!(f, "  {: >28}: {:?}", "grade", v)?; }
+        if let Some(v) = &self.resistance { writeln!(f, "  {: >28}: {:?}", "resistance", v)?; }
+        if let Some(v) = &self.time_from_course { writeln!(f, "  {: >28}: {:?}", "time_from_course", v)?; }
+        if let Some(v) = &self.cycle_length { writeln!(f, "  {: >28}: {:?}", "cycle_length", v)?; }
+        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v)?; }
+        if let Some(v) = &self.speed_1s { writeln!(f, "  {: >28}: {:?}", "speed_1s", v)?; }
+        if let Some(v) = &self.cycles { writeln!(f, "  {: >28}: {:?}", "cycles", v)?; }
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v)?; }
+        if let Some(v) = &self.compressed_accumulated_power { writeln!(f, "  {: >28}: {:?}", "compressed_accumulated_power", v)?; }
+        if let Some(v) = &self.accumulated_power { writeln!(f, "  {: >28}: {:?}", "accumulated_power", v)?; }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v)?; }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v)?; }
+        if let Some(v) = &self.vertical_speed { writeln!(f, "  {: >28}: {:?}", "vertical_speed", v)?; }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v)?; }
+        if let Some(v) = &self.vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "vertical_oscillation", v)?; }
+        if let Some(v) = &self.stance_time_percent { writeln!(f, "  {: >28}: {:?}", "stance_time_percent", v)?; }
+        if let Some(v) = &self.stance_time { writeln!(f, "  {: >28}: {:?}", "stance_time", v)?; }
+        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v)?; }
+        if let Some(v) = &self.left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "left_torque_effectiveness", v)?; }
+        if let Some(v) = &self.right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "right_torque_effectiveness", v)?; }
+        if let Some(v) = &self.left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "left_pedal_smoothness", v)?; }
+        if let Some(v) = &self.right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "right_pedal_smoothness", v)?; }
+        if let Some(v) = &self.combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "combined_pedal_smoothness", v)?; }
+        if let Some(v) = &self.time128 { writeln!(f, "  {: >28}: {:?}", "time128", v)?; }
+        if let Some(v) = &self.stroke_type { writeln!(f, "  {: >28}: {:?}", "stroke_type", v)?; }
+        if let Some(v) = &self.zone { writeln!(f, "  {: >28}: {:?}", "zone", v)?; }
+        if let Some(v) = &self.ball_speed { writeln!(f, "  {: >28}: {:?}", "ball_speed", v)?; }
+        if let Some(v) = &self.cadence256 { writeln!(f, "  {: >28}: {:?}", "cadence256", v)?; }
+        if let Some(v) = &self.fractional_cadence { writeln!(f, "  {: >28}: {:?}", "fractional_cadence", v)?; }
+        if let Some(v) = &self.total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.total_hemoglobin_conc_min { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc_min", v)?; }
+        if let Some(v) = &self.total_hemoglobin_conc_max { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc_max", v)?; }
+        if let Some(v) = &self.saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.saturated_hemoglobin_percent_min { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent_min", v)?; }
+        if let Some(v) = &self.saturated_hemoglobin_percent_max { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent_max", v)?; }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
+        if let Some(v) = &self.left_pco { writeln!(f, "  {: >28}: {:?}", "left_pco", v)?; }
+        if let Some(v) = &self.right_pco { writeln!(f, "  {: >28}: {:?}", "right_pco", v)?; }
+        if let Some(v) = &self.left_power_phase { writeln!(f, "  {: >28}: {:?}", "left_power_phase", v)?; }
+        if let Some(v) = &self.left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "left_power_phase_peak", v)?; }
+        if let Some(v) = &self.right_power_phase { writeln!(f, "  {: >28}: {:?}", "right_power_phase", v)?; }
+        if let Some(v) = &self.right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "right_power_phase_peak", v)?; }
+        if let Some(v) = &self.enhanced_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_speed", v)?; }
+        if let Some(v) = &self.enhanced_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_altitude", v)?; }
+        if let Some(v) = &self.battery_soc { writeln!(f, "  {: >28}: {:?}", "battery_soc", v)?; }
+        if let Some(v) = &self.motor_power { writeln!(f, "  {: >28}: {:?}", "motor_power", v)?; }
+        if let Some(v) = &self.vertical_ratio { writeln!(f, "  {: >28}: {:?}", "vertical_ratio", v)?; }
+        if let Some(v) = &self.stance_time_balance { writeln!(f, "  {: >28}: {:?}", "stance_time_balance", v)?; }
+        if let Some(v) = &self.step_length { writeln!(f, "  {: >28}: {:?}", "step_length", v)?; }
+        if let Some(v) = &self.absolute_pressure { writeln!(f, "  {: >28}: {:?}", "absolute_pressure", v)?; }
+        if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v)?; }
+        if let Some(v) = &self.next_stop_depth { writeln!(f, "  {: >28}: {:?}", "next_stop_depth", v)?; }
+        if let Some(v) = &self.next_stop_time { writeln!(f, "  {: >28}: {:?}", "next_stop_time", v)?; }
+        if let Some(v) = &self.time_to_surface { writeln!(f, "  {: >28}: {:?}", "time_to_surface", v)?; }
+        if let Some(v) = &self.ndl_time { writeln!(f, "  {: >28}: {:?}", "ndl_time", v)?; }
+        if let Some(v) = &self.cns_load { writeln!(f, "  {: >28}: {:?}", "cns_load", v)?; }
+        if let Some(v) = &self.n2_load { writeln!(f, "  {: >28}: {:?}", "n2_load", v)?; }
         
         Ok(())
     }
@@ -38887,16 +38887,16 @@ pub struct FitMessageSchedule {
 
 impl fmt::Display for FitMessageSchedule {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSchedule");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
-        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
-        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
-        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
-        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v); }
-        if let Some(v) = &self.completed { writeln!(f, "  {: >28}: {:?}", "completed", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.scheduled_time { writeln!(f, "  {: >28}: {:?}", "scheduled_time", v); }
+        writeln!(f, "FitMessageSchedule")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v)?; }
+        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v)?; }
+        if let Some(v) = &self.completed { writeln!(f, "  {: >28}: {:?}", "completed", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.scheduled_time { writeln!(f, "  {: >28}: {:?}", "scheduled_time", v)?; }
         
         Ok(())
     }
@@ -39171,16 +39171,16 @@ pub struct FitMessageSdmProfile {
 
 impl fmt::Display for FitMessageSdmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSdmProfile");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.sdm_ant_id { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id", v); }
-        if let Some(v) = &self.sdm_cal_factor { writeln!(f, "  {: >28}: {:?}", "sdm_cal_factor", v); }
-        if let Some(v) = &self.odometer { writeln!(f, "  {: >28}: {:?}", "odometer", v); }
-        if let Some(v) = &self.speed_source { writeln!(f, "  {: >28}: {:?}", "speed_source", v); }
-        if let Some(v) = &self.sdm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id_trans_type", v); }
-        if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v); }
+        writeln!(f, "FitMessageSdmProfile")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.sdm_ant_id { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id", v)?; }
+        if let Some(v) = &self.sdm_cal_factor { writeln!(f, "  {: >28}: {:?}", "sdm_cal_factor", v)?; }
+        if let Some(v) = &self.odometer { writeln!(f, "  {: >28}: {:?}", "odometer", v)?; }
+        if let Some(v) = &self.speed_source { writeln!(f, "  {: >28}: {:?}", "speed_source", v)?; }
+        if let Some(v) = &self.sdm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id_trans_type", v)?; }
+        if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v)?; }
         
         Ok(())
     }
@@ -39480,17 +39480,17 @@ pub struct FitMessageSegmentFile {
 
 impl fmt::Display for FitMessageSegmentFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSegmentFile");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.file_uuid { writeln!(f, "  {: >28}: {:?}", "file_uuid", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.user_profile_primary_key { writeln!(f, "  {: >28}: {:?}", "user_profile_primary_key", v); }
-        if let Some(v) = &self.leader_type { writeln!(f, "  {: >28}: {:?}", "leader_type", v); }
-        if let Some(v) = &self.leader_group_primary_key { writeln!(f, "  {: >28}: {:?}", "leader_group_primary_key", v); }
-        if let Some(v) = &self.leader_activity_id { writeln!(f, "  {: >28}: {:?}", "leader_activity_id", v); }
-        if let Some(v) = &self.leader_activity_id_string { writeln!(f, "  {: >28}: {:?}", "leader_activity_id_string", v); }
-        if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v); }
+        writeln!(f, "FitMessageSegmentFile")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.file_uuid { writeln!(f, "  {: >28}: {:?}", "file_uuid", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.user_profile_primary_key { writeln!(f, "  {: >28}: {:?}", "user_profile_primary_key", v)?; }
+        if let Some(v) = &self.leader_type { writeln!(f, "  {: >28}: {:?}", "leader_type", v)?; }
+        if let Some(v) = &self.leader_group_primary_key { writeln!(f, "  {: >28}: {:?}", "leader_group_primary_key", v)?; }
+        if let Some(v) = &self.leader_activity_id { writeln!(f, "  {: >28}: {:?}", "leader_activity_id", v)?; }
+        if let Some(v) = &self.leader_activity_id_string { writeln!(f, "  {: >28}: {:?}", "leader_activity_id_string", v)?; }
+        if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v)?; }
         
         Ok(())
     }
@@ -39851,17 +39851,17 @@ pub struct FitMessageSegmentId {
 
 impl fmt::Display for FitMessageSegmentId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSegmentId");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
-        if let Some(v) = &self.user_profile_primary_key { writeln!(f, "  {: >28}: {:?}", "user_profile_primary_key", v); }
-        if let Some(v) = &self.device_id { writeln!(f, "  {: >28}: {:?}", "device_id", v); }
-        if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v); }
-        if let Some(v) = &self.delete_status { writeln!(f, "  {: >28}: {:?}", "delete_status", v); }
-        if let Some(v) = &self.selection_type { writeln!(f, "  {: >28}: {:?}", "selection_type", v); }
+        writeln!(f, "FitMessageSegmentId")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
+        if let Some(v) = &self.user_profile_primary_key { writeln!(f, "  {: >28}: {:?}", "user_profile_primary_key", v)?; }
+        if let Some(v) = &self.device_id { writeln!(f, "  {: >28}: {:?}", "device_id", v)?; }
+        if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v)?; }
+        if let Some(v) = &self.delete_status { writeln!(f, "  {: >28}: {:?}", "delete_status", v)?; }
+        if let Some(v) = &self.selection_type { writeln!(f, "  {: >28}: {:?}", "selection_type", v)?; }
         
         Ok(())
     }
@@ -40260,95 +40260,95 @@ pub struct FitMessageSegmentLap {
 
 impl fmt::Display for FitMessageSegmentLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSegmentLap");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
-        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
-        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
-        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v); }
-        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v); }
-        if let Some(v) = &self.end_position_lat { writeln!(f, "  {: >28}: {:?}", "end_position_lat", v); }
-        if let Some(v) = &self.end_position_long { writeln!(f, "  {: >28}: {:?}", "end_position_long", v); }
-        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
-        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
-        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v); }
-        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes);
-        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
-        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
-        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v); }
-        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
-        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v); }
-        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v); }
-        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
-        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v); }
-        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v); }
-        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v); }
-        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v); }
-        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v); }
-        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
-        if let Some(v) = &self.nec_lat { writeln!(f, "  {: >28}: {:?}", "nec_lat", v); }
-        if let Some(v) = &self.nec_long { writeln!(f, "  {: >28}: {:?}", "nec_long", v); }
-        if let Some(v) = &self.swc_lat { writeln!(f, "  {: >28}: {:?}", "swc_lat", v); }
-        if let Some(v) = &self.swc_long { writeln!(f, "  {: >28}: {:?}", "swc_long", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v); }
-        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v); }
-        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v); }
-        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v); }
-        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
-        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v); }
-        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v); }
-        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v); }
-        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v); }
-        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v); }
-        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v); }
-        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v); }
-        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v); }
-        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v); }
-        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v); }
-        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v); }
-        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v); }
-        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v); }
-        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v); }
-        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v); }
-        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v); }
-        if let Some(v) = &self.repetition_num { writeln!(f, "  {: >28}: {:?}", "repetition_num", v); }
-        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v); }
-        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v); }
-        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v); }
-        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v); }
-        if let Some(v) = &self.sport_event { writeln!(f, "  {: >28}: {:?}", "sport_event", v); }
-        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v); }
-        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v); }
-        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v); }
-        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v); }
-        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v); }
-        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v); }
-        if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v); }
-        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v); }
-        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v); }
-        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v); }
-        if let Some(v) = &self.front_gear_shift_count { writeln!(f, "  {: >28}: {:?}", "front_gear_shift_count", v); }
-        if let Some(v) = &self.rear_gear_shift_count { writeln!(f, "  {: >28}: {:?}", "rear_gear_shift_count", v); }
-        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v); }
-        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v); }
-        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v); }
-        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v); }
-        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v); }
-        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v); }
-        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v); }
-        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v); }
-        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v); }
-        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v); }
-        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v); }
-        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v); }
-        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        writeln!(f, "FitMessageSegmentLap")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v)?; }
+        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v)?; }
+        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v)?; }
+        if let Some(v) = &self.end_position_lat { writeln!(f, "  {: >28}: {:?}", "end_position_lat", v)?; }
+        if let Some(v) = &self.end_position_long { writeln!(f, "  {: >28}: {:?}", "end_position_long", v)?; }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v)?; }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v)?; }
+        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes)?;
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v)?; }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v)?; }
+        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v)?; }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v)?; }
+        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v)?; }
+        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v)?; }
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v)?; }
+        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v)?; }
+        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v)?; }
+        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v)?; }
+        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v)?; }
+        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v)?; }
+        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
+        if let Some(v) = &self.nec_lat { writeln!(f, "  {: >28}: {:?}", "nec_lat", v)?; }
+        if let Some(v) = &self.nec_long { writeln!(f, "  {: >28}: {:?}", "nec_long", v)?; }
+        if let Some(v) = &self.swc_lat { writeln!(f, "  {: >28}: {:?}", "swc_lat", v)?; }
+        if let Some(v) = &self.swc_long { writeln!(f, "  {: >28}: {:?}", "swc_long", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v)?; }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v)?; }
+        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v)?; }
+        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v)?; }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v)?; }
+        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v)?; }
+        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v)?; }
+        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v)?; }
+        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v)?; }
+        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v)?; }
+        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v)?; }
+        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v)?; }
+        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v)?; }
+        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v)?; }
+        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v)?; }
+        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v)?; }
+        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v)?; }
+        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v)?; }
+        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v)?; }
+        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v)?; }
+        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v)?; }
+        if let Some(v) = &self.repetition_num { writeln!(f, "  {: >28}: {:?}", "repetition_num", v)?; }
+        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v)?; }
+        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v)?; }
+        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v)?; }
+        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v)?; }
+        if let Some(v) = &self.sport_event { writeln!(f, "  {: >28}: {:?}", "sport_event", v)?; }
+        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v)?; }
+        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v)?; }
+        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v)?; }
+        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v)?; }
+        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v)?; }
+        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v)?; }
+        if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v)?; }
+        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v)?; }
+        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v)?; }
+        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v)?; }
+        if let Some(v) = &self.front_gear_shift_count { writeln!(f, "  {: >28}: {:?}", "front_gear_shift_count", v)?; }
+        if let Some(v) = &self.rear_gear_shift_count { writeln!(f, "  {: >28}: {:?}", "rear_gear_shift_count", v)?; }
+        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v)?; }
+        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v)?; }
+        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v)?; }
+        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v)?; }
+        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v)?; }
+        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v)?; }
+        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v)?; }
+        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v)?; }
+        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v)?; }
+        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v)?; }
+        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v)?; }
+        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v)?; }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
         
         Ok(())
     }
@@ -42919,15 +42919,15 @@ pub struct FitMessageSegmentLeaderboardEntry {
 
 impl fmt::Display for FitMessageSegmentLeaderboardEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSegmentLeaderboardEntry");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.group_primary_key { writeln!(f, "  {: >28}: {:?}", "group_primary_key", v); }
-        if let Some(v) = &self.activity_id { writeln!(f, "  {: >28}: {:?}", "activity_id", v); }
-        if let Some(v) = &self.segment_time { writeln!(f, "  {: >28}: {:?}", "segment_time", v); }
-        if let Some(v) = &self.activity_id_string { writeln!(f, "  {: >28}: {:?}", "activity_id_string", v); }
+        writeln!(f, "FitMessageSegmentLeaderboardEntry")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.group_primary_key { writeln!(f, "  {: >28}: {:?}", "group_primary_key", v)?; }
+        if let Some(v) = &self.activity_id { writeln!(f, "  {: >28}: {:?}", "activity_id", v)?; }
+        if let Some(v) = &self.segment_time { writeln!(f, "  {: >28}: {:?}", "segment_time", v)?; }
+        if let Some(v) = &self.activity_id_string { writeln!(f, "  {: >28}: {:?}", "activity_id_string", v)?; }
         
         Ok(())
     }
@@ -43191,14 +43191,14 @@ pub struct FitMessageSegmentPoint {
 
 impl fmt::Display for FitMessageSegmentPoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSegmentPoint");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
-        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
-        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
-        if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v); }
-        if let Some(v) = &self.leader_time { writeln!(f, "  {: >28}: {:?}", "leader_time", v); }
+        writeln!(f, "FitMessageSegmentPoint")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v)?; }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v)?; }
+        if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v)?; }
+        if let Some(v) = &self.leader_time { writeln!(f, "  {: >28}: {:?}", "leader_time", v)?; }
         
         Ok(())
     }
@@ -43687,130 +43687,130 @@ pub struct FitMessageSession {
 
 impl fmt::Display for FitMessageSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSession");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
-        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
-        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
-        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v); }
-        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
-        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
-        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v); }
-        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes);
-        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
-        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
-        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v); }
-        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
-        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v); }
-        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v); }
-        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
-        writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes);
-        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v); }
-        writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes);
-        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v); }
-        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v); }
-        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v); }
-        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v); }
-        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v); }
-        if let Some(v) = &self.total_training_effect { writeln!(f, "  {: >28}: {:?}", "total_training_effect", v); }
-        if let Some(v) = &self.first_lap_index { writeln!(f, "  {: >28}: {:?}", "first_lap_index", v); }
-        if let Some(v) = &self.num_laps { writeln!(f, "  {: >28}: {:?}", "num_laps", v); }
-        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
-        if let Some(v) = &self.trigger { writeln!(f, "  {: >28}: {:?}", "trigger", v); }
-        if let Some(v) = &self.nec_lat { writeln!(f, "  {: >28}: {:?}", "nec_lat", v); }
-        if let Some(v) = &self.nec_long { writeln!(f, "  {: >28}: {:?}", "nec_long", v); }
-        if let Some(v) = &self.swc_lat { writeln!(f, "  {: >28}: {:?}", "swc_lat", v); }
-        if let Some(v) = &self.swc_long { writeln!(f, "  {: >28}: {:?}", "swc_long", v); }
-        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v); }
-        if let Some(v) = &self.training_stress_score { writeln!(f, "  {: >28}: {:?}", "training_stress_score", v); }
-        if let Some(v) = &self.intensity_factor { writeln!(f, "  {: >28}: {:?}", "intensity_factor", v); }
-        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
-        if let Some(v) = &self.avg_stroke_count { writeln!(f, "  {: >28}: {:?}", "avg_stroke_count", v); }
-        if let Some(v) = &self.avg_stroke_distance { writeln!(f, "  {: >28}: {:?}", "avg_stroke_distance", v); }
-        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v); }
-        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v); }
-        if let Some(v) = &self.threshold_power { writeln!(f, "  {: >28}: {:?}", "threshold_power", v); }
-        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v); }
-        if let Some(v) = &self.num_active_lengths { writeln!(f, "  {: >28}: {:?}", "num_active_lengths", v); }
-        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v); }
-        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v); }
-        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v); }
-        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
-        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v); }
-        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v); }
-        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v); }
-        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v); }
-        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v); }
-        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v); }
-        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v); }
-        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v); }
-        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v); }
-        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v); }
-        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v); }
-        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v); }
-        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v); }
-        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v); }
-        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v); }
-        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v); }
-        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v); }
-        if let Some(v) = &self.avg_lap_time { writeln!(f, "  {: >28}: {:?}", "avg_lap_time", v); }
-        if let Some(v) = &self.best_lap_index { writeln!(f, "  {: >28}: {:?}", "best_lap_index", v); }
-        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v); }
-        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v); }
-        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
-        if let Some(v) = &self.opponent_name { writeln!(f, "  {: >28}: {:?}", "opponent_name", v); }
-        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v); }
-        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v); }
-        if let Some(v) = &self.max_ball_speed { writeln!(f, "  {: >28}: {:?}", "max_ball_speed", v); }
-        if let Some(v) = &self.avg_ball_speed { writeln!(f, "  {: >28}: {:?}", "avg_ball_speed", v); }
-        if let Some(v) = &self.avg_vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "avg_vertical_oscillation", v); }
-        if let Some(v) = &self.avg_stance_time_percent { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_percent", v); }
-        if let Some(v) = &self.avg_stance_time { writeln!(f, "  {: >28}: {:?}", "avg_stance_time", v); }
-        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v); }
-        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v); }
-        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v); }
-        if let Some(v) = &self.avg_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "avg_total_hemoglobin_conc", v); }
-        if let Some(v) = &self.min_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "min_total_hemoglobin_conc", v); }
-        if let Some(v) = &self.max_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "max_total_hemoglobin_conc", v); }
-        if let Some(v) = &self.avg_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "avg_saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.min_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "min_saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.max_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "max_saturated_hemoglobin_percent", v); }
-        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v); }
-        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v); }
-        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v); }
-        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v); }
-        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v); }
-        if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v); }
-        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v); }
-        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v); }
-        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v); }
-        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v); }
-        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v); }
-        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v); }
-        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v); }
-        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v); }
-        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v); }
-        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v); }
-        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v); }
-        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v); }
-        if let Some(v) = &self.enhanced_avg_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_speed", v); }
-        if let Some(v) = &self.enhanced_max_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_max_speed", v); }
-        if let Some(v) = &self.enhanced_avg_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_altitude", v); }
-        if let Some(v) = &self.enhanced_min_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_min_altitude", v); }
-        if let Some(v) = &self.enhanced_max_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_max_altitude", v); }
-        if let Some(v) = &self.avg_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "avg_lev_motor_power", v); }
-        if let Some(v) = &self.max_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "max_lev_motor_power", v); }
-        if let Some(v) = &self.lev_battery_consumption { writeln!(f, "  {: >28}: {:?}", "lev_battery_consumption", v); }
-        if let Some(v) = &self.avg_vertical_ratio { writeln!(f, "  {: >28}: {:?}", "avg_vertical_ratio", v); }
-        if let Some(v) = &self.avg_stance_time_balance { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_balance", v); }
-        if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v); }
-        if let Some(v) = &self.total_anaerobic_training_effect { writeln!(f, "  {: >28}: {:?}", "total_anaerobic_training_effect", v); }
-        if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v); }
+        writeln!(f, "FitMessageSession")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v)?; }
+        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v)?; }
+        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v)?; }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v)?; }
+        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes)?;
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v)?; }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v)?; }
+        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v)?; }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v)?; }
+        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v)?; }
+        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v)?; }
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes)?;
+        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes)?;
+        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v)?; }
+        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v)?; }
+        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v)?; }
+        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v)?; }
+        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v)?; }
+        if let Some(v) = &self.total_training_effect { writeln!(f, "  {: >28}: {:?}", "total_training_effect", v)?; }
+        if let Some(v) = &self.first_lap_index { writeln!(f, "  {: >28}: {:?}", "first_lap_index", v)?; }
+        if let Some(v) = &self.num_laps { writeln!(f, "  {: >28}: {:?}", "num_laps", v)?; }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
+        if let Some(v) = &self.trigger { writeln!(f, "  {: >28}: {:?}", "trigger", v)?; }
+        if let Some(v) = &self.nec_lat { writeln!(f, "  {: >28}: {:?}", "nec_lat", v)?; }
+        if let Some(v) = &self.nec_long { writeln!(f, "  {: >28}: {:?}", "nec_long", v)?; }
+        if let Some(v) = &self.swc_lat { writeln!(f, "  {: >28}: {:?}", "swc_lat", v)?; }
+        if let Some(v) = &self.swc_long { writeln!(f, "  {: >28}: {:?}", "swc_long", v)?; }
+        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v)?; }
+        if let Some(v) = &self.training_stress_score { writeln!(f, "  {: >28}: {:?}", "training_stress_score", v)?; }
+        if let Some(v) = &self.intensity_factor { writeln!(f, "  {: >28}: {:?}", "intensity_factor", v)?; }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v)?; }
+        if let Some(v) = &self.avg_stroke_count { writeln!(f, "  {: >28}: {:?}", "avg_stroke_count", v)?; }
+        if let Some(v) = &self.avg_stroke_distance { writeln!(f, "  {: >28}: {:?}", "avg_stroke_distance", v)?; }
+        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v)?; }
+        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v)?; }
+        if let Some(v) = &self.threshold_power { writeln!(f, "  {: >28}: {:?}", "threshold_power", v)?; }
+        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v)?; }
+        if let Some(v) = &self.num_active_lengths { writeln!(f, "  {: >28}: {:?}", "num_active_lengths", v)?; }
+        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v)?; }
+        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v)?; }
+        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v)?; }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v)?; }
+        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v)?; }
+        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v)?; }
+        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v)?; }
+        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v)?; }
+        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v)?; }
+        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v)?; }
+        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v)?; }
+        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v)?; }
+        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v)?; }
+        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v)?; }
+        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v)?; }
+        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v)?; }
+        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v)?; }
+        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v)?; }
+        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v)?; }
+        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v)?; }
+        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v)?; }
+        if let Some(v) = &self.avg_lap_time { writeln!(f, "  {: >28}: {:?}", "avg_lap_time", v)?; }
+        if let Some(v) = &self.best_lap_index { writeln!(f, "  {: >28}: {:?}", "best_lap_index", v)?; }
+        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v)?; }
+        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v)?; }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v)?; }
+        if let Some(v) = &self.opponent_name { writeln!(f, "  {: >28}: {:?}", "opponent_name", v)?; }
+        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v)?; }
+        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v)?; }
+        if let Some(v) = &self.max_ball_speed { writeln!(f, "  {: >28}: {:?}", "max_ball_speed", v)?; }
+        if let Some(v) = &self.avg_ball_speed { writeln!(f, "  {: >28}: {:?}", "avg_ball_speed", v)?; }
+        if let Some(v) = &self.avg_vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "avg_vertical_oscillation", v)?; }
+        if let Some(v) = &self.avg_stance_time_percent { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_percent", v)?; }
+        if let Some(v) = &self.avg_stance_time { writeln!(f, "  {: >28}: {:?}", "avg_stance_time", v)?; }
+        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v)?; }
+        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v)?; }
+        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v)?; }
+        if let Some(v) = &self.avg_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "avg_total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.min_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "min_total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.max_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "max_total_hemoglobin_conc", v)?; }
+        if let Some(v) = &self.avg_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "avg_saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.min_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "min_saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.max_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "max_saturated_hemoglobin_percent", v)?; }
+        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v)?; }
+        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v)?; }
+        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v)?; }
+        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v)?; }
+        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v)?; }
+        if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v)?; }
+        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v)?; }
+        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v)?; }
+        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v)?; }
+        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v)?; }
+        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v)?; }
+        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v)?; }
+        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v)?; }
+        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v)?; }
+        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v)?; }
+        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v)?; }
+        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v)?; }
+        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v)?; }
+        if let Some(v) = &self.enhanced_avg_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_speed", v)?; }
+        if let Some(v) = &self.enhanced_max_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_max_speed", v)?; }
+        if let Some(v) = &self.enhanced_avg_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_altitude", v)?; }
+        if let Some(v) = &self.enhanced_min_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_min_altitude", v)?; }
+        if let Some(v) = &self.enhanced_max_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_max_altitude", v)?; }
+        if let Some(v) = &self.avg_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "avg_lev_motor_power", v)?; }
+        if let Some(v) = &self.max_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "max_lev_motor_power", v)?; }
+        if let Some(v) = &self.lev_battery_consumption { writeln!(f, "  {: >28}: {:?}", "lev_battery_consumption", v)?; }
+        if let Some(v) = &self.avg_vertical_ratio { writeln!(f, "  {: >28}: {:?}", "avg_vertical_ratio", v)?; }
+        if let Some(v) = &self.avg_stance_time_balance { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_balance", v)?; }
+        if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v)?; }
+        if let Some(v) = &self.total_anaerobic_training_effect { writeln!(f, "  {: >28}: {:?}", "total_anaerobic_training_effect", v)?; }
+        if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v)?; }
         
         Ok(())
     }
@@ -47465,19 +47465,19 @@ pub struct FitMessageSet {
 
 impl fmt::Display for FitMessageSet {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSet");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v); }
-        if let Some(v) = &self.repetitions { writeln!(f, "  {: >28}: {:?}", "repetitions", v); }
-        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v); }
-        if let Some(v) = &self.set_type { writeln!(f, "  {: >28}: {:?}", "set_type", v); }
-        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
-        if let Some(v) = &self.category { writeln!(f, "  {: >28}: {:?}", "category", v); }
-        if let Some(v) = &self.category_subtype { writeln!(f, "  {: >28}: {:?}", "category_subtype", v); }
-        if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v); }
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v); }
+        writeln!(f, "FitMessageSet")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v)?; }
+        if let Some(v) = &self.repetitions { writeln!(f, "  {: >28}: {:?}", "repetitions", v)?; }
+        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v)?; }
+        if let Some(v) = &self.set_type { writeln!(f, "  {: >28}: {:?}", "set_type", v)?; }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v)?; }
+        if let Some(v) = &self.category { writeln!(f, "  {: >28}: {:?}", "category", v)?; }
+        if let Some(v) = &self.category_subtype { writeln!(f, "  {: >28}: {:?}", "category_subtype", v)?; }
+        if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v)?; }
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v)?; }
         
         Ok(())
     }
@@ -47923,11 +47923,11 @@ pub struct FitMessageSlaveDevice {
 
 impl fmt::Display for FitMessageSlaveDevice {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSlaveDevice");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
-        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
-        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
+        writeln!(f, "FitMessageSlaveDevice")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
         
         Ok(())
     }
@@ -48092,11 +48092,11 @@ pub struct FitMessageSoftware {
 
 impl fmt::Display for FitMessageSoftware {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSoftware");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.version { writeln!(f, "  {: >28}: {:?}", "version", v); }
-        if let Some(v) = &self.part_number { writeln!(f, "  {: >28}: {:?}", "part_number", v); }
+        writeln!(f, "FitMessageSoftware")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.version { writeln!(f, "  {: >28}: {:?}", "version", v)?; }
+        if let Some(v) = &self.part_number { writeln!(f, "  {: >28}: {:?}", "part_number", v)?; }
         
         Ok(())
     }
@@ -48273,11 +48273,11 @@ pub struct FitMessageSpeedZone {
 
 impl fmt::Display for FitMessageSpeedZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSpeedZone");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        writeln!(f, "FitMessageSpeedZone")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
         Ok(())
     }
@@ -48454,11 +48454,11 @@ pub struct FitMessageSport {
 
 impl fmt::Display for FitMessageSport {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageSport");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        writeln!(f, "FitMessageSport")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
         Ok(())
     }
@@ -48622,10 +48622,10 @@ pub struct FitMessageStressLevel {
 
 impl fmt::Display for FitMessageStressLevel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageStressLevel");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.stress_level_value { writeln!(f, "  {: >28}: {:?}", "stress_level_value", v); }
-        if let Some(v) = &self.stress_level_time { writeln!(f, "  {: >28}: {:?}", "stress_level_time", v); }
+        writeln!(f, "FitMessageStressLevel")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.stress_level_value { writeln!(f, "  {: >28}: {:?}", "stress_level_value", v)?; }
+        if let Some(v) = &self.stress_level_time { writeln!(f, "  {: >28}: {:?}", "stress_level_time", v)?; }
         
         Ok(())
     }
@@ -48805,16 +48805,16 @@ pub struct FitMessageThreeDSensorCalibration {
 
 impl fmt::Display for FitMessageThreeDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageThreeDSensorCalibration");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v); }
-        writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes);
-        if let Some(v) = &self.calibration_factor { writeln!(f, "  {: >28}: {:?}", "calibration_factor", v); }
-        if let Some(v) = &self.calibration_divisor { writeln!(f, "  {: >28}: {:?}", "calibration_divisor", v); }
-        if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v); }
-        if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v); }
-        if let Some(v) = &self.orientation_matrix { writeln!(f, "  {: >28}: {:?}", "orientation_matrix", v); }
+        writeln!(f, "FitMessageThreeDSensorCalibration")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes)?;
+        if let Some(v) = &self.calibration_factor { writeln!(f, "  {: >28}: {:?}", "calibration_factor", v)?; }
+        if let Some(v) = &self.calibration_divisor { writeln!(f, "  {: >28}: {:?}", "calibration_divisor", v)?; }
+        if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v)?; }
+        if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v)?; }
+        if let Some(v) = &self.orientation_matrix { writeln!(f, "  {: >28}: {:?}", "orientation_matrix", v)?; }
         
         Ok(())
     }
@@ -49134,15 +49134,15 @@ pub struct FitMessageTimestampCorrelation {
 
 impl fmt::Display for FitMessageTimestampCorrelation {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageTimestampCorrelation");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
-        if let Some(v) = &self.system_timestamp { writeln!(f, "  {: >28}: {:?}", "system_timestamp", v); }
-        if let Some(v) = &self.fractional_system_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_system_timestamp", v); }
-        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.system_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "system_timestamp_ms", v); }
+        writeln!(f, "FitMessageTimestampCorrelation")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
+        if let Some(v) = &self.system_timestamp { writeln!(f, "  {: >28}: {:?}", "system_timestamp", v)?; }
+        if let Some(v) = &self.fractional_system_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_system_timestamp", v)?; }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.system_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "system_timestamp_ms", v)?; }
         
         Ok(())
     }
@@ -49436,18 +49436,18 @@ pub struct FitMessageTotals {
 
 impl fmt::Display for FitMessageTotals {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageTotals");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timer_time { writeln!(f, "  {: >28}: {:?}", "timer_time", v); }
-        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
-        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.elapsed_time { writeln!(f, "  {: >28}: {:?}", "elapsed_time", v); }
-        if let Some(v) = &self.sessions { writeln!(f, "  {: >28}: {:?}", "sessions", v); }
-        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v); }
-        if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v); }
+        writeln!(f, "FitMessageTotals")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timer_time { writeln!(f, "  {: >28}: {:?}", "timer_time", v)?; }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v)?; }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.elapsed_time { writeln!(f, "  {: >28}: {:?}", "elapsed_time", v)?; }
+        if let Some(v) = &self.sessions { writeln!(f, "  {: >28}: {:?}", "sessions", v)?; }
+        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v)?; }
+        if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v)?; }
         
         Ok(())
     }
@@ -49820,15 +49820,15 @@ pub struct FitMessageTrainingFile {
 
 impl fmt::Display for FitMessageTrainingFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageTrainingFile");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
-        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
-        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
-        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
-        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
-        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v); }
+        writeln!(f, "FitMessageTrainingFile")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v)?; }
+        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v)?; }
         
         Ok(())
     }
@@ -50117,37 +50117,37 @@ pub struct FitMessageUserProfile {
 
 impl fmt::Display for FitMessageUserProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageUserProfile");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.friendly_name { writeln!(f, "  {: >28}: {:?}", "friendly_name", v); }
-        if let Some(v) = &self.gender { writeln!(f, "  {: >28}: {:?}", "gender", v); }
-        if let Some(v) = &self.age { writeln!(f, "  {: >28}: {:?}", "age", v); }
-        if let Some(v) = &self.height { writeln!(f, "  {: >28}: {:?}", "height", v); }
-        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v); }
-        if let Some(v) = &self.language { writeln!(f, "  {: >28}: {:?}", "language", v); }
-        if let Some(v) = &self.elev_setting { writeln!(f, "  {: >28}: {:?}", "elev_setting", v); }
-        if let Some(v) = &self.weight_setting { writeln!(f, "  {: >28}: {:?}", "weight_setting", v); }
-        if let Some(v) = &self.resting_heart_rate { writeln!(f, "  {: >28}: {:?}", "resting_heart_rate", v); }
-        if let Some(v) = &self.default_max_running_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_running_heart_rate", v); }
-        if let Some(v) = &self.default_max_biking_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_biking_heart_rate", v); }
-        if let Some(v) = &self.default_max_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_heart_rate", v); }
-        if let Some(v) = &self.hr_setting { writeln!(f, "  {: >28}: {:?}", "hr_setting", v); }
-        if let Some(v) = &self.speed_setting { writeln!(f, "  {: >28}: {:?}", "speed_setting", v); }
-        if let Some(v) = &self.dist_setting { writeln!(f, "  {: >28}: {:?}", "dist_setting", v); }
-        if let Some(v) = &self.power_setting { writeln!(f, "  {: >28}: {:?}", "power_setting", v); }
-        if let Some(v) = &self.activity_class { writeln!(f, "  {: >28}: {:?}", "activity_class", v); }
-        if let Some(v) = &self.position_setting { writeln!(f, "  {: >28}: {:?}", "position_setting", v); }
-        if let Some(v) = &self.temperature_setting { writeln!(f, "  {: >28}: {:?}", "temperature_setting", v); }
-        if let Some(v) = &self.local_id { writeln!(f, "  {: >28}: {:?}", "local_id", v); }
-        if let Some(v) = &self.global_id { writeln!(f, "  {: >28}: {:?}", "global_id", v); }
-        if let Some(v) = &self.wake_time { writeln!(f, "  {: >28}: {:?}", "wake_time", v); }
-        if let Some(v) = &self.sleep_time { writeln!(f, "  {: >28}: {:?}", "sleep_time", v); }
-        if let Some(v) = &self.height_setting { writeln!(f, "  {: >28}: {:?}", "height_setting", v); }
-        if let Some(v) = &self.user_running_step_length { writeln!(f, "  {: >28}: {:?}", "user_running_step_length", v); }
-        if let Some(v) = &self.user_walking_step_length { writeln!(f, "  {: >28}: {:?}", "user_walking_step_length", v); }
-        if let Some(v) = &self.depth_setting { writeln!(f, "  {: >28}: {:?}", "depth_setting", v); }
-        if let Some(v) = &self.dive_count { writeln!(f, "  {: >28}: {:?}", "dive_count", v); }
+        writeln!(f, "FitMessageUserProfile")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.friendly_name { writeln!(f, "  {: >28}: {:?}", "friendly_name", v)?; }
+        if let Some(v) = &self.gender { writeln!(f, "  {: >28}: {:?}", "gender", v)?; }
+        if let Some(v) = &self.age { writeln!(f, "  {: >28}: {:?}", "age", v)?; }
+        if let Some(v) = &self.height { writeln!(f, "  {: >28}: {:?}", "height", v)?; }
+        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v)?; }
+        if let Some(v) = &self.language { writeln!(f, "  {: >28}: {:?}", "language", v)?; }
+        if let Some(v) = &self.elev_setting { writeln!(f, "  {: >28}: {:?}", "elev_setting", v)?; }
+        if let Some(v) = &self.weight_setting { writeln!(f, "  {: >28}: {:?}", "weight_setting", v)?; }
+        if let Some(v) = &self.resting_heart_rate { writeln!(f, "  {: >28}: {:?}", "resting_heart_rate", v)?; }
+        if let Some(v) = &self.default_max_running_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_running_heart_rate", v)?; }
+        if let Some(v) = &self.default_max_biking_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_biking_heart_rate", v)?; }
+        if let Some(v) = &self.default_max_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_heart_rate", v)?; }
+        if let Some(v) = &self.hr_setting { writeln!(f, "  {: >28}: {:?}", "hr_setting", v)?; }
+        if let Some(v) = &self.speed_setting { writeln!(f, "  {: >28}: {:?}", "speed_setting", v)?; }
+        if let Some(v) = &self.dist_setting { writeln!(f, "  {: >28}: {:?}", "dist_setting", v)?; }
+        if let Some(v) = &self.power_setting { writeln!(f, "  {: >28}: {:?}", "power_setting", v)?; }
+        if let Some(v) = &self.activity_class { writeln!(f, "  {: >28}: {:?}", "activity_class", v)?; }
+        if let Some(v) = &self.position_setting { writeln!(f, "  {: >28}: {:?}", "position_setting", v)?; }
+        if let Some(v) = &self.temperature_setting { writeln!(f, "  {: >28}: {:?}", "temperature_setting", v)?; }
+        if let Some(v) = &self.local_id { writeln!(f, "  {: >28}: {:?}", "local_id", v)?; }
+        if let Some(v) = &self.global_id { writeln!(f, "  {: >28}: {:?}", "global_id", v)?; }
+        if let Some(v) = &self.wake_time { writeln!(f, "  {: >28}: {:?}", "wake_time", v)?; }
+        if let Some(v) = &self.sleep_time { writeln!(f, "  {: >28}: {:?}", "sleep_time", v)?; }
+        if let Some(v) = &self.height_setting { writeln!(f, "  {: >28}: {:?}", "height_setting", v)?; }
+        if let Some(v) = &self.user_running_step_length { writeln!(f, "  {: >28}: {:?}", "user_running_step_length", v)?; }
+        if let Some(v) = &self.user_walking_step_length { writeln!(f, "  {: >28}: {:?}", "user_walking_step_length", v)?; }
+        if let Some(v) = &self.depth_setting { writeln!(f, "  {: >28}: {:?}", "depth_setting", v)?; }
+        if let Some(v) = &self.dive_count { writeln!(f, "  {: >28}: {:?}", "dive_count", v)?; }
         
         Ok(())
     }
@@ -50906,11 +50906,11 @@ pub struct FitMessageVideo {
 
 impl fmt::Display for FitMessageVideo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageVideo");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.url { writeln!(f, "  {: >28}: {:?}", "url", v); }
-        if let Some(v) = &self.hosting_provider { writeln!(f, "  {: >28}: {:?}", "hosting_provider", v); }
-        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v); }
+        writeln!(f, "FitMessageVideo")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.url { writeln!(f, "  {: >28}: {:?}", "url", v)?; }
+        if let Some(v) = &self.hosting_provider { writeln!(f, "  {: >28}: {:?}", "hosting_provider", v)?; }
+        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v)?; }
         
         Ok(())
     }
@@ -51079,15 +51079,15 @@ pub struct FitMessageVideoClip {
 
 impl fmt::Display for FitMessageVideoClip {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageVideoClip");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.clip_number { writeln!(f, "  {: >28}: {:?}", "clip_number", v); }
-        if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v); }
-        if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v); }
-        if let Some(v) = &self.end_timestamp { writeln!(f, "  {: >28}: {:?}", "end_timestamp", v); }
-        if let Some(v) = &self.end_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "end_timestamp_ms", v); }
-        if let Some(v) = &self.clip_start { writeln!(f, "  {: >28}: {:?}", "clip_start", v); }
-        if let Some(v) = &self.clip_end { writeln!(f, "  {: >28}: {:?}", "clip_end", v); }
+        writeln!(f, "FitMessageVideoClip")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.clip_number { writeln!(f, "  {: >28}: {:?}", "clip_number", v)?; }
+        if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v)?; }
+        if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v)?; }
+        if let Some(v) = &self.end_timestamp { writeln!(f, "  {: >28}: {:?}", "end_timestamp", v)?; }
+        if let Some(v) = &self.end_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "end_timestamp_ms", v)?; }
+        if let Some(v) = &self.clip_start { writeln!(f, "  {: >28}: {:?}", "clip_start", v)?; }
+        if let Some(v) = &self.clip_end { writeln!(f, "  {: >28}: {:?}", "clip_end", v)?; }
         
         Ok(())
     }
@@ -51336,11 +51336,11 @@ pub struct FitMessageVideoDescription {
 
 impl fmt::Display for FitMessageVideoDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageVideoDescription");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v); }
-        if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v); }
+        writeln!(f, "FitMessageVideoDescription")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v)?; }
+        if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v)?; }
         
         Ok(())
     }
@@ -51505,11 +51505,11 @@ pub struct FitMessageVideoFrame {
 
 impl fmt::Display for FitMessageVideoFrame {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageVideoFrame");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
-        if let Some(v) = &self.frame_number { writeln!(f, "  {: >28}: {:?}", "frame_number", v); }
+        writeln!(f, "FitMessageVideoFrame")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
+        if let Some(v) = &self.frame_number { writeln!(f, "  {: >28}: {:?}", "frame_number", v)?; }
         
         Ok(())
     }
@@ -51688,11 +51688,11 @@ pub struct FitMessageVideoTitle {
 
 impl fmt::Display for FitMessageVideoTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageVideoTitle");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v); }
-        if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v); }
+        writeln!(f, "FitMessageVideoTitle")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v)?; }
+        if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v)?; }
         
         Ok(())
     }
@@ -51889,12 +51889,12 @@ pub struct FitMessageWatchfaceSettings {
 
 impl fmt::Display for FitMessageWatchfaceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWatchfaceSettings");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.mode { writeln!(f, "  {: >28}: {:?}", "mode", v); }
-        writeln!(f, "  {: >28}: {:?}", "layout_subfield_bytes", self.layout_subfield_bytes);
-        if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v); }
+        writeln!(f, "FitMessageWatchfaceSettings")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.mode { writeln!(f, "  {: >28}: {:?}", "mode", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "layout_subfield_bytes", self.layout_subfield_bytes)?;
+        if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v)?; }
         
         Ok(())
     }
@@ -52083,14 +52083,14 @@ pub struct FitMessageWeatherAlert {
 
 impl fmt::Display for FitMessageWeatherAlert {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWeatherAlert");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.report_id { writeln!(f, "  {: >28}: {:?}", "report_id", v); }
-        if let Some(v) = &self.issue_time { writeln!(f, "  {: >28}: {:?}", "issue_time", v); }
-        if let Some(v) = &self.expire_time { writeln!(f, "  {: >28}: {:?}", "expire_time", v); }
-        if let Some(v) = &self.severity { writeln!(f, "  {: >28}: {:?}", "severity", v); }
-        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        writeln!(f, "FitMessageWeatherAlert")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.report_id { writeln!(f, "  {: >28}: {:?}", "report_id", v)?; }
+        if let Some(v) = &self.issue_time { writeln!(f, "  {: >28}: {:?}", "issue_time", v)?; }
+        if let Some(v) = &self.expire_time { writeln!(f, "  {: >28}: {:?}", "expire_time", v)?; }
+        if let Some(v) = &self.severity { writeln!(f, "  {: >28}: {:?}", "severity", v)?; }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
         
         Ok(())
     }
@@ -52345,24 +52345,24 @@ pub struct FitMessageWeatherConditions {
 
 impl fmt::Display for FitMessageWeatherConditions {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWeatherConditions");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.weather_report { writeln!(f, "  {: >28}: {:?}", "weather_report", v); }
-        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v); }
-        if let Some(v) = &self.condition { writeln!(f, "  {: >28}: {:?}", "condition", v); }
-        if let Some(v) = &self.wind_direction { writeln!(f, "  {: >28}: {:?}", "wind_direction", v); }
-        if let Some(v) = &self.wind_speed { writeln!(f, "  {: >28}: {:?}", "wind_speed", v); }
-        if let Some(v) = &self.precipitation_probability { writeln!(f, "  {: >28}: {:?}", "precipitation_probability", v); }
-        if let Some(v) = &self.temperature_feels_like { writeln!(f, "  {: >28}: {:?}", "temperature_feels_like", v); }
-        if let Some(v) = &self.relative_humidity { writeln!(f, "  {: >28}: {:?}", "relative_humidity", v); }
-        if let Some(v) = &self.location { writeln!(f, "  {: >28}: {:?}", "location", v); }
-        if let Some(v) = &self.observed_at_time { writeln!(f, "  {: >28}: {:?}", "observed_at_time", v); }
-        if let Some(v) = &self.observed_location_lat { writeln!(f, "  {: >28}: {:?}", "observed_location_lat", v); }
-        if let Some(v) = &self.observed_location_long { writeln!(f, "  {: >28}: {:?}", "observed_location_long", v); }
-        if let Some(v) = &self.day_of_week { writeln!(f, "  {: >28}: {:?}", "day_of_week", v); }
-        if let Some(v) = &self.high_temperature { writeln!(f, "  {: >28}: {:?}", "high_temperature", v); }
-        if let Some(v) = &self.low_temperature { writeln!(f, "  {: >28}: {:?}", "low_temperature", v); }
+        writeln!(f, "FitMessageWeatherConditions")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.weather_report { writeln!(f, "  {: >28}: {:?}", "weather_report", v)?; }
+        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v)?; }
+        if let Some(v) = &self.condition { writeln!(f, "  {: >28}: {:?}", "condition", v)?; }
+        if let Some(v) = &self.wind_direction { writeln!(f, "  {: >28}: {:?}", "wind_direction", v)?; }
+        if let Some(v) = &self.wind_speed { writeln!(f, "  {: >28}: {:?}", "wind_speed", v)?; }
+        if let Some(v) = &self.precipitation_probability { writeln!(f, "  {: >28}: {:?}", "precipitation_probability", v)?; }
+        if let Some(v) = &self.temperature_feels_like { writeln!(f, "  {: >28}: {:?}", "temperature_feels_like", v)?; }
+        if let Some(v) = &self.relative_humidity { writeln!(f, "  {: >28}: {:?}", "relative_humidity", v)?; }
+        if let Some(v) = &self.location { writeln!(f, "  {: >28}: {:?}", "location", v)?; }
+        if let Some(v) = &self.observed_at_time { writeln!(f, "  {: >28}: {:?}", "observed_at_time", v)?; }
+        if let Some(v) = &self.observed_location_lat { writeln!(f, "  {: >28}: {:?}", "observed_location_lat", v)?; }
+        if let Some(v) = &self.observed_location_long { writeln!(f, "  {: >28}: {:?}", "observed_location_long", v)?; }
+        if let Some(v) = &self.day_of_week { writeln!(f, "  {: >28}: {:?}", "day_of_week", v)?; }
+        if let Some(v) = &self.high_temperature { writeln!(f, "  {: >28}: {:?}", "high_temperature", v)?; }
+        if let Some(v) = &self.low_temperature { writeln!(f, "  {: >28}: {:?}", "low_temperature", v)?; }
         
         Ok(())
     }
@@ -52860,21 +52860,21 @@ pub struct FitMessageWeightScale {
 
 impl fmt::Display for FitMessageWeightScale {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWeightScale");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
-        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v); }
-        if let Some(v) = &self.percent_fat { writeln!(f, "  {: >28}: {:?}", "percent_fat", v); }
-        if let Some(v) = &self.percent_hydration { writeln!(f, "  {: >28}: {:?}", "percent_hydration", v); }
-        if let Some(v) = &self.visceral_fat_mass { writeln!(f, "  {: >28}: {:?}", "visceral_fat_mass", v); }
-        if let Some(v) = &self.bone_mass { writeln!(f, "  {: >28}: {:?}", "bone_mass", v); }
-        if let Some(v) = &self.muscle_mass { writeln!(f, "  {: >28}: {:?}", "muscle_mass", v); }
-        if let Some(v) = &self.basal_met { writeln!(f, "  {: >28}: {:?}", "basal_met", v); }
-        if let Some(v) = &self.physique_rating { writeln!(f, "  {: >28}: {:?}", "physique_rating", v); }
-        if let Some(v) = &self.active_met { writeln!(f, "  {: >28}: {:?}", "active_met", v); }
-        if let Some(v) = &self.metabolic_age { writeln!(f, "  {: >28}: {:?}", "metabolic_age", v); }
-        if let Some(v) = &self.visceral_fat_rating { writeln!(f, "  {: >28}: {:?}", "visceral_fat_rating", v); }
-        if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v); }
+        writeln!(f, "FitMessageWeightScale")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
+        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v)?; }
+        if let Some(v) = &self.percent_fat { writeln!(f, "  {: >28}: {:?}", "percent_fat", v)?; }
+        if let Some(v) = &self.percent_hydration { writeln!(f, "  {: >28}: {:?}", "percent_hydration", v)?; }
+        if let Some(v) = &self.visceral_fat_mass { writeln!(f, "  {: >28}: {:?}", "visceral_fat_mass", v)?; }
+        if let Some(v) = &self.bone_mass { writeln!(f, "  {: >28}: {:?}", "bone_mass", v)?; }
+        if let Some(v) = &self.muscle_mass { writeln!(f, "  {: >28}: {:?}", "muscle_mass", v)?; }
+        if let Some(v) = &self.basal_met { writeln!(f, "  {: >28}: {:?}", "basal_met", v)?; }
+        if let Some(v) = &self.physique_rating { writeln!(f, "  {: >28}: {:?}", "physique_rating", v)?; }
+        if let Some(v) = &self.active_met { writeln!(f, "  {: >28}: {:?}", "active_met", v)?; }
+        if let Some(v) = &self.metabolic_age { writeln!(f, "  {: >28}: {:?}", "metabolic_age", v)?; }
+        if let Some(v) = &self.visceral_fat_rating { writeln!(f, "  {: >28}: {:?}", "visceral_fat_rating", v)?; }
+        if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v)?; }
         
         Ok(())
     }
@@ -53351,15 +53351,15 @@ pub struct FitMessageWorkout {
 
 impl fmt::Display for FitMessageWorkout {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWorkout");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v); }
-        if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v); }
-        if let Some(v) = &self.wkt_name { writeln!(f, "  {: >28}: {:?}", "wkt_name", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v); }
-        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v); }
+        writeln!(f, "FitMessageWorkout")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v)?; }
+        if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v)?; }
+        if let Some(v) = &self.wkt_name { writeln!(f, "  {: >28}: {:?}", "wkt_name", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v)?; }
+        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v)?; }
         
         Ok(())
     }
@@ -53624,15 +53624,15 @@ pub struct FitMessageWorkoutSession {
 
 impl fmt::Display for FitMessageWorkoutSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWorkoutSession");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
-        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
-        if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v); }
-        if let Some(v) = &self.first_step_index { writeln!(f, "  {: >28}: {:?}", "first_step_index", v); }
-        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v); }
-        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v); }
+        writeln!(f, "FitMessageWorkoutSession")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
+        if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v)?; }
+        if let Some(v) = &self.first_step_index { writeln!(f, "  {: >28}: {:?}", "first_step_index", v)?; }
+        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v)?; }
+        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v)?; }
         
         Ok(())
     }
@@ -54236,27 +54236,27 @@ pub struct FitMessageWorkoutStep {
 
 impl fmt::Display for FitMessageWorkoutStep {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageWorkoutStep");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
-        if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v); }
-        if let Some(v) = &self.duration_type { writeln!(f, "  {: >28}: {:?}", "duration_type", v); }
-        writeln!(f, "  {: >28}: {:?}", "duration_value_subfield_bytes", self.duration_value_subfield_bytes);
-        if let Some(v) = &self.duration_value { writeln!(f, "  {: >28}: {:?}", "duration_value", v); }
-        if let Some(v) = &self.target_type { writeln!(f, "  {: >28}: {:?}", "target_type", v); }
-        writeln!(f, "  {: >28}: {:?}", "target_value_subfield_bytes", self.target_value_subfield_bytes);
-        if let Some(v) = &self.target_value { writeln!(f, "  {: >28}: {:?}", "target_value", v); }
-        writeln!(f, "  {: >28}: {:?}", "custom_target_value_low_subfield_bytes", self.custom_target_value_low_subfield_bytes);
-        if let Some(v) = &self.custom_target_value_low { writeln!(f, "  {: >28}: {:?}", "custom_target_value_low", v); }
-        writeln!(f, "  {: >28}: {:?}", "custom_target_value_high_subfield_bytes", self.custom_target_value_high_subfield_bytes);
-        if let Some(v) = &self.custom_target_value_high { writeln!(f, "  {: >28}: {:?}", "custom_target_value_high", v); }
-        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v); }
-        if let Some(v) = &self.notes { writeln!(f, "  {: >28}: {:?}", "notes", v); }
-        if let Some(v) = &self.equipment { writeln!(f, "  {: >28}: {:?}", "equipment", v); }
-        if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v); }
-        if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v); }
-        if let Some(v) = &self.exercise_weight { writeln!(f, "  {: >28}: {:?}", "exercise_weight", v); }
-        if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v); }
+        writeln!(f, "FitMessageWorkoutStep")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
+        if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v)?; }
+        if let Some(v) = &self.duration_type { writeln!(f, "  {: >28}: {:?}", "duration_type", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "duration_value_subfield_bytes", self.duration_value_subfield_bytes)?;
+        if let Some(v) = &self.duration_value { writeln!(f, "  {: >28}: {:?}", "duration_value", v)?; }
+        if let Some(v) = &self.target_type { writeln!(f, "  {: >28}: {:?}", "target_type", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "target_value_subfield_bytes", self.target_value_subfield_bytes)?;
+        if let Some(v) = &self.target_value { writeln!(f, "  {: >28}: {:?}", "target_value", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "custom_target_value_low_subfield_bytes", self.custom_target_value_low_subfield_bytes)?;
+        if let Some(v) = &self.custom_target_value_low { writeln!(f, "  {: >28}: {:?}", "custom_target_value_low", v)?; }
+        writeln!(f, "  {: >28}: {:?}", "custom_target_value_high_subfield_bytes", self.custom_target_value_high_subfield_bytes)?;
+        if let Some(v) = &self.custom_target_value_high { writeln!(f, "  {: >28}: {:?}", "custom_target_value_high", v)?; }
+        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v)?; }
+        if let Some(v) = &self.notes { writeln!(f, "  {: >28}: {:?}", "notes", v)?; }
+        if let Some(v) = &self.equipment { writeln!(f, "  {: >28}: {:?}", "equipment", v)?; }
+        if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v)?; }
+        if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v)?; }
+        if let Some(v) = &self.exercise_weight { writeln!(f, "  {: >28}: {:?}", "exercise_weight", v)?; }
+        if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v)?; }
         
         Ok(())
     }
@@ -54729,13 +54729,13 @@ pub struct FitMessageZonesTarget {
 
 impl fmt::Display for FitMessageZonesTarget {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "FitMessageZonesTarget");
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
-        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
-        if let Some(v) = &self.threshold_heart_rate { writeln!(f, "  {: >28}: {:?}", "threshold_heart_rate", v); }
-        if let Some(v) = &self.functional_threshold_power { writeln!(f, "  {: >28}: {:?}", "functional_threshold_power", v); }
-        if let Some(v) = &self.hr_calc_type { writeln!(f, "  {: >28}: {:?}", "hr_calc_type", v); }
-        if let Some(v) = &self.pwr_calc_type { writeln!(f, "  {: >28}: {:?}", "pwr_calc_type", v); }
+        writeln!(f, "FitMessageZonesTarget")?;
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v)?; }
+        if let Some(v) = &self.threshold_heart_rate { writeln!(f, "  {: >28}: {:?}", "threshold_heart_rate", v)?; }
+        if let Some(v) = &self.functional_threshold_power { writeln!(f, "  {: >28}: {:?}", "functional_threshold_power", v)?; }
+        if let Some(v) = &self.hr_calc_type { writeln!(f, "  {: >28}: {:?}", "hr_calc_type", v)?; }
+        if let Some(v) = &self.pwr_calc_type { writeln!(f, "  {: >28}: {:?}", "pwr_calc_type", v)?; }
         
         Ok(())
     }

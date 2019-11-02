@@ -153,7 +153,7 @@ impl fmt::Display for FitMessage {
                 writeln!(f, "{}", m)
             },
             &FitMessage::Definition(ref m) => {
-                writeln!(f, "Definition");
+                writeln!(f, "Definition")?;
                 writeln!(f, "{}", m)
             }
         }
@@ -259,6 +259,11 @@ pub fn parse_fit_message<'a>(
     }
 
     Ok((Some(fit_message), out))
+}
+
+pub struct FitFieldValue<T> {
+    value: T,
+    units: String,
 }
 
 #[derive(Debug)]
@@ -442,19 +447,18 @@ pub struct FitDefinitionMessage {
 
 impl fmt::Display for FitDefinitionMessage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "  {: >28}: {:?}", "global_mesg_num", self.global_mesg_num);
-        writeln!(f, "  {: >28}: {:?}", "endianness", self.endianness);
-        writeln!(f, "  {: >28}: {}", "num_fields", self.num_fields);
-        writeln!(f, "  {: >28}: {}", "message_size", self.message_size);
-        //writeln!(f, "  {: >28}: {:?}", "field_definitions", self.field_definitions);
-        writeln!(f, "  {: >28}: ", "field_definitions");
+        writeln!(f, "  {: >28}: {:?}", "global_mesg_num", self.global_mesg_num)?;
+        writeln!(f, "  {: >28}: {:?}", "endianness", self.endianness)?;
+        writeln!(f, "  {: >28}: {}", "num_fields", self.num_fields)?;
+        writeln!(f, "  {: >28}: {}", "message_size", self.message_size)?;
+        writeln!(f, "  {: >28}: ", "field_definitions")?;
         for field_definition in &self.field_definitions {
-            writeln!(f, "  {: >30}{:?}", " ", field_definition);
+            writeln!(f, "  {: >30}{:?}", " ", field_definition)?;
         }
-        writeln!(f, "  {: >28}: {}", "num_developer_fields", self.num_developer_fields);
-        writeln!(f, "  {: >28}:", "developer_field_definitions");
+        writeln!(f, "  {: >28}: {}", "num_developer_fields", self.num_developer_fields)?;
+        writeln!(f, "  {: >28}:", "developer_field_definitions")?;
         for developer_field_definition in &self.developer_field_definitions {
-            writeln!(f, "  {: >30}{:?}", " ", developer_field_definition);
+            writeln!(f, "  {: >30}{:?}", " ", developer_field_definition)?;
         }
         Ok(())
     }
