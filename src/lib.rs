@@ -2,6 +2,8 @@ use std::collections::HashMap;
 use std::ops::Deref;
 use std::rc::Rc;
 
+use std::fmt;
+
 extern crate bitvec;
 use bitvec::prelude as bv;
 
@@ -142,6 +144,20 @@ trait FitRecord {
 pub enum FitMessage {
     Data(FitDataMessage),
     Definition(Rc<FitDefinitionMessage>),
+}
+
+impl fmt::Display for FitMessage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            &FitMessage::Data(ref m) => {
+                writeln!(f, "{}", m)
+            },
+            &FitMessage::Definition(ref m) => {
+                writeln!(f, "Definition");
+                writeln!(f, "{}", m)
+            }
+        }
+    }
 }
 
 impl FitMessage {
@@ -338,6 +354,19 @@ enum FitGlobalMesgNum {
     Unknown(u16),
 }
 
+impl fmt::Display for FitGlobalMesgNum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            &FitGlobalMesgNum::Known(ref mesg_num) => {
+                write!(f, "{:?}", mesg_num)
+            },
+            &FitGlobalMesgNum::Unknown(num) => {
+                write!(f, "Unknown Mesg Num ({})", num)
+            }
+        }
+    }
+}
+
 impl FitGlobalMesgNum {
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
         let (raw_num, o) = match parse_uint16(input, endianness)? {
@@ -409,6 +438,26 @@ pub struct FitDefinitionMessage {
     field_definitions: Vec<FitFieldDefinition>,
     num_developer_fields: usize,
     developer_field_definitions: Vec<FitDeveloperFieldDefinition>,
+}
+
+impl fmt::Display for FitDefinitionMessage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "  {: >28}: {:?}", "global_mesg_num", self.global_mesg_num);
+        writeln!(f, "  {: >28}: {:?}", "endianness", self.endianness);
+        writeln!(f, "  {: >28}: {}", "num_fields", self.num_fields);
+        writeln!(f, "  {: >28}: {}", "message_size", self.message_size);
+        //writeln!(f, "  {: >28}: {:?}", "field_definitions", self.field_definitions);
+        writeln!(f, "  {: >28}: ", "field_definitions");
+        for field_definition in &self.field_definitions {
+            writeln!(f, "  {: >30}{:?}", " ", field_definition);
+        }
+        writeln!(f, "  {: >28}: {}", "num_developer_fields", self.num_developer_fields);
+        writeln!(f, "  {: >28}:", "developer_field_definitions");
+        for developer_field_definition in &self.developer_field_definitions {
+            writeln!(f, "  {: >30}{:?}", " ", developer_field_definition);
+        }
+        Ok(())
+    }
 }
 
 impl FitDefinitionMessage {

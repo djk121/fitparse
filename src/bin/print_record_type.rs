@@ -32,11 +32,19 @@ fn main() {
                 .long("unknowns")
                 .takes_value(false),
         )
+        .arg(
+            Arg::with_name("expanded")
+                .help("print expanded representation of each record")
+                .short("e")
+                .long("expanded")
+                .takes_value(false),
+        )
         .get_matches();
 
     let fname = matches.value_of("input").unwrap();
     let record_name = matches.value_of("record_name").unwrap();
     let unknowns = matches.is_present("unknowns");
+    let expanded = matches.is_present("expanded");
 
     let mut f = match File::open(fname) {
         Ok(fi) => fi,
@@ -61,10 +69,22 @@ fn main() {
         match message {
             FitMessage::Data(ref dm) => {
                 if dm.message_name() == record_name {
-                    println!("{:#?}", message);
+                    if expanded == true {
+                        println!("{:#?}", message);
+                    } else {
+                        println!("{}", message);
+                    }
+                }
+            },
+            FitMessage::Definition(_d) => {
+                if record_name == "Definition" {
+                    if expanded == true {
+                        println!("{:#?}", message);
+                    } else {
+                        println!("{}", message);
+                    }
                 }
             }
-            _ => (),
         }
     }
 }

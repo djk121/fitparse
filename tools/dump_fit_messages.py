@@ -135,6 +135,7 @@ impl {{ type_name }} {
     }
 }
 
+
 impl From<{{ base_rust_type }}> for {{ type_name }} {
     fn from(code: {{ base_rust_type }}) -> Self {
         match code {
@@ -184,7 +185,7 @@ def output_types(types):
     # }
 
     special_types = r"""
-
+use std::fmt;
 use std::rc::Rc;
 use std::mem::transmute;
 use std::collections::HashMap;
@@ -372,6 +373,17 @@ pub enum FitDataMessage {
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
 }
 
+impl fmt::Display for FitDataMessage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            {%- for message in messages -%}
+            FitDataMessage::{{ message.short_name }}(m) => write!(f, "{}", m),
+            {% endfor -%}
+            FitDataMessage::UnknownToSdk(_) => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
 impl FitDataMessage {
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -456,6 +468,21 @@ pub struct {{ message_name }} {
 """
 
     IMPL_TEMPLATE = """
+
+impl fmt::Display for {{ message_name }} {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "{{ message_name}}");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        {% for field in fields -%}
+        {%- if field.has_subfields -%}
+        writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes);
+        {% endif -%}
+        if let Some(v) = &self.{{ field.name }} { writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", v); }
+        {% endfor %}
+        Ok(())
+    }
+}
+
 impl {{ message_name }} {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
@@ -717,6 +744,15 @@ SCALE_AND_OFFSET_TEMPLATE = """
 
 SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64{{ offset }})).collect());"""
 
+SEMICIRCLES_TEMPMLATE = """
+                                match val {
+                                    Some(result) => {
+                                        message.{{ field_name }} = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.{{ field_name }} = None
+                                }"""
+
+
 
 class Field(object):
     FIELD_OPTION_SUBFIELD = """Option<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
@@ -899,7 +935,9 @@ class Field(object):
 
         else:
             if self.units == 'semicircles':
-                return "message.{} = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))".format(self.name)
+                template = Environment().from_string(SEMICIRCLES_TEMPMLATE,
+                                                    globals={'field_name': self.name})
+                return template.render()
             return "message.{} = val;".format(self.name)
 
 

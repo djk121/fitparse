@@ -1,5 +1,5 @@
 
-
+use std::fmt;
 use std::rc::Rc;
 use std::mem::transmute;
 use std::collections::HashMap;
@@ -165,6 +165,7 @@ impl FitFieldLeftRightBalance {
     }
 }
 
+
 impl From<u8> for FitFieldLeftRightBalance {
     fn from(code: u8) -> Self {
         match code {
@@ -243,6 +244,7 @@ impl FitFieldWorkoutCapabilities {
         }
     }
 }
+
 
 impl From<u32> for FitFieldWorkoutCapabilities {
     fn from(code: u32) -> Self {
@@ -364,6 +366,7 @@ impl FitFieldShoulderPressExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldShoulderPressExerciseName {
     fn from(code: u16) -> Self {
@@ -543,6 +546,7 @@ impl FitFieldFileFlags {
     }
 }
 
+
 impl From<u8> for FitFieldFileFlags {
     fn from(code: u8) -> Self {
         match code {
@@ -583,6 +587,7 @@ impl FitFieldBacklightTimeout {
         }
     }
 }
+
 
 impl From<u8> for FitFieldBacklightTimeout {
     fn from(code: u8) -> Self {
@@ -685,6 +690,7 @@ impl FitFieldCardioExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldCardioExerciseName {
     fn from(code: u16) -> Self {
@@ -830,6 +836,7 @@ impl FitFieldFitBaseType {
     }
 }
 
+
 impl From<u8> for FitFieldFitBaseType {
     fn from(code: u8) -> Self {
         match code {
@@ -920,6 +927,7 @@ impl FitFieldTotalBodyExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldTotalBodyExerciseName {
     fn from(code: u16) -> Self {
@@ -1100,6 +1108,7 @@ impl FitFieldCurlExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldCurlExerciseName {
     fn from(code: u16) -> Self {
@@ -1736,6 +1745,7 @@ impl FitFieldLocalDeviceType {
     }
 }
 
+
 impl From<u8> for FitFieldLocalDeviceType {
     fn from(code: u8) -> Self {
         match code {
@@ -1904,6 +1914,7 @@ impl FitFieldOlympicLiftExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldOlympicLiftExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -2047,6 +2058,7 @@ impl FitFieldFlyeExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldFlyeExerciseName {
     fn from(code: u16) -> Self {
@@ -2383,6 +2395,7 @@ impl FitFieldRowExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldRowExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -2490,6 +2503,7 @@ impl FitFieldWeight {
         }
     }
 }
+
 
 impl From<u16> for FitFieldWeight {
     fn from(code: u16) -> Self {
@@ -2696,6 +2710,7 @@ impl FitFieldConnectivityCapabilities {
         }
     }
 }
+
 
 impl From<u32> for FitFieldConnectivityCapabilities {
     fn from(code: u32) -> Self {
@@ -3039,6 +3054,7 @@ impl FitFieldSquatExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldSquatExerciseName {
     fn from(code: u16) -> Self {
@@ -3610,6 +3626,7 @@ impl FitFieldShoulderStabilityExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldShoulderStabilityExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -3718,6 +3735,7 @@ impl FitFieldBikeLightBeamAngleMode {
     }
 }
 
+
 impl From<u8> for FitFieldBikeLightBeamAngleMode {
     fn from(code: u8) -> Self {
         match code {
@@ -3754,6 +3772,7 @@ impl FitFieldLocaltimeIntoDay {
         }
     }
 }
+
 
 impl From<u32> for FitFieldLocaltimeIntoDay {
     fn from(code: u32) -> Self {
@@ -3825,6 +3844,7 @@ impl FitFieldLegCurlExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldLegCurlExerciseName {
     fn from(code: u16) -> Self {
@@ -3966,6 +3986,7 @@ impl FitFieldWarmUpExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldWarmUpExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -4082,6 +4103,7 @@ impl FitFieldShrugExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldShrugExerciseName {
     fn from(code: u16) -> Self {
@@ -4331,6 +4353,7 @@ impl FitFieldSetType {
     }
 }
 
+
 impl From<u8> for FitFieldSetType {
     fn from(code: u8) -> Self {
         match code {
@@ -4373,6 +4396,7 @@ impl FitFieldLeftRightBalance100 {
         }
     }
 }
+
 
 impl From<u16> for FitFieldLeftRightBalance100 {
     fn from(code: u16) -> Self {
@@ -4422,6 +4446,7 @@ impl FitFieldCommTimeoutType {
         }
     }
 }
+
 
 impl From<u16> for FitFieldCommTimeoutType {
     fn from(code: u16) -> Self {
@@ -4476,6 +4501,7 @@ impl FitFieldCarryExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldCarryExerciseName {
     fn from(code: u16) -> Self {
@@ -4664,6 +4690,7 @@ impl FitFieldSitUpExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldSitUpExerciseName {
     fn from(code: u16) -> Self {
@@ -5233,6 +5260,7 @@ impl FitFieldManufacturer {
     }
 }
 
+
 impl From<u16> for FitFieldManufacturer {
     fn from(code: u16) -> Self {
         match code {
@@ -5677,6 +5705,7 @@ impl FitFieldHipStabilityExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldHipStabilityExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -5821,6 +5850,7 @@ impl FitFieldAttitudeValidity {
     }
 }
 
+
 impl From<u16> for FitFieldAttitudeValidity {
     fn from(code: u16) -> Self {
         match code {
@@ -5874,6 +5904,7 @@ impl FitFieldFaveroProduct {
         }
     }
 }
+
 
 impl From<u16> for FitFieldFaveroProduct {
     fn from(code: u16) -> Self {
@@ -6240,6 +6271,7 @@ impl FitFieldUserLocalId {
     }
 }
 
+
 impl From<u16> for FitFieldUserLocalId {
     fn from(code: u16) -> Self {
         match code {
@@ -6400,6 +6432,7 @@ impl FitFieldHyperextensionExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldHyperextensionExerciseName {
     fn from(code: u16) -> Self {
@@ -7064,6 +7097,7 @@ impl FitFieldHipRaiseExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldHipRaiseExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -7268,6 +7302,7 @@ impl FitFieldCourseCapabilities {
     }
 }
 
+
 impl From<u32> for FitFieldCourseCapabilities {
     fn from(code: u32) -> Self {
         match code {
@@ -7436,6 +7471,7 @@ impl FitFieldTricepsExtensionExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldTricepsExtensionExerciseName {
     fn from(code: u16) -> Self {
@@ -7997,6 +8033,7 @@ impl FitFieldExerciseCategory {
     }
 }
 
+
 impl From<u16> for FitFieldExerciseCategory {
     fn from(code: u16) -> Self {
         match code {
@@ -8068,6 +8105,7 @@ impl FitFieldDeviceIndex {
         }
     }
 }
+
 
 impl From<u8> for FitFieldDeviceIndex {
     fn from(code: u8) -> Self {
@@ -8348,6 +8386,7 @@ impl FitFieldLungeExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldLungeExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -8488,6 +8527,7 @@ impl FitFieldSportBits0 {
     }
 }
 
+
 impl From<u8> for FitFieldSportBits0 {
     fn from(code: u8) -> Self {
         match code {
@@ -8554,6 +8594,7 @@ impl FitFieldSportBits1 {
         }
     }
 }
+
 
 impl From<u8> for FitFieldSportBits1 {
     fn from(code: u8) -> Self {
@@ -8622,6 +8663,7 @@ impl FitFieldSportBits2 {
     }
 }
 
+
 impl From<u8> for FitFieldSportBits2 {
     fn from(code: u8) -> Self {
         match code {
@@ -8688,6 +8730,7 @@ impl FitFieldSportBits3 {
         }
     }
 }
+
 
 impl From<u8> for FitFieldSportBits3 {
     fn from(code: u8) -> Self {
@@ -8756,6 +8799,7 @@ impl FitFieldSportBits4 {
     }
 }
 
+
 impl From<u8> for FitFieldSportBits4 {
     fn from(code: u8) -> Self {
         match code {
@@ -8823,6 +8867,7 @@ impl FitFieldSportBits5 {
     }
 }
 
+
 impl From<u8> for FitFieldSportBits5 {
     fn from(code: u8) -> Self {
         match code {
@@ -8868,6 +8913,7 @@ impl FitFieldSportBits6 {
         }
     }
 }
+
 
 impl From<u8> for FitFieldSportBits6 {
     fn from(code: u8) -> Self {
@@ -9021,6 +9067,7 @@ impl FitFieldPullUpExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldPullUpExerciseName {
     fn from(code: u16) -> Self {
@@ -9191,6 +9238,7 @@ impl FitFieldAutoActivityDetect {
     }
 }
 
+
 impl From<u32> for FitFieldAutoActivityDetect {
     fn from(code: u32) -> Self {
         match code {
@@ -9295,6 +9343,7 @@ impl FitFieldCalfRaiseExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldCalfRaiseExerciseName {
     fn from(code: u16) -> Self {
@@ -9488,6 +9537,7 @@ impl FitFieldPlyoExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldPlyoExerciseName {
     fn from(code: u16) -> Self {
@@ -10028,6 +10078,7 @@ impl FitFieldGarminProduct {
     }
 }
 
+
 impl From<u16> for FitFieldGarminProduct {
     fn from(code: u16) -> Self {
         match code {
@@ -10269,6 +10320,7 @@ impl FitFieldWorkoutPower {
     }
 }
 
+
 impl From<u32> for FitFieldWorkoutPower {
     fn from(code: u32) -> Self {
         match code {
@@ -10373,6 +10425,7 @@ impl FitFieldChopExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldChopExerciseName {
     fn from(code: u16) -> Self {
@@ -10726,6 +10779,7 @@ impl FitFieldLateralRaiseExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldLateralRaiseExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -10866,6 +10920,7 @@ impl FitFieldAntplusDeviceType {
         }
     }
 }
+
 
 impl From<u8> for FitFieldAntplusDeviceType {
     fn from(code: u8) -> Self {
@@ -11041,6 +11096,7 @@ impl FitFieldFitBaseUnit {
     }
 }
 
+
 impl From<u16> for FitFieldFitBaseUnit {
     fn from(code: u16) -> Self {
         match code {
@@ -11100,6 +11156,7 @@ impl FitFieldBatteryStatus {
     }
 }
 
+
 impl From<u8> for FitFieldBatteryStatus {
     fn from(code: u8) -> Self {
         match code {
@@ -11148,6 +11205,7 @@ impl FitFieldChecksum {
     }
 }
 
+
 impl From<u8> for FitFieldChecksum {
     fn from(code: u8) -> Self {
         match code {
@@ -11187,6 +11245,7 @@ impl FitFieldWorkoutHr {
         }
     }
 }
+
 
 impl From<u32> for FitFieldWorkoutHr {
     fn from(code: u32) -> Self {
@@ -11290,6 +11349,7 @@ impl FitFieldLegRaiseExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldLegRaiseExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -11371,6 +11431,7 @@ impl FitFieldLanguageBits3 {
     }
 }
 
+
 impl From<u8> for FitFieldLanguageBits3 {
     fn from(code: u8) -> Self {
         match code {
@@ -11437,6 +11498,7 @@ impl FitFieldLanguageBits2 {
         }
     }
 }
+
 
 impl From<u8> for FitFieldLanguageBits2 {
     fn from(code: u8) -> Self {
@@ -11505,6 +11567,7 @@ impl FitFieldLanguageBits1 {
     }
 }
 
+
 impl From<u8> for FitFieldLanguageBits1 {
     fn from(code: u8) -> Self {
         match code {
@@ -11571,6 +11634,7 @@ impl FitFieldLanguageBits0 {
         }
     }
 }
+
 
 impl From<u8> for FitFieldLanguageBits0 {
     fn from(code: u8) -> Self {
@@ -11682,6 +11746,7 @@ impl FitFieldLanguageBits4 {
         }
     }
 }
+
 
 impl From<u8> for FitFieldLanguageBits4 {
     fn from(code: u8) -> Self {
@@ -12045,6 +12110,7 @@ impl FitFieldMessageIndex {
     }
 }
 
+
 impl From<u16> for FitFieldMessageIndex {
     fn from(code: u16) -> Self {
         match code {
@@ -12207,6 +12273,7 @@ impl FitFieldBenchPressExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldBenchPressExerciseName {
     fn from(code: u16) -> Self {
@@ -12841,6 +12908,7 @@ impl FitFieldPlankExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldPlankExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -13470,6 +13538,7 @@ impl FitFieldCoreExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldCoreExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -13833,6 +13902,7 @@ impl FitFieldCrunchExerciseName {
     }
 }
 
+
 impl From<u16> for FitFieldCrunchExerciseName {
     fn from(code: u16) -> Self {
         match code {
@@ -13953,6 +14023,7 @@ impl FitFieldTimeIntoDay {
     }
 }
 
+
 impl From<u32> for FitFieldTimeIntoDay {
     fn from(code: u32) -> Self {
         match code {
@@ -13999,6 +14070,7 @@ impl FitFieldRunExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldRunExerciseName {
     fn from(code: u16) -> Self {
@@ -14047,6 +14119,7 @@ impl FitFieldHipSwingExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldHipSwingExerciseName {
     fn from(code: u16) -> Self {
@@ -14153,6 +14226,7 @@ impl FitFieldSupportedExdScreenLayouts {
         }
     }
 }
+
 
 impl From<u32> for FitFieldSupportedExdScreenLayouts {
     fn from(code: u32) -> Self {
@@ -14469,6 +14543,7 @@ impl FitFieldPushUpExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldPushUpExerciseName {
     fn from(code: u16) -> Self {
@@ -14845,6 +14920,7 @@ impl FitFieldMesgNum {
     }
 }
 
+
 impl From<u16> for FitFieldMesgNum {
     fn from(code: u16) -> Self {
         match code {
@@ -15023,6 +15099,7 @@ impl FitFieldDeadliftExerciseName {
         }
     }
 }
+
 
 impl From<u16> for FitFieldDeadliftExerciseName {
     fn from(code: u16) -> Self {
@@ -15240,6 +15317,28 @@ pub struct FitMessageAccelerometerData {
     pub compressed_calibrated_accel_z: Option<Vec<Option<i16>>>,  // Calibrated accel reading
     
 }
+
+impl fmt::Display for FitMessageAccelerometerData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageAccelerometerData");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
+        if let Some(v) = &self.accel_x { writeln!(f, "  {: >28}: {:?}", "accel_x", v); }
+        if let Some(v) = &self.accel_y { writeln!(f, "  {: >28}: {:?}", "accel_y", v); }
+        if let Some(v) = &self.accel_z { writeln!(f, "  {: >28}: {:?}", "accel_z", v); }
+        if let Some(v) = &self.calibrated_accel_x { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_x", v); }
+        if let Some(v) = &self.calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_y", v); }
+        if let Some(v) = &self.calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "calibrated_accel_z", v); }
+        if let Some(v) = &self.compressed_calibrated_accel_x { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_x", v); }
+        if let Some(v) = &self.compressed_calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_y", v); }
+        if let Some(v) = &self.compressed_calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_z", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageAccelerometerData {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAccelerometerData>, &'a [u8])> {
@@ -15764,6 +15863,24 @@ pub struct FitMessageActivity {
     pub event_group: Option<u8>,  
     
 }
+
+impl fmt::Display for FitMessageActivity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageActivity");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
+        if let Some(v) = &self.num_sessions { writeln!(f, "  {: >28}: {:?}", "num_sessions", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageActivity {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageActivity>, &'a [u8])> {
@@ -16053,6 +16170,21 @@ pub struct FitMessageAntChannelId {
     pub device_index: Option<FitFieldDeviceIndex>,  
     
 }
+
+impl fmt::Display for FitMessageAntChannelId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageAntChannelId");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v); }
+        if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v); }
+        if let Some(v) = &self.device_number { writeln!(f, "  {: >28}: {:?}", "device_number", v); }
+        if let Some(v) = &self.transmission_type { writeln!(f, "  {: >28}: {:?}", "transmission_type", v); }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageAntChannelId {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntChannelId>, &'a [u8])> {
@@ -16254,6 +16386,22 @@ pub struct FitMessageAntRx {
     pub data: Option<Vec<u8>>,  
     
 }
+
+impl fmt::Display for FitMessageAntRx {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageAntRx");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
+        if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v); }
+        if let Some(v) = &self.mesg_data { writeln!(f, "  {: >28}: {:?}", "mesg_data", v); }
+        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v); }
+        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageAntRx {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntRx>, &'a [u8])> {
@@ -16511,6 +16659,22 @@ pub struct FitMessageAntTx {
     pub data: Option<Vec<u8>>,  
     
 }
+
+impl fmt::Display for FitMessageAntTx {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageAntTx");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
+        if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v); }
+        if let Some(v) = &self.mesg_data { writeln!(f, "  {: >28}: {:?}", "mesg_data", v); }
+        if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v); }
+        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageAntTx {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntTx>, &'a [u8])> {
@@ -16774,6 +16938,28 @@ pub struct FitMessageAviationAttitude {
     pub validity: Option<Vec<FitFieldAttitudeValidity>>,  
     
 }
+
+impl fmt::Display for FitMessageAviationAttitude {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageAviationAttitude");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v); }
+        if let Some(v) = &self.pitch { writeln!(f, "  {: >28}: {:?}", "pitch", v); }
+        if let Some(v) = &self.roll { writeln!(f, "  {: >28}: {:?}", "roll", v); }
+        if let Some(v) = &self.accel_lateral { writeln!(f, "  {: >28}: {:?}", "accel_lateral", v); }
+        if let Some(v) = &self.accel_normal { writeln!(f, "  {: >28}: {:?}", "accel_normal", v); }
+        if let Some(v) = &self.turn_rate { writeln!(f, "  {: >28}: {:?}", "turn_rate", v); }
+        if let Some(v) = &self.stage { writeln!(f, "  {: >28}: {:?}", "stage", v); }
+        if let Some(v) = &self.attitude_stage_complete { writeln!(f, "  {: >28}: {:?}", "attitude_stage_complete", v); }
+        if let Some(v) = &self.track { writeln!(f, "  {: >28}: {:?}", "track", v); }
+        if let Some(v) = &self.validity { writeln!(f, "  {: >28}: {:?}", "validity", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageAviationAttitude {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAviationAttitude>, &'a [u8])> {
@@ -17294,6 +17480,20 @@ pub struct FitMessageBarometerData {
     pub baro_pres: Option<Vec<Option<u32>>>,  // These are the raw ADC reading. The samples may span across seconds. A conversion will need to be done on this data once read.
     
 }
+
+impl fmt::Display for FitMessageBarometerData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageBarometerData");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
+        if let Some(v) = &self.baro_pres { writeln!(f, "  {: >28}: {:?}", "baro_pres", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageBarometerData {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBarometerData>, &'a [u8])> {
@@ -17546,6 +17746,48 @@ pub struct FitMessageBikeProfile {
     pub shimano_di2_enabled: Option<bool>,  
     
 }
+
+impl fmt::Display for FitMessageBikeProfile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageBikeProfile");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.odometer { writeln!(f, "  {: >28}: {:?}", "odometer", v); }
+        if let Some(v) = &self.bike_spd_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_spd_ant_id", v); }
+        if let Some(v) = &self.bike_cad_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_cad_ant_id", v); }
+        if let Some(v) = &self.bike_spdcad_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_spdcad_ant_id", v); }
+        if let Some(v) = &self.bike_power_ant_id { writeln!(f, "  {: >28}: {:?}", "bike_power_ant_id", v); }
+        if let Some(v) = &self.custom_wheelsize { writeln!(f, "  {: >28}: {:?}", "custom_wheelsize", v); }
+        if let Some(v) = &self.auto_wheelsize { writeln!(f, "  {: >28}: {:?}", "auto_wheelsize", v); }
+        if let Some(v) = &self.bike_weight { writeln!(f, "  {: >28}: {:?}", "bike_weight", v); }
+        if let Some(v) = &self.power_cal_factor { writeln!(f, "  {: >28}: {:?}", "power_cal_factor", v); }
+        if let Some(v) = &self.auto_wheel_cal { writeln!(f, "  {: >28}: {:?}", "auto_wheel_cal", v); }
+        if let Some(v) = &self.auto_power_zero { writeln!(f, "  {: >28}: {:?}", "auto_power_zero", v); }
+        if let Some(v) = &self.id { writeln!(f, "  {: >28}: {:?}", "id", v); }
+        if let Some(v) = &self.spd_enabled { writeln!(f, "  {: >28}: {:?}", "spd_enabled", v); }
+        if let Some(v) = &self.cad_enabled { writeln!(f, "  {: >28}: {:?}", "cad_enabled", v); }
+        if let Some(v) = &self.spdcad_enabled { writeln!(f, "  {: >28}: {:?}", "spdcad_enabled", v); }
+        if let Some(v) = &self.power_enabled { writeln!(f, "  {: >28}: {:?}", "power_enabled", v); }
+        if let Some(v) = &self.crank_length { writeln!(f, "  {: >28}: {:?}", "crank_length", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.bike_spd_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_spd_ant_id_trans_type", v); }
+        if let Some(v) = &self.bike_cad_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_cad_ant_id_trans_type", v); }
+        if let Some(v) = &self.bike_spdcad_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_spdcad_ant_id_trans_type", v); }
+        if let Some(v) = &self.bike_power_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "bike_power_ant_id_trans_type", v); }
+        if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v); }
+        if let Some(v) = &self.front_gear_num { writeln!(f, "  {: >28}: {:?}", "front_gear_num", v); }
+        if let Some(v) = &self.front_gear { writeln!(f, "  {: >28}: {:?}", "front_gear", v); }
+        if let Some(v) = &self.rear_gear_num { writeln!(f, "  {: >28}: {:?}", "rear_gear_num", v); }
+        if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v); }
+        if let Some(v) = &self.shimano_di2_enabled { writeln!(f, "  {: >28}: {:?}", "shimano_di2_enabled", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageBikeProfile {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBikeProfile>, &'a [u8])> {
@@ -18423,6 +18665,27 @@ pub struct FitMessageBloodPressure {
     pub user_profile_index: Option<FitFieldMessageIndex>,  // Associates this blood pressure message to a user.  This corresponds to the index of the user profile message in the blood pressure file.
     
 }
+
+impl fmt::Display for FitMessageBloodPressure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageBloodPressure");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.systolic_pressure { writeln!(f, "  {: >28}: {:?}", "systolic_pressure", v); }
+        if let Some(v) = &self.diastolic_pressure { writeln!(f, "  {: >28}: {:?}", "diastolic_pressure", v); }
+        if let Some(v) = &self.mean_arterial_pressure { writeln!(f, "  {: >28}: {:?}", "mean_arterial_pressure", v); }
+        if let Some(v) = &self.map_3_sample_mean { writeln!(f, "  {: >28}: {:?}", "map_3_sample_mean", v); }
+        if let Some(v) = &self.map_morning_values { writeln!(f, "  {: >28}: {:?}", "map_morning_values", v); }
+        if let Some(v) = &self.map_evening_values { writeln!(f, "  {: >28}: {:?}", "map_evening_values", v); }
+        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v); }
+        if let Some(v) = &self.heart_rate_type { writeln!(f, "  {: >28}: {:?}", "heart_rate_type", v); }
+        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v); }
+        if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageBloodPressure {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBloodPressure>, &'a [u8])> {
@@ -18761,6 +19024,19 @@ pub struct FitMessageCadenceZone {
     pub name: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageCadenceZone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageCadenceZone");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageCadenceZone {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCadenceZone>, &'a [u8])> {
@@ -18919,6 +19195,21 @@ pub struct FitMessageCameraEvent {
     pub camera_orientation: Option<FitFieldCameraOrientationType>,  
     
 }
+
+impl fmt::Display for FitMessageCameraEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageCameraEvent");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.camera_event_type { writeln!(f, "  {: >28}: {:?}", "camera_event_type", v); }
+        if let Some(v) = &self.camera_file_uuid { writeln!(f, "  {: >28}: {:?}", "camera_file_uuid", v); }
+        if let Some(v) = &self.camera_orientation { writeln!(f, "  {: >28}: {:?}", "camera_orientation", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageCameraEvent {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCameraEvent>, &'a [u8])> {
@@ -19132,6 +19423,20 @@ pub struct FitMessageCapabilities {
     pub connectivity_supported: Option<FitFieldConnectivityCapabilities>,  
     
 }
+
+impl fmt::Display for FitMessageCapabilities {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageCapabilities");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.languages { writeln!(f, "  {: >28}: {:?}", "languages", v); }
+        if let Some(v) = &self.sports { writeln!(f, "  {: >28}: {:?}", "sports", v); }
+        if let Some(v) = &self.workouts_supported { writeln!(f, "  {: >28}: {:?}", "workouts_supported", v); }
+        if let Some(v) = &self.connectivity_supported { writeln!(f, "  {: >28}: {:?}", "connectivity_supported", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageCapabilities {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCapabilities>, &'a [u8])> {
@@ -19351,6 +19656,29 @@ pub struct FitMessageConnectivity {
     pub grouptrack_enabled: Option<bool>,  
     
 }
+
+impl fmt::Display for FitMessageConnectivity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageConnectivity");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.bluetooth_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_enabled", v); }
+        if let Some(v) = &self.bluetooth_le_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_le_enabled", v); }
+        if let Some(v) = &self.ant_enabled { writeln!(f, "  {: >28}: {:?}", "ant_enabled", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.live_tracking_enabled { writeln!(f, "  {: >28}: {:?}", "live_tracking_enabled", v); }
+        if let Some(v) = &self.weather_conditions_enabled { writeln!(f, "  {: >28}: {:?}", "weather_conditions_enabled", v); }
+        if let Some(v) = &self.weather_alerts_enabled { writeln!(f, "  {: >28}: {:?}", "weather_alerts_enabled", v); }
+        if let Some(v) = &self.auto_activity_upload_enabled { writeln!(f, "  {: >28}: {:?}", "auto_activity_upload_enabled", v); }
+        if let Some(v) = &self.course_download_enabled { writeln!(f, "  {: >28}: {:?}", "course_download_enabled", v); }
+        if let Some(v) = &self.workout_download_enabled { writeln!(f, "  {: >28}: {:?}", "workout_download_enabled", v); }
+        if let Some(v) = &self.gps_ephemeris_download_enabled { writeln!(f, "  {: >28}: {:?}", "gps_ephemeris_download_enabled", v); }
+        if let Some(v) = &self.incident_detection_enabled { writeln!(f, "  {: >28}: {:?}", "incident_detection_enabled", v); }
+        if let Some(v) = &self.grouptrack_enabled { writeln!(f, "  {: >28}: {:?}", "grouptrack_enabled", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageConnectivity {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageConnectivity>, &'a [u8])> {
@@ -19718,6 +20046,20 @@ pub struct FitMessageCourse {
     pub sub_sport: Option<FitFieldSubSport>,  
     
 }
+
+impl fmt::Display for FitMessageCourse {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageCourse");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageCourse {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCourse>, &'a [u8])> {
@@ -19900,6 +20242,24 @@ pub struct FitMessageCoursePoint {
     pub favorite: Option<bool>,  
     
 }
+
+impl fmt::Display for FitMessageCoursePoint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageCoursePoint");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.favorite { writeln!(f, "  {: >28}: {:?}", "favorite", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageCoursePoint {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCoursePoint>, &'a [u8])> {
@@ -20022,14 +20382,26 @@ impl FitMessageCoursePoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             }
                         }
 
@@ -20043,14 +20415,26 @@ impl FitMessageCoursePoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             }
                         }
 
@@ -20189,6 +20573,21 @@ pub struct FitMessageDeveloperDataId {
     pub application_version: Option<u32>,  
     
 }
+
+impl fmt::Display for FitMessageDeveloperDataId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDeveloperDataId");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.developer_id { writeln!(f, "  {: >28}: {:?}", "developer_id", v); }
+        if let Some(v) = &self.application_id { writeln!(f, "  {: >28}: {:?}", "application_id", v); }
+        if let Some(v) = &self.manufacturer_id { writeln!(f, "  {: >28}: {:?}", "manufacturer_id", v); }
+        if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v); }
+        if let Some(v) = &self.application_version { writeln!(f, "  {: >28}: {:?}", "application_version", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDeveloperDataId {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeveloperDataId>, &'a [u8])> {
@@ -20478,6 +20877,36 @@ pub struct FitMessageDeviceInfo {
     pub product_name: Option<String>,  // Optional free form string to indicate the devices name or model
     
 }
+
+impl fmt::Display for FitMessageDeviceInfo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDeviceInfo");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        writeln!(f, "  {: >28}: {:?}", "device_type_subfield_bytes", self.device_type_subfield_bytes);
+        if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v); }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
+        if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v); }
+        if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v); }
+        if let Some(v) = &self.cum_operating_time { writeln!(f, "  {: >28}: {:?}", "cum_operating_time", v); }
+        if let Some(v) = &self.battery_voltage { writeln!(f, "  {: >28}: {:?}", "battery_voltage", v); }
+        if let Some(v) = &self.battery_status { writeln!(f, "  {: >28}: {:?}", "battery_status", v); }
+        if let Some(v) = &self.sensor_position { writeln!(f, "  {: >28}: {:?}", "sensor_position", v); }
+        if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v); }
+        if let Some(v) = &self.ant_transmission_type { writeln!(f, "  {: >28}: {:?}", "ant_transmission_type", v); }
+        if let Some(v) = &self.ant_device_number { writeln!(f, "  {: >28}: {:?}", "ant_device_number", v); }
+        if let Some(v) = &self.ant_network { writeln!(f, "  {: >28}: {:?}", "ant_network", v); }
+        if let Some(v) = &self.source_type { writeln!(f, "  {: >28}: {:?}", "source_type", v); }
+        if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDeviceInfo {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeviceInfo>, &'a [u8])> {
@@ -21035,6 +21464,39 @@ pub struct FitMessageDeviceSettings {
     pub tap_interface: Option<FitFieldSwitch>,  
     
 }
+
+impl fmt::Display for FitMessageDeviceSettings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDeviceSettings");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.active_time_zone { writeln!(f, "  {: >28}: {:?}", "active_time_zone", v); }
+        if let Some(v) = &self.utc_offset { writeln!(f, "  {: >28}: {:?}", "utc_offset", v); }
+        if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v); }
+        if let Some(v) = &self.time_mode { writeln!(f, "  {: >28}: {:?}", "time_mode", v); }
+        if let Some(v) = &self.time_zone_offset { writeln!(f, "  {: >28}: {:?}", "time_zone_offset", v); }
+        if let Some(v) = &self.backlight_mode { writeln!(f, "  {: >28}: {:?}", "backlight_mode", v); }
+        if let Some(v) = &self.activity_tracker_enabled { writeln!(f, "  {: >28}: {:?}", "activity_tracker_enabled", v); }
+        if let Some(v) = &self.clock_time { writeln!(f, "  {: >28}: {:?}", "clock_time", v); }
+        if let Some(v) = &self.pages_enabled { writeln!(f, "  {: >28}: {:?}", "pages_enabled", v); }
+        if let Some(v) = &self.move_alert_enabled { writeln!(f, "  {: >28}: {:?}", "move_alert_enabled", v); }
+        if let Some(v) = &self.date_mode { writeln!(f, "  {: >28}: {:?}", "date_mode", v); }
+        if let Some(v) = &self.display_orientation { writeln!(f, "  {: >28}: {:?}", "display_orientation", v); }
+        if let Some(v) = &self.mounting_side { writeln!(f, "  {: >28}: {:?}", "mounting_side", v); }
+        if let Some(v) = &self.default_page { writeln!(f, "  {: >28}: {:?}", "default_page", v); }
+        if let Some(v) = &self.autosync_min_steps { writeln!(f, "  {: >28}: {:?}", "autosync_min_steps", v); }
+        if let Some(v) = &self.autosync_min_time { writeln!(f, "  {: >28}: {:?}", "autosync_min_time", v); }
+        if let Some(v) = &self.lactate_threshold_autodetect_enabled { writeln!(f, "  {: >28}: {:?}", "lactate_threshold_autodetect_enabled", v); }
+        if let Some(v) = &self.ble_auto_upload_enabled { writeln!(f, "  {: >28}: {:?}", "ble_auto_upload_enabled", v); }
+        if let Some(v) = &self.auto_sync_frequency { writeln!(f, "  {: >28}: {:?}", "auto_sync_frequency", v); }
+        if let Some(v) = &self.auto_activity_detect { writeln!(f, "  {: >28}: {:?}", "auto_activity_detect", v); }
+        if let Some(v) = &self.number_of_screens { writeln!(f, "  {: >28}: {:?}", "number_of_screens", v); }
+        if let Some(v) = &self.smart_notification_display_orientation { writeln!(f, "  {: >28}: {:?}", "smart_notification_display_orientation", v); }
+        if let Some(v) = &self.tap_interface { writeln!(f, "  {: >28}: {:?}", "tap_interface", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDeviceSettings {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeviceSettings>, &'a [u8])> {
@@ -21695,6 +22157,23 @@ pub struct FitMessageDiveAlarm {
     pub dive_types: Option<Vec<FitFieldSubSport>>,  
     
 }
+
+impl fmt::Display for FitMessageDiveAlarm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDiveAlarm");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v); }
+        if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.alarm_type { writeln!(f, "  {: >28}: {:?}", "alarm_type", v); }
+        if let Some(v) = &self.sound { writeln!(f, "  {: >28}: {:?}", "sound", v); }
+        if let Some(v) = &self.dive_types { writeln!(f, "  {: >28}: {:?}", "dive_types", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDiveAlarm {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveAlarm>, &'a [u8])> {
@@ -21976,6 +22455,20 @@ pub struct FitMessageDiveGas {
     pub status: Option<FitFieldDiveGasStatus>,  
     
 }
+
+impl fmt::Display for FitMessageDiveGas {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDiveGas");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.helium_content { writeln!(f, "  {: >28}: {:?}", "helium_content", v); }
+        if let Some(v) = &self.oxygen_content { writeln!(f, "  {: >28}: {:?}", "oxygen_content", v); }
+        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDiveGas {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveGas>, &'a [u8])> {
@@ -22204,6 +22697,39 @@ pub struct FitMessageDiveSettings {
     pub heart_rate_source: Option<FitMessageDiveSettingsSubfieldHeartRateSource>,  
     
 }
+
+impl fmt::Display for FitMessageDiveSettings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDiveSettings");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.model { writeln!(f, "  {: >28}: {:?}", "model", v); }
+        if let Some(v) = &self.gf_low { writeln!(f, "  {: >28}: {:?}", "gf_low", v); }
+        if let Some(v) = &self.gf_high { writeln!(f, "  {: >28}: {:?}", "gf_high", v); }
+        if let Some(v) = &self.water_type { writeln!(f, "  {: >28}: {:?}", "water_type", v); }
+        if let Some(v) = &self.water_density { writeln!(f, "  {: >28}: {:?}", "water_density", v); }
+        if let Some(v) = &self.po2_warn { writeln!(f, "  {: >28}: {:?}", "po2_warn", v); }
+        if let Some(v) = &self.po2_critical { writeln!(f, "  {: >28}: {:?}", "po2_critical", v); }
+        if let Some(v) = &self.po2_deco { writeln!(f, "  {: >28}: {:?}", "po2_deco", v); }
+        if let Some(v) = &self.safety_stop_enabled { writeln!(f, "  {: >28}: {:?}", "safety_stop_enabled", v); }
+        if let Some(v) = &self.bottom_depth { writeln!(f, "  {: >28}: {:?}", "bottom_depth", v); }
+        if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v); }
+        if let Some(v) = &self.apnea_countdown_enabled { writeln!(f, "  {: >28}: {:?}", "apnea_countdown_enabled", v); }
+        if let Some(v) = &self.apnea_countdown_time { writeln!(f, "  {: >28}: {:?}", "apnea_countdown_time", v); }
+        if let Some(v) = &self.backlight_mode { writeln!(f, "  {: >28}: {:?}", "backlight_mode", v); }
+        if let Some(v) = &self.backlight_brightness { writeln!(f, "  {: >28}: {:?}", "backlight_brightness", v); }
+        if let Some(v) = &self.backlight_timeout { writeln!(f, "  {: >28}: {:?}", "backlight_timeout", v); }
+        if let Some(v) = &self.repeat_dive_interval { writeln!(f, "  {: >28}: {:?}", "repeat_dive_interval", v); }
+        if let Some(v) = &self.safety_stop_time { writeln!(f, "  {: >28}: {:?}", "safety_stop_time", v); }
+        if let Some(v) = &self.heart_rate_source_type { writeln!(f, "  {: >28}: {:?}", "heart_rate_source_type", v); }
+        writeln!(f, "  {: >28}: {:?}", "heart_rate_source_subfield_bytes", self.heart_rate_source_subfield_bytes);
+        if let Some(v) = &self.heart_rate_source { writeln!(f, "  {: >28}: {:?}", "heart_rate_source", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDiveSettings {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveSettings>, &'a [u8])> {
@@ -22850,6 +23376,29 @@ pub struct FitMessageDiveSummary {
     pub bottom_time: Option<f64>,  
     
 }
+
+impl fmt::Display for FitMessageDiveSummary {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageDiveSummary");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.reference_mesg { writeln!(f, "  {: >28}: {:?}", "reference_mesg", v); }
+        if let Some(v) = &self.reference_index { writeln!(f, "  {: >28}: {:?}", "reference_index", v); }
+        if let Some(v) = &self.avg_depth { writeln!(f, "  {: >28}: {:?}", "avg_depth", v); }
+        if let Some(v) = &self.max_depth { writeln!(f, "  {: >28}: {:?}", "max_depth", v); }
+        if let Some(v) = &self.surface_interval { writeln!(f, "  {: >28}: {:?}", "surface_interval", v); }
+        if let Some(v) = &self.start_cns { writeln!(f, "  {: >28}: {:?}", "start_cns", v); }
+        if let Some(v) = &self.end_cns { writeln!(f, "  {: >28}: {:?}", "end_cns", v); }
+        if let Some(v) = &self.start_n2 { writeln!(f, "  {: >28}: {:?}", "start_n2", v); }
+        if let Some(v) = &self.end_n2 { writeln!(f, "  {: >28}: {:?}", "end_n2", v); }
+        if let Some(v) = &self.o2_toxicity { writeln!(f, "  {: >28}: {:?}", "o2_toxicity", v); }
+        if let Some(v) = &self.dive_number { writeln!(f, "  {: >28}: {:?}", "dive_number", v); }
+        if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageDiveSummary {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveSummary>, &'a [u8])> {
@@ -23500,6 +24049,30 @@ pub struct FitMessageEvent {
     pub device_index: Option<FitFieldDeviceIndex>,  
     
 }
+
+impl fmt::Display for FitMessageEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageEvent");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
+        if let Some(v) = &self.data16 { writeln!(f, "  {: >28}: {:?}", "data16", v); }
+        writeln!(f, "  {: >28}: {:?}", "data_subfield_bytes", self.data_subfield_bytes);
+        if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v); }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        if let Some(v) = &self.score { writeln!(f, "  {: >28}: {:?}", "score", v); }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
+        if let Some(v) = &self.front_gear_num { writeln!(f, "  {: >28}: {:?}", "front_gear_num", v); }
+        if let Some(v) = &self.front_gear { writeln!(f, "  {: >28}: {:?}", "front_gear", v); }
+        if let Some(v) = &self.rear_gear_num { writeln!(f, "  {: >28}: {:?}", "rear_gear_num", v); }
+        if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v); }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageEvent {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageEvent>, &'a [u8])> {
@@ -23910,6 +24483,27 @@ pub struct FitMessageExdDataConceptConfiguration {
     pub is_signed: Option<bool>,  
     
 }
+
+impl fmt::Display for FitMessageExdDataConceptConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageExdDataConceptConfiguration");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v); }
+        if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v); }
+        if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v); }
+        if let Some(v) = &self.concept_index { writeln!(f, "  {: >28}: {:?}", "concept_index", v); }
+        if let Some(v) = &self.data_page { writeln!(f, "  {: >28}: {:?}", "data_page", v); }
+        if let Some(v) = &self.concept_key { writeln!(f, "  {: >28}: {:?}", "concept_key", v); }
+        if let Some(v) = &self.scaling { writeln!(f, "  {: >28}: {:?}", "scaling", v); }
+        if let Some(v) = &self.data_units { writeln!(f, "  {: >28}: {:?}", "data_units", v); }
+        if let Some(v) = &self.qualifier { writeln!(f, "  {: >28}: {:?}", "qualifier", v); }
+        if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v); }
+        if let Some(v) = &self.is_signed { writeln!(f, "  {: >28}: {:?}", "is_signed", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageExdDataConceptConfiguration {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdDataConceptConfiguration>, &'a [u8])> {
@@ -24239,6 +24833,22 @@ pub struct FitMessageExdDataFieldConfiguration {
     pub title: Option<Vec<Option<String>>>,  
     
 }
+
+impl fmt::Display for FitMessageExdDataFieldConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageExdDataFieldConfiguration");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v); }
+        if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v); }
+        if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v); }
+        if let Some(v) = &self.concept_count { writeln!(f, "  {: >28}: {:?}", "concept_count", v); }
+        if let Some(v) = &self.display_type { writeln!(f, "  {: >28}: {:?}", "display_type", v); }
+        if let Some(v) = &self.title { writeln!(f, "  {: >28}: {:?}", "title", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageExdDataFieldConfiguration {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdDataFieldConfiguration>, &'a [u8])> {
@@ -24477,6 +25087,20 @@ pub struct FitMessageExdScreenConfiguration {
     pub screen_enabled: Option<bool>,  
     
 }
+
+impl fmt::Display for FitMessageExdScreenConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageExdScreenConfiguration");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v); }
+        if let Some(v) = &self.field_count { writeln!(f, "  {: >28}: {:?}", "field_count", v); }
+        if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v); }
+        if let Some(v) = &self.screen_enabled { writeln!(f, "  {: >28}: {:?}", "screen_enabled", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageExdScreenConfiguration {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdScreenConfiguration>, &'a [u8])> {
@@ -24655,6 +25279,20 @@ pub struct FitMessageExerciseTitle {
     pub wkt_step_name: Option<Vec<Option<String>>>,  
     
 }
+
+impl fmt::Display for FitMessageExerciseTitle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageExerciseTitle");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v); }
+        if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v); }
+        if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageExerciseTitle {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExerciseTitle>, &'a [u8])> {
@@ -24850,6 +25488,21 @@ pub struct FitMessageFieldCapabilities {
     pub count: Option<u16>,  
     
 }
+
+impl fmt::Display for FitMessageFieldCapabilities {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageFieldCapabilities");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v); }
+        if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v); }
+        if let Some(v) = &self.field_num { writeln!(f, "  {: >28}: {:?}", "field_num", v); }
+        if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageFieldCapabilities {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFieldCapabilities>, &'a [u8])> {
@@ -25059,6 +25712,30 @@ pub struct FitMessageFieldDescription {
     pub native_field_num: Option<u8>,  
     
 }
+
+impl fmt::Display for FitMessageFieldDescription {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageFieldDescription");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v); }
+        if let Some(v) = &self.field_definition_number { writeln!(f, "  {: >28}: {:?}", "field_definition_number", v); }
+        if let Some(v) = &self.fit_base_type_id { writeln!(f, "  {: >28}: {:?}", "fit_base_type_id", v); }
+        if let Some(v) = &self.field_name { writeln!(f, "  {: >28}: {:?}", "field_name", v); }
+        if let Some(v) = &self.array { writeln!(f, "  {: >28}: {:?}", "array", v); }
+        if let Some(v) = &self.components { writeln!(f, "  {: >28}: {:?}", "components", v); }
+        if let Some(v) = &self.scale { writeln!(f, "  {: >28}: {:?}", "scale", v); }
+        if let Some(v) = &self.offset { writeln!(f, "  {: >28}: {:?}", "offset", v); }
+        if let Some(v) = &self.units { writeln!(f, "  {: >28}: {:?}", "units", v); }
+        if let Some(v) = &self.bits { writeln!(f, "  {: >28}: {:?}", "bits", v); }
+        if let Some(v) = &self.accumulate { writeln!(f, "  {: >28}: {:?}", "accumulate", v); }
+        if let Some(v) = &self.fit_base_unit_id { writeln!(f, "  {: >28}: {:?}", "fit_base_unit_id", v); }
+        if let Some(v) = &self.native_mesg_num { writeln!(f, "  {: >28}: {:?}", "native_mesg_num", v); }
+        if let Some(v) = &self.native_field_num { writeln!(f, "  {: >28}: {:?}", "native_field_num", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageFieldDescription {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFieldDescription>, &'a [u8])> {
@@ -25481,6 +26158,22 @@ pub struct FitMessageFileCapabilities {
     pub max_size: Option<u32>,  
     
 }
+
+impl fmt::Display for FitMessageFileCapabilities {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageFileCapabilities");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.flags { writeln!(f, "  {: >28}: {:?}", "flags", v); }
+        if let Some(v) = &self.directory { writeln!(f, "  {: >28}: {:?}", "directory", v); }
+        if let Some(v) = &self.max_count { writeln!(f, "  {: >28}: {:?}", "max_count", v); }
+        if let Some(v) = &self.max_size { writeln!(f, "  {: >28}: {:?}", "max_size", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageFileCapabilities {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileCapabilities>, &'a [u8])> {
@@ -25699,6 +26392,18 @@ pub struct FitMessageFileCreator {
     pub hardware_version: Option<u8>,  
     
 }
+
+impl fmt::Display for FitMessageFileCreator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageFileCreator");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v); }
+        if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageFileCreator {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileCreator>, &'a [u8])> {
@@ -25882,6 +26587,24 @@ pub struct FitMessageFileId {
     pub product_name: Option<String>,  // Optional free form string to indicate the devices name or model
     
 }
+
+impl fmt::Display for FitMessageFileId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageFileId");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
+        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v); }
+        if let Some(v) = &self.number { writeln!(f, "  {: >28}: {:?}", "number", v); }
+        if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageFileId {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileId>, &'a [u8])> {
@@ -26153,6 +26876,29 @@ pub struct FitMessageGoal {
     pub source: Option<FitFieldGoalSource>,  
     
 }
+
+impl fmt::Display for FitMessageGoal {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageGoal");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.start_date { writeln!(f, "  {: >28}: {:?}", "start_date", v); }
+        if let Some(v) = &self.end_date { writeln!(f, "  {: >28}: {:?}", "end_date", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.value { writeln!(f, "  {: >28}: {:?}", "value", v); }
+        if let Some(v) = &self.repeat { writeln!(f, "  {: >28}: {:?}", "repeat", v); }
+        if let Some(v) = &self.target_value { writeln!(f, "  {: >28}: {:?}", "target_value", v); }
+        if let Some(v) = &self.recurrence { writeln!(f, "  {: >28}: {:?}", "recurrence", v); }
+        if let Some(v) = &self.recurrence_value { writeln!(f, "  {: >28}: {:?}", "recurrence_value", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.source { writeln!(f, "  {: >28}: {:?}", "source", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageGoal {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGoal>, &'a [u8])> {
@@ -26525,6 +27271,25 @@ pub struct FitMessageGpsMetadata {
     pub velocity: Option<Vec<Option<f64>>>,  // velocity[0] is lon velocity.  Velocity[1] is lat velocity.  Velocity[2] is altitude velocity.
     
 }
+
+impl fmt::Display for FitMessageGpsMetadata {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageGpsMetadata");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
+        if let Some(v) = &self.enhanced_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_altitude", v); }
+        if let Some(v) = &self.enhanced_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_speed", v); }
+        if let Some(v) = &self.heading { writeln!(f, "  {: >28}: {:?}", "heading", v); }
+        if let Some(v) = &self.utc_timestamp { writeln!(f, "  {: >28}: {:?}", "utc_timestamp", v); }
+        if let Some(v) = &self.velocity { writeln!(f, "  {: >28}: {:?}", "velocity", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageGpsMetadata {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGpsMetadata>, &'a [u8])> {
@@ -26647,14 +27412,26 @@ impl FitMessageGpsMetadata {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             }
                         }
 
@@ -26668,14 +27445,26 @@ impl FitMessageGpsMetadata {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             }
                         }
 
@@ -26879,6 +27668,25 @@ pub struct FitMessageGyroscopeData {
     pub calibrated_gyro_z: Option<Vec<Option<f32>>>,  // Calibrated gyro reading
     
 }
+
+impl fmt::Display for FitMessageGyroscopeData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageGyroscopeData");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
+        if let Some(v) = &self.gyro_x { writeln!(f, "  {: >28}: {:?}", "gyro_x", v); }
+        if let Some(v) = &self.gyro_y { writeln!(f, "  {: >28}: {:?}", "gyro_y", v); }
+        if let Some(v) = &self.gyro_z { writeln!(f, "  {: >28}: {:?}", "gyro_z", v); }
+        if let Some(v) = &self.calibrated_gyro_x { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_x", v); }
+        if let Some(v) = &self.calibrated_gyro_y { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_y", v); }
+        if let Some(v) = &self.calibrated_gyro_z { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_z", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageGyroscopeData {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGyroscopeData>, &'a [u8])> {
@@ -27290,6 +28098,22 @@ pub struct FitMessageHr {
     pub event_timestamp_12: Option<Vec<u8>>,  
     
 }
+
+impl fmt::Display for FitMessageHr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHr");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
+        if let Some(v) = &self.time256 { writeln!(f, "  {: >28}: {:?}", "time256", v); }
+        if let Some(v) = &self.filtered_bpm { writeln!(f, "  {: >28}: {:?}", "filtered_bpm", v); }
+        if let Some(v) = &self.event_timestamp { writeln!(f, "  {: >28}: {:?}", "event_timestamp", v); }
+        if let Some(v) = &self.event_timestamp_12 { writeln!(f, "  {: >28}: {:?}", "event_timestamp_12", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageHr {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHr>, &'a [u8])> {
@@ -27590,6 +28414,19 @@ pub struct FitMessageHrZone {
     pub name: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageHrZone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHrZone");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageHrZone {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrZone>, &'a [u8])> {
@@ -27748,6 +28585,21 @@ pub struct FitMessageHrmProfile {
     pub hrm_ant_id_trans_type: Option<u8>,  
     
 }
+
+impl fmt::Display for FitMessageHrmProfile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHrmProfile");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.hrm_ant_id { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id", v); }
+        if let Some(v) = &self.log_hrv { writeln!(f, "  {: >28}: {:?}", "log_hrv", v); }
+        if let Some(v) = &self.hrm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id_trans_type", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageHrmProfile {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrmProfile>, &'a [u8])> {
@@ -27944,6 +28796,17 @@ pub struct FitMessageHrv {
     pub time: Option<Vec<Option<f64>>>,  // Time between beats
     
 }
+
+impl fmt::Display for FitMessageHrv {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHrv");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageHrv {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrv>, &'a [u8])> {
@@ -28258,6 +29121,125 @@ pub struct FitMessageLap {
     pub avg_vam: Option<f64>,  
     
 }
+
+impl fmt::Display for FitMessageLap {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageLap");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
+        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v); }
+        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v); }
+        if let Some(v) = &self.end_position_lat { writeln!(f, "  {: >28}: {:?}", "end_position_lat", v); }
+        if let Some(v) = &self.end_position_long { writeln!(f, "  {: >28}: {:?}", "end_position_long", v); }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
+        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v); }
+        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes);
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
+        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v); }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
+        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v); }
+        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v); }
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
+        writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes);
+        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v); }
+        writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes);
+        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v); }
+        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v); }
+        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v); }
+        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v); }
+        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v); }
+        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v); }
+        if let Some(v) = &self.lap_trigger { writeln!(f, "  {: >28}: {:?}", "lap_trigger", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        if let Some(v) = &self.num_lengths { writeln!(f, "  {: >28}: {:?}", "num_lengths", v); }
+        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v); }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
+        if let Some(v) = &self.first_length_index { writeln!(f, "  {: >28}: {:?}", "first_length_index", v); }
+        if let Some(v) = &self.avg_stroke_distance { writeln!(f, "  {: >28}: {:?}", "avg_stroke_distance", v); }
+        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.num_active_lengths { writeln!(f, "  {: >28}: {:?}", "num_active_lengths", v); }
+        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v); }
+        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v); }
+        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v); }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
+        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v); }
+        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v); }
+        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v); }
+        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v); }
+        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v); }
+        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v); }
+        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v); }
+        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v); }
+        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v); }
+        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v); }
+        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v); }
+        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v); }
+        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v); }
+        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v); }
+        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v); }
+        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v); }
+        if let Some(v) = &self.repetition_num { writeln!(f, "  {: >28}: {:?}", "repetition_num", v); }
+        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v); }
+        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v); }
+        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v); }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
+        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v); }
+        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v); }
+        if let Some(v) = &self.avg_vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "avg_vertical_oscillation", v); }
+        if let Some(v) = &self.avg_stance_time_percent { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_percent", v); }
+        if let Some(v) = &self.avg_stance_time { writeln!(f, "  {: >28}: {:?}", "avg_stance_time", v); }
+        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v); }
+        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v); }
+        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v); }
+        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v); }
+        if let Some(v) = &self.avg_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "avg_total_hemoglobin_conc", v); }
+        if let Some(v) = &self.min_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "min_total_hemoglobin_conc", v); }
+        if let Some(v) = &self.max_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "max_total_hemoglobin_conc", v); }
+        if let Some(v) = &self.avg_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "avg_saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.min_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "min_saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.max_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "max_saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v); }
+        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v); }
+        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v); }
+        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v); }
+        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v); }
+        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v); }
+        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v); }
+        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v); }
+        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v); }
+        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v); }
+        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v); }
+        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v); }
+        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v); }
+        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v); }
+        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v); }
+        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v); }
+        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v); }
+        if let Some(v) = &self.enhanced_avg_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_speed", v); }
+        if let Some(v) = &self.enhanced_max_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_max_speed", v); }
+        if let Some(v) = &self.enhanced_avg_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_altitude", v); }
+        if let Some(v) = &self.enhanced_min_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_min_altitude", v); }
+        if let Some(v) = &self.enhanced_max_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_max_altitude", v); }
+        if let Some(v) = &self.avg_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "avg_lev_motor_power", v); }
+        if let Some(v) = &self.max_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "max_lev_motor_power", v); }
+        if let Some(v) = &self.lev_battery_consumption { writeln!(f, "  {: >28}: {:?}", "lev_battery_consumption", v); }
+        if let Some(v) = &self.avg_vertical_ratio { writeln!(f, "  {: >28}: {:?}", "avg_vertical_ratio", v); }
+        if let Some(v) = &self.avg_stance_time_balance { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_balance", v); }
+        if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v); }
+        if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageLap {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageLap>, &'a [u8])> {
@@ -28478,14 +29460,26 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_lat = None
+                                }
                             }
                         }
 
@@ -28499,14 +29493,26 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_long = None
+                                }
                             }
                         }
 
@@ -28520,14 +29526,26 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_lat = None
+                                }
                             }
                         }
 
@@ -28541,14 +29559,26 @@ impl FitMessageLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_long = None
+                                }
                             }
                         }
 
@@ -31458,6 +32488,34 @@ pub struct FitMessageLength {
     pub zone_count: Option<Vec<Option<u16>>>,  // zone number used as the index
     
 }
+
+impl fmt::Display for FitMessageLength {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageLength");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
+        if let Some(v) = &self.total_strokes { writeln!(f, "  {: >28}: {:?}", "total_strokes", v); }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
+        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v); }
+        if let Some(v) = &self.avg_swimming_cadence { writeln!(f, "  {: >28}: {:?}", "avg_swimming_cadence", v); }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
+        if let Some(v) = &self.length_type { writeln!(f, "  {: >28}: {:?}", "length_type", v); }
+        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v); }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
+        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v); }
+        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageLength {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageLength>, &'a [u8])> {
@@ -32017,6 +33075,25 @@ pub struct FitMessageMagnetometerData {
     pub calibrated_mag_z: Option<Vec<Option<f32>>>,  // Calibrated Magnetometer reading
     
 }
+
+impl fmt::Display for FitMessageMagnetometerData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageMagnetometerData");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v); }
+        if let Some(v) = &self.mag_x { writeln!(f, "  {: >28}: {:?}", "mag_x", v); }
+        if let Some(v) = &self.mag_y { writeln!(f, "  {: >28}: {:?}", "mag_y", v); }
+        if let Some(v) = &self.mag_z { writeln!(f, "  {: >28}: {:?}", "mag_z", v); }
+        if let Some(v) = &self.calibrated_mag_x { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_x", v); }
+        if let Some(v) = &self.calibrated_mag_y { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_y", v); }
+        if let Some(v) = &self.calibrated_mag_z { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_z", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageMagnetometerData {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMagnetometerData>, &'a [u8])> {
@@ -32426,6 +33503,20 @@ pub struct FitMessageMemoGlob {
     pub message_index: Option<FitFieldMessageIndex>,  // Index of external mesg
     
 }
+
+impl fmt::Display for FitMessageMemoGlob {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageMemoGlob");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.part_index { writeln!(f, "  {: >28}: {:?}", "part_index", v); }
+        if let Some(v) = &self.memo { writeln!(f, "  {: >28}: {:?}", "memo", v); }
+        if let Some(v) = &self.message_number { writeln!(f, "  {: >28}: {:?}", "message_number", v); }
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageMemoGlob {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMemoGlob>, &'a [u8])> {
@@ -32644,6 +33735,22 @@ pub struct FitMessageMesgCapabilities {
     pub count: Option<FitMessageMesgCapabilitiesSubfieldCount>,  
     
 }
+
+impl fmt::Display for FitMessageMesgCapabilities {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageMesgCapabilities");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v); }
+        if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v); }
+        if let Some(v) = &self.count_type { writeln!(f, "  {: >28}: {:?}", "count_type", v); }
+        writeln!(f, "  {: >28}: {:?}", "count_subfield_bytes", self.count_subfield_bytes);
+        if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageMesgCapabilities {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMesgCapabilities>, &'a [u8])> {
@@ -32864,6 +33971,20 @@ pub struct FitMessageMetZone {
     pub fat_calories: Option<f64>,  
     
 }
+
+impl fmt::Display for FitMessageMetZone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageMetZone");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v); }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
+        if let Some(v) = &self.fat_calories { writeln!(f, "  {: >28}: {:?}", "fat_calories", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageMetZone {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMetZone>, &'a [u8])> {
@@ -33135,6 +34256,46 @@ pub struct FitMessageMonitoring {
     pub vigorous_activity_minutes: Option<u16>,  
     
 }
+
+impl fmt::Display for FitMessageMonitoring {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageMonitoring");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
+        writeln!(f, "  {: >28}: {:?}", "cycles_subfield_bytes", self.cycles_subfield_bytes);
+        if let Some(v) = &self.cycles { writeln!(f, "  {: >28}: {:?}", "cycles", v); }
+        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v); }
+        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v); }
+        if let Some(v) = &self.activity_subtype { writeln!(f, "  {: >28}: {:?}", "activity_subtype", v); }
+        if let Some(v) = &self.activity_level { writeln!(f, "  {: >28}: {:?}", "activity_level", v); }
+        if let Some(v) = &self.distance_16 { writeln!(f, "  {: >28}: {:?}", "distance_16", v); }
+        if let Some(v) = &self.cycles_16 { writeln!(f, "  {: >28}: {:?}", "cycles_16", v); }
+        if let Some(v) = &self.active_time_16 { writeln!(f, "  {: >28}: {:?}", "active_time_16", v); }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
+        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v); }
+        if let Some(v) = &self.temperature_min { writeln!(f, "  {: >28}: {:?}", "temperature_min", v); }
+        if let Some(v) = &self.temperature_max { writeln!(f, "  {: >28}: {:?}", "temperature_max", v); }
+        if let Some(v) = &self.activity_time { writeln!(f, "  {: >28}: {:?}", "activity_time", v); }
+        if let Some(v) = &self.active_calories { writeln!(f, "  {: >28}: {:?}", "active_calories", v); }
+        if let Some(v) = &self.current_activity_type_intensity { writeln!(f, "  {: >28}: {:?}", "current_activity_type_intensity", v); }
+        if let Some(v) = &self.timestamp_min_8 { writeln!(f, "  {: >28}: {:?}", "timestamp_min_8", v); }
+        if let Some(v) = &self.timestamp_16 { writeln!(f, "  {: >28}: {:?}", "timestamp_16", v); }
+        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v); }
+        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v); }
+        if let Some(v) = &self.duration_min { writeln!(f, "  {: >28}: {:?}", "duration_min", v); }
+        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v); }
+        if let Some(v) = &self.ascent { writeln!(f, "  {: >28}: {:?}", "ascent", v); }
+        if let Some(v) = &self.descent { writeln!(f, "  {: >28}: {:?}", "descent", v); }
+        if let Some(v) = &self.moderate_activity_minutes { writeln!(f, "  {: >28}: {:?}", "moderate_activity_minutes", v); }
+        if let Some(v) = &self.vigorous_activity_minutes { writeln!(f, "  {: >28}: {:?}", "vigorous_activity_minutes", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageMonitoring {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMonitoring>, &'a [u8])> {
@@ -33989,6 +35150,22 @@ pub struct FitMessageMonitoringInfo {
     pub resting_metabolic_rate: Option<u16>,  
     
 }
+
+impl fmt::Display for FitMessageMonitoringInfo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageMonitoringInfo");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
+        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v); }
+        if let Some(v) = &self.cycles_to_distance { writeln!(f, "  {: >28}: {:?}", "cycles_to_distance", v); }
+        if let Some(v) = &self.cycles_to_calories { writeln!(f, "  {: >28}: {:?}", "cycles_to_calories", v); }
+        if let Some(v) = &self.resting_metabolic_rate { writeln!(f, "  {: >28}: {:?}", "resting_metabolic_rate", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageMonitoringInfo {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMonitoringInfo>, &'a [u8])> {
@@ -34270,6 +35447,19 @@ pub struct FitMessageNmeaSentence {
     pub sentence: Option<String>,  // NMEA sentence
     
 }
+
+impl fmt::Display for FitMessageNmeaSentence {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageNmeaSentence");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.sentence { writeln!(f, "  {: >28}: {:?}", "sentence", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageNmeaSentence {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageNmeaSentence>, &'a [u8])> {
@@ -34446,6 +35636,25 @@ pub struct FitMessageObdiiData {
     pub start_timestamp_ms: Option<u16>,  // Fractional part of start_timestamp
     
 }
+
+impl fmt::Display for FitMessageObdiiData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageObdiiData");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v); }
+        if let Some(v) = &self.pid { writeln!(f, "  {: >28}: {:?}", "pid", v); }
+        if let Some(v) = &self.raw_data { writeln!(f, "  {: >28}: {:?}", "raw_data", v); }
+        if let Some(v) = &self.pid_data_size { writeln!(f, "  {: >28}: {:?}", "pid_data_size", v); }
+        if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v); }
+        if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v); }
+        if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageObdiiData {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageObdiiData>, &'a [u8])> {
@@ -34789,6 +35998,18 @@ pub struct FitMessageOhrSettings {
     pub enabled: Option<FitFieldSwitch>,  
     
 }
+
+impl fmt::Display for FitMessageOhrSettings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageOhrSettings");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageOhrSettings {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageOhrSettings>, &'a [u8])> {
@@ -34966,6 +36187,23 @@ pub struct FitMessageOneDSensorCalibration {
     pub offset_cal: Option<i32>,  // Internal Calibration factor
     
 }
+
+impl fmt::Display for FitMessageOneDSensorCalibration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageOneDSensorCalibration");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v); }
+        writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes);
+        if let Some(v) = &self.calibration_factor { writeln!(f, "  {: >28}: {:?}", "calibration_factor", v); }
+        if let Some(v) = &self.calibration_divisor { writeln!(f, "  {: >28}: {:?}", "calibration_divisor", v); }
+        if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v); }
+        if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageOneDSensorCalibration {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageOneDSensorCalibration>, &'a [u8])> {
@@ -35220,6 +36458,19 @@ pub struct FitMessagePowerZone {
     pub name: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessagePowerZone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessagePowerZone");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessagePowerZone {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessagePowerZone>, &'a [u8])> {
@@ -35440,6 +36691,83 @@ pub struct FitMessageRecord {
     pub n2_load: Option<f64>,  
     
 }
+
+impl fmt::Display for FitMessageRecord {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageRecord");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
+        if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v); }
+        if let Some(v) = &self.heart_rate { writeln!(f, "  {: >28}: {:?}", "heart_rate", v); }
+        if let Some(v) = &self.cadence { writeln!(f, "  {: >28}: {:?}", "cadence", v); }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
+        if let Some(v) = &self.speed { writeln!(f, "  {: >28}: {:?}", "speed", v); }
+        if let Some(v) = &self.power { writeln!(f, "  {: >28}: {:?}", "power", v); }
+        if let Some(v) = &self.compressed_speed_distance { writeln!(f, "  {: >28}: {:?}", "compressed_speed_distance", v); }
+        if let Some(v) = &self.grade { writeln!(f, "  {: >28}: {:?}", "grade", v); }
+        if let Some(v) = &self.resistance { writeln!(f, "  {: >28}: {:?}", "resistance", v); }
+        if let Some(v) = &self.time_from_course { writeln!(f, "  {: >28}: {:?}", "time_from_course", v); }
+        if let Some(v) = &self.cycle_length { writeln!(f, "  {: >28}: {:?}", "cycle_length", v); }
+        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v); }
+        if let Some(v) = &self.speed_1s { writeln!(f, "  {: >28}: {:?}", "speed_1s", v); }
+        if let Some(v) = &self.cycles { writeln!(f, "  {: >28}: {:?}", "cycles", v); }
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
+        if let Some(v) = &self.compressed_accumulated_power { writeln!(f, "  {: >28}: {:?}", "compressed_accumulated_power", v); }
+        if let Some(v) = &self.accumulated_power { writeln!(f, "  {: >28}: {:?}", "accumulated_power", v); }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
+        if let Some(v) = &self.vertical_speed { writeln!(f, "  {: >28}: {:?}", "vertical_speed", v); }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
+        if let Some(v) = &self.vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "vertical_oscillation", v); }
+        if let Some(v) = &self.stance_time_percent { writeln!(f, "  {: >28}: {:?}", "stance_time_percent", v); }
+        if let Some(v) = &self.stance_time { writeln!(f, "  {: >28}: {:?}", "stance_time", v); }
+        if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v); }
+        if let Some(v) = &self.left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "left_torque_effectiveness", v); }
+        if let Some(v) = &self.right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "right_torque_effectiveness", v); }
+        if let Some(v) = &self.left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "left_pedal_smoothness", v); }
+        if let Some(v) = &self.right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "right_pedal_smoothness", v); }
+        if let Some(v) = &self.combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "combined_pedal_smoothness", v); }
+        if let Some(v) = &self.time128 { writeln!(f, "  {: >28}: {:?}", "time128", v); }
+        if let Some(v) = &self.stroke_type { writeln!(f, "  {: >28}: {:?}", "stroke_type", v); }
+        if let Some(v) = &self.zone { writeln!(f, "  {: >28}: {:?}", "zone", v); }
+        if let Some(v) = &self.ball_speed { writeln!(f, "  {: >28}: {:?}", "ball_speed", v); }
+        if let Some(v) = &self.cadence256 { writeln!(f, "  {: >28}: {:?}", "cadence256", v); }
+        if let Some(v) = &self.fractional_cadence { writeln!(f, "  {: >28}: {:?}", "fractional_cadence", v); }
+        if let Some(v) = &self.total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc", v); }
+        if let Some(v) = &self.total_hemoglobin_conc_min { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc_min", v); }
+        if let Some(v) = &self.total_hemoglobin_conc_max { writeln!(f, "  {: >28}: {:?}", "total_hemoglobin_conc_max", v); }
+        if let Some(v) = &self.saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.saturated_hemoglobin_percent_min { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent_min", v); }
+        if let Some(v) = &self.saturated_hemoglobin_percent_max { writeln!(f, "  {: >28}: {:?}", "saturated_hemoglobin_percent_max", v); }
+        if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v); }
+        if let Some(v) = &self.left_pco { writeln!(f, "  {: >28}: {:?}", "left_pco", v); }
+        if let Some(v) = &self.right_pco { writeln!(f, "  {: >28}: {:?}", "right_pco", v); }
+        if let Some(v) = &self.left_power_phase { writeln!(f, "  {: >28}: {:?}", "left_power_phase", v); }
+        if let Some(v) = &self.left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "left_power_phase_peak", v); }
+        if let Some(v) = &self.right_power_phase { writeln!(f, "  {: >28}: {:?}", "right_power_phase", v); }
+        if let Some(v) = &self.right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "right_power_phase_peak", v); }
+        if let Some(v) = &self.enhanced_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_speed", v); }
+        if let Some(v) = &self.enhanced_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_altitude", v); }
+        if let Some(v) = &self.battery_soc { writeln!(f, "  {: >28}: {:?}", "battery_soc", v); }
+        if let Some(v) = &self.motor_power { writeln!(f, "  {: >28}: {:?}", "motor_power", v); }
+        if let Some(v) = &self.vertical_ratio { writeln!(f, "  {: >28}: {:?}", "vertical_ratio", v); }
+        if let Some(v) = &self.stance_time_balance { writeln!(f, "  {: >28}: {:?}", "stance_time_balance", v); }
+        if let Some(v) = &self.step_length { writeln!(f, "  {: >28}: {:?}", "step_length", v); }
+        if let Some(v) = &self.absolute_pressure { writeln!(f, "  {: >28}: {:?}", "absolute_pressure", v); }
+        if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v); }
+        if let Some(v) = &self.next_stop_depth { writeln!(f, "  {: >28}: {:?}", "next_stop_depth", v); }
+        if let Some(v) = &self.next_stop_time { writeln!(f, "  {: >28}: {:?}", "next_stop_time", v); }
+        if let Some(v) = &self.time_to_surface { writeln!(f, "  {: >28}: {:?}", "time_to_surface", v); }
+        if let Some(v) = &self.ndl_time { writeln!(f, "  {: >28}: {:?}", "ndl_time", v); }
+        if let Some(v) = &self.cns_load { writeln!(f, "  {: >28}: {:?}", "cns_load", v); }
+        if let Some(v) = &self.n2_load { writeln!(f, "  {: >28}: {:?}", "n2_load", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageRecord {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageRecord>, &'a [u8])> {
@@ -35541,14 +36869,26 @@ impl FitMessageRecord {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             }
                         }
 
@@ -35562,14 +36902,26 @@ impl FitMessageRecord {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             }
                         }
 
@@ -37532,6 +38884,24 @@ pub struct FitMessageSchedule {
     pub scheduled_time: Option<FitFieldLocalDateTime>,  
     
 }
+
+impl fmt::Display for FitMessageSchedule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSchedule");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
+        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v); }
+        if let Some(v) = &self.completed { writeln!(f, "  {: >28}: {:?}", "completed", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.scheduled_time { writeln!(f, "  {: >28}: {:?}", "scheduled_time", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSchedule {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSchedule>, &'a [u8])> {
@@ -37798,6 +39168,24 @@ pub struct FitMessageSdmProfile {
     pub odometer_rollover: Option<u8>,  // Rollover counter that can be used to extend the odometer
     
 }
+
+impl fmt::Display for FitMessageSdmProfile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSdmProfile");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.sdm_ant_id { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id", v); }
+        if let Some(v) = &self.sdm_cal_factor { writeln!(f, "  {: >28}: {:?}", "sdm_cal_factor", v); }
+        if let Some(v) = &self.odometer { writeln!(f, "  {: >28}: {:?}", "odometer", v); }
+        if let Some(v) = &self.speed_source { writeln!(f, "  {: >28}: {:?}", "speed_source", v); }
+        if let Some(v) = &self.sdm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id_trans_type", v); }
+        if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSdmProfile {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSdmProfile>, &'a [u8])> {
@@ -38089,6 +39477,25 @@ pub struct FitMessageSegmentFile {
     pub default_race_leader: Option<u8>,  // Index for the Leader Board entry selected as the default race participant
     
 }
+
+impl fmt::Display for FitMessageSegmentFile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSegmentFile");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.file_uuid { writeln!(f, "  {: >28}: {:?}", "file_uuid", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.user_profile_primary_key { writeln!(f, "  {: >28}: {:?}", "user_profile_primary_key", v); }
+        if let Some(v) = &self.leader_type { writeln!(f, "  {: >28}: {:?}", "leader_type", v); }
+        if let Some(v) = &self.leader_group_primary_key { writeln!(f, "  {: >28}: {:?}", "leader_group_primary_key", v); }
+        if let Some(v) = &self.leader_activity_id { writeln!(f, "  {: >28}: {:?}", "leader_activity_id", v); }
+        if let Some(v) = &self.leader_activity_id_string { writeln!(f, "  {: >28}: {:?}", "leader_activity_id_string", v); }
+        if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSegmentFile {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentFile>, &'a [u8])> {
@@ -38441,6 +39848,25 @@ pub struct FitMessageSegmentId {
     pub selection_type: Option<FitFieldSegmentSelectionType>,  // Indicates how the segment was selected to be sent to the device
     
 }
+
+impl fmt::Display for FitMessageSegmentId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSegmentId");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v); }
+        if let Some(v) = &self.user_profile_primary_key { writeln!(f, "  {: >28}: {:?}", "user_profile_primary_key", v); }
+        if let Some(v) = &self.device_id { writeln!(f, "  {: >28}: {:?}", "device_id", v); }
+        if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v); }
+        if let Some(v) = &self.delete_status { writeln!(f, "  {: >28}: {:?}", "delete_status", v); }
+        if let Some(v) = &self.selection_type { writeln!(f, "  {: >28}: {:?}", "selection_type", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSegmentId {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentId>, &'a [u8])> {
@@ -38831,6 +40257,103 @@ pub struct FitMessageSegmentLap {
     pub manufacturer: Option<FitFieldManufacturer>,  // Manufacturer that produced the segment
     
 }
+
+impl fmt::Display for FitMessageSegmentLap {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSegmentLap");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
+        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v); }
+        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v); }
+        if let Some(v) = &self.end_position_lat { writeln!(f, "  {: >28}: {:?}", "end_position_lat", v); }
+        if let Some(v) = &self.end_position_long { writeln!(f, "  {: >28}: {:?}", "end_position_long", v); }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
+        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v); }
+        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes);
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
+        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v); }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
+        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v); }
+        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v); }
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
+        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v); }
+        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v); }
+        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v); }
+        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v); }
+        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v); }
+        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        if let Some(v) = &self.nec_lat { writeln!(f, "  {: >28}: {:?}", "nec_lat", v); }
+        if let Some(v) = &self.nec_long { writeln!(f, "  {: >28}: {:?}", "nec_long", v); }
+        if let Some(v) = &self.swc_lat { writeln!(f, "  {: >28}: {:?}", "swc_lat", v); }
+        if let Some(v) = &self.swc_long { writeln!(f, "  {: >28}: {:?}", "swc_long", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v); }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v); }
+        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v); }
+        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v); }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
+        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v); }
+        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v); }
+        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v); }
+        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v); }
+        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v); }
+        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v); }
+        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v); }
+        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v); }
+        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v); }
+        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v); }
+        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v); }
+        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v); }
+        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v); }
+        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v); }
+        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v); }
+        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v); }
+        if let Some(v) = &self.repetition_num { writeln!(f, "  {: >28}: {:?}", "repetition_num", v); }
+        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v); }
+        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v); }
+        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v); }
+        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v); }
+        if let Some(v) = &self.sport_event { writeln!(f, "  {: >28}: {:?}", "sport_event", v); }
+        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v); }
+        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v); }
+        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v); }
+        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v); }
+        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v); }
+        if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v); }
+        if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v); }
+        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v); }
+        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v); }
+        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v); }
+        if let Some(v) = &self.front_gear_shift_count { writeln!(f, "  {: >28}: {:?}", "front_gear_shift_count", v); }
+        if let Some(v) = &self.rear_gear_shift_count { writeln!(f, "  {: >28}: {:?}", "rear_gear_shift_count", v); }
+        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v); }
+        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v); }
+        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v); }
+        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v); }
+        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v); }
+        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v); }
+        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v); }
+        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v); }
+        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v); }
+        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v); }
+        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v); }
+        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v); }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSegmentLap {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentLap>, &'a [u8])> {
@@ -39037,14 +40560,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_lat = None
+                                }
                             }
                         }
 
@@ -39058,14 +40593,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_long = None
+                                }
                             }
                         }
 
@@ -39079,14 +40626,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_lat = None
+                                }
                             }
                         }
 
@@ -39100,14 +40659,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.end_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.end_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.end_position_long = None
+                                }
                             }
                         }
 
@@ -39559,14 +41130,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_lat = None
+                                }
                             }
                         }
 
@@ -39580,14 +41163,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_long = None
+                                }
                             }
                         }
 
@@ -39601,14 +41196,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_lat = None
+                                }
                             }
                         }
 
@@ -39622,14 +41229,26 @@ impl FitMessageSegmentLap {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_long = None
+                                }
                             }
                         }
 
@@ -41297,6 +42916,23 @@ pub struct FitMessageSegmentLeaderboardEntry {
     pub activity_id_string: Option<String>,  // String version of the activity_id. 21 characters long, express in decimal
     
 }
+
+impl fmt::Display for FitMessageSegmentLeaderboardEntry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSegmentLeaderboardEntry");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.group_primary_key { writeln!(f, "  {: >28}: {:?}", "group_primary_key", v); }
+        if let Some(v) = &self.activity_id { writeln!(f, "  {: >28}: {:?}", "activity_id", v); }
+        if let Some(v) = &self.segment_time { writeln!(f, "  {: >28}: {:?}", "segment_time", v); }
+        if let Some(v) = &self.activity_id_string { writeln!(f, "  {: >28}: {:?}", "activity_id_string", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSegmentLeaderboardEntry {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry>, &'a [u8])> {
@@ -41552,6 +43188,22 @@ pub struct FitMessageSegmentPoint {
     pub leader_time: Option<Vec<Option<f64>>>,  // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
     
 }
+
+impl fmt::Display for FitMessageSegmentPoint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSegmentPoint");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v); }
+        if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v); }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
+        if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v); }
+        if let Some(v) = &self.leader_time { writeln!(f, "  {: >28}: {:?}", "leader_time", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSegmentPoint {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentPoint>, &'a [u8])> {
@@ -41639,14 +43291,26 @@ impl FitMessageSegmentPoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_lat = None
+                                }
                             }
                         }
 
@@ -41660,14 +43324,26 @@ impl FitMessageSegmentPoint {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.position_long = None
+                                }
                             }
                         }
 
@@ -42008,6 +43684,138 @@ pub struct FitMessageSession {
     pub avg_vam: Option<f64>,  
     
 }
+
+impl fmt::Display for FitMessageSession {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSession");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v); }
+        if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v); }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
+        if let Some(v) = &self.start_position_lat { writeln!(f, "  {: >28}: {:?}", "start_position_lat", v); }
+        if let Some(v) = &self.start_position_long { writeln!(f, "  {: >28}: {:?}", "start_position_long", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.total_elapsed_time { writeln!(f, "  {: >28}: {:?}", "total_elapsed_time", v); }
+        if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v); }
+        if let Some(v) = &self.total_distance { writeln!(f, "  {: >28}: {:?}", "total_distance", v); }
+        writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes);
+        if let Some(v) = &self.total_cycles { writeln!(f, "  {: >28}: {:?}", "total_cycles", v); }
+        if let Some(v) = &self.total_calories { writeln!(f, "  {: >28}: {:?}", "total_calories", v); }
+        if let Some(v) = &self.total_fat_calories { writeln!(f, "  {: >28}: {:?}", "total_fat_calories", v); }
+        if let Some(v) = &self.avg_speed { writeln!(f, "  {: >28}: {:?}", "avg_speed", v); }
+        if let Some(v) = &self.max_speed { writeln!(f, "  {: >28}: {:?}", "max_speed", v); }
+        if let Some(v) = &self.avg_heart_rate { writeln!(f, "  {: >28}: {:?}", "avg_heart_rate", v); }
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
+        writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes);
+        if let Some(v) = &self.avg_cadence { writeln!(f, "  {: >28}: {:?}", "avg_cadence", v); }
+        writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes);
+        if let Some(v) = &self.max_cadence { writeln!(f, "  {: >28}: {:?}", "max_cadence", v); }
+        if let Some(v) = &self.avg_power { writeln!(f, "  {: >28}: {:?}", "avg_power", v); }
+        if let Some(v) = &self.max_power { writeln!(f, "  {: >28}: {:?}", "max_power", v); }
+        if let Some(v) = &self.total_ascent { writeln!(f, "  {: >28}: {:?}", "total_ascent", v); }
+        if let Some(v) = &self.total_descent { writeln!(f, "  {: >28}: {:?}", "total_descent", v); }
+        if let Some(v) = &self.total_training_effect { writeln!(f, "  {: >28}: {:?}", "total_training_effect", v); }
+        if let Some(v) = &self.first_lap_index { writeln!(f, "  {: >28}: {:?}", "first_lap_index", v); }
+        if let Some(v) = &self.num_laps { writeln!(f, "  {: >28}: {:?}", "num_laps", v); }
+        if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v); }
+        if let Some(v) = &self.trigger { writeln!(f, "  {: >28}: {:?}", "trigger", v); }
+        if let Some(v) = &self.nec_lat { writeln!(f, "  {: >28}: {:?}", "nec_lat", v); }
+        if let Some(v) = &self.nec_long { writeln!(f, "  {: >28}: {:?}", "nec_long", v); }
+        if let Some(v) = &self.swc_lat { writeln!(f, "  {: >28}: {:?}", "swc_lat", v); }
+        if let Some(v) = &self.swc_long { writeln!(f, "  {: >28}: {:?}", "swc_long", v); }
+        if let Some(v) = &self.normalized_power { writeln!(f, "  {: >28}: {:?}", "normalized_power", v); }
+        if let Some(v) = &self.training_stress_score { writeln!(f, "  {: >28}: {:?}", "training_stress_score", v); }
+        if let Some(v) = &self.intensity_factor { writeln!(f, "  {: >28}: {:?}", "intensity_factor", v); }
+        if let Some(v) = &self.left_right_balance { writeln!(f, "  {: >28}: {:?}", "left_right_balance", v); }
+        if let Some(v) = &self.avg_stroke_count { writeln!(f, "  {: >28}: {:?}", "avg_stroke_count", v); }
+        if let Some(v) = &self.avg_stroke_distance { writeln!(f, "  {: >28}: {:?}", "avg_stroke_distance", v); }
+        if let Some(v) = &self.swim_stroke { writeln!(f, "  {: >28}: {:?}", "swim_stroke", v); }
+        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v); }
+        if let Some(v) = &self.threshold_power { writeln!(f, "  {: >28}: {:?}", "threshold_power", v); }
+        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v); }
+        if let Some(v) = &self.num_active_lengths { writeln!(f, "  {: >28}: {:?}", "num_active_lengths", v); }
+        if let Some(v) = &self.total_work { writeln!(f, "  {: >28}: {:?}", "total_work", v); }
+        if let Some(v) = &self.avg_altitude { writeln!(f, "  {: >28}: {:?}", "avg_altitude", v); }
+        if let Some(v) = &self.max_altitude { writeln!(f, "  {: >28}: {:?}", "max_altitude", v); }
+        if let Some(v) = &self.gps_accuracy { writeln!(f, "  {: >28}: {:?}", "gps_accuracy", v); }
+        if let Some(v) = &self.avg_grade { writeln!(f, "  {: >28}: {:?}", "avg_grade", v); }
+        if let Some(v) = &self.avg_pos_grade { writeln!(f, "  {: >28}: {:?}", "avg_pos_grade", v); }
+        if let Some(v) = &self.avg_neg_grade { writeln!(f, "  {: >28}: {:?}", "avg_neg_grade", v); }
+        if let Some(v) = &self.max_pos_grade { writeln!(f, "  {: >28}: {:?}", "max_pos_grade", v); }
+        if let Some(v) = &self.max_neg_grade { writeln!(f, "  {: >28}: {:?}", "max_neg_grade", v); }
+        if let Some(v) = &self.avg_temperature { writeln!(f, "  {: >28}: {:?}", "avg_temperature", v); }
+        if let Some(v) = &self.max_temperature { writeln!(f, "  {: >28}: {:?}", "max_temperature", v); }
+        if let Some(v) = &self.total_moving_time { writeln!(f, "  {: >28}: {:?}", "total_moving_time", v); }
+        if let Some(v) = &self.avg_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_pos_vertical_speed", v); }
+        if let Some(v) = &self.avg_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "avg_neg_vertical_speed", v); }
+        if let Some(v) = &self.max_pos_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_pos_vertical_speed", v); }
+        if let Some(v) = &self.max_neg_vertical_speed { writeln!(f, "  {: >28}: {:?}", "max_neg_vertical_speed", v); }
+        if let Some(v) = &self.min_heart_rate { writeln!(f, "  {: >28}: {:?}", "min_heart_rate", v); }
+        if let Some(v) = &self.time_in_hr_zone { writeln!(f, "  {: >28}: {:?}", "time_in_hr_zone", v); }
+        if let Some(v) = &self.time_in_speed_zone { writeln!(f, "  {: >28}: {:?}", "time_in_speed_zone", v); }
+        if let Some(v) = &self.time_in_cadence_zone { writeln!(f, "  {: >28}: {:?}", "time_in_cadence_zone", v); }
+        if let Some(v) = &self.time_in_power_zone { writeln!(f, "  {: >28}: {:?}", "time_in_power_zone", v); }
+        if let Some(v) = &self.avg_lap_time { writeln!(f, "  {: >28}: {:?}", "avg_lap_time", v); }
+        if let Some(v) = &self.best_lap_index { writeln!(f, "  {: >28}: {:?}", "best_lap_index", v); }
+        if let Some(v) = &self.min_altitude { writeln!(f, "  {: >28}: {:?}", "min_altitude", v); }
+        if let Some(v) = &self.player_score { writeln!(f, "  {: >28}: {:?}", "player_score", v); }
+        if let Some(v) = &self.opponent_score { writeln!(f, "  {: >28}: {:?}", "opponent_score", v); }
+        if let Some(v) = &self.opponent_name { writeln!(f, "  {: >28}: {:?}", "opponent_name", v); }
+        if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v); }
+        if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v); }
+        if let Some(v) = &self.max_ball_speed { writeln!(f, "  {: >28}: {:?}", "max_ball_speed", v); }
+        if let Some(v) = &self.avg_ball_speed { writeln!(f, "  {: >28}: {:?}", "avg_ball_speed", v); }
+        if let Some(v) = &self.avg_vertical_oscillation { writeln!(f, "  {: >28}: {:?}", "avg_vertical_oscillation", v); }
+        if let Some(v) = &self.avg_stance_time_percent { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_percent", v); }
+        if let Some(v) = &self.avg_stance_time { writeln!(f, "  {: >28}: {:?}", "avg_stance_time", v); }
+        if let Some(v) = &self.avg_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "avg_fractional_cadence", v); }
+        if let Some(v) = &self.max_fractional_cadence { writeln!(f, "  {: >28}: {:?}", "max_fractional_cadence", v); }
+        if let Some(v) = &self.total_fractional_cycles { writeln!(f, "  {: >28}: {:?}", "total_fractional_cycles", v); }
+        if let Some(v) = &self.avg_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "avg_total_hemoglobin_conc", v); }
+        if let Some(v) = &self.min_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "min_total_hemoglobin_conc", v); }
+        if let Some(v) = &self.max_total_hemoglobin_conc { writeln!(f, "  {: >28}: {:?}", "max_total_hemoglobin_conc", v); }
+        if let Some(v) = &self.avg_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "avg_saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.min_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "min_saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.max_saturated_hemoglobin_percent { writeln!(f, "  {: >28}: {:?}", "max_saturated_hemoglobin_percent", v); }
+        if let Some(v) = &self.avg_left_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_left_torque_effectiveness", v); }
+        if let Some(v) = &self.avg_right_torque_effectiveness { writeln!(f, "  {: >28}: {:?}", "avg_right_torque_effectiveness", v); }
+        if let Some(v) = &self.avg_left_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_left_pedal_smoothness", v); }
+        if let Some(v) = &self.avg_right_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_right_pedal_smoothness", v); }
+        if let Some(v) = &self.avg_combined_pedal_smoothness { writeln!(f, "  {: >28}: {:?}", "avg_combined_pedal_smoothness", v); }
+        if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v); }
+        if let Some(v) = &self.time_standing { writeln!(f, "  {: >28}: {:?}", "time_standing", v); }
+        if let Some(v) = &self.stand_count { writeln!(f, "  {: >28}: {:?}", "stand_count", v); }
+        if let Some(v) = &self.avg_left_pco { writeln!(f, "  {: >28}: {:?}", "avg_left_pco", v); }
+        if let Some(v) = &self.avg_right_pco { writeln!(f, "  {: >28}: {:?}", "avg_right_pco", v); }
+        if let Some(v) = &self.avg_left_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase", v); }
+        if let Some(v) = &self.avg_left_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_left_power_phase_peak", v); }
+        if let Some(v) = &self.avg_right_power_phase { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase", v); }
+        if let Some(v) = &self.avg_right_power_phase_peak { writeln!(f, "  {: >28}: {:?}", "avg_right_power_phase_peak", v); }
+        if let Some(v) = &self.avg_power_position { writeln!(f, "  {: >28}: {:?}", "avg_power_position", v); }
+        if let Some(v) = &self.max_power_position { writeln!(f, "  {: >28}: {:?}", "max_power_position", v); }
+        if let Some(v) = &self.avg_cadence_position { writeln!(f, "  {: >28}: {:?}", "avg_cadence_position", v); }
+        if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v); }
+        if let Some(v) = &self.enhanced_avg_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_speed", v); }
+        if let Some(v) = &self.enhanced_max_speed { writeln!(f, "  {: >28}: {:?}", "enhanced_max_speed", v); }
+        if let Some(v) = &self.enhanced_avg_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_avg_altitude", v); }
+        if let Some(v) = &self.enhanced_min_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_min_altitude", v); }
+        if let Some(v) = &self.enhanced_max_altitude { writeln!(f, "  {: >28}: {:?}", "enhanced_max_altitude", v); }
+        if let Some(v) = &self.avg_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "avg_lev_motor_power", v); }
+        if let Some(v) = &self.max_lev_motor_power { writeln!(f, "  {: >28}: {:?}", "max_lev_motor_power", v); }
+        if let Some(v) = &self.lev_battery_consumption { writeln!(f, "  {: >28}: {:?}", "lev_battery_consumption", v); }
+        if let Some(v) = &self.avg_vertical_ratio { writeln!(f, "  {: >28}: {:?}", "avg_vertical_ratio", v); }
+        if let Some(v) = &self.avg_stance_time_balance { writeln!(f, "  {: >28}: {:?}", "avg_stance_time_balance", v); }
+        if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v); }
+        if let Some(v) = &self.total_anaerobic_training_effect { writeln!(f, "  {: >28}: {:?}", "total_anaerobic_training_effect", v); }
+        if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSession {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSession>, &'a [u8])> {
@@ -42228,14 +44036,26 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_lat = None
+                                }
                             }
                         }
 
@@ -42249,14 +44069,26 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.start_position_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.start_position_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.start_position_long = None
+                                }
                             }
                         }
 
@@ -42827,14 +44659,26 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_lat = None
+                                }
                             }
                         }
 
@@ -42848,14 +44692,26 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.nec_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.nec_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.nec_long = None
+                                }
                             }
                         }
 
@@ -42869,14 +44725,26 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_lat = None
+                                }
                             }
                         }
 
@@ -42890,14 +44758,26 @@ impl FitMessageSession {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.swc_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.swc_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.swc_long = None
+                                }
                             }
                         }
 
@@ -45582,6 +47462,27 @@ pub struct FitMessageSet {
     pub wkt_step_index: Option<FitFieldMessageIndex>,  
     
 }
+
+impl fmt::Display for FitMessageSet {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSet");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v); }
+        if let Some(v) = &self.repetitions { writeln!(f, "  {: >28}: {:?}", "repetitions", v); }
+        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v); }
+        if let Some(v) = &self.set_type { writeln!(f, "  {: >28}: {:?}", "set_type", v); }
+        if let Some(v) = &self.start_time { writeln!(f, "  {: >28}: {:?}", "start_time", v); }
+        if let Some(v) = &self.category { writeln!(f, "  {: >28}: {:?}", "category", v); }
+        if let Some(v) = &self.category_subtype { writeln!(f, "  {: >28}: {:?}", "category_subtype", v); }
+        if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v); }
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSet {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSet>, &'a [u8])> {
@@ -46019,6 +47920,19 @@ pub struct FitMessageSlaveDevice {
     pub product: Option<FitMessageSlaveDeviceSubfieldProduct>,  
     
 }
+
+impl fmt::Display for FitMessageSlaveDevice {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSlaveDevice");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSlaveDevice {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSlaveDevice>, &'a [u8])> {
@@ -46175,6 +48089,19 @@ pub struct FitMessageSoftware {
     pub part_number: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageSoftware {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSoftware");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.version { writeln!(f, "  {: >28}: {:?}", "version", v); }
+        if let Some(v) = &self.part_number { writeln!(f, "  {: >28}: {:?}", "part_number", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSoftware {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSoftware>, &'a [u8])> {
@@ -46343,6 +48270,19 @@ pub struct FitMessageSpeedZone {
     pub name: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageSpeedZone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSpeedZone");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSpeedZone {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSpeedZone>, &'a [u8])> {
@@ -46511,6 +48451,19 @@ pub struct FitMessageSport {
     pub name: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageSport {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSport");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageSport {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSport>, &'a [u8])> {
@@ -46666,6 +48619,18 @@ pub struct FitMessageStressLevel {
     pub stress_level_time: Option<FitFieldDateTime>,  // Time stress score was calculated
     
 }
+
+impl fmt::Display for FitMessageStressLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageStressLevel");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.stress_level_value { writeln!(f, "  {: >28}: {:?}", "stress_level_value", v); }
+        if let Some(v) = &self.stress_level_time { writeln!(f, "  {: >28}: {:?}", "stress_level_time", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageStressLevel {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageStressLevel>, &'a [u8])> {
@@ -46837,6 +48802,24 @@ pub struct FitMessageThreeDSensorCalibration {
     pub orientation_matrix: Option<Vec<Option<f64>>>,  // 3 x 3 rotation matrix (row major)
     
 }
+
+impl fmt::Display for FitMessageThreeDSensorCalibration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageThreeDSensorCalibration");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v); }
+        writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes);
+        if let Some(v) = &self.calibration_factor { writeln!(f, "  {: >28}: {:?}", "calibration_factor", v); }
+        if let Some(v) = &self.calibration_divisor { writeln!(f, "  {: >28}: {:?}", "calibration_divisor", v); }
+        if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v); }
+        if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v); }
+        if let Some(v) = &self.orientation_matrix { writeln!(f, "  {: >28}: {:?}", "orientation_matrix", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageThreeDSensorCalibration {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageThreeDSensorCalibration>, &'a [u8])> {
@@ -47148,6 +49131,23 @@ pub struct FitMessageTimestampCorrelation {
     pub system_timestamp_ms: Option<u16>,  // Millisecond part of the system timestamp
     
 }
+
+impl fmt::Display for FitMessageTimestampCorrelation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageTimestampCorrelation");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v); }
+        if let Some(v) = &self.system_timestamp { writeln!(f, "  {: >28}: {:?}", "system_timestamp", v); }
+        if let Some(v) = &self.fractional_system_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_system_timestamp", v); }
+        if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.system_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "system_timestamp_ms", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageTimestampCorrelation {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTimestampCorrelation>, &'a [u8])> {
@@ -47433,6 +49433,26 @@ pub struct FitMessageTotals {
     pub sport_index: Option<u8>,  
     
 }
+
+impl fmt::Display for FitMessageTotals {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageTotals");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timer_time { writeln!(f, "  {: >28}: {:?}", "timer_time", v); }
+        if let Some(v) = &self.distance { writeln!(f, "  {: >28}: {:?}", "distance", v); }
+        if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.elapsed_time { writeln!(f, "  {: >28}: {:?}", "elapsed_time", v); }
+        if let Some(v) = &self.sessions { writeln!(f, "  {: >28}: {:?}", "sessions", v); }
+        if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v); }
+        if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageTotals {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTotals>, &'a [u8])> {
@@ -47797,6 +49817,23 @@ pub struct FitMessageTrainingFile {
     pub time_created: Option<FitFieldDateTime>,  
     
 }
+
+impl fmt::Display for FitMessageTrainingFile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageTrainingFile");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v); }
+        writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes);
+        if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v); }
+        if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v); }
+        if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageTrainingFile {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTrainingFile>, &'a [u8])> {
@@ -48077,6 +50114,45 @@ pub struct FitMessageUserProfile {
     pub dive_count: Option<u32>,  
     
 }
+
+impl fmt::Display for FitMessageUserProfile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageUserProfile");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.friendly_name { writeln!(f, "  {: >28}: {:?}", "friendly_name", v); }
+        if let Some(v) = &self.gender { writeln!(f, "  {: >28}: {:?}", "gender", v); }
+        if let Some(v) = &self.age { writeln!(f, "  {: >28}: {:?}", "age", v); }
+        if let Some(v) = &self.height { writeln!(f, "  {: >28}: {:?}", "height", v); }
+        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v); }
+        if let Some(v) = &self.language { writeln!(f, "  {: >28}: {:?}", "language", v); }
+        if let Some(v) = &self.elev_setting { writeln!(f, "  {: >28}: {:?}", "elev_setting", v); }
+        if let Some(v) = &self.weight_setting { writeln!(f, "  {: >28}: {:?}", "weight_setting", v); }
+        if let Some(v) = &self.resting_heart_rate { writeln!(f, "  {: >28}: {:?}", "resting_heart_rate", v); }
+        if let Some(v) = &self.default_max_running_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_running_heart_rate", v); }
+        if let Some(v) = &self.default_max_biking_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_biking_heart_rate", v); }
+        if let Some(v) = &self.default_max_heart_rate { writeln!(f, "  {: >28}: {:?}", "default_max_heart_rate", v); }
+        if let Some(v) = &self.hr_setting { writeln!(f, "  {: >28}: {:?}", "hr_setting", v); }
+        if let Some(v) = &self.speed_setting { writeln!(f, "  {: >28}: {:?}", "speed_setting", v); }
+        if let Some(v) = &self.dist_setting { writeln!(f, "  {: >28}: {:?}", "dist_setting", v); }
+        if let Some(v) = &self.power_setting { writeln!(f, "  {: >28}: {:?}", "power_setting", v); }
+        if let Some(v) = &self.activity_class { writeln!(f, "  {: >28}: {:?}", "activity_class", v); }
+        if let Some(v) = &self.position_setting { writeln!(f, "  {: >28}: {:?}", "position_setting", v); }
+        if let Some(v) = &self.temperature_setting { writeln!(f, "  {: >28}: {:?}", "temperature_setting", v); }
+        if let Some(v) = &self.local_id { writeln!(f, "  {: >28}: {:?}", "local_id", v); }
+        if let Some(v) = &self.global_id { writeln!(f, "  {: >28}: {:?}", "global_id", v); }
+        if let Some(v) = &self.wake_time { writeln!(f, "  {: >28}: {:?}", "wake_time", v); }
+        if let Some(v) = &self.sleep_time { writeln!(f, "  {: >28}: {:?}", "sleep_time", v); }
+        if let Some(v) = &self.height_setting { writeln!(f, "  {: >28}: {:?}", "height_setting", v); }
+        if let Some(v) = &self.user_running_step_length { writeln!(f, "  {: >28}: {:?}", "user_running_step_length", v); }
+        if let Some(v) = &self.user_walking_step_length { writeln!(f, "  {: >28}: {:?}", "user_walking_step_length", v); }
+        if let Some(v) = &self.depth_setting { writeln!(f, "  {: >28}: {:?}", "depth_setting", v); }
+        if let Some(v) = &self.dive_count { writeln!(f, "  {: >28}: {:?}", "dive_count", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageUserProfile {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageUserProfile>, &'a [u8])> {
@@ -48827,6 +50903,19 @@ pub struct FitMessageVideo {
     pub duration: Option<u32>,  // Playback time of video
     
 }
+
+impl fmt::Display for FitMessageVideo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageVideo");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.url { writeln!(f, "  {: >28}: {:?}", "url", v); }
+        if let Some(v) = &self.hosting_provider { writeln!(f, "  {: >28}: {:?}", "hosting_provider", v); }
+        if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageVideo {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideo>, &'a [u8])> {
@@ -48987,6 +51076,23 @@ pub struct FitMessageVideoClip {
     pub clip_end: Option<u32>,  // End of clip in video time
     
 }
+
+impl fmt::Display for FitMessageVideoClip {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageVideoClip");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.clip_number { writeln!(f, "  {: >28}: {:?}", "clip_number", v); }
+        if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v); }
+        if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v); }
+        if let Some(v) = &self.end_timestamp { writeln!(f, "  {: >28}: {:?}", "end_timestamp", v); }
+        if let Some(v) = &self.end_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "end_timestamp_ms", v); }
+        if let Some(v) = &self.clip_start { writeln!(f, "  {: >28}: {:?}", "clip_start", v); }
+        if let Some(v) = &self.clip_end { writeln!(f, "  {: >28}: {:?}", "clip_end", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageVideoClip {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoClip>, &'a [u8])> {
@@ -49227,6 +51333,19 @@ pub struct FitMessageVideoDescription {
     pub text: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageVideoDescription {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageVideoDescription");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v); }
+        if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageVideoDescription {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoDescription>, &'a [u8])> {
@@ -49383,6 +51502,19 @@ pub struct FitMessageVideoFrame {
     pub frame_number: Option<u32>,  // Number of the frame that the timestamp and timestamp_ms correlate to
     
 }
+
+impl fmt::Display for FitMessageVideoFrame {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageVideoFrame");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v); }
+        if let Some(v) = &self.frame_number { writeln!(f, "  {: >28}: {:?}", "frame_number", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageVideoFrame {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoFrame>, &'a [u8])> {
@@ -49553,6 +51685,19 @@ pub struct FitMessageVideoTitle {
     pub text: Option<String>,  
     
 }
+
+impl fmt::Display for FitMessageVideoTitle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageVideoTitle");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v); }
+        if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageVideoTitle {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoTitle>, &'a [u8])> {
@@ -49741,6 +51886,20 @@ pub struct FitMessageWatchfaceSettings {
     pub layout: Option<FitMessageWatchfaceSettingsSubfieldLayout>,  
     
 }
+
+impl fmt::Display for FitMessageWatchfaceSettings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWatchfaceSettings");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.mode { writeln!(f, "  {: >28}: {:?}", "mode", v); }
+        writeln!(f, "  {: >28}: {:?}", "layout_subfield_bytes", self.layout_subfield_bytes);
+        if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWatchfaceSettings {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWatchfaceSettings>, &'a [u8])> {
@@ -49921,6 +52080,22 @@ pub struct FitMessageWeatherAlert {
     pub ftype: Option<FitFieldWeatherSevereType>,  // Tornado, Severe Thunderstorm, etc.
     
 }
+
+impl fmt::Display for FitMessageWeatherAlert {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWeatherAlert");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.report_id { writeln!(f, "  {: >28}: {:?}", "report_id", v); }
+        if let Some(v) = &self.issue_time { writeln!(f, "  {: >28}: {:?}", "issue_time", v); }
+        if let Some(v) = &self.expire_time { writeln!(f, "  {: >28}: {:?}", "expire_time", v); }
+        if let Some(v) = &self.severity { writeln!(f, "  {: >28}: {:?}", "severity", v); }
+        if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWeatherAlert {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeatherAlert>, &'a [u8])> {
@@ -50167,6 +52342,32 @@ pub struct FitMessageWeatherConditions {
     pub low_temperature: Option<i8>,  
     
 }
+
+impl fmt::Display for FitMessageWeatherConditions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWeatherConditions");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.weather_report { writeln!(f, "  {: >28}: {:?}", "weather_report", v); }
+        if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v); }
+        if let Some(v) = &self.condition { writeln!(f, "  {: >28}: {:?}", "condition", v); }
+        if let Some(v) = &self.wind_direction { writeln!(f, "  {: >28}: {:?}", "wind_direction", v); }
+        if let Some(v) = &self.wind_speed { writeln!(f, "  {: >28}: {:?}", "wind_speed", v); }
+        if let Some(v) = &self.precipitation_probability { writeln!(f, "  {: >28}: {:?}", "precipitation_probability", v); }
+        if let Some(v) = &self.temperature_feels_like { writeln!(f, "  {: >28}: {:?}", "temperature_feels_like", v); }
+        if let Some(v) = &self.relative_humidity { writeln!(f, "  {: >28}: {:?}", "relative_humidity", v); }
+        if let Some(v) = &self.location { writeln!(f, "  {: >28}: {:?}", "location", v); }
+        if let Some(v) = &self.observed_at_time { writeln!(f, "  {: >28}: {:?}", "observed_at_time", v); }
+        if let Some(v) = &self.observed_location_lat { writeln!(f, "  {: >28}: {:?}", "observed_location_lat", v); }
+        if let Some(v) = &self.observed_location_long { writeln!(f, "  {: >28}: {:?}", "observed_location_long", v); }
+        if let Some(v) = &self.day_of_week { writeln!(f, "  {: >28}: {:?}", "day_of_week", v); }
+        if let Some(v) = &self.high_temperature { writeln!(f, "  {: >28}: {:?}", "high_temperature", v); }
+        if let Some(v) = &self.low_temperature { writeln!(f, "  {: >28}: {:?}", "low_temperature", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWeatherConditions {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeatherConditions>, &'a [u8])> {
@@ -50490,14 +52691,26 @@ impl FitMessageWeatherConditions {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.observed_location_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.observed_location_lat = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_lat = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.observed_location_lat = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.observed_location_lat = None
+                                }
                             }
                         }
 
@@ -50511,14 +52724,26 @@ impl FitMessageWeatherConditions {
                                 
                                 let val = parse_sint32(&&bytes[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.observed_location_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.observed_location_long = None
+                                }
                             },
                             None => {
                                 saved_outp = &inp[f.field_size..];
                                 
                                 let val = parse_sint32(&inp[0..f.field_size], message.definition_message.endianness)?;
                                 
-                                message.observed_location_long = Some((val.unwrap() as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                
+                                match val {
+                                    Some(result) => {
+                                        message.observed_location_long = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                    },
+                                    None => message.observed_location_long = None
+                                }
                             }
                         }
 
@@ -50632,6 +52857,29 @@ pub struct FitMessageWeightScale {
     pub user_profile_index: Option<FitFieldMessageIndex>,  // Associates this weight scale message to a user.  This corresponds to the index of the user profile message in the weight scale file.
     
 }
+
+impl fmt::Display for FitMessageWeightScale {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWeightScale");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v); }
+        if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v); }
+        if let Some(v) = &self.percent_fat { writeln!(f, "  {: >28}: {:?}", "percent_fat", v); }
+        if let Some(v) = &self.percent_hydration { writeln!(f, "  {: >28}: {:?}", "percent_hydration", v); }
+        if let Some(v) = &self.visceral_fat_mass { writeln!(f, "  {: >28}: {:?}", "visceral_fat_mass", v); }
+        if let Some(v) = &self.bone_mass { writeln!(f, "  {: >28}: {:?}", "bone_mass", v); }
+        if let Some(v) = &self.muscle_mass { writeln!(f, "  {: >28}: {:?}", "muscle_mass", v); }
+        if let Some(v) = &self.basal_met { writeln!(f, "  {: >28}: {:?}", "basal_met", v); }
+        if let Some(v) = &self.physique_rating { writeln!(f, "  {: >28}: {:?}", "physique_rating", v); }
+        if let Some(v) = &self.active_met { writeln!(f, "  {: >28}: {:?}", "active_met", v); }
+        if let Some(v) = &self.metabolic_age { writeln!(f, "  {: >28}: {:?}", "metabolic_age", v); }
+        if let Some(v) = &self.visceral_fat_rating { writeln!(f, "  {: >28}: {:?}", "visceral_fat_rating", v); }
+        if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWeightScale {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeightScale>, &'a [u8])> {
@@ -51100,6 +53348,23 @@ pub struct FitMessageWorkout {
     pub pool_length_unit: Option<FitFieldDisplayMeasure>,  
     
 }
+
+impl fmt::Display for FitMessageWorkout {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWorkout");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v); }
+        if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v); }
+        if let Some(v) = &self.wkt_name { writeln!(f, "  {: >28}: {:?}", "wkt_name", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v); }
+        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWorkout {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkout>, &'a [u8])> {
@@ -51356,6 +53621,23 @@ pub struct FitMessageWorkoutSession {
     pub pool_length_unit: Option<FitFieldDisplayMeasure>,  
     
 }
+
+impl fmt::Display for FitMessageWorkoutSession {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWorkoutSession");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v); }
+        if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v); }
+        if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v); }
+        if let Some(v) = &self.first_step_index { writeln!(f, "  {: >28}: {:?}", "first_step_index", v); }
+        if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v); }
+        if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWorkoutSession {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkoutSession>, &'a [u8])> {
@@ -51951,6 +54233,35 @@ pub struct FitMessageWorkoutStep {
     pub weight_display_unit: Option<FitFieldFitBaseUnit>,  
     
 }
+
+impl fmt::Display for FitMessageWorkoutStep {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageWorkoutStep");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v); }
+        if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v); }
+        if let Some(v) = &self.duration_type { writeln!(f, "  {: >28}: {:?}", "duration_type", v); }
+        writeln!(f, "  {: >28}: {:?}", "duration_value_subfield_bytes", self.duration_value_subfield_bytes);
+        if let Some(v) = &self.duration_value { writeln!(f, "  {: >28}: {:?}", "duration_value", v); }
+        if let Some(v) = &self.target_type { writeln!(f, "  {: >28}: {:?}", "target_type", v); }
+        writeln!(f, "  {: >28}: {:?}", "target_value_subfield_bytes", self.target_value_subfield_bytes);
+        if let Some(v) = &self.target_value { writeln!(f, "  {: >28}: {:?}", "target_value", v); }
+        writeln!(f, "  {: >28}: {:?}", "custom_target_value_low_subfield_bytes", self.custom_target_value_low_subfield_bytes);
+        if let Some(v) = &self.custom_target_value_low { writeln!(f, "  {: >28}: {:?}", "custom_target_value_low", v); }
+        writeln!(f, "  {: >28}: {:?}", "custom_target_value_high_subfield_bytes", self.custom_target_value_high_subfield_bytes);
+        if let Some(v) = &self.custom_target_value_high { writeln!(f, "  {: >28}: {:?}", "custom_target_value_high", v); }
+        if let Some(v) = &self.intensity { writeln!(f, "  {: >28}: {:?}", "intensity", v); }
+        if let Some(v) = &self.notes { writeln!(f, "  {: >28}: {:?}", "notes", v); }
+        if let Some(v) = &self.equipment { writeln!(f, "  {: >28}: {:?}", "equipment", v); }
+        if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v); }
+        if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v); }
+        if let Some(v) = &self.exercise_weight { writeln!(f, "  {: >28}: {:?}", "exercise_weight", v); }
+        if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageWorkoutStep {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkoutStep>, &'a [u8])> {
@@ -52415,6 +54726,21 @@ pub struct FitMessageZonesTarget {
     pub pwr_calc_type: Option<FitFieldPwrZoneCalc>,  
     
 }
+
+impl fmt::Display for FitMessageZonesTarget {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageZonesTarget");
+        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes);
+        if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v); }
+        if let Some(v) = &self.threshold_heart_rate { writeln!(f, "  {: >28}: {:?}", "threshold_heart_rate", v); }
+        if let Some(v) = &self.functional_threshold_power { writeln!(f, "  {: >28}: {:?}", "functional_threshold_power", v); }
+        if let Some(v) = &self.hr_calc_type { writeln!(f, "  {: >28}: {:?}", "hr_calc_type", v); }
+        if let Some(v) = &self.pwr_calc_type { writeln!(f, "  {: >28}: {:?}", "pwr_calc_type", v); }
+        
+        Ok(())
+    }
+}
+
 impl FitMessageZonesTarget {
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageZonesTarget>, &'a [u8])> {
@@ -52689,6 +55015,98 @@ pub enum FitDataMessage {
     WorkoutStep(Rc<FitMessageWorkoutStep>),
     ZonesTarget(Rc<FitMessageZonesTarget>),
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
+}
+
+impl fmt::Display for FitDataMessage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {FitDataMessage::AccelerometerData(m) => write!(f, "{}", m),
+            FitDataMessage::Activity(m) => write!(f, "{}", m),
+            FitDataMessage::AntChannelId(m) => write!(f, "{}", m),
+            FitDataMessage::AntRx(m) => write!(f, "{}", m),
+            FitDataMessage::AntTx(m) => write!(f, "{}", m),
+            FitDataMessage::AviationAttitude(m) => write!(f, "{}", m),
+            FitDataMessage::BarometerData(m) => write!(f, "{}", m),
+            FitDataMessage::BikeProfile(m) => write!(f, "{}", m),
+            FitDataMessage::BloodPressure(m) => write!(f, "{}", m),
+            FitDataMessage::CadenceZone(m) => write!(f, "{}", m),
+            FitDataMessage::CameraEvent(m) => write!(f, "{}", m),
+            FitDataMessage::Capabilities(m) => write!(f, "{}", m),
+            FitDataMessage::Connectivity(m) => write!(f, "{}", m),
+            FitDataMessage::Course(m) => write!(f, "{}", m),
+            FitDataMessage::CoursePoint(m) => write!(f, "{}", m),
+            FitDataMessage::DeveloperDataId(m) => write!(f, "{}", m),
+            FitDataMessage::DeviceInfo(m) => write!(f, "{}", m),
+            FitDataMessage::DeviceSettings(m) => write!(f, "{}", m),
+            FitDataMessage::DiveAlarm(m) => write!(f, "{}", m),
+            FitDataMessage::DiveGas(m) => write!(f, "{}", m),
+            FitDataMessage::DiveSettings(m) => write!(f, "{}", m),
+            FitDataMessage::DiveSummary(m) => write!(f, "{}", m),
+            FitDataMessage::Event(m) => write!(f, "{}", m),
+            FitDataMessage::ExdDataConceptConfiguration(m) => write!(f, "{}", m),
+            FitDataMessage::ExdDataFieldConfiguration(m) => write!(f, "{}", m),
+            FitDataMessage::ExdScreenConfiguration(m) => write!(f, "{}", m),
+            FitDataMessage::ExerciseTitle(m) => write!(f, "{}", m),
+            FitDataMessage::FieldCapabilities(m) => write!(f, "{}", m),
+            FitDataMessage::FieldDescription(m) => write!(f, "{}", m),
+            FitDataMessage::FileCapabilities(m) => write!(f, "{}", m),
+            FitDataMessage::FileCreator(m) => write!(f, "{}", m),
+            FitDataMessage::FileId(m) => write!(f, "{}", m),
+            FitDataMessage::Goal(m) => write!(f, "{}", m),
+            FitDataMessage::GpsMetadata(m) => write!(f, "{}", m),
+            FitDataMessage::GyroscopeData(m) => write!(f, "{}", m),
+            FitDataMessage::Hr(m) => write!(f, "{}", m),
+            FitDataMessage::HrZone(m) => write!(f, "{}", m),
+            FitDataMessage::HrmProfile(m) => write!(f, "{}", m),
+            FitDataMessage::Hrv(m) => write!(f, "{}", m),
+            FitDataMessage::Lap(m) => write!(f, "{}", m),
+            FitDataMessage::Length(m) => write!(f, "{}", m),
+            FitDataMessage::MagnetometerData(m) => write!(f, "{}", m),
+            FitDataMessage::MemoGlob(m) => write!(f, "{}", m),
+            FitDataMessage::MesgCapabilities(m) => write!(f, "{}", m),
+            FitDataMessage::MetZone(m) => write!(f, "{}", m),
+            FitDataMessage::Monitoring(m) => write!(f, "{}", m),
+            FitDataMessage::MonitoringInfo(m) => write!(f, "{}", m),
+            FitDataMessage::NmeaSentence(m) => write!(f, "{}", m),
+            FitDataMessage::ObdiiData(m) => write!(f, "{}", m),
+            FitDataMessage::OhrSettings(m) => write!(f, "{}", m),
+            FitDataMessage::OneDSensorCalibration(m) => write!(f, "{}", m),
+            FitDataMessage::PowerZone(m) => write!(f, "{}", m),
+            FitDataMessage::Record(m) => write!(f, "{}", m),
+            FitDataMessage::Schedule(m) => write!(f, "{}", m),
+            FitDataMessage::SdmProfile(m) => write!(f, "{}", m),
+            FitDataMessage::SegmentFile(m) => write!(f, "{}", m),
+            FitDataMessage::SegmentId(m) => write!(f, "{}", m),
+            FitDataMessage::SegmentLap(m) => write!(f, "{}", m),
+            FitDataMessage::SegmentLeaderboardEntry(m) => write!(f, "{}", m),
+            FitDataMessage::SegmentPoint(m) => write!(f, "{}", m),
+            FitDataMessage::Session(m) => write!(f, "{}", m),
+            FitDataMessage::Set(m) => write!(f, "{}", m),
+            FitDataMessage::SlaveDevice(m) => write!(f, "{}", m),
+            FitDataMessage::Software(m) => write!(f, "{}", m),
+            FitDataMessage::SpeedZone(m) => write!(f, "{}", m),
+            FitDataMessage::Sport(m) => write!(f, "{}", m),
+            FitDataMessage::StressLevel(m) => write!(f, "{}", m),
+            FitDataMessage::ThreeDSensorCalibration(m) => write!(f, "{}", m),
+            FitDataMessage::TimestampCorrelation(m) => write!(f, "{}", m),
+            FitDataMessage::Totals(m) => write!(f, "{}", m),
+            FitDataMessage::TrainingFile(m) => write!(f, "{}", m),
+            FitDataMessage::UserProfile(m) => write!(f, "{}", m),
+            FitDataMessage::Video(m) => write!(f, "{}", m),
+            FitDataMessage::VideoClip(m) => write!(f, "{}", m),
+            FitDataMessage::VideoDescription(m) => write!(f, "{}", m),
+            FitDataMessage::VideoFrame(m) => write!(f, "{}", m),
+            FitDataMessage::VideoTitle(m) => write!(f, "{}", m),
+            FitDataMessage::WatchfaceSettings(m) => write!(f, "{}", m),
+            FitDataMessage::WeatherAlert(m) => write!(f, "{}", m),
+            FitDataMessage::WeatherConditions(m) => write!(f, "{}", m),
+            FitDataMessage::WeightScale(m) => write!(f, "{}", m),
+            FitDataMessage::Workout(m) => write!(f, "{}", m),
+            FitDataMessage::WorkoutSession(m) => write!(f, "{}", m),
+            FitDataMessage::WorkoutStep(m) => write!(f, "{}", m),
+            FitDataMessage::ZonesTarget(m) => write!(f, "{}", m),
+            FitDataMessage::UnknownToSdk(_) => write!(f, "UnknownToSdk")
+        }
+    }
 }
 
 impl FitDataMessage {
