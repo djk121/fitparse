@@ -210,6 +210,30 @@ use subset_with_pad;
 
 use errors::{Error, Result};
 
+macro_rules! fmt_developer_fields {
+    ($s:ident, $f:ident) => {
+        if $s.developer_fields.len() > 0 {
+            for developer_field in &$s.developer_fields {
+                if let Some(field_names) = &developer_field.field_description.field_name {
+                    if let Some(name) = &field_names[0] { write!($f, "  {: >28}: ", name)?; }
+                }
+                writeln!($f, "{}", developer_field.value)?;
+            }
+        }
+    };
+}
+
+macro_rules! fmt_raw_bytes {
+    ($s:ident, $f:ident) => {{
+        write!($f, "  {: >28}: [", "raw_bytes")?;
+        for i in 0..$s.raw_bytes.len() - 1 {
+            write!($f, "{:08b}", $s.raw_bytes[i])?;
+            if i < $s.raw_bytes.len() - 1 { write!($f, ",")?; }
+        }
+        writeln!($f, "]")?;
+    }};
+}
+
 #[derive(Copy, Clone, Debug)]
 pub struct FitFieldDateTime {
     seconds_since_garmin_epoch: u32,
@@ -472,13 +496,15 @@ pub struct {{ message_name }} {
 impl fmt::Display for {{ message_name }} {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "{{ message_name}}")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         {% for field in fields -%}
         {%- if field.has_subfields -%}
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
         {% endif -%}
         if let Some(v) = &self.{{ field.name }} { writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", v)?; }
         {% endfor %}
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -494,12 +520,12 @@ impl {{ message_name }} {
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "{{ message_name }}",
-            {%- for field in fields %}
+            {% for field in fields %}
             {%- if field.has_subfields -%}
             {{ field.name }}_subfield_bytes: vec![],
             {% endif -%}
             {{ field.name }}: None,
-            {%- endfor %}
+            {% endfor %}
         };
 
         let inp = &input[..(message.definition_message.message_size)];

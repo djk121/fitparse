@@ -655,6 +655,79 @@ enum FitBaseValue {
     Byte(Option<Vec<u8>>),
 }
 
+
+macro_rules! base_type_formatter {
+    ($val:ident, $f:ident) => {
+        match $val {
+            None => write!($f, "None")?,
+            Some(ref v) => write!($f, "{}", v)?
+        }
+    };
+}
+
+macro_rules! base_type_vec_formatter {
+    ($vals:ident, $f:ident) => {
+        {
+        write!($f, "[")?;
+        for i in 0..$vals.len() - 2 {
+            match $vals[i] {
+                Some(v) => write!($f, "{}, ", v)?,
+                None => write!($f, "None, ")?
+            }
+        }
+        match $vals[$vals.len()-1] {
+            Some(v) => write!($f, "{}] ", v)?,
+            None => write!($f, "None], ")?
+        }
+        }
+    };
+}
+
+impl fmt::Display for FitBaseValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            &FitBaseValue::Enum(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::EnumVec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Sint8(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Sint8Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint8(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint8Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint8z(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint8zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Sint16(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Sint16Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint16(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint16Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint16z(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint16zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Sint32(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Sint32Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint32(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint32Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint32z(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint32zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Float32(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Float32Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Sint64(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Sint64Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint64(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint64Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Uint64z(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Uint64zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::Float64(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Float64Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
+            &FitBaseValue::String(ref val) => { base_type_formatter!(val, f) },
+            &FitBaseValue::Byte(ref val) => { 
+                match val {
+                    Some(bytes) => write!(f, "{:?}", bytes)?,
+                    None => write!(f, "None")?,
+                }
+            },
+        }
+        Ok(())
+    }
+}
+
 impl FitBaseValue {
     fn parse<'a>(
         input: &'a [u8],

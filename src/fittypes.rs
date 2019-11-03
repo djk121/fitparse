@@ -24,6 +24,30 @@ use subset_with_pad;
 
 use errors::{Error, Result};
 
+macro_rules! fmt_developer_fields {
+    ($s:ident, $f:ident) => {
+        if $s.developer_fields.len() > 0 {
+            for developer_field in &$s.developer_fields {
+                if let Some(field_names) = &developer_field.field_description.field_name {
+                    if let Some(name) = &field_names[0] { write!($f, "  {: >28}: ", name)?; }
+                }
+                writeln!($f, "{}", developer_field.value)?;
+            }
+        }
+    };
+}
+
+macro_rules! fmt_raw_bytes {
+    ($s:ident, $f:ident) => {{
+        write!($f, "  {: >28}: [", "raw_bytes")?;
+        for i in 0..$s.raw_bytes.len() - 1 {
+            write!($f, "{:08b}", $s.raw_bytes[i])?;
+            if i < $s.raw_bytes.len() - 1 { write!($f, ",")?; }
+        }
+        writeln!($f, "]")?;
+    }};
+}
+
 #[derive(Copy, Clone, Debug)]
 pub struct FitFieldDateTime {
     seconds_since_garmin_epoch: u32,
@@ -15321,7 +15345,6 @@ pub struct FitMessageAccelerometerData {
 impl fmt::Display for FitMessageAccelerometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAccelerometerData")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
@@ -15335,6 +15358,9 @@ impl fmt::Display for FitMessageAccelerometerData {
         if let Some(v) = &self.compressed_calibrated_accel_y { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_y", v)?; }
         if let Some(v) = &self.compressed_calibrated_accel_z { writeln!(f, "  {: >28}: {:?}", "compressed_calibrated_accel_z", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -15349,7 +15375,20 @@ impl FitMessageAccelerometerData {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageAccelerometerData",timestamp: None,timestamp_ms: None,sample_time_offset: None,accel_x: None,accel_y: None,accel_z: None,calibrated_accel_x: None,calibrated_accel_y: None,calibrated_accel_z: None,compressed_calibrated_accel_x: None,compressed_calibrated_accel_y: None,compressed_calibrated_accel_z: None,
+            message_name: "FitMessageAccelerometerData",
+            timestamp: None,
+            timestamp_ms: None,
+            sample_time_offset: None,
+            accel_x: None,
+            accel_y: None,
+            accel_z: None,
+            calibrated_accel_x: None,
+            calibrated_accel_y: None,
+            calibrated_accel_z: None,
+            compressed_calibrated_accel_x: None,
+            compressed_calibrated_accel_y: None,
+            compressed_calibrated_accel_z: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -15867,7 +15906,6 @@ pub struct FitMessageActivity {
 impl fmt::Display for FitMessageActivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageActivity")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.total_timer_time { writeln!(f, "  {: >28}: {:?}", "total_timer_time", v)?; }
         if let Some(v) = &self.num_sessions { writeln!(f, "  {: >28}: {:?}", "num_sessions", v)?; }
@@ -15877,6 +15915,9 @@ impl fmt::Display for FitMessageActivity {
         if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v)?; }
         if let Some(v) = &self.event_group { writeln!(f, "  {: >28}: {:?}", "event_group", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -15891,7 +15932,16 @@ impl FitMessageActivity {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageActivity",timestamp: None,total_timer_time: None,num_sessions: None,ftype: None,event: None,event_type: None,local_timestamp: None,event_group: None,
+            message_name: "FitMessageActivity",
+            timestamp: None,
+            total_timer_time: None,
+            num_sessions: None,
+            ftype: None,
+            event: None,
+            event_type: None,
+            local_timestamp: None,
+            event_group: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -16174,13 +16224,15 @@ pub struct FitMessageAntChannelId {
 impl fmt::Display for FitMessageAntChannelId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntChannelId")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v)?; }
         if let Some(v) = &self.device_type { writeln!(f, "  {: >28}: {:?}", "device_type", v)?; }
         if let Some(v) = &self.device_number { writeln!(f, "  {: >28}: {:?}", "device_number", v)?; }
         if let Some(v) = &self.transmission_type { writeln!(f, "  {: >28}: {:?}", "transmission_type", v)?; }
         if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -16195,7 +16247,13 @@ impl FitMessageAntChannelId {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageAntChannelId",channel_number: None,device_type: None,device_number: None,transmission_type: None,device_index: None,
+            message_name: "FitMessageAntChannelId",
+            channel_number: None,
+            device_type: None,
+            device_number: None,
+            transmission_type: None,
+            device_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -16390,7 +16448,6 @@ pub struct FitMessageAntRx {
 impl fmt::Display for FitMessageAntRx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntRx")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
         if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v)?; }
@@ -16398,6 +16455,9 @@ impl fmt::Display for FitMessageAntRx {
         if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v)?; }
         if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -16412,7 +16472,14 @@ impl FitMessageAntRx {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageAntRx",timestamp: None,fractional_timestamp: None,mesg_id: None,mesg_data: None,channel_number: None,data: None,
+            message_name: "FitMessageAntRx",
+            timestamp: None,
+            fractional_timestamp: None,
+            mesg_id: None,
+            mesg_data: None,
+            channel_number: None,
+            data: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -16663,7 +16730,6 @@ pub struct FitMessageAntTx {
 impl fmt::Display for FitMessageAntTx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntTx")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
         if let Some(v) = &self.mesg_id { writeln!(f, "  {: >28}: {:?}", "mesg_id", v)?; }
@@ -16671,6 +16737,9 @@ impl fmt::Display for FitMessageAntTx {
         if let Some(v) = &self.channel_number { writeln!(f, "  {: >28}: {:?}", "channel_number", v)?; }
         if let Some(v) = &self.data { writeln!(f, "  {: >28}: {:?}", "data", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -16685,7 +16754,14 @@ impl FitMessageAntTx {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageAntTx",timestamp: None,fractional_timestamp: None,mesg_id: None,mesg_data: None,channel_number: None,data: None,
+            message_name: "FitMessageAntTx",
+            timestamp: None,
+            fractional_timestamp: None,
+            mesg_id: None,
+            mesg_data: None,
+            channel_number: None,
+            data: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -16942,7 +17018,6 @@ pub struct FitMessageAviationAttitude {
 impl fmt::Display for FitMessageAviationAttitude {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAviationAttitude")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.system_time { writeln!(f, "  {: >28}: {:?}", "system_time", v)?; }
@@ -16956,6 +17031,9 @@ impl fmt::Display for FitMessageAviationAttitude {
         if let Some(v) = &self.track { writeln!(f, "  {: >28}: {:?}", "track", v)?; }
         if let Some(v) = &self.validity { writeln!(f, "  {: >28}: {:?}", "validity", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -16970,7 +17048,20 @@ impl FitMessageAviationAttitude {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageAviationAttitude",timestamp: None,timestamp_ms: None,system_time: None,pitch: None,roll: None,accel_lateral: None,accel_normal: None,turn_rate: None,stage: None,attitude_stage_complete: None,track: None,validity: None,
+            message_name: "FitMessageAviationAttitude",
+            timestamp: None,
+            timestamp_ms: None,
+            system_time: None,
+            pitch: None,
+            roll: None,
+            accel_lateral: None,
+            accel_normal: None,
+            turn_rate: None,
+            stage: None,
+            attitude_stage_complete: None,
+            track: None,
+            validity: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -17484,12 +17575,14 @@ pub struct FitMessageBarometerData {
 impl fmt::Display for FitMessageBarometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBarometerData")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
         if let Some(v) = &self.baro_pres { writeln!(f, "  {: >28}: {:?}", "baro_pres", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -17504,7 +17597,12 @@ impl FitMessageBarometerData {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageBarometerData",timestamp: None,timestamp_ms: None,sample_time_offset: None,baro_pres: None,
+            message_name: "FitMessageBarometerData",
+            timestamp: None,
+            timestamp_ms: None,
+            sample_time_offset: None,
+            baro_pres: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -17750,7 +17848,6 @@ pub struct FitMessageBikeProfile {
 impl fmt::Display for FitMessageBikeProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBikeProfile")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
@@ -17784,6 +17881,9 @@ impl fmt::Display for FitMessageBikeProfile {
         if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v)?; }
         if let Some(v) = &self.shimano_di2_enabled { writeln!(f, "  {: >28}: {:?}", "shimano_di2_enabled", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -17798,7 +17898,40 @@ impl FitMessageBikeProfile {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageBikeProfile",message_index: None,name: None,sport: None,sub_sport: None,odometer: None,bike_spd_ant_id: None,bike_cad_ant_id: None,bike_spdcad_ant_id: None,bike_power_ant_id: None,custom_wheelsize: None,auto_wheelsize: None,bike_weight: None,power_cal_factor: None,auto_wheel_cal: None,auto_power_zero: None,id: None,spd_enabled: None,cad_enabled: None,spdcad_enabled: None,power_enabled: None,crank_length: None,enabled: None,bike_spd_ant_id_trans_type: None,bike_cad_ant_id_trans_type: None,bike_spdcad_ant_id_trans_type: None,bike_power_ant_id_trans_type: None,odometer_rollover: None,front_gear_num: None,front_gear: None,rear_gear_num: None,rear_gear: None,shimano_di2_enabled: None,
+            message_name: "FitMessageBikeProfile",
+            message_index: None,
+            name: None,
+            sport: None,
+            sub_sport: None,
+            odometer: None,
+            bike_spd_ant_id: None,
+            bike_cad_ant_id: None,
+            bike_spdcad_ant_id: None,
+            bike_power_ant_id: None,
+            custom_wheelsize: None,
+            auto_wheelsize: None,
+            bike_weight: None,
+            power_cal_factor: None,
+            auto_wheel_cal: None,
+            auto_power_zero: None,
+            id: None,
+            spd_enabled: None,
+            cad_enabled: None,
+            spdcad_enabled: None,
+            power_enabled: None,
+            crank_length: None,
+            enabled: None,
+            bike_spd_ant_id_trans_type: None,
+            bike_cad_ant_id_trans_type: None,
+            bike_spdcad_ant_id_trans_type: None,
+            bike_power_ant_id_trans_type: None,
+            odometer_rollover: None,
+            front_gear_num: None,
+            front_gear: None,
+            rear_gear_num: None,
+            rear_gear: None,
+            shimano_di2_enabled: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -18669,7 +18802,6 @@ pub struct FitMessageBloodPressure {
 impl fmt::Display for FitMessageBloodPressure {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBloodPressure")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.systolic_pressure { writeln!(f, "  {: >28}: {:?}", "systolic_pressure", v)?; }
         if let Some(v) = &self.diastolic_pressure { writeln!(f, "  {: >28}: {:?}", "diastolic_pressure", v)?; }
@@ -18682,6 +18814,9 @@ impl fmt::Display for FitMessageBloodPressure {
         if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v)?; }
         if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -18696,7 +18831,19 @@ impl FitMessageBloodPressure {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageBloodPressure",timestamp: None,systolic_pressure: None,diastolic_pressure: None,mean_arterial_pressure: None,map_3_sample_mean: None,map_morning_values: None,map_evening_values: None,heart_rate: None,heart_rate_type: None,status: None,user_profile_index: None,
+            message_name: "FitMessageBloodPressure",
+            timestamp: None,
+            systolic_pressure: None,
+            diastolic_pressure: None,
+            mean_arterial_pressure: None,
+            map_3_sample_mean: None,
+            map_morning_values: None,
+            map_evening_values: None,
+            heart_rate: None,
+            heart_rate_type: None,
+            status: None,
+            user_profile_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -19028,11 +19175,13 @@ pub struct FitMessageCadenceZone {
 impl fmt::Display for FitMessageCadenceZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCadenceZone")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -19047,7 +19196,11 @@ impl FitMessageCadenceZone {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageCadenceZone",message_index: None,high_value: None,name: None,
+            message_name: "FitMessageCadenceZone",
+            message_index: None,
+            high_value: None,
+            name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -19199,13 +19352,15 @@ pub struct FitMessageCameraEvent {
 impl fmt::Display for FitMessageCameraEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCameraEvent")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.camera_event_type { writeln!(f, "  {: >28}: {:?}", "camera_event_type", v)?; }
         if let Some(v) = &self.camera_file_uuid { writeln!(f, "  {: >28}: {:?}", "camera_file_uuid", v)?; }
         if let Some(v) = &self.camera_orientation { writeln!(f, "  {: >28}: {:?}", "camera_orientation", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -19220,7 +19375,13 @@ impl FitMessageCameraEvent {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageCameraEvent",timestamp: None,timestamp_ms: None,camera_event_type: None,camera_file_uuid: None,camera_orientation: None,
+            message_name: "FitMessageCameraEvent",
+            timestamp: None,
+            timestamp_ms: None,
+            camera_event_type: None,
+            camera_file_uuid: None,
+            camera_orientation: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -19427,12 +19588,14 @@ pub struct FitMessageCapabilities {
 impl fmt::Display for FitMessageCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCapabilities")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.languages { writeln!(f, "  {: >28}: {:?}", "languages", v)?; }
         if let Some(v) = &self.sports { writeln!(f, "  {: >28}: {:?}", "sports", v)?; }
         if let Some(v) = &self.workouts_supported { writeln!(f, "  {: >28}: {:?}", "workouts_supported", v)?; }
         if let Some(v) = &self.connectivity_supported { writeln!(f, "  {: >28}: {:?}", "connectivity_supported", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -19447,7 +19610,12 @@ impl FitMessageCapabilities {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageCapabilities",languages: None,sports: None,workouts_supported: None,connectivity_supported: None,
+            message_name: "FitMessageCapabilities",
+            languages: None,
+            sports: None,
+            workouts_supported: None,
+            connectivity_supported: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -19660,7 +19828,6 @@ pub struct FitMessageConnectivity {
 impl fmt::Display for FitMessageConnectivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageConnectivity")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.bluetooth_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_enabled", v)?; }
         if let Some(v) = &self.bluetooth_le_enabled { writeln!(f, "  {: >28}: {:?}", "bluetooth_le_enabled", v)?; }
         if let Some(v) = &self.ant_enabled { writeln!(f, "  {: >28}: {:?}", "ant_enabled", v)?; }
@@ -19675,6 +19842,9 @@ impl fmt::Display for FitMessageConnectivity {
         if let Some(v) = &self.incident_detection_enabled { writeln!(f, "  {: >28}: {:?}", "incident_detection_enabled", v)?; }
         if let Some(v) = &self.grouptrack_enabled { writeln!(f, "  {: >28}: {:?}", "grouptrack_enabled", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -19689,7 +19859,21 @@ impl FitMessageConnectivity {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageConnectivity",bluetooth_enabled: None,bluetooth_le_enabled: None,ant_enabled: None,name: None,live_tracking_enabled: None,weather_conditions_enabled: None,weather_alerts_enabled: None,auto_activity_upload_enabled: None,course_download_enabled: None,workout_download_enabled: None,gps_ephemeris_download_enabled: None,incident_detection_enabled: None,grouptrack_enabled: None,
+            message_name: "FitMessageConnectivity",
+            bluetooth_enabled: None,
+            bluetooth_le_enabled: None,
+            ant_enabled: None,
+            name: None,
+            live_tracking_enabled: None,
+            weather_conditions_enabled: None,
+            weather_alerts_enabled: None,
+            auto_activity_upload_enabled: None,
+            course_download_enabled: None,
+            workout_download_enabled: None,
+            gps_ephemeris_download_enabled: None,
+            incident_detection_enabled: None,
+            grouptrack_enabled: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -20050,12 +20234,14 @@ pub struct FitMessageCourse {
 impl fmt::Display for FitMessageCourse {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCourse")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v)?; }
         if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -20070,7 +20256,12 @@ impl FitMessageCourse {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageCourse",sport: None,name: None,capabilities: None,sub_sport: None,
+            message_name: "FitMessageCourse",
+            sport: None,
+            name: None,
+            capabilities: None,
+            sub_sport: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -20246,7 +20437,6 @@ pub struct FitMessageCoursePoint {
 impl fmt::Display for FitMessageCoursePoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCoursePoint")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
@@ -20256,6 +20446,9 @@ impl fmt::Display for FitMessageCoursePoint {
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         if let Some(v) = &self.favorite { writeln!(f, "  {: >28}: {:?}", "favorite", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -20270,7 +20463,16 @@ impl FitMessageCoursePoint {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageCoursePoint",message_index: None,timestamp: None,position_lat: None,position_long: None,distance: None,ftype: None,name: None,favorite: None,
+            message_name: "FitMessageCoursePoint",
+            message_index: None,
+            timestamp: None,
+            position_lat: None,
+            position_long: None,
+            distance: None,
+            ftype: None,
+            name: None,
+            favorite: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -20577,13 +20779,15 @@ pub struct FitMessageDeveloperDataId {
 impl fmt::Display for FitMessageDeveloperDataId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeveloperDataId")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.developer_id { writeln!(f, "  {: >28}: {:?}", "developer_id", v)?; }
         if let Some(v) = &self.application_id { writeln!(f, "  {: >28}: {:?}", "application_id", v)?; }
         if let Some(v) = &self.manufacturer_id { writeln!(f, "  {: >28}: {:?}", "manufacturer_id", v)?; }
         if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v)?; }
         if let Some(v) = &self.application_version { writeln!(f, "  {: >28}: {:?}", "application_version", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -20598,7 +20802,13 @@ impl FitMessageDeveloperDataId {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDeveloperDataId",developer_id: None,application_id: None,manufacturer_id: None,developer_data_index: None,application_version: None,
+            message_name: "FitMessageDeveloperDataId",
+            developer_id: None,
+            application_id: None,
+            manufacturer_id: None,
+            developer_data_index: None,
+            application_version: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -20881,7 +21091,6 @@ pub struct FitMessageDeviceInfo {
 impl fmt::Display for FitMessageDeviceInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeviceInfo")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
         writeln!(f, "  {: >28}: {:?}", "device_type_subfield_bytes", self.device_type_subfield_bytes)?;
@@ -20903,6 +21112,9 @@ impl fmt::Display for FitMessageDeviceInfo {
         if let Some(v) = &self.source_type { writeln!(f, "  {: >28}: {:?}", "source_type", v)?; }
         if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -20917,9 +21129,28 @@ impl FitMessageDeviceInfo {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDeviceInfo",timestamp: None,device_index: None,device_type_subfield_bytes: vec![],
-            device_type: None,manufacturer: None,serial_number: None,product_subfield_bytes: vec![],
-            product: None,software_version: None,hardware_version: None,cum_operating_time: None,battery_voltage: None,battery_status: None,sensor_position: None,descriptor: None,ant_transmission_type: None,ant_device_number: None,ant_network: None,source_type: None,product_name: None,
+            message_name: "FitMessageDeviceInfo",
+            timestamp: None,
+            device_index: None,
+            device_type_subfield_bytes: vec![],
+            device_type: None,
+            manufacturer: None,
+            serial_number: None,
+            product_subfield_bytes: vec![],
+            product: None,
+            software_version: None,
+            hardware_version: None,
+            cum_operating_time: None,
+            battery_voltage: None,
+            battery_status: None,
+            sensor_position: None,
+            descriptor: None,
+            ant_transmission_type: None,
+            ant_device_number: None,
+            ant_network: None,
+            source_type: None,
+            product_name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -21468,7 +21699,6 @@ pub struct FitMessageDeviceSettings {
 impl fmt::Display for FitMessageDeviceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeviceSettings")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.active_time_zone { writeln!(f, "  {: >28}: {:?}", "active_time_zone", v)?; }
         if let Some(v) = &self.utc_offset { writeln!(f, "  {: >28}: {:?}", "utc_offset", v)?; }
         if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v)?; }
@@ -21493,6 +21723,9 @@ impl fmt::Display for FitMessageDeviceSettings {
         if let Some(v) = &self.smart_notification_display_orientation { writeln!(f, "  {: >28}: {:?}", "smart_notification_display_orientation", v)?; }
         if let Some(v) = &self.tap_interface { writeln!(f, "  {: >28}: {:?}", "tap_interface", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -21507,7 +21740,31 @@ impl FitMessageDeviceSettings {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDeviceSettings",active_time_zone: None,utc_offset: None,time_offset: None,time_mode: None,time_zone_offset: None,backlight_mode: None,activity_tracker_enabled: None,clock_time: None,pages_enabled: None,move_alert_enabled: None,date_mode: None,display_orientation: None,mounting_side: None,default_page: None,autosync_min_steps: None,autosync_min_time: None,lactate_threshold_autodetect_enabled: None,ble_auto_upload_enabled: None,auto_sync_frequency: None,auto_activity_detect: None,number_of_screens: None,smart_notification_display_orientation: None,tap_interface: None,
+            message_name: "FitMessageDeviceSettings",
+            active_time_zone: None,
+            utc_offset: None,
+            time_offset: None,
+            time_mode: None,
+            time_zone_offset: None,
+            backlight_mode: None,
+            activity_tracker_enabled: None,
+            clock_time: None,
+            pages_enabled: None,
+            move_alert_enabled: None,
+            date_mode: None,
+            display_orientation: None,
+            mounting_side: None,
+            default_page: None,
+            autosync_min_steps: None,
+            autosync_min_time: None,
+            lactate_threshold_autodetect_enabled: None,
+            ble_auto_upload_enabled: None,
+            auto_sync_frequency: None,
+            auto_activity_detect: None,
+            number_of_screens: None,
+            smart_notification_display_orientation: None,
+            tap_interface: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -22161,7 +22418,6 @@ pub struct FitMessageDiveAlarm {
 impl fmt::Display for FitMessageDiveAlarm {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveAlarm")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.depth { writeln!(f, "  {: >28}: {:?}", "depth", v)?; }
         if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v)?; }
@@ -22170,6 +22426,9 @@ impl fmt::Display for FitMessageDiveAlarm {
         if let Some(v) = &self.sound { writeln!(f, "  {: >28}: {:?}", "sound", v)?; }
         if let Some(v) = &self.dive_types { writeln!(f, "  {: >28}: {:?}", "dive_types", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -22184,7 +22443,15 @@ impl FitMessageDiveAlarm {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDiveAlarm",message_index: None,depth: None,time: None,enabled: None,alarm_type: None,sound: None,dive_types: None,
+            message_name: "FitMessageDiveAlarm",
+            message_index: None,
+            depth: None,
+            time: None,
+            enabled: None,
+            alarm_type: None,
+            sound: None,
+            dive_types: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -22459,12 +22726,14 @@ pub struct FitMessageDiveGas {
 impl fmt::Display for FitMessageDiveGas {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveGas")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.helium_content { writeln!(f, "  {: >28}: {:?}", "helium_content", v)?; }
         if let Some(v) = &self.oxygen_content { writeln!(f, "  {: >28}: {:?}", "oxygen_content", v)?; }
         if let Some(v) = &self.status { writeln!(f, "  {: >28}: {:?}", "status", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -22479,7 +22748,12 @@ impl FitMessageDiveGas {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDiveGas",message_index: None,helium_content: None,oxygen_content: None,status: None,
+            message_name: "FitMessageDiveGas",
+            message_index: None,
+            helium_content: None,
+            oxygen_content: None,
+            status: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -22701,7 +22975,6 @@ pub struct FitMessageDiveSettings {
 impl fmt::Display for FitMessageDiveSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveSettings")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         if let Some(v) = &self.model { writeln!(f, "  {: >28}: {:?}", "model", v)?; }
@@ -22726,6 +22999,9 @@ impl fmt::Display for FitMessageDiveSettings {
         writeln!(f, "  {: >28}: {:?}", "heart_rate_source_subfield_bytes", self.heart_rate_source_subfield_bytes)?;
         if let Some(v) = &self.heart_rate_source { writeln!(f, "  {: >28}: {:?}", "heart_rate_source", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -22740,8 +23016,31 @@ impl FitMessageDiveSettings {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDiveSettings",message_index: None,name: None,model: None,gf_low: None,gf_high: None,water_type: None,water_density: None,po2_warn: None,po2_critical: None,po2_deco: None,safety_stop_enabled: None,bottom_depth: None,bottom_time: None,apnea_countdown_enabled: None,apnea_countdown_time: None,backlight_mode: None,backlight_brightness: None,backlight_timeout: None,repeat_dive_interval: None,safety_stop_time: None,heart_rate_source_type: None,heart_rate_source_subfield_bytes: vec![],
+            message_name: "FitMessageDiveSettings",
+            message_index: None,
+            name: None,
+            model: None,
+            gf_low: None,
+            gf_high: None,
+            water_type: None,
+            water_density: None,
+            po2_warn: None,
+            po2_critical: None,
+            po2_deco: None,
+            safety_stop_enabled: None,
+            bottom_depth: None,
+            bottom_time: None,
+            apnea_countdown_enabled: None,
+            apnea_countdown_time: None,
+            backlight_mode: None,
+            backlight_brightness: None,
+            backlight_timeout: None,
+            repeat_dive_interval: None,
+            safety_stop_time: None,
+            heart_rate_source_type: None,
+            heart_rate_source_subfield_bytes: vec![],
             heart_rate_source: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -23380,7 +23679,6 @@ pub struct FitMessageDiveSummary {
 impl fmt::Display for FitMessageDiveSummary {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveSummary")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.reference_mesg { writeln!(f, "  {: >28}: {:?}", "reference_mesg", v)?; }
         if let Some(v) = &self.reference_index { writeln!(f, "  {: >28}: {:?}", "reference_index", v)?; }
@@ -23395,6 +23693,9 @@ impl fmt::Display for FitMessageDiveSummary {
         if let Some(v) = &self.dive_number { writeln!(f, "  {: >28}: {:?}", "dive_number", v)?; }
         if let Some(v) = &self.bottom_time { writeln!(f, "  {: >28}: {:?}", "bottom_time", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -23409,7 +23710,21 @@ impl FitMessageDiveSummary {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageDiveSummary",timestamp: None,reference_mesg: None,reference_index: None,avg_depth: None,max_depth: None,surface_interval: None,start_cns: None,end_cns: None,start_n2: None,end_n2: None,o2_toxicity: None,dive_number: None,bottom_time: None,
+            message_name: "FitMessageDiveSummary",
+            timestamp: None,
+            reference_mesg: None,
+            reference_index: None,
+            avg_depth: None,
+            max_depth: None,
+            surface_interval: None,
+            start_cns: None,
+            end_cns: None,
+            start_n2: None,
+            end_n2: None,
+            o2_toxicity: None,
+            dive_number: None,
+            bottom_time: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -24053,7 +24368,6 @@ pub struct FitMessageEvent {
 impl fmt::Display for FitMessageEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageEvent")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
         if let Some(v) = &self.event_type { writeln!(f, "  {: >28}: {:?}", "event_type", v)?; }
@@ -24069,6 +24383,9 @@ impl fmt::Display for FitMessageEvent {
         if let Some(v) = &self.rear_gear { writeln!(f, "  {: >28}: {:?}", "rear_gear", v)?; }
         if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -24083,8 +24400,22 @@ impl FitMessageEvent {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageEvent",timestamp: None,event: None,event_type: None,data16: None,data_subfield_bytes: vec![],
-            data: None,event_group: None,score: None,opponent_score: None,front_gear_num: None,front_gear: None,rear_gear_num: None,rear_gear: None,device_index: None,
+            message_name: "FitMessageEvent",
+            timestamp: None,
+            event: None,
+            event_type: None,
+            data16: None,
+            data_subfield_bytes: vec![],
+            data: None,
+            event_group: None,
+            score: None,
+            opponent_score: None,
+            front_gear_num: None,
+            front_gear: None,
+            rear_gear_num: None,
+            rear_gear: None,
+            device_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -24487,7 +24818,6 @@ pub struct FitMessageExdDataConceptConfiguration {
 impl fmt::Display for FitMessageExdDataConceptConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdDataConceptConfiguration")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v)?; }
         if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v)?; }
         if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v)?; }
@@ -24500,6 +24830,9 @@ impl fmt::Display for FitMessageExdDataConceptConfiguration {
         if let Some(v) = &self.descriptor { writeln!(f, "  {: >28}: {:?}", "descriptor", v)?; }
         if let Some(v) = &self.is_signed { writeln!(f, "  {: >28}: {:?}", "is_signed", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -24514,7 +24847,19 @@ impl FitMessageExdDataConceptConfiguration {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageExdDataConceptConfiguration",screen_index: None,concept_field: None,field_id: None,concept_index: None,data_page: None,concept_key: None,scaling: None,data_units: None,qualifier: None,descriptor: None,is_signed: None,
+            message_name: "FitMessageExdDataConceptConfiguration",
+            screen_index: None,
+            concept_field: None,
+            field_id: None,
+            concept_index: None,
+            data_page: None,
+            concept_key: None,
+            scaling: None,
+            data_units: None,
+            qualifier: None,
+            descriptor: None,
+            is_signed: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -24837,7 +25182,6 @@ pub struct FitMessageExdDataFieldConfiguration {
 impl fmt::Display for FitMessageExdDataFieldConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdDataFieldConfiguration")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v)?; }
         if let Some(v) = &self.concept_field { writeln!(f, "  {: >28}: {:?}", "concept_field", v)?; }
         if let Some(v) = &self.field_id { writeln!(f, "  {: >28}: {:?}", "field_id", v)?; }
@@ -24845,6 +25189,9 @@ impl fmt::Display for FitMessageExdDataFieldConfiguration {
         if let Some(v) = &self.display_type { writeln!(f, "  {: >28}: {:?}", "display_type", v)?; }
         if let Some(v) = &self.title { writeln!(f, "  {: >28}: {:?}", "title", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -24859,7 +25206,14 @@ impl FitMessageExdDataFieldConfiguration {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageExdDataFieldConfiguration",screen_index: None,concept_field: None,field_id: None,concept_count: None,display_type: None,title: None,
+            message_name: "FitMessageExdDataFieldConfiguration",
+            screen_index: None,
+            concept_field: None,
+            field_id: None,
+            concept_count: None,
+            display_type: None,
+            title: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -25091,12 +25445,14 @@ pub struct FitMessageExdScreenConfiguration {
 impl fmt::Display for FitMessageExdScreenConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdScreenConfiguration")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.screen_index { writeln!(f, "  {: >28}: {:?}", "screen_index", v)?; }
         if let Some(v) = &self.field_count { writeln!(f, "  {: >28}: {:?}", "field_count", v)?; }
         if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v)?; }
         if let Some(v) = &self.screen_enabled { writeln!(f, "  {: >28}: {:?}", "screen_enabled", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -25111,7 +25467,12 @@ impl FitMessageExdScreenConfiguration {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageExdScreenConfiguration",screen_index: None,field_count: None,layout: None,screen_enabled: None,
+            message_name: "FitMessageExdScreenConfiguration",
+            screen_index: None,
+            field_count: None,
+            layout: None,
+            screen_enabled: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -25283,12 +25644,14 @@ pub struct FitMessageExerciseTitle {
 impl fmt::Display for FitMessageExerciseTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExerciseTitle")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.exercise_category { writeln!(f, "  {: >28}: {:?}", "exercise_category", v)?; }
         if let Some(v) = &self.exercise_name { writeln!(f, "  {: >28}: {:?}", "exercise_name", v)?; }
         if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -25303,7 +25666,12 @@ impl FitMessageExerciseTitle {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageExerciseTitle",message_index: None,exercise_category: None,exercise_name: None,wkt_step_name: None,
+            message_name: "FitMessageExerciseTitle",
+            message_index: None,
+            exercise_category: None,
+            exercise_name: None,
+            wkt_step_name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -25492,13 +25860,15 @@ pub struct FitMessageFieldCapabilities {
 impl fmt::Display for FitMessageFieldCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFieldCapabilities")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v)?; }
         if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v)?; }
         if let Some(v) = &self.field_num { writeln!(f, "  {: >28}: {:?}", "field_num", v)?; }
         if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -25513,7 +25883,13 @@ impl FitMessageFieldCapabilities {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageFieldCapabilities",message_index: None,file: None,mesg_num: None,field_num: None,count: None,
+            message_name: "FitMessageFieldCapabilities",
+            message_index: None,
+            file: None,
+            mesg_num: None,
+            field_num: None,
+            count: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -25716,7 +26092,6 @@ pub struct FitMessageFieldDescription {
 impl fmt::Display for FitMessageFieldDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFieldDescription")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.developer_data_index { writeln!(f, "  {: >28}: {:?}", "developer_data_index", v)?; }
         if let Some(v) = &self.field_definition_number { writeln!(f, "  {: >28}: {:?}", "field_definition_number", v)?; }
         if let Some(v) = &self.fit_base_type_id { writeln!(f, "  {: >28}: {:?}", "fit_base_type_id", v)?; }
@@ -25732,6 +26107,9 @@ impl fmt::Display for FitMessageFieldDescription {
         if let Some(v) = &self.native_mesg_num { writeln!(f, "  {: >28}: {:?}", "native_mesg_num", v)?; }
         if let Some(v) = &self.native_field_num { writeln!(f, "  {: >28}: {:?}", "native_field_num", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -25746,7 +26124,22 @@ impl FitMessageFieldDescription {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageFieldDescription",developer_data_index: None,field_definition_number: None,fit_base_type_id: None,field_name: None,array: None,components: None,scale: None,offset: None,units: None,bits: None,accumulate: None,fit_base_unit_id: None,native_mesg_num: None,native_field_num: None,
+            message_name: "FitMessageFieldDescription",
+            developer_data_index: None,
+            field_definition_number: None,
+            fit_base_type_id: None,
+            field_name: None,
+            array: None,
+            components: None,
+            scale: None,
+            offset: None,
+            units: None,
+            bits: None,
+            accumulate: None,
+            fit_base_unit_id: None,
+            native_mesg_num: None,
+            native_field_num: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -26162,7 +26555,6 @@ pub struct FitMessageFileCapabilities {
 impl fmt::Display for FitMessageFileCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileCapabilities")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
         if let Some(v) = &self.flags { writeln!(f, "  {: >28}: {:?}", "flags", v)?; }
@@ -26170,6 +26562,9 @@ impl fmt::Display for FitMessageFileCapabilities {
         if let Some(v) = &self.max_count { writeln!(f, "  {: >28}: {:?}", "max_count", v)?; }
         if let Some(v) = &self.max_size { writeln!(f, "  {: >28}: {:?}", "max_size", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -26184,7 +26579,14 @@ impl FitMessageFileCapabilities {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageFileCapabilities",message_index: None,ftype: None,flags: None,directory: None,max_count: None,max_size: None,
+            message_name: "FitMessageFileCapabilities",
+            message_index: None,
+            ftype: None,
+            flags: None,
+            directory: None,
+            max_count: None,
+            max_size: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -26396,10 +26798,12 @@ pub struct FitMessageFileCreator {
 impl fmt::Display for FitMessageFileCreator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileCreator")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.software_version { writeln!(f, "  {: >28}: {:?}", "software_version", v)?; }
         if let Some(v) = &self.hardware_version { writeln!(f, "  {: >28}: {:?}", "hardware_version", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -26414,7 +26818,10 @@ impl FitMessageFileCreator {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageFileCreator",software_version: None,hardware_version: None,
+            message_name: "FitMessageFileCreator",
+            software_version: None,
+            hardware_version: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -26591,7 +26998,6 @@ pub struct FitMessageFileId {
 impl fmt::Display for FitMessageFileId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileId")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
         if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
@@ -26601,6 +27007,9 @@ impl fmt::Display for FitMessageFileId {
         if let Some(v) = &self.number { writeln!(f, "  {: >28}: {:?}", "number", v)?; }
         if let Some(v) = &self.product_name { writeln!(f, "  {: >28}: {:?}", "product_name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -26615,8 +27024,16 @@ impl FitMessageFileId {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageFileId",ftype: None,manufacturer: None,product_subfield_bytes: vec![],
-            product: None,serial_number: None,time_created: None,number: None,product_name: None,
+            message_name: "FitMessageFileId",
+            ftype: None,
+            manufacturer: None,
+            product_subfield_bytes: vec![],
+            product: None,
+            serial_number: None,
+            time_created: None,
+            number: None,
+            product_name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -26880,7 +27297,6 @@ pub struct FitMessageGoal {
 impl fmt::Display for FitMessageGoal {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGoal")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
         if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
@@ -26895,6 +27311,9 @@ impl fmt::Display for FitMessageGoal {
         if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
         if let Some(v) = &self.source { writeln!(f, "  {: >28}: {:?}", "source", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -26909,7 +27328,21 @@ impl FitMessageGoal {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageGoal",message_index: None,sport: None,sub_sport: None,start_date: None,end_date: None,ftype: None,value: None,repeat: None,target_value: None,recurrence: None,recurrence_value: None,enabled: None,source: None,
+            message_name: "FitMessageGoal",
+            message_index: None,
+            sport: None,
+            sub_sport: None,
+            start_date: None,
+            end_date: None,
+            ftype: None,
+            value: None,
+            repeat: None,
+            target_value: None,
+            recurrence: None,
+            recurrence_value: None,
+            enabled: None,
+            source: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -27275,7 +27708,6 @@ pub struct FitMessageGpsMetadata {
 impl fmt::Display for FitMessageGpsMetadata {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGpsMetadata")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
@@ -27286,6 +27718,9 @@ impl fmt::Display for FitMessageGpsMetadata {
         if let Some(v) = &self.utc_timestamp { writeln!(f, "  {: >28}: {:?}", "utc_timestamp", v)?; }
         if let Some(v) = &self.velocity { writeln!(f, "  {: >28}: {:?}", "velocity", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -27300,7 +27735,17 @@ impl FitMessageGpsMetadata {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageGpsMetadata",timestamp: None,timestamp_ms: None,position_lat: None,position_long: None,enhanced_altitude: None,enhanced_speed: None,heading: None,utc_timestamp: None,velocity: None,
+            message_name: "FitMessageGpsMetadata",
+            timestamp: None,
+            timestamp_ms: None,
+            position_lat: None,
+            position_long: None,
+            enhanced_altitude: None,
+            enhanced_speed: None,
+            heading: None,
+            utc_timestamp: None,
+            velocity: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -27672,7 +28117,6 @@ pub struct FitMessageGyroscopeData {
 impl fmt::Display for FitMessageGyroscopeData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGyroscopeData")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
@@ -27683,6 +28127,9 @@ impl fmt::Display for FitMessageGyroscopeData {
         if let Some(v) = &self.calibrated_gyro_y { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_y", v)?; }
         if let Some(v) = &self.calibrated_gyro_z { writeln!(f, "  {: >28}: {:?}", "calibrated_gyro_z", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -27697,7 +28144,17 @@ impl FitMessageGyroscopeData {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageGyroscopeData",timestamp: None,timestamp_ms: None,sample_time_offset: None,gyro_x: None,gyro_y: None,gyro_z: None,calibrated_gyro_x: None,calibrated_gyro_y: None,calibrated_gyro_z: None,
+            message_name: "FitMessageGyroscopeData",
+            timestamp: None,
+            timestamp_ms: None,
+            sample_time_offset: None,
+            gyro_x: None,
+            gyro_y: None,
+            gyro_z: None,
+            calibrated_gyro_x: None,
+            calibrated_gyro_y: None,
+            calibrated_gyro_z: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -28102,7 +28559,6 @@ pub struct FitMessageHr {
 impl fmt::Display for FitMessageHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHr")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
         if let Some(v) = &self.time256 { writeln!(f, "  {: >28}: {:?}", "time256", v)?; }
@@ -28110,6 +28566,9 @@ impl fmt::Display for FitMessageHr {
         if let Some(v) = &self.event_timestamp { writeln!(f, "  {: >28}: {:?}", "event_timestamp", v)?; }
         if let Some(v) = &self.event_timestamp_12 { writeln!(f, "  {: >28}: {:?}", "event_timestamp_12", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -28124,7 +28583,14 @@ impl FitMessageHr {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageHr",timestamp: None,fractional_timestamp: None,time256: None,filtered_bpm: None,event_timestamp: None,event_timestamp_12: None,
+            message_name: "FitMessageHr",
+            timestamp: None,
+            fractional_timestamp: None,
+            time256: None,
+            filtered_bpm: None,
+            event_timestamp: None,
+            event_timestamp_12: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -28418,11 +28884,13 @@ pub struct FitMessageHrZone {
 impl fmt::Display for FitMessageHrZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrZone")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -28437,7 +28905,11 @@ impl FitMessageHrZone {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageHrZone",message_index: None,high_bpm: None,name: None,
+            message_name: "FitMessageHrZone",
+            message_index: None,
+            high_bpm: None,
+            name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -28589,13 +29061,15 @@ pub struct FitMessageHrmProfile {
 impl fmt::Display for FitMessageHrmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrmProfile")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
         if let Some(v) = &self.hrm_ant_id { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id", v)?; }
         if let Some(v) = &self.log_hrv { writeln!(f, "  {: >28}: {:?}", "log_hrv", v)?; }
         if let Some(v) = &self.hrm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "hrm_ant_id_trans_type", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -28610,7 +29084,13 @@ impl FitMessageHrmProfile {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageHrmProfile",message_index: None,enabled: None,hrm_ant_id: None,log_hrv: None,hrm_ant_id_trans_type: None,
+            message_name: "FitMessageHrmProfile",
+            message_index: None,
+            enabled: None,
+            hrm_ant_id: None,
+            log_hrv: None,
+            hrm_ant_id_trans_type: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -28800,9 +29280,11 @@ pub struct FitMessageHrv {
 impl fmt::Display for FitMessageHrv {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrv")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.time { writeln!(f, "  {: >28}: {:?}", "time", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -28817,7 +29299,9 @@ impl FitMessageHrv {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageHrv",time: None,
+            message_name: "FitMessageHrv",
+            time: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -29125,7 +29609,6 @@ pub struct FitMessageLap {
 impl fmt::Display for FitMessageLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageLap")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
@@ -29236,6 +29719,9 @@ impl fmt::Display for FitMessageLap {
         if let Some(v) = &self.avg_step_length { writeln!(f, "  {: >28}: {:?}", "avg_step_length", v)?; }
         if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -29250,10 +29736,117 @@ impl FitMessageLap {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageLap",message_index: None,timestamp: None,event: None,event_type: None,start_time: None,start_position_lat: None,start_position_long: None,end_position_lat: None,end_position_long: None,total_elapsed_time: None,total_timer_time: None,total_distance: None,total_cycles_subfield_bytes: vec![],
-            total_cycles: None,total_calories: None,total_fat_calories: None,avg_speed: None,max_speed: None,avg_heart_rate: None,max_heart_rate: None,avg_cadence_subfield_bytes: vec![],
-            avg_cadence: None,max_cadence_subfield_bytes: vec![],
-            max_cadence: None,avg_power: None,max_power: None,total_ascent: None,total_descent: None,intensity: None,lap_trigger: None,sport: None,event_group: None,num_lengths: None,normalized_power: None,left_right_balance: None,first_length_index: None,avg_stroke_distance: None,swim_stroke: None,sub_sport: None,num_active_lengths: None,total_work: None,avg_altitude: None,max_altitude: None,gps_accuracy: None,avg_grade: None,avg_pos_grade: None,avg_neg_grade: None,max_pos_grade: None,max_neg_grade: None,avg_temperature: None,max_temperature: None,total_moving_time: None,avg_pos_vertical_speed: None,avg_neg_vertical_speed: None,max_pos_vertical_speed: None,max_neg_vertical_speed: None,time_in_hr_zone: None,time_in_speed_zone: None,time_in_cadence_zone: None,time_in_power_zone: None,repetition_num: None,min_altitude: None,min_heart_rate: None,wkt_step_index: None,opponent_score: None,stroke_count: None,zone_count: None,avg_vertical_oscillation: None,avg_stance_time_percent: None,avg_stance_time: None,avg_fractional_cadence: None,max_fractional_cadence: None,total_fractional_cycles: None,player_score: None,avg_total_hemoglobin_conc: None,min_total_hemoglobin_conc: None,max_total_hemoglobin_conc: None,avg_saturated_hemoglobin_percent: None,min_saturated_hemoglobin_percent: None,max_saturated_hemoglobin_percent: None,avg_left_torque_effectiveness: None,avg_right_torque_effectiveness: None,avg_left_pedal_smoothness: None,avg_right_pedal_smoothness: None,avg_combined_pedal_smoothness: None,time_standing: None,stand_count: None,avg_left_pco: None,avg_right_pco: None,avg_left_power_phase: None,avg_left_power_phase_peak: None,avg_right_power_phase: None,avg_right_power_phase_peak: None,avg_power_position: None,max_power_position: None,avg_cadence_position: None,max_cadence_position: None,enhanced_avg_speed: None,enhanced_max_speed: None,enhanced_avg_altitude: None,enhanced_min_altitude: None,enhanced_max_altitude: None,avg_lev_motor_power: None,max_lev_motor_power: None,lev_battery_consumption: None,avg_vertical_ratio: None,avg_stance_time_balance: None,avg_step_length: None,avg_vam: None,
+            message_name: "FitMessageLap",
+            message_index: None,
+            timestamp: None,
+            event: None,
+            event_type: None,
+            start_time: None,
+            start_position_lat: None,
+            start_position_long: None,
+            end_position_lat: None,
+            end_position_long: None,
+            total_elapsed_time: None,
+            total_timer_time: None,
+            total_distance: None,
+            total_cycles_subfield_bytes: vec![],
+            total_cycles: None,
+            total_calories: None,
+            total_fat_calories: None,
+            avg_speed: None,
+            max_speed: None,
+            avg_heart_rate: None,
+            max_heart_rate: None,
+            avg_cadence_subfield_bytes: vec![],
+            avg_cadence: None,
+            max_cadence_subfield_bytes: vec![],
+            max_cadence: None,
+            avg_power: None,
+            max_power: None,
+            total_ascent: None,
+            total_descent: None,
+            intensity: None,
+            lap_trigger: None,
+            sport: None,
+            event_group: None,
+            num_lengths: None,
+            normalized_power: None,
+            left_right_balance: None,
+            first_length_index: None,
+            avg_stroke_distance: None,
+            swim_stroke: None,
+            sub_sport: None,
+            num_active_lengths: None,
+            total_work: None,
+            avg_altitude: None,
+            max_altitude: None,
+            gps_accuracy: None,
+            avg_grade: None,
+            avg_pos_grade: None,
+            avg_neg_grade: None,
+            max_pos_grade: None,
+            max_neg_grade: None,
+            avg_temperature: None,
+            max_temperature: None,
+            total_moving_time: None,
+            avg_pos_vertical_speed: None,
+            avg_neg_vertical_speed: None,
+            max_pos_vertical_speed: None,
+            max_neg_vertical_speed: None,
+            time_in_hr_zone: None,
+            time_in_speed_zone: None,
+            time_in_cadence_zone: None,
+            time_in_power_zone: None,
+            repetition_num: None,
+            min_altitude: None,
+            min_heart_rate: None,
+            wkt_step_index: None,
+            opponent_score: None,
+            stroke_count: None,
+            zone_count: None,
+            avg_vertical_oscillation: None,
+            avg_stance_time_percent: None,
+            avg_stance_time: None,
+            avg_fractional_cadence: None,
+            max_fractional_cadence: None,
+            total_fractional_cycles: None,
+            player_score: None,
+            avg_total_hemoglobin_conc: None,
+            min_total_hemoglobin_conc: None,
+            max_total_hemoglobin_conc: None,
+            avg_saturated_hemoglobin_percent: None,
+            min_saturated_hemoglobin_percent: None,
+            max_saturated_hemoglobin_percent: None,
+            avg_left_torque_effectiveness: None,
+            avg_right_torque_effectiveness: None,
+            avg_left_pedal_smoothness: None,
+            avg_right_pedal_smoothness: None,
+            avg_combined_pedal_smoothness: None,
+            time_standing: None,
+            stand_count: None,
+            avg_left_pco: None,
+            avg_right_pco: None,
+            avg_left_power_phase: None,
+            avg_left_power_phase_peak: None,
+            avg_right_power_phase: None,
+            avg_right_power_phase_peak: None,
+            avg_power_position: None,
+            max_power_position: None,
+            avg_cadence_position: None,
+            max_cadence_position: None,
+            enhanced_avg_speed: None,
+            enhanced_max_speed: None,
+            enhanced_avg_altitude: None,
+            enhanced_min_altitude: None,
+            enhanced_max_altitude: None,
+            avg_lev_motor_power: None,
+            max_lev_motor_power: None,
+            lev_battery_consumption: None,
+            avg_vertical_ratio: None,
+            avg_stance_time_balance: None,
+            avg_step_length: None,
+            avg_vam: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -32492,7 +33085,6 @@ pub struct FitMessageLength {
 impl fmt::Display for FitMessageLength {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageLength")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
@@ -32512,6 +33104,9 @@ impl fmt::Display for FitMessageLength {
         if let Some(v) = &self.stroke_count { writeln!(f, "  {: >28}: {:?}", "stroke_count", v)?; }
         if let Some(v) = &self.zone_count { writeln!(f, "  {: >28}: {:?}", "zone_count", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -32526,7 +33121,26 @@ impl FitMessageLength {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageLength",message_index: None,timestamp: None,event: None,event_type: None,start_time: None,total_elapsed_time: None,total_timer_time: None,total_strokes: None,avg_speed: None,swim_stroke: None,avg_swimming_cadence: None,event_group: None,total_calories: None,length_type: None,player_score: None,opponent_score: None,stroke_count: None,zone_count: None,
+            message_name: "FitMessageLength",
+            message_index: None,
+            timestamp: None,
+            event: None,
+            event_type: None,
+            start_time: None,
+            total_elapsed_time: None,
+            total_timer_time: None,
+            total_strokes: None,
+            avg_speed: None,
+            swim_stroke: None,
+            avg_swimming_cadence: None,
+            event_group: None,
+            total_calories: None,
+            length_type: None,
+            player_score: None,
+            opponent_score: None,
+            stroke_count: None,
+            zone_count: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -33079,7 +33693,6 @@ pub struct FitMessageMagnetometerData {
 impl fmt::Display for FitMessageMagnetometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMagnetometerData")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.sample_time_offset { writeln!(f, "  {: >28}: {:?}", "sample_time_offset", v)?; }
@@ -33090,6 +33703,9 @@ impl fmt::Display for FitMessageMagnetometerData {
         if let Some(v) = &self.calibrated_mag_y { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_y", v)?; }
         if let Some(v) = &self.calibrated_mag_z { writeln!(f, "  {: >28}: {:?}", "calibrated_mag_z", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -33104,7 +33720,17 @@ impl FitMessageMagnetometerData {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageMagnetometerData",timestamp: None,timestamp_ms: None,sample_time_offset: None,mag_x: None,mag_y: None,mag_z: None,calibrated_mag_x: None,calibrated_mag_y: None,calibrated_mag_z: None,
+            message_name: "FitMessageMagnetometerData",
+            timestamp: None,
+            timestamp_ms: None,
+            sample_time_offset: None,
+            mag_x: None,
+            mag_y: None,
+            mag_z: None,
+            calibrated_mag_x: None,
+            calibrated_mag_y: None,
+            calibrated_mag_z: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -33507,12 +34133,14 @@ pub struct FitMessageMemoGlob {
 impl fmt::Display for FitMessageMemoGlob {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMemoGlob")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.part_index { writeln!(f, "  {: >28}: {:?}", "part_index", v)?; }
         if let Some(v) = &self.memo { writeln!(f, "  {: >28}: {:?}", "memo", v)?; }
         if let Some(v) = &self.message_number { writeln!(f, "  {: >28}: {:?}", "message_number", v)?; }
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -33527,7 +34155,12 @@ impl FitMessageMemoGlob {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageMemoGlob",part_index: None,memo: None,message_number: None,message_index: None,
+            message_name: "FitMessageMemoGlob",
+            part_index: None,
+            memo: None,
+            message_number: None,
+            message_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -33739,7 +34372,6 @@ pub struct FitMessageMesgCapabilities {
 impl fmt::Display for FitMessageMesgCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMesgCapabilities")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.file { writeln!(f, "  {: >28}: {:?}", "file", v)?; }
         if let Some(v) = &self.mesg_num { writeln!(f, "  {: >28}: {:?}", "mesg_num", v)?; }
@@ -33747,6 +34379,9 @@ impl fmt::Display for FitMessageMesgCapabilities {
         writeln!(f, "  {: >28}: {:?}", "count_subfield_bytes", self.count_subfield_bytes)?;
         if let Some(v) = &self.count { writeln!(f, "  {: >28}: {:?}", "count", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -33761,8 +34396,14 @@ impl FitMessageMesgCapabilities {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageMesgCapabilities",message_index: None,file: None,mesg_num: None,count_type: None,count_subfield_bytes: vec![],
+            message_name: "FitMessageMesgCapabilities",
+            message_index: None,
+            file: None,
+            mesg_num: None,
+            count_type: None,
+            count_subfield_bytes: vec![],
             count: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -33975,12 +34616,14 @@ pub struct FitMessageMetZone {
 impl fmt::Display for FitMessageMetZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMetZone")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.high_bpm { writeln!(f, "  {: >28}: {:?}", "high_bpm", v)?; }
         if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v)?; }
         if let Some(v) = &self.fat_calories { writeln!(f, "  {: >28}: {:?}", "fat_calories", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -33995,7 +34638,12 @@ impl FitMessageMetZone {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageMetZone",message_index: None,high_bpm: None,calories: None,fat_calories: None,
+            message_name: "FitMessageMetZone",
+            message_index: None,
+            high_bpm: None,
+            calories: None,
+            fat_calories: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -34260,7 +34908,6 @@ pub struct FitMessageMonitoring {
 impl fmt::Display for FitMessageMonitoring {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMonitoring")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.device_index { writeln!(f, "  {: >28}: {:?}", "device_index", v)?; }
         if let Some(v) = &self.calories { writeln!(f, "  {: >28}: {:?}", "calories", v)?; }
@@ -34292,6 +34939,9 @@ impl fmt::Display for FitMessageMonitoring {
         if let Some(v) = &self.moderate_activity_minutes { writeln!(f, "  {: >28}: {:?}", "moderate_activity_minutes", v)?; }
         if let Some(v) = &self.vigorous_activity_minutes { writeln!(f, "  {: >28}: {:?}", "vigorous_activity_minutes", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -34306,8 +34956,38 @@ impl FitMessageMonitoring {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageMonitoring",timestamp: None,device_index: None,calories: None,distance: None,cycles_subfield_bytes: vec![],
-            cycles: None,active_time: None,activity_type: None,activity_subtype: None,activity_level: None,distance_16: None,cycles_16: None,active_time_16: None,local_timestamp: None,temperature: None,temperature_min: None,temperature_max: None,activity_time: None,active_calories: None,current_activity_type_intensity: None,timestamp_min_8: None,timestamp_16: None,heart_rate: None,intensity: None,duration_min: None,duration: None,ascent: None,descent: None,moderate_activity_minutes: None,vigorous_activity_minutes: None,
+            message_name: "FitMessageMonitoring",
+            timestamp: None,
+            device_index: None,
+            calories: None,
+            distance: None,
+            cycles_subfield_bytes: vec![],
+            cycles: None,
+            active_time: None,
+            activity_type: None,
+            activity_subtype: None,
+            activity_level: None,
+            distance_16: None,
+            cycles_16: None,
+            active_time_16: None,
+            local_timestamp: None,
+            temperature: None,
+            temperature_min: None,
+            temperature_max: None,
+            activity_time: None,
+            active_calories: None,
+            current_activity_type_intensity: None,
+            timestamp_min_8: None,
+            timestamp_16: None,
+            heart_rate: None,
+            intensity: None,
+            duration_min: None,
+            duration: None,
+            ascent: None,
+            descent: None,
+            moderate_activity_minutes: None,
+            vigorous_activity_minutes: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -35154,7 +35834,6 @@ pub struct FitMessageMonitoringInfo {
 impl fmt::Display for FitMessageMonitoringInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMonitoringInfo")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.local_timestamp { writeln!(f, "  {: >28}: {:?}", "local_timestamp", v)?; }
         if let Some(v) = &self.activity_type { writeln!(f, "  {: >28}: {:?}", "activity_type", v)?; }
@@ -35162,6 +35841,9 @@ impl fmt::Display for FitMessageMonitoringInfo {
         if let Some(v) = &self.cycles_to_calories { writeln!(f, "  {: >28}: {:?}", "cycles_to_calories", v)?; }
         if let Some(v) = &self.resting_metabolic_rate { writeln!(f, "  {: >28}: {:?}", "resting_metabolic_rate", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -35176,7 +35858,14 @@ impl FitMessageMonitoringInfo {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageMonitoringInfo",timestamp: None,local_timestamp: None,activity_type: None,cycles_to_distance: None,cycles_to_calories: None,resting_metabolic_rate: None,
+            message_name: "FitMessageMonitoringInfo",
+            timestamp: None,
+            local_timestamp: None,
+            activity_type: None,
+            cycles_to_distance: None,
+            cycles_to_calories: None,
+            resting_metabolic_rate: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -35451,11 +36140,13 @@ pub struct FitMessageNmeaSentence {
 impl fmt::Display for FitMessageNmeaSentence {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageNmeaSentence")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.sentence { writeln!(f, "  {: >28}: {:?}", "sentence", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -35470,7 +36161,11 @@ impl FitMessageNmeaSentence {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageNmeaSentence",timestamp: None,timestamp_ms: None,sentence: None,
+            message_name: "FitMessageNmeaSentence",
+            timestamp: None,
+            timestamp_ms: None,
+            sentence: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -35640,7 +36335,6 @@ pub struct FitMessageObdiiData {
 impl fmt::Display for FitMessageObdiiData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageObdiiData")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.time_offset { writeln!(f, "  {: >28}: {:?}", "time_offset", v)?; }
@@ -35651,6 +36345,9 @@ impl fmt::Display for FitMessageObdiiData {
         if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v)?; }
         if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -35665,7 +36362,17 @@ impl FitMessageObdiiData {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageObdiiData",timestamp: None,timestamp_ms: None,time_offset: None,pid: None,raw_data: None,pid_data_size: None,system_time: None,start_timestamp: None,start_timestamp_ms: None,
+            message_name: "FitMessageObdiiData",
+            timestamp: None,
+            timestamp_ms: None,
+            time_offset: None,
+            pid: None,
+            raw_data: None,
+            pid_data_size: None,
+            system_time: None,
+            start_timestamp: None,
+            start_timestamp_ms: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -36002,10 +36709,12 @@ pub struct FitMessageOhrSettings {
 impl fmt::Display for FitMessageOhrSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageOhrSettings")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -36020,7 +36729,10 @@ impl FitMessageOhrSettings {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageOhrSettings",timestamp: None,enabled: None,
+            message_name: "FitMessageOhrSettings",
+            timestamp: None,
+            enabled: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -36191,7 +36903,6 @@ pub struct FitMessageOneDSensorCalibration {
 impl fmt::Display for FitMessageOneDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageOneDSensorCalibration")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v)?; }
         writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes)?;
@@ -36200,6 +36911,9 @@ impl fmt::Display for FitMessageOneDSensorCalibration {
         if let Some(v) = &self.level_shift { writeln!(f, "  {: >28}: {:?}", "level_shift", v)?; }
         if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -36214,8 +36928,15 @@ impl FitMessageOneDSensorCalibration {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageOneDSensorCalibration",timestamp: None,sensor_type: None,calibration_factor_subfield_bytes: vec![],
-            calibration_factor: None,calibration_divisor: None,level_shift: None,offset_cal: None,
+            message_name: "FitMessageOneDSensorCalibration",
+            timestamp: None,
+            sensor_type: None,
+            calibration_factor_subfield_bytes: vec![],
+            calibration_factor: None,
+            calibration_divisor: None,
+            level_shift: None,
+            offset_cal: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -36462,11 +37183,13 @@ pub struct FitMessagePowerZone {
 impl fmt::Display for FitMessagePowerZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessagePowerZone")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -36481,7 +37204,11 @@ impl FitMessagePowerZone {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessagePowerZone",message_index: None,high_value: None,name: None,
+            message_name: "FitMessagePowerZone",
+            message_index: None,
+            high_value: None,
+            name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -36695,7 +37422,6 @@ pub struct FitMessageRecord {
 impl fmt::Display for FitMessageRecord {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageRecord")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
         if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v)?; }
@@ -36764,6 +37490,9 @@ impl fmt::Display for FitMessageRecord {
         if let Some(v) = &self.cns_load { writeln!(f, "  {: >28}: {:?}", "cns_load", v)?; }
         if let Some(v) = &self.n2_load { writeln!(f, "  {: >28}: {:?}", "n2_load", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -36778,7 +37507,75 @@ impl FitMessageRecord {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageRecord",timestamp: None,position_lat: None,position_long: None,altitude: None,heart_rate: None,cadence: None,distance: None,speed: None,power: None,compressed_speed_distance: None,grade: None,resistance: None,time_from_course: None,cycle_length: None,temperature: None,speed_1s: None,cycles: None,total_cycles: None,compressed_accumulated_power: None,accumulated_power: None,left_right_balance: None,gps_accuracy: None,vertical_speed: None,calories: None,vertical_oscillation: None,stance_time_percent: None,stance_time: None,activity_type: None,left_torque_effectiveness: None,right_torque_effectiveness: None,left_pedal_smoothness: None,right_pedal_smoothness: None,combined_pedal_smoothness: None,time128: None,stroke_type: None,zone: None,ball_speed: None,cadence256: None,fractional_cadence: None,total_hemoglobin_conc: None,total_hemoglobin_conc_min: None,total_hemoglobin_conc_max: None,saturated_hemoglobin_percent: None,saturated_hemoglobin_percent_min: None,saturated_hemoglobin_percent_max: None,device_index: None,left_pco: None,right_pco: None,left_power_phase: None,left_power_phase_peak: None,right_power_phase: None,right_power_phase_peak: None,enhanced_speed: None,enhanced_altitude: None,battery_soc: None,motor_power: None,vertical_ratio: None,stance_time_balance: None,step_length: None,absolute_pressure: None,depth: None,next_stop_depth: None,next_stop_time: None,time_to_surface: None,ndl_time: None,cns_load: None,n2_load: None,
+            message_name: "FitMessageRecord",
+            timestamp: None,
+            position_lat: None,
+            position_long: None,
+            altitude: None,
+            heart_rate: None,
+            cadence: None,
+            distance: None,
+            speed: None,
+            power: None,
+            compressed_speed_distance: None,
+            grade: None,
+            resistance: None,
+            time_from_course: None,
+            cycle_length: None,
+            temperature: None,
+            speed_1s: None,
+            cycles: None,
+            total_cycles: None,
+            compressed_accumulated_power: None,
+            accumulated_power: None,
+            left_right_balance: None,
+            gps_accuracy: None,
+            vertical_speed: None,
+            calories: None,
+            vertical_oscillation: None,
+            stance_time_percent: None,
+            stance_time: None,
+            activity_type: None,
+            left_torque_effectiveness: None,
+            right_torque_effectiveness: None,
+            left_pedal_smoothness: None,
+            right_pedal_smoothness: None,
+            combined_pedal_smoothness: None,
+            time128: None,
+            stroke_type: None,
+            zone: None,
+            ball_speed: None,
+            cadence256: None,
+            fractional_cadence: None,
+            total_hemoglobin_conc: None,
+            total_hemoglobin_conc_min: None,
+            total_hemoglobin_conc_max: None,
+            saturated_hemoglobin_percent: None,
+            saturated_hemoglobin_percent_min: None,
+            saturated_hemoglobin_percent_max: None,
+            device_index: None,
+            left_pco: None,
+            right_pco: None,
+            left_power_phase: None,
+            left_power_phase_peak: None,
+            right_power_phase: None,
+            right_power_phase_peak: None,
+            enhanced_speed: None,
+            enhanced_altitude: None,
+            battery_soc: None,
+            motor_power: None,
+            vertical_ratio: None,
+            stance_time_balance: None,
+            step_length: None,
+            absolute_pressure: None,
+            depth: None,
+            next_stop_depth: None,
+            next_stop_time: None,
+            time_to_surface: None,
+            ndl_time: None,
+            cns_load: None,
+            n2_load: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -38888,7 +39685,6 @@ pub struct FitMessageSchedule {
 impl fmt::Display for FitMessageSchedule {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSchedule")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
@@ -38898,6 +39694,9 @@ impl fmt::Display for FitMessageSchedule {
         if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
         if let Some(v) = &self.scheduled_time { writeln!(f, "  {: >28}: {:?}", "scheduled_time", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -38912,8 +39711,16 @@ impl FitMessageSchedule {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSchedule",manufacturer: None,product_subfield_bytes: vec![],
-            product: None,serial_number: None,time_created: None,completed: None,ftype: None,scheduled_time: None,
+            message_name: "FitMessageSchedule",
+            manufacturer: None,
+            product_subfield_bytes: vec![],
+            product: None,
+            serial_number: None,
+            time_created: None,
+            completed: None,
+            ftype: None,
+            scheduled_time: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -39172,7 +39979,6 @@ pub struct FitMessageSdmProfile {
 impl fmt::Display for FitMessageSdmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSdmProfile")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
         if let Some(v) = &self.sdm_ant_id { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id", v)?; }
@@ -39182,6 +39988,9 @@ impl fmt::Display for FitMessageSdmProfile {
         if let Some(v) = &self.sdm_ant_id_trans_type { writeln!(f, "  {: >28}: {:?}", "sdm_ant_id_trans_type", v)?; }
         if let Some(v) = &self.odometer_rollover { writeln!(f, "  {: >28}: {:?}", "odometer_rollover", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -39196,7 +40005,16 @@ impl FitMessageSdmProfile {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSdmProfile",message_index: None,enabled: None,sdm_ant_id: None,sdm_cal_factor: None,odometer: None,speed_source: None,sdm_ant_id_trans_type: None,odometer_rollover: None,
+            message_name: "FitMessageSdmProfile",
+            message_index: None,
+            enabled: None,
+            sdm_ant_id: None,
+            sdm_cal_factor: None,
+            odometer: None,
+            speed_source: None,
+            sdm_ant_id_trans_type: None,
+            odometer_rollover: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -39481,7 +40299,6 @@ pub struct FitMessageSegmentFile {
 impl fmt::Display for FitMessageSegmentFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentFile")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.file_uuid { writeln!(f, "  {: >28}: {:?}", "file_uuid", v)?; }
         if let Some(v) = &self.enabled { writeln!(f, "  {: >28}: {:?}", "enabled", v)?; }
@@ -39492,6 +40309,9 @@ impl fmt::Display for FitMessageSegmentFile {
         if let Some(v) = &self.leader_activity_id_string { writeln!(f, "  {: >28}: {:?}", "leader_activity_id_string", v)?; }
         if let Some(v) = &self.default_race_leader { writeln!(f, "  {: >28}: {:?}", "default_race_leader", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -39506,7 +40326,17 @@ impl FitMessageSegmentFile {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSegmentFile",message_index: None,file_uuid: None,enabled: None,user_profile_primary_key: None,leader_type: None,leader_group_primary_key: None,leader_activity_id: None,leader_activity_id_string: None,default_race_leader: None,
+            message_name: "FitMessageSegmentFile",
+            message_index: None,
+            file_uuid: None,
+            enabled: None,
+            user_profile_primary_key: None,
+            leader_type: None,
+            leader_group_primary_key: None,
+            leader_activity_id: None,
+            leader_activity_id_string: None,
+            default_race_leader: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -39852,7 +40682,6 @@ pub struct FitMessageSegmentId {
 impl fmt::Display for FitMessageSegmentId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentId")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         if let Some(v) = &self.uuid { writeln!(f, "  {: >28}: {:?}", "uuid", v)?; }
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
@@ -39863,6 +40692,9 @@ impl fmt::Display for FitMessageSegmentId {
         if let Some(v) = &self.delete_status { writeln!(f, "  {: >28}: {:?}", "delete_status", v)?; }
         if let Some(v) = &self.selection_type { writeln!(f, "  {: >28}: {:?}", "selection_type", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -39877,7 +40709,17 @@ impl FitMessageSegmentId {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSegmentId",name: None,uuid: None,sport: None,enabled: None,user_profile_primary_key: None,device_id: None,default_race_leader: None,delete_status: None,selection_type: None,
+            message_name: "FitMessageSegmentId",
+            name: None,
+            uuid: None,
+            sport: None,
+            enabled: None,
+            user_profile_primary_key: None,
+            device_id: None,
+            default_race_leader: None,
+            delete_status: None,
+            selection_type: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -40261,7 +41103,6 @@ pub struct FitMessageSegmentLap {
 impl fmt::Display for FitMessageSegmentLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentLap")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
@@ -40350,6 +41191,9 @@ impl fmt::Display for FitMessageSegmentLap {
         if let Some(v) = &self.max_cadence_position { writeln!(f, "  {: >28}: {:?}", "max_cadence_position", v)?; }
         if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -40364,8 +41208,95 @@ impl FitMessageSegmentLap {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSegmentLap",message_index: None,timestamp: None,event: None,event_type: None,start_time: None,start_position_lat: None,start_position_long: None,end_position_lat: None,end_position_long: None,total_elapsed_time: None,total_timer_time: None,total_distance: None,total_cycles_subfield_bytes: vec![],
-            total_cycles: None,total_calories: None,total_fat_calories: None,avg_speed: None,max_speed: None,avg_heart_rate: None,max_heart_rate: None,avg_cadence: None,max_cadence: None,avg_power: None,max_power: None,total_ascent: None,total_descent: None,sport: None,event_group: None,nec_lat: None,nec_long: None,swc_lat: None,swc_long: None,name: None,normalized_power: None,left_right_balance: None,sub_sport: None,total_work: None,avg_altitude: None,max_altitude: None,gps_accuracy: None,avg_grade: None,avg_pos_grade: None,avg_neg_grade: None,max_pos_grade: None,max_neg_grade: None,avg_temperature: None,max_temperature: None,total_moving_time: None,avg_pos_vertical_speed: None,avg_neg_vertical_speed: None,max_pos_vertical_speed: None,max_neg_vertical_speed: None,time_in_hr_zone: None,time_in_speed_zone: None,time_in_cadence_zone: None,time_in_power_zone: None,repetition_num: None,min_altitude: None,min_heart_rate: None,active_time: None,wkt_step_index: None,sport_event: None,avg_left_torque_effectiveness: None,avg_right_torque_effectiveness: None,avg_left_pedal_smoothness: None,avg_right_pedal_smoothness: None,avg_combined_pedal_smoothness: None,status: None,uuid: None,avg_fractional_cadence: None,max_fractional_cadence: None,total_fractional_cycles: None,front_gear_shift_count: None,rear_gear_shift_count: None,time_standing: None,stand_count: None,avg_left_pco: None,avg_right_pco: None,avg_left_power_phase: None,avg_left_power_phase_peak: None,avg_right_power_phase: None,avg_right_power_phase_peak: None,avg_power_position: None,max_power_position: None,avg_cadence_position: None,max_cadence_position: None,manufacturer: None,
+            message_name: "FitMessageSegmentLap",
+            message_index: None,
+            timestamp: None,
+            event: None,
+            event_type: None,
+            start_time: None,
+            start_position_lat: None,
+            start_position_long: None,
+            end_position_lat: None,
+            end_position_long: None,
+            total_elapsed_time: None,
+            total_timer_time: None,
+            total_distance: None,
+            total_cycles_subfield_bytes: vec![],
+            total_cycles: None,
+            total_calories: None,
+            total_fat_calories: None,
+            avg_speed: None,
+            max_speed: None,
+            avg_heart_rate: None,
+            max_heart_rate: None,
+            avg_cadence: None,
+            max_cadence: None,
+            avg_power: None,
+            max_power: None,
+            total_ascent: None,
+            total_descent: None,
+            sport: None,
+            event_group: None,
+            nec_lat: None,
+            nec_long: None,
+            swc_lat: None,
+            swc_long: None,
+            name: None,
+            normalized_power: None,
+            left_right_balance: None,
+            sub_sport: None,
+            total_work: None,
+            avg_altitude: None,
+            max_altitude: None,
+            gps_accuracy: None,
+            avg_grade: None,
+            avg_pos_grade: None,
+            avg_neg_grade: None,
+            max_pos_grade: None,
+            max_neg_grade: None,
+            avg_temperature: None,
+            max_temperature: None,
+            total_moving_time: None,
+            avg_pos_vertical_speed: None,
+            avg_neg_vertical_speed: None,
+            max_pos_vertical_speed: None,
+            max_neg_vertical_speed: None,
+            time_in_hr_zone: None,
+            time_in_speed_zone: None,
+            time_in_cadence_zone: None,
+            time_in_power_zone: None,
+            repetition_num: None,
+            min_altitude: None,
+            min_heart_rate: None,
+            active_time: None,
+            wkt_step_index: None,
+            sport_event: None,
+            avg_left_torque_effectiveness: None,
+            avg_right_torque_effectiveness: None,
+            avg_left_pedal_smoothness: None,
+            avg_right_pedal_smoothness: None,
+            avg_combined_pedal_smoothness: None,
+            status: None,
+            uuid: None,
+            avg_fractional_cadence: None,
+            max_fractional_cadence: None,
+            total_fractional_cycles: None,
+            front_gear_shift_count: None,
+            rear_gear_shift_count: None,
+            time_standing: None,
+            stand_count: None,
+            avg_left_pco: None,
+            avg_right_pco: None,
+            avg_left_power_phase: None,
+            avg_left_power_phase_peak: None,
+            avg_right_power_phase: None,
+            avg_right_power_phase_peak: None,
+            avg_power_position: None,
+            max_power_position: None,
+            avg_cadence_position: None,
+            max_cadence_position: None,
+            manufacturer: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -42920,7 +43851,6 @@ pub struct FitMessageSegmentLeaderboardEntry {
 impl fmt::Display for FitMessageSegmentLeaderboardEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentLeaderboardEntry")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
@@ -42929,6 +43859,9 @@ impl fmt::Display for FitMessageSegmentLeaderboardEntry {
         if let Some(v) = &self.segment_time { writeln!(f, "  {: >28}: {:?}", "segment_time", v)?; }
         if let Some(v) = &self.activity_id_string { writeln!(f, "  {: >28}: {:?}", "activity_id_string", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -42943,7 +43876,15 @@ impl FitMessageSegmentLeaderboardEntry {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSegmentLeaderboardEntry",message_index: None,name: None,ftype: None,group_primary_key: None,activity_id: None,segment_time: None,activity_id_string: None,
+            message_name: "FitMessageSegmentLeaderboardEntry",
+            message_index: None,
+            name: None,
+            ftype: None,
+            group_primary_key: None,
+            activity_id: None,
+            segment_time: None,
+            activity_id_string: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -43192,7 +44133,6 @@ pub struct FitMessageSegmentPoint {
 impl fmt::Display for FitMessageSegmentPoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentPoint")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.position_lat { writeln!(f, "  {: >28}: {:?}", "position_lat", v)?; }
         if let Some(v) = &self.position_long { writeln!(f, "  {: >28}: {:?}", "position_long", v)?; }
@@ -43200,6 +44140,9 @@ impl fmt::Display for FitMessageSegmentPoint {
         if let Some(v) = &self.altitude { writeln!(f, "  {: >28}: {:?}", "altitude", v)?; }
         if let Some(v) = &self.leader_time { writeln!(f, "  {: >28}: {:?}", "leader_time", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -43214,7 +44157,14 @@ impl FitMessageSegmentPoint {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSegmentPoint",message_index: None,position_lat: None,position_long: None,distance: None,altitude: None,leader_time: None,
+            message_name: "FitMessageSegmentPoint",
+            message_index: None,
+            position_lat: None,
+            position_long: None,
+            distance: None,
+            altitude: None,
+            leader_time: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -43688,7 +44638,6 @@ pub struct FitMessageSession {
 impl fmt::Display for FitMessageSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSession")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.event { writeln!(f, "  {: >28}: {:?}", "event", v)?; }
@@ -43812,6 +44761,9 @@ impl fmt::Display for FitMessageSession {
         if let Some(v) = &self.total_anaerobic_training_effect { writeln!(f, "  {: >28}: {:?}", "total_anaerobic_training_effect", v)?; }
         if let Some(v) = &self.avg_vam { writeln!(f, "  {: >28}: {:?}", "avg_vam", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -43826,10 +44778,130 @@ impl FitMessageSession {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSession",message_index: None,timestamp: None,event: None,event_type: None,start_time: None,start_position_lat: None,start_position_long: None,sport: None,sub_sport: None,total_elapsed_time: None,total_timer_time: None,total_distance: None,total_cycles_subfield_bytes: vec![],
-            total_cycles: None,total_calories: None,total_fat_calories: None,avg_speed: None,max_speed: None,avg_heart_rate: None,max_heart_rate: None,avg_cadence_subfield_bytes: vec![],
-            avg_cadence: None,max_cadence_subfield_bytes: vec![],
-            max_cadence: None,avg_power: None,max_power: None,total_ascent: None,total_descent: None,total_training_effect: None,first_lap_index: None,num_laps: None,event_group: None,trigger: None,nec_lat: None,nec_long: None,swc_lat: None,swc_long: None,normalized_power: None,training_stress_score: None,intensity_factor: None,left_right_balance: None,avg_stroke_count: None,avg_stroke_distance: None,swim_stroke: None,pool_length: None,threshold_power: None,pool_length_unit: None,num_active_lengths: None,total_work: None,avg_altitude: None,max_altitude: None,gps_accuracy: None,avg_grade: None,avg_pos_grade: None,avg_neg_grade: None,max_pos_grade: None,max_neg_grade: None,avg_temperature: None,max_temperature: None,total_moving_time: None,avg_pos_vertical_speed: None,avg_neg_vertical_speed: None,max_pos_vertical_speed: None,max_neg_vertical_speed: None,min_heart_rate: None,time_in_hr_zone: None,time_in_speed_zone: None,time_in_cadence_zone: None,time_in_power_zone: None,avg_lap_time: None,best_lap_index: None,min_altitude: None,player_score: None,opponent_score: None,opponent_name: None,stroke_count: None,zone_count: None,max_ball_speed: None,avg_ball_speed: None,avg_vertical_oscillation: None,avg_stance_time_percent: None,avg_stance_time: None,avg_fractional_cadence: None,max_fractional_cadence: None,total_fractional_cycles: None,avg_total_hemoglobin_conc: None,min_total_hemoglobin_conc: None,max_total_hemoglobin_conc: None,avg_saturated_hemoglobin_percent: None,min_saturated_hemoglobin_percent: None,max_saturated_hemoglobin_percent: None,avg_left_torque_effectiveness: None,avg_right_torque_effectiveness: None,avg_left_pedal_smoothness: None,avg_right_pedal_smoothness: None,avg_combined_pedal_smoothness: None,sport_index: None,time_standing: None,stand_count: None,avg_left_pco: None,avg_right_pco: None,avg_left_power_phase: None,avg_left_power_phase_peak: None,avg_right_power_phase: None,avg_right_power_phase_peak: None,avg_power_position: None,max_power_position: None,avg_cadence_position: None,max_cadence_position: None,enhanced_avg_speed: None,enhanced_max_speed: None,enhanced_avg_altitude: None,enhanced_min_altitude: None,enhanced_max_altitude: None,avg_lev_motor_power: None,max_lev_motor_power: None,lev_battery_consumption: None,avg_vertical_ratio: None,avg_stance_time_balance: None,avg_step_length: None,total_anaerobic_training_effect: None,avg_vam: None,
+            message_name: "FitMessageSession",
+            message_index: None,
+            timestamp: None,
+            event: None,
+            event_type: None,
+            start_time: None,
+            start_position_lat: None,
+            start_position_long: None,
+            sport: None,
+            sub_sport: None,
+            total_elapsed_time: None,
+            total_timer_time: None,
+            total_distance: None,
+            total_cycles_subfield_bytes: vec![],
+            total_cycles: None,
+            total_calories: None,
+            total_fat_calories: None,
+            avg_speed: None,
+            max_speed: None,
+            avg_heart_rate: None,
+            max_heart_rate: None,
+            avg_cadence_subfield_bytes: vec![],
+            avg_cadence: None,
+            max_cadence_subfield_bytes: vec![],
+            max_cadence: None,
+            avg_power: None,
+            max_power: None,
+            total_ascent: None,
+            total_descent: None,
+            total_training_effect: None,
+            first_lap_index: None,
+            num_laps: None,
+            event_group: None,
+            trigger: None,
+            nec_lat: None,
+            nec_long: None,
+            swc_lat: None,
+            swc_long: None,
+            normalized_power: None,
+            training_stress_score: None,
+            intensity_factor: None,
+            left_right_balance: None,
+            avg_stroke_count: None,
+            avg_stroke_distance: None,
+            swim_stroke: None,
+            pool_length: None,
+            threshold_power: None,
+            pool_length_unit: None,
+            num_active_lengths: None,
+            total_work: None,
+            avg_altitude: None,
+            max_altitude: None,
+            gps_accuracy: None,
+            avg_grade: None,
+            avg_pos_grade: None,
+            avg_neg_grade: None,
+            max_pos_grade: None,
+            max_neg_grade: None,
+            avg_temperature: None,
+            max_temperature: None,
+            total_moving_time: None,
+            avg_pos_vertical_speed: None,
+            avg_neg_vertical_speed: None,
+            max_pos_vertical_speed: None,
+            max_neg_vertical_speed: None,
+            min_heart_rate: None,
+            time_in_hr_zone: None,
+            time_in_speed_zone: None,
+            time_in_cadence_zone: None,
+            time_in_power_zone: None,
+            avg_lap_time: None,
+            best_lap_index: None,
+            min_altitude: None,
+            player_score: None,
+            opponent_score: None,
+            opponent_name: None,
+            stroke_count: None,
+            zone_count: None,
+            max_ball_speed: None,
+            avg_ball_speed: None,
+            avg_vertical_oscillation: None,
+            avg_stance_time_percent: None,
+            avg_stance_time: None,
+            avg_fractional_cadence: None,
+            max_fractional_cadence: None,
+            total_fractional_cycles: None,
+            avg_total_hemoglobin_conc: None,
+            min_total_hemoglobin_conc: None,
+            max_total_hemoglobin_conc: None,
+            avg_saturated_hemoglobin_percent: None,
+            min_saturated_hemoglobin_percent: None,
+            max_saturated_hemoglobin_percent: None,
+            avg_left_torque_effectiveness: None,
+            avg_right_torque_effectiveness: None,
+            avg_left_pedal_smoothness: None,
+            avg_right_pedal_smoothness: None,
+            avg_combined_pedal_smoothness: None,
+            sport_index: None,
+            time_standing: None,
+            stand_count: None,
+            avg_left_pco: None,
+            avg_right_pco: None,
+            avg_left_power_phase: None,
+            avg_left_power_phase_peak: None,
+            avg_right_power_phase: None,
+            avg_right_power_phase_peak: None,
+            avg_power_position: None,
+            max_power_position: None,
+            avg_cadence_position: None,
+            max_cadence_position: None,
+            enhanced_avg_speed: None,
+            enhanced_max_speed: None,
+            enhanced_avg_altitude: None,
+            enhanced_min_altitude: None,
+            enhanced_max_altitude: None,
+            avg_lev_motor_power: None,
+            max_lev_motor_power: None,
+            lev_battery_consumption: None,
+            avg_vertical_ratio: None,
+            avg_stance_time_balance: None,
+            avg_step_length: None,
+            total_anaerobic_training_effect: None,
+            avg_vam: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -47466,7 +48538,6 @@ pub struct FitMessageSet {
 impl fmt::Display for FitMessageSet {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSet")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v)?; }
         if let Some(v) = &self.repetitions { writeln!(f, "  {: >28}: {:?}", "repetitions", v)?; }
@@ -47479,6 +48550,9 @@ impl fmt::Display for FitMessageSet {
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.wkt_step_index { writeln!(f, "  {: >28}: {:?}", "wkt_step_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -47493,7 +48567,19 @@ impl FitMessageSet {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSet",timestamp: None,duration: None,repetitions: None,weight: None,set_type: None,start_time: None,category: None,category_subtype: None,weight_display_unit: None,message_index: None,wkt_step_index: None,
+            message_name: "FitMessageSet",
+            timestamp: None,
+            duration: None,
+            repetitions: None,
+            weight: None,
+            set_type: None,
+            start_time: None,
+            category: None,
+            category_subtype: None,
+            weight_display_unit: None,
+            message_index: None,
+            wkt_step_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -47924,11 +49010,13 @@ pub struct FitMessageSlaveDevice {
 impl fmt::Display for FitMessageSlaveDevice {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSlaveDevice")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         if let Some(v) = &self.product { writeln!(f, "  {: >28}: {:?}", "product", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -47943,8 +49031,11 @@ impl FitMessageSlaveDevice {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSlaveDevice",manufacturer: None,product_subfield_bytes: vec![],
+            message_name: "FitMessageSlaveDevice",
+            manufacturer: None,
+            product_subfield_bytes: vec![],
             product: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -48093,11 +49184,13 @@ pub struct FitMessageSoftware {
 impl fmt::Display for FitMessageSoftware {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSoftware")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.version { writeln!(f, "  {: >28}: {:?}", "version", v)?; }
         if let Some(v) = &self.part_number { writeln!(f, "  {: >28}: {:?}", "part_number", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -48112,7 +49205,11 @@ impl FitMessageSoftware {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSoftware",message_index: None,version: None,part_number: None,
+            message_name: "FitMessageSoftware",
+            message_index: None,
+            version: None,
+            part_number: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -48274,11 +49371,13 @@ pub struct FitMessageSpeedZone {
 impl fmt::Display for FitMessageSpeedZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSpeedZone")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.high_value { writeln!(f, "  {: >28}: {:?}", "high_value", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -48293,7 +49392,11 @@ impl FitMessageSpeedZone {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSpeedZone",message_index: None,high_value: None,name: None,
+            message_name: "FitMessageSpeedZone",
+            message_index: None,
+            high_value: None,
+            name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -48455,11 +49558,13 @@ pub struct FitMessageSport {
 impl fmt::Display for FitMessageSport {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSport")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
         if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
         if let Some(v) = &self.name { writeln!(f, "  {: >28}: {:?}", "name", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -48474,7 +49579,11 @@ impl FitMessageSport {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageSport",sport: None,sub_sport: None,name: None,
+            message_name: "FitMessageSport",
+            sport: None,
+            sub_sport: None,
+            name: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -48623,10 +49732,12 @@ pub struct FitMessageStressLevel {
 impl fmt::Display for FitMessageStressLevel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageStressLevel")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.stress_level_value { writeln!(f, "  {: >28}: {:?}", "stress_level_value", v)?; }
         if let Some(v) = &self.stress_level_time { writeln!(f, "  {: >28}: {:?}", "stress_level_time", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -48641,7 +49752,10 @@ impl FitMessageStressLevel {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageStressLevel",stress_level_value: None,stress_level_time: None,
+            message_name: "FitMessageStressLevel",
+            stress_level_value: None,
+            stress_level_time: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -48806,7 +49920,6 @@ pub struct FitMessageThreeDSensorCalibration {
 impl fmt::Display for FitMessageThreeDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageThreeDSensorCalibration")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.sensor_type { writeln!(f, "  {: >28}: {:?}", "sensor_type", v)?; }
         writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes)?;
@@ -48816,6 +49929,9 @@ impl fmt::Display for FitMessageThreeDSensorCalibration {
         if let Some(v) = &self.offset_cal { writeln!(f, "  {: >28}: {:?}", "offset_cal", v)?; }
         if let Some(v) = &self.orientation_matrix { writeln!(f, "  {: >28}: {:?}", "orientation_matrix", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -48830,8 +49946,16 @@ impl FitMessageThreeDSensorCalibration {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageThreeDSensorCalibration",timestamp: None,sensor_type: None,calibration_factor_subfield_bytes: vec![],
-            calibration_factor: None,calibration_divisor: None,level_shift: None,offset_cal: None,orientation_matrix: None,
+            message_name: "FitMessageThreeDSensorCalibration",
+            timestamp: None,
+            sensor_type: None,
+            calibration_factor_subfield_bytes: vec![],
+            calibration_factor: None,
+            calibration_divisor: None,
+            level_shift: None,
+            offset_cal: None,
+            orientation_matrix: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -49135,7 +50259,6 @@ pub struct FitMessageTimestampCorrelation {
 impl fmt::Display for FitMessageTimestampCorrelation {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTimestampCorrelation")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.fractional_timestamp { writeln!(f, "  {: >28}: {:?}", "fractional_timestamp", v)?; }
         if let Some(v) = &self.system_timestamp { writeln!(f, "  {: >28}: {:?}", "system_timestamp", v)?; }
@@ -49144,6 +50267,9 @@ impl fmt::Display for FitMessageTimestampCorrelation {
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.system_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "system_timestamp_ms", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -49158,7 +50284,15 @@ impl FitMessageTimestampCorrelation {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageTimestampCorrelation",timestamp: None,fractional_timestamp: None,system_timestamp: None,fractional_system_timestamp: None,local_timestamp: None,timestamp_ms: None,system_timestamp_ms: None,
+            message_name: "FitMessageTimestampCorrelation",
+            timestamp: None,
+            fractional_timestamp: None,
+            system_timestamp: None,
+            fractional_system_timestamp: None,
+            local_timestamp: None,
+            timestamp_ms: None,
+            system_timestamp_ms: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -49437,7 +50571,6 @@ pub struct FitMessageTotals {
 impl fmt::Display for FitMessageTotals {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTotals")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timer_time { writeln!(f, "  {: >28}: {:?}", "timer_time", v)?; }
@@ -49449,6 +50582,9 @@ impl fmt::Display for FitMessageTotals {
         if let Some(v) = &self.active_time { writeln!(f, "  {: >28}: {:?}", "active_time", v)?; }
         if let Some(v) = &self.sport_index { writeln!(f, "  {: >28}: {:?}", "sport_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -49463,7 +50599,18 @@ impl FitMessageTotals {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageTotals",message_index: None,timestamp: None,timer_time: None,distance: None,calories: None,sport: None,elapsed_time: None,sessions: None,active_time: None,sport_index: None,
+            message_name: "FitMessageTotals",
+            message_index: None,
+            timestamp: None,
+            timer_time: None,
+            distance: None,
+            calories: None,
+            sport: None,
+            elapsed_time: None,
+            sessions: None,
+            active_time: None,
+            sport_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -49821,7 +50968,6 @@ pub struct FitMessageTrainingFile {
 impl fmt::Display for FitMessageTrainingFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTrainingFile")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
         if let Some(v) = &self.manufacturer { writeln!(f, "  {: >28}: {:?}", "manufacturer", v)?; }
@@ -49830,6 +50976,9 @@ impl fmt::Display for FitMessageTrainingFile {
         if let Some(v) = &self.serial_number { writeln!(f, "  {: >28}: {:?}", "serial_number", v)?; }
         if let Some(v) = &self.time_created { writeln!(f, "  {: >28}: {:?}", "time_created", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -49844,8 +50993,15 @@ impl FitMessageTrainingFile {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageTrainingFile",timestamp: None,ftype: None,manufacturer: None,product_subfield_bytes: vec![],
-            product: None,serial_number: None,time_created: None,
+            message_name: "FitMessageTrainingFile",
+            timestamp: None,
+            ftype: None,
+            manufacturer: None,
+            product_subfield_bytes: vec![],
+            product: None,
+            serial_number: None,
+            time_created: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -50118,7 +51274,6 @@ pub struct FitMessageUserProfile {
 impl fmt::Display for FitMessageUserProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageUserProfile")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.friendly_name { writeln!(f, "  {: >28}: {:?}", "friendly_name", v)?; }
         if let Some(v) = &self.gender { writeln!(f, "  {: >28}: {:?}", "gender", v)?; }
@@ -50149,6 +51304,9 @@ impl fmt::Display for FitMessageUserProfile {
         if let Some(v) = &self.depth_setting { writeln!(f, "  {: >28}: {:?}", "depth_setting", v)?; }
         if let Some(v) = &self.dive_count { writeln!(f, "  {: >28}: {:?}", "dive_count", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -50163,7 +51321,37 @@ impl FitMessageUserProfile {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageUserProfile",message_index: None,friendly_name: None,gender: None,age: None,height: None,weight: None,language: None,elev_setting: None,weight_setting: None,resting_heart_rate: None,default_max_running_heart_rate: None,default_max_biking_heart_rate: None,default_max_heart_rate: None,hr_setting: None,speed_setting: None,dist_setting: None,power_setting: None,activity_class: None,position_setting: None,temperature_setting: None,local_id: None,global_id: None,wake_time: None,sleep_time: None,height_setting: None,user_running_step_length: None,user_walking_step_length: None,depth_setting: None,dive_count: None,
+            message_name: "FitMessageUserProfile",
+            message_index: None,
+            friendly_name: None,
+            gender: None,
+            age: None,
+            height: None,
+            weight: None,
+            language: None,
+            elev_setting: None,
+            weight_setting: None,
+            resting_heart_rate: None,
+            default_max_running_heart_rate: None,
+            default_max_biking_heart_rate: None,
+            default_max_heart_rate: None,
+            hr_setting: None,
+            speed_setting: None,
+            dist_setting: None,
+            power_setting: None,
+            activity_class: None,
+            position_setting: None,
+            temperature_setting: None,
+            local_id: None,
+            global_id: None,
+            wake_time: None,
+            sleep_time: None,
+            height_setting: None,
+            user_running_step_length: None,
+            user_walking_step_length: None,
+            depth_setting: None,
+            dive_count: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -50907,11 +52095,13 @@ pub struct FitMessageVideo {
 impl fmt::Display for FitMessageVideo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideo")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.url { writeln!(f, "  {: >28}: {:?}", "url", v)?; }
         if let Some(v) = &self.hosting_provider { writeln!(f, "  {: >28}: {:?}", "hosting_provider", v)?; }
         if let Some(v) = &self.duration { writeln!(f, "  {: >28}: {:?}", "duration", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -50926,7 +52116,11 @@ impl FitMessageVideo {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageVideo",url: None,hosting_provider: None,duration: None,
+            message_name: "FitMessageVideo",
+            url: None,
+            hosting_provider: None,
+            duration: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -51080,7 +52274,6 @@ pub struct FitMessageVideoClip {
 impl fmt::Display for FitMessageVideoClip {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoClip")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.clip_number { writeln!(f, "  {: >28}: {:?}", "clip_number", v)?; }
         if let Some(v) = &self.start_timestamp { writeln!(f, "  {: >28}: {:?}", "start_timestamp", v)?; }
         if let Some(v) = &self.start_timestamp_ms { writeln!(f, "  {: >28}: {:?}", "start_timestamp_ms", v)?; }
@@ -51089,6 +52282,9 @@ impl fmt::Display for FitMessageVideoClip {
         if let Some(v) = &self.clip_start { writeln!(f, "  {: >28}: {:?}", "clip_start", v)?; }
         if let Some(v) = &self.clip_end { writeln!(f, "  {: >28}: {:?}", "clip_end", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -51103,7 +52299,15 @@ impl FitMessageVideoClip {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageVideoClip",clip_number: None,start_timestamp: None,start_timestamp_ms: None,end_timestamp: None,end_timestamp_ms: None,clip_start: None,clip_end: None,
+            message_name: "FitMessageVideoClip",
+            clip_number: None,
+            start_timestamp: None,
+            start_timestamp_ms: None,
+            end_timestamp: None,
+            end_timestamp_ms: None,
+            clip_start: None,
+            clip_end: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -51337,11 +52541,13 @@ pub struct FitMessageVideoDescription {
 impl fmt::Display for FitMessageVideoDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoDescription")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v)?; }
         if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -51356,7 +52562,11 @@ impl FitMessageVideoDescription {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageVideoDescription",message_index: None,message_count: None,text: None,
+            message_name: "FitMessageVideoDescription",
+            message_index: None,
+            message_count: None,
+            text: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -51506,11 +52716,13 @@ pub struct FitMessageVideoFrame {
 impl fmt::Display for FitMessageVideoFrame {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoFrame")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.timestamp_ms { writeln!(f, "  {: >28}: {:?}", "timestamp_ms", v)?; }
         if let Some(v) = &self.frame_number { writeln!(f, "  {: >28}: {:?}", "frame_number", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -51525,7 +52737,11 @@ impl FitMessageVideoFrame {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageVideoFrame",timestamp: None,timestamp_ms: None,frame_number: None,
+            message_name: "FitMessageVideoFrame",
+            timestamp: None,
+            timestamp_ms: None,
+            frame_number: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -51689,11 +52905,13 @@ pub struct FitMessageVideoTitle {
 impl fmt::Display for FitMessageVideoTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoTitle")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.message_count { writeln!(f, "  {: >28}: {:?}", "message_count", v)?; }
         if let Some(v) = &self.text { writeln!(f, "  {: >28}: {:?}", "text", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -51708,7 +52926,11 @@ impl FitMessageVideoTitle {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageVideoTitle",message_index: None,message_count: None,text: None,
+            message_name: "FitMessageVideoTitle",
+            message_index: None,
+            message_count: None,
+            text: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -51890,12 +53112,14 @@ pub struct FitMessageWatchfaceSettings {
 impl fmt::Display for FitMessageWatchfaceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWatchfaceSettings")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.mode { writeln!(f, "  {: >28}: {:?}", "mode", v)?; }
         writeln!(f, "  {: >28}: {:?}", "layout_subfield_bytes", self.layout_subfield_bytes)?;
         if let Some(v) = &self.layout { writeln!(f, "  {: >28}: {:?}", "layout", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -51910,8 +53134,12 @@ impl FitMessageWatchfaceSettings {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWatchfaceSettings",message_index: None,mode: None,layout_subfield_bytes: vec![],
+            message_name: "FitMessageWatchfaceSettings",
+            message_index: None,
+            mode: None,
+            layout_subfield_bytes: vec![],
             layout: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -52084,7 +53312,6 @@ pub struct FitMessageWeatherAlert {
 impl fmt::Display for FitMessageWeatherAlert {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeatherAlert")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.report_id { writeln!(f, "  {: >28}: {:?}", "report_id", v)?; }
         if let Some(v) = &self.issue_time { writeln!(f, "  {: >28}: {:?}", "issue_time", v)?; }
@@ -52092,6 +53319,9 @@ impl fmt::Display for FitMessageWeatherAlert {
         if let Some(v) = &self.severity { writeln!(f, "  {: >28}: {:?}", "severity", v)?; }
         if let Some(v) = &self.ftype { writeln!(f, "  {: >28}: {:?}", "ftype", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -52106,7 +53336,14 @@ impl FitMessageWeatherAlert {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWeatherAlert",timestamp: None,report_id: None,issue_time: None,expire_time: None,severity: None,ftype: None,
+            message_name: "FitMessageWeatherAlert",
+            timestamp: None,
+            report_id: None,
+            issue_time: None,
+            expire_time: None,
+            severity: None,
+            ftype: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -52346,7 +53583,6 @@ pub struct FitMessageWeatherConditions {
 impl fmt::Display for FitMessageWeatherConditions {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeatherConditions")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.weather_report { writeln!(f, "  {: >28}: {:?}", "weather_report", v)?; }
         if let Some(v) = &self.temperature { writeln!(f, "  {: >28}: {:?}", "temperature", v)?; }
@@ -52364,6 +53600,9 @@ impl fmt::Display for FitMessageWeatherConditions {
         if let Some(v) = &self.high_temperature { writeln!(f, "  {: >28}: {:?}", "high_temperature", v)?; }
         if let Some(v) = &self.low_temperature { writeln!(f, "  {: >28}: {:?}", "low_temperature", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -52378,7 +53617,24 @@ impl FitMessageWeatherConditions {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWeatherConditions",timestamp: None,weather_report: None,temperature: None,condition: None,wind_direction: None,wind_speed: None,precipitation_probability: None,temperature_feels_like: None,relative_humidity: None,location: None,observed_at_time: None,observed_location_lat: None,observed_location_long: None,day_of_week: None,high_temperature: None,low_temperature: None,
+            message_name: "FitMessageWeatherConditions",
+            timestamp: None,
+            weather_report: None,
+            temperature: None,
+            condition: None,
+            wind_direction: None,
+            wind_speed: None,
+            precipitation_probability: None,
+            temperature_feels_like: None,
+            relative_humidity: None,
+            location: None,
+            observed_at_time: None,
+            observed_location_lat: None,
+            observed_location_long: None,
+            day_of_week: None,
+            high_temperature: None,
+            low_temperature: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -52861,7 +54117,6 @@ pub struct FitMessageWeightScale {
 impl fmt::Display for FitMessageWeightScale {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeightScale")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.timestamp { writeln!(f, "  {: >28}: {:?}", "timestamp", v)?; }
         if let Some(v) = &self.weight { writeln!(f, "  {: >28}: {:?}", "weight", v)?; }
         if let Some(v) = &self.percent_fat { writeln!(f, "  {: >28}: {:?}", "percent_fat", v)?; }
@@ -52876,6 +54131,9 @@ impl fmt::Display for FitMessageWeightScale {
         if let Some(v) = &self.visceral_fat_rating { writeln!(f, "  {: >28}: {:?}", "visceral_fat_rating", v)?; }
         if let Some(v) = &self.user_profile_index { writeln!(f, "  {: >28}: {:?}", "user_profile_index", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -52890,7 +54148,21 @@ impl FitMessageWeightScale {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWeightScale",timestamp: None,weight: None,percent_fat: None,percent_hydration: None,visceral_fat_mass: None,bone_mass: None,muscle_mass: None,basal_met: None,physique_rating: None,active_met: None,metabolic_age: None,visceral_fat_rating: None,user_profile_index: None,
+            message_name: "FitMessageWeightScale",
+            timestamp: None,
+            weight: None,
+            percent_fat: None,
+            percent_hydration: None,
+            visceral_fat_mass: None,
+            bone_mass: None,
+            muscle_mass: None,
+            basal_met: None,
+            physique_rating: None,
+            active_met: None,
+            metabolic_age: None,
+            visceral_fat_rating: None,
+            user_profile_index: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -53352,7 +54624,6 @@ pub struct FitMessageWorkout {
 impl fmt::Display for FitMessageWorkout {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkout")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
         if let Some(v) = &self.capabilities { writeln!(f, "  {: >28}: {:?}", "capabilities", v)?; }
         if let Some(v) = &self.num_valid_steps { writeln!(f, "  {: >28}: {:?}", "num_valid_steps", v)?; }
@@ -53361,6 +54632,9 @@ impl fmt::Display for FitMessageWorkout {
         if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v)?; }
         if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -53375,7 +54649,15 @@ impl FitMessageWorkout {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWorkout",sport: None,capabilities: None,num_valid_steps: None,wkt_name: None,sub_sport: None,pool_length: None,pool_length_unit: None,
+            message_name: "FitMessageWorkout",
+            sport: None,
+            capabilities: None,
+            num_valid_steps: None,
+            wkt_name: None,
+            sub_sport: None,
+            pool_length: None,
+            pool_length_unit: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -53625,7 +54907,6 @@ pub struct FitMessageWorkoutSession {
 impl fmt::Display for FitMessageWorkoutSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkoutSession")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.sport { writeln!(f, "  {: >28}: {:?}", "sport", v)?; }
         if let Some(v) = &self.sub_sport { writeln!(f, "  {: >28}: {:?}", "sub_sport", v)?; }
@@ -53634,6 +54915,9 @@ impl fmt::Display for FitMessageWorkoutSession {
         if let Some(v) = &self.pool_length { writeln!(f, "  {: >28}: {:?}", "pool_length", v)?; }
         if let Some(v) = &self.pool_length_unit { writeln!(f, "  {: >28}: {:?}", "pool_length_unit", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -53648,7 +54932,15 @@ impl FitMessageWorkoutSession {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWorkoutSession",message_index: None,sport: None,sub_sport: None,num_valid_steps: None,first_step_index: None,pool_length: None,pool_length_unit: None,
+            message_name: "FitMessageWorkoutSession",
+            message_index: None,
+            sport: None,
+            sub_sport: None,
+            num_valid_steps: None,
+            first_step_index: None,
+            pool_length: None,
+            pool_length_unit: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -54237,7 +55529,6 @@ pub struct FitMessageWorkoutStep {
 impl fmt::Display for FitMessageWorkoutStep {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkoutStep")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.message_index { writeln!(f, "  {: >28}: {:?}", "message_index", v)?; }
         if let Some(v) = &self.wkt_step_name { writeln!(f, "  {: >28}: {:?}", "wkt_step_name", v)?; }
         if let Some(v) = &self.duration_type { writeln!(f, "  {: >28}: {:?}", "duration_type", v)?; }
@@ -54258,6 +55549,9 @@ impl fmt::Display for FitMessageWorkoutStep {
         if let Some(v) = &self.exercise_weight { writeln!(f, "  {: >28}: {:?}", "exercise_weight", v)?; }
         if let Some(v) = &self.weight_display_unit { writeln!(f, "  {: >28}: {:?}", "weight_display_unit", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -54272,11 +55566,27 @@ impl FitMessageWorkoutStep {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageWorkoutStep",message_index: None,wkt_step_name: None,duration_type: None,duration_value_subfield_bytes: vec![],
-            duration_value: None,target_type: None,target_value_subfield_bytes: vec![],
-            target_value: None,custom_target_value_low_subfield_bytes: vec![],
-            custom_target_value_low: None,custom_target_value_high_subfield_bytes: vec![],
-            custom_target_value_high: None,intensity: None,notes: None,equipment: None,exercise_category: None,exercise_name: None,exercise_weight: None,weight_display_unit: None,
+            message_name: "FitMessageWorkoutStep",
+            message_index: None,
+            wkt_step_name: None,
+            duration_type: None,
+            duration_value_subfield_bytes: vec![],
+            duration_value: None,
+            target_type: None,
+            target_value_subfield_bytes: vec![],
+            target_value: None,
+            custom_target_value_low_subfield_bytes: vec![],
+            custom_target_value_low: None,
+            custom_target_value_high_subfield_bytes: vec![],
+            custom_target_value_high: None,
+            intensity: None,
+            notes: None,
+            equipment: None,
+            exercise_category: None,
+            exercise_name: None,
+            exercise_weight: None,
+            weight_display_unit: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
@@ -54730,13 +56040,15 @@ pub struct FitMessageZonesTarget {
 impl fmt::Display for FitMessageZonesTarget {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageZonesTarget")?;
-        writeln!(f, "  {: >28}: {:?}", "raw_bytes", self.raw_bytes)?;
         if let Some(v) = &self.max_heart_rate { writeln!(f, "  {: >28}: {:?}", "max_heart_rate", v)?; }
         if let Some(v) = &self.threshold_heart_rate { writeln!(f, "  {: >28}: {:?}", "threshold_heart_rate", v)?; }
         if let Some(v) = &self.functional_threshold_power { writeln!(f, "  {: >28}: {:?}", "functional_threshold_power", v)?; }
         if let Some(v) = &self.hr_calc_type { writeln!(f, "  {: >28}: {:?}", "hr_calc_type", v)?; }
         if let Some(v) = &self.pwr_calc_type { writeln!(f, "  {: >28}: {:?}", "pwr_calc_type", v)?; }
         
+            
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
         Ok(())
     }
 }
@@ -54751,7 +56063,13 @@ impl FitMessageZonesTarget {
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
-            message_name: "FitMessageZonesTarget",max_heart_rate: None,threshold_heart_rate: None,functional_threshold_power: None,hr_calc_type: None,pwr_calc_type: None,
+            message_name: "FitMessageZonesTarget",
+            max_heart_rate: None,
+            threshold_heart_rate: None,
+            functional_threshold_power: None,
+            hr_calc_type: None,
+            pwr_calc_type: None,
+            
         };
 
         let inp = &input[..(message.definition_message.message_size)];
