@@ -234,7 +234,7 @@ pub fn parse_fit_message<'a>(
                             // device_settings.time_zone_offset is 'in quarter hour increments',
                             // so a value of +15 = (15 increments * 15 minutes * 60 seconds) =
                             // = +13500 seconds
-                            if let Some(tzo) = time_zone_offset {
+                            if let Some(tzo) = &time_zone_offset.value {
                                 match tzo[0] {
                                     Some(first_offset) => parsing_state
                                         .set_timezone_offset((first_offset * 15.0 * 60.0).into()),
@@ -245,7 +245,7 @@ pub fn parse_fit_message<'a>(
                     }
                 }
                 FitDataMessage::FieldDescription(fd) => {
-                    if let Some(ddi) = fd.developer_data_index {
+                    if let Some(ddi) = fd.developer_data_index.value {
                         parsing_state.set_developer_data_definition(
                             ddi,
                             FitDataMessage::FieldDescription(fd.clone()),
@@ -261,8 +261,9 @@ pub fn parse_fit_message<'a>(
     Ok((Some(fit_message), out))
 }
 
+#[derive(Debug)]
 pub struct FitFieldValue<T> {
-    value: T,
+    value: Option<T>,
     units: String,
 }
 
@@ -598,7 +599,7 @@ impl FitDeveloperDataDefinition {
     fn add(&mut self, message: FitDataMessage) -> &Self {
         match message {
             FitDataMessage::FieldDescription(fd) => {
-                if let Some(fdn) = fd.field_definition_number {
+                if let Some(fdn) = fd.field_definition_number.value {
                     self.field_descriptions.insert(fdn, fd.clone());
                 }
                 self
@@ -1054,7 +1055,7 @@ impl FitFieldDeveloperData {
         endianness: Endianness,
         field_size: usize,
     ) -> Result<(FitFieldDeveloperData, &'a [u8])> {
-        let base_type_id = match &field_description.fit_base_type_id {
+        let base_type_id = match &field_description.fit_base_type_id.value {
             Some(bti) => bti,
             None => return Err(Error::missing_fit_base_type()),
         };

@@ -195,6 +195,7 @@ use nom::Endianness;
 
 use chrono::{DateTime, UTC, FixedOffset, TimeZone, Duration};
 
+use FitFieldValue;
 use FitRecord;
 use FitRecordHeader;
 use FitDefinitionMessage;
@@ -214,7 +215,7 @@ macro_rules! fmt_developer_fields {
     ($s:ident, $f:ident) => {
         if $s.developer_fields.len() > 0 {
             for developer_field in &$s.developer_fields {
-                if let Some(field_names) = &developer_field.field_description.field_name {
+                if let Some(field_names) = &developer_field.field_description.field_name.value {
                     if let Some(name) = &field_names[0] { write!($f, "  {: >28}: ", name)?; }
                 }
                 writeln!($f, "{}", developer_field.value)?;
@@ -500,7 +501,13 @@ impl fmt::Display for {{ message_name }} {
         {%- if field.has_subfields -%}
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
         {% endif -%}
-        if let Some(v) = &self.{{ field.name }} { writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", v)?; }
+        if let Some(v) = &self.{{ field.name }}.value { 
+            write!(f, "  {: >28}: {:?}", "{{ field.name }}", v)?;
+            if self.{{ field.name }}.units.len() > 0 { 
+                write!(f, " [{}]", &self.{{ field.name }}.units)?;
+            } 
+            writeln!(f)?;
+        }
         {% endfor %}
             
         fmt_developer_fields!(self, f);
@@ -524,7 +531,7 @@ impl {{ message_name }} {
             {%- if field.has_subfields -%}
             {{ field.name }}_subfield_bytes: vec![],
             {% endif -%}
-            {{ field.name }}: None,
+            {{ field.name }}: FitFieldValue { value: None, units: "{{ field.units }}".to_string() },
             {% endfor %}
         };
 
@@ -558,10 +565,10 @@ impl {{ message_name }} {
         {% if has_timestamp_field %}
         match _timestamp {
             Some(ts) => {
-                message.timestamp = Some(ts);
+                message.timestamp.value = Some(ts);
             },
             None => {
-                match message.timestamp {
+                match message.timestamp.value {
                     Some(ts) => {
                         parsing_state.set_last_timestamp(ts);
                     },
@@ -591,7 +598,7 @@ impl {{ message_name }} {
         if fds.len() == 1 {
             let field = fds[0];
             let val = {{ field.output_subfield_parser()}}?;
-            message.{{ field.name }} = Some(val);
+            message.{{ field.name }}.value = Some(val);
         }
         {%- endif -%}
         {%- endfor %}
@@ -763,27 +770,27 @@ impl FitRecord for {{ message_name }} {
 SCALE_AND_OFFSET_TEMPLATE = """
                                 match val {
                                     Some(result) => {
-                                       message.{{ field_name }} = Some(result as f64 / {{ scale }} as f64{{ offset }}) 
+                                       message.{{ field_name }}.value = Some(result as f64 / {{ scale }} as f64{{ offset }}) 
                                     },
-                                    None => message.{{ field_name }} = None
+                                    None => message.{{ field_name }}.value = None
                                 }"""
 
-SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }} = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64{{ offset }})).collect());"""
+SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }}.value = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64{{ offset }})).collect());"""
 
 SEMICIRCLES_TEMPMLATE = """
                                 match val {
                                     Some(result) => {
-                                        message.{{ field_name }} = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+                                        message.{{ field_name }}.value = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
                                     },
-                                    None => message.{{ field_name }} = None
+                                    None => message.{{ field_name }}.value = None
                                 }"""
 
 
 
 class Field(object):
-    FIELD_OPTION_SUBFIELD = """Option<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
-    FIELD_OPTION_BASE_TYPE = """Option<{% if is_vec %}Vec<Option<{% endif %}{{ fit_type }}{% if is_vec %}>>{% endif %}>"""
-    FIELD_OPTION_FIT_TYPE = """Option<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
+    FIELD_OPTION_SUBFIELD = """FitFieldValue<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
+    FIELD_OPTION_BASE_TYPE = """FitFieldValue<{% if is_vec %}Vec<Option<{% endif %}{{ fit_type }}{% if is_vec %}>>{% endif %}>"""
+    FIELD_OPTION_FIT_TYPE = """FitFieldValue<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
 
     def __init__(self, number, name, type, array, components, bits, scale, offset, units, comment, types):
         self.number = int(number)
@@ -905,12 +912,12 @@ class Field(object):
         elif self.type != 'enum' and self.type in FIT_TYPE_MAP.keys():
             if self.scale and self.type != 'byte':
                 if self.array:
-                    content = "Option<Vec<Option<f64>>>"
+                    content = "FitFieldValue<Vec<Option<f64>>>"
                 else:
-                    content = "Option<f64>"
+                    content = "FitFieldValue<f64>"
 
             elif self.units == 'semicircles':
-                content = "Option<f64>"
+                content = "FitFieldValue<f64>"
             else:
                 #if self.name == 'bottom_time':
                 #    print >>sys.stderr, "bottom_time is_vec: {}".format(self.array)
@@ -957,14 +964,14 @@ class Field(object):
             return template.render()
 
         if self.array or is_fit_base_type(self.type) is False or self.has_subfields:
-            return "message.{} = Some(val);".format(self.name)
+            return "message.{}.value = Some(val);".format(self.name)
 
         else:
             if self.units == 'semicircles':
                 template = Environment().from_string(SEMICIRCLES_TEMPMLATE,
                                                     globals={'field_name': self.name})
                 return template.render()
-            return "message.{} = val;".format(self.name)
+            return "message.{}.value = val;".format(self.name)
 
 
     SUBFIELD_TEMPLATE = """
@@ -979,7 +986,7 @@ pub enum {{ subfield_name }} {
 impl {{ subfield_name }} {
     fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], f: &FitFieldDefinition, _tz_offset: f64) -> Result<{{ subfield_name }}> {
         {% for sf_name in subfield_ref_names %}
-        match message.{{ sf_name }} {
+        match message.{{ sf_name }}.value {
         {% for sf in subfield_options[sf_name] %}
             Some(FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }}) => {
                 let val = {{ sf.output_field_parser(field.types, field.message.rustified_name) }}?;
