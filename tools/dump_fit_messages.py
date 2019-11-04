@@ -218,7 +218,11 @@ macro_rules! fmt_developer_fields {
                 if let Some(field_names) = &developer_field.field_description.field_name.value {
                     if let Some(name) = &field_names[0] { write!($f, "  {: >28}: ", name)?; }
                 }
-                writeln!($f, "{}", developer_field.value)?;
+                write!($f, "{}", developer_field.value)?;
+                if let Some(field_units) = &developer_field.field_description.units.value {
+                    if let Some(units) = &field_units[0] { write!($f, " [{}]", units)?; }
+                }
+                writeln!($f)?;
             }
         }
     };
@@ -233,6 +237,18 @@ macro_rules! fmt_raw_bytes {
         }
         writeln!($f, "]")?;
     }};
+}
+
+macro_rules! fmt_message_field {
+    ($thing:expr, $thingname:expr, $f:ident) => {
+        if let Some(v) = &$thing.value { 
+            write!($f, "  {: >28}: {:?}", $thingname, v)?;
+            if $thing.units.len() > 0 { 
+                write!($f, " [{}]", &$thing.units)?;
+            } 
+            writeln!($f)?;
+        }
+    };
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -501,13 +517,7 @@ impl fmt::Display for {{ message_name }} {
         {%- if field.has_subfields -%}
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
         {% endif -%}
-        if let Some(v) = &self.{{ field.name }}.value { 
-            write!(f, "  {: >28}: {:?}", "{{ field.name }}", v)?;
-            if self.{{ field.name }}.units.len() > 0 { 
-                write!(f, " [{}]", &self.{{ field.name }}.units)?;
-            } 
-            writeln!(f)?;
-        }
+        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", f);
         {% endfor %}
             
         fmt_developer_fields!(self, f);
