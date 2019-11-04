@@ -531,7 +531,7 @@ impl {{ message_name }} {
             {%- if field.has_subfields -%}
             {{ field.name }}_subfield_bytes: vec![],
             {% endif -%}
-            {{ field.name }}: FitFieldValue { value: None, units: "{{ field.units }}".to_string() },
+            {{ field.name }}: FitFieldValue { value: None, units: "{{ field.output_units }}".to_string() },
             {% endfor %}
         };
 
@@ -807,6 +807,14 @@ class Field(object):
         self.message = None
         self.types = types
         #self.message_name = message_name
+
+
+    @property
+    def output_units(self):
+        if self.units == 'semicircles':
+            return "deg"
+        else:
+            return self.units
 
     @property
     def lifetime_spec(self):
