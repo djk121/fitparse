@@ -15384,6 +15384,24 @@ impl fmt::Display for FitMessageAccelerometerData {
 
 impl FitMessageAccelerometerData {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sample_time_offset",
+            2 => "accel_x",
+            3 => "accel_y",
+            4 => "accel_z",
+            5 => "calibrated_accel_x",
+            6 => "calibrated_accel_y",
+            7 => "calibrated_accel_z",
+            8 => "compressed_calibrated_accel_x",
+            9 => "compressed_calibrated_accel_y",
+            10 => "compressed_calibrated_accel_z",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAccelerometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAccelerometerData {
@@ -15941,6 +15959,20 @@ impl fmt::Display for FitMessageActivity {
 
 impl FitMessageActivity {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "total_timer_time",
+            1 => "num_sessions",
+            2 => "ftype",
+            3 => "event",
+            4 => "event_type",
+            5 => "local_timestamp",
+            6 => "event_group",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageActivity>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageActivity {
@@ -16256,6 +16288,17 @@ impl fmt::Display for FitMessageAntChannelId {
 
 impl FitMessageAntChannelId {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "channel_number",
+            1 => "device_type",
+            2 => "device_number",
+            3 => "transmission_type",
+            4 => "device_index",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntChannelId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageAntChannelId {
@@ -16480,6 +16523,18 @@ impl fmt::Display for FitMessageAntRx {
 }
 
 impl FitMessageAntRx {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "fractional_timestamp",
+            1 => "mesg_id",
+            2 => "mesg_data",
+            3 => "channel_number",
+            4 => "data",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntRx>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -16762,6 +16817,18 @@ impl fmt::Display for FitMessageAntTx {
 }
 
 impl FitMessageAntTx {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "fractional_timestamp",
+            1 => "mesg_id",
+            2 => "mesg_data",
+            3 => "channel_number",
+            4 => "data",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAntTx>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -17056,6 +17123,24 @@ impl fmt::Display for FitMessageAviationAttitude {
 }
 
 impl FitMessageAviationAttitude {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "system_time",
+            2 => "pitch",
+            3 => "roll",
+            4 => "accel_lateral",
+            5 => "accel_normal",
+            6 => "turn_rate",
+            7 => "stage",
+            8 => "attitude_stage_complete",
+            9 => "track",
+            10 => "validity",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageAviationAttitude>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -17606,6 +17691,16 @@ impl fmt::Display for FitMessageBarometerData {
 
 impl FitMessageBarometerData {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sample_time_offset",
+            2 => "baro_pres",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBarometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBarometerData {
@@ -17906,6 +18001,44 @@ impl fmt::Display for FitMessageBikeProfile {
 }
 
 impl FitMessageBikeProfile {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "name",
+            1 => "sport",
+            2 => "sub_sport",
+            3 => "odometer",
+            4 => "bike_spd_ant_id",
+            5 => "bike_cad_ant_id",
+            6 => "bike_spdcad_ant_id",
+            7 => "bike_power_ant_id",
+            8 => "custom_wheelsize",
+            9 => "auto_wheelsize",
+            10 => "bike_weight",
+            11 => "power_cal_factor",
+            12 => "auto_wheel_cal",
+            13 => "auto_power_zero",
+            14 => "id",
+            15 => "spd_enabled",
+            16 => "cad_enabled",
+            17 => "spdcad_enabled",
+            18 => "power_enabled",
+            19 => "crank_length",
+            20 => "enabled",
+            21 => "bike_spd_ant_id_trans_type",
+            22 => "bike_cad_ant_id_trans_type",
+            23 => "bike_spdcad_ant_id_trans_type",
+            24 => "bike_power_ant_id_trans_type",
+            37 => "odometer_rollover",
+            38 => "front_gear_num",
+            39 => "front_gear",
+            40 => "rear_gear_num",
+            41 => "rear_gear",
+            44 => "shimano_di2_enabled",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBikeProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -18840,6 +18973,23 @@ impl fmt::Display for FitMessageBloodPressure {
 
 impl FitMessageBloodPressure {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "systolic_pressure",
+            1 => "diastolic_pressure",
+            2 => "mean_arterial_pressure",
+            3 => "map_3_sample_mean",
+            4 => "map_morning_values",
+            5 => "map_evening_values",
+            6 => "heart_rate",
+            7 => "heart_rate_type",
+            8 => "status",
+            9 => "user_profile_index",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageBloodPressure>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageBloodPressure {
@@ -19205,6 +19355,15 @@ impl fmt::Display for FitMessageCadenceZone {
 
 impl FitMessageCadenceZone {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "high_value",
+            1 => "name",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCadenceZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCadenceZone {
@@ -19383,6 +19542,17 @@ impl fmt::Display for FitMessageCameraEvent {
 }
 
 impl FitMessageCameraEvent {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "camera_event_type",
+            2 => "camera_file_uuid",
+            3 => "camera_orientation",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCameraEvent>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -19618,6 +19788,16 @@ impl fmt::Display for FitMessageCapabilities {
 }
 
 impl FitMessageCapabilities {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "languages",
+            1 => "sports",
+            21 => "workouts_supported",
+            23 => "connectivity_supported",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -19867,6 +20047,25 @@ impl fmt::Display for FitMessageConnectivity {
 }
 
 impl FitMessageConnectivity {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "bluetooth_enabled",
+            1 => "bluetooth_le_enabled",
+            2 => "ant_enabled",
+            3 => "name",
+            4 => "live_tracking_enabled",
+            5 => "weather_conditions_enabled",
+            6 => "weather_alerts_enabled",
+            7 => "auto_activity_upload_enabled",
+            8 => "course_download_enabled",
+            9 => "workout_download_enabled",
+            10 => "gps_ephemeris_download_enabled",
+            11 => "incident_detection_enabled",
+            12 => "grouptrack_enabled",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageConnectivity>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -20265,6 +20464,16 @@ impl fmt::Display for FitMessageCourse {
 
 impl FitMessageCourse {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            4 => "sport",
+            5 => "name",
+            6 => "capabilities",
+            7 => "sub_sport",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCourse>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageCourse {
@@ -20471,6 +20680,20 @@ impl fmt::Display for FitMessageCoursePoint {
 }
 
 impl FitMessageCoursePoint {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            1 => "timestamp",
+            2 => "position_lat",
+            3 => "position_long",
+            4 => "distance",
+            5 => "ftype",
+            6 => "name",
+            8 => "favorite",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageCoursePoint>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -20811,6 +21034,17 @@ impl fmt::Display for FitMessageDeveloperDataId {
 
 impl FitMessageDeveloperDataId {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "developer_id",
+            1 => "application_id",
+            2 => "manufacturer_id",
+            3 => "developer_data_index",
+            4 => "application_version",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeveloperDataId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDeveloperDataId {
@@ -21137,6 +21371,30 @@ impl fmt::Display for FitMessageDeviceInfo {
 }
 
 impl FitMessageDeviceInfo {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "device_index",
+            1 => "device_type",
+            2 => "manufacturer",
+            3 => "serial_number",
+            4 => "product",
+            5 => "software_version",
+            6 => "hardware_version",
+            7 => "cum_operating_time",
+            10 => "battery_voltage",
+            11 => "battery_status",
+            18 => "sensor_position",
+            19 => "descriptor",
+            20 => "ant_transmission_type",
+            21 => "ant_device_number",
+            22 => "ant_network",
+            25 => "source_type",
+            27 => "product_name",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeviceInfo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -21748,6 +22006,35 @@ impl fmt::Display for FitMessageDeviceSettings {
 }
 
 impl FitMessageDeviceSettings {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "active_time_zone",
+            1 => "utc_offset",
+            2 => "time_offset",
+            4 => "time_mode",
+            5 => "time_zone_offset",
+            12 => "backlight_mode",
+            36 => "activity_tracker_enabled",
+            39 => "clock_time",
+            40 => "pages_enabled",
+            46 => "move_alert_enabled",
+            47 => "date_mode",
+            55 => "display_orientation",
+            56 => "mounting_side",
+            57 => "default_page",
+            58 => "autosync_min_steps",
+            59 => "autosync_min_time",
+            80 => "lactate_threshold_autodetect_enabled",
+            86 => "ble_auto_upload_enabled",
+            89 => "auto_sync_frequency",
+            90 => "auto_activity_detect",
+            94 => "number_of_screens",
+            95 => "smart_notification_display_orientation",
+            134 => "tap_interface",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDeviceSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -22452,6 +22739,19 @@ impl fmt::Display for FitMessageDiveAlarm {
 
 impl FitMessageDiveAlarm {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "depth",
+            1 => "time",
+            2 => "enabled",
+            3 => "alarm_type",
+            4 => "sound",
+            5 => "dive_types",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveAlarm>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveAlarm {
@@ -22757,6 +23057,16 @@ impl fmt::Display for FitMessageDiveGas {
 
 impl FitMessageDiveGas {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "helium_content",
+            1 => "oxygen_content",
+            2 => "status",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveGas>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveGas {
@@ -23024,6 +23334,34 @@ impl fmt::Display for FitMessageDiveSettings {
 }
 
 impl FitMessageDiveSettings {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "name",
+            1 => "model",
+            2 => "gf_low",
+            3 => "gf_high",
+            4 => "water_type",
+            5 => "water_density",
+            6 => "po2_warn",
+            7 => "po2_critical",
+            8 => "po2_deco",
+            9 => "safety_stop_enabled",
+            10 => "bottom_depth",
+            11 => "bottom_time",
+            12 => "apnea_countdown_enabled",
+            13 => "apnea_countdown_time",
+            14 => "backlight_mode",
+            15 => "backlight_brightness",
+            16 => "backlight_timeout",
+            17 => "repeat_dive_interval",
+            18 => "safety_stop_time",
+            19 => "heart_rate_source_type",
+            20 => "heart_rate_source",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -23719,6 +24057,25 @@ impl fmt::Display for FitMessageDiveSummary {
 
 impl FitMessageDiveSummary {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "reference_mesg",
+            1 => "reference_index",
+            2 => "avg_depth",
+            3 => "max_depth",
+            4 => "surface_interval",
+            5 => "start_cns",
+            6 => "end_cns",
+            7 => "start_n2",
+            8 => "end_n2",
+            9 => "o2_toxicity",
+            10 => "dive_number",
+            11 => "bottom_time",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageDiveSummary>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageDiveSummary {
@@ -24409,6 +24766,25 @@ impl fmt::Display for FitMessageEvent {
 
 impl FitMessageEvent {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "event",
+            1 => "event_type",
+            2 => "data16",
+            3 => "data",
+            4 => "event_group",
+            7 => "score",
+            8 => "opponent_score",
+            9 => "front_gear_num",
+            10 => "front_gear",
+            11 => "rear_gear_num",
+            12 => "rear_gear",
+            13 => "device_index",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageEvent>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageEvent {
@@ -24856,6 +25232,23 @@ impl fmt::Display for FitMessageExdDataConceptConfiguration {
 
 impl FitMessageExdDataConceptConfiguration {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "screen_index",
+            1 => "concept_field",
+            2 => "field_id",
+            3 => "concept_index",
+            4 => "data_page",
+            5 => "concept_key",
+            6 => "scaling",
+            8 => "data_units",
+            9 => "qualifier",
+            10 => "descriptor",
+            11 => "is_signed",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdDataConceptConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataConceptConfiguration {
@@ -25215,6 +25608,18 @@ impl fmt::Display for FitMessageExdDataFieldConfiguration {
 
 impl FitMessageExdDataFieldConfiguration {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "screen_index",
+            1 => "concept_field",
+            2 => "field_id",
+            3 => "concept_count",
+            4 => "display_type",
+            5 => "title",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdDataFieldConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdDataFieldConfiguration {
@@ -25476,6 +25881,16 @@ impl fmt::Display for FitMessageExdScreenConfiguration {
 
 impl FitMessageExdScreenConfiguration {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "screen_index",
+            1 => "field_count",
+            2 => "layout",
+            3 => "screen_enabled",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExdScreenConfiguration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageExdScreenConfiguration {
@@ -25674,6 +26089,16 @@ impl fmt::Display for FitMessageExerciseTitle {
 }
 
 impl FitMessageExerciseTitle {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "exercise_category",
+            1 => "exercise_name",
+            2 => "wkt_step_name",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageExerciseTitle>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -25891,6 +26316,17 @@ impl fmt::Display for FitMessageFieldCapabilities {
 }
 
 impl FitMessageFieldCapabilities {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "file",
+            1 => "mesg_num",
+            2 => "field_num",
+            3 => "count",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFieldCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -26132,6 +26568,26 @@ impl fmt::Display for FitMessageFieldDescription {
 }
 
 impl FitMessageFieldDescription {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "developer_data_index",
+            1 => "field_definition_number",
+            2 => "fit_base_type_id",
+            3 => "field_name",
+            4 => "array",
+            5 => "components",
+            6 => "scale",
+            7 => "offset",
+            8 => "units",
+            9 => "bits",
+            10 => "accumulate",
+            13 => "fit_base_unit_id",
+            14 => "native_mesg_num",
+            15 => "native_field_num",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFieldDescription>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -26588,6 +27044,18 @@ impl fmt::Display for FitMessageFileCapabilities {
 
 impl FitMessageFileCapabilities {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "ftype",
+            1 => "flags",
+            2 => "directory",
+            3 => "max_count",
+            4 => "max_size",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCapabilities {
@@ -26827,6 +27295,14 @@ impl fmt::Display for FitMessageFileCreator {
 
 impl FitMessageFileCreator {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "software_version",
+            1 => "hardware_version",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileCreator>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageFileCreator {
@@ -27032,6 +27508,19 @@ impl fmt::Display for FitMessageFileId {
 }
 
 impl FitMessageFileId {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "ftype",
+            1 => "manufacturer",
+            2 => "product",
+            3 => "serial_number",
+            4 => "time_created",
+            5 => "number",
+            8 => "product_name",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageFileId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -27336,6 +27825,25 @@ impl fmt::Display for FitMessageGoal {
 }
 
 impl FitMessageGoal {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "sport",
+            1 => "sub_sport",
+            2 => "start_date",
+            3 => "end_date",
+            4 => "ftype",
+            5 => "value",
+            6 => "repeat",
+            7 => "target_value",
+            8 => "recurrence",
+            9 => "recurrence_value",
+            10 => "enabled",
+            11 => "source",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGoal>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -27743,6 +28251,21 @@ impl fmt::Display for FitMessageGpsMetadata {
 }
 
 impl FitMessageGpsMetadata {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "position_lat",
+            2 => "position_long",
+            3 => "enhanced_altitude",
+            4 => "enhanced_speed",
+            5 => "heading",
+            6 => "utc_timestamp",
+            7 => "velocity",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGpsMetadata>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -28152,6 +28675,21 @@ impl fmt::Display for FitMessageGyroscopeData {
 }
 
 impl FitMessageGyroscopeData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sample_time_offset",
+            2 => "gyro_x",
+            3 => "gyro_y",
+            4 => "gyro_z",
+            5 => "calibrated_gyro_x",
+            6 => "calibrated_gyro_y",
+            7 => "calibrated_gyro_z",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageGyroscopeData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -28592,6 +29130,18 @@ impl fmt::Display for FitMessageHr {
 
 impl FitMessageHr {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "fractional_timestamp",
+            1 => "time256",
+            6 => "filtered_bpm",
+            9 => "event_timestamp",
+            10 => "event_timestamp_12",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHr>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHr {
@@ -28914,6 +29464,15 @@ impl fmt::Display for FitMessageHrZone {
 
 impl FitMessageHrZone {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            1 => "high_bpm",
+            2 => "name",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHrZone {
@@ -29092,6 +29651,17 @@ impl fmt::Display for FitMessageHrmProfile {
 }
 
 impl FitMessageHrmProfile {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "enabled",
+            1 => "hrm_ant_id",
+            2 => "log_hrv",
+            3 => "hrm_ant_id_trans_type",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrmProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -29307,6 +29877,13 @@ impl fmt::Display for FitMessageHrv {
 }
 
 impl FitMessageHrv {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "time",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageHrv>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -29744,6 +30321,118 @@ impl fmt::Display for FitMessageLap {
 }
 
 impl FitMessageLap {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "event",
+            1 => "event_type",
+            2 => "start_time",
+            3 => "start_position_lat",
+            4 => "start_position_long",
+            5 => "end_position_lat",
+            6 => "end_position_long",
+            7 => "total_elapsed_time",
+            8 => "total_timer_time",
+            9 => "total_distance",
+            10 => "total_cycles",
+            11 => "total_calories",
+            12 => "total_fat_calories",
+            13 => "avg_speed",
+            14 => "max_speed",
+            15 => "avg_heart_rate",
+            16 => "max_heart_rate",
+            17 => "avg_cadence",
+            18 => "max_cadence",
+            19 => "avg_power",
+            20 => "max_power",
+            21 => "total_ascent",
+            22 => "total_descent",
+            23 => "intensity",
+            24 => "lap_trigger",
+            25 => "sport",
+            26 => "event_group",
+            32 => "num_lengths",
+            33 => "normalized_power",
+            34 => "left_right_balance",
+            35 => "first_length_index",
+            37 => "avg_stroke_distance",
+            38 => "swim_stroke",
+            39 => "sub_sport",
+            40 => "num_active_lengths",
+            41 => "total_work",
+            42 => "avg_altitude",
+            43 => "max_altitude",
+            44 => "gps_accuracy",
+            45 => "avg_grade",
+            46 => "avg_pos_grade",
+            47 => "avg_neg_grade",
+            48 => "max_pos_grade",
+            49 => "max_neg_grade",
+            50 => "avg_temperature",
+            51 => "max_temperature",
+            52 => "total_moving_time",
+            53 => "avg_pos_vertical_speed",
+            54 => "avg_neg_vertical_speed",
+            55 => "max_pos_vertical_speed",
+            56 => "max_neg_vertical_speed",
+            57 => "time_in_hr_zone",
+            58 => "time_in_speed_zone",
+            59 => "time_in_cadence_zone",
+            60 => "time_in_power_zone",
+            61 => "repetition_num",
+            62 => "min_altitude",
+            63 => "min_heart_rate",
+            71 => "wkt_step_index",
+            74 => "opponent_score",
+            75 => "stroke_count",
+            76 => "zone_count",
+            77 => "avg_vertical_oscillation",
+            78 => "avg_stance_time_percent",
+            79 => "avg_stance_time",
+            80 => "avg_fractional_cadence",
+            81 => "max_fractional_cadence",
+            82 => "total_fractional_cycles",
+            83 => "player_score",
+            84 => "avg_total_hemoglobin_conc",
+            85 => "min_total_hemoglobin_conc",
+            86 => "max_total_hemoglobin_conc",
+            87 => "avg_saturated_hemoglobin_percent",
+            88 => "min_saturated_hemoglobin_percent",
+            89 => "max_saturated_hemoglobin_percent",
+            91 => "avg_left_torque_effectiveness",
+            92 => "avg_right_torque_effectiveness",
+            93 => "avg_left_pedal_smoothness",
+            94 => "avg_right_pedal_smoothness",
+            95 => "avg_combined_pedal_smoothness",
+            98 => "time_standing",
+            99 => "stand_count",
+            100 => "avg_left_pco",
+            101 => "avg_right_pco",
+            102 => "avg_left_power_phase",
+            103 => "avg_left_power_phase_peak",
+            104 => "avg_right_power_phase",
+            105 => "avg_right_power_phase_peak",
+            106 => "avg_power_position",
+            107 => "max_power_position",
+            108 => "avg_cadence_position",
+            109 => "max_cadence_position",
+            110 => "enhanced_avg_speed",
+            111 => "enhanced_max_speed",
+            112 => "enhanced_avg_altitude",
+            113 => "enhanced_min_altitude",
+            114 => "enhanced_max_altitude",
+            115 => "avg_lev_motor_power",
+            116 => "max_lev_motor_power",
+            117 => "lev_battery_consumption",
+            118 => "avg_vertical_ratio",
+            119 => "avg_stance_time_balance",
+            120 => "avg_step_length",
+            121 => "avg_vam",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageLap>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -33130,6 +33819,30 @@ impl fmt::Display for FitMessageLength {
 
 impl FitMessageLength {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "event",
+            1 => "event_type",
+            2 => "start_time",
+            3 => "total_elapsed_time",
+            4 => "total_timer_time",
+            5 => "total_strokes",
+            6 => "avg_speed",
+            7 => "swim_stroke",
+            9 => "avg_swimming_cadence",
+            10 => "event_group",
+            11 => "total_calories",
+            12 => "length_type",
+            18 => "player_score",
+            19 => "opponent_score",
+            20 => "stroke_count",
+            21 => "zone_count",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageLength>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageLength {
@@ -33729,6 +34442,21 @@ impl fmt::Display for FitMessageMagnetometerData {
 
 impl FitMessageMagnetometerData {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sample_time_offset",
+            2 => "mag_x",
+            3 => "mag_y",
+            4 => "mag_z",
+            5 => "calibrated_mag_x",
+            6 => "calibrated_mag_y",
+            7 => "calibrated_mag_z",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMagnetometerData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMagnetometerData {
@@ -34164,6 +34892,16 @@ impl fmt::Display for FitMessageMemoGlob {
 
 impl FitMessageMemoGlob {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            250 => "part_index",
+            0 => "memo",
+            1 => "message_number",
+            2 => "message_index",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMemoGlob>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMemoGlob {
@@ -34404,6 +35142,17 @@ impl fmt::Display for FitMessageMesgCapabilities {
 }
 
 impl FitMessageMesgCapabilities {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "file",
+            1 => "mesg_num",
+            2 => "count_type",
+            3 => "count",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMesgCapabilities>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -34646,6 +35395,16 @@ impl fmt::Display for FitMessageMetZone {
 }
 
 impl FitMessageMetZone {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            1 => "high_bpm",
+            2 => "calories",
+            3 => "fat_calories",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMetZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -34964,6 +35723,41 @@ impl fmt::Display for FitMessageMonitoring {
 }
 
 impl FitMessageMonitoring {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "device_index",
+            1 => "calories",
+            2 => "distance",
+            3 => "cycles",
+            4 => "active_time",
+            5 => "activity_type",
+            6 => "activity_subtype",
+            7 => "activity_level",
+            8 => "distance_16",
+            9 => "cycles_16",
+            10 => "active_time_16",
+            11 => "local_timestamp",
+            12 => "temperature",
+            14 => "temperature_min",
+            15 => "temperature_max",
+            16 => "activity_time",
+            19 => "active_calories",
+            24 => "current_activity_type_intensity",
+            25 => "timestamp_min_8",
+            26 => "timestamp_16",
+            27 => "heart_rate",
+            28 => "intensity",
+            29 => "duration_min",
+            30 => "duration",
+            31 => "ascent",
+            32 => "descent",
+            33 => "moderate_activity_minutes",
+            34 => "vigorous_activity_minutes",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMonitoring>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -35867,6 +36661,18 @@ impl fmt::Display for FitMessageMonitoringInfo {
 
 impl FitMessageMonitoringInfo {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "local_timestamp",
+            1 => "activity_type",
+            3 => "cycles_to_distance",
+            4 => "cycles_to_calories",
+            5 => "resting_metabolic_rate",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageMonitoringInfo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageMonitoringInfo {
@@ -36170,6 +36976,15 @@ impl fmt::Display for FitMessageNmeaSentence {
 
 impl FitMessageNmeaSentence {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sentence",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageNmeaSentence>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageNmeaSentence {
@@ -36370,6 +37185,21 @@ impl fmt::Display for FitMessageObdiiData {
 }
 
 impl FitMessageObdiiData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "time_offset",
+            2 => "pid",
+            3 => "raw_data",
+            4 => "pid_data_size",
+            5 => "system_time",
+            6 => "start_timestamp",
+            7 => "start_timestamp_ms",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageObdiiData>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -36738,6 +37568,14 @@ impl fmt::Display for FitMessageOhrSettings {
 
 impl FitMessageOhrSettings {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "enabled",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageOhrSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageOhrSettings {
@@ -36936,6 +37774,18 @@ impl fmt::Display for FitMessageOneDSensorCalibration {
 }
 
 impl FitMessageOneDSensorCalibration {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "sensor_type",
+            1 => "calibration_factor",
+            2 => "calibration_divisor",
+            3 => "level_shift",
+            4 => "offset_cal",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageOneDSensorCalibration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -37212,6 +38062,15 @@ impl fmt::Display for FitMessagePowerZone {
 }
 
 impl FitMessagePowerZone {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            1 => "high_value",
+            2 => "name",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessagePowerZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -37515,6 +38374,79 @@ impl fmt::Display for FitMessageRecord {
 }
 
 impl FitMessageRecord {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "position_lat",
+            1 => "position_long",
+            2 => "altitude",
+            3 => "heart_rate",
+            4 => "cadence",
+            5 => "distance",
+            6 => "speed",
+            7 => "power",
+            8 => "compressed_speed_distance",
+            9 => "grade",
+            10 => "resistance",
+            11 => "time_from_course",
+            12 => "cycle_length",
+            13 => "temperature",
+            17 => "speed_1s",
+            18 => "cycles",
+            19 => "total_cycles",
+            28 => "compressed_accumulated_power",
+            29 => "accumulated_power",
+            30 => "left_right_balance",
+            31 => "gps_accuracy",
+            32 => "vertical_speed",
+            33 => "calories",
+            39 => "vertical_oscillation",
+            40 => "stance_time_percent",
+            41 => "stance_time",
+            42 => "activity_type",
+            43 => "left_torque_effectiveness",
+            44 => "right_torque_effectiveness",
+            45 => "left_pedal_smoothness",
+            46 => "right_pedal_smoothness",
+            47 => "combined_pedal_smoothness",
+            48 => "time128",
+            49 => "stroke_type",
+            50 => "zone",
+            51 => "ball_speed",
+            52 => "cadence256",
+            53 => "fractional_cadence",
+            54 => "total_hemoglobin_conc",
+            55 => "total_hemoglobin_conc_min",
+            56 => "total_hemoglobin_conc_max",
+            57 => "saturated_hemoglobin_percent",
+            58 => "saturated_hemoglobin_percent_min",
+            59 => "saturated_hemoglobin_percent_max",
+            62 => "device_index",
+            67 => "left_pco",
+            68 => "right_pco",
+            69 => "left_power_phase",
+            70 => "left_power_phase_peak",
+            71 => "right_power_phase",
+            72 => "right_power_phase_peak",
+            73 => "enhanced_speed",
+            78 => "enhanced_altitude",
+            81 => "battery_soc",
+            82 => "motor_power",
+            83 => "vertical_ratio",
+            84 => "stance_time_balance",
+            85 => "step_length",
+            91 => "absolute_pressure",
+            92 => "depth",
+            93 => "next_stop_depth",
+            94 => "next_stop_time",
+            95 => "time_to_surface",
+            96 => "ndl_time",
+            97 => "cns_load",
+            98 => "n2_load",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageRecord>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -39721,6 +40653,19 @@ impl fmt::Display for FitMessageSchedule {
 
 impl FitMessageSchedule {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "manufacturer",
+            1 => "product",
+            2 => "serial_number",
+            3 => "time_created",
+            4 => "completed",
+            5 => "ftype",
+            6 => "scheduled_time",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSchedule>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSchedule {
@@ -40014,6 +40959,20 @@ impl fmt::Display for FitMessageSdmProfile {
 }
 
 impl FitMessageSdmProfile {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "enabled",
+            1 => "sdm_ant_id",
+            2 => "sdm_cal_factor",
+            3 => "odometer",
+            4 => "speed_source",
+            5 => "sdm_ant_id_trans_type",
+            7 => "odometer_rollover",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSdmProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -40335,6 +41294,21 @@ impl fmt::Display for FitMessageSegmentFile {
 }
 
 impl FitMessageSegmentFile {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            1 => "file_uuid",
+            3 => "enabled",
+            4 => "user_profile_primary_key",
+            7 => "leader_type",
+            8 => "leader_group_primary_key",
+            9 => "leader_activity_id",
+            10 => "leader_activity_id_string",
+            11 => "default_race_leader",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentFile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -40718,6 +41692,21 @@ impl fmt::Display for FitMessageSegmentId {
 }
 
 impl FitMessageSegmentId {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "name",
+            1 => "uuid",
+            2 => "sport",
+            3 => "enabled",
+            4 => "user_profile_primary_key",
+            5 => "device_id",
+            6 => "default_race_leader",
+            7 => "delete_status",
+            8 => "selection_type",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentId>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -41217,6 +42206,98 @@ impl fmt::Display for FitMessageSegmentLap {
 }
 
 impl FitMessageSegmentLap {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "event",
+            1 => "event_type",
+            2 => "start_time",
+            3 => "start_position_lat",
+            4 => "start_position_long",
+            5 => "end_position_lat",
+            6 => "end_position_long",
+            7 => "total_elapsed_time",
+            8 => "total_timer_time",
+            9 => "total_distance",
+            10 => "total_cycles",
+            11 => "total_calories",
+            12 => "total_fat_calories",
+            13 => "avg_speed",
+            14 => "max_speed",
+            15 => "avg_heart_rate",
+            16 => "max_heart_rate",
+            17 => "avg_cadence",
+            18 => "max_cadence",
+            19 => "avg_power",
+            20 => "max_power",
+            21 => "total_ascent",
+            22 => "total_descent",
+            23 => "sport",
+            24 => "event_group",
+            25 => "nec_lat",
+            26 => "nec_long",
+            27 => "swc_lat",
+            28 => "swc_long",
+            29 => "name",
+            30 => "normalized_power",
+            31 => "left_right_balance",
+            32 => "sub_sport",
+            33 => "total_work",
+            34 => "avg_altitude",
+            35 => "max_altitude",
+            36 => "gps_accuracy",
+            37 => "avg_grade",
+            38 => "avg_pos_grade",
+            39 => "avg_neg_grade",
+            40 => "max_pos_grade",
+            41 => "max_neg_grade",
+            42 => "avg_temperature",
+            43 => "max_temperature",
+            44 => "total_moving_time",
+            45 => "avg_pos_vertical_speed",
+            46 => "avg_neg_vertical_speed",
+            47 => "max_pos_vertical_speed",
+            48 => "max_neg_vertical_speed",
+            49 => "time_in_hr_zone",
+            50 => "time_in_speed_zone",
+            51 => "time_in_cadence_zone",
+            52 => "time_in_power_zone",
+            53 => "repetition_num",
+            54 => "min_altitude",
+            55 => "min_heart_rate",
+            56 => "active_time",
+            57 => "wkt_step_index",
+            58 => "sport_event",
+            59 => "avg_left_torque_effectiveness",
+            60 => "avg_right_torque_effectiveness",
+            61 => "avg_left_pedal_smoothness",
+            62 => "avg_right_pedal_smoothness",
+            63 => "avg_combined_pedal_smoothness",
+            64 => "status",
+            65 => "uuid",
+            66 => "avg_fractional_cadence",
+            67 => "max_fractional_cadence",
+            68 => "total_fractional_cycles",
+            69 => "front_gear_shift_count",
+            70 => "rear_gear_shift_count",
+            71 => "time_standing",
+            72 => "stand_count",
+            73 => "avg_left_pco",
+            74 => "avg_right_pco",
+            75 => "avg_left_power_phase",
+            76 => "avg_left_power_phase_peak",
+            77 => "avg_right_power_phase",
+            78 => "avg_right_power_phase_peak",
+            79 => "avg_power_position",
+            80 => "max_power_position",
+            81 => "avg_cadence_position",
+            82 => "max_cadence_position",
+            83 => "manufacturer",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentLap>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -43886,6 +44967,19 @@ impl fmt::Display for FitMessageSegmentLeaderboardEntry {
 
 impl FitMessageSegmentLeaderboardEntry {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "name",
+            1 => "ftype",
+            2 => "group_primary_key",
+            3 => "activity_id",
+            4 => "segment_time",
+            5 => "activity_id_string",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentLeaderboardEntry>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSegmentLeaderboardEntry {
@@ -44166,6 +45260,18 @@ impl fmt::Display for FitMessageSegmentPoint {
 }
 
 impl FitMessageSegmentPoint {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            1 => "position_lat",
+            2 => "position_long",
+            3 => "distance",
+            4 => "altitude",
+            5 => "leader_time",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSegmentPoint>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -44787,6 +45893,131 @@ impl fmt::Display for FitMessageSession {
 }
 
 impl FitMessageSession {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "event",
+            1 => "event_type",
+            2 => "start_time",
+            3 => "start_position_lat",
+            4 => "start_position_long",
+            5 => "sport",
+            6 => "sub_sport",
+            7 => "total_elapsed_time",
+            8 => "total_timer_time",
+            9 => "total_distance",
+            10 => "total_cycles",
+            11 => "total_calories",
+            13 => "total_fat_calories",
+            14 => "avg_speed",
+            15 => "max_speed",
+            16 => "avg_heart_rate",
+            17 => "max_heart_rate",
+            18 => "avg_cadence",
+            19 => "max_cadence",
+            20 => "avg_power",
+            21 => "max_power",
+            22 => "total_ascent",
+            23 => "total_descent",
+            24 => "total_training_effect",
+            25 => "first_lap_index",
+            26 => "num_laps",
+            27 => "event_group",
+            28 => "trigger",
+            29 => "nec_lat",
+            30 => "nec_long",
+            31 => "swc_lat",
+            32 => "swc_long",
+            34 => "normalized_power",
+            35 => "training_stress_score",
+            36 => "intensity_factor",
+            37 => "left_right_balance",
+            41 => "avg_stroke_count",
+            42 => "avg_stroke_distance",
+            43 => "swim_stroke",
+            44 => "pool_length",
+            45 => "threshold_power",
+            46 => "pool_length_unit",
+            47 => "num_active_lengths",
+            48 => "total_work",
+            49 => "avg_altitude",
+            50 => "max_altitude",
+            51 => "gps_accuracy",
+            52 => "avg_grade",
+            53 => "avg_pos_grade",
+            54 => "avg_neg_grade",
+            55 => "max_pos_grade",
+            56 => "max_neg_grade",
+            57 => "avg_temperature",
+            58 => "max_temperature",
+            59 => "total_moving_time",
+            60 => "avg_pos_vertical_speed",
+            61 => "avg_neg_vertical_speed",
+            62 => "max_pos_vertical_speed",
+            63 => "max_neg_vertical_speed",
+            64 => "min_heart_rate",
+            65 => "time_in_hr_zone",
+            66 => "time_in_speed_zone",
+            67 => "time_in_cadence_zone",
+            68 => "time_in_power_zone",
+            69 => "avg_lap_time",
+            70 => "best_lap_index",
+            71 => "min_altitude",
+            82 => "player_score",
+            83 => "opponent_score",
+            84 => "opponent_name",
+            85 => "stroke_count",
+            86 => "zone_count",
+            87 => "max_ball_speed",
+            88 => "avg_ball_speed",
+            89 => "avg_vertical_oscillation",
+            90 => "avg_stance_time_percent",
+            91 => "avg_stance_time",
+            92 => "avg_fractional_cadence",
+            93 => "max_fractional_cadence",
+            94 => "total_fractional_cycles",
+            95 => "avg_total_hemoglobin_conc",
+            96 => "min_total_hemoglobin_conc",
+            97 => "max_total_hemoglobin_conc",
+            98 => "avg_saturated_hemoglobin_percent",
+            99 => "min_saturated_hemoglobin_percent",
+            100 => "max_saturated_hemoglobin_percent",
+            101 => "avg_left_torque_effectiveness",
+            102 => "avg_right_torque_effectiveness",
+            103 => "avg_left_pedal_smoothness",
+            104 => "avg_right_pedal_smoothness",
+            105 => "avg_combined_pedal_smoothness",
+            111 => "sport_index",
+            112 => "time_standing",
+            113 => "stand_count",
+            114 => "avg_left_pco",
+            115 => "avg_right_pco",
+            116 => "avg_left_power_phase",
+            117 => "avg_left_power_phase_peak",
+            118 => "avg_right_power_phase",
+            119 => "avg_right_power_phase_peak",
+            120 => "avg_power_position",
+            121 => "max_power_position",
+            122 => "avg_cadence_position",
+            123 => "max_cadence_position",
+            124 => "enhanced_avg_speed",
+            125 => "enhanced_max_speed",
+            126 => "enhanced_avg_altitude",
+            127 => "enhanced_min_altitude",
+            128 => "enhanced_max_altitude",
+            129 => "avg_lev_motor_power",
+            130 => "max_lev_motor_power",
+            131 => "lev_battery_consumption",
+            132 => "avg_vertical_ratio",
+            133 => "avg_stance_time_balance",
+            134 => "avg_step_length",
+            137 => "total_anaerobic_training_effect",
+            139 => "avg_vam",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSession>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -48577,6 +49808,23 @@ impl fmt::Display for FitMessageSet {
 
 impl FitMessageSet {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "timestamp",
+            0 => "duration",
+            3 => "repetitions",
+            4 => "weight",
+            5 => "set_type",
+            6 => "start_time",
+            7 => "category",
+            8 => "category_subtype",
+            9 => "weight_display_unit",
+            10 => "message_index",
+            11 => "wkt_step_index",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSet>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSet {
@@ -49041,6 +50289,14 @@ impl fmt::Display for FitMessageSlaveDevice {
 
 impl FitMessageSlaveDevice {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "manufacturer",
+            1 => "product",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSlaveDevice>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSlaveDevice {
@@ -49214,6 +50470,15 @@ impl fmt::Display for FitMessageSoftware {
 }
 
 impl FitMessageSoftware {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            3 => "version",
+            5 => "part_number",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSoftware>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -49402,6 +50667,15 @@ impl fmt::Display for FitMessageSpeedZone {
 
 impl FitMessageSpeedZone {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "high_value",
+            1 => "name",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSpeedZone>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSpeedZone {
@@ -49589,6 +50863,15 @@ impl fmt::Display for FitMessageSport {
 
 impl FitMessageSport {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "sport",
+            1 => "sub_sport",
+            3 => "name",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageSport>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageSport {
@@ -49761,6 +51044,14 @@ impl fmt::Display for FitMessageStressLevel {
 }
 
 impl FitMessageStressLevel {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "stress_level_value",
+            1 => "stress_level_time",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageStressLevel>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -49955,6 +51246,19 @@ impl fmt::Display for FitMessageThreeDSensorCalibration {
 }
 
 impl FitMessageThreeDSensorCalibration {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "sensor_type",
+            1 => "calibration_factor",
+            2 => "calibration_divisor",
+            3 => "level_shift",
+            4 => "offset_cal",
+            5 => "orientation_matrix",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageThreeDSensorCalibration>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -50294,6 +51598,19 @@ impl fmt::Display for FitMessageTimestampCorrelation {
 
 impl FitMessageTimestampCorrelation {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "fractional_timestamp",
+            1 => "system_timestamp",
+            2 => "fractional_system_timestamp",
+            3 => "local_timestamp",
+            4 => "timestamp_ms",
+            5 => "system_timestamp_ms",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTimestampCorrelation>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTimestampCorrelation {
@@ -50608,6 +51925,22 @@ impl fmt::Display for FitMessageTotals {
 }
 
 impl FitMessageTotals {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "timer_time",
+            1 => "distance",
+            2 => "calories",
+            3 => "sport",
+            4 => "elapsed_time",
+            5 => "sessions",
+            6 => "active_time",
+            9 => "sport_index",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTotals>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -51003,6 +52336,18 @@ impl fmt::Display for FitMessageTrainingFile {
 
 impl FitMessageTrainingFile {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "ftype",
+            1 => "manufacturer",
+            2 => "product",
+            3 => "serial_number",
+            4 => "time_created",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageTrainingFile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageTrainingFile {
@@ -51330,6 +52675,41 @@ impl fmt::Display for FitMessageUserProfile {
 }
 
 impl FitMessageUserProfile {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "friendly_name",
+            1 => "gender",
+            2 => "age",
+            3 => "height",
+            4 => "weight",
+            5 => "language",
+            6 => "elev_setting",
+            7 => "weight_setting",
+            8 => "resting_heart_rate",
+            9 => "default_max_running_heart_rate",
+            10 => "default_max_biking_heart_rate",
+            11 => "default_max_heart_rate",
+            12 => "hr_setting",
+            13 => "speed_setting",
+            14 => "dist_setting",
+            16 => "power_setting",
+            17 => "activity_class",
+            18 => "position_setting",
+            21 => "temperature_setting",
+            22 => "local_id",
+            23 => "global_id",
+            28 => "wake_time",
+            29 => "sleep_time",
+            30 => "height_setting",
+            31 => "user_running_step_length",
+            32 => "user_walking_step_length",
+            47 => "depth_setting",
+            49 => "dive_count",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageUserProfile>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -52126,6 +53506,15 @@ impl fmt::Display for FitMessageVideo {
 
 impl FitMessageVideo {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "url",
+            1 => "hosting_provider",
+            2 => "duration",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideo>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideo {
@@ -52308,6 +53697,19 @@ impl fmt::Display for FitMessageVideoClip {
 }
 
 impl FitMessageVideoClip {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            0 => "clip_number",
+            1 => "start_timestamp",
+            2 => "start_timestamp_ms",
+            3 => "end_timestamp",
+            4 => "end_timestamp_ms",
+            6 => "clip_start",
+            7 => "clip_end",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoClip>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -52572,6 +53974,15 @@ impl fmt::Display for FitMessageVideoDescription {
 
 impl FitMessageVideoDescription {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "message_count",
+            1 => "text",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoDescription>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageVideoDescription {
@@ -52746,6 +54157,15 @@ impl fmt::Display for FitMessageVideoFrame {
 }
 
 impl FitMessageVideoFrame {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "frame_number",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoFrame>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -52935,6 +54355,15 @@ impl fmt::Display for FitMessageVideoTitle {
 }
 
 impl FitMessageVideoTitle {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "message_count",
+            1 => "text",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageVideoTitle>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -53144,6 +54573,15 @@ impl fmt::Display for FitMessageWatchfaceSettings {
 
 impl FitMessageWatchfaceSettings {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "mode",
+            1 => "layout",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWatchfaceSettings>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWatchfaceSettings {
@@ -53345,6 +54783,18 @@ impl fmt::Display for FitMessageWeatherAlert {
 }
 
 impl FitMessageWeatherAlert {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "report_id",
+            1 => "issue_time",
+            2 => "expire_time",
+            3 => "severity",
+            4 => "ftype",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeatherAlert>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -53626,6 +55076,28 @@ impl fmt::Display for FitMessageWeatherConditions {
 }
 
 impl FitMessageWeatherConditions {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "weather_report",
+            1 => "temperature",
+            2 => "condition",
+            3 => "wind_direction",
+            4 => "wind_speed",
+            5 => "precipitation_probability",
+            6 => "temperature_feels_like",
+            7 => "relative_humidity",
+            8 => "location",
+            9 => "observed_at_time",
+            10 => "observed_location_lat",
+            11 => "observed_location_long",
+            12 => "day_of_week",
+            13 => "high_temperature",
+            14 => "low_temperature",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeatherConditions>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -54158,6 +55630,25 @@ impl fmt::Display for FitMessageWeightScale {
 
 impl FitMessageWeightScale {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "weight",
+            1 => "percent_fat",
+            2 => "percent_hydration",
+            3 => "visceral_fat_mass",
+            4 => "bone_mass",
+            5 => "muscle_mass",
+            7 => "basal_met",
+            8 => "physique_rating",
+            9 => "active_met",
+            10 => "metabolic_age",
+            11 => "visceral_fat_rating",
+            12 => "user_profile_index",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWeightScale>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWeightScale {
@@ -54659,6 +56150,19 @@ impl fmt::Display for FitMessageWorkout {
 
 impl FitMessageWorkout {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            4 => "sport",
+            5 => "capabilities",
+            6 => "num_valid_steps",
+            8 => "wkt_name",
+            11 => "sub_sport",
+            14 => "pool_length",
+            15 => "pool_length_unit",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkout>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkout {
@@ -54941,6 +56445,19 @@ impl fmt::Display for FitMessageWorkoutSession {
 }
 
 impl FitMessageWorkoutSession {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "sport",
+            1 => "sub_sport",
+            2 => "num_valid_steps",
+            3 => "first_step_index",
+            4 => "pool_length",
+            5 => "pool_length_unit",
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkoutSession>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
@@ -55576,6 +57093,27 @@ impl fmt::Display for FitMessageWorkoutStep {
 
 impl FitMessageWorkoutStep {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "wkt_step_name",
+            1 => "duration_type",
+            2 => "duration_value",
+            3 => "target_type",
+            4 => "target_value",
+            5 => "custom_target_value_low",
+            6 => "custom_target_value_high",
+            7 => "intensity",
+            8 => "notes",
+            9 => "equipment",
+            10 => "exercise_category",
+            11 => "exercise_name",
+            12 => "exercise_weight",
+            13 => "weight_display_unit",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageWorkoutStep>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageWorkoutStep {
@@ -56073,6 +57611,17 @@ impl fmt::Display for FitMessageZonesTarget {
 
 impl FitMessageZonesTarget {
 
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            1 => "max_heart_rate",
+            2 => "threshold_heart_rate",
+            3 => "functional_threshold_power",
+            5 => "hr_calc_type",
+            7 => "pwr_calc_type",
+            _ => "unknown"
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<FitMessageZonesTarget>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageZonesTarget {
@@ -56446,6 +57995,355 @@ impl fmt::Display for FitDataMessage {
 }
 
 impl FitDataMessage {
+
+    pub fn field_name(global_mesg_num: &FitGlobalMesgNum, field_number: u8) -> &'static str {
+        match *global_mesg_num {
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
+                FitMessageAccelerometerData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Activity) => {
+                FitMessageActivity::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AntChannelId) => {
+                FitMessageAntChannelId::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AntRx) => {
+                FitMessageAntRx::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AntTx) => {
+                FitMessageAntTx::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AviationAttitude) => {
+                FitMessageAviationAttitude::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::BarometerData) => {
+                FitMessageBarometerData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::BikeProfile) => {
+                FitMessageBikeProfile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::BloodPressure) => {
+                FitMessageBloodPressure::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::CadenceZone) => {
+                FitMessageCadenceZone::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::CameraEvent) => {
+                FitMessageCameraEvent::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
+                FitMessageCapabilities::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
+                FitMessageConnectivity::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Course) => {
+                FitMessageCourse::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::CoursePoint) => {
+                FitMessageCoursePoint::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DeveloperDataId) => {
+                FitMessageDeveloperDataId::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceInfo) => {
+                FitMessageDeviceInfo::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceSettings) => {
+                FitMessageDeviceSettings::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveAlarm) => {
+                FitMessageDiveAlarm::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveGas) => {
+                FitMessageDiveGas::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSettings) => {
+                FitMessageDiveSettings::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSummary) => {
+                FitMessageDiveSummary::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Event) => {
+                FitMessageEvent::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataConceptConfiguration) => {
+                FitMessageExdDataConceptConfiguration::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataFieldConfiguration) => {
+                FitMessageExdDataFieldConfiguration::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExdScreenConfiguration) => {
+                FitMessageExdScreenConfiguration::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ExerciseTitle) => {
+                FitMessageExerciseTitle::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FieldCapabilities) => {
+                FitMessageFieldCapabilities::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription) => {
+                FitMessageFieldDescription::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FileCapabilities) => {
+                FitMessageFileCapabilities::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FileCreator) => {
+                FitMessageFileCreator::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::FileId) => {
+                FitMessageFileId::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Goal) => {
+                FitMessageGoal::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::GpsMetadata) => {
+                FitMessageGpsMetadata::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::GyroscopeData) => {
+                FitMessageGyroscopeData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Hr) => {
+                FitMessageHr::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HrZone) => {
+                FitMessageHrZone::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HrmProfile) => {
+                FitMessageHrmProfile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Hrv) => {
+                FitMessageHrv::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
+                FitMessageLap::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Length) => {
+                FitMessageLength::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MagnetometerData) => {
+                FitMessageMagnetometerData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MemoGlob) => {
+                FitMessageMemoGlob::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MesgCapabilities) => {
+                FitMessageMesgCapabilities::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MetZone) => {
+                FitMessageMetZone::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Monitoring) => {
+                FitMessageMonitoring::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MonitoringInfo) => {
+                FitMessageMonitoringInfo::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
+                FitMessageNmeaSentence::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ObdiiData) => {
+                FitMessageObdiiData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::OhrSettings) => {
+                FitMessageOhrSettings::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::OneDSensorCalibration) => {
+                FitMessageOneDSensorCalibration::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::PowerZone) => {
+                FitMessagePowerZone::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Record) => {
+                FitMessageRecord::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Schedule) => {
+                FitMessageSchedule::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SdmProfile) => {
+                FitMessageSdmProfile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentFile) => {
+                FitMessageSegmentFile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentId) => {
+                FitMessageSegmentId::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLap) => {
+                FitMessageSegmentLap::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLeaderboardEntry) => {
+                FitMessageSegmentLeaderboardEntry::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentPoint) => {
+                FitMessageSegmentPoint::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Session) => {
+                FitMessageSession::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Set) => {
+                FitMessageSet::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
+                FitMessageSlaveDevice::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Software) => {
+                FitMessageSoftware::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SpeedZone) => {
+                FitMessageSpeedZone::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Sport) => {
+                FitMessageSport::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::StressLevel) => {
+                FitMessageStressLevel::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ThreeDSensorCalibration) => {
+                FitMessageThreeDSensorCalibration::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::TimestampCorrelation) => {
+                FitMessageTimestampCorrelation::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Totals) => {
+                FitMessageTotals::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingFile) => {
+                FitMessageTrainingFile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::UserProfile) => {
+                FitMessageUserProfile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Video) => {
+                FitMessageVideo::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoClip) => {
+                FitMessageVideoClip::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoDescription) => {
+                FitMessageVideoDescription::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoFrame) => {
+                FitMessageVideoFrame::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::VideoTitle) => {
+                FitMessageVideoTitle::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WatchfaceSettings) => {
+                FitMessageWatchfaceSettings::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherAlert) => {
+                FitMessageWeatherAlert::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherConditions) => {
+                FitMessageWeatherConditions::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WeightScale) => {
+                FitMessageWeightScale::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Workout) => {
+                FitMessageWorkout::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutSession) => {
+                FitMessageWorkoutSession::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutStep) => {
+                FitMessageWorkoutStep::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ZonesTarget) => {
+                FitMessageZonesTarget::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Unknown(_) => "unknown",
+            _ => "unexpected",
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {

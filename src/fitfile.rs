@@ -73,7 +73,7 @@ impl FitFile {
                     inp = out;
                 }
                 Err(e) => {
-                    println!("{}", e);
+                    println!("error: {}", e);
                     break;
                 }
             }

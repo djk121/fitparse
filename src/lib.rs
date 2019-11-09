@@ -175,9 +175,11 @@ pub fn parse_fit_message<'a>(
 ) -> Result<(Option<FitMessage>, &'a [u8])> {
     let (header, o) = match parse_record_header(input) {
         Ok((Some(header), o)) => (header, o),
-        Err(e) => return Err(e),
+        Err(e) => { println!("ERROR"); return Err(e);},
         _ => return Err(Error::parse_error("error parsing header")),
     };
+
+    println!("header: {:?}", header);
 
     let (fit_message, out) = match header {
         FitRecordHeader::Normal(normal_header) => match normal_header.message_type {
@@ -257,6 +259,7 @@ pub fn parse_fit_message<'a>(
         }
         _ => {}
     }
+    println!("fit_message: {}", fit_message);
 
     Ok((Some(fit_message), out))
 }
@@ -297,6 +300,7 @@ impl FitMessageUnknownToSdk {
             message_name: "FitMessageUnknownToSdk".to_string(),
         };
 
+        println!("unknown message");
         let inp = &input[..(message.definition_message.message_size)];
         message
             .raw_bytes
@@ -355,7 +359,7 @@ impl FitMessageUnknownToSdk {
 }
 
 #[derive(Debug, PartialEq)]
-enum FitGlobalMesgNum {
+pub enum FitGlobalMesgNum {
     Known(FitFieldMesgNum),
     Unknown(u16),
 }
@@ -374,6 +378,7 @@ impl fmt::Display for FitGlobalMesgNum {
 }
 
 impl FitGlobalMesgNum {
+
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
         let (raw_num, o) = match parse_uint16(input, endianness)? {
             Some(raw_num) => (raw_num, &input[2..]),
@@ -395,6 +400,34 @@ struct FitFieldDefinition {
 }
 
 impl FitFieldDefinition {
+
+    pub fn field_name(&self, mesg_num: &FitGlobalMesgNum) -> &'static str {
+        FitDataMessage::field_name(mesg_num, self.definition_number)
+    }
+
+    pub fn base_type_name(&self) -> &'static str {
+        match self.base_type {
+            0 => "enum",
+            1 => "sint8",
+            2 => "uint8",
+            131 => "sint16",
+            132 => "uint16",
+            133 => "sint32",
+            134 => "uint32",
+            7 => "string",
+            136 => "float32",
+            137 => "float64",
+            10 => "uint8z",
+            139 => "uint16z",
+            140 => "uint32z",
+            13 => "byte",
+            142 => "sint64",
+            143 => "uint64",
+            144 => "uint64z",
+            _ => "unknown"
+        }
+    }
+
     pub fn base_type_size(&self) -> usize {
         match self.base_type {
             0 => 1,                    // enum
@@ -454,7 +487,12 @@ impl fmt::Display for FitDefinitionMessage {
         writeln!(f, "  {: >28}: {}", "message_size", self.message_size)?;
         writeln!(f, "  {: >28}: ", "field_definitions")?;
         for field_definition in &self.field_definitions {
-            writeln!(f, "  {: >30}{:?}", " ", field_definition)?;
+            writeln!(f, "  {: >30}name: {}, field_size: {}, base_type: {}", " ",
+                field_definition.field_name(&self.global_mesg_num),
+                field_definition.field_size,
+                field_definition.base_type_name()
+            )?;
+            //writeln!(f, "  {: >30}{:?}", " ", field_definition)?;
         }
         writeln!(f, "  {: >28}: {}", "num_developer_fields", self.num_developer_fields)?;
         writeln!(f, "  {: >28}:", "developer_field_definitions")?;
@@ -514,7 +552,7 @@ named!(field_definition<&[u8], FitFieldDefinition>,
         (FitFieldDefinition{
             definition_number: definition_number[0],
             field_size: field_size[0] as usize,
-            base_type: base_type_byte[0],
+            base_type: base_type_byte[0]
         })
     )
 );
@@ -561,7 +599,6 @@ named_args!(parse_definition_message_internal(header: FitNormalRecordHeader)<Fit
         (FitDefinitionMessage{
             header: header,
             endianness: endianness,
-            //global_mesg_num: FitFieldMesgNum::parse(global_message_number, endianness).unwrap().0,
             global_mesg_num: FitGlobalMesgNum::parse(global_message_number, endianness).unwrap().0,
             num_fields: num_fields[0],
             message_size: (field_definitions.iter().fold(

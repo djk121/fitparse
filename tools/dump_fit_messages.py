@@ -426,6 +426,19 @@ impl fmt::Display for FitDataMessage {
 }
 
 impl FitDataMessage {
+
+    pub fn field_name(global_mesg_num: &FitGlobalMesgNum, field_number: u8) -> &'static str {
+        match *global_mesg_num {
+            {% for message in messages %}
+            FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
+                {{ message.full_name}}::field_name(field_number)
+            },
+            {% endfor %}
+            FitGlobalMesgNum::Unknown(_) => "unknown",
+            _ => "unexpected",
+        }
+    }
+
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
@@ -527,6 +540,15 @@ impl fmt::Display for {{ message_name }} {
 }
 
 impl {{ message_name }} {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            {% for field in fields -%}
+            {{ field.number }} => "{{ field.name }}",
+            {% endfor -%}
+            _ => "unknown"
+        }
+    }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<(Rc<{{ message_name }}>, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;

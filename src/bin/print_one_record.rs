@@ -24,10 +24,18 @@ fn main() {
                 .required(true)
                 .index(2),
         )
+        .arg(
+            Arg::with_name("expanded")
+                .help("print expanded representation of each record")
+                .short("e")
+                .long("expanded")
+                .takes_value(false),
+        )
         .get_matches();
 
     let fname = matches.value_of("input").unwrap();
     let index = matches.value_of("index").unwrap().parse::<usize>().unwrap();
+    let expanded = matches.is_present("expanded");
 
     let mut f = match File::open(fname) {
         Ok(fi) => fi,
@@ -42,5 +50,9 @@ fn main() {
     }
 
     println!("Parsed num messages: {}", ff.messages.len());
-    println!("{:#?}", ff.messages[index]);
+    if expanded == true {
+        println!("{:#?}", ff.messages[index]);
+    } else {
+        println!("{}", ff.messages[index]);
+    }
 }
