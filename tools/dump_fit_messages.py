@@ -187,13 +187,9 @@ def output_types(types):
     special_types = r"""
 use std::fmt;
 use std::rc::Rc;
-use std::mem::transmute;
 use std::collections::HashMap;
-use std::cmp::Ordering;
 
 use nom::Endianness;
-
-use chrono::{DateTime, UTC, FixedOffset, TimeZone, Duration};
 
 use FitFieldValue;
 use FitRecord;
@@ -205,119 +201,15 @@ use FitGlobalMesgNum;
 use FitMessageUnknownToSdk;
 use FitBaseValue;
 use fitparsingstate::FitParsingState;
-use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
+use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
+
+use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields}; 
+use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
+
 
 use subset_with_pad;
 
 use errors::{Error, Result};
-
-macro_rules! fmt_developer_fields {
-    ($s:ident, $f:ident) => {
-        if $s.developer_fields.len() > 0 {
-            for developer_field in &$s.developer_fields {
-                if let Some(field_names) = &developer_field.field_description.field_name.value {
-                    if let Some(name) = &field_names[0] { write!($f, "  {: >28}: ", name)?; }
-                }
-                write!($f, "{}", developer_field.value)?;
-                if let Some(field_units) = &developer_field.field_description.units.value {
-                    if let Some(units) = &field_units[0] { write!($f, " [{}]", units)?; }
-                }
-                writeln!($f)?;
-            }
-        }
-    };
-}
-
-macro_rules! fmt_raw_bytes {
-    ($s:ident, $f:ident) => {{
-        write!($f, "  {: >28}: [", "raw_bytes")?;
-        for i in 0..$s.raw_bytes.len() - 1 {
-            write!($f, "{:08b}", $s.raw_bytes[i])?;
-            if i < $s.raw_bytes.len() - 1 { write!($f, ",")?; }
-        }
-        writeln!($f, "]")?;
-    }};
-}
-
-macro_rules! fmt_message_field {
-    ($thing:expr, $thingname:expr, $f:ident) => {
-        if let Some(v) = &$thing.value { 
-            write!($f, "  {: >28}: {:?}", $thingname, v)?;
-            if $thing.units.len() > 0 { 
-                write!($f, " [{}]", &$thing.units)?;
-            } 
-            writeln!($f)?;
-        }
-    };
-}
-
-#[derive(Copy, Clone, Debug)]
-pub struct FitFieldDateTime {
-    seconds_since_garmin_epoch: u32,
-    rust_time: DateTime<UTC>,
-}
-
-impl FitFieldDateTime {
-    fn parse(input: &[u8], endianness: Endianness) -> Result<FitFieldDateTime> {
-        let (utc_dt, garmin_epoch_offset) = parse_date_time(input, endianness)?;
-        Ok(FitFieldDateTime{
-            seconds_since_garmin_epoch: garmin_epoch_offset,
-            rust_time: utc_dt
-        })
-    }
-
-    #[allow(dead_code)]
-    pub fn new_from_compressed_timestamp(&self, offset_secs: u8) -> Result<FitFieldDateTime> {
-        let last_5_existing = {
-            let bytes: [u8; 4] = unsafe { transmute(self.seconds_since_garmin_epoch.to_be()) };
-            bytes[3] & 0x0000001F
-        };
-        let last_5_offset = offset_secs & 0x0000001F;
-
-        let new_epoch_offset = match last_5_existing.cmp(&last_5_offset) {
-            Ordering::Equal => {
-                self.seconds_since_garmin_epoch
-            },
-            Ordering::Greater => {
-                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32 + 0x20
-            },
-            Ordering::Less => {
-                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32
-            }
-        };
-
-        let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
-
-        let result = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
-        Ok(result)
-    }
-}
-
-#[derive(Debug)]
-pub struct FitFieldLocalDateTime {
-    seconds_since_garmin_epoch: u32,
-    rust_time: DateTime<FixedOffset>,
-}
-
-impl FitFieldLocalDateTime {
-    fn parse(input: &[u8], endianness: Endianness, _offset_secs: f64) -> Result<FitFieldLocalDateTime> {
-        let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
-        let result = parse_uint32(input, endianness)?;
-        let garmin_epoch_offset = match result {
-            Some(geo) => geo,
-            None => return Err(Error::invalid_fit_base_type_parse())
-        };
-        let local_dt = FixedOffset::east(_offset_secs as i32).timestamp(
-            (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
-            0 // nanosecs
-        );
-
-        Ok(FitFieldLocalDateTime{
-            seconds_since_garmin_epoch: garmin_epoch_offset,
-            rust_time: local_dt
-        })
-    }
-}
 """
 
     sys.stdout.write(special_types)
@@ -533,6 +425,7 @@ impl fmt::Display for {{ message_name }} {
         fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", f);
         {% endfor %}
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())

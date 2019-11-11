@@ -5,7 +5,8 @@ use FitDefinitionMessage;
 use FitDeveloperDataDefinition;
 
 use errors::{Error, Result};
-use fittypes::{FitDataMessage, FitFieldDateTime};
+use fittypes::FitDataMessage;
+use fittypes_utils::FitFieldDateTime;
 
 pub struct FitParsingState {
     map: HashMap<u16, Rc<FitDefinitionMessage>>,

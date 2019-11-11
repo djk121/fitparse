@@ -1,13 +1,9 @@
 
 use std::fmt;
 use std::rc::Rc;
-use std::mem::transmute;
 use std::collections::HashMap;
-use std::cmp::Ordering;
 
 use nom::Endianness;
-
-use chrono::{DateTime, UTC, FixedOffset, TimeZone, Duration};
 
 use FitFieldValue;
 use FitRecord;
@@ -19,119 +15,15 @@ use FitGlobalMesgNum;
 use FitMessageUnknownToSdk;
 use FitBaseValue;
 use fitparsingstate::FitParsingState;
-use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32, parse_date_time};
+use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
+
+use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields}; 
+use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
+
 
 use subset_with_pad;
 
 use errors::{Error, Result};
-
-macro_rules! fmt_developer_fields {
-    ($s:ident, $f:ident) => {
-        if $s.developer_fields.len() > 0 {
-            for developer_field in &$s.developer_fields {
-                if let Some(field_names) = &developer_field.field_description.field_name.value {
-                    if let Some(name) = &field_names[0] { write!($f, "  {: >28}: ", name)?; }
-                }
-                write!($f, "{}", developer_field.value)?;
-                if let Some(field_units) = &developer_field.field_description.units.value {
-                    if let Some(units) = &field_units[0] { write!($f, " [{}]", units)?; }
-                }
-                writeln!($f)?;
-            }
-        }
-    };
-}
-
-macro_rules! fmt_raw_bytes {
-    ($s:ident, $f:ident) => {{
-        write!($f, "  {: >28}: [", "raw_bytes")?;
-        for i in 0..$s.raw_bytes.len() - 1 {
-            write!($f, "{:08b}", $s.raw_bytes[i])?;
-            if i < $s.raw_bytes.len() - 1 { write!($f, ",")?; }
-        }
-        writeln!($f, "]")?;
-    }};
-}
-
-macro_rules! fmt_message_field {
-    ($thing:expr, $thingname:expr, $f:ident) => {
-        if let Some(v) = &$thing.value { 
-            write!($f, "  {: >28}: {:?}", $thingname, v)?;
-            if $thing.units.len() > 0 { 
-                write!($f, " [{}]", &$thing.units)?;
-            } 
-            writeln!($f)?;
-        }
-    };
-}
-
-#[derive(Copy, Clone, Debug)]
-pub struct FitFieldDateTime {
-    seconds_since_garmin_epoch: u32,
-    rust_time: DateTime<UTC>,
-}
-
-impl FitFieldDateTime {
-    fn parse(input: &[u8], endianness: Endianness) -> Result<FitFieldDateTime> {
-        let (utc_dt, garmin_epoch_offset) = parse_date_time(input, endianness)?;
-        Ok(FitFieldDateTime{
-            seconds_since_garmin_epoch: garmin_epoch_offset,
-            rust_time: utc_dt
-        })
-    }
-
-    #[allow(dead_code)]
-    pub fn new_from_compressed_timestamp(&self, offset_secs: u8) -> Result<FitFieldDateTime> {
-        let last_5_existing = {
-            let bytes: [u8; 4] = unsafe { transmute(self.seconds_since_garmin_epoch.to_be()) };
-            bytes[3] & 0x0000001F
-        };
-        let last_5_offset = offset_secs & 0x0000001F;
-
-        let new_epoch_offset = match last_5_existing.cmp(&last_5_offset) {
-            Ordering::Equal => {
-                self.seconds_since_garmin_epoch
-            },
-            Ordering::Greater => {
-                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32 + 0x20
-            },
-            Ordering::Less => {
-                (self.seconds_since_garmin_epoch & 0b11111111_11111111_11111111_11100000) + last_5_offset as u32
-            }
-        };
-
-        let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
-
-        let result = FitFieldDateTime::parse(&bytes, Endianness::Big)?;
-        Ok(result)
-    }
-}
-
-#[derive(Debug)]
-pub struct FitFieldLocalDateTime {
-    seconds_since_garmin_epoch: u32,
-    rust_time: DateTime<FixedOffset>,
-}
-
-impl FitFieldLocalDateTime {
-    fn parse(input: &[u8], endianness: Endianness, _offset_secs: f64) -> Result<FitFieldLocalDateTime> {
-        let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
-        let result = parse_uint32(input, endianness)?;
-        let garmin_epoch_offset = match result {
-            Some(geo) => geo,
-            None => return Err(Error::invalid_fit_base_type_parse())
-        };
-        let local_dt = FixedOffset::east(_offset_secs as i32).timestamp(
-            (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
-            0 // nanosecs
-        );
-
-        Ok(FitFieldLocalDateTime{
-            seconds_since_garmin_epoch: garmin_epoch_offset,
-            rust_time: local_dt
-        })
-    }
-}
 
 
 
@@ -15376,6 +15268,7 @@ impl fmt::Display for FitMessageAccelerometerData {
         fmt_message_field!(self.compressed_calibrated_accel_z, "compressed_calibrated_accel_z", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -15951,6 +15844,7 @@ impl fmt::Display for FitMessageActivity {
         fmt_message_field!(self.event_group, "event_group", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -16280,6 +16174,7 @@ impl fmt::Display for FitMessageAntChannelId {
         fmt_message_field!(self.device_index, "device_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -16516,6 +16411,7 @@ impl fmt::Display for FitMessageAntRx {
         fmt_message_field!(self.data, "data", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -16810,6 +16706,7 @@ impl fmt::Display for FitMessageAntTx {
         fmt_message_field!(self.data, "data", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -17116,6 +17013,7 @@ impl fmt::Display for FitMessageAviationAttitude {
         fmt_message_field!(self.validity, "validity", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -17683,6 +17581,7 @@ impl fmt::Display for FitMessageBarometerData {
         fmt_message_field!(self.baro_pres, "baro_pres", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -17994,6 +17893,7 @@ impl fmt::Display for FitMessageBikeProfile {
         fmt_message_field!(self.shimano_di2_enabled, "shimano_di2_enabled", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -18965,6 +18865,7 @@ impl fmt::Display for FitMessageBloodPressure {
         fmt_message_field!(self.user_profile_index, "user_profile_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -19347,6 +19248,7 @@ impl fmt::Display for FitMessageCadenceZone {
         fmt_message_field!(self.name, "name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -19535,6 +19437,7 @@ impl fmt::Display for FitMessageCameraEvent {
         fmt_message_field!(self.camera_orientation, "camera_orientation", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -19781,6 +19684,7 @@ impl fmt::Display for FitMessageCapabilities {
         fmt_message_field!(self.connectivity_supported, "connectivity_supported", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -20040,6 +19944,7 @@ impl fmt::Display for FitMessageConnectivity {
         fmt_message_field!(self.grouptrack_enabled, "grouptrack_enabled", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -20456,6 +20361,7 @@ impl fmt::Display for FitMessageCourse {
         fmt_message_field!(self.sub_sport, "sub_sport", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -20673,6 +20579,7 @@ impl fmt::Display for FitMessageCoursePoint {
         fmt_message_field!(self.favorite, "favorite", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -21026,6 +20933,7 @@ impl fmt::Display for FitMessageDeveloperDataId {
         fmt_message_field!(self.application_version, "application_version", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -21364,6 +21272,7 @@ impl fmt::Display for FitMessageDeviceInfo {
         fmt_message_field!(self.product_name, "product_name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -21999,6 +21908,7 @@ impl fmt::Display for FitMessageDeviceSettings {
         fmt_message_field!(self.tap_interface, "tap_interface", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -22731,6 +22641,7 @@ impl fmt::Display for FitMessageDiveAlarm {
         fmt_message_field!(self.dive_types, "dive_types", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -23049,6 +22960,7 @@ impl fmt::Display for FitMessageDiveGas {
         fmt_message_field!(self.status, "status", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -23327,6 +23239,7 @@ impl fmt::Display for FitMessageDiveSettings {
         fmt_message_field!(self.heart_rate_source, "heart_rate_source", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -24049,6 +23962,7 @@ impl fmt::Display for FitMessageDiveSummary {
         fmt_message_field!(self.bottom_time, "bottom_time", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -24758,6 +24672,7 @@ impl fmt::Display for FitMessageEvent {
         fmt_message_field!(self.device_index, "device_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -25224,6 +25139,7 @@ impl fmt::Display for FitMessageExdDataConceptConfiguration {
         fmt_message_field!(self.is_signed, "is_signed", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -25600,6 +25516,7 @@ impl fmt::Display for FitMessageExdDataFieldConfiguration {
         fmt_message_field!(self.title, "title", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -25873,6 +25790,7 @@ impl fmt::Display for FitMessageExdScreenConfiguration {
         fmt_message_field!(self.screen_enabled, "screen_enabled", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -26082,6 +26000,7 @@ impl fmt::Display for FitMessageExerciseTitle {
         fmt_message_field!(self.wkt_step_name, "wkt_step_name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -26309,6 +26228,7 @@ impl fmt::Display for FitMessageFieldCapabilities {
         fmt_message_field!(self.count, "count", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -26561,6 +26481,7 @@ impl fmt::Display for FitMessageFieldDescription {
         fmt_message_field!(self.native_field_num, "native_field_num", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -27036,6 +26957,7 @@ impl fmt::Display for FitMessageFileCapabilities {
         fmt_message_field!(self.max_size, "max_size", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -27287,6 +27209,7 @@ impl fmt::Display for FitMessageFileCreator {
         fmt_message_field!(self.hardware_version, "hardware_version", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -27501,6 +27424,7 @@ impl fmt::Display for FitMessageFileId {
         fmt_message_field!(self.product_name, "product_name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -27818,6 +27742,7 @@ impl fmt::Display for FitMessageGoal {
         fmt_message_field!(self.source, "source", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -28244,6 +28169,7 @@ impl fmt::Display for FitMessageGpsMetadata {
         fmt_message_field!(self.velocity, "velocity", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -28668,6 +28594,7 @@ impl fmt::Display for FitMessageGyroscopeData {
         fmt_message_field!(self.calibrated_gyro_z, "calibrated_gyro_z", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -29122,6 +29049,7 @@ impl fmt::Display for FitMessageHr {
         fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -29456,6 +29384,7 @@ impl fmt::Display for FitMessageHrZone {
         fmt_message_field!(self.name, "name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -29644,6 +29573,7 @@ impl fmt::Display for FitMessageHrmProfile {
         fmt_message_field!(self.hrm_ant_id_trans_type, "hrm_ant_id_trans_type", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -29870,6 +29800,7 @@ impl fmt::Display for FitMessageHrv {
         fmt_message_field!(self.time, "time", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -30314,6 +30245,7 @@ impl fmt::Display for FitMessageLap {
         fmt_message_field!(self.avg_vam, "avg_vam", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -33811,6 +33743,7 @@ impl fmt::Display for FitMessageLength {
         fmt_message_field!(self.zone_count, "zone_count", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -34434,6 +34367,7 @@ impl fmt::Display for FitMessageMagnetometerData {
         fmt_message_field!(self.calibrated_mag_z, "calibrated_mag_z", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -34884,6 +34818,7 @@ impl fmt::Display for FitMessageMemoGlob {
         fmt_message_field!(self.message_index, "message_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -35135,6 +35070,7 @@ impl fmt::Display for FitMessageMesgCapabilities {
         fmt_message_field!(self.count, "count", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -35388,6 +35324,7 @@ impl fmt::Display for FitMessageMetZone {
         fmt_message_field!(self.fat_calories, "fat_calories", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -35716,6 +35653,7 @@ impl fmt::Display for FitMessageMonitoring {
         fmt_message_field!(self.vigorous_activity_minutes, "vigorous_activity_minutes", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -36653,6 +36591,7 @@ impl fmt::Display for FitMessageMonitoringInfo {
         fmt_message_field!(self.resting_metabolic_rate, "resting_metabolic_rate", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -36968,6 +36907,7 @@ impl fmt::Display for FitMessageNmeaSentence {
         fmt_message_field!(self.sentence, "sentence", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -37178,6 +37118,7 @@ impl fmt::Display for FitMessageObdiiData {
         fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -37560,6 +37501,7 @@ impl fmt::Display for FitMessageOhrSettings {
         fmt_message_field!(self.enabled, "enabled", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -37767,6 +37709,7 @@ impl fmt::Display for FitMessageOneDSensorCalibration {
         fmt_message_field!(self.offset_cal, "offset_cal", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -38055,6 +37998,7 @@ impl fmt::Display for FitMessagePowerZone {
         fmt_message_field!(self.name, "name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -38367,6 +38311,7 @@ impl fmt::Display for FitMessageRecord {
         fmt_message_field!(self.n2_load, "n2_load", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -40645,6 +40590,7 @@ impl fmt::Display for FitMessageSchedule {
         fmt_message_field!(self.scheduled_time, "scheduled_time", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -40952,6 +40898,7 @@ impl fmt::Display for FitMessageSdmProfile {
         fmt_message_field!(self.odometer_rollover, "odometer_rollover", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -41287,6 +41234,7 @@ impl fmt::Display for FitMessageSegmentFile {
         fmt_message_field!(self.default_race_leader, "default_race_leader", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -41685,6 +41633,7 @@ impl fmt::Display for FitMessageSegmentId {
         fmt_message_field!(self.selection_type, "selection_type", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -42199,6 +42148,7 @@ impl fmt::Display for FitMessageSegmentLap {
         fmt_message_field!(self.manufacturer, "manufacturer", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -44959,6 +44909,7 @@ impl fmt::Display for FitMessageSegmentLeaderboardEntry {
         fmt_message_field!(self.activity_id_string, "activity_id_string", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -45253,6 +45204,7 @@ impl fmt::Display for FitMessageSegmentPoint {
         fmt_message_field!(self.leader_time, "leader_time", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -45886,6 +45838,7 @@ impl fmt::Display for FitMessageSession {
         fmt_message_field!(self.avg_vam, "avg_vam", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -49800,6 +49753,7 @@ impl fmt::Display for FitMessageSet {
         fmt_message_field!(self.wkt_step_index, "wkt_step_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -50281,6 +50235,7 @@ impl fmt::Display for FitMessageSlaveDevice {
         fmt_message_field!(self.product, "product", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -50463,6 +50418,7 @@ impl fmt::Display for FitMessageSoftware {
         fmt_message_field!(self.part_number, "part_number", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -50659,6 +50615,7 @@ impl fmt::Display for FitMessageSpeedZone {
         fmt_message_field!(self.name, "name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -50855,6 +50812,7 @@ impl fmt::Display for FitMessageSport {
         fmt_message_field!(self.name, "name", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -51037,6 +50995,7 @@ impl fmt::Display for FitMessageStressLevel {
         fmt_message_field!(self.stress_level_time, "stress_level_time", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -51239,6 +51198,7 @@ impl fmt::Display for FitMessageThreeDSensorCalibration {
         fmt_message_field!(self.orientation_matrix, "orientation_matrix", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -51590,6 +51550,7 @@ impl fmt::Display for FitMessageTimestampCorrelation {
         fmt_message_field!(self.system_timestamp_ms, "system_timestamp_ms", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -51918,6 +51879,7 @@ impl fmt::Display for FitMessageTotals {
         fmt_message_field!(self.sport_index, "sport_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -52328,6 +52290,7 @@ impl fmt::Display for FitMessageTrainingFile {
         fmt_message_field!(self.time_created, "time_created", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -52668,6 +52631,7 @@ impl fmt::Display for FitMessageUserProfile {
         fmt_message_field!(self.dive_count, "dive_count", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -53498,6 +53462,7 @@ impl fmt::Display for FitMessageVideo {
         fmt_message_field!(self.duration, "duration", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -53690,6 +53655,7 @@ impl fmt::Display for FitMessageVideoClip {
         fmt_message_field!(self.clip_end, "clip_end", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -53966,6 +53932,7 @@ impl fmt::Display for FitMessageVideoDescription {
         fmt_message_field!(self.text, "text", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -54150,6 +54117,7 @@ impl fmt::Display for FitMessageVideoFrame {
         fmt_message_field!(self.frame_number, "frame_number", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -54348,6 +54316,7 @@ impl fmt::Display for FitMessageVideoTitle {
         fmt_message_field!(self.text, "text", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -54565,6 +54534,7 @@ impl fmt::Display for FitMessageWatchfaceSettings {
         fmt_message_field!(self.layout, "layout", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -54776,6 +54746,7 @@ impl fmt::Display for FitMessageWeatherAlert {
         fmt_message_field!(self.ftype, "ftype", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -55069,6 +55040,7 @@ impl fmt::Display for FitMessageWeatherConditions {
         fmt_message_field!(self.low_temperature, "low_temperature", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -55622,6 +55594,7 @@ impl fmt::Display for FitMessageWeightScale {
         fmt_message_field!(self.user_profile_index, "user_profile_index", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -56142,6 +56115,7 @@ impl fmt::Display for FitMessageWorkout {
         fmt_message_field!(self.pool_length_unit, "pool_length_unit", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -56438,6 +56412,7 @@ impl fmt::Display for FitMessageWorkoutSession {
         fmt_message_field!(self.pool_length_unit, "pool_length_unit", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -57085,6 +57060,7 @@ impl fmt::Display for FitMessageWorkoutStep {
         fmt_message_field!(self.weight_display_unit, "weight_display_unit", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())
@@ -57603,6 +57579,7 @@ impl fmt::Display for FitMessageZonesTarget {
         fmt_message_field!(self.pwr_calc_type, "pwr_calc_type", f);
         
             
+        fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
         fmt_raw_bytes!(self, f);
         Ok(())

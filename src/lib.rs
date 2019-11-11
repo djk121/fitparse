@@ -23,9 +23,11 @@ use fitparsers::{
 };
 use fitparsingstate::FitParsingState;
 use fittypes::{
-    FitDataMessage, FitFieldDateTime, FitFieldFitBaseType, FitFieldMesgNum,
+    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum,
     FitMessageDeveloperDataId, FitMessageDeviceSettings, FitMessageFieldDescription,
 };
+
+use fittypes_utils::{FitFieldDateTime};
 
 #[derive(Debug, PartialEq)]
 enum FitNormalRecordHeaderMessageType {
@@ -281,6 +283,13 @@ pub struct FitMessageUnknownToSdk {
     pub message_name: String,
 }
 
+impl fmt::Display for FitMessageUnknownToSdk {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Unknown_{}", self.number)?;
+        Ok(())
+    }
+}
+
 impl FitMessageUnknownToSdk {
     pub fn parse<'a>(
         number: u16,
@@ -487,8 +496,9 @@ impl fmt::Display for FitDefinitionMessage {
         writeln!(f, "  {: >28}: {}", "message_size", self.message_size)?;
         writeln!(f, "  {: >28}: ", "field_definitions")?;
         for field_definition in &self.field_definitions {
-            writeln!(f, "  {: >30}name: {}, field_size: {}, base_type: {}", " ",
+            writeln!(f, "  {: >30}name: {} ({}), field_size: {}, base_type: {}", " ",
                 field_definition.field_name(&self.global_mesg_num),
+                field_definition.definition_number,
                 field_definition.field_size,
                 field_definition.base_type_name()
             )?;
@@ -1276,3 +1286,5 @@ mod fitparsers;
 mod errors;
 pub mod fitfile;
 pub mod fitparsingstate;
+#[macro_use]
+pub mod fittypes_utils;
