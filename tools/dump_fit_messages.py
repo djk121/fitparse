@@ -312,7 +312,7 @@ impl fmt::Display for FitDataMessage {
             {%- for message in messages -%}
             FitDataMessage::{{ message.short_name }}(m) => write!(f, "{}", m),
             {% endfor -%}
-            FitDataMessage::UnknownToSdk(_) => write!(f, "UnknownToSdk")
+            FitDataMessage::UnknownToSdk(m) => write!(f, "{}", m)
         }
     }
 }

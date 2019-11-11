@@ -57966,7 +57966,7 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::WorkoutSession(m) => write!(f, "{}", m),
             FitDataMessage::WorkoutStep(m) => write!(f, "{}", m),
             FitDataMessage::ZonesTarget(m) => write!(f, "{}", m),
-            FitDataMessage::UnknownToSdk(_) => write!(f, "UnknownToSdk")
+            FitDataMessage::UnknownToSdk(m) => write!(f, "{}", m)
         }
     }
 }

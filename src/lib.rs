@@ -181,7 +181,7 @@ pub fn parse_fit_message<'a>(
         _ => return Err(Error::parse_error("error parsing header")),
     };
 
-    println!("header: {:?}", header);
+    //println!("header: {:?}", header);
 
     let (fit_message, out) = match header {
         FitRecordHeader::Normal(normal_header) => match normal_header.message_type {
@@ -261,7 +261,7 @@ pub fn parse_fit_message<'a>(
         }
         _ => {}
     }
-    println!("fit_message: {}", fit_message);
+    //println!("fit_message: {}", fit_message);
 
     Ok((Some(fit_message), out))
 }
@@ -286,6 +286,8 @@ pub struct FitMessageUnknownToSdk {
 impl fmt::Display for FitMessageUnknownToSdk {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "Unknown_{}", self.number)?;
+        fmt_developer_fields!(self, f);
+        fmt_unknown_fields!(self, f);
         Ok(())
     }
 }
@@ -309,7 +311,6 @@ impl FitMessageUnknownToSdk {
             message_name: "FitMessageUnknownToSdk".to_string(),
         };
 
-        println!("unknown message");
         let inp = &input[..(message.definition_message.message_size)];
         message
             .raw_bytes
