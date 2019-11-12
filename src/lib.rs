@@ -266,10 +266,10 @@ pub fn parse_fit_message<'a>(
     Ok((Some(fit_message), out))
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FitFieldValue<T> {
-    value: Option<T>,
-    units: String,
+    pub value: Option<T>,
+    pub units: String,
 }
 
 #[derive(Debug)]

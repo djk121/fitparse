@@ -51,6 +51,15 @@ fn make_field_definitions(definitions: Vec<(u8, usize, u8)>) -> Vec<FitFieldDefi
         .collect()
 }
 
+macro_rules! ffv {
+    ($s:expr) => {
+        FitFieldValue{ value: $s, units: "".to_string() }
+    };
+    ($s:expr, $u:expr) => {
+        FitFieldValue{ value: $s, units: $u.to_string() }
+    };
+}
+
 fn make_field_description(
     field_name: Vec<Option<String>>,
     units: Vec<Option<String>>,
@@ -86,20 +95,20 @@ fn make_field_description(
         unknown_fields: HashMap::new(),
         raw_bytes: vec![],
         message_name: "FitMessageFieldDescription",
-        developer_data_index: Some(0),
-        field_definition_number: Some(field_definition_number),
-        fit_base_type_id: Some(fit_base_type_id),
-        field_name: Some(field_name),
-        array: None,
-        components: None,
-        scale: None,
-        offset: None,
-        units: Some(units),
-        bits: None,
-        accumulate: None,
-        fit_base_unit_id: None,
-        native_mesg_num: native_mesg_num,
-        native_field_num: None,
+        developer_data_index: ffv!(Some(0)),
+        field_definition_number: ffv!(Some(field_definition_number)),
+        fit_base_type_id: ffv!(Some(fit_base_type_id)),
+        field_name: ffv!(Some(field_name)),
+        array: ffv!(None),
+        components: ffv!(None),
+        scale: ffv!(None),
+        offset: ffv!(None),
+        units: ffv!(Some(units)),
+        bits: ffv!(None),
+        accumulate: ffv!(None),
+        fit_base_unit_id: ffv!(None),
+        native_mesg_num: ffv!(native_mesg_num),
+        native_field_num: ffv!(None),
     })
 }
 
@@ -123,10 +132,10 @@ fn fit_message_record() {
     });
 
     let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
-    assert_eq!(rec.position_lat, Some(42.56913810968399));
-    assert_eq!(rec.position_long, Some(-71.02391302585602));
-    assert_eq!(rec.heart_rate, Some(151));
-    assert_eq!(rec.power, Some(209));
+    assert_eq!(rec.position_lat, ffv!(Some(42.56913810968399), "deg"));
+    assert_eq!(rec.position_long, ffv!(Some(-71.02391302585602), "deg"));
+    assert_eq!(rec.heart_rate, ffv!(Some(151), "bpm"));
+    assert_eq!(rec.power, ffv!(Some(209), "watts"));
 }
 
 #[test]
@@ -236,16 +245,17 @@ fn fit_message_record_with_developer_fields() {
     });
 
     let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
-    assert_eq!(rec.position_lat, Some(42.56913810968399));
-    assert_eq!(rec.position_long, Some(-71.02391302585602));
-    assert_eq!(rec.heart_rate, Some(151));
-    assert_eq!(rec.power, Some(209));
+    assert_eq!(rec.position_lat, ffv!(Some(42.56913810968399), "deg"));
+    assert_eq!(rec.position_long, ffv!(Some(-71.02391302585602), "deg"));
+    assert_eq!(rec.heart_rate, ffv!(Some(151), "bpm"));
+    assert_eq!(rec.power, ffv!(Some(209), "watts"));
 
     let fp_field_name = Some("Form Power".to_string());
 
     for ffdd in &rec.developer_fields {
         match ffdd.field_description.field_name {
-            Some(ref field_names) => {
+            FitFieldValue{ value: Some(ref field_names), units: _} => {
+            //Some(ref field_names) => {
                 if field_names[0] == fp_field_name {
                     assert_eq!(ffdd.value, FitBaseValue::Uint16(Some(57)));
                     return;
