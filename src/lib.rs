@@ -718,7 +718,7 @@ macro_rules! base_type_vec_formatter {
     ($vals:ident, $f:ident) => {
         {
         write!($f, "[")?;
-        for i in 0..$vals.len() - 2 {
+        for i in 0..$vals.len() - 1 {
             match $vals[i] {
                 Some(v) => write!($f, "{}, ", v)?,
                 None => write!($f, "None, ")?

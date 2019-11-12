@@ -35,7 +35,7 @@ fn main() {
 
     println!("Parsed num messages: {}", ff.messages.len());
     for rec in ff.iter() {
-        println!("{:?}", rec);
+        println!("{}", rec);
         println!();
     }
 }
