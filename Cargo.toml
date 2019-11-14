@@ -7,7 +7,8 @@ include = [
   "src/*.rs",
 ]
 
-
+[profile.release]
+debug = true
 
 [dependencies]
 nom = "^3.2"

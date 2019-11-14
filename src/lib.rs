@@ -23,11 +23,11 @@ use fitparsers::{
 };
 use fitparsingstate::FitParsingState;
 use fittypes::{
-    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum,
-    FitMessageDeveloperDataId, FitMessageDeviceSettings, FitMessageFieldDescription,
+    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum, FitMessageDeveloperDataId,
+    FitMessageDeviceSettings, FitMessageFieldDescription,
 };
 
-use fittypes_utils::{FitFieldDateTime};
+use fittypes_utils::FitFieldDateTime;
 
 #[derive(Debug, PartialEq)]
 enum FitNormalRecordHeaderMessageType {
@@ -151,9 +151,7 @@ pub enum FitMessage {
 impl fmt::Display for FitMessage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            &FitMessage::Data(ref m) => {
-                writeln!(f, "{}", m)
-            },
+            &FitMessage::Data(ref m) => writeln!(f, "{}", m),
             &FitMessage::Definition(ref m) => {
                 writeln!(f, "Definition")?;
                 writeln!(f, "{}", m)
@@ -177,7 +175,10 @@ pub fn parse_fit_message<'a>(
 ) -> Result<(Option<FitMessage>, &'a [u8])> {
     let (header, o) = match parse_record_header(input) {
         Ok((Some(header), o)) => (header, o),
-        Err(e) => { println!("ERROR"); return Err(e);},
+        Err(e) => {
+            println!("ERROR");
+            return Err(e);
+        }
         _ => return Err(Error::parse_error("error parsing header")),
     };
 
@@ -377,18 +378,13 @@ pub enum FitGlobalMesgNum {
 impl fmt::Display for FitGlobalMesgNum {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            &FitGlobalMesgNum::Known(ref mesg_num) => {
-                write!(f, "{:?}", mesg_num)
-            },
-            &FitGlobalMesgNum::Unknown(num) => {
-                write!(f, "Unknown Mesg Num ({})", num)
-            }
+            &FitGlobalMesgNum::Known(ref mesg_num) => write!(f, "{:?}", mesg_num),
+            &FitGlobalMesgNum::Unknown(num) => write!(f, "Unknown Mesg Num ({})", num),
         }
     }
 }
 
 impl FitGlobalMesgNum {
-
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
         let (raw_num, o) = match parse_uint16(input, endianness)? {
             Some(raw_num) => (raw_num, &input[2..]),
@@ -410,7 +406,6 @@ struct FitFieldDefinition {
 }
 
 impl FitFieldDefinition {
-
     pub fn field_name(&self, mesg_num: &FitGlobalMesgNum) -> &'static str {
         FitDataMessage::field_name(mesg_num, self.definition_number)
     }
@@ -434,7 +429,7 @@ impl FitFieldDefinition {
             142 => "sint64",
             143 => "uint64",
             144 => "uint64z",
-            _ => "unknown"
+            _ => "unknown",
         }
     }
 
@@ -491,13 +486,20 @@ pub struct FitDefinitionMessage {
 
 impl fmt::Display for FitDefinitionMessage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "  {: >28}: {:?}", "global_mesg_num", self.global_mesg_num)?;
+        writeln!(
+            f,
+            "  {: >28}: {:?}",
+            "global_mesg_num", self.global_mesg_num
+        )?;
         writeln!(f, "  {: >28}: {:?}", "endianness", self.endianness)?;
         writeln!(f, "  {: >28}: {}", "num_fields", self.num_fields)?;
         writeln!(f, "  {: >28}: {}", "message_size", self.message_size)?;
         writeln!(f, "  {: >28}: ", "field_definitions")?;
         for field_definition in &self.field_definitions {
-            writeln!(f, "  {: >30}name: {} ({}), field_size: {}, base_type: {}", " ",
+            writeln!(
+                f,
+                "  {: >30}name: {} ({}), field_size: {}, base_type: {}",
+                " ",
                 field_definition.field_name(&self.global_mesg_num),
                 field_definition.definition_number,
                 field_definition.field_size,
@@ -505,7 +507,11 @@ impl fmt::Display for FitDefinitionMessage {
             )?;
             //writeln!(f, "  {: >30}{:?}", " ", field_definition)?;
         }
-        writeln!(f, "  {: >28}: {}", "num_developer_fields", self.num_developer_fields)?;
+        writeln!(
+            f,
+            "  {: >28}: {}",
+            "num_developer_fields", self.num_developer_fields
+        )?;
         writeln!(f, "  {: >28}:", "developer_field_definitions")?;
         for developer_field_definition in &self.developer_field_definitions {
             writeln!(f, "  {: >30}{:?}", " ", developer_field_definition)?;
@@ -704,73 +710,68 @@ enum FitBaseValue {
     Byte(Option<Vec<u8>>),
 }
 
-
 macro_rules! base_type_formatter {
     ($val:ident, $f:ident) => {
         match $val {
             None => write!($f, "None")?,
-            Some(ref v) => write!($f, "{}", v)?
+            Some(ref v) => write!($f, "{}", v)?,
         }
     };
 }
 
 macro_rules! base_type_vec_formatter {
-    ($vals:ident, $f:ident) => {
-        {
+    ($vals:ident, $f:ident) => {{
         write!($f, "[")?;
         for i in 0..$vals.len() - 1 {
             match $vals[i] {
                 Some(v) => write!($f, "{}, ", v)?,
-                None => write!($f, "None, ")?
+                None => write!($f, "None, ")?,
             }
         }
-        match $vals[$vals.len()-1] {
+        match $vals[$vals.len() - 1] {
             Some(v) => write!($f, "{}] ", v)?,
-            None => write!($f, "None], ")?
+            None => write!($f, "None], ")?,
         }
-        }
-    };
+    }};
 }
 
 impl fmt::Display for FitBaseValue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            &FitBaseValue::Enum(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::EnumVec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Sint8(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Sint8Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint8(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint8Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint8z(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint8zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Sint16(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Sint16Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint16(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint16Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint16z(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint16zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Sint32(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Sint32Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint32(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint32Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint32z(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint32zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Float32(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Float32Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Sint64(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Sint64Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint64(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint64Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Uint64z(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Uint64zVec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::Float64(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Float64Vec(ref vals) => { base_type_vec_formatter!(vals, f) },
-            &FitBaseValue::String(ref val) => { base_type_formatter!(val, f) },
-            &FitBaseValue::Byte(ref val) => { 
-                match val {
-                    Some(bytes) => write!(f, "{:?}", bytes)?,
-                    None => write!(f, "None")?,
-                }
+            &FitBaseValue::Enum(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::EnumVec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Sint8(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Sint8Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint8(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint8Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint8z(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint8zVec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Sint16(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Sint16Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint16(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint16Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint16z(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint16zVec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Sint32(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Sint32Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint32(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint32Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint32z(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint32zVec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Float32(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Float32Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Sint64(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Sint64Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint64(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint64Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Uint64z(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Uint64zVec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::Float64(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Float64Vec(ref vals) => base_type_vec_formatter!(vals, f),
+            &FitBaseValue::String(ref val) => base_type_formatter!(val, f),
+            &FitBaseValue::Byte(ref val) => match val {
+                Some(bytes) => write!(f, "{:?}", bytes)?,
+                None => write!(f, "None")?,
             },
         }
         Ok(())
@@ -1137,14 +1138,14 @@ pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -
     let remainder = num_bits % 8;
     if remainder != 0 {
         desired_byte_length = desired_byte_length + 1;
-    } 
+    }
 
     let mut raw_input = inp.to_vec();
     //println!("raw_input: {}", format_bits(&raw_input));
 
     while raw_input.len() > desired_byte_length {
         //println!("raw_input (shrinking): {}", format_bits(&raw_input));
-        raw_input.remove(raw_input.len()-1);
+        raw_input.remove(raw_input.len() - 1);
     }
 
     // 2. flip endianness if need be
@@ -1174,12 +1175,15 @@ pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -
         ret.reverse();
     }
 
-    return Ok(ret)
-
+    return Ok(ret);
 }
 
-pub fn subset_with_pad(inp: &[u8], start: usize, num_bits: usize, endianness: Endianness) -> Result<Vec<u8>> {
-    
+pub fn subset_with_pad(
+    inp: &[u8],
+    start: usize,
+    num_bits: usize,
+    endianness: Endianness,
+) -> Result<Vec<u8>> {
     // we're passed however many bytes the output should end up being
     let output_size = inp.len();
     // bit_subset should return us an even number of bytes
@@ -1191,14 +1195,13 @@ pub fn subset_with_pad(inp: &[u8], start: usize, num_bits: usize, endianness: En
         subset_bytes = subset_bytes + 1;
         match endianness {
             nom::Endianness::Big => bytes.insert(0, 0),
-            nom::Endianness::Little => bytes.push(0)
+            nom::Endianness::Little => bytes.push(0),
         }
     }
 
     //println!("subset_with_pad output: {}", format_bits(&bytes));
     Ok(bytes)
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -1278,7 +1281,6 @@ mod tests {
         //let res = definition_message(&defintion_message_data);
         assert_eq!(res, Some(expected));
     }
-
 }
 
 pub mod fittypes;

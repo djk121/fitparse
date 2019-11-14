@@ -53,10 +53,16 @@ fn make_field_definitions(definitions: Vec<(u8, usize, u8)>) -> Vec<FitFieldDefi
 
 macro_rules! ffv {
     ($s:expr) => {
-        FitFieldValue{ value: $s, units: "".to_string() }
+        FitFieldValue {
+            value: $s,
+            units: "".to_string(),
+        }
     };
     ($s:expr, $u:expr) => {
-        FitFieldValue{ value: $s, units: $u.to_string() }
+        FitFieldValue {
+            value: $s,
+            units: $u.to_string(),
+        }
     };
 }
 
@@ -254,8 +260,11 @@ fn fit_message_record_with_developer_fields() {
 
     for ffdd in &rec.developer_fields {
         match ffdd.field_description.field_name {
-            FitFieldValue{ value: Some(ref field_names), units: _} => {
-            //Some(ref field_names) => {
+            FitFieldValue {
+                value: Some(ref field_names),
+                units: _,
+            } => {
+                //Some(ref field_names) => {
                 if field_names[0] == fp_field_name {
                     assert_eq!(ffdd.value, FitBaseValue::Uint16(Some(57)));
                     return;
