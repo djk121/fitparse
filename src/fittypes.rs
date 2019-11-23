@@ -22,8 +22,8 @@ use FitRecordHeader;
 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
 use {
-    deg_parse_assignment, fmt_developer_fields, fmt_message_field, fmt_raw_bytes,
-    fmt_unknown_fields, main_parse_message, parse_developer_fields, parse_subfields,
+    deg_parse_assignment, field_parser_fit_type, fmt_developer_fields, fmt_message_field,
+    fmt_raw_bytes, fmt_unknown_fields, main_parse_message, parse_developer_fields, parse_subfields,
     parsing_state_set_timestamp, scale_and_offset_parse_assignment,
 };
 
@@ -14489,20 +14489,16 @@ impl FitMessageAccelerometerData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -15196,20 +15192,16 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -15305,14 +15297,14 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldActivity::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivity, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldActivity::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivity, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -15332,14 +15324,14 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, &bytes, f)?;
 
                                 message.event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, inp, f)?;
 
                                 message.event.value = Some(val);
                             }
@@ -15359,14 +15351,14 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEventType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, &bytes, f)?;
 
                                 message.event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, inp, f)?;
 
                                 message.event_type.value = Some(val);
                             }
@@ -15386,10 +15378,12 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    &bytes,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -15397,10 +15391,12 @@ impl FitMessageActivity {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    inp,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -15690,14 +15686,14 @@ impl FitMessageAntChannelId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDeviceIndex::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, &bytes, f)?;
 
                                 message.device_index.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDeviceIndex::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, inp, f)?;
 
                                 message.device_index.value = Some(val);
                             }
@@ -15854,20 +15850,16 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -16247,20 +16239,16 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -16682,20 +16670,16 @@ impl FitMessageAviationAttitude {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -17106,7 +17090,8 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldAttitudeStage::parse(&tempp[0..f.field_size])?;
+                                    let v =
+                                        field_parser_fit_type!(FitFieldAttitudeStage, tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17121,7 +17106,8 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldAttitudeStage::parse(&tempp[0..f.field_size])?;
+                                    let v =
+                                        field_parser_fit_type!(FitFieldAttitudeStage, tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17253,9 +17239,11 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldAttitudeValidity::parse(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
+                                    let v = field_parser_fit_type!(
+                                        FitFieldAttitudeValidity,
+                                        tempp,
+                                        f,
+                                        message
                                     )?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
@@ -17271,9 +17259,11 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldAttitudeValidity::parse(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
+                                    let v = field_parser_fit_type!(
+                                        FitFieldAttitudeValidity,
+                                        tempp,
+                                        f,
+                                        message
                                     )?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
@@ -17421,20 +17411,16 @@ impl FitMessageBarometerData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -17918,9 +17904,11 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -17928,10 +17916,8 @@ impl FitMessageBikeProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -17978,14 +17964,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -18005,14 +17991,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -19086,20 +19072,16 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -19344,14 +19326,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldHrType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldHrType, &bytes, f)?;
 
                                 message.heart_rate_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldHrType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldHrType, inp, f)?;
 
                                 message.heart_rate_type.value = Some(val);
                             }
@@ -19371,14 +19353,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldBpStatus::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBpStatus, &bytes, f)?;
 
                                 message.status.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldBpStatus::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBpStatus, inp, f)?;
 
                                 message.status.value = Some(val);
                             }
@@ -19398,9 +19380,11 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.user_profile_index.value = Some(val);
@@ -19408,10 +19392,8 @@ impl FitMessageBloodPressure {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.user_profile_index.value = Some(val);
                             }
@@ -19545,9 +19527,11 @@ impl FitMessageCadenceZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -19555,10 +19539,8 @@ impl FitMessageCadenceZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -19762,20 +19744,16 @@ impl FitMessageCameraEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -19828,14 +19806,15 @@ impl FitMessageCameraEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldCameraEventType::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldCameraEventType, &bytes, f)?;
 
                                 message.camera_event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldCameraEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldCameraEventType, inp, f)?;
 
                                 message.camera_event_type.value = Some(val);
                             }
@@ -19882,8 +19861,11 @@ impl FitMessageCameraEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val =
-                                    FitFieldCameraOrientationType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(
+                                    FitFieldCameraOrientationType,
+                                    &bytes,
+                                    f
+                                )?;
 
                                 message.camera_orientation.value = Some(val);
                             }
@@ -19891,7 +19873,7 @@ impl FitMessageCameraEvent {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val =
-                                    FitFieldCameraOrientationType::parse(&inp[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldCameraOrientationType, inp, f)?;
 
                                 message.camera_orientation.value = Some(val);
                             }
@@ -20079,7 +20061,7 @@ impl FitMessageCapabilities {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldSportBits0::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldSportBits0, tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -20094,7 +20076,7 @@ impl FitMessageCapabilities {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldSportBits0::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldSportBits0, tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -20118,9 +20100,11 @@ impl FitMessageCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWorkoutCapabilities::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldWorkoutCapabilities,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.workouts_supported.value = Some(val);
@@ -20128,9 +20112,11 @@ impl FitMessageCapabilities {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWorkoutCapabilities::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldWorkoutCapabilities,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.workouts_supported.value = Some(val);
@@ -20151,9 +20137,11 @@ impl FitMessageCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldConnectivityCapabilities::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldConnectivityCapabilities,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.connectivity_supported.value = Some(val);
@@ -20161,9 +20149,11 @@ impl FitMessageCapabilities {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldConnectivityCapabilities::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldConnectivityCapabilities,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.connectivity_supported.value = Some(val);
@@ -20856,14 +20846,14 @@ impl FitMessageCourse {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -20910,9 +20900,11 @@ impl FitMessageCourse {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldCourseCapabilities::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldCourseCapabilities,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.capabilities.value = Some(val);
@@ -20920,9 +20912,11 @@ impl FitMessageCourse {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldCourseCapabilities::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldCourseCapabilities,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.capabilities.value = Some(val);
@@ -20943,14 +20937,14 @@ impl FitMessageCourse {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -21121,9 +21115,11 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -21131,10 +21127,8 @@ impl FitMessageCoursePoint {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -21154,20 +21148,16 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -21286,14 +21276,14 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldCoursePoint::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldCoursePoint, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldCoursePoint::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldCoursePoint, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -21549,9 +21539,11 @@ impl FitMessageDeveloperDataId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer_id.value = Some(val);
@@ -21559,10 +21551,8 @@ impl FitMessageDeveloperDataId {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer_id.value = Some(val);
                             }
@@ -21673,7 +21663,7 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
     ) -> Result<FitMessageDeviceInfoSubfieldDeviceType> {
         match message.source_type.value {
             Some(FitFieldSourceType::Antplus) => {
-                let val = FitFieldAntplusDeviceType::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldAntplusDeviceType, inp, f)?;
 
                 return Ok(FitMessageDeviceInfoSubfieldDeviceType::AntplusDeviceType(
                     Some(val),
@@ -21709,10 +21699,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
     ) -> Result<FitMessageDeviceInfoSubfieldProduct> {
         match message.manufacturer.value {
             Some(FitFieldManufacturer::FaveroElectronics) => {
-                let val = FitFieldFaveroProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldFaveroProduct, inp, f, message)?;
 
                 return Ok(FitMessageDeviceInfoSubfieldProduct::FaveroProduct(Some(
                     val,
@@ -21720,10 +21707,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::Garmin) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageDeviceInfoSubfieldProduct::GarminProduct(Some(
                     val,
@@ -21731,10 +21715,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::Dynastream) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageDeviceInfoSubfieldProduct::GarminProduct(Some(
                     val,
@@ -21742,10 +21723,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::DynastreamOem) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageDeviceInfoSubfieldProduct::GarminProduct(Some(
                     val,
@@ -22018,20 +21996,16 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -22051,14 +22025,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDeviceIndex::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, &bytes, f)?;
 
                                 message.device_index.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDeviceIndex::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, inp, f)?;
 
                                 message.device_index.value = Some(val);
                             }
@@ -22109,9 +22083,11 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer.value = Some(val);
@@ -22119,10 +22095,8 @@ impl FitMessageDeviceInfo {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer.value = Some(val);
                             }
@@ -22352,14 +22326,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldBatteryStatus::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBatteryStatus, &bytes, f)?;
 
                                 message.battery_status.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldBatteryStatus::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBatteryStatus, inp, f)?;
 
                                 message.battery_status.value = Some(val);
                             }
@@ -22379,14 +22353,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldBodyLocation::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBodyLocation, &bytes, f)?;
 
                                 message.sensor_position.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldBodyLocation::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBodyLocation, inp, f)?;
 
                                 message.sensor_position.value = Some(val);
                             }
@@ -22493,14 +22467,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldAntNetwork::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldAntNetwork, &bytes, f)?;
 
                                 message.ant_network.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldAntNetwork::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldAntNetwork, inp, f)?;
 
                                 message.ant_network.value = Some(val);
                             }
@@ -22520,14 +22494,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSourceType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSourceType, &bytes, f)?;
 
                                 message.source_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSourceType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSourceType, inp, f)?;
 
                                 message.source_type.value = Some(val);
                             }
@@ -22949,7 +22923,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldTimeMode::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldTimeMode, tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -22964,7 +22938,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldTimeMode::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldTimeMode, tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23043,14 +23017,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldBacklightMode::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBacklightMode, &bytes, f)?;
 
                                 message.backlight_mode.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldBacklightMode::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBacklightMode, inp, f)?;
 
                                 message.backlight_mode.value = Some(val);
                             }
@@ -23097,20 +23071,16 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.clock_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.clock_time.value = Some(val);
                             }
@@ -23206,14 +23176,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateMode::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDateMode, &bytes, f)?;
 
                                 message.date_mode.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateMode::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDateMode, inp, f)?;
 
                                 message.date_mode.value = Some(val);
                             }
@@ -23234,14 +23204,15 @@ impl FitMessageDeviceSettings {
                                 )?;
 
                                 let val =
-                                    FitFieldDisplayOrientation::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldDisplayOrientation, &bytes, f)?;
 
                                 message.display_orientation.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayOrientation::parse(&inp[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayOrientation, inp, f)?;
 
                                 message.display_orientation.value = Some(val);
                             }
@@ -23261,14 +23232,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSide::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSide, &bytes, f)?;
 
                                 message.mounting_side.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSide::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSide, inp, f)?;
 
                                 message.mounting_side.value = Some(val);
                             }
@@ -23458,14 +23429,15 @@ impl FitMessageDeviceSettings {
                                 )?;
 
                                 let val =
-                                    FitFieldAutoSyncFrequency::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldAutoSyncFrequency, &bytes, f)?;
 
                                 message.auto_sync_frequency.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldAutoSyncFrequency::parse(&inp[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldAutoSyncFrequency, inp, f)?;
 
                                 message.auto_sync_frequency.value = Some(val);
                             }
@@ -23485,9 +23457,11 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldAutoActivityDetect::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldAutoActivityDetect,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.auto_activity_detect.value = Some(val);
@@ -23495,9 +23469,11 @@ impl FitMessageDeviceSettings {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldAutoActivityDetect::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldAutoActivityDetect,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.auto_activity_detect.value = Some(val);
@@ -23546,14 +23522,15 @@ impl FitMessageDeviceSettings {
                                 )?;
 
                                 let val =
-                                    FitFieldDisplayOrientation::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldDisplayOrientation, &bytes, f)?;
 
                                 message.smart_notification_display_orientation.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayOrientation::parse(&inp[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayOrientation, inp, f)?;
 
                                 message.smart_notification_display_orientation.value = Some(val);
                             }
@@ -23573,14 +23550,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSwitch::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwitch, &bytes, f)?;
 
                                 message.tap_interface.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSwitch::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwitch, inp, f)?;
 
                                 message.tap_interface.value = Some(val);
                             }
@@ -23742,9 +23719,11 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -23752,10 +23731,8 @@ impl FitMessageDiveAlarm {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -23868,14 +23845,14 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDiveAlarmType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDiveAlarmType, &bytes, f)?;
 
                                 message.alarm_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDiveAlarmType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDiveAlarmType, inp, f)?;
 
                                 message.alarm_type.value = Some(val);
                             }
@@ -23895,14 +23872,14 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldTone::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldTone, &bytes, f)?;
 
                                 message.sound.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldTone::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldTone, inp, f)?;
 
                                 message.sound.value = Some(val);
                             }
@@ -23926,7 +23903,7 @@ impl FitMessageDiveAlarm {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldSubSport::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldSubSport, tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23941,7 +23918,7 @@ impl FitMessageDiveAlarm {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldSubSport::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldSubSport, tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -24086,9 +24063,11 @@ impl FitMessageDiveGas {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -24096,10 +24075,8 @@ impl FitMessageDiveGas {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -24173,14 +24150,14 @@ impl FitMessageDiveGas {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDiveGasStatus::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDiveGasStatus, &bytes, f)?;
 
                                 message.status.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDiveGasStatus::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDiveGasStatus, inp, f)?;
 
                                 message.status.value = Some(val);
                             }
@@ -24231,7 +24208,7 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
     ) -> Result<FitMessageDiveSettingsSubfieldHeartRateSource> {
         match message.heart_rate_source_type.value {
             Some(FitFieldSourceType::Antplus) => {
-                let val = FitFieldAntplusDeviceType::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldAntplusDeviceType, inp, f)?;
 
                 return Ok(
                     FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateAntplusDeviceType(
@@ -24241,7 +24218,7 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
             }
 
             Some(FitFieldSourceType::Local) => {
-                let val = FitFieldLocalDeviceType::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldLocalDeviceType, inp, f)?;
 
                 return Ok(
                     FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateLocalDeviceType(Some(
@@ -24519,9 +24496,11 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -24529,10 +24508,8 @@ impl FitMessageDiveSettings {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -24579,14 +24556,15 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldTissueModelType::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldTissueModelType, &bytes, f)?;
 
                                 message.model.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldTissueModelType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldTissueModelType, inp, f)?;
 
                                 message.model.value = Some(val);
                             }
@@ -24660,14 +24638,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWaterType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWaterType, &bytes, f)?;
 
                                 message.water_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWaterType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWaterType, inp, f)?;
 
                                 message.water_type.value = Some(val);
                             }
@@ -24965,14 +24943,15 @@ impl FitMessageDiveSettings {
                                 )?;
 
                                 let val =
-                                    FitFieldDiveBacklightMode::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldDiveBacklightMode, &bytes, f)?;
 
                                 message.backlight_mode.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDiveBacklightMode::parse(&inp[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDiveBacklightMode, inp, f)?;
 
                                 message.backlight_mode.value = Some(val);
                             }
@@ -25020,14 +24999,14 @@ impl FitMessageDiveSettings {
                                 )?;
 
                                 let val =
-                                    FitFieldBacklightTimeout::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldBacklightTimeout, &bytes, f)?;
 
                                 message.backlight_timeout.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldBacklightTimeout::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldBacklightTimeout, inp, f)?;
 
                                 message.backlight_timeout.value = Some(val);
                             }
@@ -25133,14 +25112,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSourceType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSourceType, &bytes, f)?;
 
                                 message.heart_rate_source_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSourceType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSourceType, inp, f)?;
 
                                 message.heart_rate_source_type.value = Some(val);
                             }
@@ -25377,20 +25356,16 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -25410,20 +25385,15 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMesgNum::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMesgNum, &bytes, f, message)?;
 
                                 message.reference_mesg.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMesgNum::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_fit_type!(FitFieldMesgNum, inp, f, message)?;
 
                                 message.reference_mesg.value = Some(val);
                             }
@@ -25443,9 +25413,11 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.reference_index.value = Some(val);
@@ -25453,10 +25425,8 @@ impl FitMessageDiveSummary {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.reference_index.value = Some(val);
                             }
@@ -25863,16 +25833,13 @@ impl FitMessageEventSubfieldData {
     ) -> Result<FitMessageEventSubfieldData> {
         match message.event.value {
             Some(FitFieldEvent::Timer) => {
-                let val = FitFieldTimerTrigger::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldTimerTrigger, inp, f)?;
 
                 return Ok(FitMessageEventSubfieldData::TimerTrigger(Some(val)));
             }
 
             Some(FitFieldEvent::CoursePoint) => {
-                let val = FitFieldMessageIndex::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::CoursePointIndex(Some(val)));
             }
@@ -25967,7 +25934,7 @@ impl FitMessageEventSubfieldData {
             }
 
             Some(FitFieldEvent::FitnessEquipment) => {
-                let val = FitFieldFitnessEquipmentState::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldFitnessEquipmentState, inp, f)?;
 
                 return Ok(FitMessageEventSubfieldData::FitnessEquipmentState(Some(
                     val,
@@ -25996,16 +25963,13 @@ impl FitMessageEventSubfieldData {
             }
 
             Some(FitFieldEvent::RiderPositionChange) => {
-                let val = FitFieldRiderPositionType::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldRiderPositionType, inp, f)?;
 
                 return Ok(FitMessageEventSubfieldData::RiderPosition(Some(val)));
             }
 
             Some(FitFieldEvent::CommTimeout) => {
-                let val = FitFieldCommTimeoutType::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldCommTimeoutType, inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::CommTimeout(Some(val)));
             }
@@ -26218,20 +26182,16 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -26251,14 +26211,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, &bytes, f)?;
 
                                 message.event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, inp, f)?;
 
                                 message.event.value = Some(val);
                             }
@@ -26278,14 +26238,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEventType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, &bytes, f)?;
 
                                 message.event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, inp, f)?;
 
                                 message.event_type.value = Some(val);
                             }
@@ -26578,14 +26538,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDeviceIndex::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, &bytes, f)?;
 
                                 message.device_index.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDeviceIndex::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, inp, f)?;
 
                                 message.device_index.value = Some(val);
                             }
@@ -26985,14 +26945,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExdDataUnits::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdDataUnits, &bytes, f)?;
 
                                 message.data_units.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExdDataUnits::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdDataUnits, inp, f)?;
 
                                 message.data_units.value = Some(val);
                             }
@@ -27012,14 +26972,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExdQualifiers::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdQualifiers, &bytes, f)?;
 
                                 message.qualifier.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExdQualifiers::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdQualifiers, inp, f)?;
 
                                 message.qualifier.value = Some(val);
                             }
@@ -27039,14 +26999,15 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExdDescriptors::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldExdDescriptors, &bytes, f)?;
 
                                 message.descriptor.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExdDescriptors::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdDescriptors, inp, f)?;
 
                                 message.descriptor.value = Some(val);
                             }
@@ -27357,14 +27318,15 @@ impl FitMessageExdDataFieldConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExdDisplayType::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldExdDisplayType, &bytes, f)?;
 
                                 message.display_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExdDisplayType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdDisplayType, inp, f)?;
 
                                 message.display_type.value = Some(val);
                             }
@@ -27609,14 +27571,14 @@ impl FitMessageExdScreenConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExdLayout::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdLayout, &bytes, f)?;
 
                                 message.layout.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExdLayout::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldExdLayout, inp, f)?;
 
                                 message.layout.value = Some(val);
                             }
@@ -27784,9 +27746,11 @@ impl FitMessageExerciseTitle {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -27794,10 +27758,8 @@ impl FitMessageExerciseTitle {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -27817,9 +27779,11 @@ impl FitMessageExerciseTitle {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExerciseCategory::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldExerciseCategory,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.exercise_category.value = Some(val);
@@ -27827,9 +27791,11 @@ impl FitMessageExerciseTitle {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExerciseCategory::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldExerciseCategory,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.exercise_category.value = Some(val);
@@ -28056,9 +28022,11 @@ impl FitMessageFieldCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -28066,10 +28034,8 @@ impl FitMessageFieldCapabilities {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -28089,14 +28055,14 @@ impl FitMessageFieldCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFile::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, &bytes, f)?;
 
                                 message.file.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFile::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, inp, f)?;
 
                                 message.file.value = Some(val);
                             }
@@ -28116,20 +28082,15 @@ impl FitMessageFieldCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMesgNum::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMesgNum, &bytes, f, message)?;
 
                                 message.mesg_num.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMesgNum::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_fit_type!(FitFieldMesgNum, inp, f, message)?;
 
                                 message.mesg_num.value = Some(val);
                             }
@@ -28454,14 +28415,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFitBaseType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFitBaseType, &bytes, f)?;
 
                                 message.fit_base_type_id.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFitBaseType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFitBaseType, inp, f)?;
 
                                 message.fit_base_type_id.value = Some(val);
                             }
@@ -28733,9 +28694,11 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFitBaseUnit::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldFitBaseUnit,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.fit_base_unit_id.value = Some(val);
@@ -28743,10 +28706,8 @@ impl FitMessageFieldDescription {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFitBaseUnit::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldFitBaseUnit, inp, f, message)?;
 
                                 message.fit_base_unit_id.value = Some(val);
                             }
@@ -28766,20 +28727,15 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMesgNum::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMesgNum, &bytes, f, message)?;
 
                                 message.native_mesg_num.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMesgNum::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_fit_type!(FitFieldMesgNum, inp, f, message)?;
 
                                 message.native_mesg_num.value = Some(val);
                             }
@@ -28961,9 +28917,11 @@ impl FitMessageFileCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -28971,10 +28929,8 @@ impl FitMessageFileCapabilities {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -28994,14 +28950,14 @@ impl FitMessageFileCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFile::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFile::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -29021,14 +28977,14 @@ impl FitMessageFileCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFileFlags::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFileFlags, &bytes, f)?;
 
                                 message.flags.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFileFlags::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFileFlags, inp, f)?;
 
                                 message.flags.value = Some(val);
                             }
@@ -29339,37 +29295,25 @@ impl FitMessageFileIdSubfieldProduct {
     ) -> Result<FitMessageFileIdSubfieldProduct> {
         match message.manufacturer.value {
             Some(FitFieldManufacturer::FaveroElectronics) => {
-                let val = FitFieldFaveroProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldFaveroProduct, inp, f, message)?;
 
                 return Ok(FitMessageFileIdSubfieldProduct::FaveroProduct(Some(val)));
             }
 
             Some(FitFieldManufacturer::Garmin) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageFileIdSubfieldProduct::GarminProduct(Some(val)));
             }
 
             Some(FitFieldManufacturer::Dynastream) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageFileIdSubfieldProduct::GarminProduct(Some(val)));
             }
 
             Some(FitFieldManufacturer::DynastreamOem) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageFileIdSubfieldProduct::GarminProduct(Some(val)));
             }
@@ -29538,14 +29482,14 @@ impl FitMessageFileId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFile::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFile::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -29565,9 +29509,11 @@ impl FitMessageFileId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer.value = Some(val);
@@ -29575,10 +29521,8 @@ impl FitMessageFileId {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer.value = Some(val);
                             }
@@ -29662,20 +29606,16 @@ impl FitMessageFileId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.time_created.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.time_created.value = Some(val);
                             }
@@ -29939,9 +29879,11 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -29949,10 +29891,8 @@ impl FitMessageGoal {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -29972,14 +29912,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -29999,14 +29939,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -30026,20 +29966,16 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_date.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_date.value = Some(val);
                             }
@@ -30059,20 +29995,16 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.end_date.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.end_date.value = Some(val);
                             }
@@ -30092,14 +30024,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldGoal::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGoal, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldGoal::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGoal, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -30212,14 +30144,15 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldGoalRecurrence::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldGoalRecurrence, &bytes, f)?;
 
                                 message.recurrence.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldGoalRecurrence::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGoalRecurrence, inp, f)?;
 
                                 message.recurrence.value = Some(val);
                             }
@@ -30299,14 +30232,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldGoalSource::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGoalSource, &bytes, f)?;
 
                                 message.source.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldGoalSource::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGoalSource, inp, f)?;
 
                                 message.source.value = Some(val);
                             }
@@ -30484,20 +30417,16 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -30735,20 +30664,16 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.utc_timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.utc_timestamp.value = Some(val);
                             }
@@ -30987,20 +30912,16 @@ impl FitMessageGyroscopeData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -31533,20 +31454,16 @@ impl FitMessageHr {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -31969,9 +31886,11 @@ impl FitMessageHrZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -31979,10 +31898,8 @@ impl FitMessageHrZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -32184,9 +32101,11 @@ impl FitMessageHrmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -32194,10 +32113,8 @@ impl FitMessageHrmProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -33546,9 +33463,11 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -33556,10 +33475,8 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -33579,20 +33496,16 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -33612,14 +33525,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, &bytes, f)?;
 
                                 message.event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, inp, f)?;
 
                                 message.event.value = Some(val);
                             }
@@ -33639,14 +33552,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEventType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, &bytes, f)?;
 
                                 message.event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, inp, f)?;
 
                                 message.event_type.value = Some(val);
                             }
@@ -33666,20 +33579,16 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
@@ -34387,14 +34296,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldIntensity::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldIntensity, &bytes, f)?;
 
                                 message.intensity.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldIntensity::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldIntensity, inp, f)?;
 
                                 message.intensity.value = Some(val);
                             }
@@ -34414,14 +34323,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLapTrigger::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLapTrigger, &bytes, f)?;
 
                                 message.lap_trigger.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLapTrigger::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLapTrigger, inp, f)?;
 
                                 message.lap_trigger.value = Some(val);
                             }
@@ -34441,14 +34350,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -34561,9 +34470,11 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLeftRightBalance100::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLeftRightBalance100,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.left_right_balance.value = Some(val);
@@ -34571,9 +34482,11 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLeftRightBalance100::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLeftRightBalance100,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.left_right_balance.value = Some(val);
@@ -34670,14 +34583,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSwimStroke::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwimStroke, &bytes, f)?;
 
                                 message.swim_stroke.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSwimStroke::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwimStroke, inp, f)?;
 
                                 message.swim_stroke.value = Some(val);
                             }
@@ -34697,14 +34610,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -35748,9 +35661,11 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.wkt_step_index.value = Some(val);
@@ -35758,10 +35673,8 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.wkt_step_index.value = Some(val);
                             }
@@ -37971,9 +37884,11 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -37981,10 +37896,8 @@ impl FitMessageLength {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -38004,20 +37917,16 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -38037,14 +37946,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, &bytes, f)?;
 
                                 message.event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, inp, f)?;
 
                                 message.event.value = Some(val);
                             }
@@ -38064,14 +37973,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEventType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, &bytes, f)?;
 
                                 message.event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, inp, f)?;
 
                                 message.event_type.value = Some(val);
                             }
@@ -38091,20 +38000,16 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
@@ -38276,14 +38181,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSwimStroke::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwimStroke, &bytes, f)?;
 
                                 message.swim_stroke.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSwimStroke::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwimStroke, inp, f)?;
 
                                 message.swim_stroke.value = Some(val);
                             }
@@ -38390,14 +38295,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLengthType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLengthType, &bytes, f)?;
 
                                 message.length_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLengthType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLengthType, inp, f)?;
 
                                 message.length_type.value = Some(val);
                             }
@@ -38739,20 +38644,16 @@ impl FitMessageMagnetometerData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -39362,9 +39263,11 @@ impl FitMessageMemoGlob {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -39372,10 +39275,8 @@ impl FitMessageMemoGlob {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -39597,9 +39498,11 @@ impl FitMessageMesgCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -39607,10 +39510,8 @@ impl FitMessageMesgCapabilities {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -39630,14 +39531,14 @@ impl FitMessageMesgCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFile::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, &bytes, f)?;
 
                                 message.file.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFile::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, inp, f)?;
 
                                 message.file.value = Some(val);
                             }
@@ -39657,20 +39558,15 @@ impl FitMessageMesgCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMesgNum::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMesgNum, &bytes, f, message)?;
 
                                 message.mesg_num.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMesgNum::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_fit_type!(FitFieldMesgNum, inp, f, message)?;
 
                                 message.mesg_num.value = Some(val);
                             }
@@ -39690,14 +39586,14 @@ impl FitMessageMesgCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMesgCount::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldMesgCount, &bytes, f)?;
 
                                 message.count_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMesgCount::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldMesgCount, inp, f)?;
 
                                 message.count_type.value = Some(val);
                             }
@@ -39869,9 +39765,11 @@ impl FitMessageMetZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -39879,10 +39777,8 @@ impl FitMessageMetZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -40389,20 +40285,16 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -40422,14 +40314,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDeviceIndex::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, &bytes, f)?;
 
                                 message.device_index.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDeviceIndex::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, inp, f)?;
 
                                 message.device_index.value = Some(val);
                             }
@@ -40589,14 +40481,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldActivityType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityType, &bytes, f)?;
 
                                 message.activity_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldActivityType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityType, inp, f)?;
 
                                 message.activity_type.value = Some(val);
                             }
@@ -40616,14 +40508,15 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldActivitySubtype::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldActivitySubtype, &bytes, f)?;
 
                                 message.activity_subtype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldActivitySubtype::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivitySubtype, inp, f)?;
 
                                 message.activity_subtype.value = Some(val);
                             }
@@ -40643,14 +40536,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldActivityLevel::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityLevel, &bytes, f)?;
 
                                 message.activity_level.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldActivityLevel::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityLevel, inp, f)?;
 
                                 message.activity_level.value = Some(val);
                             }
@@ -40769,10 +40662,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    &bytes,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -40780,10 +40675,12 @@ impl FitMessageMonitoring {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    inp,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -41507,20 +41404,16 @@ impl FitMessageMonitoringInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -41540,10 +41433,12 @@ impl FitMessageMonitoringInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    &bytes,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -41551,10 +41446,12 @@ impl FitMessageMonitoringInfo {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    inp,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -41579,7 +41476,7 @@ impl FitMessageMonitoringInfo {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldActivityType::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldActivityType, tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -41594,7 +41491,7 @@ impl FitMessageMonitoringInfo {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldActivityType::parse(&tempp[0..f.field_size])?;
+                                    let v = field_parser_fit_type!(FitFieldActivityType, tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -41889,20 +41786,16 @@ impl FitMessageNmeaSentence {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -42140,20 +42033,16 @@ impl FitMessageObdiiData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -42401,20 +42290,16 @@ impl FitMessageObdiiData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_timestamp.value = Some(val);
                             }
@@ -42576,20 +42461,16 @@ impl FitMessageOhrSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -42609,14 +42490,14 @@ impl FitMessageOhrSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSwitch::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwitch, &bytes, f)?;
 
                                 message.enabled.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSwitch::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwitch, inp, f)?;
 
                                 message.enabled.value = Some(val);
                             }
@@ -42841,20 +42722,16 @@ impl FitMessageOneDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -42874,14 +42751,14 @@ impl FitMessageOneDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSensorType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSensorType, &bytes, f)?;
 
                                 message.sensor_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSensorType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSensorType, inp, f)?;
 
                                 message.sensor_type.value = Some(val);
                             }
@@ -43145,9 +43022,11 @@ impl FitMessagePowerZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -43155,10 +43034,8 @@ impl FitMessagePowerZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -43844,20 +43721,16 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -44553,14 +44426,14 @@ m"
                                 )?;
 
                                 let val =
-                                    FitFieldLeftRightBalance::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldLeftRightBalance, &bytes, f)?;
 
                                 message.left_right_balance.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLeftRightBalance::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLeftRightBalance, inp, f)?;
 
                                 message.left_right_balance.value = Some(val);
                             }
@@ -44802,14 +44675,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldActivityType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityType, &bytes, f)?;
 
                                 message.activity_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldActivityType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityType, inp, f)?;
 
                                 message.activity_type.value = Some(val);
                             }
@@ -45041,14 +44914,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldStrokeType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldStrokeType, &bytes, f)?;
 
                                 message.stroke_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldStrokeType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldStrokeType, inp, f)?;
 
                                 message.stroke_type.value = Some(val);
                             }
@@ -45456,14 +45329,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDeviceIndex::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, &bytes, f)?;
 
                                 message.device_index.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDeviceIndex::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDeviceIndex, inp, f)?;
 
                                 message.device_index.value = Some(val);
                             }
@@ -46341,37 +46214,25 @@ impl FitMessageScheduleSubfieldProduct {
     ) -> Result<FitMessageScheduleSubfieldProduct> {
         match message.manufacturer.value {
             Some(FitFieldManufacturer::FaveroElectronics) => {
-                let val = FitFieldFaveroProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldFaveroProduct, inp, f, message)?;
 
                 return Ok(FitMessageScheduleSubfieldProduct::FaveroProduct(Some(val)));
             }
 
             Some(FitFieldManufacturer::Garmin) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageScheduleSubfieldProduct::GarminProduct(Some(val)));
             }
 
             Some(FitFieldManufacturer::Dynastream) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageScheduleSubfieldProduct::GarminProduct(Some(val)));
             }
 
             Some(FitFieldManufacturer::DynastreamOem) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageScheduleSubfieldProduct::GarminProduct(Some(val)));
             }
@@ -46540,9 +46401,11 @@ impl FitMessageSchedule {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer.value = Some(val);
@@ -46550,10 +46413,8 @@ impl FitMessageSchedule {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer.value = Some(val);
                             }
@@ -46637,20 +46498,16 @@ impl FitMessageSchedule {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.time_created.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.time_created.value = Some(val);
                             }
@@ -46697,14 +46554,14 @@ impl FitMessageSchedule {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSchedule::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSchedule, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSchedule::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSchedule, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -46724,10 +46581,12 @@ impl FitMessageSchedule {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    &bytes,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.scheduled_time.value = Some(val);
@@ -46735,10 +46594,12 @@ impl FitMessageSchedule {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    inp,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.scheduled_time.value = Some(val);
@@ -46908,9 +46769,11 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -46918,10 +46781,8 @@ impl FitMessageSdmProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -47318,9 +47179,11 @@ impl FitMessageSegmentFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -47328,10 +47191,8 @@ impl FitMessageSegmentFile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -47442,8 +47303,10 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldSegmentLeaderboardType::parse(
-                                        &tempp[0..f.field_size],
+                                    let v = field_parser_fit_type!(
+                                        FitFieldSegmentLeaderboardType,
+                                        tempp,
+                                        f
                                     )?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
@@ -47459,8 +47322,10 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldSegmentLeaderboardType::parse(
-                                        &tempp[0..f.field_size],
+                                    let v = field_parser_fit_type!(
+                                        FitFieldSegmentLeaderboardType,
+                                        tempp,
+                                        f
                                     )?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
@@ -47865,14 +47730,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -48013,7 +47878,7 @@ impl FitMessageSegmentId {
                                 )?;
 
                                 let val =
-                                    FitFieldSegmentDeleteStatus::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldSegmentDeleteStatus, &bytes, f)?;
 
                                 message.delete_status.value = Some(val);
                             }
@@ -48021,7 +47886,7 @@ impl FitMessageSegmentId {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val =
-                                    FitFieldSegmentDeleteStatus::parse(&inp[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldSegmentDeleteStatus, inp, f)?;
 
                                 message.delete_status.value = Some(val);
                             }
@@ -48041,8 +47906,11 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val =
-                                    FitFieldSegmentSelectionType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(
+                                    FitFieldSegmentSelectionType,
+                                    &bytes,
+                                    f
+                                )?;
 
                                 message.selection_type.value = Some(val);
                             }
@@ -48050,7 +47918,7 @@ impl FitMessageSegmentId {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val =
-                                    FitFieldSegmentSelectionType::parse(&inp[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldSegmentSelectionType, inp, f)?;
 
                                 message.selection_type.value = Some(val);
                             }
@@ -48853,9 +48721,11 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -48863,10 +48733,8 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -48886,20 +48754,16 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -48919,14 +48783,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, &bytes, f)?;
 
                                 message.event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, inp, f)?;
 
                                 message.event.value = Some(val);
                             }
@@ -48946,14 +48810,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEventType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, &bytes, f)?;
 
                                 message.event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, inp, f)?;
 
                                 message.event_type.value = Some(val);
                             }
@@ -48973,20 +48837,16 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
@@ -49670,14 +49530,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -49916,9 +49776,11 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLeftRightBalance100::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLeftRightBalance100,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.left_right_balance.value = Some(val);
@@ -49926,9 +49788,11 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLeftRightBalance100::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLeftRightBalance100,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.left_right_balance.value = Some(val);
@@ -49949,14 +49813,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -50986,9 +50850,11 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.wkt_step_index.value = Some(val);
@@ -50996,10 +50862,8 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.wkt_step_index.value = Some(val);
                             }
@@ -51019,14 +50883,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSportEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSportEvent, &bytes, f)?;
 
                                 message.sport_event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSportEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSportEvent, inp, f)?;
 
                                 message.sport_event.value = Some(val);
                             }
@@ -51232,14 +51096,14 @@ impl FitMessageSegmentLap {
                                 )?;
 
                                 let val =
-                                    FitFieldSegmentLapStatus::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldSegmentLapStatus, &bytes, f)?;
 
                                 message.status.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSegmentLapStatus::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSegmentLapStatus, inp, f)?;
 
                                 message.status.value = Some(val);
                             }
@@ -51997,9 +51861,11 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer.value = Some(val);
@@ -52007,10 +51873,8 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer.value = Some(val);
                             }
@@ -52177,9 +52041,11 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -52187,10 +52053,8 @@ impl FitMessageSegmentLeaderboardEntry {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -52237,8 +52101,10 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSegmentLeaderboardType::parse(
-                                    &&bytes[0..f.field_size],
+                                let val = field_parser_fit_type!(
+                                    FitFieldSegmentLeaderboardType,
+                                    &bytes,
+                                    f
                                 )?;
 
                                 message.ftype.value = Some(val);
@@ -52247,7 +52113,7 @@ impl FitMessageSegmentLeaderboardEntry {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val =
-                                    FitFieldSegmentLeaderboardType::parse(&inp[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldSegmentLeaderboardType, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -52538,9 +52404,11 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -52548,10 +52416,8 @@ impl FitMessageSegmentPoint {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -53913,9 +53779,11 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -53923,10 +53791,8 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -53946,20 +53812,16 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -53979,14 +53841,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEvent::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, &bytes, f)?;
 
                                 message.event.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEvent::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEvent, inp, f)?;
 
                                 message.event.value = Some(val);
                             }
@@ -54006,14 +53868,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldEventType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, &bytes, f)?;
 
                                 message.event_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldEventType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldEventType, inp, f)?;
 
                                 message.event_type.value = Some(val);
                             }
@@ -54033,20 +53895,16 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
@@ -54132,14 +53990,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -54159,14 +54017,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -54872,14 +54730,15 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSessionTrigger::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldSessionTrigger, &bytes, f)?;
 
                                 message.trigger.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSessionTrigger::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSessionTrigger, inp, f)?;
 
                                 message.trigger.value = Some(val);
                             }
@@ -55150,9 +55009,11 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLeftRightBalance100::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLeftRightBalance100,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.left_right_balance.value = Some(val);
@@ -55160,9 +55021,11 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLeftRightBalance100::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLeftRightBalance100,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.left_right_balance.value = Some(val);
@@ -55269,14 +55132,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSwimStroke::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwimStroke, &bytes, f)?;
 
                                 message.swim_stroke.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSwimStroke::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSwimStroke, inp, f)?;
 
                                 message.swim_stroke.value = Some(val);
                             }
@@ -55372,14 +55235,15 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.pool_length_unit.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.pool_length_unit.value = Some(val);
                             }
@@ -58784,20 +58648,16 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -58916,14 +58776,14 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSetType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSetType, &bytes, f)?;
 
                                 message.set_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSetType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSetType, inp, f)?;
 
                                 message.set_type.value = Some(val);
                             }
@@ -58943,20 +58803,16 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_time.value = Some(val);
                             }
@@ -58980,9 +58836,11 @@ impl FitMessageSet {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = FitFieldExerciseCategory::parse(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
+                                    let v = field_parser_fit_type!(
+                                        FitFieldExerciseCategory,
+                                        tempp,
+                                        f,
+                                        message
                                     )?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
@@ -58998,9 +58856,11 @@ impl FitMessageSet {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = FitFieldExerciseCategory::parse(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
+                                    let v = field_parser_fit_type!(
+                                        FitFieldExerciseCategory,
+                                        tempp,
+                                        f,
+                                        message
                                     )?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
@@ -59074,9 +58934,11 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFitBaseUnit::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldFitBaseUnit,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.weight_display_unit.value = Some(val);
@@ -59084,10 +58946,8 @@ impl FitMessageSet {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFitBaseUnit::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldFitBaseUnit, inp, f, message)?;
 
                                 message.weight_display_unit.value = Some(val);
                             }
@@ -59107,9 +58967,11 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -59117,10 +58979,8 @@ impl FitMessageSet {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -59140,9 +59000,11 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.wkt_step_index.value = Some(val);
@@ -59150,10 +59012,8 @@ impl FitMessageSet {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.wkt_step_index.value = Some(val);
                             }
@@ -59204,10 +59064,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
     ) -> Result<FitMessageSlaveDeviceSubfieldProduct> {
         match message.manufacturer.value {
             Some(FitFieldManufacturer::FaveroElectronics) => {
-                let val = FitFieldFaveroProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldFaveroProduct, inp, f, message)?;
 
                 return Ok(FitMessageSlaveDeviceSubfieldProduct::FaveroProduct(Some(
                     val,
@@ -59215,10 +59072,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::Garmin) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageSlaveDeviceSubfieldProduct::GarminProduct(Some(
                     val,
@@ -59226,10 +59080,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::Dynastream) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageSlaveDeviceSubfieldProduct::GarminProduct(Some(
                     val,
@@ -59237,10 +59088,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::DynastreamOem) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageSlaveDeviceSubfieldProduct::GarminProduct(Some(
                     val,
@@ -59376,9 +59224,11 @@ impl FitMessageSlaveDevice {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer.value = Some(val);
@@ -59386,10 +59236,8 @@ impl FitMessageSlaveDevice {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer.value = Some(val);
                             }
@@ -59554,9 +59402,11 @@ impl FitMessageSoftware {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -59564,10 +59414,8 @@ impl FitMessageSoftware {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -59761,9 +59609,11 @@ impl FitMessageSpeedZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -59771,10 +59621,8 @@ impl FitMessageSpeedZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -59978,14 +59826,14 @@ impl FitMessageSport {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -60005,14 +59853,14 @@ impl FitMessageSport {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -60199,20 +60047,16 @@ impl FitMessageStressLevel {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.stress_level_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.stress_level_time.value = Some(val);
                             }
@@ -60455,20 +60299,16 @@ impl FitMessageThreeDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -60488,14 +60328,14 @@ impl FitMessageThreeDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSensorType::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSensorType, &bytes, f)?;
 
                                 message.sensor_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSensorType::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSensorType, inp, f)?;
 
                                 message.sensor_type.value = Some(val);
                             }
@@ -60875,20 +60715,16 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -60951,20 +60787,16 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.system_timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.system_timestamp.value = Some(val);
                             }
@@ -61027,10 +60859,12 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    &bytes,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -61038,10 +60872,12 @@ impl FitMessageTimestampCorrelation {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocalDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                    _tz_offset,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocalDateTime,
+                                    inp,
+                                    f,
+                                    message,
+                                    _tz_offset
                                 )?;
 
                                 message.local_timestamp.value = Some(val);
@@ -61293,9 +61129,11 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -61303,10 +61141,8 @@ impl FitMessageTotals {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -61326,20 +61162,16 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -61458,14 +61290,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -61642,10 +61474,7 @@ impl FitMessageTrainingFileSubfieldProduct {
     ) -> Result<FitMessageTrainingFileSubfieldProduct> {
         match message.manufacturer.value {
             Some(FitFieldManufacturer::FaveroElectronics) => {
-                let val = FitFieldFaveroProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldFaveroProduct, inp, f, message)?;
 
                 return Ok(FitMessageTrainingFileSubfieldProduct::FaveroProduct(Some(
                     val,
@@ -61653,10 +61482,7 @@ impl FitMessageTrainingFileSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::Garmin) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageTrainingFileSubfieldProduct::GarminProduct(Some(
                     val,
@@ -61664,10 +61490,7 @@ impl FitMessageTrainingFileSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::Dynastream) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageTrainingFileSubfieldProduct::GarminProduct(Some(
                     val,
@@ -61675,10 +61498,7 @@ impl FitMessageTrainingFileSubfieldProduct {
             }
 
             Some(FitFieldManufacturer::DynastreamOem) => {
-                let val = FitFieldGarminProduct::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldGarminProduct, inp, f, message)?;
 
                 return Ok(FitMessageTrainingFileSubfieldProduct::GarminProduct(Some(
                     val,
@@ -61844,20 +61664,16 @@ impl FitMessageTrainingFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -61877,14 +61693,14 @@ impl FitMessageTrainingFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFile::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFile::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldFile, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -61904,9 +61720,11 @@ impl FitMessageTrainingFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldManufacturer::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldManufacturer,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.manufacturer.value = Some(val);
@@ -61914,10 +61732,8 @@ impl FitMessageTrainingFile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldManufacturer::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldManufacturer, inp, f, message)?;
 
                                 message.manufacturer.value = Some(val);
                             }
@@ -62001,20 +61817,16 @@ impl FitMessageTrainingFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.time_created.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.time_created.value = Some(val);
                             }
@@ -62338,9 +62150,11 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -62348,10 +62162,8 @@ impl FitMessageUserProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -62398,14 +62210,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldGender::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGender, &bytes, f)?;
 
                                 message.gender.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldGender::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldGender, inp, f)?;
 
                                 message.gender.value = Some(val);
                             }
@@ -62512,14 +62324,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLanguage::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLanguage, &bytes, f)?;
 
                                 message.language.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLanguage::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldLanguage, inp, f)?;
 
                                 message.language.value = Some(val);
                             }
@@ -62539,14 +62351,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.elev_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.elev_setting.value = Some(val);
                             }
@@ -62566,14 +62379,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.weight_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.weight_setting.value = Some(val);
                             }
@@ -62701,14 +62515,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayHeart::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayHeart, &bytes, f)?;
 
                                 message.hr_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayHeart::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayHeart, inp, f)?;
 
                                 message.hr_setting.value = Some(val);
                             }
@@ -62728,14 +62542,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.speed_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.speed_setting.value = Some(val);
                             }
@@ -62755,14 +62570,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.dist_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.dist_setting.value = Some(val);
                             }
@@ -62782,14 +62598,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayPower::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayPower, &bytes, f)?;
 
                                 message.power_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayPower::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayPower, inp, f)?;
 
                                 message.power_setting.value = Some(val);
                             }
@@ -62809,14 +62625,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldActivityClass::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityClass, &bytes, f)?;
 
                                 message.activity_class.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldActivityClass::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldActivityClass, inp, f)?;
 
                                 message.activity_class.value = Some(val);
                             }
@@ -62836,14 +62652,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayPosition::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayPosition, &bytes, f)?;
 
                                 message.position_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayPosition::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayPosition, inp, f)?;
 
                                 message.position_setting.value = Some(val);
                             }
@@ -62863,14 +62680,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.temperature_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.temperature_setting.value = Some(val);
                             }
@@ -62890,9 +62708,11 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldUserLocalId::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldUserLocalId,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.local_id.value = Some(val);
@@ -62900,10 +62720,8 @@ impl FitMessageUserProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldUserLocalId::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldUserLocalId, inp, f, message)?;
 
                                 message.local_id.value = Some(val);
                             }
@@ -62950,9 +62768,11 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocaltimeIntoDay::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocaltimeIntoDay,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.wake_time.value = Some(val);
@@ -62960,9 +62780,11 @@ impl FitMessageUserProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocaltimeIntoDay::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocaltimeIntoDay,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.wake_time.value = Some(val);
@@ -62983,9 +62805,11 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldLocaltimeIntoDay::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocaltimeIntoDay,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.sleep_time.value = Some(val);
@@ -62993,9 +62817,11 @@ impl FitMessageUserProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldLocaltimeIntoDay::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldLocaltimeIntoDay,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.sleep_time.value = Some(val);
@@ -63016,14 +62842,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.height_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.height_setting.value = Some(val);
                             }
@@ -63129,14 +62956,15 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.depth_setting.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.depth_setting.value = Some(val);
                             }
@@ -63565,20 +63393,16 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.start_timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.start_timestamp.value = Some(val);
                             }
@@ -63631,20 +63455,16 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.end_timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.end_timestamp.value = Some(val);
                             }
@@ -63877,9 +63697,11 @@ impl FitMessageVideoDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -63887,10 +63709,8 @@ impl FitMessageVideoDescription {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -64086,20 +63906,16 @@ impl FitMessageVideoFrame {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -64299,9 +64115,11 @@ impl FitMessageVideoTitle {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -64309,10 +64127,8 @@ impl FitMessageVideoTitle {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -64423,7 +64239,7 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
     ) -> Result<FitMessageWatchfaceSettingsSubfieldLayout> {
         match message.mode.value {
             Some(FitFieldWatchfaceMode::Digital) => {
-                let val = FitFieldDigitalWatchfaceLayout::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldDigitalWatchfaceLayout, inp, f)?;
 
                 return Ok(FitMessageWatchfaceSettingsSubfieldLayout::DigitalLayout(
                     Some(val),
@@ -64431,7 +64247,7 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
             }
 
             Some(FitFieldWatchfaceMode::Analog) => {
-                let val = FitFieldAnalogWatchfaceLayout::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldAnalogWatchfaceLayout, inp, f)?;
 
                 return Ok(FitMessageWatchfaceSettingsSubfieldLayout::AnalogLayout(
                     Some(val),
@@ -64574,9 +64390,11 @@ impl FitMessageWatchfaceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -64584,10 +64402,8 @@ impl FitMessageWatchfaceSettings {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -64607,14 +64423,14 @@ impl FitMessageWatchfaceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWatchfaceMode::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWatchfaceMode, &bytes, f)?;
 
                                 message.mode.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWatchfaceMode::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWatchfaceMode, inp, f)?;
 
                                 message.mode.value = Some(val);
                             }
@@ -64802,20 +64618,16 @@ impl FitMessageWeatherAlert {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -64862,20 +64674,16 @@ impl FitMessageWeatherAlert {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.issue_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.issue_time.value = Some(val);
                             }
@@ -64895,20 +64703,16 @@ impl FitMessageWeatherAlert {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.expire_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.expire_time.value = Some(val);
                             }
@@ -64928,14 +64732,15 @@ impl FitMessageWeatherAlert {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWeatherSeverity::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldWeatherSeverity, &bytes, f)?;
 
                                 message.severity.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWeatherSeverity::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWeatherSeverity, inp, f)?;
 
                                 message.severity.value = Some(val);
                             }
@@ -64956,14 +64761,15 @@ impl FitMessageWeatherAlert {
                                 )?;
 
                                 let val =
-                                    FitFieldWeatherSevereType::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldWeatherSevereType, &bytes, f)?;
 
                                 message.ftype.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWeatherSevereType::parse(&inp[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldWeatherSevereType, inp, f)?;
 
                                 message.ftype.value = Some(val);
                             }
@@ -65194,20 +65000,16 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -65227,14 +65029,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWeatherReport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWeatherReport, &bytes, f)?;
 
                                 message.weather_report.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWeatherReport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWeatherReport, inp, f)?;
 
                                 message.weather_report.value = Some(val);
                             }
@@ -65281,14 +65083,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWeatherStatus::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWeatherStatus, &bytes, f)?;
 
                                 message.condition.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWeatherStatus::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWeatherStatus, inp, f)?;
 
                                 message.condition.value = Some(val);
                             }
@@ -65492,20 +65294,16 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.observed_at_time.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.observed_at_time.value = Some(val);
                             }
@@ -65591,14 +65389,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDayOfWeek::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDayOfWeek, &bytes, f)?;
 
                                 message.day_of_week.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDayOfWeek::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDayOfWeek, inp, f)?;
 
                                 message.day_of_week.value = Some(val);
                             }
@@ -65858,20 +65656,16 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDateTime::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, &bytes, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDateTime::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDateTime, inp, f, message)?;
 
                                 message.timestamp.value = Some(val);
                             }
@@ -65891,20 +65685,15 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWeight::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldWeight, &bytes, f, message)?;
 
                                 message.weight.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWeight::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_fit_type!(FitFieldWeight, inp, f, message)?;
 
                                 message.weight.value = Some(val);
                             }
@@ -66276,9 +66065,11 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.user_profile_index.value = Some(val);
@@ -66286,10 +66077,8 @@ impl FitMessageWeightScale {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.user_profile_index.value = Some(val);
                             }
@@ -66451,14 +66240,14 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -66478,9 +66267,11 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWorkoutCapabilities::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldWorkoutCapabilities,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.capabilities.value = Some(val);
@@ -66488,9 +66279,11 @@ impl FitMessageWorkout {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWorkoutCapabilities::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldWorkoutCapabilities,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.capabilities.value = Some(val);
@@ -66571,14 +66364,14 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -66641,14 +66434,15 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.pool_length_unit.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.pool_length_unit.value = Some(val);
                             }
@@ -66810,9 +66604,11 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -66820,10 +66616,8 @@ impl FitMessageWorkoutSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -66843,14 +66637,14 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, &bytes, f)?;
 
                                 message.sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSport, inp, f)?;
 
                                 message.sport.value = Some(val);
                             }
@@ -66870,14 +66664,14 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldSubSport::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, &bytes, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldSubSport::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldSubSport, inp, f)?;
 
                                 message.sub_sport.value = Some(val);
                             }
@@ -67006,14 +66800,15 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldDisplayMeasure::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldDisplayMeasure, &bytes, f)?;
 
                                 message.pool_length_unit.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldDisplayMeasure::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldDisplayMeasure, inp, f)?;
 
                                 message.pool_length_unit.value = Some(val);
                             }
@@ -67094,10 +66889,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::HrLessThan) => {
-                let val = FitFieldWorkoutHr::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutHr, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationHr(
                     Some(val),
@@ -67105,10 +66897,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::HrGreaterThan) => {
-                let val = FitFieldWorkoutHr::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutHr, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationHr(
                     Some(val),
@@ -67195,10 +66984,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::PowerLessThan) => {
-                let val = FitFieldWorkoutPower::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutPower, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationPower(
                     Some(val),
@@ -67206,10 +66992,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::PowerGreaterThan) => {
-                let val = FitFieldWorkoutPower::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutPower, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationPower(
                     Some(val),
@@ -67289,10 +67072,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilHrLessThan) => {
-                let val = FitFieldWorkoutHr::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutHr, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(Some(
                     val,
@@ -67300,10 +67080,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilHrGreaterThan) => {
-                let val = FitFieldWorkoutHr::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutHr, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(Some(
                     val,
@@ -67311,10 +67088,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilPowerLessThan) => {
-                let val = FitFieldWorkoutPower::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutPower, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(Some(
                     val,
@@ -67322,10 +67096,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilPowerGreaterThan) => {
-                let val = FitFieldWorkoutPower::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutPower, inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(Some(
                     val,
@@ -67371,7 +67142,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepTarget::SwimStroke) => {
-                let val = FitFieldSwimStroke::parse(&inp[0..f.field_size])?;
+                let val = field_parser_fit_type!(FitFieldSwimStroke, inp, f)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(
                     Some(val),
@@ -67412,10 +67183,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
             }
 
             Some(FitFieldWktStepTarget::HeartRate) => {
-                let val = FitFieldWorkoutHr::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutHr, inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetHeartRateLow(
@@ -67434,10 +67202,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
             }
 
             Some(FitFieldWktStepTarget::Power) => {
-                let val = FitFieldWorkoutPower::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutPower, inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetPowerLow(Some(
@@ -67482,10 +67247,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
             }
 
             Some(FitFieldWktStepTarget::HeartRate) => {
-                let val = FitFieldWorkoutHr::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutHr, inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetHeartRateHigh(
@@ -67506,10 +67268,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
             }
 
             Some(FitFieldWktStepTarget::Power) => {
-                let val = FitFieldWorkoutPower::parse(
-                    &inp[0..f.field_size],
-                    message.definition_message.endianness,
-                )?;
+                let val = field_parser_fit_type!(FitFieldWorkoutPower, inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetPowerHigh(
@@ -67809,9 +67568,11 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldMessageIndex,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.message_index.value = Some(val);
@@ -67819,10 +67580,8 @@ impl FitMessageWorkoutStep {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldMessageIndex::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldMessageIndex, inp, f, message)?;
 
                                 message.message_index.value = Some(val);
                             }
@@ -67869,14 +67628,15 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWktStepDuration::parse(&&bytes[0..f.field_size])?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldWktStepDuration, &bytes, f)?;
 
                                 message.duration_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWktStepDuration::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWktStepDuration, inp, f)?;
 
                                 message.duration_type.value = Some(val);
                             }
@@ -67927,14 +67687,14 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldWktStepTarget::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWktStepTarget, &bytes, f)?;
 
                                 message.target_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWktStepTarget::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWktStepTarget, inp, f)?;
 
                                 message.target_type.value = Some(val);
                             }
@@ -68047,14 +67807,14 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldIntensity::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldIntensity, &bytes, f)?;
 
                                 message.intensity.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldIntensity::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldIntensity, inp, f)?;
 
                                 message.intensity.value = Some(val);
                             }
@@ -68102,14 +67862,14 @@ impl FitMessageWorkoutStep {
                                 )?;
 
                                 let val =
-                                    FitFieldWorkoutEquipment::parse(&&bytes[0..f.field_size])?;
+                                    field_parser_fit_type!(FitFieldWorkoutEquipment, &bytes, f)?;
 
                                 message.equipment.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldWorkoutEquipment::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldWorkoutEquipment, inp, f)?;
 
                                 message.equipment.value = Some(val);
                             }
@@ -68129,9 +67889,11 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldExerciseCategory::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldExerciseCategory,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.exercise_category.value = Some(val);
@@ -68139,9 +67901,11 @@ impl FitMessageWorkoutStep {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldExerciseCategory::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldExerciseCategory,
+                                    inp,
+                                    f,
+                                    message
                                 )?;
 
                                 message.exercise_category.value = Some(val);
@@ -68238,9 +68002,11 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldFitBaseUnit::parse(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
+                                let val = field_parser_fit_type!(
+                                    FitFieldFitBaseUnit,
+                                    &bytes,
+                                    f,
+                                    message
                                 )?;
 
                                 message.weight_display_unit.value = Some(val);
@@ -68248,10 +68014,8 @@ impl FitMessageWorkoutStep {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldFitBaseUnit::parse(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val =
+                                    field_parser_fit_type!(FitFieldFitBaseUnit, inp, f, message)?;
 
                                 message.weight_display_unit.value = Some(val);
                             }
@@ -68490,14 +68254,14 @@ impl FitMessageZonesTarget {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldHrZoneCalc::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldHrZoneCalc, &bytes, f)?;
 
                                 message.hr_calc_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldHrZoneCalc::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldHrZoneCalc, inp, f)?;
 
                                 message.hr_calc_type.value = Some(val);
                             }
@@ -68517,14 +68281,14 @@ impl FitMessageZonesTarget {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = FitFieldPwrZoneCalc::parse(&&bytes[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldPwrZoneCalc, &bytes, f)?;
 
                                 message.pwr_calc_type.value = Some(val);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = FitFieldPwrZoneCalc::parse(&inp[0..f.field_size])?;
+                                let val = field_parser_fit_type!(FitFieldPwrZoneCalc, inp, f)?;
 
                                 message.pwr_calc_type.value = Some(val);
                             }

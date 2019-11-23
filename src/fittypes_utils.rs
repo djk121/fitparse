@@ -5,6 +5,21 @@ use nom::Endianness;
 use std::cmp::Ordering;
 use std::mem::transmute;
 
+
+#[macro_export]
+macro_rules! field_parser_fit_type {
+    ($field:ty, $bytes:expr, $f:expr, $message:expr, $tz_offset:expr) => {
+        <$field>::parse(&$bytes[0..$f.field_size], $message.definition_message.endianness, $tz_offset);
+    };
+    ($field:ty, $bytes:expr, $f:expr, $message:expr) => {
+        <$field>::parse(&$bytes[0..$f.field_size], $message.definition_message.endianness);
+    };
+
+    ($field:ty, $bytes:expr, $f:expr) => {
+        <$field>::parse(&$bytes[0..$f.field_size]);
+    };
+}
+
 #[macro_export]
 macro_rules! scale_and_offset_parse_assignment {
     ("vec", $val:expr, $message_field:expr, $scale:expr, 0) => {
@@ -270,7 +285,7 @@ impl FitFieldLocalDateTime {
     pub fn parse(
         input: &[u8],
         endianness: Endianness,
-        _offset_secs: f64,
+        offset_secs: f64,
     ) -> Result<FitFieldLocalDateTime> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let result = parse_uint32(input, endianness)?;
@@ -278,7 +293,7 @@ impl FitFieldLocalDateTime {
             Some(geo) => geo,
             None => return Err(Error::invalid_fit_base_type_parse()),
         };
-        let local_dt = FixedOffset::east(_offset_secs as i32).timestamp(
+        let local_dt = FixedOffset::east(offset_secs as i32).timestamp(
             (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
             0, // nanosecs
         );

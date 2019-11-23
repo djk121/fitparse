@@ -203,7 +203,7 @@ use FitBaseValue;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
 
-use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment}; 
+use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment, field_parser_fit_type}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
 
 
@@ -738,12 +738,13 @@ class Field(object):
         else:
             endianness = self.types[self.type]['base_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
             local_date_time = self.type == 'local_date_time'
-            template = Environment().from_string(FIELD_PARSER_FIT_TYPE,
-                                                 globals={'field_type': rustify_name(self.type),
-                                                          'endianness': endianness,
-                                                          'local_date_time': local_date_time,
-                                                          'bytes_from': bytes_from})
-            return template.render()
+          
+            if endianness and local_date_time:
+                return "field_parser_fit_type!(FitField{}, {}, f, message, _tz_offset)".format(rustify_name(self.type), bytes_from)
+            elif endianness:
+                return "field_parser_fit_type!(FitField{}, {}, f, message)".format(rustify_name(self.type), bytes_from)
+            else:
+                return "field_parser_fit_type!(FitField{}, {}, f)".format(rustify_name(self.type), bytes_from)
 
     def output_components_action_pushes(self):
         if not self.components:
@@ -919,12 +920,6 @@ FIELD_PARSER_BASE_TYPE = """parse_{{ field_type }}(&{{ bytes_from }}[0..f.field_
 {%- if endianness -%}, message.definition_message.endianness{%- endif -%}
 )"""
 
-FIELD_PARSER_FIT_TYPE = """FitField{{ field_type }}::parse(&{{ bytes_from }}[0..f.field_size]
-{%- if endianness -%}, message.definition_message.endianness{%- endif -%}
-{%- if local_date_time -%}, _tz_offset{%- endif -%}
-)"""
-
-
 class Subfield(object):
     def __init__(self, field_name, field_type, ref_field_name, ref_field_value, components, bits, scale, offset):
         self.field_name = field_name
@@ -976,11 +971,15 @@ class Subfield(object):
         else:
             endianness = types[self.type]['base_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
             local_date_time = self.type == 'local_date_time'
-            template = Environment().from_string(FIELD_PARSER_FIT_TYPE, globals={'field_type': rustify_name(self.type),
-                                                                                 'endianness': endianness,
-                                                                                 'local_date_time': local_date_time,
-                                                                                 'bytes_from': 'inp'})
-            return template.render()
+           
+            if endianness and local_date_time:
+                return "field_parser_fit_type!(FitField{}, inp, f, message, _tz_offset)".format(rustify_name(self.type))
+            elif endianness:
+                return "field_parser_fit_type!(FitField{}, inp, f, message)".format(rustify_name(self.type))
+            else:
+                return "field_parser_fit_type!(FitField{}, inp, f)".format(rustify_name(self.type))
+
+
 
 
 def parse_messages_file(messages_file_name, types):
