@@ -21,7 +21,11 @@ use FitRecord;
 use FitRecordHeader;
 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
-use {fmt_developer_fields, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields};
+use {
+    deg_parse_assignment, fmt_developer_fields, fmt_message_field, fmt_raw_bytes,
+    fmt_unknown_fields, main_parse_message, parse_developer_fields, parse_subfields,
+    parsing_state_set_timestamp, scale_and_offset_parse_assignment,
+};
 
 use subset_with_pad;
 
@@ -14449,51 +14453,12 @@ impl FitMessageAccelerometerData {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageAccelerometerData::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageAccelerometerData:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageAccelerometerData);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -15195,51 +15160,12 @@ impl FitMessageActivity {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageActivity::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageActivity:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageActivity);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -15308,13 +15234,12 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -15324,13 +15249,12 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -15618,39 +15542,10 @@ impl FitMessageAntChannelId {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageAntChannelId::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageAntChannelId:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageAntChannelId);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -15923,51 +15818,12 @@ impl FitMessageAntRx {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageAntRx::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageAntRx:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageAntRx);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -16036,13 +15892,12 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -16052,13 +15907,12 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                         }
 
@@ -16357,51 +16211,12 @@ impl FitMessageAntTx {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageAntTx::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageAntTx:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageAntTx);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -16470,13 +16285,12 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -16486,13 +16300,12 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                         }
 
@@ -16833,51 +16646,12 @@ impl FitMessageAviationAttitude {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageAviationAttitude::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageAviationAttitude:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageAviationAttitude);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -17036,11 +16810,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.pitch.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10430.38 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.pitch,
+                                    10430.38,
+                                    0
                                 );
                             }
                             None => {
@@ -17059,11 +16834,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.pitch.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10430.38 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.pitch,
+                                    10430.38,
+                                    0
                                 );
                             }
                         }
@@ -17095,11 +16871,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.roll.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10430.38 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.roll,
+                                    10430.38,
+                                    0
                                 );
                             }
                             None => {
@@ -17118,11 +16895,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.roll.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10430.38 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.roll,
+                                    10430.38,
+                                    0
                                 );
                             }
                         }
@@ -17154,11 +16932,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.accel_lateral.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.accel_lateral,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -17177,11 +16956,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.accel_lateral.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.accel_lateral,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -17213,11 +16993,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.accel_normal.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.accel_normal,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -17236,11 +17017,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.accel_normal.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.accel_normal,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -17272,11 +17054,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.turn_rate.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1024 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.turn_rate,
+                                    1024,
+                                    0
                                 );
                             }
                             None => {
@@ -17295,11 +17078,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.turn_rate.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1024 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.turn_rate,
+                                    1024,
+                                    0
                                 );
                             }
                         }
@@ -17417,11 +17201,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.track.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10430.38 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.track,
+                                    10430.38,
+                                    0
                                 );
                             }
                             None => {
@@ -17440,11 +17225,12 @@ impl FitMessageAviationAttitude {
                                     array_size = array_size - 1
                                 }
 
-                                message.track.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10430.38 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.track,
+                                    10430.38,
+                                    0
                                 );
                             }
                         }
@@ -17599,51 +17385,12 @@ impl FitMessageBarometerData {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageBarometerData::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageBarometerData:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageBarometerData);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -18137,39 +17884,10 @@ impl FitMessageBikeProfile {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageBikeProfile::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageBikeProfile:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageBikeProfile);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -18319,12 +18037,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.odometer.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.odometer.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -18334,12 +18047,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.odometer.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.odometer.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
                         }
 
@@ -18494,13 +18202,12 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.custom_wheelsize.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.custom_wheelsize.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.custom_wheelsize,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -18510,13 +18217,12 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.custom_wheelsize.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.custom_wheelsize.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.custom_wheelsize,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -18539,13 +18245,12 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.auto_wheelsize.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.auto_wheelsize.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.auto_wheelsize,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -18555,13 +18260,12 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.auto_wheelsize.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.auto_wheelsize.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.auto_wheelsize,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -18584,12 +18288,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.bike_weight.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.bike_weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.bike_weight, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -18599,12 +18298,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.bike_weight.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.bike_weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.bike_weight, 10, 0);
                             }
                         }
 
@@ -18627,13 +18321,12 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.power_cal_factor.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.power_cal_factor.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.power_cal_factor,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -18643,13 +18336,12 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.power_cal_factor.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.power_cal_factor.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.power_cal_factor,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -18858,26 +18550,24 @@ impl FitMessageBikeProfile {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.crank_length.value =
-                                            Some(result as f64 / 2 as f64 - (-110 as f64))
-                                    }
-                                    None => message.crank_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.crank_length,
+                                    2,
+                                    -110
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.crank_length.value =
-                                            Some(result as f64 / 2 as f64 - (-110 as f64))
-                                    }
-                                    None => message.crank_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.crank_length,
+                                    2,
+                                    -110
+                                );
                             }
                         }
 
@@ -19360,51 +19050,12 @@ impl FitMessageBloodPressure {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageBloodPressure::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageBloodPressure:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageBloodPressure);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -19860,39 +19511,10 @@ impl FitMessageCadenceZone {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageCadenceZone::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageCadenceZone:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageCadenceZone);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -20104,51 +19726,12 @@ impl FitMessageCameraEvent {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageCameraEvent::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageCameraEvent:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageCameraEvent);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -20415,39 +19998,10 @@ impl FitMessageCapabilities {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageCapabilities::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageCapabilities:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageCapabilities);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -20796,39 +20350,10 @@ impl FitMessageConnectivity {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageConnectivity::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageConnectivity:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageConnectivity);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -21297,39 +20822,10 @@ impl FitMessageCourse {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageCourse::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageCourse:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageCourse);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -21589,51 +21085,12 @@ impl FitMessageCoursePoint {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageCoursePoint::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageCoursePoint:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageCoursePoint);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -21735,13 +21192,7 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -21751,13 +21202,7 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                         }
 
@@ -21780,13 +21225,7 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -21796,13 +21235,7 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                         }
 
@@ -21825,12 +21258,7 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -21840,12 +21268,7 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                         }
 
@@ -22038,39 +21461,10 @@ impl FitMessageDeveloperDataId {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDeveloperDataId::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDeveloperDataId:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDeveloperDataId);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -22549,61 +21943,14 @@ impl FitMessageDeviceInfo {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDeviceInfo::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDeviceInfo:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDeviceInfo);
 
-        match FitMessageDeviceInfo::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageDeviceInfo:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageDeviceInfo);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -22864,13 +22211,12 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.software_version.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.software_version.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.software_version,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -22880,13 +22226,12 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.software_version.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.software_version.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.software_version,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -22969,13 +22314,12 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.battery_voltage.value =
-                                            Some(result as f64 / 256 as f64)
-                                    }
-                                    None => message.battery_voltage.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.battery_voltage,
+                                    256,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -22985,13 +22329,12 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.battery_voltage.value =
-                                            Some(result as f64 / 256 as f64)
-                                    }
-                                    None => message.battery_voltage.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.battery_voltage,
+                                    256,
+                                    0
+                                );
                             }
                         }
 
@@ -23459,39 +22802,10 @@ impl FitMessageDeviceSettings {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDeviceSettings::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDeviceSettings:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDeviceSettings);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -23684,11 +22998,12 @@ impl FitMessageDeviceSettings {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_zone_offset.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 4 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_zone_offset,
+                                    4,
+                                    0
                                 );
                             }
                             None => {
@@ -23704,11 +23019,12 @@ impl FitMessageDeviceSettings {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_zone_offset.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 4 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_zone_offset,
+                                    4,
+                                    0
                                 );
                             }
                         }
@@ -24392,39 +23708,10 @@ impl FitMessageDiveAlarm {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDiveAlarm::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDiveAlarm:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDiveAlarm);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -24493,12 +23780,7 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -24508,12 +23790,7 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
                         }
 
@@ -24536,12 +23813,7 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.time, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -24551,12 +23823,7 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.time, 1, 0);
                             }
                         }
 
@@ -24785,39 +24052,10 @@ impl FitMessageDiveGas {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDiveGas::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDiveGas:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDiveGas);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -25224,49 +24462,12 @@ impl FitMessageDiveSettings {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDiveSettings::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDiveSettings:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDiveSettings);
 
-        match FitMessageDiveSettings::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageDiveSettings:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageDiveSettings);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -25521,24 +24722,14 @@ impl FitMessageDiveSettings {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.po2_warn.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.po2_warn.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.po2_warn, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.po2_warn.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.po2_warn.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.po2_warn, 100, 0);
                             }
                         }
 
@@ -25558,26 +24749,24 @@ impl FitMessageDiveSettings {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.po2_critical.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.po2_critical.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.po2_critical,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.po2_critical.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.po2_critical.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.po2_critical,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -25597,24 +24786,14 @@ impl FitMessageDiveSettings {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.po2_deco.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.po2_deco.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.po2_deco, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.po2_deco.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.po2_deco.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.po2_deco, 100, 0);
                             }
                         }
 
@@ -25873,13 +25052,12 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.repeat_dive_interval.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.repeat_dive_interval.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.repeat_dive_interval,
+                                    1,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -25889,13 +25067,12 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.repeat_dive_interval.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.repeat_dive_interval.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.repeat_dive_interval,
+                                    1,
+                                    0
+                                );
                             }
                         }
 
@@ -25918,13 +25095,12 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.safety_stop_time.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.safety_stop_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.safety_stop_time,
+                                    1,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -25934,13 +25110,12 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.safety_stop_time.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.safety_stop_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.safety_stop_time,
+                                    1,
+                                    0
+                                );
                             }
                         }
 
@@ -26166,51 +25341,12 @@ impl FitMessageDiveSummary {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageDiveSummary::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageDiveSummary:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageDiveSummary);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -26345,12 +25481,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -26360,12 +25491,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_depth, 1000, 0);
                             }
                         }
 
@@ -26388,12 +25514,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -26403,12 +25524,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_depth, 1000, 0);
                             }
                         }
 
@@ -26431,13 +25547,12 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.surface_interval.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.surface_interval.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.surface_interval,
+                                    1,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -26447,13 +25562,12 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.surface_interval.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.surface_interval.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.surface_interval,
+                                    1,
+                                    0
+                                );
                             }
                         }
 
@@ -26473,24 +25587,14 @@ impl FitMessageDiveSummary {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_cns.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.start_cns.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.start_cns, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_cns.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.start_cns.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.start_cns, 1, 0);
                             }
                         }
 
@@ -26510,24 +25614,14 @@ impl FitMessageDiveSummary {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_cns.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.end_cns.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.end_cns, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_cns.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.end_cns.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.end_cns, 1, 0);
                             }
                         }
 
@@ -26550,12 +25644,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_n2.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.start_n2.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.start_n2, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -26565,12 +25654,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_n2.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.start_n2.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.start_n2, 1, 0);
                             }
                         }
 
@@ -26593,12 +25677,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_n2.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.end_n2.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.end_n2, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -26608,12 +25687,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_n2.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.end_n2.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.end_n2, 1, 0);
                             }
                         }
 
@@ -26702,13 +25776,12 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.bottom_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.bottom_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.bottom_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -26718,13 +25791,12 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.bottom_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.bottom_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.bottom_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -27087,60 +26159,14 @@ impl FitMessageEvent {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageEvent::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageEvent:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageEvent);
 
-        match FitMessageEvent::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string = String::from("Error parsing subfields for FitMessageEvent:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageEvent);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -27715,44 +26741,15 @@ impl FitMessageExdDataConceptConfiguration {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageExdDataConceptConfiguration::parse_internal(
-            &mut message,
+        let o = main_parse_message!(
             input,
-            tz_offset,
-        ) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing FitMessageExdDataConceptConfiguration:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+            message,
+            parsing_state,
+            FitMessageExdDataConceptConfiguration
+        );
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -28197,44 +27194,15 @@ impl FitMessageExdDataFieldConfiguration {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageExdDataFieldConfiguration::parse_internal(
-            &mut message,
+        let o = main_parse_message!(
             input,
-            tz_offset,
-        ) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing FitMessageExdDataFieldConfiguration:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+            message,
+            parsing_state,
+            FitMessageExdDataFieldConfiguration
+        );
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -28548,44 +27516,15 @@ impl FitMessageExdScreenConfiguration {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageExdScreenConfiguration::parse_internal(
-            &mut message,
+        let o = main_parse_message!(
             input,
-            tz_offset,
-        ) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing FitMessageExdScreenConfiguration:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+            message,
+            parsing_state,
+            FitMessageExdScreenConfiguration
+        );
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -28811,39 +27750,10 @@ impl FitMessageExerciseTitle {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageExerciseTitle::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageExerciseTitle:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageExerciseTitle);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -29112,39 +28022,10 @@ impl FitMessageFieldCapabilities {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageFieldCapabilities::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageFieldCapabilities:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageFieldCapabilities);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -29485,39 +28366,10 @@ impl FitMessageFieldDescription {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageFieldDescription::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageFieldDescription:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageFieldDescription);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -30075,39 +28927,10 @@ impl FitMessageFileCapabilities {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageFileCapabilities::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageFileCapabilities:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageFileCapabilities);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -30391,39 +29214,10 @@ impl FitMessageFileCreator {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageFileCreator::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageFileCreator:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageFileCreator);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -30687,48 +29481,12 @@ impl FitMessageFileId {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageFileId::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageFileId:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageFileId);
 
-        match FitMessageFileId::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string = String::from("Error parsing subfields for FitMessageFileId:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageFileId);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -31147,39 +29905,10 @@ impl FitMessageGoal {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageGoal::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageGoal:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageGoal);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -31719,51 +30448,12 @@ impl FitMessageGpsMetadata {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageGpsMetadata::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageGpsMetadata:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageGpsMetadata);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -31865,13 +30555,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -31881,13 +30565,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                         }
 
@@ -31910,13 +30588,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -31926,13 +30598,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                         }
 
@@ -31955,13 +30621,12 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -31971,13 +30636,12 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -32000,13 +30664,12 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -32016,13 +30679,12 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -32045,12 +30707,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.heading.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.heading.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.heading, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -32060,12 +30717,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.heading.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.heading.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.heading, 100, 0);
                             }
                         }
 
@@ -32129,11 +30781,12 @@ impl FitMessageGpsMetadata {
                                     array_size = array_size - 1
                                 }
 
-                                message.velocity.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.velocity,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -32152,11 +30805,12 @@ impl FitMessageGpsMetadata {
                                     array_size = array_size - 1
                                 }
 
-                                message.velocity.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.velocity,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -32297,51 +30951,12 @@ impl FitMessageGyroscopeData {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageGyroscopeData::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageGyroscopeData:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageGyroscopeData);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -32882,51 +31497,12 @@ impl FitMessageHr {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageHr::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageHr:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageHr);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -32995,13 +31571,12 @@ impl FitMessageHr {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -33011,13 +31586,12 @@ impl FitMessageHr {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                         }
 
@@ -33037,24 +31611,14 @@ impl FitMessageHr {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time256.value = Some(result as f64 / 256 as f64)
-                                    }
-                                    None => message.time256.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.time256, 256, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time256.value = Some(result as f64 / 256 as f64)
-                                    }
-                                    None => message.time256.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.time256, 256, 0);
                             }
                         }
 
@@ -33136,11 +31700,12 @@ impl FitMessageHr {
                                     array_size = array_size - 1
                                 }
 
-                                message.event_timestamp.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1024 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.event_timestamp,
+                                    1024,
+                                    0
                                 );
                             }
                             None => {
@@ -33159,11 +31724,12 @@ impl FitMessageHr {
                                     array_size = array_size - 1
                                 }
 
-                                message.event_timestamp.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1024 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.event_timestamp,
+                                    1024,
+                                    0
                                 );
                             }
                         }
@@ -33369,39 +31935,10 @@ impl FitMessageHrZone {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageHrZone::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageHrZone:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageHrZone);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -33613,39 +32150,10 @@ impl FitMessageHrmProfile {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageHrmProfile::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageHrmProfile:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageHrmProfile);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -33889,39 +32397,10 @@ impl FitMessageHrv {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageHrv::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageHrv:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageHrv);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -33965,11 +32444,12 @@ impl FitMessageHrv {
                                     array_size = array_size - 1
                                 }
 
-                                message.time.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -33988,11 +32468,12 @@ impl FitMessageHrv {
                                     array_size = array_size - 1
                                 }
 
-                                message.time.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -34974,60 +33455,14 @@ impl FitMessageLap {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageLap::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageLap:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageLap);
 
-        match FitMessageLap::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string = String::from("Error parsing subfields for FitMessageLap:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageLap);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -35269,13 +33704,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35285,13 +33714,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_lat);
                             }
                         }
 
@@ -35314,13 +33737,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35330,13 +33747,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_long);
                             }
                         }
 
@@ -35359,13 +33770,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35375,13 +33780,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_lat);
                             }
                         }
 
@@ -35404,13 +33803,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35420,13 +33813,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_long);
                             }
                         }
 
@@ -35449,13 +33836,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35465,13 +33851,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -35494,13 +33879,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35510,13 +33894,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -35539,13 +33922,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_distance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35555,13 +33937,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_distance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -35681,12 +34062,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35696,12 +34072,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                         }
 
@@ -35732,12 +34103,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -35747,12 +34113,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                         }
 
@@ -36271,13 +34632,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stroke_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stroke_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stroke_distance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36287,13 +34647,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stroke_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stroke_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stroke_distance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -36436,13 +34795,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36452,13 +34810,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -36489,13 +34846,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36505,13 +34861,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -36569,12 +34924,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36584,12 +34934,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                         }
 
@@ -36612,13 +34957,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36628,13 +34972,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -36657,13 +35000,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36673,13 +35015,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -36702,13 +35043,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36718,13 +35058,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -36747,13 +35086,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36763,13 +35101,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -36846,13 +35183,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_moving_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_moving_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_moving_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36862,13 +35198,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_moving_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_moving_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_moving_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -36891,13 +35226,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36907,13 +35241,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -36936,13 +35269,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36952,13 +35284,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -36981,13 +35312,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -36997,13 +35327,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -37026,13 +35355,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -37042,13 +35370,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -37079,11 +35406,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_hr_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_hr_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -37102,11 +35430,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_hr_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_hr_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -37138,11 +35467,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_speed_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_speed_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -37161,11 +35491,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_speed_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_speed_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -37197,11 +35528,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_cadence_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_cadence_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -37220,11 +35552,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_cadence_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_cadence_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -37256,11 +35589,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_power_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_power_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -37279,11 +35613,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_power_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_power_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -37340,13 +35675,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -37356,13 +35690,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -37584,13 +35917,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_oscillation.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_vertical_oscillation.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_oscillation,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -37600,13 +35932,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_oscillation.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_vertical_oscillation.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_oscillation,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -37629,13 +35960,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_percent.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_percent,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -37645,13 +35975,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_percent.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_percent,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -37674,13 +36003,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_stance_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -37690,13 +36018,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_stance_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -37716,26 +36043,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.avg_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.avg_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -37755,26 +36080,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.max_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.max_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -37794,26 +36117,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_fractional_cycles.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.total_fractional_cycles.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_fractional_cycles,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_fractional_cycles.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.total_fractional_cycles.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_fractional_cycles,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -37877,11 +36198,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -37900,11 +36222,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -37936,11 +36259,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -37959,11 +36283,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -37995,11 +36320,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -38018,11 +36344,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -38054,11 +36381,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                             None => {
@@ -38077,11 +36405,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                         }
@@ -38113,11 +36442,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                             None => {
@@ -38136,11 +36466,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                         }
@@ -38172,11 +36503,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                             None => {
@@ -38195,11 +36527,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                         }
@@ -38220,26 +36553,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -38259,26 +36590,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -38298,26 +36627,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -38337,26 +36664,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -38376,26 +36701,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -38418,13 +36741,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_standing.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_standing.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_standing,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -38434,13 +36756,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_standing.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_standing.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_standing,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -38555,11 +36876,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -38575,11 +36897,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -38608,11 +36931,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -38628,11 +36952,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -38661,11 +36986,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -38681,11 +37007,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -38714,11 +37041,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -38734,11 +37062,12 @@ impl FitMessageLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -38946,13 +37275,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -38962,13 +37290,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -38991,13 +37318,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39007,13 +37333,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -39036,13 +37361,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39052,13 +37376,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -39081,13 +37404,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39097,13 +37419,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -39126,13 +37447,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39142,13 +37462,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -39234,26 +37553,24 @@ impl FitMessageLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.lev_battery_consumption.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.lev_battery_consumption.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.lev_battery_consumption,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.lev_battery_consumption.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.lev_battery_consumption.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.lev_battery_consumption,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -39276,13 +37593,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_ratio.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_vertical_ratio.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_ratio,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39292,13 +37608,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_ratio.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_vertical_ratio.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_ratio,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -39321,13 +37636,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_balance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_balance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_balance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39337,13 +37651,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_balance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_balance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_balance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -39366,13 +37679,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_step_length.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_step_length,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39382,13 +37694,12 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_step_length.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_step_length,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -39411,12 +37722,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vam.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_vam.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39426,12 +37732,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vam.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_vam.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
                         }
 
@@ -39634,51 +37935,12 @@ impl FitMessageLength {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageLength::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageLength:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageLength);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -39867,13 +38129,12 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39883,13 +38144,12 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -39912,13 +38172,12 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -39928,13 +38187,12 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -39990,12 +38248,7 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -40005,12 +38258,7 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                         }
 
@@ -40455,51 +38703,12 @@ impl FitMessageMagnetometerData {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageMagnetometerData::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageMagnetometerData:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageMagnetometerData);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -41026,39 +39235,10 @@ impl FitMessageMemoGlob {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageMemoGlob::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageMemoGlob:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageMemoGlob);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -41360,49 +39540,12 @@ impl FitMessageMesgCapabilities {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageMesgCapabilities::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageMesgCapabilities:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageMesgCapabilities);
 
-        match FitMessageMesgCapabilities::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageMesgCapabilities:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageMesgCapabilities);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -41692,39 +39835,10 @@ impl FitMessageMetZone {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageMetZone::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageMetZone:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageMetZone);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -41820,12 +39934,7 @@ impl FitMessageMetZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.calories.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.calories.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.calories, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -41835,12 +39944,7 @@ impl FitMessageMetZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.calories.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.calories.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.calories, 10, 0);
                             }
                         }
 
@@ -41860,24 +39964,24 @@ impl FitMessageMetZone {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fat_calories.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.fat_calories.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fat_calories,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fat_calories.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.fat_calories.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fat_calories,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -42226,61 +40330,14 @@ impl FitMessageMonitoring {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageMonitoring::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageMonitoring:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageMonitoring);
 
-        match FitMessageMonitoring::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageMonitoring:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageMonitoring);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -42430,12 +40487,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -42445,12 +40497,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                         }
 
@@ -42504,13 +40551,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.active_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.active_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.active_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -42520,13 +40566,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.active_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.active_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.active_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -42764,12 +40809,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.temperature.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.temperature.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.temperature,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -42779,12 +40824,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.temperature.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.temperature.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.temperature,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -42807,13 +40852,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.temperature_min.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.temperature_min.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.temperature_min,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -42823,13 +40867,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.temperature_min.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.temperature_min.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.temperature_min,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -42852,13 +40895,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.temperature_max.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.temperature_max.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.temperature_max,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -42868,13 +40910,12 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.temperature_max.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.temperature_max.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.temperature_max,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -43106,24 +41147,14 @@ impl FitMessageMonitoring {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.intensity.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.intensity.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.intensity, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.intensity.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.intensity.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.intensity, 10, 0);
                             }
                         }
 
@@ -43212,12 +41243,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.ascent.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.ascent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.ascent, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -43227,12 +41253,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.ascent.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.ascent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.ascent, 1000, 0);
                             }
                         }
 
@@ -43255,12 +41276,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.descent.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.descent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.descent, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -43270,12 +41286,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.descent.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.descent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.descent, 1000, 0);
                             }
                         }
 
@@ -43460,51 +41471,12 @@ impl FitMessageMonitoringInfo {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageMonitoringInfo::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageMonitoringInfo:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageMonitoringInfo);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -43659,11 +41631,12 @@ impl FitMessageMonitoringInfo {
                                     array_size = array_size - 1
                                 }
 
-                                message.cycles_to_distance.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 5000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.cycles_to_distance,
+                                    5000,
+                                    0
                                 );
                             }
                             None => {
@@ -43682,11 +41655,12 @@ impl FitMessageMonitoringInfo {
                                     array_size = array_size - 1
                                 }
 
-                                message.cycles_to_distance.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 5000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.cycles_to_distance,
+                                    5000,
+                                    0
                                 );
                             }
                         }
@@ -43718,11 +41692,12 @@ impl FitMessageMonitoringInfo {
                                     array_size = array_size - 1
                                 }
 
-                                message.cycles_to_calories.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 5000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.cycles_to_calories,
+                                    5000,
+                                    0
                                 );
                             }
                             None => {
@@ -43741,11 +41716,12 @@ impl FitMessageMonitoringInfo {
                                     array_size = array_size - 1
                                 }
 
-                                message.cycles_to_calories.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 5000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.cycles_to_calories,
+                                    5000,
+                                    0
                                 );
                             }
                         }
@@ -43877,51 +41853,12 @@ impl FitMessageNmeaSentence {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageNmeaSentence::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageNmeaSentence:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageNmeaSentence);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -44167,51 +42104,12 @@ impl FitMessageObdiiData {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageObdiiData::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageObdiiData:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageObdiiData);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -44642,51 +42540,12 @@ impl FitMessageOhrSettings {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageOhrSettings::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageOhrSettings:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageOhrSettings);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -44915,63 +42774,19 @@ impl FitMessageOneDSensorCalibration {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o =
-            match FitMessageOneDSensorCalibration::parse_internal(&mut message, input, tz_offset) {
-                Ok(o) => o,
-                Err(e) => {
-                    let mut err_string =
-                        String::from("Error parsing FitMessageOneDSensorCalibration:");
-                    err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                    err_string.push_str(&format!("  specific error: {:?}", e));
-                    return Err(Error::message_parse_failed(err_string));
-                }
-            };
+        let o = main_parse_message!(
+            input,
+            message,
+            parsing_state,
+            FitMessageOneDSensorCalibration
+        );
 
-        match FitMessageOneDSensorCalibration::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageOneDSensorCalibration:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageOneDSensorCalibration);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -45296,39 +43111,10 @@ impl FitMessagePowerZone {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessagePowerZone::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessagePowerZone:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessagePowerZone);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -46022,51 +43808,12 @@ m"
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageRecord::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageRecord:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageRecord);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -46135,13 +43882,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46151,13 +43892,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                         }
 
@@ -46180,13 +43915,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46196,13 +43925,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                         }
 
@@ -46225,13 +43948,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46241,13 +43958,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
                         }
 
@@ -46332,12 +44043,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46347,12 +44053,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                         }
 
@@ -46375,12 +44076,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46390,12 +44086,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.speed, 1000, 0);
                             }
                         }
 
@@ -46502,12 +44193,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46517,12 +44203,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.grade, 100, 0);
                             }
                         }
 
@@ -46572,13 +44253,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_from_course.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_from_course.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_from_course,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46588,13 +44268,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_from_course.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_from_course.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_from_course,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -46614,26 +44293,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.cycle_length.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.cycle_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.cycle_length,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.cycle_length.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.cycle_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.cycle_length,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -46688,11 +44365,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.speed_1s.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 16 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.speed_1s,
+                                    16,
+                                    0
                                 );
                             }
                             None => {
@@ -46708,11 +44386,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.speed_1s.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 16 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.speed_1s,
+                                    16,
+                                    0
                                 );
                             }
                         }
@@ -46933,13 +44612,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -46949,13 +44627,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -47011,13 +44688,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.vertical_oscillation.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.vertical_oscillation.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.vertical_oscillation,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47027,13 +44703,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.vertical_oscillation.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.vertical_oscillation.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.vertical_oscillation,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -47056,13 +44731,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.stance_time_percent.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.stance_time_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.stance_time_percent,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47072,13 +44746,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.stance_time_percent.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.stance_time_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.stance_time_percent,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -47101,12 +44774,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.stance_time.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.stance_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.stance_time, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47116,12 +44784,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.stance_time.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.stance_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.stance_time, 10, 0);
                             }
                         }
 
@@ -47168,26 +44831,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -47207,26 +44868,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -47246,26 +44905,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -47285,26 +44942,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -47324,26 +44979,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -47363,24 +45016,14 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time128.value = Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.time128.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.time128, 128, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time128.value = Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.time128.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.time128, 128, 0);
                             }
                         }
 
@@ -47457,12 +45100,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.ball_speed.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.ball_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.ball_speed, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47472,12 +45110,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.ball_speed.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.ball_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.ball_speed, 100, 0);
                             }
                         }
 
@@ -47500,12 +45133,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.cadence256.value = Some(result as f64 / 256 as f64)
-                                    }
-                                    None => message.cadence256.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.cadence256, 256, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47515,12 +45143,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.cadence256.value = Some(result as f64 / 256 as f64)
-                                    }
-                                    None => message.cadence256.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.cadence256, 256, 0);
                             }
                         }
 
@@ -47540,26 +45163,24 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -47582,13 +45203,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_hemoglobin_conc.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_hemoglobin_conc.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_hemoglobin_conc,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47598,13 +45218,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_hemoglobin_conc.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_hemoglobin_conc.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_hemoglobin_conc,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -47627,13 +45246,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_hemoglobin_conc_min.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_hemoglobin_conc_min.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_hemoglobin_conc_min,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47643,13 +45261,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_hemoglobin_conc_min.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_hemoglobin_conc_min.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_hemoglobin_conc_min,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -47672,13 +45289,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_hemoglobin_conc_max.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_hemoglobin_conc_max.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_hemoglobin_conc_max,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47688,13 +45304,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_hemoglobin_conc_max.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_hemoglobin_conc_max.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_hemoglobin_conc_max,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -47717,13 +45332,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.saturated_hemoglobin_percent.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.saturated_hemoglobin_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.saturated_hemoglobin_percent,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47733,13 +45347,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.saturated_hemoglobin_percent.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.saturated_hemoglobin_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.saturated_hemoglobin_percent,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -47762,13 +45375,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.saturated_hemoglobin_percent_min.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.saturated_hemoglobin_percent_min.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.saturated_hemoglobin_percent_min,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47778,13 +45390,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.saturated_hemoglobin_percent_min.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.saturated_hemoglobin_percent_min.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.saturated_hemoglobin_percent_min,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -47807,13 +45418,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.saturated_hemoglobin_percent_max.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.saturated_hemoglobin_percent_max.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.saturated_hemoglobin_percent_max,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -47823,13 +45433,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.saturated_hemoglobin_percent_max.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.saturated_hemoglobin_percent_max.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.saturated_hemoglobin_percent_max,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -47938,11 +45547,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -47958,11 +45568,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -47991,11 +45602,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -48011,11 +45623,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -48044,11 +45657,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -48064,11 +45678,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -48097,11 +45712,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -48117,11 +45733,12 @@ m"
                                     array_size = array_size - 1
                                 }
 
-                                message.right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -48145,13 +45762,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48161,13 +45777,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -48190,13 +45805,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48206,13 +45820,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -48232,24 +45845,14 @@ m"
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.battery_soc.value = Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.battery_soc.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.battery_soc, 2, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.battery_soc.value = Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.battery_soc.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.battery_soc, 2, 0);
                             }
                         }
 
@@ -48305,13 +45908,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.vertical_ratio.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.vertical_ratio.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.vertical_ratio,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48321,13 +45923,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.vertical_ratio.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.vertical_ratio.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.vertical_ratio,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -48350,13 +45951,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.stance_time_balance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.stance_time_balance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.stance_time_balance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48366,13 +45966,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.stance_time_balance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.stance_time_balance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.stance_time_balance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -48395,12 +45994,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.step_length.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.step_length, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48410,12 +46004,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.step_length.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.step_length, 10, 0);
                             }
                         }
 
@@ -48471,12 +46060,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48486,12 +46070,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.depth.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
                         }
 
@@ -48514,13 +46093,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.next_stop_depth.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.next_stop_depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.next_stop_depth,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48530,13 +46108,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.next_stop_depth.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.next_stop_depth.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.next_stop_depth,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -48559,13 +46136,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.next_stop_time.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.next_stop_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.next_stop_time,
+                                    1,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48575,13 +46151,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.next_stop_time.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.next_stop_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.next_stop_time,
+                                    1,
+                                    0
+                                );
                             }
                         }
 
@@ -48604,13 +46179,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_to_surface.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.time_to_surface.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_to_surface,
+                                    1,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48620,13 +46194,12 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_to_surface.value =
-                                            Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.time_to_surface.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_to_surface,
+                                    1,
+                                    0
+                                );
                             }
                         }
 
@@ -48649,12 +46222,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.ndl_time.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.ndl_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.ndl_time, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48664,12 +46232,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.ndl_time.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.ndl_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.ndl_time, 1, 0);
                             }
                         }
 
@@ -48719,12 +46282,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.n2_load.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.n2_load.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.n2_load, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -48734,12 +46292,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.n2_load.value = Some(result as f64 / 1 as f64)
-                                    }
-                                    None => message.n2_load.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.n2_load, 1, 0);
                             }
                         }
 
@@ -48930,49 +46483,12 @@ impl FitMessageSchedule {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSchedule::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSchedule:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSchedule);
 
-        match FitMessageSchedule::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageSchedule:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageSchedule);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -49358,39 +46874,10 @@ impl FitMessageSdmProfile {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSdmProfile::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSdmProfile:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSdmProfile);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -49519,13 +47006,12 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.sdm_cal_factor.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.sdm_cal_factor.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.sdm_cal_factor,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -49535,13 +47021,12 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.sdm_cal_factor.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.sdm_cal_factor.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.sdm_cal_factor,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -49564,12 +47049,7 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.odometer.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.odometer.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -49579,12 +47059,7 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.odometer.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.odometer.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
                         }
 
@@ -49809,39 +47284,10 @@ impl FitMessageSegmentFile {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSegmentFile::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSegmentFile:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSegmentFile);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -50331,39 +47777,10 @@ impl FitMessageSegmentId {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSegmentId::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSegmentId:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSegmentId);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -51377,61 +48794,14 @@ impl FitMessageSegmentLap {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSegmentLap::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSegmentLap:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSegmentLap);
 
-        match FitMessageSegmentLap::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageSegmentLap:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageSegmentLap);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -51641,13 +49011,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51657,13 +49021,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_lat);
                             }
                         }
 
@@ -51686,13 +49044,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51702,13 +49054,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_long);
                             }
                         }
 
@@ -51731,13 +49077,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51747,13 +49087,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_lat);
                             }
                         }
 
@@ -51776,13 +49110,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51792,13 +49120,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.end_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.end_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.end_position_long);
                             }
                         }
 
@@ -51821,13 +49143,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51837,13 +49158,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -51866,13 +49186,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51882,13 +49201,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -51911,13 +49229,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_distance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -51927,13 +49244,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_distance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -52053,12 +49369,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52068,12 +49379,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                         }
 
@@ -52096,12 +49402,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52111,12 +49412,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                         }
 
@@ -52433,13 +49729,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52449,13 +49739,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_lat);
                             }
                         }
 
@@ -52478,13 +49762,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52494,13 +49772,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_long);
                             }
                         }
 
@@ -52523,13 +49795,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52539,13 +49805,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_lat);
                             }
                         }
 
@@ -52568,13 +49828,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52584,13 +49838,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_long);
                             }
                         }
 
@@ -52766,13 +50014,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52782,13 +50029,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -52811,13 +50057,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52827,13 +50072,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -52883,12 +50127,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52898,12 +50137,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                         }
 
@@ -52926,13 +50160,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52942,13 +50175,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -52971,13 +50203,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -52987,13 +50218,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -53016,13 +50246,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53032,13 +50261,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -53061,13 +50289,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53077,13 +50304,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -53160,13 +50386,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_moving_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_moving_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_moving_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53176,13 +50401,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_moving_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_moving_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_moving_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -53205,13 +50429,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53221,13 +50444,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -53250,13 +50472,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53266,13 +50487,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -53295,13 +50515,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53311,13 +50530,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -53340,13 +50558,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53356,13 +50573,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -53393,11 +50609,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_hr_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_hr_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -53416,11 +50633,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_hr_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_hr_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -53452,11 +50670,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_speed_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_speed_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -53475,11 +50694,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_speed_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_speed_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -53511,11 +50731,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_cadence_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_cadence_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -53534,11 +50755,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_cadence_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_cadence_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -53570,11 +50792,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_power_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_power_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -53593,11 +50816,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_power_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_power_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -53654,13 +50878,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53670,13 +50893,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -53726,13 +50948,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.active_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.active_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.active_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -53742,13 +50963,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.active_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.active_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.active_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -53828,26 +51048,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -53867,26 +51085,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -53906,26 +51122,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -53945,26 +51159,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -53984,26 +51196,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -54078,26 +51288,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.avg_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.avg_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -54117,26 +51325,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.max_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.max_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -54156,26 +51362,24 @@ impl FitMessageSegmentLap {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_fractional_cycles.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.total_fractional_cycles.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_fractional_cycles,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_fractional_cycles.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.total_fractional_cycles.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_fractional_cycles,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -54264,13 +51468,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_standing.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_standing.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_standing,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -54280,13 +51483,12 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_standing.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_standing.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_standing,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -54401,11 +51603,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -54421,11 +51624,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -54454,11 +51658,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -54474,11 +51679,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -54507,11 +51713,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -54527,11 +51734,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -54560,11 +51768,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -54580,11 +51789,12 @@ impl FitMessageSegmentLap {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -54928,42 +52138,15 @@ impl FitMessageSegmentLeaderboardEntry {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o =
-            match FitMessageSegmentLeaderboardEntry::parse_internal(&mut message, input, tz_offset)
-            {
-                Ok(o) => o,
-                Err(e) => {
-                    let mut err_string =
-                        String::from("Error parsing FitMessageSegmentLeaderboardEntry:");
-                    err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                    err_string.push_str(&format!("  specific error: {:?}", e));
-                    return Err(Error::message_parse_failed(err_string));
-                }
-            };
+        let o = main_parse_message!(
+            input,
+            message,
+            parsing_state,
+            FitMessageSegmentLeaderboardEntry
+        );
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -55155,13 +52338,12 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.segment_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.segment_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.segment_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -55171,13 +52353,12 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.segment_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.segment_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.segment_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -55323,39 +52504,10 @@ impl FitMessageSegmentPoint {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSegmentPoint::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSegmentPoint:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSegmentPoint);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -55424,13 +52576,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -55440,13 +52586,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_lat);
                             }
                         }
 
@@ -55469,13 +52609,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -55485,13 +52619,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.position_long);
                             }
                         }
 
@@ -55514,12 +52642,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -55529,12 +52652,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.distance.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                         }
 
@@ -55557,13 +52675,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -55573,13 +52685,7 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
                         }
 
@@ -55610,11 +52716,12 @@ impl FitMessageSegmentPoint {
                                     array_size = array_size - 1
                                 }
 
-                                message.leader_time.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.leader_time,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -55633,11 +52740,12 @@ impl FitMessageSegmentPoint {
                                     array_size = array_size - 1
                                 }
 
-                                message.leader_time.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.leader_time,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -56714,60 +53822,14 @@ impl FitMessageSession {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSession::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSession:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSession);
 
-        match FitMessageSession::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string = String::from("Error parsing subfields for FitMessageSession:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageSession);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -57009,13 +54071,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57025,13 +54081,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_lat);
                             }
                         }
 
@@ -57054,13 +54104,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57070,13 +54114,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.start_position_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.start_position_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.start_position_long);
                             }
                         }
 
@@ -57153,13 +54191,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57169,13 +54206,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_elapsed_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_elapsed_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_elapsed_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -57198,13 +54234,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57214,13 +54249,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_timer_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_timer_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_timer_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -57243,13 +54277,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_distance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57259,13 +54292,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.total_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_distance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -57385,12 +54417,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57400,12 +54427,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                         }
 
@@ -57436,12 +54458,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57451,12 +54468,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                         }
 
@@ -57732,26 +54744,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_training_effect.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.total_training_effect.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_training_effect,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_training_effect.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.total_training_effect.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_training_effect,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -57894,13 +54904,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57910,13 +54914,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_lat);
                             }
                         }
 
@@ -57939,13 +54937,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -57955,13 +54947,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.nec_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.nec_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.nec_long);
                             }
                         }
 
@@ -57984,13 +54970,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58000,13 +54980,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_lat);
                             }
                         }
 
@@ -58029,13 +55003,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58045,13 +55013,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.swc_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.swc_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.swc_long);
                             }
                         }
 
@@ -58107,13 +55069,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.training_stress_score.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.training_stress_score.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.training_stress_score,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58123,13 +55084,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.training_stress_score.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.training_stress_score.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.training_stress_score,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -58152,13 +55112,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.intensity_factor.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.intensity_factor.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.intensity_factor,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58168,13 +55127,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.intensity_factor.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.intensity_factor.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.intensity_factor,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -58230,13 +55188,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stroke_count.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_stroke_count.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stroke_count,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58246,13 +55203,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stroke_count.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_stroke_count.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stroke_count,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -58275,13 +55231,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stroke_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stroke_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stroke_distance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58291,13 +55246,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stroke_distance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stroke_distance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stroke_distance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -58347,12 +55301,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.pool_length.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.pool_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.pool_length,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58362,12 +55316,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.pool_length.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.pool_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.pool_length,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -58516,13 +55470,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58532,13 +55485,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -58569,13 +55521,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58585,13 +55536,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -58649,12 +55599,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58664,12 +55609,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_grade.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                         }
 
@@ -58692,13 +55632,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58708,13 +55647,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -58737,13 +55675,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58753,13 +55690,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -58782,13 +55718,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58798,13 +55733,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_pos_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -58827,13 +55761,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58843,13 +55776,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_grade.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_neg_grade.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_grade,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -58926,13 +55858,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_moving_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_moving_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_moving_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58942,13 +55873,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_moving_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.total_moving_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_moving_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -58971,13 +55901,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -58987,13 +55916,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -59016,13 +55944,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59032,13 +55959,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -59061,13 +55987,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59077,13 +56002,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_pos_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_pos_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_pos_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -59106,13 +56030,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59122,13 +56045,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_neg_vertical_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.max_neg_vertical_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_neg_vertical_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -59186,11 +56108,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_hr_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_hr_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -59209,11 +56132,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_hr_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_hr_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -59245,11 +56169,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_speed_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_speed_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -59268,11 +56193,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_speed_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_speed_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -59304,11 +56230,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_cadence_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_cadence_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -59327,11 +56254,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_cadence_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_cadence_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -59363,11 +56291,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_power_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_power_zone,
+                                    1000,
+                                    0
                                 );
                             }
                             None => {
@@ -59386,11 +56315,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.time_in_power_zone.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 1000 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.time_in_power_zone,
+                                    1000,
+                                    0
                                 );
                             }
                         }
@@ -59414,13 +56344,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_lap_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_lap_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_lap_time,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59430,13 +56359,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_lap_time.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_lap_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_lap_time,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -59492,13 +56420,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59508,13 +56435,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -59736,13 +56662,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_ball_speed.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_ball_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_ball_speed,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59752,13 +56677,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_ball_speed.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.max_ball_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_ball_speed,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -59781,13 +56705,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_ball_speed.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_ball_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_ball_speed,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59797,13 +56720,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_ball_speed.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_ball_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_ball_speed,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -59826,13 +56748,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_oscillation.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_vertical_oscillation.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_oscillation,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59842,13 +56763,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_oscillation.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_vertical_oscillation.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_oscillation,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -59871,13 +56791,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_percent.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_percent,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59887,13 +56806,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_percent.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_percent.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_percent,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -59916,13 +56834,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_stance_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -59932,13 +56849,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_stance_time.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -59958,26 +56874,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.avg_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.avg_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -59997,26 +56911,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.max_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.max_fractional_cadence.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.max_fractional_cadence.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.max_fractional_cadence,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -60036,26 +56948,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_fractional_cycles.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.total_fractional_cycles.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_fractional_cycles,
+                                    128,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_fractional_cycles.value =
-                                            Some(result as f64 / 128 as f64)
-                                    }
-                                    None => message.total_fractional_cycles.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_fractional_cycles,
+                                    128,
+                                    0
+                                );
                             }
                         }
 
@@ -60086,11 +56996,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -60109,11 +57020,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -60145,11 +57057,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -60168,11 +57081,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -60204,11 +57118,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                             None => {
@@ -60227,11 +57142,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_total_hemoglobin_conc.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 100 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_total_hemoglobin_conc,
+                                    100,
+                                    0
                                 );
                             }
                         }
@@ -60263,11 +57179,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                             None => {
@@ -60286,11 +57203,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                         }
@@ -60322,11 +57240,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                             None => {
@@ -60345,11 +57264,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.min_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.min_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                         }
@@ -60381,11 +57301,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                             None => {
@@ -60404,11 +57325,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.max_saturated_hemoglobin_percent.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 10 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.max_saturated_hemoglobin_percent,
+                                    10,
+                                    0
                                 );
                             }
                         }
@@ -60429,26 +57351,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -60468,26 +57388,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_torque_effectiveness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_torque_effectiveness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_torque_effectiveness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -60507,26 +57425,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_left_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_left_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_left_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -60546,26 +57462,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_right_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_right_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_right_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -60585,26 +57499,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_combined_pedal_smoothness.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.avg_combined_pedal_smoothness.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_combined_pedal_smoothness,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -60654,13 +57566,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_standing.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_standing.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_standing,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -60670,13 +57581,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.time_standing.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.time_standing.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.time_standing,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -60791,11 +57701,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -60811,11 +57722,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -60844,11 +57756,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -60864,11 +57777,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_left_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_left_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -60897,11 +57811,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -60917,11 +57832,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -60950,11 +57866,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                             None => {
@@ -60970,11 +57887,12 @@ impl FitMessageSession {
                                     array_size = array_size - 1
                                 }
 
-                                message.avg_right_power_phase_peak.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 0.7111111 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.avg_right_power_phase_peak,
+                                    0.7111111,
+                                    0
                                 );
                             }
                         }
@@ -61182,13 +58100,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61198,13 +58115,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_avg_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -61227,13 +58143,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61243,13 +58158,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_speed.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.enhanced_max_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -61272,13 +58186,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61288,13 +58201,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_avg_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_avg_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_avg_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -61317,13 +58229,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61333,13 +58244,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_min_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_min_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_min_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -61362,13 +58272,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61378,13 +58287,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.enhanced_max_altitude.value =
-                                            Some(result as f64 / 5 as f64 - (500 as f64))
-                                    }
-                                    None => message.enhanced_max_altitude.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.enhanced_max_altitude,
+                                    5,
+                                    500
+                                );
                             }
                         }
 
@@ -61470,26 +58378,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.lev_battery_consumption.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.lev_battery_consumption.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.lev_battery_consumption,
+                                    2,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.lev_battery_consumption.value =
-                                            Some(result as f64 / 2 as f64)
-                                    }
-                                    None => message.lev_battery_consumption.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.lev_battery_consumption,
+                                    2,
+                                    0
+                                );
                             }
                         }
 
@@ -61512,13 +58418,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_ratio.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_vertical_ratio.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_ratio,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61528,13 +58433,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vertical_ratio.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_vertical_ratio.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_vertical_ratio,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -61557,13 +58461,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_balance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_balance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_balance,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61573,13 +58476,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_stance_time_balance.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.avg_stance_time_balance.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_stance_time_balance,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -61602,13 +58504,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_step_length.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_step_length,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61618,13 +58519,12 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_step_length.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.avg_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.avg_step_length,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -61644,26 +58544,24 @@ impl FitMessageSession {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_anaerobic_training_effect.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.total_anaerobic_training_effect.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_anaerobic_training_effect,
+                                    10,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.total_anaerobic_training_effect.value =
-                                            Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.total_anaerobic_training_effect.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.total_anaerobic_training_effect,
+                                    10,
+                                    0
+                                );
                             }
                         }
 
@@ -61686,12 +58584,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vam.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_vam.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61701,12 +58594,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.avg_vam.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.avg_vam.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
                         }
 
@@ -61860,51 +58748,12 @@ impl FitMessageSet {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSet::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSet:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSet);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -61973,12 +58822,7 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.duration.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.duration.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.duration, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -61988,12 +58832,7 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.duration.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.duration.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.duration, 1000, 0);
                             }
                         }
 
@@ -62049,12 +58888,7 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.weight.value = Some(result as f64 / 16 as f64)
-                                    }
-                                    None => message.weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.weight, 16, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -62064,12 +58898,7 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.weight.value = Some(result as f64 / 16 as f64)
-                                    }
-                                    None => message.weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.weight, 16, 0);
                             }
                         }
 
@@ -62490,49 +59319,12 @@ impl FitMessageSlaveDevice {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSlaveDevice::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSlaveDevice:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSlaveDevice);
 
-        match FitMessageSlaveDevice::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageSlaveDevice:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageSlaveDevice);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -62728,39 +59520,10 @@ impl FitMessageSoftware {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSoftware::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSoftware:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSoftware);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -62829,12 +59592,7 @@ impl FitMessageSoftware {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.version.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.version.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.version, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -62844,12 +59602,7 @@ impl FitMessageSoftware {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.version.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.version.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.version, 100, 0);
                             }
                         }
 
@@ -62974,39 +59727,10 @@ impl FitMessageSpeedZone {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSpeedZone::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSpeedZone:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSpeedZone);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -63075,12 +59799,12 @@ impl FitMessageSpeedZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.high_value.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.high_value.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.high_value,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -63090,12 +59814,12 @@ impl FitMessageSpeedZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.high_value.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.high_value.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.high_value,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -63220,39 +59944,10 @@ impl FitMessageSport {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageSport::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageSport:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageSport);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -63437,39 +60132,10 @@ impl FitMessageStressLevel {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageStressLevel::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageStressLevel:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageStressLevel);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -63722,64 +60388,19 @@ impl FitMessageThreeDSensorCalibration {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o =
-            match FitMessageThreeDSensorCalibration::parse_internal(&mut message, input, tz_offset)
-            {
-                Ok(o) => o,
-                Err(e) => {
-                    let mut err_string =
-                        String::from("Error parsing FitMessageThreeDSensorCalibration:");
-                    err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                    err_string.push_str(&format!("  specific error: {:?}", e));
-                    return Err(Error::message_parse_failed(err_string));
-                }
-            };
+        let o = main_parse_message!(
+            input,
+            message,
+            parsing_state,
+            FitMessageThreeDSensorCalibration
+        );
 
-        match FitMessageThreeDSensorCalibration::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageThreeDSensorCalibration:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageThreeDSensorCalibration);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -64053,11 +60674,12 @@ impl FitMessageThreeDSensorCalibration {
                                     array_size = array_size - 1
                                 }
 
-                                message.orientation_matrix.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 65535 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.orientation_matrix,
+                                    65535,
+                                    0
                                 );
                             }
                             None => {
@@ -64076,11 +60698,12 @@ impl FitMessageThreeDSensorCalibration {
                                     array_size = array_size - 1
                                 }
 
-                                message.orientation_matrix.value = Some(
-                                    val.into_iter()
-                                        .filter_map(|x| x)
-                                        .map(|i| Some(i as f64 / 65535 as f64))
-                                        .collect(),
+                                scale_and_offset_parse_assignment!(
+                                    "vec",
+                                    val,
+                                    message.orientation_matrix,
+                                    65535,
+                                    0
                                 );
                             }
                         }
@@ -64211,52 +60834,17 @@ impl FitMessageTimestampCorrelation {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageTimestampCorrelation::parse_internal(&mut message, input, tz_offset)
-        {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageTimestampCorrelation:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(
+            input,
+            message,
+            parsing_state,
+            FitMessageTimestampCorrelation
+        );
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -64325,13 +60913,12 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -64341,13 +60928,12 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                         }
 
@@ -64403,13 +60989,12 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_system_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_system_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_system_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -64419,13 +61004,12 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.fractional_system_timestamp.value =
-                                            Some(result as f64 / 32768 as f64)
-                                    }
-                                    None => message.fractional_system_timestamp.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.fractional_system_timestamp,
+                                    32768,
+                                    0
+                                );
                             }
                         }
 
@@ -64673,51 +61257,12 @@ impl FitMessageTotals {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageTotals::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageTotals:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageTotals);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -65240,61 +61785,14 @@ impl FitMessageTrainingFile {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageTrainingFile::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageTrainingFile:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageTrainingFile);
 
-        match FitMessageTrainingFile::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageTrainingFile:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageTrainingFile);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -65806,39 +62304,10 @@ impl FitMessageUserProfile {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageUserProfile::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageUserProfile:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageUserProfile);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -65985,24 +62454,14 @@ impl FitMessageUserProfile {
 
                                 let val = parse_uint8(&&bytes[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.height.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.height.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.height, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
                                 let val = parse_uint8(&inp[0..f.field_size])?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.height.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.height.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.height, 100, 0);
                             }
                         }
 
@@ -66025,12 +62484,7 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.weight.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.weight, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -66040,12 +62494,7 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.weight.value = Some(result as f64 / 10 as f64)
-                                    }
-                                    None => message.weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.weight, 10, 0);
                             }
                         }
 
@@ -66599,13 +63048,12 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.user_running_step_length.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.user_running_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.user_running_step_length,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -66615,13 +63063,12 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.user_running_step_length.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.user_running_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.user_running_step_length,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -66644,13 +63091,12 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.user_walking_step_length.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.user_walking_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.user_walking_step_length,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -66660,13 +63106,12 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.user_walking_step_length.value =
-                                            Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.user_walking_step_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.user_walking_step_length,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -66824,39 +63269,10 @@ impl FitMessageVideo {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageVideo::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageVideo:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageVideo);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -67082,39 +63498,10 @@ impl FitMessageVideoClip {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageVideoClip::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageVideoClip:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageVideoClip);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -67456,39 +63843,10 @@ impl FitMessageVideoDescription {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageVideoDescription::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageVideoDescription:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageVideoDescription);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -67692,51 +64050,12 @@ impl FitMessageVideoFrame {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageVideoFrame::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageVideoFrame:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageVideoFrame);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -67946,39 +64265,10 @@ impl FitMessageVideoTitle {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageVideoTitle::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageVideoTitle:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageVideoTitle);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -68227,49 +64517,12 @@ impl FitMessageWatchfaceSettings {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWatchfaceSettings::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWatchfaceSettings:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWatchfaceSettings);
 
-        match FitMessageWatchfaceSettings::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageWatchfaceSettings:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageWatchfaceSettings);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -68513,51 +64766,12 @@ impl FitMessageWeatherAlert {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWeatherAlert::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWeatherAlert:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWeatherAlert);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -68944,51 +65158,12 @@ impl FitMessageWeatherConditions {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWeatherConditions::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWeatherConditions:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWeatherConditions);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -69171,12 +65346,12 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.wind_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.wind_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.wind_speed,
+                                    1000,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69186,12 +65361,12 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.wind_speed.value = Some(result as f64 / 1000 as f64)
-                                    }
-                                    None => message.wind_speed.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.wind_speed,
+                                    1000,
+                                    0
+                                );
                             }
                         }
 
@@ -69355,13 +65530,7 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.observed_location_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.observed_location_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.observed_location_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69371,13 +65540,7 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.observed_location_lat.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.observed_location_lat.value = None,
-                                }
+                                deg_parse_assignment!(val, message.observed_location_lat);
                             }
                         }
 
@@ -69400,13 +65563,7 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.observed_location_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.observed_location_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.observed_location_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69416,13 +65573,7 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.observed_location_long.value =
-                                            Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    }
-                                    None => message.observed_location_long.value = None,
-                                }
+                                deg_parse_assignment!(val, message.observed_location_long);
                             }
                         }
 
@@ -69671,51 +65822,12 @@ impl FitMessageWeightScale {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWeightScale::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWeightScale:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWeightScale);
 
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            }
-            None => match message.timestamp.value {
-                Some(ts) => {
-                    parsing_state.set_last_timestamp(ts);
-                }
-                None => return Err(Error::missing_timestamp_field()),
-            },
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -69817,12 +65929,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.percent_fat.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.percent_fat.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.percent_fat,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69832,12 +65944,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.percent_fat.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.percent_fat.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.percent_fat,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -69860,13 +65972,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.percent_hydration.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.percent_hydration.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.percent_hydration,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69876,13 +65987,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.percent_hydration.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.percent_hydration.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.percent_hydration,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -69905,13 +66015,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.visceral_fat_mass.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.visceral_fat_mass.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.visceral_fat_mass,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69921,13 +66030,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.visceral_fat_mass.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.visceral_fat_mass.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.visceral_fat_mass,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -69950,12 +66058,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.bone_mass.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.bone_mass.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.bone_mass, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -69965,12 +66068,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.bone_mass.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.bone_mass.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.bone_mass, 100, 0);
                             }
                         }
 
@@ -69993,12 +66091,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.muscle_mass.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.muscle_mass.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.muscle_mass,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -70008,12 +66106,12 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.muscle_mass.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.muscle_mass.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.muscle_mass,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -70036,12 +66134,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.basal_met.value = Some(result as f64 / 4 as f64)
-                                    }
-                                    None => message.basal_met.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.basal_met, 4, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -70051,12 +66144,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.basal_met.value = Some(result as f64 / 4 as f64)
-                                    }
-                                    None => message.basal_met.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.basal_met, 4, 0);
                             }
                         }
 
@@ -70106,12 +66194,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.active_met.value = Some(result as f64 / 4 as f64)
-                                    }
-                                    None => message.active_met.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.active_met, 4, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -70121,12 +66204,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.active_met.value = Some(result as f64 / 4 as f64)
-                                    }
-                                    None => message.active_met.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(val, message.active_met, 4, 0);
                             }
                         }
 
@@ -70339,39 +66417,10 @@ impl FitMessageWorkout {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWorkout::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWorkout:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWorkout);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -70554,12 +66603,12 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.pool_length.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.pool_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.pool_length,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -70569,12 +66618,12 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.pool_length.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.pool_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.pool_length,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -70727,39 +66776,10 @@ impl FitMessageWorkoutSession {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWorkoutSession::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWorkoutSession:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWorkoutSession);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -70948,12 +66968,12 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.pool_length.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.pool_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.pool_length,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -70963,12 +66983,12 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.pool_length.value = Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.pool_length.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.pool_length,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -71684,49 +67704,12 @@ impl FitMessageWorkoutStep {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageWorkoutStep::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageWorkoutStep:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageWorkoutStep);
 
-        match FitMessageWorkoutStep::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string =
-                    String::from("Error parsing subfields for FitMessageWorkoutStep:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, FitMessageWorkoutStep);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -72217,13 +68200,12 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.exercise_weight.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.exercise_weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.exercise_weight,
+                                    100,
+                                    0
+                                );
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
@@ -72233,13 +68215,12 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                match val {
-                                    Some(result) => {
-                                        message.exercise_weight.value =
-                                            Some(result as f64 / 100 as f64)
-                                    }
-                                    None => message.exercise_weight.value = None,
-                                }
+                                scale_and_offset_parse_assignment!(
+                                    val,
+                                    message.exercise_weight,
+                                    100,
+                                    0
+                                );
                             }
                         }
 
@@ -72388,39 +68369,10 @@ impl FitMessageZonesTarget {
             },
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message
-                .raw_bytes
-                .resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match FitMessageZonesTarget::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageZonesTarget:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, FitMessageZonesTarget);
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                message.definition_message.endianness,
-                dev_field.field_size,
-            )?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }

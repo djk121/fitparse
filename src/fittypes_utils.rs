@@ -6,6 +6,153 @@ use std::cmp::Ordering;
 use std::mem::transmute;
 
 #[macro_export]
+macro_rules! scale_and_offset_parse_assignment {
+    ("vec", $val:expr, $message_field:expr, $scale:expr, 0) => {
+        $message_field.value = Some(
+            $val.into_iter()
+                .filter_map(|x| x)
+                .map(|i| Some(i as f64 / $scale as f64))
+                .collect(),
+        );
+    };
+    ("vec", $val:expr, $message_field:expr, $scale:expr, $offset:expr) => {
+        $message_field.value = Some(
+            $val.into_iter()
+                .filter_map(|x| x)
+                .map(|i| Some(i as f64 / $scale as f64 - ($offset as f64)))
+                .collect(),
+        );
+    };
+    ($val:expr, $message_field:expr, $scale:expr, 0) => {
+        match $val {
+            Some(result) => $message_field.value = Some(result as f64 / $scale as f64),
+            None => $message_field.value = None,
+        }
+    };
+    ($val:expr, $message_field:expr, $scale:expr, $offset:expr) => {
+        match $val {
+            Some(result) => {
+                $message_field.value = Some(result as f64 / $scale as f64 - ($offset as f64))
+            }
+            None => $message_field.value = None,
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! scale_and_offset_vec_parse_assignment {
+    ($val:expr, $message_field:expr, $scale:expr, $offset:expr) => {
+        $message_field.value = Some(
+            val.into_iter()
+                .filter_map(|x| x)
+                .map(|i| Some(i as f64 / $scale as f64))
+                .collect(),
+        );
+    };
+    ($val:expr, $message_field:expr, $scale:expr) => {
+        $message_field.value = Some(
+            val.into_iter()
+                .filter_map(|x| x)
+                .map(|i| Some(i as f64 / $scale as f64 - ($offset as f64)))
+                .collect(),
+        );
+    };
+}
+
+#[macro_export]
+macro_rules! deg_parse_assignment {
+    ($val:expr, $message_field:expr) => {
+        match $val {
+            Some(result) => {
+                $message_field.value = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
+            }
+            None => $message_field.value = None,
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! main_parse_message {
+    ($input:expr, $message:expr, $parsing_state:expr, $output_type:ty) => {{
+        let inp = &$input[..($message.definition_message.message_size)];
+        if $parsing_state.retain_bytes == true {
+            $message
+                .raw_bytes
+                .resize($message.definition_message.message_size, 0);
+            $message.raw_bytes.copy_from_slice(inp);
+        }
+        let tz_offset = $parsing_state.get_timezone_offset();
+        let o = match <$output_type>::parse_internal(&mut $message, $input, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string =
+                    String::from(concat!("Error parsing ", stringify!($output_type), ":"));
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+        };
+
+        o
+    }};
+}
+
+#[macro_export]
+macro_rules! parse_subfields {
+    ($message:expr, $parsing_state:expr, $output_type:ty) => {
+        match <$output_type>::parse_subfields(&mut $message, $parsing_state.get_timezone_offset()) {
+            Err(e) => {
+                let mut err_string = String::from(concat!(
+                    "Error parsing subfields for ",
+                    stringify!($output_type),
+                    ":"
+                ));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+            Ok(_) => (),
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! parse_developer_fields {
+    ($inp2:expr, $message:expr, $parsing_state:expr) => {
+        for dev_field in &$message.definition_message.developer_field_definitions {
+            let dev_data_definition =
+                $parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description =
+                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let (dd, outp) = FitFieldDeveloperData::parse(
+                $inp2,
+                field_description.clone(),
+                $message.definition_message.endianness,
+                dev_field.field_size,
+            )?;
+            $message.developer_fields.push(dd);
+            $inp2 = outp;
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! parsing_state_set_timestamp {
+    ($message:expr, $timestamp:expr, $parsing_state:expr) => {
+        match $timestamp {
+            Some(ts) => {
+                $message.timestamp.value = Some(ts);
+            }
+            None => match $message.timestamp.value {
+                Some(ts) => {
+                    $parsing_state.set_last_timestamp(ts);
+                }
+                None => return Err(Error::missing_timestamp_field()),
+            },
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! fmt_unknown_fields {
     ($s:ident, $f:ident) => {
         if $s.unknown_fields.len() > 0 {

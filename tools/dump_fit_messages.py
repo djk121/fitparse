@@ -203,7 +203,7 @@ use FitBaseValue;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
 
-use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields}; 
+use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
 
 
@@ -460,57 +460,18 @@ impl {{ message_name }} {
             {% endfor %}
         };
 
-        let inp = &input[..(message.definition_message.message_size)];
-        if parsing_state.retain_bytes == true {
-            message.raw_bytes.resize(message.definition_message.message_size, 0);
-            message.raw_bytes.copy_from_slice(inp);
-        }
-        let tz_offset = parsing_state.get_timezone_offset();
-        let o = match {{ message_name }}::parse_internal(&mut message, input, tz_offset) {
-            Ok(o) => o,
-            Err(e) => {
-                let mut err_string = String::from("Error parsing {{ message_name }}:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string))
-            }
-        };
+        let o = main_parse_message!(input, message, parsing_state, {{ message_name }});
 
         {% if has_subfields %}
-        match {{ message_name }}::parse_subfields(&mut message, tz_offset) {
-            Err(e) => {
-                let mut err_string = String::from("Error parsing subfields for {{ message_name }}:");
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string))
-            },
-            Ok(_) => (),
-        }
+        parse_subfields!(message, parsing_state, {{ message_name }});
         {% endif %}
 
         {% if has_timestamp_field %}
-        match _timestamp {
-            Some(ts) => {
-                message.timestamp.value = Some(ts);
-            },
-            None => {
-                match message.timestamp.value {
-                    Some(ts) => {
-                        parsing_state.set_last_timestamp(ts);
-                    },
-                    None => return Err(Error::missing_timestamp_field())
-                }
-            }
-        }
+        parsing_state_set_timestamp!(message, _timestamp, parsing_state);
         {% endif %}
 
         let mut inp2 = o;
-        for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition = parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description = dev_data_definition.get_field_description(dev_field.definition_number)?;
-            let (dd, outp) = FitFieldDeveloperData::parse(inp2, field_description.clone(), message.definition_message.endianness, dev_field.field_size)?;
-            message.developer_fields.push(dd);
-            inp2 = outp;
-        }
+        parse_developer_fields!(inp2, message, parsing_state);
 
         Ok((Rc::new(message), inp2))
     }
@@ -692,26 +653,6 @@ impl FitRecord for {{ message_name }} {
             sys.stdout.write(field.output_subfield_definition())
 
 
-SCALE_AND_OFFSET_TEMPLATE = """
-                                match val {
-                                    Some(result) => {
-                                       message.{{ field_name }}.value = Some(result as f64 / {{ scale }} as f64{{ offset }}) 
-                                    },
-                                    None => message.{{ field_name }}.value = None
-                                }"""
-
-SCALE_AND_OFFSET_ARRAY_TEMPLATE = """message.{{ field_name }}.value = Some(val.into_iter().filter_map(|x| x).map(|i| Some(i as f64 / {{ scale }} as f64{{ offset }})).collect());"""
-
-SEMICIRCLES_TEMPMLATE = """
-                                match val {
-                                    Some(result) => {
-                                        message.{{ field_name }}.value = Some((result as f64) * (180.0_f64 / 2_f64.powf(31.0)))
-                                    },
-                                    None => message.{{ field_name }}.value = None
-                                }"""
-
-
-
 class Field(object):
     FIELD_OPTION_SUBFIELD = """FitFieldValue<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
     FIELD_OPTION_BASE_TYPE = """FitFieldValue<{% if is_vec %}Vec<Option<{% endif %}{{ fit_type }}{% if is_vec %}>>{% endif %}>"""
@@ -880,30 +821,21 @@ class Field(object):
 
         if self.scale and is_fit_base_type(self.type) and not self.subfields and self.type != 'byte':
 
-            offset = ''
+            offset = 0
             if self.offset:
-                offset = " - ({} as f64)".format(self.offset)
+                offset = self.offset
 
             if self.array:
-                template = Environment().from_string(SCALE_AND_OFFSET_ARRAY_TEMPLATE,
-                                                     globals={'field_name': self.name,
-                                                              'scale': self.scale,
-                                                              'offset': offset})
+                return "scale_and_offset_parse_assignment!(\"vec\", val, message.{}, {}, {});".format(self.name, self.scale, offset)
             else:
-                template = Environment().from_string(SCALE_AND_OFFSET_TEMPLATE,
-                                                    globals={'field_name': self.name,
-                                                             'scale': self.scale,
-                                                             'offset': offset})
-            return template.render()
+                return "scale_and_offset_parse_assignment!(val, message.{}, {}, {});".format(self.name, self.scale, offset)
 
         if self.array or is_fit_base_type(self.type) is False or self.has_subfields:
             return "message.{}.value = Some(val);".format(self.name)
 
         else:
             if self.units == 'semicircles':
-                template = Environment().from_string(SEMICIRCLES_TEMPMLATE,
-                                                    globals={'field_name': self.name})
-                return template.render()
+                return "deg_parse_assignment!(val, message.{});".format(self.name)
             return "message.{}.value = val;".format(self.name)
 
 
