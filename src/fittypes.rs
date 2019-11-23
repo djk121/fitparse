@@ -22,9 +22,10 @@ use FitRecordHeader;
 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
 use {
-    deg_parse_assignment, field_parser_fit_type, fmt_developer_fields, fmt_message_field,
-    fmt_raw_bytes, fmt_unknown_fields, main_parse_message, parse_developer_fields, parse_subfields,
-    parsing_state_set_timestamp, scale_and_offset_parse_assignment,
+    deg_parse_assignment, field_parser_base_type, field_parser_fit_type, fmt_developer_fields,
+    fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, main_parse_message,
+    parse_developer_fields, parse_subfields, parsing_state_set_timestamp,
+    scale_and_offset_parse_assignment,
 };
 
 use subset_with_pad;
@@ -14518,20 +14519,14 @@ impl FitMessageAccelerometerData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -14555,10 +14550,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14573,10 +14565,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14604,10 +14593,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14622,10 +14608,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14653,10 +14636,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14671,10 +14651,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14702,10 +14679,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14720,10 +14694,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14751,10 +14722,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14769,10 +14737,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14800,10 +14765,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14818,10 +14780,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14849,10 +14808,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14867,10 +14823,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14898,10 +14851,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14916,10 +14866,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14947,10 +14894,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14965,10 +14909,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -14996,10 +14937,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -15014,10 +14952,7 @@ impl FitMessageAccelerometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -15221,10 +15156,7 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -15236,10 +15168,7 @@ impl FitMessageActivity {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -15264,20 +15193,14 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_sessions.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_sessions.value = val;
                             }
@@ -15417,14 +15340,14 @@ impl FitMessageActivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.event_group.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.event_group.value = val;
                             }
@@ -15572,14 +15495,14 @@ impl FitMessageAntChannelId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.channel_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.channel_number.value = val;
                             }
@@ -15599,14 +15522,14 @@ impl FitMessageAntChannelId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.device_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.device_type.value = val;
                             }
@@ -15626,20 +15549,14 @@ impl FitMessageAntChannelId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.device_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.device_number.value = val;
                             }
@@ -15659,14 +15576,14 @@ impl FitMessageAntChannelId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.transmission_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.transmission_type.value = val;
                             }
@@ -15879,10 +15796,7 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -15894,10 +15808,7 @@ impl FitMessageAntRx {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -15922,14 +15833,14 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.mesg_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.mesg_id.value = val;
                             }
@@ -15949,14 +15860,14 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.mesg_data.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.mesg_data.value = val;
                             }
@@ -16048,14 +15959,14 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.channel_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.channel_number.value = val;
                             }
@@ -16075,14 +15986,14 @@ impl FitMessageAntRx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.data.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.data.value = val;
                             }
@@ -16268,10 +16179,7 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -16283,10 +16191,7 @@ impl FitMessageAntTx {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -16311,14 +16216,14 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.mesg_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.mesg_id.value = val;
                             }
@@ -16338,14 +16243,14 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.mesg_data.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.mesg_data.value = val;
                             }
@@ -16437,14 +16342,14 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.channel_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.channel_number.value = val;
                             }
@@ -16464,14 +16369,14 @@ impl FitMessageAntTx {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.data.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.data.value = val;
                             }
@@ -16699,20 +16604,14 @@ impl FitMessageAviationAttitude {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -16736,10 +16635,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16754,10 +16650,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16785,10 +16678,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16809,10 +16699,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16846,10 +16733,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16870,10 +16754,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16907,10 +16788,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16931,10 +16809,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16968,10 +16843,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -16992,10 +16864,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17029,10 +16898,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17053,10 +16919,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17135,7 +16998,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17150,7 +17013,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17178,10 +17041,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17202,10 +17062,7 @@ impl FitMessageAviationAttitude {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17440,20 +17297,14 @@ impl FitMessageBarometerData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -17477,10 +17328,7 @@ impl FitMessageBarometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17495,10 +17343,7 @@ impl FitMessageBarometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17526,10 +17371,7 @@ impl FitMessageBarometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17544,10 +17386,7 @@ impl FitMessageBarometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -17937,14 +17776,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -18018,20 +17857,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
@@ -18051,20 +17884,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.bike_spd_ant_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.bike_spd_ant_id.value = val;
                             }
@@ -18084,20 +17911,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.bike_cad_ant_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.bike_cad_ant_id.value = val;
                             }
@@ -18117,20 +17938,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.bike_spdcad_ant_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.bike_spdcad_ant_id.value = val;
                             }
@@ -18150,20 +17965,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.bike_power_ant_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.bike_power_ant_id.value = val;
                             }
@@ -18183,10 +17992,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18198,10 +18004,7 @@ impl FitMessageBikeProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18226,10 +18029,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18241,10 +18041,7 @@ impl FitMessageBikeProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18269,20 +18066,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.bike_weight, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.bike_weight, 10, 0);
                             }
@@ -18302,10 +18093,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18317,10 +18105,7 @@ impl FitMessageBikeProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18345,14 +18130,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.auto_wheel_cal.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.auto_wheel_cal.value = val;
                             }
@@ -18372,14 +18157,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.auto_power_zero.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.auto_power_zero.value = val;
                             }
@@ -18399,14 +18184,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.id.value = val;
                             }
@@ -18426,14 +18211,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.spd_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.spd_enabled.value = val;
                             }
@@ -18453,14 +18238,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.cad_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.cad_enabled.value = val;
                             }
@@ -18480,14 +18265,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.spdcad_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.spdcad_enabled.value = val;
                             }
@@ -18507,14 +18292,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.power_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.power_enabled.value = val;
                             }
@@ -18534,7 +18319,7 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18546,7 +18331,7 @@ impl FitMessageBikeProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -18571,14 +18356,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -18598,14 +18383,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.bike_spd_ant_id_trans_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.bike_spd_ant_id_trans_type.value = val;
                             }
@@ -18625,14 +18410,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.bike_cad_ant_id_trans_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.bike_cad_ant_id_trans_type.value = val;
                             }
@@ -18652,14 +18437,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.bike_spdcad_ant_id_trans_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.bike_spdcad_ant_id_trans_type.value = val;
                             }
@@ -18679,14 +18464,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.bike_power_ant_id_trans_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.bike_power_ant_id_trans_type.value = val;
                             }
@@ -18706,14 +18491,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.odometer_rollover.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.odometer_rollover.value = val;
                             }
@@ -18733,14 +18518,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.front_gear_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.front_gear_num.value = val;
                             }
@@ -18764,7 +18549,7 @@ impl FitMessageBikeProfile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8z(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8z", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -18779,7 +18564,7 @@ impl FitMessageBikeProfile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8z(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8z", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -18803,14 +18588,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.rear_gear_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.rear_gear_num.value = val;
                             }
@@ -18834,7 +18619,7 @@ impl FitMessageBikeProfile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8z(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8z", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -18849,7 +18634,7 @@ impl FitMessageBikeProfile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8z(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8z", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -18873,14 +18658,14 @@ impl FitMessageBikeProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.shimano_di2_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.shimano_di2_enabled.value = val;
                             }
@@ -19101,20 +18886,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.systolic_pressure.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.systolic_pressure.value = val;
                             }
@@ -19134,20 +18913,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.diastolic_pressure.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.diastolic_pressure.value = val;
                             }
@@ -19167,20 +18940,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.mean_arterial_pressure.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.mean_arterial_pressure.value = val;
                             }
@@ -19200,20 +18967,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.map_3_sample_mean.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.map_3_sample_mean.value = val;
                             }
@@ -19233,20 +18994,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.map_morning_values.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.map_morning_values.value = val;
                             }
@@ -19266,20 +19021,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.map_evening_values.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.map_evening_values.value = val;
                             }
@@ -19299,14 +19048,14 @@ impl FitMessageBloodPressure {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.heart_rate.value = val;
                             }
@@ -19560,14 +19309,14 @@ impl FitMessageCadenceZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.high_value.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.high_value.value = val;
                             }
@@ -19587,14 +19336,14 @@ impl FitMessageCadenceZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -19773,20 +19522,14 @@ impl FitMessageCameraEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -19834,14 +19577,14 @@ impl FitMessageCameraEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.camera_file_uuid.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.camera_file_uuid.value = val;
                             }
@@ -20018,7 +19761,7 @@ impl FitMessageCapabilities {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8z(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8z", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -20033,7 +19776,7 @@ impl FitMessageCapabilities {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8z(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8z", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -20374,14 +20117,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.bluetooth_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.bluetooth_enabled.value = val;
                             }
@@ -20401,14 +20144,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.bluetooth_le_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.bluetooth_le_enabled.value = val;
                             }
@@ -20428,14 +20171,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.ant_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.ant_enabled.value = val;
                             }
@@ -20455,14 +20198,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -20482,14 +20225,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.live_tracking_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.live_tracking_enabled.value = val;
                             }
@@ -20509,14 +20252,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.weather_conditions_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.weather_conditions_enabled.value = val;
                             }
@@ -20536,14 +20279,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.weather_alerts_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.weather_alerts_enabled.value = val;
                             }
@@ -20563,14 +20306,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.auto_activity_upload_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.auto_activity_upload_enabled.value = val;
                             }
@@ -20590,14 +20333,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.course_download_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.course_download_enabled.value = val;
                             }
@@ -20617,14 +20360,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.workout_download_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.workout_download_enabled.value = val;
                             }
@@ -20644,14 +20387,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.gps_ephemeris_download_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.gps_ephemeris_download_enabled.value = val;
                             }
@@ -20671,14 +20414,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.incident_detection_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.incident_detection_enabled.value = val;
                             }
@@ -20698,14 +20441,14 @@ impl FitMessageConnectivity {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.grouptrack_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.grouptrack_enabled.value = val;
                             }
@@ -20873,14 +20616,14 @@ impl FitMessageCourse {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -21177,20 +20920,14 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
@@ -21210,20 +20947,14 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
@@ -21243,20 +20974,14 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
@@ -21303,14 +21028,14 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -21330,14 +21055,14 @@ impl FitMessageCoursePoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.favorite.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.favorite.value = val;
                             }
@@ -21485,14 +21210,14 @@ impl FitMessageDeveloperDataId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.developer_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.developer_id.value = val;
                             }
@@ -21512,14 +21237,14 @@ impl FitMessageDeveloperDataId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.application_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.application_id.value = val;
                             }
@@ -21572,14 +21297,14 @@ impl FitMessageDeveloperDataId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.developer_data_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.developer_data_index.value = val;
                             }
@@ -21599,20 +21324,14 @@ impl FitMessageDeveloperDataId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.application_version.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.application_version.value = val;
                             }
@@ -21671,7 +21390,7 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
             }
 
             Some(FitFieldSourceType::Ant) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageDeviceInfoSubfieldDeviceType::AntDeviceType(val));
             }
@@ -21679,7 +21398,7 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
             _ => (),
         }
 
-        let val = parse_uint8(&inp[0..f.field_size])?;
+        let val = field_parser_base_type!("uint8", inp, f)?;
         Ok(FitMessageDeviceInfoSubfieldDeviceType::Default(val))
     }
 }
@@ -21733,7 +21452,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
             _ => (),
         }
 
-        let val = parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint16", inp, f, message)?;
         Ok(FitMessageDeviceInfoSubfieldProduct::Default(val))
     }
 }
@@ -22116,20 +21835,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", &bytes, f, message)?;
 
                                 message.serial_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", inp, f, message)?;
 
                                 message.serial_number.value = val;
                             }
@@ -22180,10 +21893,7 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -22195,10 +21905,7 @@ impl FitMessageDeviceInfo {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -22223,14 +21930,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.hardware_version.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.hardware_version.value = val;
                             }
@@ -22250,20 +21957,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.cum_operating_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.cum_operating_time.value = val;
                             }
@@ -22283,10 +21984,7 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -22298,10 +21996,7 @@ impl FitMessageDeviceInfo {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -22380,14 +22075,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.descriptor.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.descriptor.value = val;
                             }
@@ -22407,14 +22102,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.ant_transmission_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.ant_transmission_type.value = val;
                             }
@@ -22434,20 +22129,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.ant_device_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.ant_device_number.value = val;
                             }
@@ -22521,14 +22210,14 @@ impl FitMessageDeviceInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.product_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.product_name.value = val;
                             }
@@ -22810,14 +22499,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.active_time_zone.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.active_time_zone.value = val;
                             }
@@ -22837,20 +22526,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.utc_offset.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.utc_offset.value = val;
                             }
@@ -22874,10 +22557,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -22892,10 +22572,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -22966,7 +22643,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("sint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -22987,7 +22664,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("sint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23044,14 +22721,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.activity_tracker_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.activity_tracker_enabled.value = val;
                             }
@@ -23104,10 +22781,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23122,10 +22796,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23149,14 +22820,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.move_alert_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.move_alert_enabled.value = val;
                             }
@@ -23263,10 +22934,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23281,10 +22949,7 @@ impl FitMessageDeviceSettings {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -23308,20 +22973,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.autosync_min_steps.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.autosync_min_steps.value = val;
                             }
@@ -23341,20 +23000,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.autosync_min_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.autosync_min_time.value = val;
                             }
@@ -23374,14 +23027,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.lactate_threshold_autodetect_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.lactate_threshold_autodetect_enabled.value = val;
                             }
@@ -23401,14 +23054,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.ble_auto_upload_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.ble_auto_upload_enabled.value = val;
                             }
@@ -23494,14 +23147,14 @@ impl FitMessageDeviceSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.number_of_screens.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.number_of_screens.value = val;
                             }
@@ -23752,20 +23405,14 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
@@ -23785,20 +23432,14 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.time, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.time, 1, 0);
                             }
@@ -23818,14 +23459,14 @@ impl FitMessageDiveAlarm {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -24096,14 +23737,14 @@ impl FitMessageDiveGas {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.helium_content.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.helium_content.value = val;
                             }
@@ -24123,14 +23764,14 @@ impl FitMessageDiveGas {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.oxygen_content.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.oxygen_content.value = val;
                             }
@@ -24230,7 +23871,7 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
             _ => (),
         }
 
-        let val = parse_uint8(&inp[0..f.field_size])?;
+        let val = field_parser_base_type!("uint8", inp, f)?;
         Ok(FitMessageDiveSettingsSubfieldHeartRateSource::Default(val))
     }
 }
@@ -24529,14 +24170,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -24584,14 +24225,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.gf_low.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.gf_low.value = val;
                             }
@@ -24611,14 +24252,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.gf_high.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.gf_high.value = val;
                             }
@@ -24665,20 +24306,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_float32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("float32", &bytes, f, message)?;
 
                                 message.water_density.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_float32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("float32", inp, f, message)?;
 
                                 message.water_density.value = val;
                             }
@@ -24698,14 +24333,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.po2_warn, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.po2_warn, 100, 0);
                             }
@@ -24725,7 +24360,7 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -24737,7 +24372,7 @@ impl FitMessageDiveSettings {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -24762,14 +24397,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.po2_deco, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.po2_deco, 100, 0);
                             }
@@ -24789,14 +24424,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.safety_stop_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.safety_stop_enabled.value = val;
                             }
@@ -24816,20 +24451,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_float32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("float32", &bytes, f, message)?;
 
                                 message.bottom_depth.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_float32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("float32", inp, f, message)?;
 
                                 message.bottom_depth.value = val;
                             }
@@ -24849,20 +24478,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.bottom_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.bottom_time.value = val;
                             }
@@ -24882,14 +24505,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.apnea_countdown_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.apnea_countdown_enabled.value = val;
                             }
@@ -24909,20 +24532,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.apnea_countdown_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.apnea_countdown_time.value = val;
                             }
@@ -24971,14 +24588,14 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.backlight_brightness.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.backlight_brightness.value = val;
                             }
@@ -25026,10 +24643,7 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25041,10 +24655,7 @@ impl FitMessageDiveSettings {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25069,10 +24680,7 @@ impl FitMessageDiveSettings {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25084,10 +24692,7 @@ impl FitMessageDiveSettings {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25446,20 +25051,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_depth, 1000, 0);
                             }
@@ -25479,20 +25078,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_depth, 1000, 0);
                             }
@@ -25512,10 +25105,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25527,10 +25117,7 @@ impl FitMessageDiveSummary {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25555,14 +25142,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.start_cns, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.start_cns, 1, 0);
                             }
@@ -25582,14 +25169,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.end_cns, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.end_cns, 1, 0);
                             }
@@ -25609,20 +25196,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.start_n2, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.start_n2, 1, 0);
                             }
@@ -25642,20 +25223,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.end_n2, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.end_n2, 1, 0);
                             }
@@ -25675,20 +25250,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.o2_toxicity.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.o2_toxicity.value = val;
                             }
@@ -25708,20 +25277,14 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.dive_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.dive_number.value = val;
                             }
@@ -25741,10 +25304,7 @@ impl FitMessageDiveSummary {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25756,10 +25316,7 @@ impl FitMessageDiveSummary {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -25845,90 +25402,79 @@ impl FitMessageEventSubfieldData {
             }
 
             Some(FitFieldEvent::Battery) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::BatteryLevel(val));
             }
 
             Some(FitFieldEvent::VirtualPartnerPace) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::VirtualPartnerSpeed(val));
             }
 
             Some(FitFieldEvent::HrHighAlert) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageEventSubfieldData::HrHighAlert(val));
             }
 
             Some(FitFieldEvent::HrLowAlert) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageEventSubfieldData::HrLowAlert(val));
             }
 
             Some(FitFieldEvent::SpeedHighAlert) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::SpeedHighAlert(val));
             }
 
             Some(FitFieldEvent::SpeedLowAlert) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::SpeedLowAlert(val));
             }
 
             Some(FitFieldEvent::CadHighAlert) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::CadHighAlert(val));
             }
 
             Some(FitFieldEvent::CadLowAlert) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::CadLowAlert(val));
             }
 
             Some(FitFieldEvent::PowerHighAlert) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::PowerHighAlert(val));
             }
 
             Some(FitFieldEvent::PowerLowAlert) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::PowerLowAlert(val));
             }
 
             Some(FitFieldEvent::TimeDurationAlert) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::TimeDurationAlert(val));
             }
 
             Some(FitFieldEvent::DistanceDurationAlert) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::DistanceDurationAlert(val));
             }
 
             Some(FitFieldEvent::CalorieDurationAlert) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::CalorieDurationAlert(val));
             }
@@ -25942,22 +25488,19 @@ impl FitMessageEventSubfieldData {
             }
 
             Some(FitFieldEvent::SportPoint) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::SportPoint(val));
             }
 
             Some(FitFieldEvent::FrontGearChange) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::GearChangeData(val));
             }
 
             Some(FitFieldEvent::RearGearChange) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageEventSubfieldData::GearChangeData(val));
             }
@@ -25977,7 +25520,7 @@ impl FitMessageEventSubfieldData {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageEventSubfieldData::Default(val))
     }
 }
@@ -26265,20 +25808,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.data16.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.data16.value = val;
                             }
@@ -26337,14 +25874,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.event_group.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.event_group.value = val;
                             }
@@ -26364,20 +25901,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.score.value = val;
                             }
@@ -26397,20 +25928,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
@@ -26430,14 +25955,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.front_gear_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.front_gear_num.value = val;
                             }
@@ -26457,14 +25982,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.front_gear.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.front_gear.value = val;
                             }
@@ -26484,14 +26009,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.rear_gear_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.rear_gear_num.value = val;
                             }
@@ -26511,14 +26036,14 @@ impl FitMessageEvent {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.rear_gear.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.rear_gear.value = val;
                             }
@@ -26740,14 +26265,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.screen_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.screen_index.value = val;
                             }
@@ -26767,14 +26292,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.concept_field.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.concept_field.value = val;
                             }
@@ -26810,14 +26335,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.field_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.field_id.value = val;
                             }
@@ -26837,14 +26362,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.concept_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.concept_index.value = val;
                             }
@@ -26864,14 +26389,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.data_page.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.data_page.value = val;
                             }
@@ -26891,14 +26416,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.concept_key.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.concept_key.value = val;
                             }
@@ -26918,14 +26443,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.scaling.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.scaling.value = val;
                             }
@@ -27027,14 +26552,14 @@ impl FitMessageExdDataConceptConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.is_signed.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.is_signed.value = val;
                             }
@@ -27194,14 +26719,14 @@ impl FitMessageExdDataFieldConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.screen_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.screen_index.value = val;
                             }
@@ -27221,14 +26746,14 @@ impl FitMessageExdDataFieldConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.concept_field.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.concept_field.value = val;
                             }
@@ -27264,14 +26789,14 @@ impl FitMessageExdDataFieldConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.field_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.field_id.value = val;
                             }
@@ -27291,14 +26816,14 @@ impl FitMessageExdDataFieldConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.concept_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.concept_count.value = val;
                             }
@@ -27350,8 +26875,7 @@ impl FitMessageExdDataFieldConfiguration {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -27366,8 +26890,7 @@ impl FitMessageExdDataFieldConfiguration {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -27517,14 +27040,14 @@ impl FitMessageExdScreenConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.screen_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.screen_index.value = val;
                             }
@@ -27544,14 +27067,14 @@ impl FitMessageExdScreenConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.field_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.field_count.value = val;
                             }
@@ -27598,14 +27121,14 @@ impl FitMessageExdScreenConfiguration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.screen_enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.screen_enabled.value = val;
                             }
@@ -27816,20 +27339,14 @@ impl FitMessageExerciseTitle {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.exercise_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.exercise_name.value = val;
                             }
@@ -27853,8 +27370,7 @@ impl FitMessageExerciseTitle {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -27869,8 +27385,7 @@ impl FitMessageExerciseTitle {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -28110,14 +27625,14 @@ impl FitMessageFieldCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.field_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.field_num.value = val;
                             }
@@ -28137,20 +27652,14 @@ impl FitMessageFieldCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.count.value = val;
                             }
@@ -28361,14 +27870,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.developer_data_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.developer_data_index.value = val;
                             }
@@ -28388,14 +27897,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.field_definition_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.field_definition_number.value = val;
                             }
@@ -28446,8 +27955,7 @@ impl FitMessageFieldDescription {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -28462,8 +27970,7 @@ impl FitMessageFieldDescription {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -28487,14 +27994,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.array.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.array.value = val;
                             }
@@ -28514,14 +28021,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.components.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.components.value = val;
                             }
@@ -28541,14 +28048,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.scale.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.scale.value = val;
                             }
@@ -28568,14 +28075,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.offset.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.offset.value = val;
                             }
@@ -28599,8 +28106,7 @@ impl FitMessageFieldDescription {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -28615,8 +28121,7 @@ impl FitMessageFieldDescription {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -28640,14 +28145,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.bits.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.bits.value = val;
                             }
@@ -28667,14 +28172,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.accumulate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.accumulate.value = val;
                             }
@@ -28755,14 +28260,14 @@ impl FitMessageFieldDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.native_field_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.native_field_num.value = val;
                             }
@@ -29004,14 +28509,14 @@ impl FitMessageFileCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.directory.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.directory.value = val;
                             }
@@ -29031,20 +28536,14 @@ impl FitMessageFileCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.max_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.max_count.value = val;
                             }
@@ -29064,20 +28563,14 @@ impl FitMessageFileCapabilities {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.max_size.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.max_size.value = val;
                             }
@@ -29204,20 +28697,14 @@ impl FitMessageFileCreator {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.software_version.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.software_version.value = val;
                             }
@@ -29237,14 +28724,14 @@ impl FitMessageFileCreator {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.hardware_version.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.hardware_version.value = val;
                             }
@@ -29321,7 +28808,7 @@ impl FitMessageFileIdSubfieldProduct {
             _ => (),
         }
 
-        let val = parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint16", inp, f, message)?;
         Ok(FitMessageFileIdSubfieldProduct::Default(val))
     }
 }
@@ -29573,20 +29060,14 @@ impl FitMessageFileId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", &bytes, f, message)?;
 
                                 message.serial_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", inp, f, message)?;
 
                                 message.serial_number.value = val;
                             }
@@ -29635,20 +29116,14 @@ impl FitMessageFileId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.number.value = val;
                             }
@@ -29668,14 +29143,14 @@ impl FitMessageFileId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.product_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.product_name.value = val;
                             }
@@ -30051,20 +29526,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.value.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.value.value = val;
                             }
@@ -30084,14 +29553,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.repeat.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.repeat.value = val;
                             }
@@ -30111,20 +29580,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.target_value.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.target_value.value = val;
                             }
@@ -30172,20 +29635,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.recurrence_value.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.recurrence_value.value = val;
                             }
@@ -30205,14 +29662,14 @@ impl FitMessageGoal {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -30446,20 +29903,14 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -30479,20 +29930,14 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
@@ -30512,20 +29957,14 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
@@ -30545,10 +29984,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -30560,10 +29996,7 @@ impl FitMessageGpsMetadata {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -30588,10 +30021,7 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -30603,10 +30033,7 @@ impl FitMessageGpsMetadata {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -30631,20 +30058,14 @@ impl FitMessageGpsMetadata {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.heading, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.heading, 100, 0);
                             }
@@ -30697,10 +30118,7 @@ impl FitMessageGpsMetadata {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -30721,10 +30139,7 @@ impl FitMessageGpsMetadata {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -30941,20 +30356,14 @@ impl FitMessageGyroscopeData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -30978,10 +30387,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -30996,10 +30402,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31027,10 +30430,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31045,10 +30445,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31076,10 +30473,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31094,10 +30488,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31125,10 +30516,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31143,10 +30531,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31174,10 +30559,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31192,10 +30574,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31223,10 +30602,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31241,10 +30617,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31272,10 +30645,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31290,10 +30660,7 @@ impl FitMessageGyroscopeData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31483,10 +30850,7 @@ impl FitMessageHr {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -31498,10 +30862,7 @@ impl FitMessageHr {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -31526,14 +30887,14 @@ impl FitMessageHr {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.time256, 256, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.time256, 256, 0);
                             }
@@ -31565,7 +30926,7 @@ impl FitMessageHr {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31580,7 +30941,7 @@ impl FitMessageHr {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31608,10 +30969,7 @@ impl FitMessageHr {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31632,10 +30990,7 @@ impl FitMessageHr {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -31665,14 +31020,14 @@ impl FitMessageHr {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.event_timestamp_12.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.event_timestamp_12.value = val;
                             }
@@ -31919,14 +31274,14 @@ impl FitMessageHrZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.high_bpm.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.high_bpm.value = val;
                             }
@@ -31946,14 +31301,14 @@ impl FitMessageHrZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -32134,14 +31489,14 @@ impl FitMessageHrmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -32161,20 +31516,14 @@ impl FitMessageHrmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.hrm_ant_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.hrm_ant_id.value = val;
                             }
@@ -32194,14 +31543,14 @@ impl FitMessageHrmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.log_hrv.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.log_hrv.value = val;
                             }
@@ -32221,14 +31570,14 @@ impl FitMessageHrmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.hrm_ant_id_trans_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.hrm_ant_id_trans_type.value = val;
                             }
@@ -32352,10 +31701,7 @@ impl FitMessageHrv {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -32376,10 +31722,7 @@ impl FitMessageHrv {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -32439,15 +31782,13 @@ impl FitMessageLapSubfieldTotalCycles {
     ) -> Result<FitMessageLapSubfieldTotalCycles> {
         match message.sport.value {
             Some(FitFieldSport::Running) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageLapSubfieldTotalCycles::TotalStrides(val));
             }
 
             Some(FitFieldSport::Walking) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageLapSubfieldTotalCycles::TotalStrides(val));
             }
@@ -32455,7 +31796,7 @@ impl FitMessageLapSubfieldTotalCycles {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageLapSubfieldTotalCycles::Default(val))
     }
 }
@@ -32474,7 +31815,7 @@ impl FitMessageLapSubfieldAvgCadence {
     ) -> Result<FitMessageLapSubfieldAvgCadence> {
         match message.sport.value {
             Some(FitFieldSport::Running) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageLapSubfieldAvgCadence::AvgRunningCadence(val));
             }
@@ -32482,7 +31823,7 @@ impl FitMessageLapSubfieldAvgCadence {
             _ => (),
         }
 
-        let val = parse_uint8(&inp[0..f.field_size])?;
+        let val = field_parser_base_type!("uint8", inp, f)?;
         Ok(FitMessageLapSubfieldAvgCadence::Default(val))
     }
 }
@@ -32501,7 +31842,7 @@ impl FitMessageLapSubfieldMaxCadence {
     ) -> Result<FitMessageLapSubfieldMaxCadence> {
         match message.sport.value {
             Some(FitFieldSport::Running) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageLapSubfieldMaxCadence::MaxRunningCadence(val));
             }
@@ -32509,7 +31850,7 @@ impl FitMessageLapSubfieldMaxCadence {
             _ => (),
         }
 
-        let val = parse_uint8(&inp[0..f.field_size])?;
+        let val = field_parser_base_type!("uint8", inp, f)?;
         Ok(FitMessageLapSubfieldMaxCadence::Default(val))
     }
 }
@@ -33608,20 +32949,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_lat);
                             }
@@ -33641,20 +32976,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_long);
                             }
@@ -33674,20 +33003,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_lat);
                             }
@@ -33707,20 +33030,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_long);
                             }
@@ -33740,10 +33057,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -33755,10 +33069,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -33783,10 +33094,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -33798,10 +33106,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -33826,10 +33131,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -33841,10 +33143,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -33900,20 +33199,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_calories.value = val;
                             }
@@ -33933,20 +33226,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_fat_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_fat_calories.value = val;
                             }
@@ -33966,20 +33253,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
@@ -34007,20 +33288,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
@@ -34048,14 +33323,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.avg_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.avg_heart_rate.value = val;
                             }
@@ -34075,14 +33350,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
@@ -34164,20 +33439,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.avg_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.avg_power.value = val;
                             }
@@ -34197,20 +33466,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.max_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.max_power.value = val;
                             }
@@ -34230,20 +33493,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_ascent.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_ascent.value = val;
                             }
@@ -34263,20 +33520,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_descent.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_descent.value = val;
                             }
@@ -34377,14 +33628,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.event_group.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.event_group.value = val;
                             }
@@ -34404,20 +33655,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_lengths.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_lengths.value = val;
                             }
@@ -34437,20 +33682,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.normalized_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.normalized_power.value = val;
                             }
@@ -34507,20 +33746,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.first_length_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.first_length_index.value = val;
                             }
@@ -34540,10 +33773,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34555,10 +33785,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34637,20 +33864,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_active_lengths.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_active_lengths.value = val;
                             }
@@ -34670,20 +33891,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.total_work.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.total_work.value = val;
                             }
@@ -34703,10 +33918,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34718,10 +33930,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34754,10 +33963,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34769,10 +33975,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34805,14 +34008,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
@@ -34832,20 +34035,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
@@ -34865,10 +34062,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34880,10 +34074,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34908,10 +34099,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34923,10 +34111,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34951,10 +34136,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34966,10 +34148,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -34994,10 +34173,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35009,10 +34185,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35037,14 +34210,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_temperature.value = val;
                             }
@@ -35064,14 +34237,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.max_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.max_temperature.value = val;
                             }
@@ -35091,10 +34264,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35106,10 +34276,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35134,10 +34301,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35149,10 +34313,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35177,10 +34338,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35192,10 +34350,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35220,10 +34375,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35235,10 +34387,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35263,10 +34412,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35278,10 +34424,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35310,10 +34453,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35334,10 +34474,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35371,10 +34508,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35395,10 +34529,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35432,10 +34563,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35456,10 +34584,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35493,10 +34618,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35517,10 +34639,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35550,20 +34669,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.repetition_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.repetition_num.value = val;
                             }
@@ -35583,10 +34696,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35598,10 +34708,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35634,14 +34741,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.min_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.min_heart_rate.value = val;
                             }
@@ -35694,20 +34801,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
@@ -35731,10 +34832,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35749,10 +34847,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35780,10 +34875,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35798,10 +34890,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -35825,10 +34914,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35840,10 +34926,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35868,10 +34951,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35883,10 +34963,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35911,10 +34988,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35926,10 +35000,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35954,7 +35025,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35966,7 +35037,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -35991,7 +35062,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36003,7 +35074,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36028,7 +35099,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36040,7 +35111,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36065,20 +35136,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.player_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.player_score.value = val;
                             }
@@ -36102,10 +35167,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36126,10 +35188,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36163,10 +35222,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36187,10 +35243,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36224,10 +35277,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36248,10 +35298,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36285,10 +35332,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36309,10 +35353,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36346,10 +35387,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36370,10 +35408,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36407,10 +35442,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36431,10 +35463,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36464,7 +35493,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36476,7 +35505,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36501,7 +35530,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36513,7 +35542,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36538,7 +35567,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36550,7 +35579,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36575,7 +35604,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36587,7 +35616,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36612,7 +35641,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36624,7 +35653,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36649,10 +35678,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36664,10 +35690,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -36692,20 +35715,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.stand_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.stand_count.value = val;
                             }
@@ -36725,14 +35742,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_left_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_left_pco.value = val;
                             }
@@ -36752,14 +35769,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_right_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_right_pco.value = val;
                             }
@@ -36783,7 +35800,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36804,7 +35821,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36838,7 +35855,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36859,7 +35876,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36893,7 +35910,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36914,7 +35931,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36948,7 +35965,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -36969,7 +35986,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37003,10 +36020,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37021,10 +36035,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37052,10 +36063,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37070,10 +36078,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37101,7 +36106,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37116,7 +36121,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37144,7 +36149,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37159,7 +36164,7 @@ impl FitMessageLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -37183,10 +36188,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37198,10 +36200,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37226,10 +36225,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37241,10 +36237,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37269,10 +36262,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37284,10 +36274,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37312,10 +36299,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37327,10 +36311,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37355,10 +36336,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37370,10 +36348,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37398,20 +36373,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.avg_lev_motor_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.avg_lev_motor_power.value = val;
                             }
@@ -37431,20 +36400,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.max_lev_motor_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.max_lev_motor_power.value = val;
                             }
@@ -37464,7 +36427,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37476,7 +36439,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37501,10 +36464,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37516,10 +36476,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37544,10 +36501,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37559,10 +36513,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37587,10 +36538,7 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37602,10 +36550,7 @@ impl FitMessageLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -37630,20 +36575,14 @@ impl FitMessageLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
@@ -38029,10 +36968,7 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -38044,10 +36980,7 @@ impl FitMessageLength {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -38072,10 +37005,7 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -38087,10 +37017,7 @@ impl FitMessageLength {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -38115,20 +37042,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_strokes.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_strokes.value = val;
                             }
@@ -38148,20 +37069,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
@@ -38208,14 +37123,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.avg_swimming_cadence.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.avg_swimming_cadence.value = val;
                             }
@@ -38235,14 +37150,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.event_group.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.event_group.value = val;
                             }
@@ -38262,20 +37177,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_calories.value = val;
                             }
@@ -38322,20 +37231,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.player_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.player_score.value = val;
                             }
@@ -38355,20 +37258,14 @@ impl FitMessageLength {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
@@ -38392,10 +37289,7 @@ impl FitMessageLength {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38410,10 +37304,7 @@ impl FitMessageLength {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38441,10 +37332,7 @@ impl FitMessageLength {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38459,10 +37347,7 @@ impl FitMessageLength {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38673,20 +37558,14 @@ impl FitMessageMagnetometerData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -38710,10 +37589,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38728,10 +37604,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38759,10 +37632,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38777,10 +37647,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38808,10 +37675,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38826,10 +37690,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38857,10 +37718,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38875,10 +37733,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38906,10 +37761,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38924,10 +37776,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38955,10 +37804,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -38973,10 +37819,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -39004,10 +37847,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -39022,10 +37862,7 @@ impl FitMessageMagnetometerData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_float32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("float32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -39170,20 +38007,14 @@ impl FitMessageMemoGlob {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.part_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.part_index.value = val;
                             }
@@ -39203,14 +38034,14 @@ impl FitMessageMemoGlob {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.memo.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.memo.value = val;
                             }
@@ -39230,20 +38061,14 @@ impl FitMessageMemoGlob {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.message_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.message_number.value = val;
                             }
@@ -39328,22 +38153,19 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
     ) -> Result<FitMessageMesgCapabilitiesSubfieldCount> {
         match message.count_type.value {
             Some(FitFieldMesgCount::NumPerFile) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageMesgCapabilitiesSubfieldCount::NumPerFile(val));
             }
 
             Some(FitFieldMesgCount::MaxPerFile) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageMesgCapabilitiesSubfieldCount::MaxPerFile(val));
             }
 
             Some(FitFieldMesgCount::MaxPerFileType) => {
-                let val =
-                    parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                 return Ok(FitMessageMesgCapabilitiesSubfieldCount::MaxPerFileType(val));
             }
@@ -39351,7 +38173,7 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
             _ => (),
         }
 
-        let val = parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint16", inp, f, message)?;
         Ok(FitMessageMesgCapabilitiesSubfieldCount::Default(val))
     }
 }
@@ -39798,14 +38620,14 @@ impl FitMessageMetZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.high_bpm.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.high_bpm.value = val;
                             }
@@ -39825,20 +38647,14 @@ impl FitMessageMetZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.calories, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.calories, 10, 0);
                             }
@@ -39858,7 +38674,7 @@ impl FitMessageMetZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -39870,7 +38686,7 @@ impl FitMessageMetZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -39926,29 +38742,25 @@ impl FitMessageMonitoringSubfieldCycles {
     ) -> Result<FitMessageMonitoringSubfieldCycles> {
         match message.activity_type.value {
             Some(FitFieldActivityType::Walking) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageMonitoringSubfieldCycles::Steps(val));
             }
 
             Some(FitFieldActivityType::Running) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageMonitoringSubfieldCycles::Steps(val));
             }
 
             Some(FitFieldActivityType::Cycling) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageMonitoringSubfieldCycles::Strokes(val));
             }
 
             Some(FitFieldActivityType::Swimming) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageMonitoringSubfieldCycles::Strokes(val));
             }
@@ -39956,7 +38768,7 @@ impl FitMessageMonitoringSubfieldCycles {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageMonitoringSubfieldCycles::Default(val))
     }
 }
@@ -40341,20 +39153,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.calories.value = val;
                             }
@@ -40374,20 +39180,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
@@ -40438,10 +39238,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40453,10 +39250,7 @@ impl FitMessageMonitoring {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40563,20 +39357,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.distance_16.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.distance_16.value = val;
                             }
@@ -40596,20 +39384,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.cycles_16.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.cycles_16.value = val;
                             }
@@ -40629,20 +39411,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.active_time_16.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.active_time_16.value = val;
                             }
@@ -40701,10 +39477,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40716,10 +39489,7 @@ impl FitMessageMonitoring {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40744,10 +39514,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40759,10 +39526,7 @@ impl FitMessageMonitoring {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40787,10 +39551,7 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40802,10 +39563,7 @@ impl FitMessageMonitoring {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -40834,10 +39592,7 @@ impl FitMessageMonitoring {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -40852,10 +39607,7 @@ impl FitMessageMonitoring {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -40879,20 +39631,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.active_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.active_calories.value = val;
                             }
@@ -40912,14 +39658,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.current_activity_type_intensity.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.current_activity_type_intensity.value = val;
                             }
@@ -40955,14 +39701,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.timestamp_min_8.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.timestamp_min_8.value = val;
                             }
@@ -40982,20 +39728,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_16.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_16.value = val;
                             }
@@ -41015,14 +39755,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.heart_rate.value = val;
                             }
@@ -41042,14 +39782,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.intensity, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.intensity, 10, 0);
                             }
@@ -41069,20 +39809,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.duration_min.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.duration_min.value = val;
                             }
@@ -41102,20 +39836,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.duration.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.duration.value = val;
                             }
@@ -41135,20 +39863,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.ascent, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.ascent, 1000, 0);
                             }
@@ -41168,20 +39890,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.descent, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.descent, 1000, 0);
                             }
@@ -41201,20 +39917,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.moderate_activity_minutes.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.moderate_activity_minutes.value = val;
                             }
@@ -41234,20 +39944,14 @@ impl FitMessageMonitoring {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.vigorous_activity_minutes.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.vigorous_activity_minutes.value = val;
                             }
@@ -41519,10 +40223,7 @@ impl FitMessageMonitoringInfo {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -41543,10 +40244,7 @@ impl FitMessageMonitoringInfo {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -41580,10 +40278,7 @@ impl FitMessageMonitoringInfo {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -41604,10 +40299,7 @@ impl FitMessageMonitoringInfo {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -41637,20 +40329,14 @@ impl FitMessageMonitoringInfo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.resting_metabolic_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.resting_metabolic_rate.value = val;
                             }
@@ -41815,20 +40501,14 @@ impl FitMessageNmeaSentence {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -41848,14 +40528,14 @@ impl FitMessageNmeaSentence {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.sentence.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.sentence.value = val;
                             }
@@ -42062,20 +40742,14 @@ impl FitMessageObdiiData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -42099,10 +40773,7 @@ impl FitMessageObdiiData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -42117,10 +40788,7 @@ impl FitMessageObdiiData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -42144,14 +40812,14 @@ impl FitMessageObdiiData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.pid.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.pid.value = val;
                             }
@@ -42171,14 +40839,14 @@ impl FitMessageObdiiData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.raw_data.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.raw_data.value = val;
                             }
@@ -42202,7 +40870,7 @@ impl FitMessageObdiiData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -42217,7 +40885,7 @@ impl FitMessageObdiiData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -42245,10 +40913,7 @@ impl FitMessageObdiiData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -42263,10 +40928,7 @@ impl FitMessageObdiiData {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -42319,20 +40981,14 @@ impl FitMessageObdiiData {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.start_timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.start_timestamp_ms.value = val;
                             }
@@ -42547,8 +41203,7 @@ impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
     ) -> Result<FitMessageOneDSensorCalibrationSubfieldCalibrationFactor> {
         match message.sensor_type.value {
             Some(FitFieldSensorType::Barometer) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::BaroCalFactor(val),
@@ -42558,7 +41213,7 @@ impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::Default(val))
     }
 }
@@ -42809,20 +41464,14 @@ impl FitMessageOneDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.calibration_divisor.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.calibration_divisor.value = val;
                             }
@@ -42842,20 +41491,14 @@ impl FitMessageOneDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.level_shift.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.level_shift.value = val;
                             }
@@ -42875,20 +41518,14 @@ impl FitMessageOneDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 message.offset_cal.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 message.offset_cal.value = val;
                             }
@@ -43055,20 +41692,14 @@ impl FitMessagePowerZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.high_value.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.high_value.value = val;
                             }
@@ -43088,14 +41719,14 @@ impl FitMessagePowerZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -43750,20 +42381,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
@@ -43783,20 +42408,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
@@ -43816,20 +42435,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
@@ -43857,14 +42470,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.heart_rate.value = val;
                             }
@@ -43884,14 +42497,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.cadence.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.cadence.value = val;
                             }
@@ -43911,20 +42524,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
@@ -43944,20 +42551,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.speed, 1000, 0);
                             }
@@ -43985,20 +42586,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.power.value = val;
                             }
@@ -44018,14 +42613,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.compressed_speed_distance.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.compressed_speed_distance.value = val;
                             }
@@ -44061,20 +42656,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.grade, 100, 0);
                             }
@@ -44094,14 +42683,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.resistance.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.resistance.value = val;
                             }
@@ -44121,10 +42710,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44136,10 +42722,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44164,7 +42747,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44176,7 +42759,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44201,14 +42784,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.temperature.value = val;
                             }
@@ -44232,7 +42815,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -44253,7 +42836,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -44283,14 +42866,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.cycles.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.cycles.value = val;
                             }
@@ -44318,20 +42901,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.total_cycles.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.total_cycles.value = val;
                             }
@@ -44351,20 +42928,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.compressed_accumulated_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.compressed_accumulated_power.value = val;
                             }
@@ -44392,20 +42963,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.accumulated_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.accumulated_power.value = val;
                             }
@@ -44453,14 +43018,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
@@ -44480,10 +43045,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44495,10 +43057,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44523,20 +43082,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.calories.value = val;
                             }
@@ -44556,10 +43109,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44571,10 +43121,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44599,10 +43146,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44614,10 +43158,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44642,20 +43183,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.stance_time, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.stance_time, 10, 0);
                             }
@@ -44702,7 +43237,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44714,7 +43249,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44739,7 +43274,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44751,7 +43286,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44776,7 +43311,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44788,7 +43323,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44813,7 +43348,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44825,7 +43360,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44850,7 +43385,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44862,7 +43397,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -44887,14 +43422,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.time128, 128, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.time128, 128, 0);
                             }
@@ -44941,14 +43476,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.zone.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.zone.value = val;
                             }
@@ -44968,20 +43503,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.ball_speed, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.ball_speed, 100, 0);
                             }
@@ -45001,20 +43530,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.cadence256, 256, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.cadence256, 256, 0);
                             }
@@ -45034,7 +43557,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45046,7 +43569,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45071,10 +43594,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45086,10 +43606,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45114,10 +43631,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45129,10 +43643,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45157,10 +43668,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45172,10 +43680,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45200,10 +43705,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45215,10 +43717,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45243,10 +43742,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45258,10 +43754,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45286,10 +43779,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45301,10 +43791,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45356,14 +43843,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.left_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.left_pco.value = val;
                             }
@@ -45383,14 +43870,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.right_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.right_pco.value = val;
                             }
@@ -45414,7 +43901,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45435,7 +43922,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45469,7 +43956,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45490,7 +43977,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45524,7 +44011,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45545,7 +44032,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45579,7 +44066,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45600,7 +44087,7 @@ m"
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -45630,10 +44117,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45645,10 +44129,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45673,10 +44154,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45688,10 +44166,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45716,14 +44191,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.battery_soc, 2, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.battery_soc, 2, 0);
                             }
@@ -45743,20 +44218,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.motor_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.motor_power.value = val;
                             }
@@ -45776,10 +44245,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45791,10 +44257,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45819,10 +44282,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45834,10 +44294,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45862,20 +44319,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.step_length, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.step_length, 10, 0);
                             }
@@ -45895,20 +44346,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.absolute_pressure.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.absolute_pressure.value = val;
                             }
@@ -45928,20 +44373,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.depth, 1000, 0);
                             }
@@ -45961,10 +44400,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -45976,10 +44412,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46004,10 +44437,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46019,10 +44449,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46047,10 +44474,7 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46062,10 +44486,7 @@ m"
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46090,20 +44511,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.ndl_time, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.ndl_time, 1, 0);
                             }
@@ -46123,14 +44538,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.cns_load.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.cns_load.value = val;
                             }
@@ -46150,20 +44565,14 @@ m"
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.n2_load, 1, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.n2_load, 1, 0);
                             }
@@ -46240,7 +44649,7 @@ impl FitMessageScheduleSubfieldProduct {
             _ => (),
         }
 
-        let val = parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint16", inp, f, message)?;
         Ok(FitMessageScheduleSubfieldProduct::Default(val))
     }
 }
@@ -46465,20 +44874,14 @@ impl FitMessageSchedule {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", &bytes, f, message)?;
 
                                 message.serial_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", inp, f, message)?;
 
                                 message.serial_number.value = val;
                             }
@@ -46527,14 +44930,14 @@ impl FitMessageSchedule {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.completed.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.completed.value = val;
                             }
@@ -46802,14 +45205,14 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -46829,20 +45232,14 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", &bytes, f, message)?;
 
                                 message.sdm_ant_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16z", inp, f, message)?;
 
                                 message.sdm_ant_id.value = val;
                             }
@@ -46862,10 +45259,7 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46877,10 +45271,7 @@ impl FitMessageSdmProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -46905,20 +45296,14 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.odometer, 100, 0);
                             }
@@ -46938,14 +45323,14 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.speed_source.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.speed_source.value = val;
                             }
@@ -46965,14 +45350,14 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8z(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", &bytes, f)?;
 
                                 message.sdm_ant_id_trans_type.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8z(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8z", inp, f)?;
 
                                 message.sdm_ant_id_trans_type.value = val;
                             }
@@ -46992,14 +45377,14 @@ impl FitMessageSdmProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.odometer_rollover.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.odometer_rollover.value = val;
                             }
@@ -47212,14 +45597,14 @@ impl FitMessageSegmentFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.file_uuid.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.file_uuid.value = val;
                             }
@@ -47239,14 +45624,14 @@ impl FitMessageSegmentFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -47266,20 +45651,14 @@ impl FitMessageSegmentFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.user_profile_primary_key.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.user_profile_primary_key.value = val;
                             }
@@ -47354,10 +45733,7 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -47372,10 +45748,7 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -47403,10 +45776,7 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -47421,10 +45791,7 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -47452,8 +45819,7 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -47468,8 +45834,7 @@ impl FitMessageSegmentFile {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v =
-                                        parse_string(&tempp[0..f.field_size], field.field_size)?;
+                                    let v = field_parser_base_type!("string", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -47493,14 +45858,14 @@ impl FitMessageSegmentFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.default_race_leader.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.default_race_leader.value = val;
                             }
@@ -47676,14 +46041,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -47703,14 +46068,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.uuid.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.uuid.value = val;
                             }
@@ -47757,14 +46122,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_bool(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", &bytes, f)?;
 
                                 message.enabled.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_bool(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("bool", inp, f)?;
 
                                 message.enabled.value = val;
                             }
@@ -47784,20 +46149,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.user_profile_primary_key.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.user_profile_primary_key.value = val;
                             }
@@ -47817,20 +46176,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.device_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.device_id.value = val;
                             }
@@ -47850,14 +46203,14 @@ impl FitMessageSegmentId {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.default_race_leader.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.default_race_leader.value = val;
                             }
@@ -47968,8 +46321,7 @@ impl FitMessageSegmentLapSubfieldTotalCycles {
     ) -> Result<FitMessageSegmentLapSubfieldTotalCycles> {
         match message.sport.value {
             Some(FitFieldSport::Cycling) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageSegmentLapSubfieldTotalCycles::TotalStrokes(val));
             }
@@ -47977,7 +46329,7 @@ impl FitMessageSegmentLapSubfieldTotalCycles {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageSegmentLapSubfieldTotalCycles::Default(val))
     }
 }
@@ -48866,20 +47218,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_lat);
                             }
@@ -48899,20 +47245,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_long);
                             }
@@ -48932,20 +47272,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_lat);
                             }
@@ -48965,20 +47299,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.end_position_long);
                             }
@@ -48998,10 +47326,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49013,10 +47338,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49041,10 +47363,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49056,10 +47375,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49084,10 +47400,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49099,10 +47412,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49158,20 +47468,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_calories.value = val;
                             }
@@ -49191,20 +47495,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_fat_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_fat_calories.value = val;
                             }
@@ -49224,20 +47522,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
@@ -49257,20 +47549,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
@@ -49290,14 +47576,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.avg_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.avg_heart_rate.value = val;
                             }
@@ -49317,14 +47603,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
@@ -49344,14 +47630,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.avg_cadence.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.avg_cadence.value = val;
                             }
@@ -49371,14 +47657,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.max_cadence.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.max_cadence.value = val;
                             }
@@ -49398,20 +47684,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.avg_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.avg_power.value = val;
                             }
@@ -49431,20 +47711,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.max_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.max_power.value = val;
                             }
@@ -49464,20 +47738,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_ascent.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_ascent.value = val;
                             }
@@ -49497,20 +47765,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_descent.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_descent.value = val;
                             }
@@ -49557,14 +47819,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.event_group.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.event_group.value = val;
                             }
@@ -49584,20 +47846,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_lat);
                             }
@@ -49617,20 +47873,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_long);
                             }
@@ -49650,20 +47900,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_lat);
                             }
@@ -49683,20 +47927,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_long);
                             }
@@ -49716,14 +47954,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -49743,20 +47981,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.normalized_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.normalized_power.value = val;
                             }
@@ -49840,20 +48072,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.total_work.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.total_work.value = val;
                             }
@@ -49873,10 +48099,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49888,10 +48111,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49916,10 +48136,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49931,10 +48148,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -49959,14 +48173,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
@@ -49986,20 +48200,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
@@ -50019,10 +48227,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50034,10 +48239,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50062,10 +48264,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50077,10 +48276,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50105,10 +48301,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50120,10 +48313,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50148,10 +48338,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50163,10 +48350,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50191,14 +48375,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_temperature.value = val;
                             }
@@ -50218,14 +48402,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.max_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.max_temperature.value = val;
                             }
@@ -50245,10 +48429,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50260,10 +48441,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50288,10 +48466,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50303,10 +48478,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50331,10 +48503,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50346,10 +48515,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50374,10 +48540,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50389,10 +48552,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50417,10 +48577,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50432,10 +48589,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50464,10 +48618,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50488,10 +48639,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50525,10 +48673,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50549,10 +48694,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50586,10 +48728,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50610,10 +48749,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50647,10 +48783,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50671,10 +48804,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -50704,20 +48834,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.repetition_num.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.repetition_num.value = val;
                             }
@@ -50737,10 +48861,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50752,10 +48873,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50780,14 +48898,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.min_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.min_heart_rate.value = val;
                             }
@@ -50807,10 +48925,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50822,10 +48937,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50910,7 +49022,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50922,7 +49034,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50947,7 +49059,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50959,7 +49071,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50984,7 +49096,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -50996,7 +49108,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51021,7 +49133,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51033,7 +49145,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51058,7 +49170,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51070,7 +49182,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51123,14 +49235,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.uuid.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.uuid.value = val;
                             }
@@ -51150,7 +49262,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51162,7 +49274,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51187,7 +49299,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51199,7 +49311,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51224,7 +49336,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51236,7 +49348,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51261,20 +49373,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.front_gear_shift_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.front_gear_shift_count.value = val;
                             }
@@ -51294,20 +49400,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.rear_gear_shift_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.rear_gear_shift_count.value = val;
                             }
@@ -51327,10 +49427,7 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51342,10 +49439,7 @@ impl FitMessageSegmentLap {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -51370,20 +49464,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.stand_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.stand_count.value = val;
                             }
@@ -51403,14 +49491,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_left_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_left_pco.value = val;
                             }
@@ -51430,14 +49518,14 @@ impl FitMessageSegmentLap {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_right_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_right_pco.value = val;
                             }
@@ -51461,7 +49549,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51482,7 +49570,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51516,7 +49604,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51537,7 +49625,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51571,7 +49659,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51592,7 +49680,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51626,7 +49714,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51647,7 +49735,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51681,10 +49769,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51699,10 +49784,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51730,10 +49812,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51748,10 +49827,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51779,7 +49855,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51794,7 +49870,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51822,7 +49898,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -51837,7 +49913,7 @@ impl FitMessageSegmentLap {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -52074,14 +50150,14 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -52133,20 +50209,14 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.group_primary_key.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.group_primary_key.value = val;
                             }
@@ -52166,20 +50236,14 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.activity_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.activity_id.value = val;
                             }
@@ -52199,10 +50263,7 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -52214,10 +50275,7 @@ impl FitMessageSegmentLeaderboardEntry {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -52242,14 +50300,14 @@ impl FitMessageSegmentLeaderboardEntry {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.activity_id_string.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.activity_id_string.value = val;
                             }
@@ -52437,20 +50495,14 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_lat);
                             }
@@ -52470,20 +50522,14 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.position_long);
                             }
@@ -52503,20 +50549,14 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.distance, 100, 0);
                             }
@@ -52536,20 +50576,14 @@ impl FitMessageSegmentPoint {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.altitude, 5, 500);
                             }
@@ -52573,10 +50607,7 @@ impl FitMessageSegmentPoint {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -52597,10 +50628,7 @@ impl FitMessageSegmentPoint {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -52660,15 +50688,13 @@ impl FitMessageSessionSubfieldTotalCycles {
     ) -> Result<FitMessageSessionSubfieldTotalCycles> {
         match message.sport.value {
             Some(FitFieldSport::Running) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageSessionSubfieldTotalCycles::TotalStrides(val));
             }
 
             Some(FitFieldSport::Walking) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageSessionSubfieldTotalCycles::TotalStrides(val));
             }
@@ -52676,7 +50702,7 @@ impl FitMessageSessionSubfieldTotalCycles {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageSessionSubfieldTotalCycles::Default(val))
     }
 }
@@ -52695,7 +50721,7 @@ impl FitMessageSessionSubfieldAvgCadence {
     ) -> Result<FitMessageSessionSubfieldAvgCadence> {
         match message.sport.value {
             Some(FitFieldSport::Running) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageSessionSubfieldAvgCadence::AvgRunningCadence(val));
             }
@@ -52703,7 +50729,7 @@ impl FitMessageSessionSubfieldAvgCadence {
             _ => (),
         }
 
-        let val = parse_uint8(&inp[0..f.field_size])?;
+        let val = field_parser_base_type!("uint8", inp, f)?;
         Ok(FitMessageSessionSubfieldAvgCadence::Default(val))
     }
 }
@@ -52722,7 +50748,7 @@ impl FitMessageSessionSubfieldMaxCadence {
     ) -> Result<FitMessageSessionSubfieldMaxCadence> {
         match message.sport.value {
             Some(FitFieldSport::Running) => {
-                let val = parse_uint8(&inp[0..f.field_size])?;
+                let val = field_parser_base_type!("uint8", inp, f)?;
 
                 return Ok(FitMessageSessionSubfieldMaxCadence::MaxRunningCadence(val));
             }
@@ -52730,7 +50756,7 @@ impl FitMessageSessionSubfieldMaxCadence {
             _ => (),
         }
 
-        let val = parse_uint8(&inp[0..f.field_size])?;
+        let val = field_parser_base_type!("uint8", inp, f)?;
         Ok(FitMessageSessionSubfieldMaxCadence::Default(val))
     }
 }
@@ -53924,20 +51950,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_lat);
                             }
@@ -53957,20 +51977,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.start_position_long);
                             }
@@ -54044,10 +52058,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54059,10 +52070,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54087,10 +52095,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54102,10 +52107,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54130,10 +52132,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54145,10 +52144,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54204,20 +52200,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_calories.value = val;
                             }
@@ -54237,20 +52227,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_fat_calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_fat_calories.value = val;
                             }
@@ -54270,20 +52254,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_speed, 1000, 0);
                             }
@@ -54311,20 +52289,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.max_speed, 1000, 0);
                             }
@@ -54352,14 +52324,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.avg_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.avg_heart_rate.value = val;
                             }
@@ -54379,14 +52351,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
@@ -54468,20 +52440,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.avg_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.avg_power.value = val;
                             }
@@ -54501,20 +52467,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.max_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.max_power.value = val;
                             }
@@ -54534,20 +52494,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_ascent.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_ascent.value = val;
                             }
@@ -54567,20 +52521,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.total_descent.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.total_descent.value = val;
                             }
@@ -54600,7 +52548,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54612,7 +52560,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54637,20 +52585,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.first_lap_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.first_lap_index.value = val;
                             }
@@ -54670,20 +52612,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_laps.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_laps.value = val;
                             }
@@ -54703,14 +52639,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.event_group.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.event_group.value = val;
                             }
@@ -54758,20 +52694,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_lat);
                             }
@@ -54791,20 +52721,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.nec_long);
                             }
@@ -54824,20 +52748,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_lat);
                             }
@@ -54857,20 +52775,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.swc_long);
                             }
@@ -54890,20 +52802,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.normalized_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.normalized_power.value = val;
                             }
@@ -54923,10 +52829,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54938,10 +52841,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54966,10 +52866,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -54981,10 +52878,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55046,10 +52940,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55061,10 +52952,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55089,10 +52977,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55104,10 +52989,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55159,10 +53041,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55174,10 +53053,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55202,20 +53078,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.threshold_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.threshold_power.value = val;
                             }
@@ -55263,20 +53133,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_active_lengths.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_active_lengths.value = val;
                             }
@@ -55296,20 +53160,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.total_work.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.total_work.value = val;
                             }
@@ -55329,10 +53187,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55344,10 +53199,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55380,10 +53232,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55395,10 +53244,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55431,14 +53277,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.gps_accuracy.value = val;
                             }
@@ -55458,20 +53304,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_grade, 100, 0);
                             }
@@ -55491,10 +53331,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55506,10 +53343,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55534,10 +53368,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55549,10 +53380,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55577,10 +53405,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55592,10 +53417,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55620,10 +53442,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55635,10 +53454,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55663,14 +53479,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_temperature.value = val;
                             }
@@ -55690,14 +53506,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.max_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.max_temperature.value = val;
                             }
@@ -55717,10 +53533,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55732,10 +53545,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55760,10 +53570,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55775,10 +53582,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55803,10 +53607,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55818,10 +53619,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55846,10 +53644,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55861,10 +53656,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55889,10 +53681,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55904,10 +53693,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -55932,14 +53718,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.min_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.min_heart_rate.value = val;
                             }
@@ -55963,10 +53749,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -55987,10 +53770,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56024,10 +53804,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56048,10 +53825,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56085,10 +53859,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56109,10 +53880,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56146,10 +53914,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56170,10 +53935,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56203,10 +53965,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56218,10 +53977,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56246,20 +54002,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.best_lap_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.best_lap_index.value = val;
                             }
@@ -56279,10 +54029,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56294,10 +54041,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56330,20 +54074,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.player_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.player_score.value = val;
                             }
@@ -56363,20 +54101,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.opponent_score.value = val;
                             }
@@ -56396,14 +54128,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.opponent_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.opponent_name.value = val;
                             }
@@ -56427,10 +54159,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56445,10 +54174,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56476,10 +54202,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56494,10 +54217,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56521,10 +54241,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56536,10 +54253,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56564,10 +54278,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56579,10 +54290,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56607,10 +54315,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56622,10 +54327,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56650,10 +54352,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56665,10 +54364,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56693,10 +54389,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56708,10 +54401,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56736,7 +54426,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56748,7 +54438,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56773,7 +54463,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56785,7 +54475,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56810,7 +54500,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56822,7 +54512,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -56851,10 +54541,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56875,10 +54562,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56912,10 +54596,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56936,10 +54617,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56973,10 +54651,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -56997,10 +54672,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57034,10 +54706,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57058,10 +54727,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57095,10 +54761,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57119,10 +54782,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57156,10 +54816,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57180,10 +54837,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57213,7 +54867,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57225,7 +54879,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57250,7 +54904,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57262,7 +54916,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57287,7 +54941,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57299,7 +54953,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57324,7 +54978,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57336,7 +54990,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57361,7 +55015,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57373,7 +55027,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57398,14 +55052,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.sport_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.sport_index.value = val;
                             }
@@ -57425,10 +55079,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57440,10 +55091,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57468,20 +55116,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.stand_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.stand_count.value = val;
                             }
@@ -57501,14 +55143,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_left_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_left_pco.value = val;
                             }
@@ -57528,14 +55170,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.avg_right_pco.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.avg_right_pco.value = val;
                             }
@@ -57559,7 +55201,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57580,7 +55222,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57614,7 +55256,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57635,7 +55277,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57669,7 +55311,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57690,7 +55332,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57724,7 +55366,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57745,7 +55387,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57779,10 +55421,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57797,10 +55436,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57828,10 +55464,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57846,10 +55479,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57877,7 +55507,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57892,7 +55522,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57920,7 +55550,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57935,7 +55565,7 @@ impl FitMessageSession {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint8(&tempp[0..f.field_size])?;
+                                    let v = field_parser_base_type!("uint8", tempp, f)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -57959,10 +55589,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -57974,10 +55601,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58002,10 +55626,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58017,10 +55638,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58045,10 +55663,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58060,10 +55675,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58088,10 +55700,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58103,10 +55712,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58131,10 +55737,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58146,10 +55749,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58174,20 +55774,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.avg_lev_motor_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.avg_lev_motor_power.value = val;
                             }
@@ -58207,20 +55801,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.max_lev_motor_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.max_lev_motor_power.value = val;
                             }
@@ -58240,7 +55828,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58252,7 +55840,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58277,10 +55865,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58292,10 +55877,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58320,10 +55902,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58335,10 +55914,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58363,10 +55939,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58378,10 +55951,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58406,7 +55976,7 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58418,7 +55988,7 @@ impl FitMessageSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -58443,20 +56013,14 @@ impl FitMessageSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.avg_vam, 1000, 0);
                             }
@@ -58677,20 +56241,14 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.duration, 1000, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.duration, 1000, 0);
                             }
@@ -58710,20 +56268,14 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.repetitions.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.repetitions.value = val;
                             }
@@ -58743,20 +56295,14 @@ impl FitMessageSet {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.weight, 16, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.weight, 16, 0);
                             }
@@ -58889,10 +56435,7 @@ impl FitMessageSet {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -58907,10 +56450,7 @@ impl FitMessageSet {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_uint16(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("uint16", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -59098,7 +56638,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
             _ => (),
         }
 
-        let val = parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint16", inp, f, message)?;
         Ok(FitMessageSlaveDeviceSubfieldProduct::Default(val))
     }
 }
@@ -59435,20 +56975,14 @@ impl FitMessageSoftware {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.version, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.version, 100, 0);
                             }
@@ -59468,14 +57002,14 @@ impl FitMessageSoftware {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.part_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.part_number.value = val;
                             }
@@ -59642,10 +57176,7 @@ impl FitMessageSpeedZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -59657,10 +57188,7 @@ impl FitMessageSpeedZone {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -59685,14 +57213,14 @@ impl FitMessageSpeedZone {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -59880,14 +57408,14 @@ impl FitMessageSport {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.name.value = val;
                             }
@@ -60014,20 +57542,14 @@ impl FitMessageStressLevel {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", &bytes, f, message)?;
 
                                 message.stress_level_value.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint16", inp, f, message)?;
 
                                 message.stress_level_value.value = val;
                             }
@@ -60107,8 +57629,7 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     ) -> Result<FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor> {
         match message.sensor_type.value {
             Some(FitFieldSensorType::Accelerometer) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::AccelCalFactor(val),
@@ -60116,8 +57637,7 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
             }
 
             Some(FitFieldSensorType::Gyroscope) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::GyroCalFactor(val),
@@ -60127,7 +57647,7 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::Default(val))
     }
 }
@@ -60386,20 +57906,14 @@ impl FitMessageThreeDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.calibration_divisor.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.calibration_divisor.value = val;
                             }
@@ -60419,20 +57933,14 @@ impl FitMessageThreeDSensorCalibration {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.level_shift.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.level_shift.value = val;
                             }
@@ -60456,10 +57964,7 @@ impl FitMessageThreeDSensorCalibration {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -60474,10 +57979,7 @@ impl FitMessageThreeDSensorCalibration {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -60505,10 +58007,7 @@ impl FitMessageThreeDSensorCalibration {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = &bytes[..];
                                 while array_size > 0 {
-                                    let v = parse_sint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint32", tempp, f, message)?;
                                     tempp = &tempp[field.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -60529,10 +58028,7 @@ impl FitMessageThreeDSensorCalibration {
                                 let mut val = Vec::with_capacity(array_size);
                                 let mut tempp = inp;
                                 while array_size > 0 {
-                                    let v = parse_sint32(
-                                        &tempp[0..f.field_size],
-                                        message.definition_message.endianness,
-                                    )?;
+                                    let v = field_parser_base_type!("sint32", tempp, f, message)?;
                                     tempp = &tempp[f.base_type_size()..];
                                     val.push(v);
                                     array_size = array_size - 1
@@ -60744,10 +58240,7 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -60759,10 +58252,7 @@ impl FitMessageTimestampCorrelation {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -60816,10 +58306,7 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -60831,10 +58318,7 @@ impl FitMessageTimestampCorrelation {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -60898,20 +58382,14 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -60931,20 +58409,14 @@ impl FitMessageTimestampCorrelation {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.system_timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.system_timestamp_ms.value = val;
                             }
@@ -61191,20 +58663,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.timer_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.timer_time.value = val;
                             }
@@ -61224,20 +58690,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.distance.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.distance.value = val;
                             }
@@ -61257,20 +58717,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.calories.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.calories.value = val;
                             }
@@ -61317,20 +58771,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.elapsed_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.elapsed_time.value = val;
                             }
@@ -61350,20 +58798,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.sessions.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.sessions.value = val;
                             }
@@ -61383,20 +58825,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.active_time.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.active_time.value = val;
                             }
@@ -61416,14 +58852,14 @@ impl FitMessageTotals {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.sport_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.sport_index.value = val;
                             }
@@ -61508,7 +58944,7 @@ impl FitMessageTrainingFileSubfieldProduct {
             _ => (),
         }
 
-        let val = parse_uint16(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint16", inp, f, message)?;
         Ok(FitMessageTrainingFileSubfieldProduct::Default(val))
     }
 }
@@ -61784,20 +59220,14 @@ impl FitMessageTrainingFile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32z(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", &bytes, f, message)?;
 
                                 message.serial_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32z(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32z", inp, f, message)?;
 
                                 message.serial_number.value = val;
                             }
@@ -62183,14 +59613,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.friendly_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.friendly_name.value = val;
                             }
@@ -62237,14 +59667,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.age.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.age.value = val;
                             }
@@ -62264,14 +59694,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.height, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 scale_and_offset_parse_assignment!(val, message.height, 100, 0);
                             }
@@ -62291,20 +59721,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.weight, 10, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.weight, 10, 0);
                             }
@@ -62407,14 +59831,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.resting_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.resting_heart_rate.value = val;
                             }
@@ -62434,14 +59858,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.default_max_running_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.default_max_running_heart_rate.value = val;
                             }
@@ -62461,14 +59885,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.default_max_biking_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.default_max_biking_heart_rate.value = val;
                             }
@@ -62488,14 +59912,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.default_max_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.default_max_heart_rate.value = val;
                             }
@@ -62741,14 +60165,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_byte(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", &bytes, f)?;
 
                                 message.global_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_byte(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("byte", inp, f)?;
 
                                 message.global_id.value = val;
                             }
@@ -62870,10 +60294,7 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -62885,10 +60306,7 @@ impl FitMessageUserProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -62913,10 +60331,7 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -62928,10 +60343,7 @@ impl FitMessageUserProfile {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -62984,20 +60396,14 @@ impl FitMessageUserProfile {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.dive_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.dive_count.value = val;
                             }
@@ -63131,14 +60537,14 @@ impl FitMessageVideo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.url.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.url.value = val;
                             }
@@ -63158,14 +60564,14 @@ impl FitMessageVideo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.hosting_provider.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.hosting_provider.value = val;
                             }
@@ -63185,20 +60591,14 @@ impl FitMessageVideo {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.duration.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.duration.value = val;
                             }
@@ -63360,20 +60760,14 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.clip_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.clip_number.value = val;
                             }
@@ -63422,20 +60816,14 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.start_timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.start_timestamp_ms.value = val;
                             }
@@ -63484,20 +60872,14 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.end_timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.end_timestamp_ms.value = val;
                             }
@@ -63517,20 +60899,14 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.clip_start.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.clip_start.value = val;
                             }
@@ -63550,20 +60926,14 @@ impl FitMessageVideoClip {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.clip_end.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.clip_end.value = val;
                             }
@@ -63730,20 +61100,14 @@ impl FitMessageVideoDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.message_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.message_count.value = val;
                             }
@@ -63763,14 +61127,14 @@ impl FitMessageVideoDescription {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.text.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.text.value = val;
                             }
@@ -63935,20 +61299,14 @@ impl FitMessageVideoFrame {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.timestamp_ms.value = val;
                             }
@@ -63968,20 +61326,14 @@ impl FitMessageVideoFrame {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", &bytes, f, message)?;
 
                                 message.frame_number.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                                 message.frame_number.value = val;
                             }
@@ -64148,20 +61500,14 @@ impl FitMessageVideoTitle {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.message_count.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.message_count.value = val;
                             }
@@ -64181,14 +61527,14 @@ impl FitMessageVideoTitle {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.text.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.text.value = val;
                             }
@@ -64257,7 +61603,7 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
             _ => (),
         }
 
-        let val = parse_byte(&inp[0..f.field_size], f.field_size)?;
+        let val = field_parser_base_type!("byte", inp, f)?;
         Ok(FitMessageWatchfaceSettingsSubfieldLayout::Default(val))
     }
 }
@@ -64647,14 +61993,14 @@ impl FitMessageWeatherAlert {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.report_id.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.report_id.value = val;
                             }
@@ -65056,14 +62402,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.temperature.value = val;
                             }
@@ -65110,20 +62456,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.wind_direction.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.wind_direction.value = val;
                             }
@@ -65143,10 +62483,7 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65158,10 +62495,7 @@ impl FitMessageWeatherConditions {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65186,14 +62520,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.precipitation_probability.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.precipitation_probability.value = val;
                             }
@@ -65213,14 +62547,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.temperature_feels_like.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.temperature_feels_like.value = val;
                             }
@@ -65240,14 +62574,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.relative_humidity.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.relative_humidity.value = val;
                             }
@@ -65267,14 +62601,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.location.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.location.value = val;
                             }
@@ -65323,20 +62657,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.observed_location_lat);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.observed_location_lat);
                             }
@@ -65356,20 +62684,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint32(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", &bytes, f, message)?;
 
                                 deg_parse_assignment!(val, message.observed_location_long);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint32(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("sint32", inp, f, message)?;
 
                                 deg_parse_assignment!(val, message.observed_location_long);
                             }
@@ -65416,14 +62738,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.high_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.high_temperature.value = val;
                             }
@@ -65443,14 +62765,14 @@ impl FitMessageWeatherConditions {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_sint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", &bytes, f)?;
 
                                 message.low_temperature.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_sint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("sint8", inp, f)?;
 
                                 message.low_temperature.value = val;
                             }
@@ -65713,10 +63035,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65728,10 +63047,7 @@ impl FitMessageWeightScale {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65756,10 +63072,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65771,10 +63084,7 @@ impl FitMessageWeightScale {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65799,10 +63109,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65814,10 +63121,7 @@ impl FitMessageWeightScale {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65842,20 +63146,14 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.bone_mass, 100, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.bone_mass, 100, 0);
                             }
@@ -65875,10 +63173,7 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65890,10 +63185,7 @@ impl FitMessageWeightScale {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -65918,20 +63210,14 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.basal_met, 4, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.basal_met, 4, 0);
                             }
@@ -65951,14 +63237,14 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.physique_rating.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.physique_rating.value = val;
                             }
@@ -65978,20 +63264,14 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.active_met, 4, 0);
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(val, message.active_met, 4, 0);
                             }
@@ -66011,14 +63291,14 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.metabolic_age.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.metabolic_age.value = val;
                             }
@@ -66038,14 +63318,14 @@ impl FitMessageWeightScale {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.visceral_fat_rating.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.visceral_fat_rating.value = val;
                             }
@@ -66304,20 +63584,14 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_valid_steps.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_valid_steps.value = val;
                             }
@@ -66337,14 +63611,14 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.wkt_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.wkt_name.value = val;
                             }
@@ -66391,10 +63665,7 @@ impl FitMessageWorkout {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -66406,10 +63677,7 @@ impl FitMessageWorkout {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -66691,20 +63959,14 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.num_valid_steps.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.num_valid_steps.value = val;
                             }
@@ -66724,20 +63986,14 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.first_step_index.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.first_step_index.value = val;
                             }
@@ -66757,10 +64013,7 @@ impl FitMessageWorkoutSession {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -66772,10 +64025,7 @@ impl FitMessageWorkoutSession {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -66864,8 +64114,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
     ) -> Result<FitMessageWorkoutStepSubfieldDurationValue> {
         match message.duration_type.value {
             Some(FitFieldWktStepDuration::Time) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationTime(
                     val,
@@ -66873,8 +64122,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepetitionTime) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationTime(
                     val,
@@ -66882,8 +64130,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::Distance) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationDistance(val));
             }
@@ -66905,15 +64152,13 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::Calories) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationCalories(val));
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilStepsCmplt) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66921,8 +64166,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilTime) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66930,8 +64174,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilDistance) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66939,8 +64182,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilCalories) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66948,8 +64190,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilHrLessThan) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66957,8 +64198,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilHrGreaterThan) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66966,8 +64206,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilPowerLessThan) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -66975,8 +64214,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilPowerGreaterThan) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationStep(
                     val,
@@ -67000,8 +64238,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             }
 
             Some(FitFieldWktStepDuration::Reps) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldDurationValue::DurationReps(
                     val,
@@ -67011,7 +64248,7 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageWorkoutStepSubfieldDurationValue::Default(val))
     }
 }
@@ -67040,22 +64277,19 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
     ) -> Result<FitMessageWorkoutStepSubfieldTargetValue> {
         match message.duration_type.value {
             Some(FitFieldWktStepDuration::RepeatUntilStepsCmplt) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatSteps(val));
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilTime) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatTime(val));
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilDistance) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatDistance(
                     val,
@@ -67063,8 +64297,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepDuration::RepeatUntilCalories) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::RepeatCalories(
                     val,
@@ -67108,8 +64341,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
         match message.target_type.value {
             Some(FitFieldWktStepTarget::Speed) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(
                     val,
@@ -67117,15 +64349,13 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepTarget::HeartRate) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val));
             }
 
             Some(FitFieldWktStepTarget::Cadence) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(
                     val,
@@ -67133,8 +64363,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
 
             Some(FitFieldWktStepTarget::Power) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(
                     val,
@@ -67152,7 +64381,7 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageWorkoutStepSubfieldTargetValue::Default(val))
     }
 }
@@ -67174,8 +64403,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     ) -> Result<FitMessageWorkoutStepSubfieldCustomTargetValueLow> {
         match message.target_type.value {
             Some(FitFieldWktStepTarget::Speed) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetSpeedLow(val),
@@ -67193,8 +64421,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
             }
 
             Some(FitFieldWktStepTarget::Cadence) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetCadenceLow(val),
@@ -67214,7 +64441,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageWorkoutStepSubfieldCustomTargetValueLow::Default(
             val,
         ))
@@ -67238,8 +64465,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     ) -> Result<FitMessageWorkoutStepSubfieldCustomTargetValueHigh> {
         match message.target_type.value {
             Some(FitFieldWktStepTarget::Speed) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetSpeedHigh(val),
@@ -67257,8 +64483,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
             }
 
             Some(FitFieldWktStepTarget::Cadence) => {
-                let val =
-                    parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+                let val = field_parser_base_type!("uint32", inp, f, message)?;
 
                 return Ok(
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetCadenceHigh(
@@ -67280,7 +64505,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
             _ => (),
         }
 
-        let val = parse_uint32(&inp[0..f.field_size], message.definition_message.endianness)?;
+        let val = field_parser_base_type!("uint32", inp, f, message)?;
         Ok(FitMessageWorkoutStepSubfieldCustomTargetValueHigh::Default(
             val,
         ))
@@ -67601,14 +64826,14 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.wkt_step_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.wkt_step_name.value = val;
                             }
@@ -67834,14 +65059,14 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_string(&&bytes[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", &bytes, f)?;
 
                                 message.notes.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_string(&inp[0..f.field_size], field.field_size)?;
+                                let val = field_parser_base_type!("string", inp, f)?;
 
                                 message.notes.value = val;
                             }
@@ -67926,20 +65151,14 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.exercise_name.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.exercise_name.value = val;
                             }
@@ -67959,10 +65178,7 @@ impl FitMessageWorkoutStep {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -67974,10 +65190,7 @@ impl FitMessageWorkoutStep {
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 scale_and_offset_parse_assignment!(
                                     val,
@@ -68167,14 +65380,14 @@ impl FitMessageZonesTarget {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.max_heart_rate.value = val;
                             }
@@ -68194,14 +65407,14 @@ impl FitMessageZonesTarget {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint8(&&bytes[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", &bytes, f)?;
 
                                 message.threshold_heart_rate.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint8(&inp[0..f.field_size])?;
+                                let val = field_parser_base_type!("uint8", inp, f)?;
 
                                 message.threshold_heart_rate.value = val;
                             }
@@ -68221,20 +65434,14 @@ impl FitMessageZonesTarget {
                                     message.definition_message.endianness,
                                 )?;
 
-                                let val = parse_uint16(
-                                    &&bytes[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", &bytes, f, message)?;
 
                                 message.functional_threshold_power.value = val;
                             }
                             None => {
                                 saved_outp = &inp[f.field_size..];
 
-                                let val = parse_uint16(
-                                    &inp[0..f.field_size],
-                                    message.definition_message.endianness,
-                                )?;
+                                let val = field_parser_base_type!("uint16", inp, f, message)?;
 
                                 message.functional_threshold_power.value = val;
                             }

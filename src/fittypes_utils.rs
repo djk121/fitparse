@@ -5,14 +5,111 @@ use nom::Endianness;
 use std::cmp::Ordering;
 use std::mem::transmute;
 
+#[macro_export]
+macro_rules! field_parser_base_type {
+    ("string", $bytes:expr, $field:expr) => {
+        parse_string(&$bytes[0..$field.field_size], $field.field_size);
+    };
+    ("byte", $bytes:expr, $field:expr) => {
+        parse_byte(&$bytes[0..$field.field_size], $field.field_size);
+    };
+    ("bool", $bytes:expr, $field:expr) => {
+        parse_bool(&$bytes[0..$field.field_size]);
+    };
+    ("enum", $bytes:expr, $field:expr) => {
+        parse_enum(&$bytes[0..$field.field_size]);
+    };
+    ("uint8", $bytes:expr, $field:expr) => {
+        parse_uint8(&$bytes[0..$field.field_size]);
+    };
+    ("uint8z", $bytes:expr, $field:expr) => {
+        parse_uint8z(&$bytes[0..$field.field_size]);
+    };
+    ("sint8", $bytes:expr, $field:expr) => {
+        parse_sint8(&$bytes[0..$field.field_size]);
+    };
+    ("uint16", $bytes:expr, $field:expr, $message:expr) => {
+        parse_uint16(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("uint16z", $bytes:expr, $field:expr, $message:expr) => {
+        parse_uint16z(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("sint16", $bytes:expr, $field:expr, $message:expr) => {
+        parse_sint16(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("uint32", $bytes:expr, $field:expr, $message:expr) => {
+        parse_uint32(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("uint32z", $bytes:expr, $field:expr, $message:expr) => {
+        parse_uint32z(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("sint32", $bytes:expr, $field:expr, $message:expr) => {
+        parse_sint32(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("float32", $bytes:expr, $field:expr, $message:expr) => {
+        parse_float32(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("uint64", $bytes:expr, $field:expr, $message:expr) => {
+        parse_uint64(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("uint64z", $bytes:expr, $field:expr, $message:expr) => {
+        parse_uint64z(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("sint64", $bytes:expr, $field:expr, $message:expr) => {
+        parse_sint64(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+    ("float64", $bytes:expr, $field:expr, $message:expr) => {
+        parse_float32(
+            &$bytes[0..$field.field_size],
+            $message.definition_message.endianness,
+        );
+    };
+}
 
 #[macro_export]
 macro_rules! field_parser_fit_type {
     ($field:ty, $bytes:expr, $f:expr, $message:expr, $tz_offset:expr) => {
-        <$field>::parse(&$bytes[0..$f.field_size], $message.definition_message.endianness, $tz_offset);
+        <$field>::parse(
+            &$bytes[0..$f.field_size],
+            $message.definition_message.endianness,
+            $tz_offset,
+        );
     };
     ($field:ty, $bytes:expr, $f:expr, $message:expr) => {
-        <$field>::parse(&$bytes[0..$f.field_size], $message.definition_message.endianness);
+        <$field>::parse(
+            &$bytes[0..$f.field_size],
+            $message.definition_message.endianness,
+        );
     };
 
     ($field:ty, $bytes:expr, $f:expr) => {

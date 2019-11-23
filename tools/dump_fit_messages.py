@@ -203,7 +203,7 @@ use FitBaseValue;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
 
-use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment, field_parser_fit_type}; 
+use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment, field_parser_fit_type, field_parser_base_type}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
 
 
@@ -725,15 +725,11 @@ class Field(object):
             return template.render()
 
         elif self.type in FIT_TYPE_MAP.keys():
-            field_size = self.type in ['byte', 'string']
-            endianness = self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
-            template = Environment().from_string(FIELD_PARSER_BASE_TYPE,
-                                                 globals={'field_type': self.type,
-                                                          'field_size': field_size,
-                                                          'endianness': endianness,
-                                                          'bytes_from': bytes_from,
-                                                          'field_name': field_variable_name})
-            return template.render()
+            if self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
+                return "field_parser_base_type!(\"{}\", {}, f, message)".format(self.type, bytes_from)
+            else:
+                return "field_parser_base_type!(\"{}\", {}, f)".format(self.type, bytes_from)
+
 
         else:
             endianness = self.types[self.type]['base_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
@@ -959,14 +955,11 @@ class Subfield(object):
 
     def output_field_parser(self, types, message_name):
         if self.type in FIT_TYPE_MAP.keys():
-            field_size = self.type in ['byte', 'string']
-            endianness = self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
-            template = Environment().from_string(FIELD_PARSER_BASE_TYPE, globals={'field_type': self.type,
-                                                                                  'field_size': field_size,
-                                                                                  'endianness': endianness,
-                                                                                  'bytes_from': 'inp',
-                                                                                  'field_name': '_field'})
-            return template.render()
+            if self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
+                return "field_parser_base_type!(\"{}\", inp, f, message)".format(self.type)
+            else:
+                return "field_parser_base_type!(\"{}\", inp, f)".format(self.type)
+
 
         else:
             endianness = types[self.type]['base_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
