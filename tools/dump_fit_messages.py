@@ -667,7 +667,7 @@ class Field(object):
         self.bits = bits
         self.scale = scale
         self.offset = offset
-        self.units = units
+        self.units = units.replace('\n', ' ')
         self.comment = comment
         self.subfields = []
         self.message = None

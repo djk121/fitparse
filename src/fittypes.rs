@@ -42082,9 +42082,7 @@ impl FitMessageRecord {
             },
             compressed_speed_distance: FitFieldValue {
                 value: None,
-                units: "m/s,
-m"
-                .to_string(),
+                units: "m/s, m".to_string(),
             },
             grade: FitFieldValue {
                 value: None,
