@@ -51,29 +51,98 @@ fn make_field_definitions(definitions: Vec<(u8, usize, u8)>) -> Vec<FitFieldDefi
         .collect()
 }
 
-macro_rules! ffv {
-    ($s:expr) => {
-        FitFieldValue {
-            value: $s,
+macro_rules! ffbv {
+    ("unparsed", $ty:ty, "single") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::NotYetParsedSingle,
             units: "".to_string(),
         }
     };
-    ($s:expr, $u:expr) => {
-        FitFieldValue {
-            value: $s,
+    ("unparsed", $ty:ty, "vec") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::NotYetParsedVec,
+            units: "".to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, "single") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Single($s),
+            units: "".to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, "vec") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Vec($s),
+            units: "".to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, $u:expr, "single") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Single($s),
+            units: $u.to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, $u:expr, "vec") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Vec($s),
             units: $u.to_string(),
         }
     };
 }
 
+macro_rules! ffav {
+    ("unparsed", $ty:ty, $scale:expr, $offset:expr, "single") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::NotYetParsedSingle,
+            parsed_value: PreAdjustedValue::<$ty>::NotYetParsedSingle,
+            units: "".to_string(),
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+    ("unparsed", $ty:ty, $scale:expr, $offset:expr, "vec") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::NotYetParsedVec,
+            parsed_value: PreAdjustedValue::<$ty>::NotYetParsedVec,
+            units: "".to_string(),
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "single") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::Single($value),
+            parsed_value: PreAdjustedValue::<$ty>::Single($preadjusted_value),
+            units: $units,
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "vec") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::Vec($value),
+            parsed_value: PreAdjustedValue::<$ty>::Vec($preadjusted_value),
+            units: $units,
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+}
+
 fn make_field_description(
-    field_name: Vec<Option<String>>,
-    units: Vec<Option<String>>,
-    field_definition_number: u8,
+    field_name: Vec<FitString>,
+    units: Vec<FitString>,
+    field_definition_number: FitUint8,
     native_mesg_num: Option<FitFieldMesgNum>,
     fit_base_type_id: FitFieldFitBaseType,
     field_definitions: Vec<(u8, usize, u8)>,
 ) -> Rc<FitMessageFieldDescription> {
+
+    let nmn = match native_mesg_num {
+        None => ffbv!("unparsed", FitFieldMesgNum, "single"),
+        Some(x) => ffbv!(x, FitFieldMesgNum, "single")
+    };
+
     Rc::new(FitMessageFieldDescription {
         header: FitRecordHeader::Normal(FitNormalRecordHeader {
             message_type: FitNormalRecordHeaderMessageType::Data,
@@ -101,20 +170,20 @@ fn make_field_description(
         unknown_fields: HashMap::new(),
         raw_bytes: vec![],
         message_name: "FitMessageFieldDescription",
-        developer_data_index: ffv!(Some(0)),
-        field_definition_number: ffv!(Some(field_definition_number)),
-        fit_base_type_id: ffv!(Some(fit_base_type_id)),
-        field_name: ffv!(Some(field_name)),
-        array: ffv!(None),
-        components: ffv!(None),
-        scale: ffv!(None),
-        offset: ffv!(None),
-        units: ffv!(Some(units)),
-        bits: ffv!(None),
-        accumulate: ffv!(None),
-        fit_base_unit_id: ffv!(None),
-        native_mesg_num: ffv!(native_mesg_num),
-        native_field_num: ffv!(None),
+        developer_data_index: ffbv!(FitUint8::new(0), FitUint8, "single"),
+        field_definition_number: ffbv!(field_definition_number, FitUint8, "single"),
+        fit_base_type_id: ffbv!(fit_base_type_id, FitFieldFitBaseType, "single"),
+        field_name: ffbv!(field_name, FitString, "vec"),
+        array: ffbv!("unparsed", FitUint8, "single"),
+        components: ffbv!("unparsed", FitString, "single"),
+        scale: ffbv!("unparsed", FitUint8, "single"),
+        offset: ffbv!("unparsed", FitSint8, "single"),
+        units: ffbv!(units, FitString, "vec"),
+        bits: ffbv!("unparsed", FitString, "single"),
+        accumulate: ffbv!("unparsed", FitString, "single"),
+        fit_base_unit_id: ffbv!("unparsed", FitFieldFitBaseUnit, "single"),
+        native_mesg_num: nmn,
+        native_field_num: ffbv!("unparsed", FitUint8, "single"),
     })
 }
 
@@ -138,10 +207,10 @@ fn fit_message_record() {
     });
 
     let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
-    assert_eq!(rec.position_lat, ffv!(Some(42.56913810968399), "deg"));
-    assert_eq!(rec.position_long, ffv!(Some(-71.02391302585602), "deg"));
-    assert_eq!(rec.heart_rate, ffv!(Some(151), "bpm"));
-    assert_eq!(rec.power, ffv!(Some(209), "watts"));
+    assert_eq!(rec.position_lat, ffav!(FitSint32::new(507869600), FitFloat64::new(42.56913810968399), FitSint32, 0.0, 0.0, "deg".to_string(), "single"));
+    assert_eq!(rec.position_long, ffav!(FitSint32::new(-847348288), FitFloat64::new(-71.02391302585602), FitSint32, 0.0, 0.0, "deg".to_string(), "single"));
+    assert_eq!(rec.heart_rate, ffbv!(FitUint8::new(151), FitUint8, "bpm", "single"));
+    assert_eq!(rec.power, ffbv!(FitUint16::new(209), FitUint16, "watts", "single"));
 }
 
 #[test]
@@ -190,25 +259,25 @@ fn fit_message_record_with_developer_fields() {
 
     let developer_field_descriptions = vec![
         (
-            vec![Some("Form Power".to_string())],
-            vec![Some("Watts".to_string())],
-            8,
+            vec![FitString::new("Form Power".to_string())],
+            vec![FitString::new("Watts".to_string())],
+            FitUint8::new(8),
             None,
             FitFieldFitBaseType::Uint16,
             vec![(0, 1, 2), (1, 1, 2), (2, 1, 2), (3, 11, 7), (8, 6, 7)],
         ),
         (
-            vec![Some("Leg Spring Stiffness".to_string())],
-            vec![Some("KN/m".to_string())],
-            9,
+            vec![FitString::new("Leg Spring Stiffness".to_string())],
+            vec![FitString::new("KN/m".to_string())],
+            FitUint8::new(9),
             None,
             FitFieldFitBaseType::Float32,
             vec![(0, 1, 2), (1, 1, 2), (2, 1, 2), (3, 21, 7), (8, 5, 7)],
         ),
         (
-            vec![Some("Distance".to_string())],
-            vec![Some("Meters".to_string())],
-            6,
+            vec![FitString::new("Distance".to_string())],
+            vec![FitString::new("Meters".to_string())],
+            FitUint8::new(6),
             Some(FitFieldMesgNum::SdmProfile),
             FitFieldFitBaseType::Uint32,
             vec![
@@ -221,9 +290,9 @@ fn fit_message_record_with_developer_fields() {
             ],
         ),
         (
-            vec![Some("Speed".to_string())],
-            vec![Some("M/S".to_string())],
-            5,
+            vec![FitString::new("Speed".to_string())],
+            vec![FitString::new("M/S".to_string())],
+            FitUint8::new(5),
             Some(FitFieldMesgNum::BikeProfile),
             FitFieldFitBaseType::Float32,
             vec![
@@ -251,22 +320,28 @@ fn fit_message_record_with_developer_fields() {
     });
 
     let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
-    assert_eq!(rec.position_lat, ffv!(Some(42.56913810968399), "deg"));
-    assert_eq!(rec.position_long, ffv!(Some(-71.02391302585602), "deg"));
-    assert_eq!(rec.heart_rate, ffv!(Some(151), "bpm"));
-    assert_eq!(rec.power, ffv!(Some(209), "watts"));
+    assert_eq!(rec.position_lat, ffav!(FitSint32::new(507869600), FitFloat64::new(42.56913810968399), FitSint32, 0.0, 0.0, "deg".to_string(), "single"));
+    assert_eq!(rec.position_long, ffav!(FitSint32::new(-847348288), FitFloat64::new(-71.02391302585602), FitSint32, 0.0, 0.0, "deg".to_string(), "single"));
+    assert_eq!(rec.heart_rate, ffbv!(FitUint8::new(151), FitUint8, "bpm", "single"));
+    assert_eq!(rec.power, ffbv!(FitUint16::new(209), FitUint16, "watts", "single"));
 
-    let fp_field_name = Some("Form Power".to_string());
+    let fp_field_name = FitString::new("Form Power".to_string());
 
     for ffdd in &rec.developer_fields {
         match ffdd.field_description.field_name {
+            FitFieldBasicValue {
+                value: BasicValue::<FitString>::Vec(ref field_names),
+                ..
+            } => {
+            /*
             FitFieldValue {
                 value: Some(ref field_names),
                 units: _,
             } => {
+                */
                 //Some(ref field_names) => {
                 if field_names[0] == fp_field_name {
-                    assert_eq!(ffdd.value, FitBaseValue::Uint16(Some(57)));
+                    assert_eq!(ffdd.value, FitBaseValue::Uint16(FitUint16::new(57)));
                     return;
                 }
             }

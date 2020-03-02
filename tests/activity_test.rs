@@ -1,13 +1,92 @@
 extern crate fitparse;
 
 use fitparse::fitfile::FitFile;
-use fitparse::{FitMessage, FitFieldValue};
+use fitparse::{FitMessage, FitFieldBasicValue, FitFieldAdjustedValue};
 use fitparse::fittypes::FitDataMessage;
+use fitparse::{BasicValue, AdjustedValue, PreAdjustedValue, FitFloat64, FitUint32, FitUint16};
 
 
 #[test]
 fn smoke() {
     assert_eq!(1, 1);
+}
+
+macro_rules! ffbv {
+    ("unparsed", $ty:ty, "single") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::NotYetParsedSingle,
+            units: "".to_string(),
+        }
+    };
+    ("unparsed", $ty:ty, "vec") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::NotYetParsedVec,
+            units: "".to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, "single") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Single($s),
+            units: "".to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, "vec") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Vec($s),
+            units: "".to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, $u:expr, "single") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Single($s),
+            units: $u.to_string(),
+        }
+    };
+    ($s:expr, $ty:ty, $u:expr, "vec") => {
+        FitFieldBasicValue {
+            value: BasicValue::<$ty>::Vec($s),
+            units: $u.to_string(),
+        }
+    };
+}
+
+macro_rules! ffav {
+    ("unparsed", $ty:ty, $scale:expr, $offset:expr, "single") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::NotYetParsedSingle,
+            parsed_value: PreAdjustedValue::<$ty>::NotYetParsedSingle,
+            units: "".to_string(),
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+    ("unparsed", $ty:ty, $scale:expr, $offset:expr, "vec") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::NotYetParsedVec,
+            parsed_value: PreAdjustedValue::<$ty>::NotYetParsedVec,
+            units: "".to_string(),
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "single") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::Single($value),
+            parsed_value: PreAdjustedValue::<$ty>::Single($preadjusted_value),
+            units: $units,
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
+    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "vec") => {
+        FitFieldAdjustedValue {
+            value: AdjustedValue::Vec($value),
+            parsed_value: PreAdjustedValue::<$ty>::Vec($preadjusted_value),
+            units: $units,
+            scale: $scale,
+            offset: $offset, 
+        }
+    };
 }
 
 #[test]
@@ -136,20 +215,31 @@ fn activity_test() {
 
     assert_eq!(32, ff.messages.len());
     
-    println!("session: {:#?}", ff.messages[29]);
+    //println!("session: {:#?}", ff.messages[29]);
 
     match ff.messages[29] {
         FitMessage::Data(FitDataMessage::Session(ref m)) => {
-            assert_eq!(m.num_laps, FitFieldValue{ value: Some(1), units: "".to_string() });
-            assert_eq!(m.avg_speed, FitFieldValue{ value: Some(0.417), units: "m/s".to_string() });
-            assert_eq!(m.max_speed, FitFieldValue{ value: Some(0.368), units: "m/s".to_string() });
-            assert_eq!(m.enhanced_max_speed, FitFieldValue{ value: Some(0.368), units: "m/s".to_string() });
+            //assert_eq!(m.num_laps, FitFieldValue{ value: Some(1), units: "".to_string() });
+            assert_eq!(m.num_laps, ffbv!(FitUint16::new(1), FitUint16, "".to_string(), "single"));
+            //assert_eq!(m.avg_speed, FitFieldValue{ value: Some(0.417), units: "m/s".to_string() });
+            assert_eq!(m.avg_speed, ffav!(FitUint16::new(417), FitFloat64::new(0.417), FitUint16, 1000.0, 0.0, "m/s".to_string(), "single")); 
+            //assert_eq!(m.max_speed, FitFieldValue{ value: Some(0.368), units: "m/s".to_string() });
+            assert_eq!(m.max_speed, ffav!(FitUint16::new(368), FitFloat64::new(0.368), FitUint16, 1000.0, 0.0, "m/s".to_string(), "single")); 
+            //assert_eq!(m.enhanced_max_speed, FitFieldValue{ value: Some(0.368), units: "m/s".to_string() });
+            assert_eq!(m.enhanced_max_speed, ffav!(FitUint32::new(368), FitFloat64::new(0.368), FitUint32, 1000.0, 0.0, "m/s".to_string(), "single")); 
+
         },
         _ => panic!("message 29 should be Activity with enhanced_max_speed = 0.368")
     }
     
     match ff.messages[31] {
-        FitMessage::Data(FitDataMessage::Activity(ref m)) => assert_eq!(m.total_timer_time, FitFieldValue{ value: Some(13.749), units: "s".to_string() }),
+        FitMessage::Data(FitDataMessage::Activity(ref m)) => {
+            assert_eq!(
+                m.total_timer_time, 
+                //FitFieldValue{ value: Some(13.749), units: "s".to_string() })
+                ffav!(FitUint32::new(13749), FitFloat64::new(13.749), FitUint32, 1000.0, 0.0, "s".to_string(), "single")
+            )
+        },
         _ => panic!("message 31 should be Activity with total_timer_time = 13.749")
     }
 }

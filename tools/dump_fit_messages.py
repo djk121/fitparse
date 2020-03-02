@@ -1,4 +1,4 @@
-#!/usr/bin/env - python
+#!/usr/bin/env - python3
 
 import csv
 import sys
@@ -6,25 +6,42 @@ import inflect # for number -> words conversion
 
 from jinja2 import Template, Environment
 
-FIT_TYPE_MAP = {
-    'enum': 'u8',
-    'uint8': 'u8',
-    'uint8z': 'u8',
-    'uint16': 'u16',
-    'uint16z': 'u16',
-    'uint32': 'u32',
-    'uint32z': 'u32',
-    'string': 'String',
-    'sint8': 'i8',
-    'sint16': 'i16',
-    'sint32': 'i32',
-    'bool': 'bool',
-    'byte': 'Vec<u8>',
-    #'byte': "&'a [u8]",
-    'float32': 'f32',
-    'float64': 'f64',
-
+FIT_TYPE_MAP_RUST_TYPES = {
+     'enum': 'u8',
+     'uint8': 'u8',
+     'uint8z': 'u8',
+     'uint16': 'u16',
+     'uint16z': 'u16',
+     'uint32': 'u32',
+     'uint32z': 'u32',
+     'string': 'String',
+     'sint8': 'i8',
+     'sint16': 'i16',
+     'sint32': 'i32',
+     'bool': 'bool',
+     'byte': 'Vec<u8>',
+     'float32': 'f32',
+     'float64': 'f64',
 }
+
+FIT_TYPE_MAP = {
+    'enum': 'FitEnum',
+    'uint8': 'FitUint8',
+    'uint8z': 'FitUint8z',
+    'uint16': 'FitUint16',
+    'uint16z': 'FitUint16z',
+    'uint32': 'FitUint32',
+    'uint32z': 'FitUint32z',
+    'string': 'FitString',
+    'sint8': 'FitSint8',
+    'sint16': 'FitSint16',
+    'sint32': 'FitSint32',
+    'bool': 'FitBool',
+    'byte': 'FitByte',
+    'float32': 'FitFloat32',
+    'float64': 'FitFloat64',
+}
+
 
 RUST_TYPE_SIZE_MAP = {
     'enum': 1,
@@ -44,23 +61,35 @@ RUST_TYPE_SIZE_MAP = {
     'float64': 8,
 }
 
+FIT_BASE_TYPE_NUM = {
+    'enum': 0,
+    'uint8': 2,
+    'uint8z': 10,
+    'uint16': 132,
+    'uint16z': 139,
+    'uint32': 134,
+    'uint32z': 140,
+    'string': 7,
+    'sint8': 1,
+    'sint16': 131,
+    'sint32': 133,
+    'byte': 13,
+    'float32': 136,
+    'float64': 137,
+    'sint64': 142,
+    'uint64': 143,
+    'uint64z': 144
+}
+
 FIT_BASE_TYPES = ['uint8', 'uint8z', 'uint16', 'uint16z', 'uint32', 'uint32z', 'sint8', 'sint16', 'sint32', 'float32', 'float64', 'string', 'byte']
 FIT_BASE_NUMERIC_TYPES = ['uint8', 'uint8z', 'uint16', 'uint16z', 'uint32', 'uint32z', 'sint8', 'sint16', 'sint32', 'float32', 'float64']
 
 ENUM_TYPE_TEMPLATE = """
 {% set base_type = types[this_type]["base_type"] %}
-{% set base_rust_type = fit_type_map[base_type] %}
+{% set base_rust_type = fit_type_map_rust_types[base_type] %}
 {% set fields = types[this_type]["fields"] %}
 
-{% if base_type not in ['string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8'] -%}
-    {% set endianness_clause_full = ', endianness: Endianness' -%}
-    {% set endianness_clause_pass = ', endianness' -%}
-{% else -%}
-    {% set endianness_clause_full = '' -%}
-    {% set endianness_clause_pass = '' -%}
-{% endif %}
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum {{ type_name }} { // fit base type: {{ base_type }}
 {%- for field in fields if not field["value_name"][0].isdigit() %}
     {{ rustify_name(field["value_name"]) }} = {{ field["value"]}},
@@ -70,16 +99,30 @@ pub enum {{ type_name }} { // fit base type: {{ base_type }}
     UnknownToSdk = -2,
 }
 
-impl {{ type_name }} {
-    pub fn parse(input: &[u8]{{ endianness_clause_full}}) -> Result<{{ type_name }}> {
-        let val = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
-        match val {
-            Some(valid_val) => Ok({{ type_name }}::from(valid_val)),
-            None => Ok({{ type_name }}::InvalidFieldValue),
-            //None => Err(Error::invalid_fit_base_type_parse())
+impl fmt::Display for {{ type_name }} {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            {%- for field in fields if not field["value_name"][0].isdigit() %}
+            {{ type_name }}::{{ rustify_name(field["value_name"]) }} => write!(f, "{}", "{{ rustify_name(field["value_name"]) }}"),
+            {%- endfor %}
+            InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
+
+impl FitFieldParseable for {{ type_name }} {
+    fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<{{ type_name }}> {
+        let val = parse_{{ base_type }}(input, parse_config);
+        match val {
+            Ok(v) => Ok({{ type_name }}::from(v)),
+            Err(_) => Ok({{ type_name }}::InvalidFieldValue)
+        }
+    }
+}
+
+vec_fit_field_parseable!({{ type_name }});
+
 
 impl From<{{ base_rust_type }}> for {{ type_name }} {
     fn from(code: {{ base_rust_type }}) -> Self {
@@ -96,45 +139,48 @@ impl From<{{ base_rust_type }}> for {{ type_name }} {
 
 NON_ENUM_TYPE_TEMPLATE = """
 {% set base_type = types[this_type]["base_type"] %}
-{% set base_rust_type = fit_type_map[base_type] %}
+{% set base_rust_type = fit_type_map_rust_types[base_type] %}
 {% set fields = types[this_type]["fields"] %}
 
-{% if base_type not in ['string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8'] -%}
-    {% set endianness_clause_full = ', endianness: Endianness' -%}
-    {% set endianness_clause_pass = ', endianness' -%}
-{% else -%}
-    {% set endianness_clause_full = '' -%}
-    {% set endianness_clause_pass = '' -%}
-{% endif %}
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum {{ type_name }} { // fit base type: {{ base_type }}
 {%- for field in fields if not field["value_name"][0].isdigit() %}
     {{ rustify_name(field["value_name"]) }}, // {{ field["value"] }}
     {%- if field["comment"] %}  {{ field["comment"] }}{% endif %}
 {%- endfor %}
-    {{ rustify_name(this_type) }}({{ fit_type_map[base_type] }}),
+    {{ rustify_name(this_type) }}({{ base_rust_type }}),
     InvalidFieldValue,
     UnknownToSdk,
 }
 
-impl {{ type_name }} {
-    pub fn parse(input: &[u8]{{ endianness_clause_full}}) -> Result<{{ type_name }}> {
-        let val = parse_{{ base_type }}(input{{ endianness_clause_pass }})?;
-        match val {
-            Some(valid_val) => {
-                match valid_val {
-                    {% for field in fields if not field["value_name"][0].isdigit() %}
-                    {{ field["value"] }} => Ok({{ type_name }}::from(valid_val)),
-                    {% endfor %}
-                    v => Ok({{ type_name }}::{{ rustify_name(this_type) }}(v)),
-                }
-            },
-            None => Ok({{ type_name }}::InvalidFieldValue),
+impl fmt::Display for {{ type_name }} {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            {%- for field in fields if not field["value_name"][0].isdigit() %}
+            {{ type_name }}::{{ rustify_name(field["value_name"]) }} => write!(f, "{}", "{{ rustify_name(field["value_name"]) }}"),
+            {%- endfor %}
+            InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
 
+impl FitFieldParseable for {{ type_name }} {
+    fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<{{ type_name }}> {
+        let val = parse_{{ base_type }}(input, parse_config);
+        match val {
+            Err(_) => Ok({{ type_name }}::InvalidFieldValue),
+            Ok(v) => match v {
+                {% for field in fields if not field["value_name"][0].isdigit() %}
+                {{ field["value"] }} => Ok({{ type_name }}::from(v)),
+                {%- endfor %}
+                v => Ok({{ type_name }}::{{ rustify_name(this_type) }}(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!({{ type_name }});
 
 impl From<{{ base_rust_type }}> for {{ type_name }} {
     fn from(code: {{ base_rust_type }}) -> Self {
@@ -153,6 +199,13 @@ def resolve_field_size(field_type, types):
         return RUST_TYPE_SIZE_MAP[field_type]
     else:
         return RUST_TYPE_SIZE_MAP[types[field_type]['base_type']]
+
+def resolve_field_type(field_type, types):
+    if field_type in FIT_BASE_TYPES:
+        return FIT_BASE_TYPE_NUM[field_type]
+    else:
+        return FIT_BASE_TYPE_NUM[types[field_type]['base_type']]
+
 
 def rustify_name(name):
     rustified = [name[0].upper(),]
@@ -191,7 +244,7 @@ use std::collections::HashMap;
 
 use nom::Endianness;
 
-use FitFieldValue;
+use {FitFieldBasicValue, FitFieldAdjustedValue};
 use FitRecord;
 use FitRecordHeader;
 use FitDefinitionMessage;
@@ -200,12 +253,19 @@ use FitFieldDeveloperData;
 use FitGlobalMesgNum;
 use FitMessageUnknownToSdk;
 use FitBaseValue;
+use FitParseConfig;
+use FitFieldParseable;
 use fitparsingstate::FitParsingState;
 use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
 
-use {fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment, field_parser_fit_type, field_parser_base_type}; 
+use {vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment, field_parser_fit_type, field_parser_base_type}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
+use {FitBool, FitBoolVec, FitEnum, FitEnumVec, FitUint8, FitUint8Vec, FitUint8z, FitUint8zVec, FitSint8, FitSint8Vec, FitUint16, FitUint16Vec, 
+     FitUint16z, FitUint16zVec, FitSint16, FitSint16Vec, FitUint32, FitUint32Vec, FitUint32z, FitUint32zVec, FitSint32, FitSint32Vec,
+     FitFloat32, FitFloat32Vec, FitUint64, FitUint64Vec, FitUint64z, FitUint64zVec, FitSint64, FitSint64Vec, FitFloat64, FitFloat64Vec,
+     FitByte, FitByteVec, FitString, FitStringVec};
 
+use {BasicValue, PreAdjustedValue, AdjustedValue};
 
 use subset_with_pad;
 
@@ -228,14 +288,14 @@ use errors::{Error, Result};
         else:
             template = Environment().from_string(NON_ENUM_TYPE_TEMPLATE, globals={'rustify_name': rustify_name, 'field_name': field_name})
 
-        content = template.render(this_type=this_type, type_name=type_name, types=types, fit_type_map=FIT_TYPE_MAP)
+        content = template.render(this_type=this_type, type_name=type_name, types=types, fit_type_map=FIT_TYPE_MAP, fit_type_map_rust_types=FIT_TYPE_MAP_RUST_TYPES)
         sys.stdout.write(content)
 
 
 def parse_types_file(types_file_name):
     types = {}
 
-    f = open(sys.argv[1], 'rb')
+    f = open(sys.argv[1], 'rt')
     lines = []
     csvreader = csv.reader(f)
     for row in csvreader:
@@ -421,8 +481,10 @@ impl fmt::Display for {{ message_name }} {
         {% for field in fields -%}
         {%- if field.has_subfields -%}
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
+        writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", self.{{field.name }})?;
+        {% else %}
+        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", {% if field.is_adjusted or field.is_semicircles %}true{% else %}false{% endif %}, f);
         {% endif -%}
-        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", f);
         {% endfor %}
             
         fmt_unknown_fields!(self, f);
@@ -456,7 +518,7 @@ impl {{ message_name }} {
             {%- if field.has_subfields -%}
             {{ field.name }}_subfield_bytes: vec![],
             {% endif -%}
-            {{ field.name }}: FitFieldValue { value: None, units: "{{ field.output_units }}".to_string() },
+            {{ field.name }}: {{ field.output_message_field() }},
             {% endfor %}
         };
 
@@ -477,14 +539,15 @@ impl {{ message_name }} {
     }
 
     {% if has_subfields %}
-    fn parse_subfields(message: &mut {{ message_name }}, _tz_offset: f64) -> Result<()> {
+    fn parse_subfields(message: &mut {{ message_name }}, tz_offset: f64) -> Result<()> {
         {%- for field in fields -%}
         {%- if field.has_subfields %}
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == {{ field.number }}).collect();
         if fds.len() == 1 {
-            let field = fds[0];
+            // let field = fds[0];
+            let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = {{ field.output_subfield_parser()}}?;
-            message.{{ field.name }}.value = Some(val);
+            message.{{ field.name }} = val;
         }
         {%- endif -%}
         {%- endfor %}
@@ -493,72 +556,66 @@ impl {{ message_name }} {
     }
     {% endif %}
 
-    fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], _tz_offset: f64) -> Result<&'a [u8]> {
+    fn parse_internal<'a>(message: &mut {{ message_name }}, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        let mut saved_outp = input;
+        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
-            let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> = vec![(*field, None)];
+
+            let orig_field_size = field.field_size;
+            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
+            let should_advance_inp = false;
 
             while actions.len() > 0 {
+                let (parse_config, advance_inp) = actions.remove(0);
+                let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
-                let (f, components_bit_range) = actions.remove(0);
+                let mut parse_input = inp;
+                if let Some((start, num_bits)) = parse_config.bit_range {
+                    alternate_input = subset_with_pad(&inp[0..parse_config.field_size()], 
+                        start, num_bits, parse_config.endianness())?;
+                    parse_input = &alternate_input;
+                };
+                /*
+                let parse_input = match parse_config.bit_range {
+                    None => inp,
+                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
+                        start, num_bits, parse_config.endianness())?
+                };
+                */
 
-                let _parse_result: Result<()> = match f.definition_number {
-                {% for field in fields %}
+                //println!("parse_config: {:?}", parse_config);
+                //println!("parse_input: {:?}", parse_input);
+
+                match parse_config.field_definition_number() {
+                {% for field in fields if not field.has_subfields %}
                     {{ field.number }} => {  // {{ field.name }}
-                        match components_bit_range {
-                            Some((bit_range_start, num_bits)) => {
-                                let bytes = subset_with_pad(&inp[0..f.field_size], bit_range_start, num_bits, message.definition_message.endianness)?;
-                                {% if field.array %}
-                                let mut array_size = field.field_size / field.base_type_size();
-                                let mut val = Vec::with_capacity(array_size);
-                                let mut tempp = &bytes[..];
-                                while array_size > 0 {
-                                    let v = {{ field.output_field_parser('tempp') }}?;
-                                    tempp = &tempp[field.base_type_size()..];
-                                    val.push(v);
-                                    array_size = array_size - 1
-                                }
-                                {% else %}
-                                let val = {{ field.output_field_parser('&bytes') }}?;
-                                {% endif %}
-                                {{ field.output_parsed_field_assignment() }}
-                            },
-                            None => {
-                                saved_outp = &inp[f.field_size..];
-                                {% if field.array %}
-                                let mut array_size = field.field_size / field.base_type_size();
-                                let mut val = Vec::with_capacity(array_size);
-                                let mut tempp = inp;
-                                while array_size > 0 {
-                                    let v = {{ field.output_field_parser('tempp') }}?;
-                                    tempp = &tempp[f.base_type_size()..];
-                                    val.push(v);
-                                    array_size = array_size - 1
-                                }
-                                {% else %}
-                                let val = {{ field.output_field_parser('inp') }}?;
-                                {% endif %}
-                                {{ field.output_parsed_field_assignment() }}
-                            }
-                        }
-
-                        {% for action_push in field.output_components_action_pushes() -%}
-                        {{ action_push }}
-                        {% endfor -%}
-                        Ok(())
+                        message.{{ field.name }}.parse(parse_input, parse_config)?;
+                        {% if field.has_components %}
+                        let components = {{ field.calculate_components_vec() }};
+                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(actions_extend);
+                        {% endif %}
+                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 {% endfor %}
                     unknown_field_num => {
-                        let base_type = FitFieldFitBaseType::from(f.base_type);
-                        let val = FitBaseValue::parse(inp, &base_type, message.definition_message.endianness, f.field_size)?;
+                        let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        saved_outp = &inp[f.field_size..];
-                        Ok(())
+                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
+
+                if actions.len() == 0 {
+                    //println!("advancing inp by {}", orig_field_size);
+                    inp = &inp[orig_field_size..];
+                }
+
+                //if advance_inp == true {
+                //    inp = &inp[parse_config.field_size()..];
+                //    //saved_outp = &inp[parse_config.field_size()..];
+                //}
             }
-            inp = saved_outp;
+            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -630,6 +687,7 @@ impl FitRecord for {{ message_name }} {
         self.output_struct()
         self.output_impl()
 
+
     def output_struct(self):
         template = Environment().from_string(self.STRUCT_TEMPLATE,
                                              globals={'fields': self.fields,
@@ -654,33 +712,101 @@ impl FitRecord for {{ message_name }} {
 
 
 class Field(object):
-    FIELD_OPTION_SUBFIELD = """FitFieldValue<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
-    FIELD_OPTION_BASE_TYPE = """FitFieldValue<{% if is_vec %}Vec<Option<{% endif %}{{ fit_type }}{% if is_vec %}>>{% endif %}>"""
-    FIELD_OPTION_FIT_TYPE = """FitFieldValue<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
+    #FIELD_OPTION_SUBFIELD = """FitFieldBasicValue<FitMessage{{ message_name }}Subfield{{ field_name }}>"""
+    FIELD_OPTION_SUBFIELD = """FitMessage{{ message_name }}Subfield{{ field_name }}"""
+    FIELD_OPTION_BASE_TYPE = """FitFieldBasicValue<{% if is_vec %}Vec<{% endif %}{{ fit_type }}{% if is_vec %}>{% endif %}>"""
+    #FIELD_OPTION_FIT_TYPE = """FitFieldValue<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
+    FIELD_OPTION_FIT_TYPE = """FitFieldBasicValue<{% if is_vec %}Vec<{% endif %}FitField{{ field_type }}{% if is_vec %}>{% endif %}>"""
+
 
     def __init__(self, number, name, type, array, components, bits, scale, offset, units, comment, types):
         self.number = int(number)
         self.name = name
         self.type = type
         self.array = (array != '' and type != 'byte')
-        self.components = components
-        self.bits = bits
-        self.scale = scale
-        self.offset = offset
-        self.units = units.replace('\n', ' ')
+        #self.components = components
+        #self.bits = None
+        self.scale = None
+        self.offset = None
+        self.units = ''
         self.comment = comment
         self.subfields = []
         self.message = None
         self.types = types
         #self.message_name = message_name
+        self.is_adjusted = False
 
+        
+        self.components = []
+        if len(components) > 0:
+            #if not (len(components) == len(scale) == len(units)):
+            #    print("error parsing field {}: different numbers of components ({}), scale ({}), units ({})".format(name, components, scale, units), file=sys.stderr)
+            #    sys.exit(1)
+
+            bit_ranges = self.set_bit_ranges(bits)
+
+            #self.units = []
+            for i in range(0, len(components)):
+                self.components.append((components[i], bit_ranges[i]))
+                
+                # not all components have scale/offset
+                #this_scale = ''
+                #if i+1 <= len(scale):
+                #    this_scale = scale[i]
+                #this_units = ''
+                #if i+1 <= len(units):
+                #    this_units = units[i]
+
+                #self.components.append((components[i], this_scale, this_units))
+        
+        # units apply to this field
+        if len(units) == 1:        
+            self.units = units[0]
+
+            # only base types can have scale/offset. the weight message
+            # type screws this up in the fit profile, so protect here
+            if not self.type in FIT_TYPE_MAP.keys():
+                return
+
+            if len(scale) == 0 and len(offset) == 0:
+                self.is_adjusted = False
+            elif len(scale) == 1 and len(offset) == 0:
+                self.scale = float(scale[0])
+                self.offset = 0.0
+                self.is_adjusted = True
+            elif len(scale) == 0 and len(offset) == 1:
+                self.offset = float(offset[0])
+                self.scale = 0.0
+                self.is_adjusted = True
+            elif len(scale) == 1 and len(offset) == 1:
+                self.offset = float(offset[0])
+                self.scale = float(scale[0])
+                self.is_adjusted = True
+            #else:
+            #    print("whoops, messed up scale/offset w/o components", file=sys.stderr)
+            #    print("field: {}, number: {}".format(self.name, self.number), file=sys.stderr)
+            #    sys.exit(1)  
+
+    def set_bit_ranges(self, bits): 
+        bit_ranges = []
+        range_begin = 0
+        for bit_amt in bits:
+            range_end = range_begin + bit_amt
+            bit_ranges.append((range_begin, bit_amt))
+            range_begin = range_end
+
+        return bit_ranges
 
     @property
     def output_units(self):
-        if self.units == 'semicircles':
+        if self.is_semicircles:
             return "deg"
         else:
-            return self.units
+            if self.units is None:
+                return ""
+            else:
+                #return ",".join(self.units)
+                return self.units
 
     @property
     def lifetime_spec(self):
@@ -701,11 +827,21 @@ class Field(object):
     @property
     def field_type_name(self):
         return field_name(self)
+    
+    @property
+    def has_components(self):
+        return len(self.components) > 0
+
+    @property
+    def is_semicircles(self):
+        if self.units == 'semicircles':
+            return True
+        return False
 
 
     #FIELD_PARSER_SUBFIELDS = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, _tz_offset)"""
     FIELD_PARSER_SUBFIELD_BYTES = """parse_byte({{ bytes_from }}, field.field_size)"""
-    FIELD_PARSER_SUBFIELD = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, &field, _tz_offset)"""
+    FIELD_PARSER_SUBFIELD = """FitMessage{{ message_name }}Subfield{{ field_name }}::parse(message, {{ bytes_from }}, parse_config)"""
 
 
     def output_subfield_parser(self):
@@ -725,6 +861,7 @@ class Field(object):
             return template.render()
 
         elif self.type in FIT_TYPE_MAP.keys():
+            return ""
             if self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
                 return "field_parser_base_type!(\"{}\", {}, f, message)".format(self.type, bytes_from)
             else:
@@ -742,30 +879,52 @@ class Field(object):
             else:
                 return "field_parser_fit_type!(FitField{}, {}, f)".format(rustify_name(self.type), bytes_from)
 
-    def output_components_action_pushes(self):
-        if not self.components:
-            return ""
+   
+    def calculate_components_vec(self):
+        # if both components and scale/offset are present, the scale/offset
+        # apply to the components, not this field.       
+        print("ccv, components = {}".format(self.components), file=sys.stderr)
+        components_parts = []
+        if len(self.components):
+            for i in range(len(self.components)):
+                for field in self.message.fields:
+                    if self.components[i][0] == field.name:
+                        print("found target field: {}".format(field.name), file=sys.stderr)
+                        field_size = resolve_field_size(field.type, self.types)
+                        base_type_num = resolve_field_type(field.type, self.types)
+                        #bit_start = 0
+                        #x = 0
+                        #while x < i:
+                        #    bit_start += self.bits[x]
+                        #    x = x + 1
+                        (bit_start, bit_len) = self.components[i][1]
 
-        action_pushes = []
-        for i in range(len(self.components)):
-            for field in self.message.fields:
-                if self.components[i] == field.name:
+                        #components_parts.append("FitParseConfig::new_from_component({}, {}, {}, {}, {})".format(field.number, field_size, field_size, bit_start, self.bits[i]))
+                        components_parts.append("FitParseConfig::new_from_component({}, {}, {}, message.definition_message.endianness, {}, {})".format(field.number, field_size, base_type_num, bit_start, bit_len))
+        return "vec![{}]".format(",".join(components_parts))
 
-                    # print >>sys.stderr, "components[{}]: {}".format(i, self.components[i])
-                    # print >>sys.stderr, "bits: {}".format(self.bits)
+    def output_message_field(self):
+        if self.subfields:
+            return "FitMessage{}Subfield{}::NotYetParsed".format(rustify_name(self.message.name), rustify_name(self.name))
+        
+        new_spec = '_single'
+        if self.array:
+            new_spec = '_vec'
 
-                    field_size = resolve_field_size(field.type, self.types)
+        if ((self.scale or self.offset) and self.type in FIT_TYPE_MAP.keys()) or self.is_semicircles:
+            scale = "0.0"
+            if self.scale:
+                scale = self.scale
+            
+            offset = "0.0"
+            if self.offset:
+                offset = self.offset
 
-                    bit_start = 0
-                    x = 0
-                    while x < i:
-                        bit_start += self.bits[x]
-                        x = x + 1
-
-                    action_pushes.append("actions.push( (FitFieldDefinition{{definition_number: {}, field_size: {}, base_type: 0}}, Some(({}, {})) ));".format(field.number, field_size, bit_start, self.bits[i]))
-                    # action_push += "actions.push( (message.definition_message.get_field_definition({})?, Some(({}, {})) ));\n".format(field.number, bit_start, self.bits[i])
-
-        return action_pushes
+            return "FitFieldAdjustedValue::new{}(\"{}\".to_string(), {}, {})".format(new_spec, self.output_units, scale, offset)
+            #return "FitFieldAdjustedValue {{ value: None, units: \"{}\".to_string(), scale: {}, offset: {} }}".format(self.output_units, scale, offset)
+        else:
+            return "FitFieldBasicValue::new{}(\"{}\".to_string())".format(new_spec, self.output_units)
+            # return "FitFieldBasicValue {{ value: None, units: \"{}\".to_string() }}".format(self.output_units)
 
     def output_field_option(self):
         content = ""
@@ -779,36 +938,43 @@ class Field(object):
                                                  globals={'message_name': self.message.rustified_name,
                                                           'field_name': self.rustified_name,
                                                           'lifetime_spec': lifetime_spec})
-            content = template.render()
+            return template.render()
+        #elif self.array:
+        #    if (self.scale or self.units == 'semicircles'):
+        #        return "Vec<FitFieldAdjustedValue<Fit{}>>".format(rustify_name(self.type))
+        #    else:
+        #        return "Vec<FitFieldBasicValue<Fit{}>>".format(rustify_name(self.type))
+
         elif self.type != 'enum' and self.type in FIT_TYPE_MAP.keys():
-            if self.scale and self.type != 'byte':
-                if self.array:
-                    content = "FitFieldValue<Vec<Option<f64>>>"
-                else:
-                    content = "FitFieldValue<f64>"
-
-            elif self.units == 'semicircles':
-                content = "FitFieldValue<f64>"
+            name = "Fit{}".format(rustify_name(self.type))
+            #if self.array:
+            #    name = "Vec<{}>".format(name)
+            
+            if (self.scale or self.is_semicircles) and self.type != 'byte':
+                content = "FitFieldAdjustedValue<{}>".format(name)
             else:
-                #if self.name == 'bottom_time':
-                #    print >>sys.stderr, "bottom_time is_vec: {}".format(self.array)
-
-                fit_type = FIT_TYPE_MAP[self.type]
-                #if self.type[-1] == 'z' and self.array:
-                #    fit_type = "Option<{}>".format(fit_type)
-
-                template = Environment().from_string(self.FIELD_OPTION_BASE_TYPE,
-                                                     globals={'fit_type': fit_type,
-                                                              'is_vec': self.array})
-                content = template.render()
+                content = "FitFieldBasicValue<{}>".format(name)
+            
+            return content
 
         else:
-            template = Environment().from_string(self.FIELD_OPTION_FIT_TYPE,
-                                                 globals={'field_type': rustify_name(self.type),
-                                                          'is_vec': self.array})
-            content = template.render()
+            return "FitFieldBasicValue<FitField{}>".format(rustify_name(self.type))
 
-        return content
+            #template = Environment().from_string(self.FIELD_OPTION_FIT_TYPE,
+            #                                     globals={'field_type': rustify_name(self.type),
+            #                                              'is_vec': self.array})
+            #return template.render()
+
+
+    def output_field_container(self):
+        array_spec = "_single"
+        if self.array:
+            array_spec = "_vec"
+        if self.is_adjusted or self.is_semicircles:
+            return "FitFieldAdjustedValue::new{}(\"{}\".to_string(), {}, {})".format(array_spec, self.units, self.scale, self.offset)
+        else:
+            print("units: {}".format(self.units), file=sys.stderr)
+            return "FitFieldBasicValue::new{}(\"{}\".to_string())".format(array_spec, self.units)
 
     def output_parsed_field_assignment(self):
         # we're just capturing the bytes here, the parse will happpen
@@ -831,7 +997,7 @@ class Field(object):
             return "message.{}.value = Some(val);".format(self.name)
 
         else:
-            if self.units == 'semicircles':
+            if self.is_semicircles:
                 return "deg_parse_assignment!(val, message.{});".format(self.name)
             return "message.{}.value = val;".format(self.name)
 
@@ -839,24 +1005,21 @@ class Field(object):
     SUBFIELD_TEMPLATE = """
 #[derive(Debug)]
 pub enum {{ subfield_name }} {
-    Default(Option<{{ subfield_default_option }}>),
+    NotYetParsed,
+    Default({{ subfield_default_option }}),
     {%- for sf in subfield_enum_options %}
     {{ sf[0] }}({{ sf[1] }}),
     {%- endfor %}
 }
 
 impl {{ subfield_name }} {
-    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], f: &FitFieldDefinition, _tz_offset: f64) -> Result<{{ subfield_name }}> {
+    fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], parse_config: FitParseConfig) -> Result<{{ subfield_name }}> {
         {% for sf_name in subfield_ref_names %}
-        match message.{{ sf_name }}.value {
+        match message.{{ sf_name }}.get_single()? {
         {% for sf in subfield_options[sf_name] %}
-            Some(FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }}) => {
+            FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }} => {
                 let val = {{ sf.output_field_parser(field.types, field.message.rustified_name) }}?;
-                {% if sf.is_fit_base_type %}
                 return Ok({{ subfield_name }}::{{ sf.field_name_rustified }}(val))
-                {% else %}
-                return Ok({{ subfield_name }}::{{ sf.field_name_rustified }}(Some(val)))
-                {% endif -%}
             },
         {% endfor %}
             _ => (),
@@ -875,12 +1038,25 @@ impl {{ subfield_name }} {
         for srn in subfield_ref_names:
             subfield_options[srn] = [sf for sf in self.subfields if sf.ref_field_name == srn]
 
-        subfield_default_parser = self.output_field_parser('inp', only_default_case=True, field_variable_name='f')
+        #subfield_default_parser = self.output_field_parser('inp', only_default_case=True, field_variable_name='f')
+        
+        subfield_default_parser = ''
+        if self.type in FIT_TYPE_MAP:
+            subfield_default_parser = "Fit{}::parse(inp, parse_config)".format(rustify_name(self.type))
+        else:
+            subfield_default_parser = "FitField{}::parse(inp, parse_config)".format(rustify_name(self.type))
         subfield_enum_options = []
         for sf in self.subfields:
-            ftn = "Option<{}>".format(sf.field_type_name)
-            if sf.type == 'byte':
-                ftn = "Option<Vec<u8>>"
+
+            ftn = ''
+            if sf.type in FIT_TYPE_MAP:
+                ftn = "{}".format(FIT_TYPE_MAP[sf.type])
+            else:
+                ftn = "{}".format(sf.field_type_name)
+
+            #ftn = "Option<{}>".format(sf.field_type_name)
+            #if sf.type == 'byte':
+            #    ftn = "Option<Vec<u8>>"
                 #ftn += "<'a>"
             subfield_enum_options.append((sf.field_name_rustified, ftn))
 
@@ -954,23 +1130,28 @@ class Subfield(object):
         return rustify_name(self.ref_field_value)
 
     def output_field_parser(self, types, message_name):
+
+
         if self.type in FIT_TYPE_MAP.keys():
-            if self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
-                return "field_parser_base_type!(\"{}\", inp, f, message)".format(self.type)
-            else:
-                return "field_parser_base_type!(\"{}\", inp, f)".format(self.type)
+            return "Fit{}::parse(inp, parse_config)".format(rustify_name(self.type))
+            #return "parse_{}(inp, parse_config)".format(self.type)
+            #if self.type not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']:
+            #    return "field_parser_base_type!(\"{}\", inp, f, message)".format(self.type)
+            #else:
+            #    return "field_parser_base_type!(\"{}\", inp, f)".format(self.type)
 
 
         else:
-            endianness = types[self.type]['base_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
-            local_date_time = self.type == 'local_date_time'
+            return "FitField{}::parse(inp, parse_config)".format(rustify_name(self.type))
+            #endianness = types[self.type]['base_type'] not in ['bool', 'string', 'byte', 'enum', 'uint8', 'uint8z', 'sint8']
+            #local_date_time = self.type == 'local_date_time'
            
-            if endianness and local_date_time:
-                return "field_parser_fit_type!(FitField{}, inp, f, message, _tz_offset)".format(rustify_name(self.type))
-            elif endianness:
-                return "field_parser_fit_type!(FitField{}, inp, f, message)".format(rustify_name(self.type))
-            else:
-                return "field_parser_fit_type!(FitField{}, inp, f)".format(rustify_name(self.type))
+            #if endianness and local_date_time:
+            #    return "field_parser_fit_type!(FitField{}, inp, f, message, _tz_offset)".format(rustify_name(self.type))
+            #elif endianness:
+            #    return "field_parser_fit_type!(FitField{}, inp, f, message)".format(rustify_name(self.type))
+            #else:
+            #    return "field_parser_fit_type!(FitField{}, inp, f)".format(rustify_name(self.type))
 
 
 
@@ -979,7 +1160,7 @@ def parse_messages_file(messages_file_name, types):
 
     messages = {}
 
-    f = open(messages_file_name, 'rb')
+    f = open(messages_file_name, 'rt')
     lines = []
     csvreader = csv.reader(f)
     for row in csvreader:
@@ -1008,7 +1189,7 @@ def parse_messages_file(messages_file_name, types):
                         #print "sf rfn: {}".format(sf.ref_field_name)
                         ref_field = [f for f in messages[current_message].fields if f.name == sf.ref_field_name]
                         if not len(ref_field):
-                            print "error {}".format(current_message)
+                            print("error {}").format(current_message)
                             sys.exit(1)
                         else:
                             sf.ref_field_type = ref_field[0].type
@@ -1018,14 +1199,6 @@ def parse_messages_file(messages_file_name, types):
 
             messages[current_message] = Message(current_message, message_comment)
 
-
-            # messages[current_message] = {
-            #    "comment": message_comment,
-            #    "fields": [],
-            #    "needs_lifetime_spec": False,
-            #    #"global_message_number": FIT_GLOBAL_MESG_NUM[current_message]
-            #}
-
         else:
             _, field_number, field_name, field_type, array, \
             components, scale, offset, units, bits, _, \
@@ -1034,12 +1207,24 @@ def parse_messages_file(messages_file_name, types):
             parsed_components = []
             parsed_bits = []
             if components:
+                if components == 'enhanced_max_speed':
+                    print("enhanced_max_speed", file=sys.stderr)
                 parsed_components = [x.strip() for x in components.split(',')]
+                if components == 'enhanced_max_speed':
+                    print("parsed_components: {}".format(parsed_components), file=sys.stderr)
                 parsed_bits = [int(x) for x in bits.split(',')]
 
             parsed_scale = []
             if scale:
                 parsed_scale = [x.strip() for x in scale.split(',')]
+
+            parsed_offset = []
+            if offset:
+                parsed_offset = [x.strip() for x in offset.split(',')]
+
+            parsed_units = []
+            if units:
+                parsed_units = [x.strip() for x in units.split(',')]
 
             if field_number == '':
                 if ref_field_name != '':  # this is a dynamic field
@@ -1051,54 +1236,19 @@ def parse_messages_file(messages_file_name, types):
                         messages[current_message].add_subfield(
                             Subfield(field_name, field_type, ref_fields[i], ref_values[i], components, bits, scale, offset)
                         )
-
-                        #messages[current_message]['fields'][-1]['subfields'].append({
-                        #    'field_name': field_name,
-                        #    'rustified_field_name': rustify_name(field_name),
-                        #    'field_type': field_type,
-                        #    'ref_field_name': ref_fields[i],
-                        #    'ref_field_value': ref_values[i],
-                        #    'ref_field_type': None,
-                        #    'components': parsed_components,
-                        #    'bits': parsed_bits,
-                        #    'scale': parsed_scale,
-                        #    'offset': offset,
-                        #})
                 continue
 
             if field_name == 'type':  # reserved word in rust
                 field_name = 'ftype'
 
-            #if field_type == 'byte':
-            #    messages[current_message]['needs_lifetime_spec'] = True
-
-            if field_name == 'bottom_time':
-                print >> sys.stderr, "bottom_time array: '{}'".format(array)
+            #if field_name == 'bottom_time':
+            #    print("bottom_time array: '{}'".format(array), file=sys.stderr)
 
             messages[current_message].add_field(
-                Field(field_number, field_name, field_type, array.strip(), parsed_components, parsed_bits, scale, offset, units, comment, types)
+                Field(field_number, field_name, field_type, array.strip(), parsed_components, parsed_bits, parsed_scale, parsed_offset, parsed_units, comment, types)
             )
 
-            #messages[current_message]["fields"].append({
-            #    "field_number": int(field_number),
-            #    "field_name": field_name,
-            #    "field_type": field_type,
-            #    "array": array,
-            #    "components": parsed_components,
-            #    "bits": parsed_bits,
-            #    "scale": parsed_scale,
-            #    "offset": offset,
-            #    "field_comment": comment,
-            #    "subfields": []
-            #})
-
     return messages
-
-    #for message in messages.keys():
-    #    print "%s (global_mesg_num: %d)" % (message, messages[message]["global_message_number"])
-    #    for field in messages[message]["fields"]:
-    #        print "  %s" % (field)
-
 
 def main():
     types_file_path = sys.argv[1]

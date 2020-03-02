@@ -26,6 +26,11 @@ impl Error {
     }
 
     #[allow(dead_code)]
+    pub(crate) fn parse_invalid_field_value() -> Error {
+        Error::from(ErrorKind::ParseInvalidFieldValue)
+    }
+
+    #[allow(dead_code)]
     pub(crate) fn parse_error<T: AsRef<str>>(pe: T) -> Error {
         Error::from(ErrorKind::ParseError(pe.as_ref().to_string()))
     }
@@ -91,6 +96,21 @@ impl Error {
     }
 
     #[allow(dead_code)]
+    pub(crate) fn bad_adjusted_value_call() -> Error {
+        Error::from(ErrorKind::BadAdjustedValueCall)
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn bad_basic_value_call() -> Error {
+        Error::from(ErrorKind::BadBasicValueCall)
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn bad_fit_base_type_value_call() -> Error {
+        Error::from(ErrorKind::BadFitBaseTypeValueCall)
+    }
+
+    #[allow(dead_code)]
     pub(crate) fn missing_fit_base_type() -> Error {
         Error::from(ErrorKind::MissingFitBaseType)
     }
@@ -134,6 +154,11 @@ impl Error {
     pub(crate) fn fit_file_too_large(max_allowed: usize, attempted: usize) -> Error {
         Error::from(ErrorKind::FitFileTooLarge((max_allowed, attempted)))
     }
+
+     #[allow(dead_code)]
+    pub(crate) fn hr_message_timestamp() -> Error {
+        Error::from(ErrorKind::HrMessageTimestamp)
+    }
 }
 
 impl Fail for Error {
@@ -157,6 +182,7 @@ impl fmt::Display for Error {
 pub enum ErrorKind {
     ParseIncomplete(usize),
     ParseIncompleteUnknown,
+    ParseInvalidFieldValue,
     ParseError(String),
     ParseZero,
     UnsupportedRelativetimestamp,
@@ -170,6 +196,9 @@ pub enum ErrorKind {
     MissingTimestampField,
     InvalidFieldNumber(u8),
     MessageParseFailed(String),
+    BadAdjustedValueCall,
+    BadBasicValueCall,
+    BadFitBaseTypeValueCall,
     MissingFitBaseType,
     ParseUnknownBaseValue,
     DeveloperDataDefinitionNotFound(u8),
@@ -179,6 +208,7 @@ pub enum ErrorKind {
     FieldDefinitionNumberNotFound(u8),
     InvalidFitBaseTypeParse,
     FitFileTooLarge((usize, usize)),
+    HrMessageTimestamp,
 }
 
 impl fmt::Display for ErrorKind {
@@ -192,6 +222,10 @@ impl fmt::Display for ErrorKind {
             ErrorKind::ParseIncompleteUnknown => write!(
                 f,
                 "insufficient data to finish parse, unknown amount needed",
+            ),
+            ErrorKind::ParseInvalidFieldValue => write!(
+                f,
+                "invalid field value for field",
             ),
             ErrorKind::ParseError(ref pe) => write!(f, "error during parse: {:?}", pe),
             ErrorKind::ParseZero => write!(f, "zero value found for type requiring non-zero",),
@@ -230,6 +264,18 @@ impl fmt::Display for ErrorKind {
                 ifn,
             ),
             ErrorKind::MessageParseFailed(ref fm) => write!(f, "MessageParseFailed: {:?}", fm),
+            ErrorKind::BadAdjustedValueCall => write!(
+                f,
+                "bad call to as_64 or as_64_vec: not initialized or wrong variant"
+            ),
+            ErrorKind::BadBasicValueCall => write!(
+                f,
+                "bad call to as_single or as_vec: not initialized or wrong variant"
+            ),
+            ErrorKind::BadFitBaseTypeValueCall => write!(
+                f,
+                "bad call to value(): not initialized"
+            ),
             ErrorKind::MissingFitBaseType => write!(
                 f,
                 "fit_base_type_id not supplied; can't parse developer data"
@@ -254,6 +300,8 @@ impl fmt::Display for ErrorKind {
                 "fit file too large, max_allowed: {:?}, attempted: {:?}",
                 fftl.0, fftl.1
             ),
+            ErrorKind::HrMessageTimestamp => write!(f, "Error parsing timestamps in Hr message"),
+
         }
     }
 }
@@ -267,5 +315,11 @@ impl From<ErrorKind> for Error {
 impl From<Context<ErrorKind>> for Error {
     fn from(ctx: Context<ErrorKind>) -> Error {
         Error { ctx }
+    }
+}
+
+impl From<Error> for fmt::Error {
+    fn from(_e: Error) -> fmt::Error {
+        return fmt::Error
     }
 }
