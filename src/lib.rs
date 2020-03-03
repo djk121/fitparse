@@ -327,11 +327,11 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
 
     fn parse(&mut self, input: &[u8], parse_config: FitParseConfig) -> Result<()> {
         match self.value {
-            BasicValue::NotYetParsedSingle => {
+            BasicValue::NotYetParsedSingle | BasicValue::Single(_) => {
                 self.value = BasicValue::Single(T::parse(input, parse_config)?);
                 Ok(())
             },
-            BasicValue::NotYetParsedVec => {
+            BasicValue::NotYetParsedVec | BasicValue::Vec(_) => {
                 let mut outp = input;
                 let mut num_to_parse = parse_config.num_in_field();
                 let mut v = vec![];
@@ -343,8 +343,7 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
                 }
                 self.value = BasicValue::Vec(v);
                 Ok(())
-            },
-            _ => return Err(Error::bad_basic_value_call())
+            }
         }
     }
 
@@ -478,14 +477,14 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone > FitFieldAdjustedValue<T>
 
     fn parse(&mut self, input: &[u8], parse_config: FitParseConfig) -> Result<()> {
         match self.value {
-            AdjustedValue::NotYetParsedSingle => {
+            AdjustedValue::NotYetParsedSingle | AdjustedValue::Single(_) => {
                 let x = T::parse(input, parse_config)?;
                 let val = AdjustedValue::Single(self.adjust(&x));
                 self.parsed_value = PreAdjustedValue::Single(x);
                 self.value = val;
                 Ok(())
             },
-            AdjustedValue::NotYetParsedVec => {
+            AdjustedValue::NotYetParsedVec | AdjustedValue::Vec(_) => {
                 let mut outp = input;
                 let mut num_to_parse = parse_config.num_in_field();
                 let mut v = vec![];
@@ -497,8 +496,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone > FitFieldAdjustedValue<T>
                 }
                 self.value = AdjustedValue::Vec(v.iter().map(|x| self.adjust(x)).collect());
                 Ok(())
-            },
-            _ => return Err(Error::bad_basic_value_call())
+            }
         }
     }
 
