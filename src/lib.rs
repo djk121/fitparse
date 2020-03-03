@@ -1976,7 +1976,6 @@ pub fn subset_with_pad(
     let mut subset_bytes = num_bits / 8;
 
     let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
-    println!("subset_with_pad inp: {:?}", inp);
 
     while subset_bytes < output_size {
         subset_bytes = subset_bytes + 1;

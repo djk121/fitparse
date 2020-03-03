@@ -105,8 +105,8 @@ impl fmt::Display for {{ type_name }} {
             {%- for field in fields if not field["value_name"][0].isdigit() %}
             {{ type_name }}::{{ rustify_name(field["value_name"]) }} => write!(f, "{}", "{{ rustify_name(field["value_name"]) }}"),
             {%- endfor %}
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            {{ type_name }}::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            {{ type_name }}::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -159,8 +159,9 @@ impl fmt::Display for {{ type_name }} {
             {%- for field in fields if not field["value_name"][0].isdigit() %}
             {{ type_name }}::{{ rustify_name(field["value_name"]) }} => write!(f, "{}", "{{ rustify_name(field["value_name"]) }}"),
             {%- endfor %}
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            {{ type_name }}::{{ rustify_name(this_type) }}(x) => write!(f, "{}({})", "{{ rustify_name(this_type) }}", x),
+            {{ type_name }}::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            {{ type_name }}::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -483,7 +484,7 @@ impl fmt::Display for {{ message_name }} {
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", self.{{field.name }})?;
         {% else %}
-        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", {% if field.is_adjusted or field.is_semicircles %}true{% else %}false{% endif %}, f);
+        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", {% if field.is_adjusted or field.is_semicircles %}true{% else %}false{% endif %}, f)?;
         {% endif -%}
         {% endfor %}
             
@@ -562,11 +563,11 @@ impl {{ message_name }} {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -591,9 +592,9 @@ impl {{ message_name }} {
                     {{ field.number }} => {  // {{ field.name }}
                         message.{{ field.name }}.parse(parse_input, parse_config)?;
                         {% if field.has_components %}
-                        let components = {{ field.calculate_components_vec() }};
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = {{ field.calculate_components_vec() }};
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend({{ field.calculate_components_vec() }});
                         {% endif %}
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -609,11 +610,6 @@ impl {{ message_name }} {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }

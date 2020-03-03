@@ -109,7 +109,6 @@ fn parse_date_time_internal(
 
 fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> {
     let mut res = std::vec::from_elem(0, desired_size);
-    println!("buffer input: {:?}", input);
 
     let mut len = input.len();
     if len == 0 {
@@ -117,7 +116,6 @@ fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> 
     }
 
     len = len - 1;
-    //let mut len = input.len() - 1;
 
     if endianness == Endianness::Big {
         let mut spot = desired_size;
@@ -199,7 +197,6 @@ macro_rules! nom_internal_parser {
         match $func($input, $endianness) {
             nom::IResult::Done(_, f) => match f == $invalid_field_value {
                 true => {
-                    println!("invalid field value: {}", f);
                     Err(Error::parse_invalid_field_value())
                 },
                 false => Ok(f),

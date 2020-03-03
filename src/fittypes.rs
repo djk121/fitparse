@@ -86,8 +86,8 @@ impl fmt::Display for FitFieldFile {
             FitFieldFile::ExdConfiguration => write!(f, "{}", "ExdConfiguration"),
             FitFieldFile::MfgRangeMin => write!(f, "{}", "MfgRangeMin"),
             FitFieldFile::MfgRangeMax => write!(f, "{}", "MfgRangeMax"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFile::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFile::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -320,8 +320,9 @@ impl fmt::Display for FitFieldMesgNum {
             FitFieldMesgNum::DiveSummary => write!(f, "{}", "DiveSummary"),
             FitFieldMesgNum::MfgRangeMin => write!(f, "{}", "MfgRangeMin"),
             FitFieldMesgNum::MfgRangeMax => write!(f, "{}", "MfgRangeMax"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldMesgNum::MesgNum(x) => write!(f, "{}({})", "MesgNum", x),
+            FitFieldMesgNum::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldMesgNum::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -540,8 +541,9 @@ impl fmt::Display for FitFieldChecksum {
         match self {
             FitFieldChecksum::Clear => write!(f, "{}", "Clear"),
             FitFieldChecksum::Ok => write!(f, "{}", "Ok"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldChecksum::Checksum(x) => write!(f, "{}({})", "Checksum", x),
+            FitFieldChecksum::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldChecksum::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -592,8 +594,9 @@ impl fmt::Display for FitFieldFileFlags {
             FitFieldFileFlags::Read => write!(f, "{}", "Read"),
             FitFieldFileFlags::Write => write!(f, "{}", "Write"),
             FitFieldFileFlags::Erase => write!(f, "{}", "Erase"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFileFlags::FileFlags(x) => write!(f, "{}({})", "FileFlags", x),
+            FitFieldFileFlags::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFileFlags::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -645,8 +648,8 @@ impl fmt::Display for FitFieldMesgCount {
             FitFieldMesgCount::NumPerFile => write!(f, "{}", "NumPerFile"),
             FitFieldMesgCount::MaxPerFile => write!(f, "{}", "MaxPerFile"),
             FitFieldMesgCount::MaxPerFileType => write!(f, "{}", "MaxPerFileType"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldMesgCount::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldMesgCount::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -694,8 +697,9 @@ impl fmt::Display for FitFieldMessageIndex {
             FitFieldMessageIndex::Selected => write!(f, "{}", "Selected"),
             FitFieldMessageIndex::Reserved => write!(f, "{}", "Reserved"),
             FitFieldMessageIndex::Mask => write!(f, "{}", "Mask"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldMessageIndex::MessageIndex(x) => write!(f, "{}({})", "MessageIndex", x),
+            FitFieldMessageIndex::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldMessageIndex::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -744,8 +748,9 @@ impl fmt::Display for FitFieldDeviceIndex {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldDeviceIndex::Creator => write!(f, "{}", "Creator"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDeviceIndex::DeviceIndex(x) => write!(f, "{}({})", "DeviceIndex", x),
+            FitFieldDeviceIndex::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDeviceIndex::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -791,8 +796,8 @@ impl fmt::Display for FitFieldGender {
         match self {
             FitFieldGender::Female => write!(f, "{}", "Female"),
             FitFieldGender::Male => write!(f, "{}", "Male"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldGender::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldGender::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -910,8 +915,8 @@ impl fmt::Display for FitFieldLanguage {
             FitFieldLanguage::Burmese => write!(f, "{}", "Burmese"),
             FitFieldLanguage::Mongolian => write!(f, "{}", "Mongolian"),
             FitFieldLanguage::Custom => write!(f, "{}", "Custom"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLanguage::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLanguage::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1005,8 +1010,9 @@ impl fmt::Display for FitFieldLanguageBits0 {
             FitFieldLanguageBits0::Croatian => write!(f, "{}", "Croatian"),
             FitFieldLanguageBits0::Czech => write!(f, "{}", "Czech"),
             FitFieldLanguageBits0::Danish => write!(f, "{}", "Danish"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLanguageBits0::LanguageBits0(x) => write!(f, "{}({})", "LanguageBits0", x),
+            FitFieldLanguageBits0::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLanguageBits0::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1079,8 +1085,9 @@ impl fmt::Display for FitFieldLanguageBits1 {
             FitFieldLanguageBits1::Polish => write!(f, "{}", "Polish"),
             FitFieldLanguageBits1::Portuguese => write!(f, "{}", "Portuguese"),
             FitFieldLanguageBits1::Slovakian => write!(f, "{}", "Slovakian"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLanguageBits1::LanguageBits1(x) => write!(f, "{}({})", "LanguageBits1", x),
+            FitFieldLanguageBits1::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLanguageBits1::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1153,8 +1160,9 @@ impl fmt::Display for FitFieldLanguageBits2 {
             FitFieldLanguageBits2::Ukrainian => write!(f, "{}", "Ukrainian"),
             FitFieldLanguageBits2::Arabic => write!(f, "{}", "Arabic"),
             FitFieldLanguageBits2::Farsi => write!(f, "{}", "Farsi"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLanguageBits2::LanguageBits2(x) => write!(f, "{}({})", "LanguageBits2", x),
+            FitFieldLanguageBits2::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLanguageBits2::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1227,8 +1235,9 @@ impl fmt::Display for FitFieldLanguageBits3 {
             FitFieldLanguageBits3::Taiwanese => write!(f, "{}", "Taiwanese"),
             FitFieldLanguageBits3::Thai => write!(f, "{}", "Thai"),
             FitFieldLanguageBits3::Hebrew => write!(f, "{}", "Hebrew"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLanguageBits3::LanguageBits3(x) => write!(f, "{}({})", "LanguageBits3", x),
+            FitFieldLanguageBits3::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLanguageBits3::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1297,8 +1306,9 @@ impl fmt::Display for FitFieldLanguageBits4 {
             FitFieldLanguageBits4::Vietnamese => write!(f, "{}", "Vietnamese"),
             FitFieldLanguageBits4::Burmese => write!(f, "{}", "Burmese"),
             FitFieldLanguageBits4::Mongolian => write!(f, "{}", "Mongolian"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLanguageBits4::LanguageBits4(x) => write!(f, "{}({})", "LanguageBits4", x),
+            FitFieldLanguageBits4::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLanguageBits4::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1562,8 +1572,8 @@ impl fmt::Display for FitFieldTimeZone {
             FitFieldTimeZone::Santiago => write!(f, "{}", "Santiago"),
             FitFieldTimeZone::Manual => write!(f, "{}", "Manual"),
             FitFieldTimeZone::Automatic => write!(f, "{}", "Automatic"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTimeZone::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTimeZone::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1713,8 +1723,8 @@ impl fmt::Display for FitFieldDisplayMeasure {
             FitFieldDisplayMeasure::Metric => write!(f, "{}", "Metric"),
             FitFieldDisplayMeasure::Statute => write!(f, "{}", "Statute"),
             FitFieldDisplayMeasure::Nautical => write!(f, "{}", "Nautical"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDisplayMeasure::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDisplayMeasure::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1761,8 +1771,8 @@ impl fmt::Display for FitFieldDisplayHeart {
             FitFieldDisplayHeart::Bpm => write!(f, "{}", "Bpm"),
             FitFieldDisplayHeart::Max => write!(f, "{}", "Max"),
             FitFieldDisplayHeart::Reserve => write!(f, "{}", "Reserve"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDisplayHeart::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDisplayHeart::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1807,8 +1817,8 @@ impl fmt::Display for FitFieldDisplayPower {
         match self {
             FitFieldDisplayPower::Watts => write!(f, "{}", "Watts"),
             FitFieldDisplayPower::PercentFtp => write!(f, "{}", "PercentFtp"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDisplayPower::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDisplayPower::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -1932,8 +1942,8 @@ impl fmt::Display for FitFieldDisplayPosition {
             FitFieldDisplayPosition::EstonianGrid => write!(f, "{}", "EstonianGrid"),
             FitFieldDisplayPosition::LatvianGrid => write!(f, "{}", "LatvianGrid"),
             FitFieldDisplayPosition::SwedishRef99Grid => write!(f, "{}", "SwedishRef99Grid"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDisplayPosition::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDisplayPosition::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2019,8 +2029,8 @@ impl fmt::Display for FitFieldSwitch {
             FitFieldSwitch::Off => write!(f, "{}", "Off"),
             FitFieldSwitch::On => write!(f, "{}", "On"),
             FitFieldSwitch::Auto => write!(f, "{}", "Auto"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSwitch::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSwitch::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2161,8 +2171,8 @@ impl fmt::Display for FitFieldSport {
             FitFieldSport::Boxing => write!(f, "{}", "Boxing"),
             FitFieldSport::FloorClimbing => write!(f, "{}", "FloorClimbing"),
             FitFieldSport::All => write!(f, "{}", "All"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSport::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSport::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2267,8 +2277,9 @@ impl fmt::Display for FitFieldSportBits0 {
             FitFieldSportBits0::Swimming => write!(f, "{}", "Swimming"),
             FitFieldSportBits0::Basketball => write!(f, "{}", "Basketball"),
             FitFieldSportBits0::Soccer => write!(f, "{}", "Soccer"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits0::SportBits0(x) => write!(f, "{}({})", "SportBits0", x),
+            FitFieldSportBits0::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits0::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2341,8 +2352,9 @@ impl fmt::Display for FitFieldSportBits1 {
             FitFieldSportBits1::AlpineSkiing => write!(f, "{}", "AlpineSkiing"),
             FitFieldSportBits1::Snowboarding => write!(f, "{}", "Snowboarding"),
             FitFieldSportBits1::Rowing => write!(f, "{}", "Rowing"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits1::SportBits1(x) => write!(f, "{}({})", "SportBits1", x),
+            FitFieldSportBits1::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits1::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2415,8 +2427,9 @@ impl fmt::Display for FitFieldSportBits2 {
             FitFieldSportBits2::EBiking => write!(f, "{}", "EBiking"),
             FitFieldSportBits2::Motorcycling => write!(f, "{}", "Motorcycling"),
             FitFieldSportBits2::Boating => write!(f, "{}", "Boating"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits2::SportBits2(x) => write!(f, "{}({})", "SportBits2", x),
+            FitFieldSportBits2::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits2::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2489,8 +2502,9 @@ impl fmt::Display for FitFieldSportBits3 {
             FitFieldSportBits3::Fishing => write!(f, "{}", "Fishing"),
             FitFieldSportBits3::InlineSkating => write!(f, "{}", "InlineSkating"),
             FitFieldSportBits3::RockClimbing => write!(f, "{}", "RockClimbing"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits3::SportBits3(x) => write!(f, "{}({})", "SportBits3", x),
+            FitFieldSportBits3::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits3::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2563,8 +2577,9 @@ impl fmt::Display for FitFieldSportBits4 {
             FitFieldSportBits4::StandUpPaddleboarding => write!(f, "{}", "StandUpPaddleboarding"),
             FitFieldSportBits4::Surfing => write!(f, "{}", "Surfing"),
             FitFieldSportBits4::Wakeboarding => write!(f, "{}", "Wakeboarding"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits4::SportBits4(x) => write!(f, "{}({})", "SportBits4", x),
+            FitFieldSportBits4::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits4::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2637,8 +2652,9 @@ impl fmt::Display for FitFieldSportBits5 {
             FitFieldSportBits5::Tactical => write!(f, "{}", "Tactical"),
             FitFieldSportBits5::Jumpmaster => write!(f, "{}", "Jumpmaster"),
             FitFieldSportBits5::Boxing => write!(f, "{}", "Boxing"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits5::SportBits5(x) => write!(f, "{}({})", "SportBits5", x),
+            FitFieldSportBits5::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits5::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2697,8 +2713,9 @@ impl fmt::Display for FitFieldSportBits6 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldSportBits6::FloorClimbing => write!(f, "{}", "FloorClimbing"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportBits6::SportBits6(x) => write!(f, "{}({})", "SportBits6", x),
+            FitFieldSportBits6::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportBits6::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2862,8 +2879,8 @@ impl fmt::Display for FitFieldSubSport {
             FitFieldSubSport::VirtualActivity => write!(f, "{}", "VirtualActivity"),
             FitFieldSubSport::Obstacle => write!(f, "{}", "Obstacle"),
             FitFieldSubSport::All => write!(f, "{}", "All"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSubSport::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSubSport::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -2980,8 +2997,8 @@ impl fmt::Display for FitFieldSportEvent {
             FitFieldSportEvent::Training => write!(f, "{}", "Training"),
             FitFieldSportEvent::Transportation => write!(f, "{}", "Transportation"),
             FitFieldSportEvent::Touring => write!(f, "{}", "Touring"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSportEvent::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSportEvent::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3032,8 +3049,8 @@ impl fmt::Display for FitFieldActivity {
         match self {
             FitFieldActivity::Manual => write!(f, "{}", "Manual"),
             FitFieldActivity::AutoMultiSport => write!(f, "{}", "AutoMultiSport"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldActivity::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldActivity::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3081,8 +3098,8 @@ impl fmt::Display for FitFieldIntensity {
             FitFieldIntensity::Rest => write!(f, "{}", "Rest"),
             FitFieldIntensity::Warmup => write!(f, "{}", "Warmup"),
             FitFieldIntensity::Cooldown => write!(f, "{}", "Cooldown"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldIntensity::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldIntensity::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3132,8 +3149,8 @@ impl fmt::Display for FitFieldSessionTrigger {
             FitFieldSessionTrigger::Manual => write!(f, "{}", "Manual"),
             FitFieldSessionTrigger::AutoMultiSport => write!(f, "{}", "AutoMultiSport"),
             FitFieldSessionTrigger::FitnessEquipment => write!(f, "{}", "FitnessEquipment"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSessionTrigger::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSessionTrigger::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3189,8 +3206,8 @@ impl fmt::Display for FitFieldAutolapTrigger {
             FitFieldAutolapTrigger::PositionWaypoint => write!(f, "{}", "PositionWaypoint"),
             FitFieldAutolapTrigger::PositionMarked => write!(f, "{}", "PositionMarked"),
             FitFieldAutolapTrigger::Off => write!(f, "{}", "Off"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAutolapTrigger::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAutolapTrigger::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3253,8 +3270,8 @@ impl fmt::Display for FitFieldLapTrigger {
             FitFieldLapTrigger::PositionMarked => write!(f, "{}", "PositionMarked"),
             FitFieldLapTrigger::SessionEnd => write!(f, "{}", "SessionEnd"),
             FitFieldLapTrigger::FitnessEquipment => write!(f, "{}", "FitnessEquipment"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLapTrigger::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLapTrigger::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3313,8 +3330,8 @@ impl fmt::Display for FitFieldTimeMode {
             FitFieldTimeMode::Hour12WithSeconds => write!(f, "{}", "Hour12WithSeconds"),
             FitFieldTimeMode::Hour24WithSeconds => write!(f, "{}", "Hour24WithSeconds"),
             FitFieldTimeMode::Utc => write!(f, "{}", "Utc"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTimeMode::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTimeMode::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3372,8 +3389,8 @@ impl fmt::Display for FitFieldBacklightMode {
             FitFieldBacklightMode::SmartNotifications => write!(f, "{}", "SmartNotifications"),
             FitFieldBacklightMode::KeyAndMessagesNight => write!(f, "{}", "KeyAndMessagesNight"),
             FitFieldBacklightMode::KeyAndMessagesAndSmartNotifications => write!(f, "{}", "KeyAndMessagesAndSmartNotifications"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBacklightMode::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBacklightMode::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3422,8 +3439,8 @@ impl fmt::Display for FitFieldDateMode {
         match self {
             FitFieldDateMode::DayMonth => write!(f, "{}", "DayMonth"),
             FitFieldDateMode::MonthDay => write!(f, "{}", "MonthDay"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDateMode::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDateMode::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3466,8 +3483,9 @@ impl fmt::Display for FitFieldBacklightTimeout {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldBacklightTimeout::Infinite => write!(f, "{}", "Infinite"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBacklightTimeout::BacklightTimeout(x) => write!(f, "{}({})", "BacklightTimeout", x),
+            FitFieldBacklightTimeout::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBacklightTimeout::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3581,8 +3599,8 @@ impl fmt::Display for FitFieldEvent {
             FitFieldEvent::ElevHighAlert => write!(f, "{}", "ElevHighAlert"),
             FitFieldEvent::ElevLowAlert => write!(f, "{}", "ElevLowAlert"),
             FitFieldEvent::CommTimeout => write!(f, "{}", "CommTimeout"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldEvent::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldEvent::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3676,8 +3694,8 @@ impl fmt::Display for FitFieldEventType {
             FitFieldEventType::EndAllDepreciated => write!(f, "{}", "EndAllDepreciated"),
             FitFieldEventType::StopDisable => write!(f, "{}", "StopDisable"),
             FitFieldEventType::StopDisableAll => write!(f, "{}", "StopDisableAll"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldEventType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldEventType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3731,8 +3749,8 @@ impl fmt::Display for FitFieldTimerTrigger {
             FitFieldTimerTrigger::Manual => write!(f, "{}", "Manual"),
             FitFieldTimerTrigger::Auto => write!(f, "{}", "Auto"),
             FitFieldTimerTrigger::FitnessEquipment => write!(f, "{}", "FitnessEquipment"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTimerTrigger::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTimerTrigger::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3781,8 +3799,8 @@ impl fmt::Display for FitFieldFitnessEquipmentState {
             FitFieldFitnessEquipmentState::InUse => write!(f, "{}", "InUse"),
             FitFieldFitnessEquipmentState::Paused => write!(f, "{}", "Paused"),
             FitFieldFitnessEquipmentState::Unknown => write!(f, "{}", "Unknown"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFitnessEquipmentState::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFitnessEquipmentState::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3832,8 +3850,8 @@ impl fmt::Display for FitFieldTone {
             FitFieldTone::Tone => write!(f, "{}", "Tone"),
             FitFieldTone::Vibrate => write!(f, "{}", "Vibrate"),
             FitFieldTone::ToneAndVibrate => write!(f, "{}", "ToneAndVibrate"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTone::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTone::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3883,8 +3901,8 @@ impl fmt::Display for FitFieldAutoscroll {
             FitFieldAutoscroll::Slow => write!(f, "{}", "Slow"),
             FitFieldAutoscroll::Medium => write!(f, "{}", "Medium"),
             FitFieldAutoscroll::Fast => write!(f, "{}", "Fast"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAutoscroll::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAutoscroll::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3932,8 +3950,8 @@ impl fmt::Display for FitFieldActivityClass {
             FitFieldActivityClass::Level => write!(f, "{}", "Level"),
             FitFieldActivityClass::LevelMax => write!(f, "{}", "LevelMax"),
             FitFieldActivityClass::Athlete => write!(f, "{}", "Athlete"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldActivityClass::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldActivityClass::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -3980,8 +3998,8 @@ impl fmt::Display for FitFieldHrZoneCalc {
             FitFieldHrZoneCalc::Custom => write!(f, "{}", "Custom"),
             FitFieldHrZoneCalc::PercentMaxHr => write!(f, "{}", "PercentMaxHr"),
             FitFieldHrZoneCalc::PercentHrr => write!(f, "{}", "PercentHrr"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldHrZoneCalc::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldHrZoneCalc::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4026,8 +4044,8 @@ impl fmt::Display for FitFieldPwrZoneCalc {
         match self {
             FitFieldPwrZoneCalc::Custom => write!(f, "{}", "Custom"),
             FitFieldPwrZoneCalc::PercentFtp => write!(f, "{}", "PercentFtp"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldPwrZoneCalc::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPwrZoneCalc::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4127,8 +4145,8 @@ impl fmt::Display for FitFieldWktStepDuration {
             FitFieldWktStepDuration::RepeatUntilTrainingPeaksTss => write!(f, "{}", "RepeatUntilTrainingPeaksTss"),
             FitFieldWktStepDuration::RepetitionTime => write!(f, "{}", "RepetitionTime"),
             FitFieldWktStepDuration::Reps => write!(f, "{}", "Reps"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWktStepDuration::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWktStepDuration::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4224,8 +4242,8 @@ impl fmt::Display for FitFieldWktStepTarget {
             FitFieldWktStepTarget::SwimStroke => write!(f, "{}", "SwimStroke"),
             FitFieldWktStepTarget::SpeedLap => write!(f, "{}", "SpeedLap"),
             FitFieldWktStepTarget::HeartRateLap => write!(f, "{}", "HeartRateLap"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWktStepTarget::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWktStepTarget::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4291,8 +4309,8 @@ impl fmt::Display for FitFieldGoal {
             FitFieldGoal::Steps => write!(f, "{}", "Steps"),
             FitFieldGoal::Ascent => write!(f, "{}", "Ascent"),
             FitFieldGoal::ActiveMinutes => write!(f, "{}", "ActiveMinutes"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldGoal::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldGoal::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4349,8 +4367,8 @@ impl fmt::Display for FitFieldGoalRecurrence {
             FitFieldGoalRecurrence::Monthly => write!(f, "{}", "Monthly"),
             FitFieldGoalRecurrence::Yearly => write!(f, "{}", "Yearly"),
             FitFieldGoalRecurrence::Custom => write!(f, "{}", "Custom"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldGoalRecurrence::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldGoalRecurrence::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4400,8 +4418,8 @@ impl fmt::Display for FitFieldGoalSource {
             FitFieldGoalSource::Auto => write!(f, "{}", "Auto"),
             FitFieldGoalSource::Community => write!(f, "{}", "Community"),
             FitFieldGoalSource::User => write!(f, "{}", "User"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldGoalSource::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldGoalSource::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4446,8 +4464,8 @@ impl fmt::Display for FitFieldSchedule {
         match self {
             FitFieldSchedule::Workout => write!(f, "{}", "Workout"),
             FitFieldSchedule::Course => write!(f, "{}", "Course"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSchedule::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSchedule::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4539,8 +4557,8 @@ impl fmt::Display for FitFieldCoursePoint {
             FitFieldCoursePoint::UTurn => write!(f, "{}", "UTurn"),
             FitFieldCoursePoint::SegmentStart => write!(f, "{}", "SegmentStart"),
             FitFieldCoursePoint::SegmentEnd => write!(f, "{}", "SegmentEnd"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCoursePoint::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCoursePoint::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -4935,8 +4953,9 @@ impl fmt::Display for FitFieldManufacturer {
             FitFieldManufacturer::Cycligentinc => write!(f, "{}", "Cycligentinc"),
             FitFieldManufacturer::Trailforks => write!(f, "{}", "Trailforks"),
             FitFieldManufacturer::Actigraphcorp => write!(f, "{}", "Actigraphcorp"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldManufacturer::Manufacturer(x) => write!(f, "{}({})", "Manufacturer", x),
+            FitFieldManufacturer::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldManufacturer::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -5621,8 +5640,9 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::ConnectiqSimulator => write!(f, "{}", "ConnectiqSimulator"),
             FitFieldGarminProduct::AndroidAntplusPlugin => write!(f, "{}", "AndroidAntplusPlugin"),
             FitFieldGarminProduct::Connect => write!(f, "{}", "Connect"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldGarminProduct::GarminProduct(x) => write!(f, "{}({})", "GarminProduct", x),
+            FitFieldGarminProduct::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldGarminProduct::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6025,8 +6045,9 @@ impl fmt::Display for FitFieldAntplusDeviceType {
             FitFieldAntplusDeviceType::BikeCadence => write!(f, "{}", "BikeCadence"),
             FitFieldAntplusDeviceType::BikeSpeed => write!(f, "{}", "BikeSpeed"),
             FitFieldAntplusDeviceType::StrideSpeedDistance => write!(f, "{}", "StrideSpeedDistance"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAntplusDeviceType::AntplusDeviceType(x) => write!(f, "{}({})", "AntplusDeviceType", x),
+            FitFieldAntplusDeviceType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAntplusDeviceType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6122,8 +6143,8 @@ impl fmt::Display for FitFieldAntNetwork {
             FitFieldAntNetwork::Antplus => write!(f, "{}", "Antplus"),
             FitFieldAntNetwork::Antfs => write!(f, "{}", "Antfs"),
             FitFieldAntNetwork::Private => write!(f, "{}", "Private"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAntNetwork::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAntNetwork::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6194,8 +6215,9 @@ impl fmt::Display for FitFieldWorkoutCapabilities {
             FitFieldWorkoutCapabilities::Grade => write!(f, "{}", "Grade"),
             FitFieldWorkoutCapabilities::Resistance => write!(f, "{}", "Resistance"),
             FitFieldWorkoutCapabilities::Protected => write!(f, "{}", "Protected"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWorkoutCapabilities::WorkoutCapabilities(x) => write!(f, "{}({})", "WorkoutCapabilities", x),
+            FitFieldWorkoutCapabilities::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWorkoutCapabilities::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6278,8 +6300,9 @@ impl fmt::Display for FitFieldBatteryStatus {
             FitFieldBatteryStatus::Critical => write!(f, "{}", "Critical"),
             FitFieldBatteryStatus::Charging => write!(f, "{}", "Charging"),
             FitFieldBatteryStatus::Unknown => write!(f, "{}", "Unknown"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBatteryStatus::BatteryStatus(x) => write!(f, "{}({})", "BatteryStatus", x),
+            FitFieldBatteryStatus::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBatteryStatus::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6337,8 +6360,8 @@ impl fmt::Display for FitFieldHrType {
         match self {
             FitFieldHrType::Normal => write!(f, "{}", "Normal"),
             FitFieldHrType::Irregular => write!(f, "{}", "Irregular"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldHrType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldHrType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6401,8 +6424,9 @@ impl fmt::Display for FitFieldCourseCapabilities {
             FitFieldCourseCapabilities::Training => write!(f, "{}", "Training"),
             FitFieldCourseCapabilities::Navigation => write!(f, "{}", "Navigation"),
             FitFieldCourseCapabilities::Bikeway => write!(f, "{}", "Bikeway"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCourseCapabilities::CourseCapabilities(x) => write!(f, "{}({})", "CourseCapabilities", x),
+            FitFieldCourseCapabilities::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCourseCapabilities::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6467,8 +6491,9 @@ impl fmt::Display for FitFieldWeight {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldWeight::Calculating => write!(f, "{}", "Calculating"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWeight::Weight(x) => write!(f, "{}({})", "Weight", x),
+            FitFieldWeight::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWeight::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6513,8 +6538,9 @@ impl fmt::Display for FitFieldWorkoutHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldWorkoutHr::BpmOffset => write!(f, "{}", "BpmOffset"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWorkoutHr::WorkoutHr(x) => write!(f, "{}({})", "WorkoutHr", x),
+            FitFieldWorkoutHr::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWorkoutHr::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6559,8 +6585,9 @@ impl fmt::Display for FitFieldWorkoutPower {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldWorkoutPower::WattsOffset => write!(f, "{}", "WattsOffset"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWorkoutPower::WorkoutPower(x) => write!(f, "{}({})", "WorkoutPower", x),
+            FitFieldWorkoutPower::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWorkoutPower::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6612,8 +6639,8 @@ impl fmt::Display for FitFieldBpStatus {
             FitFieldBpStatus::ErrorNoMeasurement => write!(f, "{}", "ErrorNoMeasurement"),
             FitFieldBpStatus::ErrorDataOutOfRange => write!(f, "{}", "ErrorDataOutOfRange"),
             FitFieldBpStatus::ErrorIrregularHeartRate => write!(f, "{}", "ErrorIrregularHeartRate"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBpStatus::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBpStatus::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6669,8 +6696,9 @@ impl fmt::Display for FitFieldUserLocalId {
             FitFieldUserLocalId::StationaryMax => write!(f, "{}", "StationaryMax"),
             FitFieldUserLocalId::PortableMin => write!(f, "{}", "PortableMin"),
             FitFieldUserLocalId::PortableMax => write!(f, "{}", "PortableMax"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldUserLocalId::UserLocalId(x) => write!(f, "{}({})", "UserLocalId", x),
+            FitFieldUserLocalId::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldUserLocalId::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6736,8 +6764,8 @@ impl fmt::Display for FitFieldSwimStroke {
             FitFieldSwimStroke::Drill => write!(f, "{}", "Drill"),
             FitFieldSwimStroke::Mixed => write!(f, "{}", "Mixed"),
             FitFieldSwimStroke::Im => write!(f, "{}", "Im"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSwimStroke::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSwimStroke::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6800,8 +6828,8 @@ impl fmt::Display for FitFieldActivityType {
             FitFieldActivityType::Walking => write!(f, "{}", "Walking"),
             FitFieldActivityType::Sedentary => write!(f, "{}", "Sedentary"),
             FitFieldActivityType::All => write!(f, "{}", "All"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldActivityType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldActivityType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6888,8 +6916,8 @@ impl fmt::Display for FitFieldActivitySubtype {
             FitFieldActivitySubtype::LapSwimming => write!(f, "{}", "LapSwimming"),
             FitFieldActivitySubtype::OpenWater => write!(f, "{}", "OpenWater"),
             FitFieldActivitySubtype::All => write!(f, "{}", "All"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldActivitySubtype::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldActivitySubtype::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6953,8 +6981,8 @@ impl fmt::Display for FitFieldActivityLevel {
             FitFieldActivityLevel::Low => write!(f, "{}", "Low"),
             FitFieldActivityLevel::Medium => write!(f, "{}", "Medium"),
             FitFieldActivityLevel::High => write!(f, "{}", "High"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldActivityLevel::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldActivityLevel::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -6999,8 +7027,8 @@ impl fmt::Display for FitFieldSide {
         match self {
             FitFieldSide::Right => write!(f, "{}", "Right"),
             FitFieldSide::Left => write!(f, "{}", "Left"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSide::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSide::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7045,8 +7073,9 @@ impl fmt::Display for FitFieldLeftRightBalance {
         match self {
             FitFieldLeftRightBalance::Mask => write!(f, "{}", "Mask"),
             FitFieldLeftRightBalance::Right => write!(f, "{}", "Right"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLeftRightBalance::LeftRightBalance(x) => write!(f, "{}({})", "LeftRightBalance", x),
+            FitFieldLeftRightBalance::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLeftRightBalance::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7095,8 +7124,9 @@ impl fmt::Display for FitFieldLeftRightBalance100 {
         match self {
             FitFieldLeftRightBalance100::Mask => write!(f, "{}", "Mask"),
             FitFieldLeftRightBalance100::Right => write!(f, "{}", "Right"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLeftRightBalance100::LeftRightBalance100(x) => write!(f, "{}({})", "LeftRightBalance100", x),
+            FitFieldLeftRightBalance100::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLeftRightBalance100::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7144,8 +7174,8 @@ impl fmt::Display for FitFieldLengthType {
         match self {
             FitFieldLengthType::Idle => write!(f, "{}", "Idle"),
             FitFieldLengthType::Active => write!(f, "{}", "Active"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLengthType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLengthType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7199,8 +7229,8 @@ impl fmt::Display for FitFieldDayOfWeek {
             FitFieldDayOfWeek::Thursday => write!(f, "{}", "Thursday"),
             FitFieldDayOfWeek::Friday => write!(f, "{}", "Friday"),
             FitFieldDayOfWeek::Saturday => write!(f, "{}", "Saturday"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDayOfWeek::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDayOfWeek::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7310,8 +7340,9 @@ impl fmt::Display for FitFieldConnectivityCapabilities {
             FitFieldConnectivityCapabilities::LiveTrackAutoStart => write!(f, "{}", "LiveTrackAutoStart"),
             FitFieldConnectivityCapabilities::LiveTrackMessaging => write!(f, "{}", "LiveTrackMessaging"),
             FitFieldConnectivityCapabilities::InstantInput => write!(f, "{}", "InstantInput"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldConnectivityCapabilities::ConnectivityCapabilities(x) => write!(f, "{}({})", "ConnectivityCapabilities", x),
+            FitFieldConnectivityCapabilities::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldConnectivityCapabilities::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7421,8 +7452,8 @@ impl fmt::Display for FitFieldWeatherReport {
             FitFieldWeatherReport::Current => write!(f, "{}", "Current"),
             FitFieldWeatherReport::HourlyForecast => write!(f, "{}", "HourlyForecast"),
             FitFieldWeatherReport::DailyForecast => write!(f, "{}", "DailyForecast"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWeatherReport::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWeatherReport::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7505,8 +7536,8 @@ impl fmt::Display for FitFieldWeatherStatus {
             FitFieldWeatherStatus::LightRainSnow => write!(f, "{}", "LightRainSnow"),
             FitFieldWeatherStatus::HeavyRainSnow => write!(f, "{}", "HeavyRainSnow"),
             FitFieldWeatherStatus::Cloudy => write!(f, "{}", "Cloudy"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWeatherStatus::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWeatherStatus::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7575,8 +7606,8 @@ impl fmt::Display for FitFieldWeatherSeverity {
             FitFieldWeatherSeverity::Watch => write!(f, "{}", "Watch"),
             FitFieldWeatherSeverity::Advisory => write!(f, "{}", "Advisory"),
             FitFieldWeatherSeverity::Statement => write!(f, "{}", "Statement"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWeatherSeverity::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWeatherSeverity::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7789,8 +7820,8 @@ impl fmt::Display for FitFieldWeatherSevereType {
             FitFieldWeatherSevereType::LowWater => write!(f, "{}", "LowWater"),
             FitFieldWeatherSevereType::Hydrological => write!(f, "{}", "Hydrological"),
             FitFieldWeatherSevereType::SpecialWeather => write!(f, "{}", "SpecialWeather"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWeatherSevereType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWeatherSevereType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7914,8 +7945,9 @@ pub enum FitFieldTimeIntoDay { // fit base type: uint32
 impl fmt::Display for FitFieldTimeIntoDay {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTimeIntoDay::TimeIntoDay(x) => write!(f, "{}({})", "TimeIntoDay", x),
+            FitFieldTimeIntoDay::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTimeIntoDay::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -7956,8 +7988,9 @@ pub enum FitFieldLocaltimeIntoDay { // fit base type: uint32
 impl fmt::Display for FitFieldLocaltimeIntoDay {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLocaltimeIntoDay::LocaltimeIntoDay(x) => write!(f, "{}({})", "LocaltimeIntoDay", x),
+            FitFieldLocaltimeIntoDay::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLocaltimeIntoDay::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8009,8 +8042,8 @@ impl fmt::Display for FitFieldStrokeType {
             FitFieldStrokeType::Forehand => write!(f, "{}", "Forehand"),
             FitFieldStrokeType::Backhand => write!(f, "{}", "Backhand"),
             FitFieldStrokeType::Smash => write!(f, "{}", "Smash"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldStrokeType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldStrokeType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8134,8 +8167,8 @@ impl fmt::Display for FitFieldBodyLocation {
             FitFieldBodyLocation::WaistFront => write!(f, "{}", "WaistFront"),
             FitFieldBodyLocation::WaistLeft => write!(f, "{}", "WaistLeft"),
             FitFieldBodyLocation::WaistRight => write!(f, "{}", "WaistRight"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBodyLocation::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBodyLocation::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8217,8 +8250,8 @@ impl fmt::Display for FitFieldSegmentLapStatus {
         match self {
             FitFieldSegmentLapStatus::End => write!(f, "{}", "End"),
             FitFieldSegmentLapStatus::Fail => write!(f, "{}", "Fail"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSegmentLapStatus::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSegmentLapStatus::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8280,8 +8313,8 @@ impl fmt::Display for FitFieldSegmentLeaderboardType {
             FitFieldSegmentLeaderboardType::Goal => write!(f, "{}", "Goal"),
             FitFieldSegmentLeaderboardType::Rival => write!(f, "{}", "Rival"),
             FitFieldSegmentLeaderboardType::ClubLeader => write!(f, "{}", "ClubLeader"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSegmentLeaderboardType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSegmentLeaderboardType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8336,8 +8369,8 @@ impl fmt::Display for FitFieldSegmentDeleteStatus {
             FitFieldSegmentDeleteStatus::DoNotDelete => write!(f, "{}", "DoNotDelete"),
             FitFieldSegmentDeleteStatus::DeleteOne => write!(f, "{}", "DeleteOne"),
             FitFieldSegmentDeleteStatus::DeleteAll => write!(f, "{}", "DeleteAll"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSegmentDeleteStatus::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSegmentDeleteStatus::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8382,8 +8415,8 @@ impl fmt::Display for FitFieldSegmentSelectionType {
         match self {
             FitFieldSegmentSelectionType::Starred => write!(f, "{}", "Starred"),
             FitFieldSegmentSelectionType::Suggested => write!(f, "{}", "Suggested"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSegmentSelectionType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSegmentSelectionType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8435,8 +8468,8 @@ impl fmt::Display for FitFieldSourceType {
             FitFieldSourceType::BluetoothLowEnergy => write!(f, "{}", "BluetoothLowEnergy"),
             FitFieldSourceType::Wifi => write!(f, "{}", "Wifi"),
             FitFieldSourceType::Local => write!(f, "{}", "Local"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSourceType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSourceType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8481,8 +8514,9 @@ pub enum FitFieldLocalDeviceType { // fit base type: uint8
 impl fmt::Display for FitFieldLocalDeviceType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLocalDeviceType::LocalDeviceType(x) => write!(f, "{}({})", "LocalDeviceType", x),
+            FitFieldLocalDeviceType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLocalDeviceType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8532,8 +8566,8 @@ impl fmt::Display for FitFieldDisplayOrientation {
             FitFieldDisplayOrientation::Landscape => write!(f, "{}", "Landscape"),
             FitFieldDisplayOrientation::PortraitFlipped => write!(f, "{}", "PortraitFlipped"),
             FitFieldDisplayOrientation::LandscapeFlipped => write!(f, "{}", "LandscapeFlipped"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDisplayOrientation::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDisplayOrientation::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8588,8 +8622,8 @@ impl fmt::Display for FitFieldWorkoutEquipment {
             FitFieldWorkoutEquipment::SwimPaddles => write!(f, "{}", "SwimPaddles"),
             FitFieldWorkoutEquipment::SwimPullBuoy => write!(f, "{}", "SwimPullBuoy"),
             FitFieldWorkoutEquipment::SwimSnorkel => write!(f, "{}", "SwimSnorkel"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWorkoutEquipment::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWorkoutEquipment::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8641,8 +8675,8 @@ impl fmt::Display for FitFieldWatchfaceMode {
             FitFieldWatchfaceMode::Analog => write!(f, "{}", "Analog"),
             FitFieldWatchfaceMode::ConnectIq => write!(f, "{}", "ConnectIq"),
             FitFieldWatchfaceMode::Disabled => write!(f, "{}", "Disabled"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWatchfaceMode::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWatchfaceMode::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8690,8 +8724,8 @@ impl fmt::Display for FitFieldDigitalWatchfaceLayout {
             FitFieldDigitalWatchfaceLayout::Traditional => write!(f, "{}", "Traditional"),
             FitFieldDigitalWatchfaceLayout::Modern => write!(f, "{}", "Modern"),
             FitFieldDigitalWatchfaceLayout::Bold => write!(f, "{}", "Bold"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDigitalWatchfaceLayout::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDigitalWatchfaceLayout::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8738,8 +8772,8 @@ impl fmt::Display for FitFieldAnalogWatchfaceLayout {
             FitFieldAnalogWatchfaceLayout::Minimal => write!(f, "{}", "Minimal"),
             FitFieldAnalogWatchfaceLayout::Traditional => write!(f, "{}", "Traditional"),
             FitFieldAnalogWatchfaceLayout::Modern => write!(f, "{}", "Modern"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAnalogWatchfaceLayout::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAnalogWatchfaceLayout::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8788,8 +8822,8 @@ impl fmt::Display for FitFieldRiderPositionType {
             FitFieldRiderPositionType::Standing => write!(f, "{}", "Standing"),
             FitFieldRiderPositionType::TransitionToSeated => write!(f, "{}", "TransitionToSeated"),
             FitFieldRiderPositionType::TransitionToStanding => write!(f, "{}", "TransitionToStanding"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldRiderPositionType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldRiderPositionType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8839,8 +8873,8 @@ impl fmt::Display for FitFieldPowerPhaseType {
             FitFieldPowerPhaseType::PowerPhaseEndAngle => write!(f, "{}", "PowerPhaseEndAngle"),
             FitFieldPowerPhaseType::PowerPhaseArcLength => write!(f, "{}", "PowerPhaseArcLength"),
             FitFieldPowerPhaseType::PowerPhaseCenter => write!(f, "{}", "PowerPhaseCenter"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldPowerPhaseType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPowerPhaseType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8908,8 +8942,8 @@ impl fmt::Display for FitFieldCameraEventType {
             FitFieldCameraEventType::VideoSecondStreamPause => write!(f, "{}", "VideoSecondStreamPause"),
             FitFieldCameraEventType::VideoResume => write!(f, "{}", "VideoResume"),
             FitFieldCameraEventType::VideoSecondStreamResume => write!(f, "{}", "VideoSecondStreamResume"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCameraEventType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCameraEventType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -8968,8 +9002,8 @@ impl fmt::Display for FitFieldSensorType {
             FitFieldSensorType::Gyroscope => write!(f, "{}", "Gyroscope"),
             FitFieldSensorType::Compass => write!(f, "{}", "Compass"),
             FitFieldSensorType::Barometer => write!(f, "{}", "Barometer"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSensorType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSensorType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9019,8 +9053,8 @@ impl fmt::Display for FitFieldBikeLightNetworkConfigType {
             FitFieldBikeLightNetworkConfigType::Individual => write!(f, "{}", "Individual"),
             FitFieldBikeLightNetworkConfigType::HighVisibility => write!(f, "{}", "HighVisibility"),
             FitFieldBikeLightNetworkConfigType::Trail => write!(f, "{}", "Trail"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBikeLightNetworkConfigType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBikeLightNetworkConfigType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9071,8 +9105,9 @@ impl fmt::Display for FitFieldCommTimeoutType {
             FitFieldCommTimeoutType::PairingTimeout => write!(f, "{}", "PairingTimeout"),
             FitFieldCommTimeoutType::ConnectionLost => write!(f, "{}", "ConnectionLost"),
             FitFieldCommTimeoutType::ConnectionTimeout => write!(f, "{}", "ConnectionTimeout"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCommTimeoutType::CommTimeoutType(x) => write!(f, "{}({})", "CommTimeoutType", x),
+            FitFieldCommTimeoutType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCommTimeoutType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9128,8 +9163,8 @@ impl fmt::Display for FitFieldCameraOrientationType {
             FitFieldCameraOrientationType::CameraOrientation90 => write!(f, "{}", "CameraOrientation90"),
             FitFieldCameraOrientationType::CameraOrientation180 => write!(f, "{}", "CameraOrientation180"),
             FitFieldCameraOrientationType::CameraOrientation270 => write!(f, "{}", "CameraOrientation270"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCameraOrientationType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCameraOrientationType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9179,8 +9214,8 @@ impl fmt::Display for FitFieldAttitudeStage {
             FitFieldAttitudeStage::Aligning => write!(f, "{}", "Aligning"),
             FitFieldAttitudeStage::Degraded => write!(f, "{}", "Degraded"),
             FitFieldAttitudeStage::Valid => write!(f, "{}", "Valid"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAttitudeStage::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAttitudeStage::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9249,8 +9284,9 @@ impl fmt::Display for FitFieldAttitudeValidity {
             FitFieldAttitudeValidity::SolutionCoasting => write!(f, "{}", "SolutionCoasting"),
             FitFieldAttitudeValidity::TrueTrackAngle => write!(f, "{}", "TrueTrackAngle"),
             FitFieldAttitudeValidity::MagneticHeading => write!(f, "{}", "MagneticHeading"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAttitudeValidity::AttitudeValidity(x) => write!(f, "{}({})", "AttitudeValidity", x),
+            FitFieldAttitudeValidity::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAttitudeValidity::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9326,8 +9362,8 @@ impl fmt::Display for FitFieldAutoSyncFrequency {
             FitFieldAutoSyncFrequency::Frequent => write!(f, "{}", "Frequent"),
             FitFieldAutoSyncFrequency::OnceADay => write!(f, "{}", "OnceADay"),
             FitFieldAutoSyncFrequency::Remote => write!(f, "{}", "Remote"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAutoSyncFrequency::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAutoSyncFrequency::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9386,8 +9422,8 @@ impl fmt::Display for FitFieldExdLayout {
             FitFieldExdLayout::FullQuarterSplit => write!(f, "{}", "FullQuarterSplit"),
             FitFieldExdLayout::HalfVerticalLeftSplit => write!(f, "{}", "HalfVerticalLeftSplit"),
             FitFieldExdLayout::HalfHorizontalTopSplit => write!(f, "{}", "HalfHorizontalTopSplit"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldExdLayout::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldExdLayout::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9455,8 +9491,8 @@ impl fmt::Display for FitFieldExdDisplayType {
             FitFieldExdDisplayType::String => write!(f, "{}", "String"),
             FitFieldExdDisplayType::SimpleDynamicIcon => write!(f, "{}", "SimpleDynamicIcon"),
             FitFieldExdDisplayType::Gauge => write!(f, "{}", "Gauge"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldExdDisplayType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldExdDisplayType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9605,8 +9641,8 @@ impl fmt::Display for FitFieldExdDataUnits {
             FitFieldExdDataUnits::MetersPerMin => write!(f, "{}", "MetersPerMin"),
             FitFieldExdDataUnits::MetersPerSec => write!(f, "{}", "MetersPerSec"),
             FitFieldExdDataUnits::EightCardinal => write!(f, "{}", "EightCardinal"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldExdDataUnits::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldExdDataUnits::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -9782,8 +9818,8 @@ impl fmt::Display for FitFieldExdQualifiers {
             FitFieldExdQualifiers::Zone3 => write!(f, "{}", "Zone3"),
             FitFieldExdQualifiers::Zone2 => write!(f, "{}", "Zone2"),
             FitFieldExdQualifiers::Zone1 => write!(f, "{}", "Zone1"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldExdQualifiers::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldExdQualifiers::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10059,8 +10095,8 @@ impl fmt::Display for FitFieldExdDescriptors {
             FitFieldExdDescriptors::AmbientPressure => write!(f, "{}", "AmbientPressure"),
             FitFieldExdDescriptors::Pressure => write!(f, "{}", "Pressure"),
             FitFieldExdDescriptors::Vam => write!(f, "{}", "Vam"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldExdDescriptors::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldExdDescriptors::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10210,8 +10246,9 @@ impl fmt::Display for FitFieldAutoActivityDetect {
             FitFieldAutoActivityDetect::Walking => write!(f, "{}", "Walking"),
             FitFieldAutoActivityDetect::Elliptical => write!(f, "{}", "Elliptical"),
             FitFieldAutoActivityDetect::Sedentary => write!(f, "{}", "Sedentary"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldAutoActivityDetect::AutoActivityDetect(x) => write!(f, "{}({})", "AutoActivityDetect", x),
+            FitFieldAutoActivityDetect::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldAutoActivityDetect::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10282,8 +10319,9 @@ impl fmt::Display for FitFieldSupportedExdScreenLayouts {
             FitFieldSupportedExdScreenLayouts::FullQuarterSplit => write!(f, "{}", "FullQuarterSplit"),
             FitFieldSupportedExdScreenLayouts::HalfVerticalLeftSplit => write!(f, "{}", "HalfVerticalLeftSplit"),
             FitFieldSupportedExdScreenLayouts::HalfHorizontalTopSplit => write!(f, "{}", "HalfHorizontalTopSplit"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSupportedExdScreenLayouts::SupportedExdScreenLayouts(x) => write!(f, "{}({})", "SupportedExdScreenLayouts", x),
+            FitFieldSupportedExdScreenLayouts::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSupportedExdScreenLayouts::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10374,8 +10412,9 @@ impl fmt::Display for FitFieldFitBaseType {
             FitFieldFitBaseType::Sint64 => write!(f, "{}", "Sint64"),
             FitFieldFitBaseType::Uint64 => write!(f, "{}", "Uint64"),
             FitFieldFitBaseType::Uint64z => write!(f, "{}", "Uint64z"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFitBaseType::FitBaseType(x) => write!(f, "{}({})", "FitBaseType", x),
+            FitFieldFitBaseType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFitBaseType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10525,8 +10564,8 @@ impl fmt::Display for FitFieldTurnType {
             FitFieldTurnType::UturnRightIdx => write!(f, "{}", "UturnRightIdx"),
             FitFieldTurnType::IconInvIdx => write!(f, "{}", "IconInvIdx"),
             FitFieldTurnType::IconIdxCnt => write!(f, "{}", "IconIdxCnt"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTurnType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTurnType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10607,8 +10646,9 @@ impl fmt::Display for FitFieldBikeLightBeamAngleMode {
         match self {
             FitFieldBikeLightBeamAngleMode::Manual => write!(f, "{}", "Manual"),
             FitFieldBikeLightBeamAngleMode::Auto => write!(f, "{}", "Auto"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBikeLightBeamAngleMode::BikeLightBeamAngleMode(x) => write!(f, "{}({})", "BikeLightBeamAngleMode", x),
+            FitFieldBikeLightBeamAngleMode::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBikeLightBeamAngleMode::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10659,8 +10699,9 @@ impl fmt::Display for FitFieldFitBaseUnit {
             FitFieldFitBaseUnit::Other => write!(f, "{}", "Other"),
             FitFieldFitBaseUnit::Kilogram => write!(f, "{}", "Kilogram"),
             FitFieldFitBaseUnit::Pound => write!(f, "{}", "Pound"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFitBaseUnit::FitBaseUnit(x) => write!(f, "{}({})", "FitBaseUnit", x),
+            FitFieldFitBaseUnit::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFitBaseUnit::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10711,8 +10752,9 @@ impl fmt::Display for FitFieldSetType {
         match self {
             FitFieldSetType::Rest => write!(f, "{}", "Rest"),
             FitFieldSetType::Active => write!(f, "{}", "Active"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSetType::SetType(x) => write!(f, "{}({})", "SetType", x),
+            FitFieldSetType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSetType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10825,8 +10867,9 @@ impl fmt::Display for FitFieldExerciseCategory {
             FitFieldExerciseCategory::WarmUp => write!(f, "{}", "WarmUp"),
             FitFieldExerciseCategory::Run => write!(f, "{}", "Run"),
             FitFieldExerciseCategory::Unknown => write!(f, "{}", "Unknown"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldExerciseCategory::ExerciseCategory(x) => write!(f, "{}({})", "ExerciseCategory", x),
+            FitFieldExerciseCategory::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldExerciseCategory::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -10989,8 +11032,9 @@ impl fmt::Display for FitFieldBenchPressExerciseName {
             FitFieldBenchPressExerciseName::TripleStopBarbellBenchPress => write!(f, "{}", "TripleStopBarbellBenchPress"),
             FitFieldBenchPressExerciseName::WideGripBarbellBenchPress => write!(f, "{}", "WideGripBarbellBenchPress"),
             FitFieldBenchPressExerciseName::AlternatingDumbbellChestPress => write!(f, "{}", "AlternatingDumbbellChestPress"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldBenchPressExerciseName::BenchPressExerciseName(x) => write!(f, "{}({})", "BenchPressExerciseName", x),
+            FitFieldBenchPressExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBenchPressExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -11127,8 +11171,9 @@ impl fmt::Display for FitFieldCalfRaiseExerciseName {
             FitFieldCalfRaiseExerciseName::StandingCalfRaise => write!(f, "{}", "StandingCalfRaise"),
             FitFieldCalfRaiseExerciseName::WeightedStandingCalfRaise => write!(f, "{}", "WeightedStandingCalfRaise"),
             FitFieldCalfRaiseExerciseName::StandingDumbbellCalfRaise => write!(f, "{}", "StandingDumbbellCalfRaise"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCalfRaiseExerciseName::CalfRaiseExerciseName(x) => write!(f, "{}({})", "CalfRaiseExerciseName", x),
+            FitFieldCalfRaiseExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCalfRaiseExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -11255,8 +11300,9 @@ impl fmt::Display for FitFieldCardioExerciseName {
             FitFieldCardioExerciseName::WeightedSquatJacks => write!(f, "{}", "WeightedSquatJacks"),
             FitFieldCardioExerciseName::TripleUnder => write!(f, "{}", "TripleUnder"),
             FitFieldCardioExerciseName::WeightedTripleUnder => write!(f, "{}", "WeightedTripleUnder"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCardioExerciseName::CardioExerciseName(x) => write!(f, "{}({})", "CardioExerciseName", x),
+            FitFieldCardioExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCardioExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -11351,8 +11397,9 @@ impl fmt::Display for FitFieldCarryExerciseName {
             FitFieldCarryExerciseName::FarmersWalkOnToes => write!(f, "{}", "FarmersWalkOnToes"),
             FitFieldCarryExerciseName::HexDumbbellHold => write!(f, "{}", "HexDumbbellHold"),
             FitFieldCarryExerciseName::OverheadCarry => write!(f, "{}", "OverheadCarry"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCarryExerciseName::CarryExerciseName(x) => write!(f, "{}({})", "CarryExerciseName", x),
+            FitFieldCarryExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCarryExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -11449,8 +11496,9 @@ impl fmt::Display for FitFieldChopExerciseName {
             FitFieldChopExerciseName::StandingSplitRotationalChop => write!(f, "{}", "StandingSplitRotationalChop"),
             FitFieldChopExerciseName::StandingSplitRotationalReverseChop => write!(f, "{}", "StandingSplitRotationalReverseChop"),
             FitFieldChopExerciseName::StandingStabilityReverseChop => write!(f, "{}", "StandingStabilityReverseChop"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldChopExerciseName::ChopExerciseName(x) => write!(f, "{}({})", "ChopExerciseName", x),
+            FitFieldChopExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldChopExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -11683,8 +11731,9 @@ impl fmt::Display for FitFieldCoreExerciseName {
             FitFieldCoreExerciseName::Swimming => write!(f, "{}", "Swimming"),
             FitFieldCoreExerciseName::Teaser => write!(f, "{}", "Teaser"),
             FitFieldCoreExerciseName::TheHundred => write!(f, "{}", "TheHundred"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCoreExerciseName::CoreExerciseName(x) => write!(f, "{}({})", "CoreExerciseName", x),
+            FitFieldCoreExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCoreExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -12041,8 +12090,9 @@ impl fmt::Display for FitFieldCrunchExerciseName {
             FitFieldCrunchExerciseName::WeightedToesToBar => write!(f, "{}", "WeightedToesToBar"),
             FitFieldCrunchExerciseName::Crunch => write!(f, "{}", "Crunch"),
             FitFieldCrunchExerciseName::StraightLegCrunchWithBall => write!(f, "{}", "StraightLegCrunchWithBall"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCrunchExerciseName::CrunchExerciseName(x) => write!(f, "{}({})", "CrunchExerciseName", x),
+            FitFieldCrunchExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCrunchExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -12341,8 +12391,9 @@ impl fmt::Display for FitFieldCurlExerciseName {
             FitFieldCurlExerciseName::SwissBallEzBarPreacherCurl => write!(f, "{}", "SwissBallEzBarPreacherCurl"),
             FitFieldCurlExerciseName::TwistingStandingDumbbellBicepsCurl => write!(f, "{}", "TwistingStandingDumbbellBicepsCurl"),
             FitFieldCurlExerciseName::WideGripEzBarBicepsCurl => write!(f, "{}", "WideGripEzBarBicepsCurl"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldCurlExerciseName::CurlExerciseName(x) => write!(f, "{}({})", "CurlExerciseName", x),
+            FitFieldCurlExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldCurlExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -12509,8 +12560,9 @@ impl fmt::Display for FitFieldDeadliftExerciseName {
             FitFieldDeadliftExerciseName::SumoDeadliftHighPull => write!(f, "{}", "SumoDeadliftHighPull"),
             FitFieldDeadliftExerciseName::TrapBarDeadlift => write!(f, "{}", "TrapBarDeadlift"),
             FitFieldDeadliftExerciseName::WideGripBarbellDeadlift => write!(f, "{}", "WideGripBarbellDeadlift"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDeadliftExerciseName::DeadliftExerciseName(x) => write!(f, "{}({})", "DeadliftExerciseName", x),
+            FitFieldDeadliftExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDeadliftExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -12609,8 +12661,9 @@ impl fmt::Display for FitFieldFlyeExerciseName {
             FitFieldFlyeExerciseName::SwissBallDumbbellFlye => write!(f, "{}", "SwissBallDumbbellFlye"),
             FitFieldFlyeExerciseName::ArmRotations => write!(f, "{}", "ArmRotations"),
             FitFieldFlyeExerciseName::HugATree => write!(f, "{}", "HugATree"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFlyeExerciseName::FlyeExerciseName(x) => write!(f, "{}({})", "FlyeExerciseName", x),
+            FitFieldFlyeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFlyeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -12771,8 +12824,9 @@ impl fmt::Display for FitFieldHipRaiseExerciseName {
             FitFieldHipRaiseExerciseName::LegCircles => write!(f, "{}", "LegCircles"),
             FitFieldHipRaiseExerciseName::LegLift => write!(f, "{}", "LegLift"),
             FitFieldHipRaiseExerciseName::LegLiftInExternalRotation => write!(f, "{}", "LegLiftInExternalRotation"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldHipRaiseExerciseName::HipRaiseExerciseName(x) => write!(f, "{}({})", "HipRaiseExerciseName", x),
+            FitFieldHipRaiseExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldHipRaiseExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -12981,8 +13035,9 @@ impl fmt::Display for FitFieldHipStabilityExerciseName {
             FitFieldHipStabilityExerciseName::WeightedStandingRearLegRaise => write!(f, "{}", "WeightedStandingRearLegRaise"),
             FitFieldHipStabilityExerciseName::SupineHipInternalRotation => write!(f, "{}", "SupineHipInternalRotation"),
             FitFieldHipStabilityExerciseName::WeightedSupineHipInternalRotation => write!(f, "{}", "WeightedSupineHipInternalRotation"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldHipStabilityExerciseName::HipStabilityExerciseName(x) => write!(f, "{}({})", "HipStabilityExerciseName", x),
+            FitFieldHipStabilityExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldHipStabilityExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -13097,8 +13152,9 @@ impl fmt::Display for FitFieldHipSwingExerciseName {
             FitFieldHipSwingExerciseName::SingleArmKettlebellSwing => write!(f, "{}", "SingleArmKettlebellSwing"),
             FitFieldHipSwingExerciseName::SingleArmDumbbellSwing => write!(f, "{}", "SingleArmDumbbellSwing"),
             FitFieldHipSwingExerciseName::StepOutSwing => write!(f, "{}", "StepOutSwing"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldHipSwingExerciseName::HipSwingExerciseName(x) => write!(f, "{}({})", "HipSwingExerciseName", x),
+            FitFieldHipSwingExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldHipSwingExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -13225,8 +13281,9 @@ impl fmt::Display for FitFieldHyperextensionExerciseName {
             FitFieldHyperextensionExerciseName::SupermanOnSwissBall => write!(f, "{}", "SupermanOnSwissBall"),
             FitFieldHyperextensionExerciseName::Cobra => write!(f, "{}", "Cobra"),
             FitFieldHyperextensionExerciseName::SupineFloorBarre => write!(f, "{}", "SupineFloorBarre"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldHyperextensionExerciseName::HyperextensionExerciseName(x) => write!(f, "{}({})", "HyperextensionExerciseName", x),
+            FitFieldHyperextensionExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldHyperextensionExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -13415,8 +13472,9 @@ impl fmt::Display for FitFieldLateralRaiseExerciseName {
             FitFieldLateralRaiseExerciseName::WeightedWallSlide => write!(f, "{}", "WeightedWallSlide"),
             FitFieldLateralRaiseExerciseName::ArmCircles => write!(f, "{}", "ArmCircles"),
             FitFieldLateralRaiseExerciseName::ShavingTheHead => write!(f, "{}", "ShavingTheHead"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLateralRaiseExerciseName::LateralRaiseExerciseName(x) => write!(f, "{}({})", "LateralRaiseExerciseName", x),
+            FitFieldLateralRaiseExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLateralRaiseExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -13549,8 +13607,9 @@ impl fmt::Display for FitFieldLegCurlExerciseName {
             FitFieldLegCurlExerciseName::StaggeredStanceGoodMorning => write!(f, "{}", "StaggeredStanceGoodMorning"),
             FitFieldLegCurlExerciseName::SwissBallHipRaiseAndLegCurl => write!(f, "{}", "SwissBallHipRaiseAndLegCurl"),
             FitFieldLegCurlExerciseName::ZercherGoodMorning => write!(f, "{}", "ZercherGoodMorning"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLegCurlExerciseName::LegCurlExerciseName(x) => write!(f, "{}({})", "LegCurlExerciseName", x),
+            FitFieldLegCurlExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLegCurlExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -13659,8 +13718,9 @@ impl fmt::Display for FitFieldLegRaiseExerciseName {
             FitFieldLegRaiseExerciseName::WeightedHangingKneeRaise => write!(f, "{}", "WeightedHangingKneeRaise"),
             FitFieldLegRaiseExerciseName::LateralStepover => write!(f, "{}", "LateralStepover"),
             FitFieldLegRaiseExerciseName::WeightedLateralStepover => write!(f, "{}", "WeightedLateralStepover"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLegRaiseExerciseName::LegRaiseExerciseName(x) => write!(f, "{}({})", "LegRaiseExerciseName", x),
+            FitFieldLegRaiseExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLegRaiseExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -13907,8 +13967,9 @@ impl fmt::Display for FitFieldLungeExerciseName {
             FitFieldLungeExerciseName::WalkingLunge => write!(f, "{}", "WalkingLunge"),
             FitFieldLungeExerciseName::WeightedWalkingLunge => write!(f, "{}", "WeightedWalkingLunge"),
             FitFieldLungeExerciseName::WideGripOverheadBarbellSplitSquat => write!(f, "{}", "WideGripOverheadBarbellSplitSquat"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldLungeExerciseName::LungeExerciseName(x) => write!(f, "{}({})", "LungeExerciseName", x),
+            FitFieldLungeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLungeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -14153,8 +14214,9 @@ impl fmt::Display for FitFieldOlympicLiftExerciseName {
             FitFieldOlympicLiftExerciseName::SingleArmKettlebellSnatch => write!(f, "{}", "SingleArmKettlebellSnatch"),
             FitFieldOlympicLiftExerciseName::SplitJerk => write!(f, "{}", "SplitJerk"),
             FitFieldOlympicLiftExerciseName::SquatCleanAndJerk => write!(f, "{}", "SquatCleanAndJerk"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldOlympicLiftExerciseName::OlympicLiftExerciseName(x) => write!(f, "{}({})", "OlympicLiftExerciseName", x),
+            FitFieldOlympicLiftExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldOlympicLiftExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -14507,8 +14569,9 @@ impl fmt::Display for FitFieldPlankExerciseName {
             FitFieldPlankExerciseName::PlankWithArmVariations => write!(f, "{}", "PlankWithArmVariations"),
             FitFieldPlankExerciseName::PlankWithLegLift => write!(f, "{}", "PlankWithLegLift"),
             FitFieldPlankExerciseName::ReversePlankWithLegPull => write!(f, "{}", "ReversePlankWithLegPull"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldPlankExerciseName::PlankExerciseName(x) => write!(f, "{}({})", "PlankExerciseName", x),
+            FitFieldPlankExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPlankExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -14885,8 +14948,9 @@ impl fmt::Display for FitFieldPlyoExerciseName {
             FitFieldPlyoExerciseName::WeightedSquatJumpOntoBox => write!(f, "{}", "WeightedSquatJumpOntoBox"),
             FitFieldPlyoExerciseName::SquatJumpsInAndOut => write!(f, "{}", "SquatJumpsInAndOut"),
             FitFieldPlyoExerciseName::WeightedSquatJumpsInAndOut => write!(f, "{}", "WeightedSquatJumpsInAndOut"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldPlyoExerciseName::PlyoExerciseName(x) => write!(f, "{}({})", "PlyoExerciseName", x),
+            FitFieldPlyoExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPlyoExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -15071,8 +15135,9 @@ impl fmt::Display for FitFieldPullUpExerciseName {
             FitFieldPullUpExerciseName::SuspendedChinUp => write!(f, "{}", "SuspendedChinUp"),
             FitFieldPullUpExerciseName::WeightedSuspendedChinUp => write!(f, "{}", "WeightedSuspendedChinUp"),
             FitFieldPullUpExerciseName::PullUp => write!(f, "{}", "PullUp"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldPullUpExerciseName::PullUpExerciseName(x) => write!(f, "{}({})", "PullUpExerciseName", x),
+            FitFieldPullUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPullUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -15349,8 +15414,9 @@ impl fmt::Display for FitFieldPushUpExerciseName {
             FitFieldPushUpExerciseName::WeightedRingPushUp => write!(f, "{}", "WeightedRingPushUp"),
             FitFieldPushUpExerciseName::PushUp => write!(f, "{}", "PushUp"),
             FitFieldPushUpExerciseName::PilatesPushup => write!(f, "{}", "PilatesPushup"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldPushUpExerciseName::PushUpExerciseName(x) => write!(f, "{}({})", "PushUpExerciseName", x),
+            FitFieldPushUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPushUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -15617,8 +15683,9 @@ impl fmt::Display for FitFieldRowExerciseName {
             FitFieldRowExerciseName::UnderhandGripCableRow => write!(f, "{}", "UnderhandGripCableRow"),
             FitFieldRowExerciseName::VGripCableRow => write!(f, "{}", "VGripCableRow"),
             FitFieldRowExerciseName::WideGripSeatedCableRow => write!(f, "{}", "WideGripSeatedCableRow"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldRowExerciseName::RowExerciseName(x) => write!(f, "{}({})", "RowExerciseName", x),
+            FitFieldRowExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldRowExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -15775,8 +15842,9 @@ impl fmt::Display for FitFieldShoulderPressExerciseName {
             FitFieldShoulderPressExerciseName::SplitStanceHammerCurlToPress => write!(f, "{}", "SplitStanceHammerCurlToPress"),
             FitFieldShoulderPressExerciseName::SwissBallDumbbellShoulderPress => write!(f, "{}", "SwissBallDumbbellShoulderPress"),
             FitFieldShoulderPressExerciseName::WeightPlateFrontRaise => write!(f, "{}", "WeightPlateFrontRaise"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldShoulderPressExerciseName::ShoulderPressExerciseName(x) => write!(f, "{}({})", "ShoulderPressExerciseName", x),
+            FitFieldShoulderPressExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldShoulderPressExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -15931,8 +15999,9 @@ impl fmt::Display for FitFieldShoulderStabilityExerciseName {
             FitFieldShoulderStabilityExerciseName::WeightedSwissBallWRaise => write!(f, "{}", "WeightedSwissBallWRaise"),
             FitFieldShoulderStabilityExerciseName::SwissBallYRaise => write!(f, "{}", "SwissBallYRaise"),
             FitFieldShoulderStabilityExerciseName::WeightedSwissBallYRaise => write!(f, "{}", "WeightedSwissBallYRaise"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldShoulderStabilityExerciseName::ShoulderStabilityExerciseName(x) => write!(f, "{}({})", "ShoulderStabilityExerciseName", x),
+            FitFieldShoulderStabilityExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldShoulderStabilityExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -16073,8 +16142,9 @@ impl fmt::Display for FitFieldShrugExerciseName {
             FitFieldShrugExerciseName::SerratusShrug => write!(f, "{}", "SerratusShrug"),
             FitFieldShrugExerciseName::WeightedSerratusShrug => write!(f, "{}", "WeightedSerratusShrug"),
             FitFieldShrugExerciseName::WideGripJumpShrug => write!(f, "{}", "WideGripJumpShrug"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldShrugExerciseName::ShrugExerciseName(x) => write!(f, "{}({})", "ShrugExerciseName", x),
+            FitFieldShrugExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldShrugExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -16225,8 +16295,9 @@ impl fmt::Display for FitFieldSitUpExerciseName {
             FitFieldSitUpExerciseName::XAbs => write!(f, "{}", "XAbs"),
             FitFieldSitUpExerciseName::WeightedXAbs => write!(f, "{}", "WeightedXAbs"),
             FitFieldSitUpExerciseName::SitUp => write!(f, "{}", "SitUp"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSitUpExerciseName::SitUpExerciseName(x) => write!(f, "{}({})", "SitUpExerciseName", x),
+            FitFieldSitUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSitUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -16527,8 +16598,9 @@ impl fmt::Display for FitFieldSquatExerciseName {
             FitFieldSquatExerciseName::SquatJumpsInNOut => write!(f, "{}", "SquatJumpsInNOut"),
             FitFieldSquatExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeels => write!(f, "{}", "PilatesPlieSquatsParallelTurnedOutFlatAndHeels"),
             FitFieldSquatExerciseName::ReleveStraightLegAndKneeBentWithOneLegVariation => write!(f, "{}", "ReleveStraightLegAndKneeBentWithOneLegVariation"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldSquatExerciseName::SquatExerciseName(x) => write!(f, "{}({})", "SquatExerciseName", x),
+            FitFieldSquatExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSquatExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -16779,8 +16851,9 @@ impl fmt::Display for FitFieldTotalBodyExerciseName {
             FitFieldTotalBodyExerciseName::WeightedSquatPlankPushUp => write!(f, "{}", "WeightedSquatPlankPushUp"),
             FitFieldTotalBodyExerciseName::StandingTRotationBalance => write!(f, "{}", "StandingTRotationBalance"),
             FitFieldTotalBodyExerciseName::WeightedStandingTRotationBalance => write!(f, "{}", "WeightedStandingTRotationBalance"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTotalBodyExerciseName::TotalBodyExerciseName(x) => write!(f, "{}({})", "TotalBodyExerciseName", x),
+            FitFieldTotalBodyExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTotalBodyExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -16929,8 +17002,9 @@ impl fmt::Display for FitFieldTricepsExtensionExerciseName {
             FitFieldTricepsExtensionExerciseName::TricepsExtensionOnFloor => write!(f, "{}", "TricepsExtensionOnFloor"),
             FitFieldTricepsExtensionExerciseName::TricepsPressdown => write!(f, "{}", "TricepsPressdown"),
             FitFieldTricepsExtensionExerciseName::WeightedDip => write!(f, "{}", "WeightedDip"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTricepsExtensionExerciseName::TricepsExtensionExerciseName(x) => write!(f, "{}({})", "TricepsExtensionExerciseName", x),
+            FitFieldTricepsExtensionExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTricepsExtensionExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17115,8 +17189,9 @@ impl fmt::Display for FitFieldWarmUpExerciseName {
             FitFieldWarmUpExerciseName::WalkingLegCradles => write!(f, "{}", "WalkingLegCradles"),
             FitFieldWarmUpExerciseName::Walkout => write!(f, "{}", "Walkout"),
             FitFieldWarmUpExerciseName::WalkoutFromPushUpPosition => write!(f, "{}", "WalkoutFromPushUpPosition"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWarmUpExerciseName::WarmUpExerciseName(x) => write!(f, "{}({})", "WarmUpExerciseName", x),
+            FitFieldWarmUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWarmUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17227,8 +17302,9 @@ impl fmt::Display for FitFieldRunExerciseName {
             FitFieldRunExerciseName::Walk => write!(f, "{}", "Walk"),
             FitFieldRunExerciseName::Jog => write!(f, "{}", "Jog"),
             FitFieldRunExerciseName::Sprint => write!(f, "{}", "Sprint"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldRunExerciseName::RunExerciseName(x) => write!(f, "{}({})", "RunExerciseName", x),
+            FitFieldRunExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldRunExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17284,8 +17360,8 @@ impl fmt::Display for FitFieldWaterType {
             FitFieldWaterType::Salt => write!(f, "{}", "Salt"),
             FitFieldWaterType::En13319 => write!(f, "{}", "En13319"),
             FitFieldWaterType::Custom => write!(f, "{}", "Custom"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldWaterType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldWaterType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17329,8 +17405,8 @@ impl fmt::Display for FitFieldTissueModelType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FitFieldTissueModelType::Zhl16c => write!(f, "{}", "Zhl16c"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldTissueModelType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTissueModelType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17375,8 +17451,8 @@ impl fmt::Display for FitFieldDiveGasStatus {
             FitFieldDiveGasStatus::Disabled => write!(f, "{}", "Disabled"),
             FitFieldDiveGasStatus::Enabled => write!(f, "{}", "Enabled"),
             FitFieldDiveGasStatus::BackupOnly => write!(f, "{}", "BackupOnly"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDiveGasStatus::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDiveGasStatus::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17421,8 +17497,8 @@ impl fmt::Display for FitFieldDiveAlarmType {
         match self {
             FitFieldDiveAlarmType::Depth => write!(f, "{}", "Depth"),
             FitFieldDiveAlarmType::Time => write!(f, "{}", "Time"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDiveAlarmType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDiveAlarmType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17466,8 +17542,8 @@ impl fmt::Display for FitFieldDiveBacklightMode {
         match self {
             FitFieldDiveBacklightMode::AtDepth => write!(f, "{}", "AtDepth"),
             FitFieldDiveBacklightMode::AlwaysOn => write!(f, "{}", "AlwaysOn"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldDiveBacklightMode::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldDiveBacklightMode::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17512,8 +17588,9 @@ impl fmt::Display for FitFieldFaveroProduct {
         match self {
             FitFieldFaveroProduct::AssiomaUno => write!(f, "{}", "AssiomaUno"),
             FitFieldFaveroProduct::AssiomaDuo => write!(f, "{}", "AssiomaDuo"),
-            InvalidFieldValue => write!(f, "InvalidFieldValue"),
-            UnknownToSdk => write!(f, "UnknownToSdk")
+            FitFieldFaveroProduct::FaveroProduct(x) => write!(f, "{}({})", "FaveroProduct", x),
+            FitFieldFaveroProduct::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFaveroProduct::UnknownToSdk => write!(f, "UnknownToSdk")
         }
     }
 }
@@ -17571,29 +17648,29 @@ impl fmt::Display for FitMessageAccelerometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAccelerometerData")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
         
-        fmt_message_field!(self.accel_x, "accel_x", false, f);
+        fmt_message_field!(self.accel_x, "accel_x", false, f)?;
         
-        fmt_message_field!(self.accel_y, "accel_y", false, f);
+        fmt_message_field!(self.accel_y, "accel_y", false, f)?;
         
-        fmt_message_field!(self.accel_z, "accel_z", false, f);
+        fmt_message_field!(self.accel_z, "accel_z", false, f)?;
         
-        fmt_message_field!(self.calibrated_accel_x, "calibrated_accel_x", false, f);
+        fmt_message_field!(self.calibrated_accel_x, "calibrated_accel_x", false, f)?;
         
-        fmt_message_field!(self.calibrated_accel_y, "calibrated_accel_y", false, f);
+        fmt_message_field!(self.calibrated_accel_y, "calibrated_accel_y", false, f)?;
         
-        fmt_message_field!(self.calibrated_accel_z, "calibrated_accel_z", false, f);
+        fmt_message_field!(self.calibrated_accel_z, "calibrated_accel_z", false, f)?;
         
-        fmt_message_field!(self.compressed_calibrated_accel_x, "compressed_calibrated_accel_x", false, f);
+        fmt_message_field!(self.compressed_calibrated_accel_x, "compressed_calibrated_accel_x", false, f)?;
         
-        fmt_message_field!(self.compressed_calibrated_accel_y, "compressed_calibrated_accel_y", false, f);
+        fmt_message_field!(self.compressed_calibrated_accel_y, "compressed_calibrated_accel_y", false, f)?;
         
-        fmt_message_field!(self.compressed_calibrated_accel_z, "compressed_calibrated_accel_z", false, f);
+        fmt_message_field!(self.compressed_calibrated_accel_z, "compressed_calibrated_accel_z", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -17669,11 +17746,11 @@ impl FitMessageAccelerometerData {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -17778,11 +17855,6 @@ impl FitMessageAccelerometerData {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -17819,21 +17891,21 @@ impl fmt::Display for FitMessageActivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageActivity")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
         
-        fmt_message_field!(self.num_sessions, "num_sessions", false, f);
+        fmt_message_field!(self.num_sessions, "num_sessions", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.event, "event", false, f);
+        fmt_message_field!(self.event, "event", false, f)?;
         
-        fmt_message_field!(self.event_type, "event_type", false, f);
+        fmt_message_field!(self.event_type, "event_type", false, f)?;
         
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
         
-        fmt_message_field!(self.event_group, "event_group", false, f);
+        fmt_message_field!(self.event_group, "event_group", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -17901,11 +17973,11 @@ impl FitMessageActivity {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -17986,11 +18058,6 @@ impl FitMessageActivity {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -18024,15 +18091,15 @@ impl fmt::Display for FitMessageAntChannelId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntChannelId")?;
         
-        fmt_message_field!(self.channel_number, "channel_number", false, f);
+        fmt_message_field!(self.channel_number, "channel_number", false, f)?;
         
-        fmt_message_field!(self.device_type, "device_type", false, f);
+        fmt_message_field!(self.device_type, "device_type", false, f)?;
         
-        fmt_message_field!(self.device_number, "device_number", false, f);
+        fmt_message_field!(self.device_number, "device_number", false, f)?;
         
-        fmt_message_field!(self.transmission_type, "transmission_type", false, f);
+        fmt_message_field!(self.transmission_type, "transmission_type", false, f)?;
         
-        fmt_message_field!(self.device_index, "device_index", false, f);
+        fmt_message_field!(self.device_index, "device_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -18092,11 +18159,11 @@ impl FitMessageAntChannelId {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -18159,11 +18226,6 @@ impl FitMessageAntChannelId {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -18198,17 +18260,17 @@ impl fmt::Display for FitMessageAntRx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntRx")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
         
-        fmt_message_field!(self.mesg_id, "mesg_id", false, f);
+        fmt_message_field!(self.mesg_id, "mesg_id", false, f)?;
         
-        fmt_message_field!(self.mesg_data, "mesg_data", false, f);
+        fmt_message_field!(self.mesg_data, "mesg_data", false, f)?;
         
-        fmt_message_field!(self.channel_number, "channel_number", false, f);
+        fmt_message_field!(self.channel_number, "channel_number", false, f)?;
         
-        fmt_message_field!(self.data, "data", false, f);
+        fmt_message_field!(self.data, "data", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -18272,11 +18334,11 @@ impl FitMessageAntRx {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -18319,9 +18381,9 @@ impl FitMessageAntRx {
                     2 => {  // mesg_data
                         message.mesg_data.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -18349,11 +18411,6 @@ impl FitMessageAntRx {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -18388,17 +18445,17 @@ impl fmt::Display for FitMessageAntTx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntTx")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
         
-        fmt_message_field!(self.mesg_id, "mesg_id", false, f);
+        fmt_message_field!(self.mesg_id, "mesg_id", false, f)?;
         
-        fmt_message_field!(self.mesg_data, "mesg_data", false, f);
+        fmt_message_field!(self.mesg_data, "mesg_data", false, f)?;
         
-        fmt_message_field!(self.channel_number, "channel_number", false, f);
+        fmt_message_field!(self.channel_number, "channel_number", false, f)?;
         
-        fmt_message_field!(self.data, "data", false, f);
+        fmt_message_field!(self.data, "data", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -18462,11 +18519,11 @@ impl FitMessageAntTx {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -18509,9 +18566,9 @@ impl FitMessageAntTx {
                     2 => {  // mesg_data
                         message.mesg_data.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -18539,11 +18596,6 @@ impl FitMessageAntTx {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -18584,29 +18636,29 @@ impl fmt::Display for FitMessageAviationAttitude {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAviationAttitude")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.system_time, "system_time", false, f);
+        fmt_message_field!(self.system_time, "system_time", false, f)?;
         
-        fmt_message_field!(self.pitch, "pitch", true, f);
+        fmt_message_field!(self.pitch, "pitch", true, f)?;
         
-        fmt_message_field!(self.roll, "roll", true, f);
+        fmt_message_field!(self.roll, "roll", true, f)?;
         
-        fmt_message_field!(self.accel_lateral, "accel_lateral", true, f);
+        fmt_message_field!(self.accel_lateral, "accel_lateral", true, f)?;
         
-        fmt_message_field!(self.accel_normal, "accel_normal", true, f);
+        fmt_message_field!(self.accel_normal, "accel_normal", true, f)?;
         
-        fmt_message_field!(self.turn_rate, "turn_rate", true, f);
+        fmt_message_field!(self.turn_rate, "turn_rate", true, f)?;
         
-        fmt_message_field!(self.stage, "stage", false, f);
+        fmt_message_field!(self.stage, "stage", false, f)?;
         
-        fmt_message_field!(self.attitude_stage_complete, "attitude_stage_complete", false, f);
+        fmt_message_field!(self.attitude_stage_complete, "attitude_stage_complete", false, f)?;
         
-        fmt_message_field!(self.track, "track", true, f);
+        fmt_message_field!(self.track, "track", true, f)?;
         
-        fmt_message_field!(self.validity, "validity", false, f);
+        fmt_message_field!(self.validity, "validity", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -18682,11 +18734,11 @@ impl FitMessageAviationAttitude {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -18791,11 +18843,6 @@ impl FitMessageAviationAttitude {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -18828,13 +18875,13 @@ impl fmt::Display for FitMessageBarometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBarometerData")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
         
-        fmt_message_field!(self.baro_pres, "baro_pres", false, f);
+        fmt_message_field!(self.baro_pres, "baro_pres", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -18894,11 +18941,11 @@ impl FitMessageBarometerData {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -18955,11 +19002,6 @@ impl FitMessageBarometerData {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -19020,69 +19062,69 @@ impl fmt::Display for FitMessageBikeProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBikeProfile")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.odometer, "odometer", true, f);
+        fmt_message_field!(self.odometer, "odometer", true, f)?;
         
-        fmt_message_field!(self.bike_spd_ant_id, "bike_spd_ant_id", false, f);
+        fmt_message_field!(self.bike_spd_ant_id, "bike_spd_ant_id", false, f)?;
         
-        fmt_message_field!(self.bike_cad_ant_id, "bike_cad_ant_id", false, f);
+        fmt_message_field!(self.bike_cad_ant_id, "bike_cad_ant_id", false, f)?;
         
-        fmt_message_field!(self.bike_spdcad_ant_id, "bike_spdcad_ant_id", false, f);
+        fmt_message_field!(self.bike_spdcad_ant_id, "bike_spdcad_ant_id", false, f)?;
         
-        fmt_message_field!(self.bike_power_ant_id, "bike_power_ant_id", false, f);
+        fmt_message_field!(self.bike_power_ant_id, "bike_power_ant_id", false, f)?;
         
-        fmt_message_field!(self.custom_wheelsize, "custom_wheelsize", true, f);
+        fmt_message_field!(self.custom_wheelsize, "custom_wheelsize", true, f)?;
         
-        fmt_message_field!(self.auto_wheelsize, "auto_wheelsize", true, f);
+        fmt_message_field!(self.auto_wheelsize, "auto_wheelsize", true, f)?;
         
-        fmt_message_field!(self.bike_weight, "bike_weight", true, f);
+        fmt_message_field!(self.bike_weight, "bike_weight", true, f)?;
         
-        fmt_message_field!(self.power_cal_factor, "power_cal_factor", true, f);
+        fmt_message_field!(self.power_cal_factor, "power_cal_factor", true, f)?;
         
-        fmt_message_field!(self.auto_wheel_cal, "auto_wheel_cal", false, f);
+        fmt_message_field!(self.auto_wheel_cal, "auto_wheel_cal", false, f)?;
         
-        fmt_message_field!(self.auto_power_zero, "auto_power_zero", false, f);
+        fmt_message_field!(self.auto_power_zero, "auto_power_zero", false, f)?;
         
-        fmt_message_field!(self.id, "id", false, f);
+        fmt_message_field!(self.id, "id", false, f)?;
         
-        fmt_message_field!(self.spd_enabled, "spd_enabled", false, f);
+        fmt_message_field!(self.spd_enabled, "spd_enabled", false, f)?;
         
-        fmt_message_field!(self.cad_enabled, "cad_enabled", false, f);
+        fmt_message_field!(self.cad_enabled, "cad_enabled", false, f)?;
         
-        fmt_message_field!(self.spdcad_enabled, "spdcad_enabled", false, f);
+        fmt_message_field!(self.spdcad_enabled, "spdcad_enabled", false, f)?;
         
-        fmt_message_field!(self.power_enabled, "power_enabled", false, f);
+        fmt_message_field!(self.power_enabled, "power_enabled", false, f)?;
         
-        fmt_message_field!(self.crank_length, "crank_length", true, f);
+        fmt_message_field!(self.crank_length, "crank_length", true, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.bike_spd_ant_id_trans_type, "bike_spd_ant_id_trans_type", false, f);
+        fmt_message_field!(self.bike_spd_ant_id_trans_type, "bike_spd_ant_id_trans_type", false, f)?;
         
-        fmt_message_field!(self.bike_cad_ant_id_trans_type, "bike_cad_ant_id_trans_type", false, f);
+        fmt_message_field!(self.bike_cad_ant_id_trans_type, "bike_cad_ant_id_trans_type", false, f)?;
         
-        fmt_message_field!(self.bike_spdcad_ant_id_trans_type, "bike_spdcad_ant_id_trans_type", false, f);
+        fmt_message_field!(self.bike_spdcad_ant_id_trans_type, "bike_spdcad_ant_id_trans_type", false, f)?;
         
-        fmt_message_field!(self.bike_power_ant_id_trans_type, "bike_power_ant_id_trans_type", false, f);
+        fmt_message_field!(self.bike_power_ant_id_trans_type, "bike_power_ant_id_trans_type", false, f)?;
         
-        fmt_message_field!(self.odometer_rollover, "odometer_rollover", false, f);
+        fmt_message_field!(self.odometer_rollover, "odometer_rollover", false, f)?;
         
-        fmt_message_field!(self.front_gear_num, "front_gear_num", false, f);
+        fmt_message_field!(self.front_gear_num, "front_gear_num", false, f)?;
         
-        fmt_message_field!(self.front_gear, "front_gear", false, f);
+        fmt_message_field!(self.front_gear, "front_gear", false, f)?;
         
-        fmt_message_field!(self.rear_gear_num, "rear_gear_num", false, f);
+        fmt_message_field!(self.rear_gear_num, "rear_gear_num", false, f)?;
         
-        fmt_message_field!(self.rear_gear, "rear_gear", false, f);
+        fmt_message_field!(self.rear_gear, "rear_gear", false, f)?;
         
-        fmt_message_field!(self.shimano_di2_enabled, "shimano_di2_enabled", false, f);
+        fmt_message_field!(self.shimano_di2_enabled, "shimano_di2_enabled", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -19196,11 +19238,11 @@ impl FitMessageBikeProfile {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -19425,11 +19467,6 @@ impl FitMessageBikeProfile {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -19469,27 +19506,27 @@ impl fmt::Display for FitMessageBloodPressure {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBloodPressure")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.systolic_pressure, "systolic_pressure", false, f);
+        fmt_message_field!(self.systolic_pressure, "systolic_pressure", false, f)?;
         
-        fmt_message_field!(self.diastolic_pressure, "diastolic_pressure", false, f);
+        fmt_message_field!(self.diastolic_pressure, "diastolic_pressure", false, f)?;
         
-        fmt_message_field!(self.mean_arterial_pressure, "mean_arterial_pressure", false, f);
+        fmt_message_field!(self.mean_arterial_pressure, "mean_arterial_pressure", false, f)?;
         
-        fmt_message_field!(self.map_3_sample_mean, "map_3_sample_mean", false, f);
+        fmt_message_field!(self.map_3_sample_mean, "map_3_sample_mean", false, f)?;
         
-        fmt_message_field!(self.map_morning_values, "map_morning_values", false, f);
+        fmt_message_field!(self.map_morning_values, "map_morning_values", false, f)?;
         
-        fmt_message_field!(self.map_evening_values, "map_evening_values", false, f);
+        fmt_message_field!(self.map_evening_values, "map_evening_values", false, f)?;
         
-        fmt_message_field!(self.heart_rate, "heart_rate", false, f);
+        fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
         
-        fmt_message_field!(self.heart_rate_type, "heart_rate_type", false, f);
+        fmt_message_field!(self.heart_rate_type, "heart_rate_type", false, f)?;
         
-        fmt_message_field!(self.status, "status", false, f);
+        fmt_message_field!(self.status, "status", false, f)?;
         
-        fmt_message_field!(self.user_profile_index, "user_profile_index", false, f);
+        fmt_message_field!(self.user_profile_index, "user_profile_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -19563,11 +19600,11 @@ impl FitMessageBloodPressure {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -19666,11 +19703,6 @@ impl FitMessageBloodPressure {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -19702,11 +19734,11 @@ impl fmt::Display for FitMessageCadenceZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCadenceZone")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.high_value, "high_value", false, f);
+        fmt_message_field!(self.high_value, "high_value", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -19762,11 +19794,11 @@ impl FitMessageCadenceZone {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -19817,11 +19849,6 @@ impl FitMessageCadenceZone {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -19855,15 +19882,15 @@ impl fmt::Display for FitMessageCameraEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCameraEvent")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.camera_event_type, "camera_event_type", false, f);
+        fmt_message_field!(self.camera_event_type, "camera_event_type", false, f)?;
         
-        fmt_message_field!(self.camera_file_uuid, "camera_file_uuid", false, f);
+        fmt_message_field!(self.camera_file_uuid, "camera_file_uuid", false, f)?;
         
-        fmt_message_field!(self.camera_orientation, "camera_orientation", false, f);
+        fmt_message_field!(self.camera_orientation, "camera_orientation", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -19925,11 +19952,11 @@ impl FitMessageCameraEvent {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -19992,11 +20019,6 @@ impl FitMessageCameraEvent {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -20029,13 +20051,13 @@ impl fmt::Display for FitMessageCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCapabilities")?;
         
-        fmt_message_field!(self.languages, "languages", false, f);
+        fmt_message_field!(self.languages, "languages", false, f)?;
         
-        fmt_message_field!(self.sports, "sports", false, f);
+        fmt_message_field!(self.sports, "sports", false, f)?;
         
-        fmt_message_field!(self.workouts_supported, "workouts_supported", false, f);
+        fmt_message_field!(self.workouts_supported, "workouts_supported", false, f)?;
         
-        fmt_message_field!(self.connectivity_supported, "connectivity_supported", false, f);
+        fmt_message_field!(self.connectivity_supported, "connectivity_supported", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -20093,11 +20115,11 @@ impl FitMessageCapabilities {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -20154,11 +20176,6 @@ impl FitMessageCapabilities {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -20200,31 +20217,31 @@ impl fmt::Display for FitMessageConnectivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageConnectivity")?;
         
-        fmt_message_field!(self.bluetooth_enabled, "bluetooth_enabled", false, f);
+        fmt_message_field!(self.bluetooth_enabled, "bluetooth_enabled", false, f)?;
         
-        fmt_message_field!(self.bluetooth_le_enabled, "bluetooth_le_enabled", false, f);
+        fmt_message_field!(self.bluetooth_le_enabled, "bluetooth_le_enabled", false, f)?;
         
-        fmt_message_field!(self.ant_enabled, "ant_enabled", false, f);
+        fmt_message_field!(self.ant_enabled, "ant_enabled", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.live_tracking_enabled, "live_tracking_enabled", false, f);
+        fmt_message_field!(self.live_tracking_enabled, "live_tracking_enabled", false, f)?;
         
-        fmt_message_field!(self.weather_conditions_enabled, "weather_conditions_enabled", false, f);
+        fmt_message_field!(self.weather_conditions_enabled, "weather_conditions_enabled", false, f)?;
         
-        fmt_message_field!(self.weather_alerts_enabled, "weather_alerts_enabled", false, f);
+        fmt_message_field!(self.weather_alerts_enabled, "weather_alerts_enabled", false, f)?;
         
-        fmt_message_field!(self.auto_activity_upload_enabled, "auto_activity_upload_enabled", false, f);
+        fmt_message_field!(self.auto_activity_upload_enabled, "auto_activity_upload_enabled", false, f)?;
         
-        fmt_message_field!(self.course_download_enabled, "course_download_enabled", false, f);
+        fmt_message_field!(self.course_download_enabled, "course_download_enabled", false, f)?;
         
-        fmt_message_field!(self.workout_download_enabled, "workout_download_enabled", false, f);
+        fmt_message_field!(self.workout_download_enabled, "workout_download_enabled", false, f)?;
         
-        fmt_message_field!(self.gps_ephemeris_download_enabled, "gps_ephemeris_download_enabled", false, f);
+        fmt_message_field!(self.gps_ephemeris_download_enabled, "gps_ephemeris_download_enabled", false, f)?;
         
-        fmt_message_field!(self.incident_detection_enabled, "incident_detection_enabled", false, f);
+        fmt_message_field!(self.incident_detection_enabled, "incident_detection_enabled", false, f)?;
         
-        fmt_message_field!(self.grouptrack_enabled, "grouptrack_enabled", false, f);
+        fmt_message_field!(self.grouptrack_enabled, "grouptrack_enabled", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -20300,11 +20317,11 @@ impl FitMessageConnectivity {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -20415,11 +20432,6 @@ impl FitMessageConnectivity {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -20452,13 +20464,13 @@ impl fmt::Display for FitMessageCourse {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCourse")?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.capabilities, "capabilities", false, f);
+        fmt_message_field!(self.capabilities, "capabilities", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -20516,11 +20528,11 @@ impl FitMessageCourse {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -20577,11 +20589,6 @@ impl FitMessageCourse {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -20618,21 +20625,21 @@ impl fmt::Display for FitMessageCoursePoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCoursePoint")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.position_lat, "position_lat", true, f);
+        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
         
-        fmt_message_field!(self.position_long, "position_long", true, f);
+        fmt_message_field!(self.position_long, "position_long", true, f)?;
         
-        fmt_message_field!(self.distance, "distance", true, f);
+        fmt_message_field!(self.distance, "distance", true, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.favorite, "favorite", false, f);
+        fmt_message_field!(self.favorite, "favorite", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -20700,11 +20707,11 @@ impl FitMessageCoursePoint {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -20785,11 +20792,6 @@ impl FitMessageCoursePoint {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -20823,15 +20825,15 @@ impl fmt::Display for FitMessageDeveloperDataId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeveloperDataId")?;
         
-        fmt_message_field!(self.developer_id, "developer_id", false, f);
+        fmt_message_field!(self.developer_id, "developer_id", false, f)?;
         
-        fmt_message_field!(self.application_id, "application_id", false, f);
+        fmt_message_field!(self.application_id, "application_id", false, f)?;
         
-        fmt_message_field!(self.manufacturer_id, "manufacturer_id", false, f);
+        fmt_message_field!(self.manufacturer_id, "manufacturer_id", false, f)?;
         
-        fmt_message_field!(self.developer_data_index, "developer_data_index", false, f);
+        fmt_message_field!(self.developer_data_index, "developer_data_index", false, f)?;
         
-        fmt_message_field!(self.application_version, "application_version", false, f);
+        fmt_message_field!(self.application_version, "application_version", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -20891,11 +20893,11 @@ impl FitMessageDeveloperDataId {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -20958,11 +20960,6 @@ impl FitMessageDeveloperDataId {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -20980,8 +20977,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntplusDeviceType(FitFieldAntplusDeviceType),
     AntDeviceType(FitUint8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -21081,41 +21078,41 @@ impl fmt::Display for FitMessageDeviceInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeviceInfo")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.device_index, "device_index", false, f);
+        fmt_message_field!(self.device_index, "device_index", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "device_type_subfield_bytes", self.device_type_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "device_type", self.device_type)?;
         
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f);
+        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
         
-        fmt_message_field!(self.serial_number, "serial_number", false, f);
+        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
         
-        fmt_message_field!(self.software_version, "software_version", false, f);
+        fmt_message_field!(self.software_version, "software_version", false, f)?;
         
-        fmt_message_field!(self.hardware_version, "hardware_version", false, f);
+        fmt_message_field!(self.hardware_version, "hardware_version", false, f)?;
         
-        fmt_message_field!(self.cum_operating_time, "cum_operating_time", false, f);
+        fmt_message_field!(self.cum_operating_time, "cum_operating_time", false, f)?;
         
-        fmt_message_field!(self.battery_voltage, "battery_voltage", true, f);
+        fmt_message_field!(self.battery_voltage, "battery_voltage", true, f)?;
         
-        fmt_message_field!(self.battery_status, "battery_status", false, f);
+        fmt_message_field!(self.battery_status, "battery_status", false, f)?;
         
-        fmt_message_field!(self.sensor_position, "sensor_position", false, f);
+        fmt_message_field!(self.sensor_position, "sensor_position", false, f)?;
         
-        fmt_message_field!(self.descriptor, "descriptor", false, f);
+        fmt_message_field!(self.descriptor, "descriptor", false, f)?;
         
-        fmt_message_field!(self.ant_transmission_type, "ant_transmission_type", false, f);
+        fmt_message_field!(self.ant_transmission_type, "ant_transmission_type", false, f)?;
         
-        fmt_message_field!(self.ant_device_number, "ant_device_number", false, f);
+        fmt_message_field!(self.ant_device_number, "ant_device_number", false, f)?;
         
-        fmt_message_field!(self.ant_network, "ant_network", false, f);
+        fmt_message_field!(self.ant_network, "ant_network", false, f)?;
         
-        fmt_message_field!(self.source_type, "source_type", false, f);
+        fmt_message_field!(self.source_type, "source_type", false, f)?;
         
-        fmt_message_field!(self.product_name, "product_name", false, f);
+        fmt_message_field!(self.product_name, "product_name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -21226,11 +21223,11 @@ impl FitMessageDeviceInfo {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -21359,11 +21356,6 @@ impl FitMessageDeviceInfo {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -21415,51 +21407,51 @@ impl fmt::Display for FitMessageDeviceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeviceSettings")?;
         
-        fmt_message_field!(self.active_time_zone, "active_time_zone", false, f);
+        fmt_message_field!(self.active_time_zone, "active_time_zone", false, f)?;
         
-        fmt_message_field!(self.utc_offset, "utc_offset", false, f);
+        fmt_message_field!(self.utc_offset, "utc_offset", false, f)?;
         
-        fmt_message_field!(self.time_offset, "time_offset", false, f);
+        fmt_message_field!(self.time_offset, "time_offset", false, f)?;
         
-        fmt_message_field!(self.time_mode, "time_mode", false, f);
+        fmt_message_field!(self.time_mode, "time_mode", false, f)?;
         
-        fmt_message_field!(self.time_zone_offset, "time_zone_offset", true, f);
+        fmt_message_field!(self.time_zone_offset, "time_zone_offset", true, f)?;
         
-        fmt_message_field!(self.backlight_mode, "backlight_mode", false, f);
+        fmt_message_field!(self.backlight_mode, "backlight_mode", false, f)?;
         
-        fmt_message_field!(self.activity_tracker_enabled, "activity_tracker_enabled", false, f);
+        fmt_message_field!(self.activity_tracker_enabled, "activity_tracker_enabled", false, f)?;
         
-        fmt_message_field!(self.clock_time, "clock_time", false, f);
+        fmt_message_field!(self.clock_time, "clock_time", false, f)?;
         
-        fmt_message_field!(self.pages_enabled, "pages_enabled", false, f);
+        fmt_message_field!(self.pages_enabled, "pages_enabled", false, f)?;
         
-        fmt_message_field!(self.move_alert_enabled, "move_alert_enabled", false, f);
+        fmt_message_field!(self.move_alert_enabled, "move_alert_enabled", false, f)?;
         
-        fmt_message_field!(self.date_mode, "date_mode", false, f);
+        fmt_message_field!(self.date_mode, "date_mode", false, f)?;
         
-        fmt_message_field!(self.display_orientation, "display_orientation", false, f);
+        fmt_message_field!(self.display_orientation, "display_orientation", false, f)?;
         
-        fmt_message_field!(self.mounting_side, "mounting_side", false, f);
+        fmt_message_field!(self.mounting_side, "mounting_side", false, f)?;
         
-        fmt_message_field!(self.default_page, "default_page", false, f);
+        fmt_message_field!(self.default_page, "default_page", false, f)?;
         
-        fmt_message_field!(self.autosync_min_steps, "autosync_min_steps", false, f);
+        fmt_message_field!(self.autosync_min_steps, "autosync_min_steps", false, f)?;
         
-        fmt_message_field!(self.autosync_min_time, "autosync_min_time", false, f);
+        fmt_message_field!(self.autosync_min_time, "autosync_min_time", false, f)?;
         
-        fmt_message_field!(self.lactate_threshold_autodetect_enabled, "lactate_threshold_autodetect_enabled", false, f);
+        fmt_message_field!(self.lactate_threshold_autodetect_enabled, "lactate_threshold_autodetect_enabled", false, f)?;
         
-        fmt_message_field!(self.ble_auto_upload_enabled, "ble_auto_upload_enabled", false, f);
+        fmt_message_field!(self.ble_auto_upload_enabled, "ble_auto_upload_enabled", false, f)?;
         
-        fmt_message_field!(self.auto_sync_frequency, "auto_sync_frequency", false, f);
+        fmt_message_field!(self.auto_sync_frequency, "auto_sync_frequency", false, f)?;
         
-        fmt_message_field!(self.auto_activity_detect, "auto_activity_detect", false, f);
+        fmt_message_field!(self.auto_activity_detect, "auto_activity_detect", false, f)?;
         
-        fmt_message_field!(self.number_of_screens, "number_of_screens", false, f);
+        fmt_message_field!(self.number_of_screens, "number_of_screens", false, f)?;
         
-        fmt_message_field!(self.smart_notification_display_orientation, "smart_notification_display_orientation", false, f);
+        fmt_message_field!(self.smart_notification_display_orientation, "smart_notification_display_orientation", false, f)?;
         
-        fmt_message_field!(self.tap_interface, "tap_interface", false, f);
+        fmt_message_field!(self.tap_interface, "tap_interface", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -21555,11 +21547,11 @@ impl FitMessageDeviceSettings {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -21730,11 +21722,6 @@ impl FitMessageDeviceSettings {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -21770,19 +21757,19 @@ impl fmt::Display for FitMessageDiveAlarm {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveAlarm")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.depth, "depth", true, f);
+        fmt_message_field!(self.depth, "depth", true, f)?;
         
-        fmt_message_field!(self.time, "time", true, f);
+        fmt_message_field!(self.time, "time", true, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.alarm_type, "alarm_type", false, f);
+        fmt_message_field!(self.alarm_type, "alarm_type", false, f)?;
         
-        fmt_message_field!(self.sound, "sound", false, f);
+        fmt_message_field!(self.sound, "sound", false, f)?;
         
-        fmt_message_field!(self.dive_types, "dive_types", false, f);
+        fmt_message_field!(self.dive_types, "dive_types", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -21846,11 +21833,11 @@ impl FitMessageDiveAlarm {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -21925,11 +21912,6 @@ impl FitMessageDiveAlarm {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -21962,13 +21944,13 @@ impl fmt::Display for FitMessageDiveGas {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveGas")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.helium_content, "helium_content", false, f);
+        fmt_message_field!(self.helium_content, "helium_content", false, f)?;
         
-        fmt_message_field!(self.oxygen_content, "oxygen_content", false, f);
+        fmt_message_field!(self.oxygen_content, "oxygen_content", false, f)?;
         
-        fmt_message_field!(self.status, "status", false, f);
+        fmt_message_field!(self.status, "status", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -22026,11 +22008,11 @@ impl FitMessageDiveGas {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -22087,11 +22069,6 @@ impl FitMessageDiveGas {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -22173,47 +22150,47 @@ impl fmt::Display for FitMessageDiveSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveSettings")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.model, "model", false, f);
+        fmt_message_field!(self.model, "model", false, f)?;
         
-        fmt_message_field!(self.gf_low, "gf_low", false, f);
+        fmt_message_field!(self.gf_low, "gf_low", false, f)?;
         
-        fmt_message_field!(self.gf_high, "gf_high", false, f);
+        fmt_message_field!(self.gf_high, "gf_high", false, f)?;
         
-        fmt_message_field!(self.water_type, "water_type", false, f);
+        fmt_message_field!(self.water_type, "water_type", false, f)?;
         
-        fmt_message_field!(self.water_density, "water_density", false, f);
+        fmt_message_field!(self.water_density, "water_density", false, f)?;
         
-        fmt_message_field!(self.po2_warn, "po2_warn", true, f);
+        fmt_message_field!(self.po2_warn, "po2_warn", true, f)?;
         
-        fmt_message_field!(self.po2_critical, "po2_critical", true, f);
+        fmt_message_field!(self.po2_critical, "po2_critical", true, f)?;
         
-        fmt_message_field!(self.po2_deco, "po2_deco", true, f);
+        fmt_message_field!(self.po2_deco, "po2_deco", true, f)?;
         
-        fmt_message_field!(self.safety_stop_enabled, "safety_stop_enabled", false, f);
+        fmt_message_field!(self.safety_stop_enabled, "safety_stop_enabled", false, f)?;
         
-        fmt_message_field!(self.bottom_depth, "bottom_depth", false, f);
+        fmt_message_field!(self.bottom_depth, "bottom_depth", false, f)?;
         
-        fmt_message_field!(self.bottom_time, "bottom_time", false, f);
+        fmt_message_field!(self.bottom_time, "bottom_time", false, f)?;
         
-        fmt_message_field!(self.apnea_countdown_enabled, "apnea_countdown_enabled", false, f);
+        fmt_message_field!(self.apnea_countdown_enabled, "apnea_countdown_enabled", false, f)?;
         
-        fmt_message_field!(self.apnea_countdown_time, "apnea_countdown_time", false, f);
+        fmt_message_field!(self.apnea_countdown_time, "apnea_countdown_time", false, f)?;
         
-        fmt_message_field!(self.backlight_mode, "backlight_mode", false, f);
+        fmt_message_field!(self.backlight_mode, "backlight_mode", false, f)?;
         
-        fmt_message_field!(self.backlight_brightness, "backlight_brightness", false, f);
+        fmt_message_field!(self.backlight_brightness, "backlight_brightness", false, f)?;
         
-        fmt_message_field!(self.backlight_timeout, "backlight_timeout", false, f);
+        fmt_message_field!(self.backlight_timeout, "backlight_timeout", false, f)?;
         
-        fmt_message_field!(self.repeat_dive_interval, "repeat_dive_interval", true, f);
+        fmt_message_field!(self.repeat_dive_interval, "repeat_dive_interval", true, f)?;
         
-        fmt_message_field!(self.safety_stop_time, "safety_stop_time", true, f);
+        fmt_message_field!(self.safety_stop_time, "safety_stop_time", true, f)?;
         
-        fmt_message_field!(self.heart_rate_source_type, "heart_rate_source_type", false, f);
+        fmt_message_field!(self.heart_rate_source_type, "heart_rate_source_type", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "heart_rate_source_subfield_bytes", self.heart_rate_source_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "heart_rate_source", self.heart_rate_source)?;
         
@@ -22324,11 +22301,11 @@ impl FitMessageDiveSettings {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -22487,11 +22464,6 @@ impl FitMessageDiveSettings {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -22533,31 +22505,31 @@ impl fmt::Display for FitMessageDiveSummary {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveSummary")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.reference_mesg, "reference_mesg", false, f);
+        fmt_message_field!(self.reference_mesg, "reference_mesg", false, f)?;
         
-        fmt_message_field!(self.reference_index, "reference_index", false, f);
+        fmt_message_field!(self.reference_index, "reference_index", false, f)?;
         
-        fmt_message_field!(self.avg_depth, "avg_depth", true, f);
+        fmt_message_field!(self.avg_depth, "avg_depth", true, f)?;
         
-        fmt_message_field!(self.max_depth, "max_depth", true, f);
+        fmt_message_field!(self.max_depth, "max_depth", true, f)?;
         
-        fmt_message_field!(self.surface_interval, "surface_interval", true, f);
+        fmt_message_field!(self.surface_interval, "surface_interval", true, f)?;
         
-        fmt_message_field!(self.start_cns, "start_cns", true, f);
+        fmt_message_field!(self.start_cns, "start_cns", true, f)?;
         
-        fmt_message_field!(self.end_cns, "end_cns", true, f);
+        fmt_message_field!(self.end_cns, "end_cns", true, f)?;
         
-        fmt_message_field!(self.start_n2, "start_n2", true, f);
+        fmt_message_field!(self.start_n2, "start_n2", true, f)?;
         
-        fmt_message_field!(self.end_n2, "end_n2", true, f);
+        fmt_message_field!(self.end_n2, "end_n2", true, f)?;
         
-        fmt_message_field!(self.o2_toxicity, "o2_toxicity", false, f);
+        fmt_message_field!(self.o2_toxicity, "o2_toxicity", false, f)?;
         
-        fmt_message_field!(self.dive_number, "dive_number", false, f);
+        fmt_message_field!(self.dive_number, "dive_number", false, f)?;
         
-        fmt_message_field!(self.bottom_time, "bottom_time", true, f);
+        fmt_message_field!(self.bottom_time, "bottom_time", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -22635,11 +22607,11 @@ impl FitMessageDiveSummary {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -22750,11 +22722,6 @@ impl FitMessageDiveSummary {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -22772,26 +22739,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    GearChangeData(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    SpeedLowAlert(FitUint32),
-    HrLowAlert(FitUint8),
-    CoursePointIndex(FitFieldMessageIndex),
-    SpeedHighAlert(FitUint32),
+    HrHighAlert(FitUint8),
     PowerLowAlert(FitUint16),
+    CadLowAlert(FitUint16),
+    TimeDurationAlert(FitUint32),
+    BatteryLevel(FitUint16),
+    SpeedLowAlert(FitUint32),
+    PowerHighAlert(FitUint16),
     VirtualPartnerSpeed(FitUint16),
     DistanceDurationAlert(FitUint32),
-    RiderPosition(FitFieldRiderPositionType),
-    HrHighAlert(FitUint8),
-    CommTimeout(FitFieldCommTimeoutType),
-    TimeDurationAlert(FitUint32),
-    PowerHighAlert(FitUint16),
-    CadHighAlert(FitUint16),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    TimerTrigger(FitFieldTimerTrigger),
-    BatteryLevel(FitUint16),
-    CadLowAlert(FitUint16),
+    CalorieDurationAlert(FitUint32),
     SportPoint(FitUint32),
+    SpeedHighAlert(FitUint32),
+    HrLowAlert(FitUint8),
+    CommTimeout(FitFieldCommTimeoutType),
+    GearChangeData(FitUint32),
+    TimerTrigger(FitFieldTimerTrigger),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    CoursePointIndex(FitFieldMessageIndex),
+    CadHighAlert(FitUint16),
+    RiderPosition(FitFieldRiderPositionType),
 }
 
 impl FitMessageEventSubfieldData {
@@ -22940,31 +22907,31 @@ impl fmt::Display for FitMessageEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageEvent")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.event, "event", false, f);
+        fmt_message_field!(self.event, "event", false, f)?;
         
-        fmt_message_field!(self.event_type, "event_type", false, f);
+        fmt_message_field!(self.event_type, "event_type", false, f)?;
         
-        fmt_message_field!(self.data16, "data16", false, f);
+        fmt_message_field!(self.data16, "data16", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "data_subfield_bytes", self.data_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "data", self.data)?;
         
-        fmt_message_field!(self.event_group, "event_group", false, f);
+        fmt_message_field!(self.event_group, "event_group", false, f)?;
         
-        fmt_message_field!(self.score, "score", false, f);
+        fmt_message_field!(self.score, "score", false, f)?;
         
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f);
+        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
         
-        fmt_message_field!(self.front_gear_num, "front_gear_num", false, f);
+        fmt_message_field!(self.front_gear_num, "front_gear_num", false, f)?;
         
-        fmt_message_field!(self.front_gear, "front_gear", false, f);
+        fmt_message_field!(self.front_gear, "front_gear", false, f)?;
         
-        fmt_message_field!(self.rear_gear_num, "rear_gear_num", false, f);
+        fmt_message_field!(self.rear_gear_num, "rear_gear_num", false, f)?;
         
-        fmt_message_field!(self.rear_gear, "rear_gear", false, f);
+        fmt_message_field!(self.rear_gear, "rear_gear", false, f)?;
         
-        fmt_message_field!(self.device_index, "device_index", false, f);
+        fmt_message_field!(self.device_index, "device_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -23057,11 +23024,11 @@ impl FitMessageEvent {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -23104,9 +23071,9 @@ impl FitMessageEvent {
                     2 => {  // data16
                         message.data16.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(3, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(3, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(3, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -23170,11 +23137,6 @@ impl FitMessageEvent {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -23214,27 +23176,27 @@ impl fmt::Display for FitMessageExdDataConceptConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdDataConceptConfiguration")?;
         
-        fmt_message_field!(self.screen_index, "screen_index", false, f);
+        fmt_message_field!(self.screen_index, "screen_index", false, f)?;
         
-        fmt_message_field!(self.concept_field, "concept_field", false, f);
+        fmt_message_field!(self.concept_field, "concept_field", false, f)?;
         
-        fmt_message_field!(self.field_id, "field_id", false, f);
+        fmt_message_field!(self.field_id, "field_id", false, f)?;
         
-        fmt_message_field!(self.concept_index, "concept_index", false, f);
+        fmt_message_field!(self.concept_index, "concept_index", false, f)?;
         
-        fmt_message_field!(self.data_page, "data_page", false, f);
+        fmt_message_field!(self.data_page, "data_page", false, f)?;
         
-        fmt_message_field!(self.concept_key, "concept_key", false, f);
+        fmt_message_field!(self.concept_key, "concept_key", false, f)?;
         
-        fmt_message_field!(self.scaling, "scaling", false, f);
+        fmt_message_field!(self.scaling, "scaling", false, f)?;
         
-        fmt_message_field!(self.data_units, "data_units", false, f);
+        fmt_message_field!(self.data_units, "data_units", false, f)?;
         
-        fmt_message_field!(self.qualifier, "qualifier", false, f);
+        fmt_message_field!(self.qualifier, "qualifier", false, f)?;
         
-        fmt_message_field!(self.descriptor, "descriptor", false, f);
+        fmt_message_field!(self.descriptor, "descriptor", false, f)?;
         
-        fmt_message_field!(self.is_signed, "is_signed", false, f);
+        fmt_message_field!(self.is_signed, "is_signed", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -23306,11 +23268,11 @@ impl FitMessageExdDataConceptConfiguration {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -23341,9 +23303,9 @@ impl FitMessageExdDataConceptConfiguration {
                     1 => {  // concept_field
                         message.concept_field.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -23413,11 +23375,6 @@ impl FitMessageExdDataConceptConfiguration {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -23452,17 +23409,17 @@ impl fmt::Display for FitMessageExdDataFieldConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdDataFieldConfiguration")?;
         
-        fmt_message_field!(self.screen_index, "screen_index", false, f);
+        fmt_message_field!(self.screen_index, "screen_index", false, f)?;
         
-        fmt_message_field!(self.concept_field, "concept_field", false, f);
+        fmt_message_field!(self.concept_field, "concept_field", false, f)?;
         
-        fmt_message_field!(self.field_id, "field_id", false, f);
+        fmt_message_field!(self.field_id, "field_id", false, f)?;
         
-        fmt_message_field!(self.concept_count, "concept_count", false, f);
+        fmt_message_field!(self.concept_count, "concept_count", false, f)?;
         
-        fmt_message_field!(self.display_type, "display_type", false, f);
+        fmt_message_field!(self.display_type, "display_type", false, f)?;
         
-        fmt_message_field!(self.title, "title", false, f);
+        fmt_message_field!(self.title, "title", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -23524,11 +23481,11 @@ impl FitMessageExdDataFieldConfiguration {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -23559,9 +23516,9 @@ impl FitMessageExdDataFieldConfiguration {
                     1 => {  // concept_field
                         message.concept_field.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -23601,11 +23558,6 @@ impl FitMessageExdDataFieldConfiguration {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -23638,13 +23590,13 @@ impl fmt::Display for FitMessageExdScreenConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdScreenConfiguration")?;
         
-        fmt_message_field!(self.screen_index, "screen_index", false, f);
+        fmt_message_field!(self.screen_index, "screen_index", false, f)?;
         
-        fmt_message_field!(self.field_count, "field_count", false, f);
+        fmt_message_field!(self.field_count, "field_count", false, f)?;
         
-        fmt_message_field!(self.layout, "layout", false, f);
+        fmt_message_field!(self.layout, "layout", false, f)?;
         
-        fmt_message_field!(self.screen_enabled, "screen_enabled", false, f);
+        fmt_message_field!(self.screen_enabled, "screen_enabled", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -23702,11 +23654,11 @@ impl FitMessageExdScreenConfiguration {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -23763,11 +23715,6 @@ impl FitMessageExdScreenConfiguration {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -23800,13 +23747,13 @@ impl fmt::Display for FitMessageExerciseTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExerciseTitle")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.exercise_category, "exercise_category", false, f);
+        fmt_message_field!(self.exercise_category, "exercise_category", false, f)?;
         
-        fmt_message_field!(self.exercise_name, "exercise_name", false, f);
+        fmt_message_field!(self.exercise_name, "exercise_name", false, f)?;
         
-        fmt_message_field!(self.wkt_step_name, "wkt_step_name", false, f);
+        fmt_message_field!(self.wkt_step_name, "wkt_step_name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -23864,11 +23811,11 @@ impl FitMessageExerciseTitle {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -23925,11 +23872,6 @@ impl FitMessageExerciseTitle {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -23963,15 +23905,15 @@ impl fmt::Display for FitMessageFieldCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFieldCapabilities")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.file, "file", false, f);
+        fmt_message_field!(self.file, "file", false, f)?;
         
-        fmt_message_field!(self.mesg_num, "mesg_num", false, f);
+        fmt_message_field!(self.mesg_num, "mesg_num", false, f)?;
         
-        fmt_message_field!(self.field_num, "field_num", false, f);
+        fmt_message_field!(self.field_num, "field_num", false, f)?;
         
-        fmt_message_field!(self.count, "count", false, f);
+        fmt_message_field!(self.count, "count", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -24031,11 +23973,11 @@ impl FitMessageFieldCapabilities {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -24098,11 +24040,6 @@ impl FitMessageFieldCapabilities {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -24145,33 +24082,33 @@ impl fmt::Display for FitMessageFieldDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFieldDescription")?;
         
-        fmt_message_field!(self.developer_data_index, "developer_data_index", false, f);
+        fmt_message_field!(self.developer_data_index, "developer_data_index", false, f)?;
         
-        fmt_message_field!(self.field_definition_number, "field_definition_number", false, f);
+        fmt_message_field!(self.field_definition_number, "field_definition_number", false, f)?;
         
-        fmt_message_field!(self.fit_base_type_id, "fit_base_type_id", false, f);
+        fmt_message_field!(self.fit_base_type_id, "fit_base_type_id", false, f)?;
         
-        fmt_message_field!(self.field_name, "field_name", false, f);
+        fmt_message_field!(self.field_name, "field_name", false, f)?;
         
-        fmt_message_field!(self.array, "array", false, f);
+        fmt_message_field!(self.array, "array", false, f)?;
         
-        fmt_message_field!(self.components, "components", false, f);
+        fmt_message_field!(self.components, "components", false, f)?;
         
-        fmt_message_field!(self.scale, "scale", false, f);
+        fmt_message_field!(self.scale, "scale", false, f)?;
         
-        fmt_message_field!(self.offset, "offset", false, f);
+        fmt_message_field!(self.offset, "offset", false, f)?;
         
-        fmt_message_field!(self.units, "units", false, f);
+        fmt_message_field!(self.units, "units", false, f)?;
         
-        fmt_message_field!(self.bits, "bits", false, f);
+        fmt_message_field!(self.bits, "bits", false, f)?;
         
-        fmt_message_field!(self.accumulate, "accumulate", false, f);
+        fmt_message_field!(self.accumulate, "accumulate", false, f)?;
         
-        fmt_message_field!(self.fit_base_unit_id, "fit_base_unit_id", false, f);
+        fmt_message_field!(self.fit_base_unit_id, "fit_base_unit_id", false, f)?;
         
-        fmt_message_field!(self.native_mesg_num, "native_mesg_num", false, f);
+        fmt_message_field!(self.native_mesg_num, "native_mesg_num", false, f)?;
         
-        fmt_message_field!(self.native_field_num, "native_field_num", false, f);
+        fmt_message_field!(self.native_field_num, "native_field_num", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -24249,11 +24186,11 @@ impl FitMessageFieldDescription {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -24370,11 +24307,6 @@ impl FitMessageFieldDescription {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -24409,17 +24341,17 @@ impl fmt::Display for FitMessageFileCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileCapabilities")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.flags, "flags", false, f);
+        fmt_message_field!(self.flags, "flags", false, f)?;
         
-        fmt_message_field!(self.directory, "directory", false, f);
+        fmt_message_field!(self.directory, "directory", false, f)?;
         
-        fmt_message_field!(self.max_count, "max_count", false, f);
+        fmt_message_field!(self.max_count, "max_count", false, f)?;
         
-        fmt_message_field!(self.max_size, "max_size", false, f);
+        fmt_message_field!(self.max_size, "max_size", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -24481,11 +24413,11 @@ impl FitMessageFileCapabilities {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -24554,11 +24486,6 @@ impl FitMessageFileCapabilities {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -24589,9 +24516,9 @@ impl fmt::Display for FitMessageFileCreator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileCreator")?;
         
-        fmt_message_field!(self.software_version, "software_version", false, f);
+        fmt_message_field!(self.software_version, "software_version", false, f)?;
         
-        fmt_message_field!(self.hardware_version, "hardware_version", false, f);
+        fmt_message_field!(self.hardware_version, "hardware_version", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -24645,11 +24572,11 @@ impl FitMessageFileCreator {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -24694,11 +24621,6 @@ impl FitMessageFileCreator {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -24775,19 +24697,19 @@ impl fmt::Display for FitMessageFileId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileId")?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f);
+        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
         
-        fmt_message_field!(self.serial_number, "serial_number", false, f);
+        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
         
-        fmt_message_field!(self.time_created, "time_created", false, f);
+        fmt_message_field!(self.time_created, "time_created", false, f)?;
         
-        fmt_message_field!(self.number, "number", false, f);
+        fmt_message_field!(self.number, "number", false, f)?;
         
-        fmt_message_field!(self.product_name, "product_name", false, f);
+        fmt_message_field!(self.product_name, "product_name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -24866,11 +24788,11 @@ impl FitMessageFileId {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -24939,11 +24861,6 @@ impl FitMessageFileId {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -24985,31 +24902,31 @@ impl fmt::Display for FitMessageGoal {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGoal")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.start_date, "start_date", false, f);
+        fmt_message_field!(self.start_date, "start_date", false, f)?;
         
-        fmt_message_field!(self.end_date, "end_date", false, f);
+        fmt_message_field!(self.end_date, "end_date", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.value, "value", false, f);
+        fmt_message_field!(self.value, "value", false, f)?;
         
-        fmt_message_field!(self.repeat, "repeat", false, f);
+        fmt_message_field!(self.repeat, "repeat", false, f)?;
         
-        fmt_message_field!(self.target_value, "target_value", false, f);
+        fmt_message_field!(self.target_value, "target_value", false, f)?;
         
-        fmt_message_field!(self.recurrence, "recurrence", false, f);
+        fmt_message_field!(self.recurrence, "recurrence", false, f)?;
         
-        fmt_message_field!(self.recurrence_value, "recurrence_value", false, f);
+        fmt_message_field!(self.recurrence_value, "recurrence_value", false, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.source, "source", false, f);
+        fmt_message_field!(self.source, "source", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -25085,11 +25002,11 @@ impl FitMessageGoal {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -25200,11 +25117,6 @@ impl FitMessageGoal {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -25242,23 +25154,23 @@ impl fmt::Display for FitMessageGpsMetadata {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGpsMetadata")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.position_lat, "position_lat", true, f);
+        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
         
-        fmt_message_field!(self.position_long, "position_long", true, f);
+        fmt_message_field!(self.position_long, "position_long", true, f)?;
         
-        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", true, f);
+        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", true, f)?;
         
-        fmt_message_field!(self.enhanced_speed, "enhanced_speed", true, f);
+        fmt_message_field!(self.enhanced_speed, "enhanced_speed", true, f)?;
         
-        fmt_message_field!(self.heading, "heading", true, f);
+        fmt_message_field!(self.heading, "heading", true, f)?;
         
-        fmt_message_field!(self.utc_timestamp, "utc_timestamp", false, f);
+        fmt_message_field!(self.utc_timestamp, "utc_timestamp", false, f)?;
         
-        fmt_message_field!(self.velocity, "velocity", true, f);
+        fmt_message_field!(self.velocity, "velocity", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -25328,11 +25240,11 @@ impl FitMessageGpsMetadata {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -25419,11 +25331,6 @@ impl FitMessageGpsMetadata {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -25461,23 +25368,23 @@ impl fmt::Display for FitMessageGyroscopeData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGyroscopeData")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
         
-        fmt_message_field!(self.gyro_x, "gyro_x", false, f);
+        fmt_message_field!(self.gyro_x, "gyro_x", false, f)?;
         
-        fmt_message_field!(self.gyro_y, "gyro_y", false, f);
+        fmt_message_field!(self.gyro_y, "gyro_y", false, f)?;
         
-        fmt_message_field!(self.gyro_z, "gyro_z", false, f);
+        fmt_message_field!(self.gyro_z, "gyro_z", false, f)?;
         
-        fmt_message_field!(self.calibrated_gyro_x, "calibrated_gyro_x", false, f);
+        fmt_message_field!(self.calibrated_gyro_x, "calibrated_gyro_x", false, f)?;
         
-        fmt_message_field!(self.calibrated_gyro_y, "calibrated_gyro_y", false, f);
+        fmt_message_field!(self.calibrated_gyro_y, "calibrated_gyro_y", false, f)?;
         
-        fmt_message_field!(self.calibrated_gyro_z, "calibrated_gyro_z", false, f);
+        fmt_message_field!(self.calibrated_gyro_z, "calibrated_gyro_z", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -25547,11 +25454,11 @@ impl FitMessageGyroscopeData {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -25638,11 +25545,6 @@ impl FitMessageGyroscopeData {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -25677,17 +25579,17 @@ impl fmt::Display for FitMessageHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHr")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
         
-        fmt_message_field!(self.time256, "time256", true, f);
+        fmt_message_field!(self.time256, "time256", true, f)?;
         
-        fmt_message_field!(self.filtered_bpm, "filtered_bpm", false, f);
+        fmt_message_field!(self.filtered_bpm, "filtered_bpm", false, f)?;
         
-        fmt_message_field!(self.event_timestamp, "event_timestamp", true, f);
+        fmt_message_field!(self.event_timestamp, "event_timestamp", true, f)?;
         
-        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", false, f);
+        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -25751,11 +25653,11 @@ impl FitMessageHr {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -25792,9 +25694,9 @@ impl FitMessageHr {
                     1 => {  // time256
                         message.time256.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(0, 2, 132, message.definition_message.endianness, 0, 8)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(0, 2, 132, message.definition_message.endianness, 0, 8)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(0, 2, 132, message.definition_message.endianness, 0, 8)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -25814,9 +25716,9 @@ impl FitMessageHr {
                     10 => {  // event_timestamp_12
                         message.event_timestamp_12.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 12, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 24, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 36, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 48, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 60, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 72, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 84, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 96, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 108, 12)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 12, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 24, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 36, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 48, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 60, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 72, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 84, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 96, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 108, 12)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 12, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 24, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 36, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 48, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 60, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 72, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 84, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 96, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 108, 12)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -25832,11 +25734,6 @@ impl FitMessageHr {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -25868,11 +25765,11 @@ impl fmt::Display for FitMessageHrZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrZone")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.high_bpm, "high_bpm", false, f);
+        fmt_message_field!(self.high_bpm, "high_bpm", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -25928,11 +25825,11 @@ impl FitMessageHrZone {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -25983,11 +25880,6 @@ impl FitMessageHrZone {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -26021,15 +25913,15 @@ impl fmt::Display for FitMessageHrmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrmProfile")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.hrm_ant_id, "hrm_ant_id", false, f);
+        fmt_message_field!(self.hrm_ant_id, "hrm_ant_id", false, f)?;
         
-        fmt_message_field!(self.log_hrv, "log_hrv", false, f);
+        fmt_message_field!(self.log_hrv, "log_hrv", false, f)?;
         
-        fmt_message_field!(self.hrm_ant_id_trans_type, "hrm_ant_id_trans_type", false, f);
+        fmt_message_field!(self.hrm_ant_id_trans_type, "hrm_ant_id_trans_type", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -26089,11 +25981,11 @@ impl FitMessageHrmProfile {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -26156,11 +26048,6 @@ impl FitMessageHrmProfile {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -26190,7 +26077,7 @@ impl fmt::Display for FitMessageHrv {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrv")?;
         
-        fmt_message_field!(self.time, "time", true, f);
+        fmt_message_field!(self.time, "time", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -26242,11 +26129,11 @@ impl FitMessageHrv {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -26285,11 +26172,6 @@ impl FitMessageHrv {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -26504,217 +26386,217 @@ impl fmt::Display for FitMessageLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageLap")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.event, "event", false, f);
+        fmt_message_field!(self.event, "event", false, f)?;
         
-        fmt_message_field!(self.event_type, "event_type", false, f);
+        fmt_message_field!(self.event_type, "event_type", false, f)?;
         
-        fmt_message_field!(self.start_time, "start_time", false, f);
+        fmt_message_field!(self.start_time, "start_time", false, f)?;
         
-        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f)?;
         
-        fmt_message_field!(self.start_position_long, "start_position_long", true, f);
+        fmt_message_field!(self.start_position_long, "start_position_long", true, f)?;
         
-        fmt_message_field!(self.end_position_lat, "end_position_lat", true, f);
+        fmt_message_field!(self.end_position_lat, "end_position_lat", true, f)?;
         
-        fmt_message_field!(self.end_position_long, "end_position_long", true, f);
+        fmt_message_field!(self.end_position_long, "end_position_long", true, f)?;
         
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
         
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
         
-        fmt_message_field!(self.total_distance, "total_distance", true, f);
+        fmt_message_field!(self.total_distance, "total_distance", true, f)?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles", self.total_cycles)?;
         
-        fmt_message_field!(self.total_calories, "total_calories", false, f);
+        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
         
-        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f);
+        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f)?;
         
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f);
+        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
         
-        fmt_message_field!(self.max_speed, "max_speed", true, f);
+        fmt_message_field!(self.max_speed, "max_speed", true, f)?;
         
-        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f)?;
         
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "avg_cadence", self.avg_cadence)?;
         writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "max_cadence", self.max_cadence)?;
         
-        fmt_message_field!(self.avg_power, "avg_power", false, f);
+        fmt_message_field!(self.avg_power, "avg_power", false, f)?;
         
-        fmt_message_field!(self.max_power, "max_power", false, f);
+        fmt_message_field!(self.max_power, "max_power", false, f)?;
         
-        fmt_message_field!(self.total_ascent, "total_ascent", false, f);
+        fmt_message_field!(self.total_ascent, "total_ascent", false, f)?;
         
-        fmt_message_field!(self.total_descent, "total_descent", false, f);
+        fmt_message_field!(self.total_descent, "total_descent", false, f)?;
         
-        fmt_message_field!(self.intensity, "intensity", false, f);
+        fmt_message_field!(self.intensity, "intensity", false, f)?;
         
-        fmt_message_field!(self.lap_trigger, "lap_trigger", false, f);
+        fmt_message_field!(self.lap_trigger, "lap_trigger", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.event_group, "event_group", false, f);
+        fmt_message_field!(self.event_group, "event_group", false, f)?;
         
-        fmt_message_field!(self.num_lengths, "num_lengths", false, f);
+        fmt_message_field!(self.num_lengths, "num_lengths", false, f)?;
         
-        fmt_message_field!(self.normalized_power, "normalized_power", false, f);
+        fmt_message_field!(self.normalized_power, "normalized_power", false, f)?;
         
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
         
-        fmt_message_field!(self.first_length_index, "first_length_index", false, f);
+        fmt_message_field!(self.first_length_index, "first_length_index", false, f)?;
         
-        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", true, f);
+        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", true, f)?;
         
-        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f);
+        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.num_active_lengths, "num_active_lengths", false, f);
+        fmt_message_field!(self.num_active_lengths, "num_active_lengths", false, f)?;
         
-        fmt_message_field!(self.total_work, "total_work", false, f);
+        fmt_message_field!(self.total_work, "total_work", false, f)?;
         
-        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f);
+        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f)?;
         
-        fmt_message_field!(self.max_altitude, "max_altitude", true, f);
+        fmt_message_field!(self.max_altitude, "max_altitude", true, f)?;
         
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
         
-        fmt_message_field!(self.avg_grade, "avg_grade", true, f);
+        fmt_message_field!(self.avg_grade, "avg_grade", true, f)?;
         
-        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f);
+        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f)?;
         
-        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f);
+        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f)?;
         
-        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f);
+        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f)?;
         
-        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f);
+        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f)?;
         
-        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f);
+        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f)?;
         
-        fmt_message_field!(self.max_temperature, "max_temperature", false, f);
+        fmt_message_field!(self.max_temperature, "max_temperature", false, f)?;
         
-        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f)?;
         
-        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", true, f);
+        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", true, f);
+        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", true, f);
+        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", true, f);
+        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f);
+        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f);
+        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f);
+        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f);
+        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f)?;
         
-        fmt_message_field!(self.repetition_num, "repetition_num", false, f);
+        fmt_message_field!(self.repetition_num, "repetition_num", false, f)?;
         
-        fmt_message_field!(self.min_altitude, "min_altitude", true, f);
+        fmt_message_field!(self.min_altitude, "min_altitude", true, f)?;
         
-        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f);
+        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f)?;
         
-        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f);
+        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f)?;
         
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f);
+        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
         
-        fmt_message_field!(self.stroke_count, "stroke_count", false, f);
+        fmt_message_field!(self.stroke_count, "stroke_count", false, f)?;
         
-        fmt_message_field!(self.zone_count, "zone_count", false, f);
+        fmt_message_field!(self.zone_count, "zone_count", false, f)?;
         
-        fmt_message_field!(self.avg_vertical_oscillation, "avg_vertical_oscillation", true, f);
+        fmt_message_field!(self.avg_vertical_oscillation, "avg_vertical_oscillation", true, f)?;
         
-        fmt_message_field!(self.avg_stance_time_percent, "avg_stance_time_percent", true, f);
+        fmt_message_field!(self.avg_stance_time_percent, "avg_stance_time_percent", true, f)?;
         
-        fmt_message_field!(self.avg_stance_time, "avg_stance_time", true, f);
+        fmt_message_field!(self.avg_stance_time, "avg_stance_time", true, f)?;
         
-        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", true, f);
+        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", true, f);
+        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", true, f);
+        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", true, f)?;
         
-        fmt_message_field!(self.player_score, "player_score", false, f);
+        fmt_message_field!(self.player_score, "player_score", false, f)?;
         
-        fmt_message_field!(self.avg_total_hemoglobin_conc, "avg_total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.avg_total_hemoglobin_conc, "avg_total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.min_total_hemoglobin_conc, "min_total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.min_total_hemoglobin_conc, "min_total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.max_total_hemoglobin_conc, "max_total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.max_total_hemoglobin_conc, "max_total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.avg_saturated_hemoglobin_percent, "avg_saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.avg_saturated_hemoglobin_percent, "avg_saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.min_saturated_hemoglobin_percent, "min_saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.min_saturated_hemoglobin_percent, "min_saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.max_saturated_hemoglobin_percent, "max_saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.max_saturated_hemoglobin_percent, "max_saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.avg_left_torque_effectiveness, "avg_left_torque_effectiveness", true, f);
+        fmt_message_field!(self.avg_left_torque_effectiveness, "avg_left_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.avg_right_torque_effectiveness, "avg_right_torque_effectiveness", true, f);
+        fmt_message_field!(self.avg_right_torque_effectiveness, "avg_right_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.avg_left_pedal_smoothness, "avg_left_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_left_pedal_smoothness, "avg_left_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.avg_right_pedal_smoothness, "avg_right_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_right_pedal_smoothness, "avg_right_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.avg_combined_pedal_smoothness, "avg_combined_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_combined_pedal_smoothness, "avg_combined_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.time_standing, "time_standing", true, f);
+        fmt_message_field!(self.time_standing, "time_standing", true, f)?;
         
-        fmt_message_field!(self.stand_count, "stand_count", false, f);
+        fmt_message_field!(self.stand_count, "stand_count", false, f)?;
         
-        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f);
+        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f)?;
         
-        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f);
+        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f)?;
         
-        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f);
+        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f)?;
         
-        fmt_message_field!(self.avg_left_power_phase_peak, "avg_left_power_phase_peak", true, f);
+        fmt_message_field!(self.avg_left_power_phase_peak, "avg_left_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f);
+        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f)?;
         
-        fmt_message_field!(self.avg_right_power_phase_peak, "avg_right_power_phase_peak", true, f);
+        fmt_message_field!(self.avg_right_power_phase_peak, "avg_right_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f);
+        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f)?;
         
-        fmt_message_field!(self.max_power_position, "max_power_position", false, f);
+        fmt_message_field!(self.max_power_position, "max_power_position", false, f)?;
         
-        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f);
+        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f)?;
         
-        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f);
+        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f)?;
         
-        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", true, f);
+        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", true, f)?;
         
-        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", true, f);
+        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", true, f)?;
         
-        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", true, f);
+        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", true, f)?;
         
-        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", true, f);
+        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", true, f)?;
         
-        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", true, f);
+        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", true, f)?;
         
-        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", false, f);
+        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", false, f)?;
         
-        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", false, f);
+        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", false, f)?;
         
-        fmt_message_field!(self.lev_battery_consumption, "lev_battery_consumption", true, f);
+        fmt_message_field!(self.lev_battery_consumption, "lev_battery_consumption", true, f)?;
         
-        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", true, f);
+        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", true, f)?;
         
-        fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", true, f);
+        fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", true, f)?;
         
-        fmt_message_field!(self.avg_step_length, "avg_step_length", true, f);
+        fmt_message_field!(self.avg_step_length, "avg_step_length", true, f)?;
         
-        fmt_message_field!(self.avg_vam, "avg_vam", true, f);
+        fmt_message_field!(self.avg_vam, "avg_vam", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -27009,11 +26891,11 @@ impl FitMessageLap {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -27122,9 +27004,9 @@ impl FitMessageLap {
                     13 => {  // avg_speed
                         message.avg_speed.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(110, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(110, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(110, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -27132,9 +27014,9 @@ impl FitMessageLap {
                     14 => {  // max_speed
                         message.max_speed.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(111, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(111, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(111, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -27256,9 +27138,9 @@ impl FitMessageLap {
                     42 => {  // avg_altitude
                         message.avg_altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(112, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(112, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(112, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -27266,9 +27148,9 @@ impl FitMessageLap {
                     43 => {  // max_altitude
                         message.max_altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(114, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(114, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(114, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -27384,9 +27266,9 @@ impl FitMessageLap {
                     62 => {  // min_altitude
                         message.min_altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(113, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(113, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(113, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -27684,11 +27566,6 @@ impl FitMessageLap {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -27735,41 +27612,41 @@ impl fmt::Display for FitMessageLength {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageLength")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.event, "event", false, f);
+        fmt_message_field!(self.event, "event", false, f)?;
         
-        fmt_message_field!(self.event_type, "event_type", false, f);
+        fmt_message_field!(self.event_type, "event_type", false, f)?;
         
-        fmt_message_field!(self.start_time, "start_time", false, f);
+        fmt_message_field!(self.start_time, "start_time", false, f)?;
         
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
         
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
         
-        fmt_message_field!(self.total_strokes, "total_strokes", false, f);
+        fmt_message_field!(self.total_strokes, "total_strokes", false, f)?;
         
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f);
+        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
         
-        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f);
+        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f)?;
         
-        fmt_message_field!(self.avg_swimming_cadence, "avg_swimming_cadence", false, f);
+        fmt_message_field!(self.avg_swimming_cadence, "avg_swimming_cadence", false, f)?;
         
-        fmt_message_field!(self.event_group, "event_group", false, f);
+        fmt_message_field!(self.event_group, "event_group", false, f)?;
         
-        fmt_message_field!(self.total_calories, "total_calories", false, f);
+        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
         
-        fmt_message_field!(self.length_type, "length_type", false, f);
+        fmt_message_field!(self.length_type, "length_type", false, f)?;
         
-        fmt_message_field!(self.player_score, "player_score", false, f);
+        fmt_message_field!(self.player_score, "player_score", false, f)?;
         
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f);
+        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
         
-        fmt_message_field!(self.stroke_count, "stroke_count", false, f);
+        fmt_message_field!(self.stroke_count, "stroke_count", false, f)?;
         
-        fmt_message_field!(self.zone_count, "zone_count", false, f);
+        fmt_message_field!(self.zone_count, "zone_count", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -27857,11 +27734,11 @@ impl FitMessageLength {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -28002,11 +27879,6 @@ impl FitMessageLength {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -28044,23 +27916,23 @@ impl fmt::Display for FitMessageMagnetometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMagnetometerData")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
         
-        fmt_message_field!(self.mag_x, "mag_x", false, f);
+        fmt_message_field!(self.mag_x, "mag_x", false, f)?;
         
-        fmt_message_field!(self.mag_y, "mag_y", false, f);
+        fmt_message_field!(self.mag_y, "mag_y", false, f)?;
         
-        fmt_message_field!(self.mag_z, "mag_z", false, f);
+        fmt_message_field!(self.mag_z, "mag_z", false, f)?;
         
-        fmt_message_field!(self.calibrated_mag_x, "calibrated_mag_x", false, f);
+        fmt_message_field!(self.calibrated_mag_x, "calibrated_mag_x", false, f)?;
         
-        fmt_message_field!(self.calibrated_mag_y, "calibrated_mag_y", false, f);
+        fmt_message_field!(self.calibrated_mag_y, "calibrated_mag_y", false, f)?;
         
-        fmt_message_field!(self.calibrated_mag_z, "calibrated_mag_z", false, f);
+        fmt_message_field!(self.calibrated_mag_z, "calibrated_mag_z", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -28130,11 +28002,11 @@ impl FitMessageMagnetometerData {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -28221,11 +28093,6 @@ impl FitMessageMagnetometerData {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -28258,13 +28125,13 @@ impl fmt::Display for FitMessageMemoGlob {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMemoGlob")?;
         
-        fmt_message_field!(self.part_index, "part_index", false, f);
+        fmt_message_field!(self.part_index, "part_index", false, f)?;
         
-        fmt_message_field!(self.memo, "memo", false, f);
+        fmt_message_field!(self.memo, "memo", false, f)?;
         
-        fmt_message_field!(self.message_number, "message_number", false, f);
+        fmt_message_field!(self.message_number, "message_number", false, f)?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -28322,11 +28189,11 @@ impl FitMessageMemoGlob {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -28383,11 +28250,6 @@ impl FitMessageMemoGlob {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -28406,8 +28268,8 @@ pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
     NumPerFile(FitUint16),
-    MaxPerFile(FitUint16),
     MaxPerFileType(FitUint16),
+    MaxPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -28458,13 +28320,13 @@ impl fmt::Display for FitMessageMesgCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMesgCapabilities")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.file, "file", false, f);
+        fmt_message_field!(self.file, "file", false, f)?;
         
-        fmt_message_field!(self.mesg_num, "mesg_num", false, f);
+        fmt_message_field!(self.mesg_num, "mesg_num", false, f)?;
         
-        fmt_message_field!(self.count_type, "count_type", false, f);
+        fmt_message_field!(self.count_type, "count_type", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "count_subfield_bytes", self.count_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "count", self.count)?;
         
@@ -28541,11 +28403,11 @@ impl FitMessageMesgCapabilities {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -28602,11 +28464,6 @@ impl FitMessageMesgCapabilities {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -28639,13 +28496,13 @@ impl fmt::Display for FitMessageMetZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMetZone")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.high_bpm, "high_bpm", false, f);
+        fmt_message_field!(self.high_bpm, "high_bpm", false, f)?;
         
-        fmt_message_field!(self.calories, "calories", true, f);
+        fmt_message_field!(self.calories, "calories", true, f)?;
         
-        fmt_message_field!(self.fat_calories, "fat_calories", true, f);
+        fmt_message_field!(self.fat_calories, "fat_calories", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -28703,11 +28560,11 @@ impl FitMessageMetZone {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -28764,11 +28621,6 @@ impl FitMessageMetZone {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -28786,8 +28638,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitUint32),
-    Steps(FitUint32),
     Strokes(FitUint32),
+    Steps(FitUint32),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -28867,63 +28719,63 @@ impl fmt::Display for FitMessageMonitoring {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMonitoring")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.device_index, "device_index", false, f);
+        fmt_message_field!(self.device_index, "device_index", false, f)?;
         
-        fmt_message_field!(self.calories, "calories", false, f);
+        fmt_message_field!(self.calories, "calories", false, f)?;
         
-        fmt_message_field!(self.distance, "distance", true, f);
+        fmt_message_field!(self.distance, "distance", true, f)?;
         writeln!(f, "  {: >28}: {:?}", "cycles_subfield_bytes", self.cycles_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "cycles", self.cycles)?;
         
-        fmt_message_field!(self.active_time, "active_time", true, f);
+        fmt_message_field!(self.active_time, "active_time", true, f)?;
         
-        fmt_message_field!(self.activity_type, "activity_type", false, f);
+        fmt_message_field!(self.activity_type, "activity_type", false, f)?;
         
-        fmt_message_field!(self.activity_subtype, "activity_subtype", false, f);
+        fmt_message_field!(self.activity_subtype, "activity_subtype", false, f)?;
         
-        fmt_message_field!(self.activity_level, "activity_level", false, f);
+        fmt_message_field!(self.activity_level, "activity_level", false, f)?;
         
-        fmt_message_field!(self.distance_16, "distance_16", false, f);
+        fmt_message_field!(self.distance_16, "distance_16", false, f)?;
         
-        fmt_message_field!(self.cycles_16, "cycles_16", false, f);
+        fmt_message_field!(self.cycles_16, "cycles_16", false, f)?;
         
-        fmt_message_field!(self.active_time_16, "active_time_16", false, f);
+        fmt_message_field!(self.active_time_16, "active_time_16", false, f)?;
         
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
         
-        fmt_message_field!(self.temperature, "temperature", true, f);
+        fmt_message_field!(self.temperature, "temperature", true, f)?;
         
-        fmt_message_field!(self.temperature_min, "temperature_min", true, f);
+        fmt_message_field!(self.temperature_min, "temperature_min", true, f)?;
         
-        fmt_message_field!(self.temperature_max, "temperature_max", true, f);
+        fmt_message_field!(self.temperature_max, "temperature_max", true, f)?;
         
-        fmt_message_field!(self.activity_time, "activity_time", false, f);
+        fmt_message_field!(self.activity_time, "activity_time", false, f)?;
         
-        fmt_message_field!(self.active_calories, "active_calories", false, f);
+        fmt_message_field!(self.active_calories, "active_calories", false, f)?;
         
-        fmt_message_field!(self.current_activity_type_intensity, "current_activity_type_intensity", false, f);
+        fmt_message_field!(self.current_activity_type_intensity, "current_activity_type_intensity", false, f)?;
         
-        fmt_message_field!(self.timestamp_min_8, "timestamp_min_8", false, f);
+        fmt_message_field!(self.timestamp_min_8, "timestamp_min_8", false, f)?;
         
-        fmt_message_field!(self.timestamp_16, "timestamp_16", false, f);
+        fmt_message_field!(self.timestamp_16, "timestamp_16", false, f)?;
         
-        fmt_message_field!(self.heart_rate, "heart_rate", false, f);
+        fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
         
-        fmt_message_field!(self.intensity, "intensity", false, f);
+        fmt_message_field!(self.intensity, "intensity", false, f)?;
         
-        fmt_message_field!(self.duration_min, "duration_min", false, f);
+        fmt_message_field!(self.duration_min, "duration_min", false, f)?;
         
-        fmt_message_field!(self.duration, "duration", false, f);
+        fmt_message_field!(self.duration, "duration", false, f)?;
         
-        fmt_message_field!(self.ascent, "ascent", true, f);
+        fmt_message_field!(self.ascent, "ascent", true, f)?;
         
-        fmt_message_field!(self.descent, "descent", true, f);
+        fmt_message_field!(self.descent, "descent", true, f)?;
         
-        fmt_message_field!(self.moderate_activity_minutes, "moderate_activity_minutes", false, f);
+        fmt_message_field!(self.moderate_activity_minutes, "moderate_activity_minutes", false, f)?;
         
-        fmt_message_field!(self.vigorous_activity_minutes, "vigorous_activity_minutes", false, f);
+        fmt_message_field!(self.vigorous_activity_minutes, "vigorous_activity_minutes", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -29048,11 +28900,11 @@ impl FitMessageMonitoring {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -29179,9 +29031,9 @@ impl FitMessageMonitoring {
                     24 => {  // current_activity_type_intensity
                         message.current_activity_type_intensity.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(5, 1, 0, message.definition_message.endianness, 0, 5),FitParseConfig::new_from_component(28, 1, 2, message.definition_message.endianness, 5, 3)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(5, 1, 0, message.definition_message.endianness, 0, 5),FitParseConfig::new_from_component(28, 1, 2, message.definition_message.endianness, 5, 3)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(5, 1, 0, message.definition_message.endianness, 0, 5),FitParseConfig::new_from_component(28, 1, 2, message.definition_message.endianness, 5, 3)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -29257,11 +29109,6 @@ impl FitMessageMonitoring {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -29296,17 +29143,17 @@ impl fmt::Display for FitMessageMonitoringInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMonitoringInfo")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
         
-        fmt_message_field!(self.activity_type, "activity_type", false, f);
+        fmt_message_field!(self.activity_type, "activity_type", false, f)?;
         
-        fmt_message_field!(self.cycles_to_distance, "cycles_to_distance", true, f);
+        fmt_message_field!(self.cycles_to_distance, "cycles_to_distance", true, f)?;
         
-        fmt_message_field!(self.cycles_to_calories, "cycles_to_calories", true, f);
+        fmt_message_field!(self.cycles_to_calories, "cycles_to_calories", true, f)?;
         
-        fmt_message_field!(self.resting_metabolic_rate, "resting_metabolic_rate", false, f);
+        fmt_message_field!(self.resting_metabolic_rate, "resting_metabolic_rate", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -29370,11 +29217,11 @@ impl FitMessageMonitoringInfo {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -29443,11 +29290,6 @@ impl FitMessageMonitoringInfo {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -29479,11 +29321,11 @@ impl fmt::Display for FitMessageNmeaSentence {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageNmeaSentence")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.sentence, "sentence", false, f);
+        fmt_message_field!(self.sentence, "sentence", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -29541,11 +29383,11 @@ impl FitMessageNmeaSentence {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -29596,11 +29438,6 @@ impl FitMessageNmeaSentence {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -29638,23 +29475,23 @@ impl fmt::Display for FitMessageObdiiData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageObdiiData")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.time_offset, "time_offset", false, f);
+        fmt_message_field!(self.time_offset, "time_offset", false, f)?;
         
-        fmt_message_field!(self.pid, "pid", false, f);
+        fmt_message_field!(self.pid, "pid", false, f)?;
         
-        fmt_message_field!(self.raw_data, "raw_data", false, f);
+        fmt_message_field!(self.raw_data, "raw_data", false, f)?;
         
-        fmt_message_field!(self.pid_data_size, "pid_data_size", false, f);
+        fmt_message_field!(self.pid_data_size, "pid_data_size", false, f)?;
         
-        fmt_message_field!(self.system_time, "system_time", false, f);
+        fmt_message_field!(self.system_time, "system_time", false, f)?;
         
-        fmt_message_field!(self.start_timestamp, "start_timestamp", false, f);
+        fmt_message_field!(self.start_timestamp, "start_timestamp", false, f)?;
         
-        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", false, f);
+        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -29724,11 +29561,11 @@ impl FitMessageObdiiData {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -29815,11 +29652,6 @@ impl FitMessageObdiiData {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -29850,9 +29682,9 @@ impl fmt::Display for FitMessageOhrSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageOhrSettings")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -29908,11 +29740,11 @@ impl FitMessageOhrSettings {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -29957,11 +29789,6 @@ impl FitMessageOhrSettings {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -30021,17 +29848,17 @@ impl fmt::Display for FitMessageOneDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageOneDSensorCalibration")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.sensor_type, "sensor_type", false, f);
+        fmt_message_field!(self.sensor_type, "sensor_type", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "calibration_factor", self.calibration_factor)?;
         
-        fmt_message_field!(self.calibration_divisor, "calibration_divisor", false, f);
+        fmt_message_field!(self.calibration_divisor, "calibration_divisor", false, f)?;
         
-        fmt_message_field!(self.level_shift, "level_shift", false, f);
+        fmt_message_field!(self.level_shift, "level_shift", false, f)?;
         
-        fmt_message_field!(self.offset_cal, "offset_cal", false, f);
+        fmt_message_field!(self.offset_cal, "offset_cal", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -30110,11 +29937,11 @@ impl FitMessageOneDSensorCalibration {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -30177,11 +30004,6 @@ impl FitMessageOneDSensorCalibration {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -30213,11 +30035,11 @@ impl fmt::Display for FitMessagePowerZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessagePowerZone")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.high_value, "high_value", false, f);
+        fmt_message_field!(self.high_value, "high_value", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -30273,11 +30095,11 @@ impl FitMessagePowerZone {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -30328,11 +30150,6 @@ impl FitMessagePowerZone {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -30428,139 +30245,139 @@ impl fmt::Display for FitMessageRecord {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageRecord")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.position_lat, "position_lat", true, f);
+        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
         
-        fmt_message_field!(self.position_long, "position_long", true, f);
+        fmt_message_field!(self.position_long, "position_long", true, f)?;
         
-        fmt_message_field!(self.altitude, "altitude", true, f);
+        fmt_message_field!(self.altitude, "altitude", true, f)?;
         
-        fmt_message_field!(self.heart_rate, "heart_rate", false, f);
+        fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
         
-        fmt_message_field!(self.cadence, "cadence", false, f);
+        fmt_message_field!(self.cadence, "cadence", false, f)?;
         
-        fmt_message_field!(self.distance, "distance", true, f);
+        fmt_message_field!(self.distance, "distance", true, f)?;
         
-        fmt_message_field!(self.speed, "speed", true, f);
+        fmt_message_field!(self.speed, "speed", true, f)?;
         
-        fmt_message_field!(self.power, "power", false, f);
+        fmt_message_field!(self.power, "power", false, f)?;
         
-        fmt_message_field!(self.compressed_speed_distance, "compressed_speed_distance", false, f);
+        fmt_message_field!(self.compressed_speed_distance, "compressed_speed_distance", false, f)?;
         
-        fmt_message_field!(self.grade, "grade", true, f);
+        fmt_message_field!(self.grade, "grade", true, f)?;
         
-        fmt_message_field!(self.resistance, "resistance", false, f);
+        fmt_message_field!(self.resistance, "resistance", false, f)?;
         
-        fmt_message_field!(self.time_from_course, "time_from_course", true, f);
+        fmt_message_field!(self.time_from_course, "time_from_course", true, f)?;
         
-        fmt_message_field!(self.cycle_length, "cycle_length", true, f);
+        fmt_message_field!(self.cycle_length, "cycle_length", true, f)?;
         
-        fmt_message_field!(self.temperature, "temperature", false, f);
+        fmt_message_field!(self.temperature, "temperature", false, f)?;
         
-        fmt_message_field!(self.speed_1s, "speed_1s", true, f);
+        fmt_message_field!(self.speed_1s, "speed_1s", true, f)?;
         
-        fmt_message_field!(self.cycles, "cycles", false, f);
+        fmt_message_field!(self.cycles, "cycles", false, f)?;
         
-        fmt_message_field!(self.total_cycles, "total_cycles", false, f);
+        fmt_message_field!(self.total_cycles, "total_cycles", false, f)?;
         
-        fmt_message_field!(self.compressed_accumulated_power, "compressed_accumulated_power", false, f);
+        fmt_message_field!(self.compressed_accumulated_power, "compressed_accumulated_power", false, f)?;
         
-        fmt_message_field!(self.accumulated_power, "accumulated_power", false, f);
+        fmt_message_field!(self.accumulated_power, "accumulated_power", false, f)?;
         
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
         
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
         
-        fmt_message_field!(self.vertical_speed, "vertical_speed", true, f);
+        fmt_message_field!(self.vertical_speed, "vertical_speed", true, f)?;
         
-        fmt_message_field!(self.calories, "calories", false, f);
+        fmt_message_field!(self.calories, "calories", false, f)?;
         
-        fmt_message_field!(self.vertical_oscillation, "vertical_oscillation", true, f);
+        fmt_message_field!(self.vertical_oscillation, "vertical_oscillation", true, f)?;
         
-        fmt_message_field!(self.stance_time_percent, "stance_time_percent", true, f);
+        fmt_message_field!(self.stance_time_percent, "stance_time_percent", true, f)?;
         
-        fmt_message_field!(self.stance_time, "stance_time", true, f);
+        fmt_message_field!(self.stance_time, "stance_time", true, f)?;
         
-        fmt_message_field!(self.activity_type, "activity_type", false, f);
+        fmt_message_field!(self.activity_type, "activity_type", false, f)?;
         
-        fmt_message_field!(self.left_torque_effectiveness, "left_torque_effectiveness", true, f);
+        fmt_message_field!(self.left_torque_effectiveness, "left_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.right_torque_effectiveness, "right_torque_effectiveness", true, f);
+        fmt_message_field!(self.right_torque_effectiveness, "right_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.left_pedal_smoothness, "left_pedal_smoothness", true, f);
+        fmt_message_field!(self.left_pedal_smoothness, "left_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.right_pedal_smoothness, "right_pedal_smoothness", true, f);
+        fmt_message_field!(self.right_pedal_smoothness, "right_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.combined_pedal_smoothness, "combined_pedal_smoothness", true, f);
+        fmt_message_field!(self.combined_pedal_smoothness, "combined_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.time128, "time128", true, f);
+        fmt_message_field!(self.time128, "time128", true, f)?;
         
-        fmt_message_field!(self.stroke_type, "stroke_type", false, f);
+        fmt_message_field!(self.stroke_type, "stroke_type", false, f)?;
         
-        fmt_message_field!(self.zone, "zone", false, f);
+        fmt_message_field!(self.zone, "zone", false, f)?;
         
-        fmt_message_field!(self.ball_speed, "ball_speed", true, f);
+        fmt_message_field!(self.ball_speed, "ball_speed", true, f)?;
         
-        fmt_message_field!(self.cadence256, "cadence256", true, f);
+        fmt_message_field!(self.cadence256, "cadence256", true, f)?;
         
-        fmt_message_field!(self.fractional_cadence, "fractional_cadence", true, f);
+        fmt_message_field!(self.fractional_cadence, "fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.total_hemoglobin_conc, "total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.total_hemoglobin_conc, "total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.total_hemoglobin_conc_min, "total_hemoglobin_conc_min", true, f);
+        fmt_message_field!(self.total_hemoglobin_conc_min, "total_hemoglobin_conc_min", true, f)?;
         
-        fmt_message_field!(self.total_hemoglobin_conc_max, "total_hemoglobin_conc_max", true, f);
+        fmt_message_field!(self.total_hemoglobin_conc_max, "total_hemoglobin_conc_max", true, f)?;
         
-        fmt_message_field!(self.saturated_hemoglobin_percent, "saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.saturated_hemoglobin_percent, "saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.saturated_hemoglobin_percent_min, "saturated_hemoglobin_percent_min", true, f);
+        fmt_message_field!(self.saturated_hemoglobin_percent_min, "saturated_hemoglobin_percent_min", true, f)?;
         
-        fmt_message_field!(self.saturated_hemoglobin_percent_max, "saturated_hemoglobin_percent_max", true, f);
+        fmt_message_field!(self.saturated_hemoglobin_percent_max, "saturated_hemoglobin_percent_max", true, f)?;
         
-        fmt_message_field!(self.device_index, "device_index", false, f);
+        fmt_message_field!(self.device_index, "device_index", false, f)?;
         
-        fmt_message_field!(self.left_pco, "left_pco", false, f);
+        fmt_message_field!(self.left_pco, "left_pco", false, f)?;
         
-        fmt_message_field!(self.right_pco, "right_pco", false, f);
+        fmt_message_field!(self.right_pco, "right_pco", false, f)?;
         
-        fmt_message_field!(self.left_power_phase, "left_power_phase", true, f);
+        fmt_message_field!(self.left_power_phase, "left_power_phase", true, f)?;
         
-        fmt_message_field!(self.left_power_phase_peak, "left_power_phase_peak", true, f);
+        fmt_message_field!(self.left_power_phase_peak, "left_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.right_power_phase, "right_power_phase", true, f);
+        fmt_message_field!(self.right_power_phase, "right_power_phase", true, f)?;
         
-        fmt_message_field!(self.right_power_phase_peak, "right_power_phase_peak", true, f);
+        fmt_message_field!(self.right_power_phase_peak, "right_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.enhanced_speed, "enhanced_speed", true, f);
+        fmt_message_field!(self.enhanced_speed, "enhanced_speed", true, f)?;
         
-        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", true, f);
+        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", true, f)?;
         
-        fmt_message_field!(self.battery_soc, "battery_soc", true, f);
+        fmt_message_field!(self.battery_soc, "battery_soc", true, f)?;
         
-        fmt_message_field!(self.motor_power, "motor_power", false, f);
+        fmt_message_field!(self.motor_power, "motor_power", false, f)?;
         
-        fmt_message_field!(self.vertical_ratio, "vertical_ratio", true, f);
+        fmt_message_field!(self.vertical_ratio, "vertical_ratio", true, f)?;
         
-        fmt_message_field!(self.stance_time_balance, "stance_time_balance", true, f);
+        fmt_message_field!(self.stance_time_balance, "stance_time_balance", true, f)?;
         
-        fmt_message_field!(self.step_length, "step_length", true, f);
+        fmt_message_field!(self.step_length, "step_length", true, f)?;
         
-        fmt_message_field!(self.absolute_pressure, "absolute_pressure", false, f);
+        fmt_message_field!(self.absolute_pressure, "absolute_pressure", false, f)?;
         
-        fmt_message_field!(self.depth, "depth", true, f);
+        fmt_message_field!(self.depth, "depth", true, f)?;
         
-        fmt_message_field!(self.next_stop_depth, "next_stop_depth", true, f);
+        fmt_message_field!(self.next_stop_depth, "next_stop_depth", true, f)?;
         
-        fmt_message_field!(self.next_stop_time, "next_stop_time", true, f);
+        fmt_message_field!(self.next_stop_time, "next_stop_time", true, f)?;
         
-        fmt_message_field!(self.time_to_surface, "time_to_surface", true, f);
+        fmt_message_field!(self.time_to_surface, "time_to_surface", true, f)?;
         
-        fmt_message_field!(self.ndl_time, "ndl_time", true, f);
+        fmt_message_field!(self.ndl_time, "ndl_time", true, f)?;
         
-        fmt_message_field!(self.cns_load, "cns_load", false, f);
+        fmt_message_field!(self.cns_load, "cns_load", false, f)?;
         
-        fmt_message_field!(self.n2_load, "n2_load", true, f);
+        fmt_message_field!(self.n2_load, "n2_load", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -30746,11 +30563,11 @@ impl FitMessageRecord {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -30793,9 +30610,9 @@ impl FitMessageRecord {
                     2 => {  // altitude
                         message.altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(78, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(78, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(78, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -30821,9 +30638,9 @@ impl FitMessageRecord {
                     6 => {  // speed
                         message.speed.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(73, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(73, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(73, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -30837,9 +30654,9 @@ impl FitMessageRecord {
                     8 => {  // compressed_speed_distance
                         message.compressed_speed_distance.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(6, 2, 132, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(5, 4, 134, message.definition_message.endianness, 12, 12)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(6, 2, 132, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(5, 4, 134, message.definition_message.endianness, 12, 12)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(6, 2, 132, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(5, 4, 134, message.definition_message.endianness, 12, 12)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -30883,9 +30700,9 @@ impl FitMessageRecord {
                     18 => {  // cycles
                         message.cycles.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(19, 4, 134, message.definition_message.endianness, 0, 8)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(19, 4, 134, message.definition_message.endianness, 0, 8)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(19, 4, 134, message.definition_message.endianness, 0, 8)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -30899,9 +30716,9 @@ impl FitMessageRecord {
                     28 => {  // compressed_accumulated_power
                         message.compressed_accumulated_power.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(29, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(29, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(29, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -31205,11 +31022,6 @@ impl FitMessageRecord {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -31286,19 +31098,19 @@ impl fmt::Display for FitMessageSchedule {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSchedule")?;
         
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f);
+        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
         
-        fmt_message_field!(self.serial_number, "serial_number", false, f);
+        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
         
-        fmt_message_field!(self.time_created, "time_created", false, f);
+        fmt_message_field!(self.time_created, "time_created", false, f)?;
         
-        fmt_message_field!(self.completed, "completed", false, f);
+        fmt_message_field!(self.completed, "completed", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.scheduled_time, "scheduled_time", false, f);
+        fmt_message_field!(self.scheduled_time, "scheduled_time", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -31377,11 +31189,11 @@ impl FitMessageSchedule {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -31450,11 +31262,6 @@ impl FitMessageSchedule {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -31491,21 +31298,21 @@ impl fmt::Display for FitMessageSdmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSdmProfile")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.sdm_ant_id, "sdm_ant_id", false, f);
+        fmt_message_field!(self.sdm_ant_id, "sdm_ant_id", false, f)?;
         
-        fmt_message_field!(self.sdm_cal_factor, "sdm_cal_factor", true, f);
+        fmt_message_field!(self.sdm_cal_factor, "sdm_cal_factor", true, f)?;
         
-        fmt_message_field!(self.odometer, "odometer", true, f);
+        fmt_message_field!(self.odometer, "odometer", true, f)?;
         
-        fmt_message_field!(self.speed_source, "speed_source", false, f);
+        fmt_message_field!(self.speed_source, "speed_source", false, f)?;
         
-        fmt_message_field!(self.sdm_ant_id_trans_type, "sdm_ant_id_trans_type", false, f);
+        fmt_message_field!(self.sdm_ant_id_trans_type, "sdm_ant_id_trans_type", false, f)?;
         
-        fmt_message_field!(self.odometer_rollover, "odometer_rollover", false, f);
+        fmt_message_field!(self.odometer_rollover, "odometer_rollover", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -31571,11 +31378,11 @@ impl FitMessageSdmProfile {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -31656,11 +31463,6 @@ impl FitMessageSdmProfile {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -31698,23 +31500,23 @@ impl fmt::Display for FitMessageSegmentFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentFile")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.file_uuid, "file_uuid", false, f);
+        fmt_message_field!(self.file_uuid, "file_uuid", false, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.user_profile_primary_key, "user_profile_primary_key", false, f);
+        fmt_message_field!(self.user_profile_primary_key, "user_profile_primary_key", false, f)?;
         
-        fmt_message_field!(self.leader_type, "leader_type", false, f);
+        fmt_message_field!(self.leader_type, "leader_type", false, f)?;
         
-        fmt_message_field!(self.leader_group_primary_key, "leader_group_primary_key", false, f);
+        fmt_message_field!(self.leader_group_primary_key, "leader_group_primary_key", false, f)?;
         
-        fmt_message_field!(self.leader_activity_id, "leader_activity_id", false, f);
+        fmt_message_field!(self.leader_activity_id, "leader_activity_id", false, f)?;
         
-        fmt_message_field!(self.leader_activity_id_string, "leader_activity_id_string", false, f);
+        fmt_message_field!(self.leader_activity_id_string, "leader_activity_id_string", false, f)?;
         
-        fmt_message_field!(self.default_race_leader, "default_race_leader", false, f);
+        fmt_message_field!(self.default_race_leader, "default_race_leader", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -31782,11 +31584,11 @@ impl FitMessageSegmentFile {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -31873,11 +31675,6 @@ impl FitMessageSegmentFile {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -31915,23 +31712,23 @@ impl fmt::Display for FitMessageSegmentId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentId")?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.uuid, "uuid", false, f);
+        fmt_message_field!(self.uuid, "uuid", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.enabled, "enabled", false, f);
+        fmt_message_field!(self.enabled, "enabled", false, f)?;
         
-        fmt_message_field!(self.user_profile_primary_key, "user_profile_primary_key", false, f);
+        fmt_message_field!(self.user_profile_primary_key, "user_profile_primary_key", false, f)?;
         
-        fmt_message_field!(self.device_id, "device_id", false, f);
+        fmt_message_field!(self.device_id, "device_id", false, f)?;
         
-        fmt_message_field!(self.default_race_leader, "default_race_leader", false, f);
+        fmt_message_field!(self.default_race_leader, "default_race_leader", false, f)?;
         
-        fmt_message_field!(self.delete_status, "delete_status", false, f);
+        fmt_message_field!(self.delete_status, "delete_status", false, f)?;
         
-        fmt_message_field!(self.selection_type, "selection_type", false, f);
+        fmt_message_field!(self.selection_type, "selection_type", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -31999,11 +31796,11 @@ impl FitMessageSegmentId {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -32090,11 +31887,6 @@ impl FitMessageSegmentId {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -32234,177 +32026,177 @@ impl fmt::Display for FitMessageSegmentLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentLap")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.event, "event", false, f);
+        fmt_message_field!(self.event, "event", false, f)?;
         
-        fmt_message_field!(self.event_type, "event_type", false, f);
+        fmt_message_field!(self.event_type, "event_type", false, f)?;
         
-        fmt_message_field!(self.start_time, "start_time", false, f);
+        fmt_message_field!(self.start_time, "start_time", false, f)?;
         
-        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f)?;
         
-        fmt_message_field!(self.start_position_long, "start_position_long", true, f);
+        fmt_message_field!(self.start_position_long, "start_position_long", true, f)?;
         
-        fmt_message_field!(self.end_position_lat, "end_position_lat", true, f);
+        fmt_message_field!(self.end_position_lat, "end_position_lat", true, f)?;
         
-        fmt_message_field!(self.end_position_long, "end_position_long", true, f);
+        fmt_message_field!(self.end_position_long, "end_position_long", true, f)?;
         
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
         
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
         
-        fmt_message_field!(self.total_distance, "total_distance", true, f);
+        fmt_message_field!(self.total_distance, "total_distance", true, f)?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles", self.total_cycles)?;
         
-        fmt_message_field!(self.total_calories, "total_calories", false, f);
+        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
         
-        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f);
+        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f)?;
         
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f);
+        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
         
-        fmt_message_field!(self.max_speed, "max_speed", true, f);
+        fmt_message_field!(self.max_speed, "max_speed", true, f)?;
         
-        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f)?;
         
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
         
-        fmt_message_field!(self.avg_cadence, "avg_cadence", false, f);
+        fmt_message_field!(self.avg_cadence, "avg_cadence", false, f)?;
         
-        fmt_message_field!(self.max_cadence, "max_cadence", false, f);
+        fmt_message_field!(self.max_cadence, "max_cadence", false, f)?;
         
-        fmt_message_field!(self.avg_power, "avg_power", false, f);
+        fmt_message_field!(self.avg_power, "avg_power", false, f)?;
         
-        fmt_message_field!(self.max_power, "max_power", false, f);
+        fmt_message_field!(self.max_power, "max_power", false, f)?;
         
-        fmt_message_field!(self.total_ascent, "total_ascent", false, f);
+        fmt_message_field!(self.total_ascent, "total_ascent", false, f)?;
         
-        fmt_message_field!(self.total_descent, "total_descent", false, f);
+        fmt_message_field!(self.total_descent, "total_descent", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.event_group, "event_group", false, f);
+        fmt_message_field!(self.event_group, "event_group", false, f)?;
         
-        fmt_message_field!(self.nec_lat, "nec_lat", true, f);
+        fmt_message_field!(self.nec_lat, "nec_lat", true, f)?;
         
-        fmt_message_field!(self.nec_long, "nec_long", true, f);
+        fmt_message_field!(self.nec_long, "nec_long", true, f)?;
         
-        fmt_message_field!(self.swc_lat, "swc_lat", true, f);
+        fmt_message_field!(self.swc_lat, "swc_lat", true, f)?;
         
-        fmt_message_field!(self.swc_long, "swc_long", true, f);
+        fmt_message_field!(self.swc_long, "swc_long", true, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.normalized_power, "normalized_power", false, f);
+        fmt_message_field!(self.normalized_power, "normalized_power", false, f)?;
         
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.total_work, "total_work", false, f);
+        fmt_message_field!(self.total_work, "total_work", false, f)?;
         
-        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f);
+        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f)?;
         
-        fmt_message_field!(self.max_altitude, "max_altitude", true, f);
+        fmt_message_field!(self.max_altitude, "max_altitude", true, f)?;
         
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
         
-        fmt_message_field!(self.avg_grade, "avg_grade", true, f);
+        fmt_message_field!(self.avg_grade, "avg_grade", true, f)?;
         
-        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f);
+        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f)?;
         
-        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f);
+        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f)?;
         
-        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f);
+        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f)?;
         
-        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f);
+        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f)?;
         
-        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f);
+        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f)?;
         
-        fmt_message_field!(self.max_temperature, "max_temperature", false, f);
+        fmt_message_field!(self.max_temperature, "max_temperature", false, f)?;
         
-        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f)?;
         
-        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", true, f);
+        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", true, f);
+        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", true, f);
+        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", true, f);
+        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f);
+        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f);
+        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f);
+        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f);
+        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f)?;
         
-        fmt_message_field!(self.repetition_num, "repetition_num", false, f);
+        fmt_message_field!(self.repetition_num, "repetition_num", false, f)?;
         
-        fmt_message_field!(self.min_altitude, "min_altitude", true, f);
+        fmt_message_field!(self.min_altitude, "min_altitude", true, f)?;
         
-        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f);
+        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f)?;
         
-        fmt_message_field!(self.active_time, "active_time", true, f);
+        fmt_message_field!(self.active_time, "active_time", true, f)?;
         
-        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f);
+        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f)?;
         
-        fmt_message_field!(self.sport_event, "sport_event", false, f);
+        fmt_message_field!(self.sport_event, "sport_event", false, f)?;
         
-        fmt_message_field!(self.avg_left_torque_effectiveness, "avg_left_torque_effectiveness", true, f);
+        fmt_message_field!(self.avg_left_torque_effectiveness, "avg_left_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.avg_right_torque_effectiveness, "avg_right_torque_effectiveness", true, f);
+        fmt_message_field!(self.avg_right_torque_effectiveness, "avg_right_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.avg_left_pedal_smoothness, "avg_left_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_left_pedal_smoothness, "avg_left_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.avg_right_pedal_smoothness, "avg_right_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_right_pedal_smoothness, "avg_right_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.avg_combined_pedal_smoothness, "avg_combined_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_combined_pedal_smoothness, "avg_combined_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.status, "status", false, f);
+        fmt_message_field!(self.status, "status", false, f)?;
         
-        fmt_message_field!(self.uuid, "uuid", false, f);
+        fmt_message_field!(self.uuid, "uuid", false, f)?;
         
-        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", true, f);
+        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", true, f);
+        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", true, f);
+        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", true, f)?;
         
-        fmt_message_field!(self.front_gear_shift_count, "front_gear_shift_count", false, f);
+        fmt_message_field!(self.front_gear_shift_count, "front_gear_shift_count", false, f)?;
         
-        fmt_message_field!(self.rear_gear_shift_count, "rear_gear_shift_count", false, f);
+        fmt_message_field!(self.rear_gear_shift_count, "rear_gear_shift_count", false, f)?;
         
-        fmt_message_field!(self.time_standing, "time_standing", true, f);
+        fmt_message_field!(self.time_standing, "time_standing", true, f)?;
         
-        fmt_message_field!(self.stand_count, "stand_count", false, f);
+        fmt_message_field!(self.stand_count, "stand_count", false, f)?;
         
-        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f);
+        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f)?;
         
-        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f);
+        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f)?;
         
-        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f);
+        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f)?;
         
-        fmt_message_field!(self.avg_left_power_phase_peak, "avg_left_power_phase_peak", true, f);
+        fmt_message_field!(self.avg_left_power_phase_peak, "avg_left_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f);
+        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f)?;
         
-        fmt_message_field!(self.avg_right_power_phase_peak, "avg_right_power_phase_peak", true, f);
+        fmt_message_field!(self.avg_right_power_phase_peak, "avg_right_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f);
+        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f)?;
         
-        fmt_message_field!(self.max_power_position, "max_power_position", false, f);
+        fmt_message_field!(self.max_power_position, "max_power_position", false, f)?;
         
-        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f);
+        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f)?;
         
-        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f);
+        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f)?;
         
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f);
+        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -32643,11 +32435,11 @@ impl FitMessageSegmentLap {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -33190,11 +32982,6 @@ impl FitMessageSegmentLap {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -33230,19 +33017,19 @@ impl fmt::Display for FitMessageSegmentLeaderboardEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentLeaderboardEntry")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.group_primary_key, "group_primary_key", false, f);
+        fmt_message_field!(self.group_primary_key, "group_primary_key", false, f)?;
         
-        fmt_message_field!(self.activity_id, "activity_id", false, f);
+        fmt_message_field!(self.activity_id, "activity_id", false, f)?;
         
-        fmt_message_field!(self.segment_time, "segment_time", true, f);
+        fmt_message_field!(self.segment_time, "segment_time", true, f)?;
         
-        fmt_message_field!(self.activity_id_string, "activity_id_string", false, f);
+        fmt_message_field!(self.activity_id_string, "activity_id_string", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -33306,11 +33093,11 @@ impl FitMessageSegmentLeaderboardEntry {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -33385,11 +33172,6 @@ impl FitMessageSegmentLeaderboardEntry {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -33424,17 +33206,17 @@ impl fmt::Display for FitMessageSegmentPoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentPoint")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.position_lat, "position_lat", true, f);
+        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
         
-        fmt_message_field!(self.position_long, "position_long", true, f);
+        fmt_message_field!(self.position_long, "position_long", true, f)?;
         
-        fmt_message_field!(self.distance, "distance", true, f);
+        fmt_message_field!(self.distance, "distance", true, f)?;
         
-        fmt_message_field!(self.altitude, "altitude", true, f);
+        fmt_message_field!(self.altitude, "altitude", true, f)?;
         
-        fmt_message_field!(self.leader_time, "leader_time", true, f);
+        fmt_message_field!(self.leader_time, "leader_time", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -33496,11 +33278,11 @@ impl FitMessageSegmentPoint {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -33569,11 +33351,6 @@ impl FitMessageSegmentPoint {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -33801,243 +33578,243 @@ impl fmt::Display for FitMessageSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSession")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.event, "event", false, f);
+        fmt_message_field!(self.event, "event", false, f)?;
         
-        fmt_message_field!(self.event_type, "event_type", false, f);
+        fmt_message_field!(self.event_type, "event_type", false, f)?;
         
-        fmt_message_field!(self.start_time, "start_time", false, f);
+        fmt_message_field!(self.start_time, "start_time", false, f)?;
         
-        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f)?;
         
-        fmt_message_field!(self.start_position_long, "start_position_long", true, f);
+        fmt_message_field!(self.start_position_long, "start_position_long", true, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
         
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
         
-        fmt_message_field!(self.total_distance, "total_distance", true, f);
+        fmt_message_field!(self.total_distance, "total_distance", true, f)?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles", self.total_cycles)?;
         
-        fmt_message_field!(self.total_calories, "total_calories", false, f);
+        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
         
-        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f);
+        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f)?;
         
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f);
+        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
         
-        fmt_message_field!(self.max_speed, "max_speed", true, f);
+        fmt_message_field!(self.max_speed, "max_speed", true, f)?;
         
-        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f)?;
         
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "avg_cadence_subfield_bytes", self.avg_cadence_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "avg_cadence", self.avg_cadence)?;
         writeln!(f, "  {: >28}: {:?}", "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "max_cadence", self.max_cadence)?;
         
-        fmt_message_field!(self.avg_power, "avg_power", false, f);
+        fmt_message_field!(self.avg_power, "avg_power", false, f)?;
         
-        fmt_message_field!(self.max_power, "max_power", false, f);
+        fmt_message_field!(self.max_power, "max_power", false, f)?;
         
-        fmt_message_field!(self.total_ascent, "total_ascent", false, f);
+        fmt_message_field!(self.total_ascent, "total_ascent", false, f)?;
         
-        fmt_message_field!(self.total_descent, "total_descent", false, f);
+        fmt_message_field!(self.total_descent, "total_descent", false, f)?;
         
-        fmt_message_field!(self.total_training_effect, "total_training_effect", false, f);
+        fmt_message_field!(self.total_training_effect, "total_training_effect", false, f)?;
         
-        fmt_message_field!(self.first_lap_index, "first_lap_index", false, f);
+        fmt_message_field!(self.first_lap_index, "first_lap_index", false, f)?;
         
-        fmt_message_field!(self.num_laps, "num_laps", false, f);
+        fmt_message_field!(self.num_laps, "num_laps", false, f)?;
         
-        fmt_message_field!(self.event_group, "event_group", false, f);
+        fmt_message_field!(self.event_group, "event_group", false, f)?;
         
-        fmt_message_field!(self.trigger, "trigger", false, f);
+        fmt_message_field!(self.trigger, "trigger", false, f)?;
         
-        fmt_message_field!(self.nec_lat, "nec_lat", true, f);
+        fmt_message_field!(self.nec_lat, "nec_lat", true, f)?;
         
-        fmt_message_field!(self.nec_long, "nec_long", true, f);
+        fmt_message_field!(self.nec_long, "nec_long", true, f)?;
         
-        fmt_message_field!(self.swc_lat, "swc_lat", true, f);
+        fmt_message_field!(self.swc_lat, "swc_lat", true, f)?;
         
-        fmt_message_field!(self.swc_long, "swc_long", true, f);
+        fmt_message_field!(self.swc_long, "swc_long", true, f)?;
         
-        fmt_message_field!(self.normalized_power, "normalized_power", false, f);
+        fmt_message_field!(self.normalized_power, "normalized_power", false, f)?;
         
-        fmt_message_field!(self.training_stress_score, "training_stress_score", true, f);
+        fmt_message_field!(self.training_stress_score, "training_stress_score", true, f)?;
         
-        fmt_message_field!(self.intensity_factor, "intensity_factor", true, f);
+        fmt_message_field!(self.intensity_factor, "intensity_factor", true, f)?;
         
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
         
-        fmt_message_field!(self.avg_stroke_count, "avg_stroke_count", true, f);
+        fmt_message_field!(self.avg_stroke_count, "avg_stroke_count", true, f)?;
         
-        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", true, f);
+        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", true, f)?;
         
-        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f);
+        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f)?;
         
-        fmt_message_field!(self.pool_length, "pool_length", true, f);
+        fmt_message_field!(self.pool_length, "pool_length", true, f)?;
         
-        fmt_message_field!(self.threshold_power, "threshold_power", false, f);
+        fmt_message_field!(self.threshold_power, "threshold_power", false, f)?;
         
-        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f);
+        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f)?;
         
-        fmt_message_field!(self.num_active_lengths, "num_active_lengths", false, f);
+        fmt_message_field!(self.num_active_lengths, "num_active_lengths", false, f)?;
         
-        fmt_message_field!(self.total_work, "total_work", false, f);
+        fmt_message_field!(self.total_work, "total_work", false, f)?;
         
-        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f);
+        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f)?;
         
-        fmt_message_field!(self.max_altitude, "max_altitude", true, f);
+        fmt_message_field!(self.max_altitude, "max_altitude", true, f)?;
         
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
         
-        fmt_message_field!(self.avg_grade, "avg_grade", true, f);
+        fmt_message_field!(self.avg_grade, "avg_grade", true, f)?;
         
-        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f);
+        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f)?;
         
-        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f);
+        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f)?;
         
-        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f);
+        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f)?;
         
-        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f);
+        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f)?;
         
-        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f);
+        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f)?;
         
-        fmt_message_field!(self.max_temperature, "max_temperature", false, f);
+        fmt_message_field!(self.max_temperature, "max_temperature", false, f)?;
         
-        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f)?;
         
-        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", true, f);
+        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", true, f);
+        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", true, f);
+        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", true, f);
+        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", true, f)?;
         
-        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f);
+        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f)?;
         
-        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f);
+        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f);
+        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f);
+        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f)?;
         
-        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f);
+        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f)?;
         
-        fmt_message_field!(self.avg_lap_time, "avg_lap_time", true, f);
+        fmt_message_field!(self.avg_lap_time, "avg_lap_time", true, f)?;
         
-        fmt_message_field!(self.best_lap_index, "best_lap_index", false, f);
+        fmt_message_field!(self.best_lap_index, "best_lap_index", false, f)?;
         
-        fmt_message_field!(self.min_altitude, "min_altitude", true, f);
+        fmt_message_field!(self.min_altitude, "min_altitude", true, f)?;
         
-        fmt_message_field!(self.player_score, "player_score", false, f);
+        fmt_message_field!(self.player_score, "player_score", false, f)?;
         
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f);
+        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
         
-        fmt_message_field!(self.opponent_name, "opponent_name", false, f);
+        fmt_message_field!(self.opponent_name, "opponent_name", false, f)?;
         
-        fmt_message_field!(self.stroke_count, "stroke_count", false, f);
+        fmt_message_field!(self.stroke_count, "stroke_count", false, f)?;
         
-        fmt_message_field!(self.zone_count, "zone_count", false, f);
+        fmt_message_field!(self.zone_count, "zone_count", false, f)?;
         
-        fmt_message_field!(self.max_ball_speed, "max_ball_speed", true, f);
+        fmt_message_field!(self.max_ball_speed, "max_ball_speed", true, f)?;
         
-        fmt_message_field!(self.avg_ball_speed, "avg_ball_speed", true, f);
+        fmt_message_field!(self.avg_ball_speed, "avg_ball_speed", true, f)?;
         
-        fmt_message_field!(self.avg_vertical_oscillation, "avg_vertical_oscillation", true, f);
+        fmt_message_field!(self.avg_vertical_oscillation, "avg_vertical_oscillation", true, f)?;
         
-        fmt_message_field!(self.avg_stance_time_percent, "avg_stance_time_percent", true, f);
+        fmt_message_field!(self.avg_stance_time_percent, "avg_stance_time_percent", true, f)?;
         
-        fmt_message_field!(self.avg_stance_time, "avg_stance_time", true, f);
+        fmt_message_field!(self.avg_stance_time, "avg_stance_time", true, f)?;
         
-        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", true, f);
+        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", true, f);
+        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", true, f)?;
         
-        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", true, f);
+        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", true, f)?;
         
-        fmt_message_field!(self.avg_total_hemoglobin_conc, "avg_total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.avg_total_hemoglobin_conc, "avg_total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.min_total_hemoglobin_conc, "min_total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.min_total_hemoglobin_conc, "min_total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.max_total_hemoglobin_conc, "max_total_hemoglobin_conc", true, f);
+        fmt_message_field!(self.max_total_hemoglobin_conc, "max_total_hemoglobin_conc", true, f)?;
         
-        fmt_message_field!(self.avg_saturated_hemoglobin_percent, "avg_saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.avg_saturated_hemoglobin_percent, "avg_saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.min_saturated_hemoglobin_percent, "min_saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.min_saturated_hemoglobin_percent, "min_saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.max_saturated_hemoglobin_percent, "max_saturated_hemoglobin_percent", true, f);
+        fmt_message_field!(self.max_saturated_hemoglobin_percent, "max_saturated_hemoglobin_percent", true, f)?;
         
-        fmt_message_field!(self.avg_left_torque_effectiveness, "avg_left_torque_effectiveness", true, f);
+        fmt_message_field!(self.avg_left_torque_effectiveness, "avg_left_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.avg_right_torque_effectiveness, "avg_right_torque_effectiveness", true, f);
+        fmt_message_field!(self.avg_right_torque_effectiveness, "avg_right_torque_effectiveness", true, f)?;
         
-        fmt_message_field!(self.avg_left_pedal_smoothness, "avg_left_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_left_pedal_smoothness, "avg_left_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.avg_right_pedal_smoothness, "avg_right_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_right_pedal_smoothness, "avg_right_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.avg_combined_pedal_smoothness, "avg_combined_pedal_smoothness", true, f);
+        fmt_message_field!(self.avg_combined_pedal_smoothness, "avg_combined_pedal_smoothness", true, f)?;
         
-        fmt_message_field!(self.sport_index, "sport_index", false, f);
+        fmt_message_field!(self.sport_index, "sport_index", false, f)?;
         
-        fmt_message_field!(self.time_standing, "time_standing", true, f);
+        fmt_message_field!(self.time_standing, "time_standing", true, f)?;
         
-        fmt_message_field!(self.stand_count, "stand_count", false, f);
+        fmt_message_field!(self.stand_count, "stand_count", false, f)?;
         
-        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f);
+        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f)?;
         
-        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f);
+        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f)?;
         
-        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f);
+        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f)?;
         
-        fmt_message_field!(self.avg_left_power_phase_peak, "avg_left_power_phase_peak", true, f);
+        fmt_message_field!(self.avg_left_power_phase_peak, "avg_left_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f);
+        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f)?;
         
-        fmt_message_field!(self.avg_right_power_phase_peak, "avg_right_power_phase_peak", true, f);
+        fmt_message_field!(self.avg_right_power_phase_peak, "avg_right_power_phase_peak", true, f)?;
         
-        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f);
+        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f)?;
         
-        fmt_message_field!(self.max_power_position, "max_power_position", false, f);
+        fmt_message_field!(self.max_power_position, "max_power_position", false, f)?;
         
-        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f);
+        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f)?;
         
-        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f);
+        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f)?;
         
-        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", true, f);
+        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", true, f)?;
         
-        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", true, f);
+        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", true, f)?;
         
-        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", true, f);
+        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", true, f)?;
         
-        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", true, f);
+        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", true, f)?;
         
-        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", true, f);
+        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", true, f)?;
         
-        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", false, f);
+        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", false, f)?;
         
-        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", false, f);
+        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", false, f)?;
         
-        fmt_message_field!(self.lev_battery_consumption, "lev_battery_consumption", true, f);
+        fmt_message_field!(self.lev_battery_consumption, "lev_battery_consumption", true, f)?;
         
-        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", true, f);
+        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", true, f)?;
         
-        fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", true, f);
+        fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", true, f)?;
         
-        fmt_message_field!(self.avg_step_length, "avg_step_length", true, f);
+        fmt_message_field!(self.avg_step_length, "avg_step_length", true, f)?;
         
-        fmt_message_field!(self.total_anaerobic_training_effect, "total_anaerobic_training_effect", false, f);
+        fmt_message_field!(self.total_anaerobic_training_effect, "total_anaerobic_training_effect", false, f)?;
         
-        fmt_message_field!(self.avg_vam, "avg_vam", true, f);
+        fmt_message_field!(self.avg_vam, "avg_vam", true, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -34358,11 +34135,11 @@ impl FitMessageSession {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -34471,9 +34248,9 @@ impl FitMessageSession {
                     14 => {  // avg_speed
                         message.avg_speed.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(124, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(124, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(124, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -34481,9 +34258,9 @@ impl FitMessageSession {
                     15 => {  // max_speed
                         message.max_speed.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(125, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(125, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(125, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -34653,9 +34430,9 @@ impl FitMessageSession {
                     49 => {  // avg_altitude
                         message.avg_altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(126, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(126, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(126, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -34663,9 +34440,9 @@ impl FitMessageSession {
                     50 => {  // max_altitude
                         message.max_altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(128, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(128, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(128, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -34793,9 +34570,9 @@ impl FitMessageSession {
                     71 => {  // min_altitude
                         message.min_altitude.parse(parse_input, parse_config)?;
                         
-                        let components = vec![FitParseConfig::new_from_component(127, 4, 134, message.definition_message.endianness, 0, 16)];
-                        let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
-                        actions.extend(actions_extend);
+                        //let components = vec![FitParseConfig::new_from_component(127, 4, 134, message.definition_message.endianness, 0, 16)];
+                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
+                        actions.extend(vec![FitParseConfig::new_from_component(127, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
                         //saved_outp = &inp[parse_config.field_size()..];
                     },
@@ -35111,11 +34888,6 @@ impl FitMessageSession {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -35155,27 +34927,27 @@ impl fmt::Display for FitMessageSet {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSet")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.duration, "duration", true, f);
+        fmt_message_field!(self.duration, "duration", true, f)?;
         
-        fmt_message_field!(self.repetitions, "repetitions", false, f);
+        fmt_message_field!(self.repetitions, "repetitions", false, f)?;
         
-        fmt_message_field!(self.weight, "weight", true, f);
+        fmt_message_field!(self.weight, "weight", true, f)?;
         
-        fmt_message_field!(self.set_type, "set_type", false, f);
+        fmt_message_field!(self.set_type, "set_type", false, f)?;
         
-        fmt_message_field!(self.start_time, "start_time", false, f);
+        fmt_message_field!(self.start_time, "start_time", false, f)?;
         
-        fmt_message_field!(self.category, "category", false, f);
+        fmt_message_field!(self.category, "category", false, f)?;
         
-        fmt_message_field!(self.category_subtype, "category_subtype", false, f);
+        fmt_message_field!(self.category_subtype, "category_subtype", false, f)?;
         
-        fmt_message_field!(self.weight_display_unit, "weight_display_unit", false, f);
+        fmt_message_field!(self.weight_display_unit, "weight_display_unit", false, f)?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f);
+        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -35249,11 +35021,11 @@ impl FitMessageSet {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -35352,11 +35124,6 @@ impl FitMessageSet {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -35428,7 +35195,7 @@ impl fmt::Display for FitMessageSlaveDevice {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSlaveDevice")?;
         
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f);
+        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
         
@@ -35499,11 +35266,11 @@ impl FitMessageSlaveDevice {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -35542,11 +35309,6 @@ impl FitMessageSlaveDevice {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -35578,11 +35340,11 @@ impl fmt::Display for FitMessageSoftware {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSoftware")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.version, "version", false, f);
+        fmt_message_field!(self.version, "version", false, f)?;
         
-        fmt_message_field!(self.part_number, "part_number", false, f);
+        fmt_message_field!(self.part_number, "part_number", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -35638,11 +35400,11 @@ impl FitMessageSoftware {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -35693,11 +35455,6 @@ impl FitMessageSoftware {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -35729,11 +35486,11 @@ impl fmt::Display for FitMessageSpeedZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSpeedZone")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.high_value, "high_value", true, f);
+        fmt_message_field!(self.high_value, "high_value", true, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -35789,11 +35546,11 @@ impl FitMessageSpeedZone {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -35844,11 +35601,6 @@ impl FitMessageSpeedZone {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -35880,11 +35632,11 @@ impl fmt::Display for FitMessageSport {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSport")?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.name, "name", false, f);
+        fmt_message_field!(self.name, "name", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -35940,11 +35692,11 @@ impl FitMessageSport {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -35995,11 +35747,6 @@ impl FitMessageSport {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -36030,9 +35777,9 @@ impl fmt::Display for FitMessageStressLevel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageStressLevel")?;
         
-        fmt_message_field!(self.stress_level_value, "stress_level_value", false, f);
+        fmt_message_field!(self.stress_level_value, "stress_level_value", false, f)?;
         
-        fmt_message_field!(self.stress_level_time, "stress_level_time", false, f);
+        fmt_message_field!(self.stress_level_time, "stress_level_time", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -36086,11 +35833,11 @@ impl FitMessageStressLevel {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -36135,11 +35882,6 @@ impl FitMessageStressLevel {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -36206,19 +35948,19 @@ impl fmt::Display for FitMessageThreeDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageThreeDSensorCalibration")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.sensor_type, "sensor_type", false, f);
+        fmt_message_field!(self.sensor_type, "sensor_type", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "calibration_factor_subfield_bytes", self.calibration_factor_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "calibration_factor", self.calibration_factor)?;
         
-        fmt_message_field!(self.calibration_divisor, "calibration_divisor", false, f);
+        fmt_message_field!(self.calibration_divisor, "calibration_divisor", false, f)?;
         
-        fmt_message_field!(self.level_shift, "level_shift", false, f);
+        fmt_message_field!(self.level_shift, "level_shift", false, f)?;
         
-        fmt_message_field!(self.offset_cal, "offset_cal", false, f);
+        fmt_message_field!(self.offset_cal, "offset_cal", false, f)?;
         
-        fmt_message_field!(self.orientation_matrix, "orientation_matrix", false, f);
+        fmt_message_field!(self.orientation_matrix, "orientation_matrix", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -36299,11 +36041,11 @@ impl FitMessageThreeDSensorCalibration {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -36372,11 +36114,6 @@ impl FitMessageThreeDSensorCalibration {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -36412,19 +36149,19 @@ impl fmt::Display for FitMessageTimestampCorrelation {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTimestampCorrelation")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
         
-        fmt_message_field!(self.system_timestamp, "system_timestamp", false, f);
+        fmt_message_field!(self.system_timestamp, "system_timestamp", false, f)?;
         
-        fmt_message_field!(self.fractional_system_timestamp, "fractional_system_timestamp", true, f);
+        fmt_message_field!(self.fractional_system_timestamp, "fractional_system_timestamp", true, f)?;
         
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.system_timestamp_ms, "system_timestamp_ms", false, f);
+        fmt_message_field!(self.system_timestamp_ms, "system_timestamp_ms", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -36490,11 +36227,11 @@ impl FitMessageTimestampCorrelation {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -36569,11 +36306,6 @@ impl FitMessageTimestampCorrelation {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -36612,25 +36344,25 @@ impl fmt::Display for FitMessageTotals {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTotals")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timer_time, "timer_time", false, f);
+        fmt_message_field!(self.timer_time, "timer_time", false, f)?;
         
-        fmt_message_field!(self.distance, "distance", false, f);
+        fmt_message_field!(self.distance, "distance", false, f)?;
         
-        fmt_message_field!(self.calories, "calories", false, f);
+        fmt_message_field!(self.calories, "calories", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.elapsed_time, "elapsed_time", false, f);
+        fmt_message_field!(self.elapsed_time, "elapsed_time", false, f)?;
         
-        fmt_message_field!(self.sessions, "sessions", false, f);
+        fmt_message_field!(self.sessions, "sessions", false, f)?;
         
-        fmt_message_field!(self.active_time, "active_time", false, f);
+        fmt_message_field!(self.active_time, "active_time", false, f)?;
         
-        fmt_message_field!(self.sport_index, "sport_index", false, f);
+        fmt_message_field!(self.sport_index, "sport_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -36702,11 +36434,11 @@ impl FitMessageTotals {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -36799,11 +36531,6 @@ impl FitMessageTotals {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -36879,17 +36606,17 @@ impl fmt::Display for FitMessageTrainingFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTrainingFile")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f);
+        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "product_subfield_bytes", self.product_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
         
-        fmt_message_field!(self.serial_number, "serial_number", false, f);
+        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
         
-        fmt_message_field!(self.time_created, "time_created", false, f);
+        fmt_message_field!(self.time_created, "time_created", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -36968,11 +36695,11 @@ impl FitMessageTrainingFile {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -37035,11 +36762,6 @@ impl FitMessageTrainingFile {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -37097,63 +36819,63 @@ impl fmt::Display for FitMessageUserProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageUserProfile")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.friendly_name, "friendly_name", false, f);
+        fmt_message_field!(self.friendly_name, "friendly_name", false, f)?;
         
-        fmt_message_field!(self.gender, "gender", false, f);
+        fmt_message_field!(self.gender, "gender", false, f)?;
         
-        fmt_message_field!(self.age, "age", false, f);
+        fmt_message_field!(self.age, "age", false, f)?;
         
-        fmt_message_field!(self.height, "height", true, f);
+        fmt_message_field!(self.height, "height", true, f)?;
         
-        fmt_message_field!(self.weight, "weight", true, f);
+        fmt_message_field!(self.weight, "weight", true, f)?;
         
-        fmt_message_field!(self.language, "language", false, f);
+        fmt_message_field!(self.language, "language", false, f)?;
         
-        fmt_message_field!(self.elev_setting, "elev_setting", false, f);
+        fmt_message_field!(self.elev_setting, "elev_setting", false, f)?;
         
-        fmt_message_field!(self.weight_setting, "weight_setting", false, f);
+        fmt_message_field!(self.weight_setting, "weight_setting", false, f)?;
         
-        fmt_message_field!(self.resting_heart_rate, "resting_heart_rate", false, f);
+        fmt_message_field!(self.resting_heart_rate, "resting_heart_rate", false, f)?;
         
-        fmt_message_field!(self.default_max_running_heart_rate, "default_max_running_heart_rate", false, f);
+        fmt_message_field!(self.default_max_running_heart_rate, "default_max_running_heart_rate", false, f)?;
         
-        fmt_message_field!(self.default_max_biking_heart_rate, "default_max_biking_heart_rate", false, f);
+        fmt_message_field!(self.default_max_biking_heart_rate, "default_max_biking_heart_rate", false, f)?;
         
-        fmt_message_field!(self.default_max_heart_rate, "default_max_heart_rate", false, f);
+        fmt_message_field!(self.default_max_heart_rate, "default_max_heart_rate", false, f)?;
         
-        fmt_message_field!(self.hr_setting, "hr_setting", false, f);
+        fmt_message_field!(self.hr_setting, "hr_setting", false, f)?;
         
-        fmt_message_field!(self.speed_setting, "speed_setting", false, f);
+        fmt_message_field!(self.speed_setting, "speed_setting", false, f)?;
         
-        fmt_message_field!(self.dist_setting, "dist_setting", false, f);
+        fmt_message_field!(self.dist_setting, "dist_setting", false, f)?;
         
-        fmt_message_field!(self.power_setting, "power_setting", false, f);
+        fmt_message_field!(self.power_setting, "power_setting", false, f)?;
         
-        fmt_message_field!(self.activity_class, "activity_class", false, f);
+        fmt_message_field!(self.activity_class, "activity_class", false, f)?;
         
-        fmt_message_field!(self.position_setting, "position_setting", false, f);
+        fmt_message_field!(self.position_setting, "position_setting", false, f)?;
         
-        fmt_message_field!(self.temperature_setting, "temperature_setting", false, f);
+        fmt_message_field!(self.temperature_setting, "temperature_setting", false, f)?;
         
-        fmt_message_field!(self.local_id, "local_id", false, f);
+        fmt_message_field!(self.local_id, "local_id", false, f)?;
         
-        fmt_message_field!(self.global_id, "global_id", false, f);
+        fmt_message_field!(self.global_id, "global_id", false, f)?;
         
-        fmt_message_field!(self.wake_time, "wake_time", false, f);
+        fmt_message_field!(self.wake_time, "wake_time", false, f)?;
         
-        fmt_message_field!(self.sleep_time, "sleep_time", false, f);
+        fmt_message_field!(self.sleep_time, "sleep_time", false, f)?;
         
-        fmt_message_field!(self.height_setting, "height_setting", false, f);
+        fmt_message_field!(self.height_setting, "height_setting", false, f)?;
         
-        fmt_message_field!(self.user_running_step_length, "user_running_step_length", true, f);
+        fmt_message_field!(self.user_running_step_length, "user_running_step_length", true, f)?;
         
-        fmt_message_field!(self.user_walking_step_length, "user_walking_step_length", true, f);
+        fmt_message_field!(self.user_walking_step_length, "user_walking_step_length", true, f)?;
         
-        fmt_message_field!(self.depth_setting, "depth_setting", false, f);
+        fmt_message_field!(self.depth_setting, "depth_setting", false, f)?;
         
-        fmt_message_field!(self.dive_count, "dive_count", false, f);
+        fmt_message_field!(self.dive_count, "dive_count", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -37261,11 +36983,11 @@ impl FitMessageUserProfile {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -37472,11 +37194,6 @@ impl FitMessageUserProfile {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -37508,11 +37225,11 @@ impl fmt::Display for FitMessageVideo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideo")?;
         
-        fmt_message_field!(self.url, "url", false, f);
+        fmt_message_field!(self.url, "url", false, f)?;
         
-        fmt_message_field!(self.hosting_provider, "hosting_provider", false, f);
+        fmt_message_field!(self.hosting_provider, "hosting_provider", false, f)?;
         
-        fmt_message_field!(self.duration, "duration", false, f);
+        fmt_message_field!(self.duration, "duration", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -37568,11 +37285,11 @@ impl FitMessageVideo {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -37623,11 +37340,6 @@ impl FitMessageVideo {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -37663,19 +37375,19 @@ impl fmt::Display for FitMessageVideoClip {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoClip")?;
         
-        fmt_message_field!(self.clip_number, "clip_number", false, f);
+        fmt_message_field!(self.clip_number, "clip_number", false, f)?;
         
-        fmt_message_field!(self.start_timestamp, "start_timestamp", false, f);
+        fmt_message_field!(self.start_timestamp, "start_timestamp", false, f)?;
         
-        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", false, f);
+        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.end_timestamp, "end_timestamp", false, f);
+        fmt_message_field!(self.end_timestamp, "end_timestamp", false, f)?;
         
-        fmt_message_field!(self.end_timestamp_ms, "end_timestamp_ms", false, f);
+        fmt_message_field!(self.end_timestamp_ms, "end_timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.clip_start, "clip_start", false, f);
+        fmt_message_field!(self.clip_start, "clip_start", false, f)?;
         
-        fmt_message_field!(self.clip_end, "clip_end", false, f);
+        fmt_message_field!(self.clip_end, "clip_end", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -37739,11 +37451,11 @@ impl FitMessageVideoClip {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -37818,11 +37530,6 @@ impl FitMessageVideoClip {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -37854,11 +37561,11 @@ impl fmt::Display for FitMessageVideoDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoDescription")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.message_count, "message_count", false, f);
+        fmt_message_field!(self.message_count, "message_count", false, f)?;
         
-        fmt_message_field!(self.text, "text", false, f);
+        fmt_message_field!(self.text, "text", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -37914,11 +37621,11 @@ impl FitMessageVideoDescription {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -37969,11 +37676,6 @@ impl FitMessageVideoDescription {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -38005,11 +37707,11 @@ impl fmt::Display for FitMessageVideoFrame {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoFrame")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
         
-        fmt_message_field!(self.frame_number, "frame_number", false, f);
+        fmt_message_field!(self.frame_number, "frame_number", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -38067,11 +37769,11 @@ impl FitMessageVideoFrame {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -38122,11 +37824,6 @@ impl FitMessageVideoFrame {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -38158,11 +37855,11 @@ impl fmt::Display for FitMessageVideoTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoTitle")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.message_count, "message_count", false, f);
+        fmt_message_field!(self.message_count, "message_count", false, f)?;
         
-        fmt_message_field!(self.text, "text", false, f);
+        fmt_message_field!(self.text, "text", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -38218,11 +37915,11 @@ impl FitMessageVideoTitle {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -38273,11 +37970,6 @@ impl FitMessageVideoTitle {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -38295,8 +37987,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    DigitalLayout(FitFieldDigitalWatchfaceLayout),
     AnalogLayout(FitFieldAnalogWatchfaceLayout),
+    DigitalLayout(FitFieldDigitalWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -38340,9 +38032,9 @@ impl fmt::Display for FitMessageWatchfaceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWatchfaceSettings")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.mode, "mode", false, f);
+        fmt_message_field!(self.mode, "mode", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "layout_subfield_bytes", self.layout_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "layout", self.layout)?;
         
@@ -38415,11 +38107,11 @@ impl FitMessageWatchfaceSettings {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -38464,11 +38156,6 @@ impl FitMessageWatchfaceSettings {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -38503,17 +38190,17 @@ impl fmt::Display for FitMessageWeatherAlert {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeatherAlert")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.report_id, "report_id", false, f);
+        fmt_message_field!(self.report_id, "report_id", false, f)?;
         
-        fmt_message_field!(self.issue_time, "issue_time", false, f);
+        fmt_message_field!(self.issue_time, "issue_time", false, f)?;
         
-        fmt_message_field!(self.expire_time, "expire_time", false, f);
+        fmt_message_field!(self.expire_time, "expire_time", false, f)?;
         
-        fmt_message_field!(self.severity, "severity", false, f);
+        fmt_message_field!(self.severity, "severity", false, f)?;
         
-        fmt_message_field!(self.ftype, "ftype", false, f);
+        fmt_message_field!(self.ftype, "ftype", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -38577,11 +38264,11 @@ impl FitMessageWeatherAlert {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -38650,11 +38337,6 @@ impl FitMessageWeatherAlert {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -38699,37 +38381,37 @@ impl fmt::Display for FitMessageWeatherConditions {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeatherConditions")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.weather_report, "weather_report", false, f);
+        fmt_message_field!(self.weather_report, "weather_report", false, f)?;
         
-        fmt_message_field!(self.temperature, "temperature", false, f);
+        fmt_message_field!(self.temperature, "temperature", false, f)?;
         
-        fmt_message_field!(self.condition, "condition", false, f);
+        fmt_message_field!(self.condition, "condition", false, f)?;
         
-        fmt_message_field!(self.wind_direction, "wind_direction", false, f);
+        fmt_message_field!(self.wind_direction, "wind_direction", false, f)?;
         
-        fmt_message_field!(self.wind_speed, "wind_speed", true, f);
+        fmt_message_field!(self.wind_speed, "wind_speed", true, f)?;
         
-        fmt_message_field!(self.precipitation_probability, "precipitation_probability", false, f);
+        fmt_message_field!(self.precipitation_probability, "precipitation_probability", false, f)?;
         
-        fmt_message_field!(self.temperature_feels_like, "temperature_feels_like", false, f);
+        fmt_message_field!(self.temperature_feels_like, "temperature_feels_like", false, f)?;
         
-        fmt_message_field!(self.relative_humidity, "relative_humidity", false, f);
+        fmt_message_field!(self.relative_humidity, "relative_humidity", false, f)?;
         
-        fmt_message_field!(self.location, "location", false, f);
+        fmt_message_field!(self.location, "location", false, f)?;
         
-        fmt_message_field!(self.observed_at_time, "observed_at_time", false, f);
+        fmt_message_field!(self.observed_at_time, "observed_at_time", false, f)?;
         
-        fmt_message_field!(self.observed_location_lat, "observed_location_lat", true, f);
+        fmt_message_field!(self.observed_location_lat, "observed_location_lat", true, f)?;
         
-        fmt_message_field!(self.observed_location_long, "observed_location_long", true, f);
+        fmt_message_field!(self.observed_location_long, "observed_location_long", true, f)?;
         
-        fmt_message_field!(self.day_of_week, "day_of_week", false, f);
+        fmt_message_field!(self.day_of_week, "day_of_week", false, f)?;
         
-        fmt_message_field!(self.high_temperature, "high_temperature", false, f);
+        fmt_message_field!(self.high_temperature, "high_temperature", false, f)?;
         
-        fmt_message_field!(self.low_temperature, "low_temperature", false, f);
+        fmt_message_field!(self.low_temperature, "low_temperature", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -38813,11 +38495,11 @@ impl FitMessageWeatherConditions {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -38946,11 +38628,6 @@ impl FitMessageWeatherConditions {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -38992,31 +38669,31 @@ impl fmt::Display for FitMessageWeightScale {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeightScale")?;
         
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
         
-        fmt_message_field!(self.weight, "weight", false, f);
+        fmt_message_field!(self.weight, "weight", false, f)?;
         
-        fmt_message_field!(self.percent_fat, "percent_fat", true, f);
+        fmt_message_field!(self.percent_fat, "percent_fat", true, f)?;
         
-        fmt_message_field!(self.percent_hydration, "percent_hydration", true, f);
+        fmt_message_field!(self.percent_hydration, "percent_hydration", true, f)?;
         
-        fmt_message_field!(self.visceral_fat_mass, "visceral_fat_mass", true, f);
+        fmt_message_field!(self.visceral_fat_mass, "visceral_fat_mass", true, f)?;
         
-        fmt_message_field!(self.bone_mass, "bone_mass", true, f);
+        fmt_message_field!(self.bone_mass, "bone_mass", true, f)?;
         
-        fmt_message_field!(self.muscle_mass, "muscle_mass", true, f);
+        fmt_message_field!(self.muscle_mass, "muscle_mass", true, f)?;
         
-        fmt_message_field!(self.basal_met, "basal_met", true, f);
+        fmt_message_field!(self.basal_met, "basal_met", true, f)?;
         
-        fmt_message_field!(self.physique_rating, "physique_rating", false, f);
+        fmt_message_field!(self.physique_rating, "physique_rating", false, f)?;
         
-        fmt_message_field!(self.active_met, "active_met", true, f);
+        fmt_message_field!(self.active_met, "active_met", true, f)?;
         
-        fmt_message_field!(self.metabolic_age, "metabolic_age", false, f);
+        fmt_message_field!(self.metabolic_age, "metabolic_age", false, f)?;
         
-        fmt_message_field!(self.visceral_fat_rating, "visceral_fat_rating", false, f);
+        fmt_message_field!(self.visceral_fat_rating, "visceral_fat_rating", false, f)?;
         
-        fmt_message_field!(self.user_profile_index, "user_profile_index", false, f);
+        fmt_message_field!(self.user_profile_index, "user_profile_index", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -39094,11 +38771,11 @@ impl FitMessageWeightScale {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -39209,11 +38886,6 @@ impl FitMessageWeightScale {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -39249,19 +38921,19 @@ impl fmt::Display for FitMessageWorkout {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkout")?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.capabilities, "capabilities", false, f);
+        fmt_message_field!(self.capabilities, "capabilities", false, f)?;
         
-        fmt_message_field!(self.num_valid_steps, "num_valid_steps", false, f);
+        fmt_message_field!(self.num_valid_steps, "num_valid_steps", false, f)?;
         
-        fmt_message_field!(self.wkt_name, "wkt_name", false, f);
+        fmt_message_field!(self.wkt_name, "wkt_name", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.pool_length, "pool_length", true, f);
+        fmt_message_field!(self.pool_length, "pool_length", true, f)?;
         
-        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f);
+        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -39325,11 +38997,11 @@ impl FitMessageWorkout {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -39404,11 +39076,6 @@ impl FitMessageWorkout {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -39444,19 +39111,19 @@ impl fmt::Display for FitMessageWorkoutSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkoutSession")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.sport, "sport", false, f);
+        fmt_message_field!(self.sport, "sport", false, f)?;
         
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f);
+        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
         
-        fmt_message_field!(self.num_valid_steps, "num_valid_steps", false, f);
+        fmt_message_field!(self.num_valid_steps, "num_valid_steps", false, f)?;
         
-        fmt_message_field!(self.first_step_index, "first_step_index", false, f);
+        fmt_message_field!(self.first_step_index, "first_step_index", false, f)?;
         
-        fmt_message_field!(self.pool_length, "pool_length", true, f);
+        fmt_message_field!(self.pool_length, "pool_length", true, f)?;
         
-        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f);
+        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -39520,11 +39187,11 @@ impl FitMessageWorkoutSession {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -39599,11 +39266,6 @@ impl FitMessageWorkoutSession {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -39621,13 +39283,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationDistance(FitUint32),
     DurationStep(FitUint32),
     DurationReps(FitUint32),
-    DurationPower(FitFieldWorkoutPower),
-    DurationHr(FitFieldWorkoutHr),
+    DurationDistance(FitUint32),
     DurationTime(FitUint32),
+    DurationHr(FitFieldWorkoutHr),
     DurationCalories(FitUint32),
+    DurationPower(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -39731,17 +39393,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetPowerZone(FitUint32),
+    TargetHrZone(FitUint32),
     RepeatPower(FitFieldWorkoutPower),
     TargetStrokeType(FitFieldSwimStroke),
-    TargetHrZone(FitUint32),
-    RepeatTime(FitUint32),
     RepeatSteps(FitUint32),
-    TargetSpeedZone(FitUint32),
-    TargetCadenceZone(FitUint32),
-    RepeatDistance(FitUint32),
+    RepeatTime(FitUint32),
     RepeatHr(FitFieldWorkoutHr),
+    RepeatDistance(FitUint32),
+    TargetCadenceZone(FitUint32),
+    TargetSpeedZone(FitUint32),
     RepeatCalories(FitUint32),
+    TargetPowerZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -39831,9 +39493,9 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetSpeedLow(FitUint32),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -39872,10 +39534,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetSpeedHigh(FitUint32),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
-    CustomTargetCadenceHigh(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetCadenceHigh(FitUint32),
+    CustomTargetSpeedHigh(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -39944,15 +39606,15 @@ impl fmt::Display for FitMessageWorkoutStep {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkoutStep")?;
         
-        fmt_message_field!(self.message_index, "message_index", false, f);
+        fmt_message_field!(self.message_index, "message_index", false, f)?;
         
-        fmt_message_field!(self.wkt_step_name, "wkt_step_name", false, f);
+        fmt_message_field!(self.wkt_step_name, "wkt_step_name", false, f)?;
         
-        fmt_message_field!(self.duration_type, "duration_type", false, f);
+        fmt_message_field!(self.duration_type, "duration_type", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "duration_value_subfield_bytes", self.duration_value_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "duration_value", self.duration_value)?;
         
-        fmt_message_field!(self.target_type, "target_type", false, f);
+        fmt_message_field!(self.target_type, "target_type", false, f)?;
         writeln!(f, "  {: >28}: {:?}", "target_value_subfield_bytes", self.target_value_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "target_value", self.target_value)?;
         writeln!(f, "  {: >28}: {:?}", "custom_target_value_low_subfield_bytes", self.custom_target_value_low_subfield_bytes)?;
@@ -39960,19 +39622,19 @@ impl fmt::Display for FitMessageWorkoutStep {
         writeln!(f, "  {: >28}: {:?}", "custom_target_value_high_subfield_bytes", self.custom_target_value_high_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "custom_target_value_high", self.custom_target_value_high)?;
         
-        fmt_message_field!(self.intensity, "intensity", false, f);
+        fmt_message_field!(self.intensity, "intensity", false, f)?;
         
-        fmt_message_field!(self.notes, "notes", false, f);
+        fmt_message_field!(self.notes, "notes", false, f)?;
         
-        fmt_message_field!(self.equipment, "equipment", false, f);
+        fmt_message_field!(self.equipment, "equipment", false, f)?;
         
-        fmt_message_field!(self.exercise_category, "exercise_category", false, f);
+        fmt_message_field!(self.exercise_category, "exercise_category", false, f)?;
         
-        fmt_message_field!(self.exercise_name, "exercise_name", false, f);
+        fmt_message_field!(self.exercise_name, "exercise_name", false, f)?;
         
-        fmt_message_field!(self.exercise_weight, "exercise_weight", true, f);
+        fmt_message_field!(self.exercise_weight, "exercise_weight", true, f)?;
         
-        fmt_message_field!(self.weight_display_unit, "weight_display_unit", false, f);
+        fmt_message_field!(self.weight_display_unit, "weight_display_unit", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -40091,11 +39753,11 @@ impl FitMessageWorkoutStep {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -40194,11 +39856,6 @@ impl FitMessageWorkoutStep {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }
@@ -40232,15 +39889,15 @@ impl fmt::Display for FitMessageZonesTarget {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageZonesTarget")?;
         
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
         
-        fmt_message_field!(self.threshold_heart_rate, "threshold_heart_rate", false, f);
+        fmt_message_field!(self.threshold_heart_rate, "threshold_heart_rate", false, f)?;
         
-        fmt_message_field!(self.functional_threshold_power, "functional_threshold_power", false, f);
+        fmt_message_field!(self.functional_threshold_power, "functional_threshold_power", false, f)?;
         
-        fmt_message_field!(self.hr_calc_type, "hr_calc_type", false, f);
+        fmt_message_field!(self.hr_calc_type, "hr_calc_type", false, f)?;
         
-        fmt_message_field!(self.pwr_calc_type, "pwr_calc_type", false, f);
+        fmt_message_field!(self.pwr_calc_type, "pwr_calc_type", false, f)?;
         
             
         fmt_unknown_fields!(self, f);
@@ -40300,11 +39957,11 @@ impl FitMessageZonesTarget {
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
-            let mut actions: Vec<(FitParseConfig, bool)> = vec![(FitParseConfig::new(*field, message.definition_message.endianness, tz_offset), true)];
-            let should_advance_inp = false;
+            let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
+            //let should_advance_inp = false;
 
             while actions.len() > 0 {
-                let (parse_config, advance_inp) = actions.remove(0);
+                let parse_config = actions.remove(0);
                 let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
 
                 let mut parse_input = inp;
@@ -40367,11 +40024,6 @@ impl FitMessageZonesTarget {
                     //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
-
-                //if advance_inp == true {
-                //    inp = &inp[parse_config.field_size()..];
-                //    //saved_outp = &inp[parse_config.field_size()..];
-                //}
             }
             //inp = saved_outp;
         }

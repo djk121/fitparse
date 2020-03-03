@@ -824,12 +824,12 @@ pub struct FitMessageHr {
 impl fmt::Display for FitMessageHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHr")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f);
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f);
-        fmt_message_field!(self.time256, "time256", true, f);
-        fmt_message_field!(self.filtered_bpm, "filtered_bpm", false, f);
-        fmt_message_field!(self.event_timestamp, "event_timestamp", true, f);
-        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", true, f);
+        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
+        fmt_message_field!(self.time256, "time256", true, f)?;
+        fmt_message_field!(self.filtered_bpm, "filtered_bpm", false, f)?;
+        fmt_message_field!(self.event_timestamp, "event_timestamp", true, f)?;
+        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", true, f)?;
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
