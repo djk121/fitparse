@@ -109,7 +109,7 @@ fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> 
 
     let mut len = input.len();
     if len == 0 {
-        return res
+        return res;
     }
 
     len = len - 1;
@@ -193,9 +193,7 @@ macro_rules! nom_internal_parser {
     ($func:ident, $input:expr, $invalid_field_value:expr, $endianness:expr) => {
         match $func($input, $endianness) {
             nom::IResult::Done(_, f) => match f == $invalid_field_value {
-                true => {
-                    Err(Error::parse_invalid_field_value())
-                },
+                true => Err(Error::parse_invalid_field_value()),
                 false => Ok(f),
             },
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
@@ -228,12 +226,10 @@ macro_rules! nom_internal_parser {
 macro_rules! nom_internal_nonzero_parser {
     ($func:ident, $input:expr) => {
         match nom_internal_parser!($func, $input)? {
-            (num, _) => {
-                match num {
-                    0 => Err(Error::parse_invalid_field_value()),
-                    _ => Ok(num),
-                }
-            }
+            (num, _) => match num {
+                0 => Err(Error::parse_invalid_field_value()),
+                _ => Ok(num),
+            },
         }
     };
     ($func:ident, $input:expr, $endianness:expr) => {
@@ -276,9 +272,19 @@ macro_rules! nom_parser {
         pub fn parse_sint16(input: &[u8], parse_config: FitParseConfig) -> Result<i16> {
             if input.len() < 2 {
                 let inp = buffer(input, 2, parse_config.endianness());
-                nom_internal_parser!(parse_sint16_internal, &inp, 0x7FFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_sint16_internal,
+                    &inp,
+                    0x7FFF,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_sint16_internal, input, 0x7FFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_sint16_internal,
+                    input,
+                    0x7FFF,
+                    parse_config.endianness()
+                )
             }
         }
     };
@@ -286,9 +292,19 @@ macro_rules! nom_parser {
         pub fn parse_uint16(input: &[u8], parse_config: FitParseConfig) -> Result<u16> {
             if input.len() < 2 {
                 let inp = buffer(input, 2, parse_config.endianness());
-                nom_internal_parser!(parse_uint16_internal, &inp, 0xFFFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint16_internal,
+                    &inp,
+                    0xFFFF,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_uint16_internal, input, 0xFFFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint16_internal,
+                    input,
+                    0xFFFF,
+                    parse_config.endianness()
+                )
             }
         }
     };
@@ -296,9 +312,19 @@ macro_rules! nom_parser {
         pub fn parse_uint16z(input: &[u8], parse_config: FitParseConfig) -> Result<u16> {
             if input.len() < 2 {
                 let inp = buffer(input, 2, parse_config.endianness());
-                nom_internal_parser!(parse_uint16_internal, &inp, 0x0000, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint16_internal,
+                    &inp,
+                    0x0000,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_uint16_internal, input, 0x0000, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint16_internal,
+                    input,
+                    0x0000,
+                    parse_config.endianness()
+                )
             }
         }
     };
@@ -306,9 +332,19 @@ macro_rules! nom_parser {
         pub fn parse_sint32(input: &[u8], parse_config: FitParseConfig) -> Result<i32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
-                nom_internal_parser!(parse_sint32_internal, &inp, 0x7FFFFFFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_sint32_internal,
+                    &inp,
+                    0x7FFFFFFF,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_sint32_internal, input, 0x7FFFFFFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_sint32_internal,
+                    input,
+                    0x7FFFFFFF,
+                    parse_config.endianness()
+                )
             }
         }
     };
@@ -316,9 +352,19 @@ macro_rules! nom_parser {
         pub fn parse_uint32(input: &[u8], parse_config: FitParseConfig) -> Result<u32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
-                nom_internal_parser!(parse_uint32_internal, &inp, 0xFFFFFFFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint32_internal,
+                    &inp,
+                    0xFFFFFFFF,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_uint32_internal, input, 0xFFFFFFFF, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint32_internal,
+                    input,
+                    0xFFFFFFFF,
+                    parse_config.endianness()
+                )
             }
         }
     };
@@ -326,9 +372,19 @@ macro_rules! nom_parser {
         pub fn parse_uint32z(input: &[u8], parse_config: FitParseConfig) -> Result<u32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
-                nom_internal_parser!(parse_uint32_internal, &inp, 0x00000000, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint32_internal,
+                    &inp,
+                    0x00000000,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_uint32_internal, input, 0x00000000, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint32_internal,
+                    input,
+                    0x00000000,
+                    parse_config.endianness()
+                )
             }
         }
     };
@@ -366,9 +422,19 @@ macro_rules! nom_parser {
         pub fn parse_uint64z(input: &[u8], parse_config: FitParseConfig) -> Result<u64> {
             if input.len() < 8 {
                 let inp = buffer(input, 8, parse_config.endianness());
-                nom_internal_parser!(parse_uint64_internal, &inp, 0x0000000000000000, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint64_internal,
+                    &inp,
+                    0x0000000000000000,
+                    parse_config.endianness()
+                )
             } else {
-                nom_internal_parser!(parse_uint64_internal, input, 0x0000000000000000, parse_config.endianness())
+                nom_internal_parser!(
+                    parse_uint64_internal,
+                    input,
+                    0x0000000000000000,
+                    parse_config.endianness()
+                )
             }
         }
     };

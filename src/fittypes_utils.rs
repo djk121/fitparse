@@ -15,12 +15,12 @@ use FitFieldDefinition;
 use FitFieldDeveloperData;
 use FitFieldFitBaseType;
 use FitFieldParseable;
-use {FitFieldBasicValue, FitFieldAdjustedValue};
 use FitParseConfig;
 use FitRecord;
 use FitRecordHeader;
-use {BasicValue, AdjustedValue};
-use {FitUint8, FitUint16, FitUint32, FitFloat64};
+use {AdjustedValue, BasicValue};
+use {FitFieldAdjustedValue, FitFieldBasicValue};
+use {FitFloat64, FitUint16, FitUint32, FitUint8};
 
 #[macro_export]
 macro_rules! vec_fit_field_parseable {
@@ -28,10 +28,10 @@ macro_rules! vec_fit_field_parseable {
         impl FitFieldParseable for Vec<$name> {
             fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<$name>> {
                 let mut num_to_parse = parse_config.num_in_field();
-           
+
                 let mut outp = input;
                 let mut v = vec![];
-        
+
                 while num_to_parse > 0 {
                     let val = $name::parse(outp, parse_config)?;
                     outp = &outp[parse_config.base_type_size()..];
@@ -41,7 +41,7 @@ macro_rules! vec_fit_field_parseable {
                 Ok(v)
             }
         }
-    }
+    };
 }
 
 #[macro_export]
@@ -319,10 +319,10 @@ macro_rules! parse_developer_fields {
                 FitFieldFitBaseType::Uint8 => 2,
                 FitFieldFitBaseType::Sint16 => 131,
                 FitFieldFitBaseType::Uint16 => 132,
-                FitFieldFitBaseType::Sint32 => 133, 
+                FitFieldFitBaseType::Sint32 => 133,
                 FitFieldFitBaseType::Uint32 => 134,
-                FitFieldFitBaseType::String => 7, 
-                FitFieldFitBaseType::Float32 => 136, 
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
                 FitFieldFitBaseType::Float64 => 137,
                 FitFieldFitBaseType::Uint8z => 10,
                 FitFieldFitBaseType::Uint16z => 139,
@@ -331,35 +331,30 @@ macro_rules! parse_developer_fields {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error())
+                _ => return Err(Error::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
 
             let parse_config = FitParseConfig {
-                field_definition:
-                    Some(FitFieldDefinition {
-                            definition_number: def_num,
-                            field_size: dev_field.field_size,
-                            base_type: base_type_num
-                    }),
+                field_definition: Some(FitFieldDefinition {
+                    definition_number: def_num,
+                    field_size: dev_field.field_size,
+                    base_type: base_type_num,
+                }),
                 endianness: Some($message.definition_message.endianness),
                 tz_offset_secs: None,
                 bit_range: None,
             };
 
-            let dd = FitFieldDeveloperData::parse(
-                $inp2,
-                field_description.clone(),
-                parse_config
-            )?;
+            let dd = FitFieldDeveloperData::parse($inp2, field_description.clone(), parse_config)?;
             $message.developer_fields.push(dd);
             // we can run out of input before all fields are consumed. according
             // to the spec, buffering with zero-padded fields is appropriate
             if $inp2.len() < parse_config.field_size() {
                 $inp2 = &$inp2[$inp2.len()..];
             } else {
-                $inp2 = &$inp2[parse_config.field_size()..]; 
+                $inp2 = &$inp2[parse_config.field_size()..];
             }
         }
     };
@@ -375,7 +370,7 @@ macro_rules! parsing_state_set_timestamp {
             None => {
                 let ts = $message.timestamp.get_single()?;
                 $parsing_state.set_last_timestamp(ts);
-            },
+            }
         }
     };
 }
@@ -432,14 +427,16 @@ macro_rules! fmt_raw_bytes {
 macro_rules! fmt_message_field_basic {
     ($thing:expr, $thingname:expr, $f:ident) => {
         let val = match &$thing.value {
-            BasicValue::NotYetParsedSingle | BasicValue::NotYetParsedVec => "not yet parsed".to_string(),
+            BasicValue::NotYetParsedSingle | BasicValue::NotYetParsedVec => {
+                "not yet parsed".to_string()
+            }
             BasicValue::Single(v) => format!("{:?}", v),
             BasicValue::Vec(v) => {
                 let s = "[".to_string();
                 for i in 0..v.len() - 1 {
                     s.push(format!("{}, ", v[i]));
                 }
-                s.push(format!("{}]", v[v.len()-1]));
+                s.push(format!("{}]", v[v.len() - 1]));
                 s
             }
         };
@@ -451,14 +448,16 @@ macro_rules! fmt_message_field_basic {
 macro_rules! fmt_message_field_adjusted {
     ($thing:expr, $thingname:expr, $f:ident) => {
         let val = match &$thing.value {
-            AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => "not yet parsed".to_string(),
+            AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => {
+                "not yet parsed".to_string()
+            }
             AdjustedValue::Single(v) => format!("{:?}", v),
             AdjustedValue::Vec(v) => {
                 let s = "[".to_string();
                 for i in 0..v.len() - 1 {
                     s.push(format!("{}, ", v[i]));
                 }
-                s.push(format!("{}]", v[v.len()-1]));
+                s.push(format!("{}]", v[v.len() - 1]));
                 s
             }
         };
@@ -483,7 +482,6 @@ macro_rules! fmt_message_subfield {
     };
 }
 
-
 #[derive(Copy, Clone, Debug)]
 pub struct FitFieldDateTime {
     seconds_since_garmin_epoch: u32,
@@ -492,7 +490,11 @@ pub struct FitFieldDateTime {
 
 impl fmt::Display for FitFieldDateTime {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "seconds_since_garmin_epoch: {}, rust_time: {}", self.seconds_since_garmin_epoch, self.rust_time)
+        write!(
+            f,
+            "seconds_since_garmin_epoch: {}, rust_time: {}",
+            self.seconds_since_garmin_epoch, self.rust_time
+        )
     }
 }
 
@@ -543,7 +545,11 @@ pub struct FitFieldLocalDateTime {
 
 impl fmt::Display for FitFieldLocalDateTime {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "seconds_since_garmin_epoch: {}, rust_time: {}", self.seconds_since_garmin_epoch, self.rust_time)
+        write!(
+            f,
+            "seconds_since_garmin_epoch: {}, rust_time: {}",
+            self.seconds_since_garmin_epoch, self.rust_time
+        )
     }
 }
 
@@ -663,16 +669,20 @@ impl FitMessageHr {
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
-               
+
                 let alternate_input: Vec<u8>;
                 let mut parse_input = inp;
 
                 if let Some((start, num_bits)) = parse_config.bit_range {
-                    alternate_input = subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?;
+                    alternate_input = subset_with_pad(
+                        &inp[0..parse_config.field_size()],
+                        start,
+                        num_bits,
+                        parse_config.endianness(),
+                    )?;
                     parse_input = &alternate_input;
                 };
-               
+
                 match parse_config.field_definition_number() {
                     253 => {
                         // timestamp
@@ -688,7 +698,8 @@ impl FitMessageHr {
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
-                    1 => { // time256
+                    1 => {
+                        // time256
                         let _components = message.time256.parse(parse_input, parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
 
@@ -704,20 +715,26 @@ impl FitMessageHr {
                         });
                     }
 
-                    6 => { // filtered_bpm
+                    6 => {
+                        // filtered_bpm
                         let _components = message.filtered_bpm.parse(parse_input, parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
-                    9 => { // event_timestamp
-                        let _components = message.event_timestamp.parse(parse_input, parse_config)?;
+                    9 => {
+                        // event_timestamp
+                        let _components =
+                            message.event_timestamp.parse(parse_input, parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
-                    10 => { // event_timestamp_12
-                        let _components = message.event_timestamp_12.parse(parse_input, parse_config)?;
+                    10 => {
+                        // event_timestamp_12
+                        let _components = message
+                            .event_timestamp_12
+                            .parse(parse_input, parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
-                
+
                         // special stuff for FitMessageHr
                         let (current_timestamp, scale) = match message.event_timestamp {
                             FitFieldAdjustedValue {
@@ -728,12 +745,12 @@ impl FitMessageHr {
                                 offset: _,
                             } => {
                                 if cts.len() == 0 {
-                                    return Err(Error::hr_message_timestamp())
+                                    return Err(Error::hr_message_timestamp());
                                 } else {
                                     (<f64>::from(cts[cts.len() - 1].clone()), s)
                                 }
-                            },
-                            _ => return Err(Error::hr_message_timestamp())
+                            }
+                            _ => return Err(Error::hr_message_timestamp()),
                         };
 
                         let range = vec![0, 12, 24, 36, 48, 60, 72, 84, 96, 108];
@@ -764,7 +781,7 @@ impl FitMessageHr {
                                 _ => return Err(Error::hr_message_timestamp()),
                             }
                         }
-                    },
+                    }
 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
@@ -805,9 +822,9 @@ impl From<FitFieldFitBaseType> for u8 {
             FitFieldFitBaseType::Sint64 => 142,
             FitFieldFitBaseType::Uint64 => 143,
             FitFieldFitBaseType::Uint64z => 144,
-            FitFieldFitBaseType::UnknownToSdk => 3, // ?
-            FitFieldFitBaseType::FitBaseType(x) => x, // ?
-            FitFieldFitBaseType::InvalidFieldValue => 4 // ?
+            FitFieldFitBaseType::UnknownToSdk => 3,      // ?
+            FitFieldFitBaseType::FitBaseType(x) => x,    // ?
+            FitFieldFitBaseType::InvalidFieldValue => 4, // ?
         }
     }
 }

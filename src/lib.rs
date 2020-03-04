@@ -1,7 +1,7 @@
 use std::collections::HashMap;
+use std::convert::From;
 use std::ops::Deref;
 use std::rc::Rc;
-use std::convert::From;
 
 use std::fmt;
 
@@ -21,9 +21,9 @@ use conv::*;
 pub use errors::{Error, ErrorKind, Result};
 
 use fitparsers::{
-    parse_byte, parse_enum, parse_float32, parse_float64, parse_sint16, parse_sint32, parse_sint64,
-    parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z,
-    parse_uint64, parse_uint64z, parse_uint8, parse_uint8z, parse_bool
+    parse_bool, parse_byte, parse_enum, parse_float32, parse_float64, parse_sint16, parse_sint32,
+    parse_sint64, parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32,
+    parse_uint32z, parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
 };
 use fitparsingstate::FitParsingState;
 use fittypes::{
@@ -32,7 +32,6 @@ use fittypes::{
 };
 
 use fittypes_utils::FitFieldDateTime;
-
 
 #[derive(Debug, PartialEq)]
 enum FitNormalRecordHeaderMessageType {
@@ -112,7 +111,7 @@ pub struct FitFileHeader {
 impl FitFileHeader {
     pub fn parse(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
         let (ffh, o) = parse_fit_file_header(input)?;
-        return Ok((ffh, o))
+        return Ok((ffh, o));
     }
 }
 
@@ -238,7 +237,8 @@ pub fn parse_fit_message<'a>(
                             // so a value of +15 = (15 increments * 15 minutes * 60 seconds) =
                             // = +13500 seconds
                             if let AdjustedValue::Vec(v) = &time_zone_offset.value {
-                                parsing_state.set_timezone_offset((<f64>::from(v[0].clone()) * 15.0 * 60.0));
+                                parsing_state
+                                    .set_timezone_offset((<f64>::from(v[0].clone()) * 15.0 * 60.0));
                             }
                         }
                     }
@@ -276,14 +276,14 @@ impl<T: FitFieldParseable + Clone> BasicValue<T> {
     fn get_single(&self) -> Result<T> {
         match self {
             BasicValue::Single(x) => Ok(x.clone()),
-            _ => Err(Error::bad_basic_value_call())
+            _ => Err(Error::bad_basic_value_call()),
         }
     }
 
     fn get_vec(&self) -> Result<Vec<T>> {
         match self {
             BasicValue::Vec(x) => Ok(x.to_vec()),
-            _ => Err(Error::bad_basic_value_call())
+            _ => Err(Error::bad_basic_value_call()),
         }
     }
 }
@@ -295,7 +295,6 @@ pub struct FitFieldBasicValue<T: FitFieldParseable + Clone> {
 }
 
 impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
-
     fn new_single(units: String) -> FitFieldBasicValue<T> {
         FitFieldBasicValue {
             value: BasicValue::<T>::NotYetParsedSingle,
@@ -307,7 +306,7 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
         FitFieldBasicValue {
             value: BasicValue::<T>::NotYetParsedVec,
             units: units,
-        }   
+        }
     }
 
     fn parse(&mut self, input: &[u8], parse_config: FitParseConfig) -> Result<()> {
@@ -315,7 +314,7 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
             BasicValue::NotYetParsedSingle | BasicValue::Single(_) => {
                 self.value = BasicValue::Single(T::parse(input, parse_config)?);
                 Ok(())
-            },
+            }
             BasicValue::NotYetParsedVec | BasicValue::Vec(_) => {
                 let mut outp = input;
                 let mut num_to_parse = parse_config.num_in_field();
@@ -334,17 +333,15 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
 
     fn get_single(&self) -> Result<T> {
         match self.value {
-            BasicValue::Single(ref v) => {
-                return Ok(v.clone())
-            },
-            _ => return Err(Error::bad_basic_value_call())
+            BasicValue::Single(ref v) => return Ok(v.clone()),
+            _ => return Err(Error::bad_basic_value_call()),
         }
     }
 
     fn get_vec(&self) -> Result<Vec<T>> {
         match self.value {
             BasicValue::Vec(ref v) => Ok(v.clone()),
-            _ => Err(Error::bad_basic_value_call())
+            _ => Err(Error::bad_basic_value_call()),
         }
     }
 }
@@ -356,20 +353,20 @@ impl<T: fmt::Display + FitFieldParseable + Clone> fmt::Display for FitFieldBasic
             BasicValue::NotYetParsedVec => write!(f, "<not yet parsed, vec>"),
             BasicValue::Single(ref x) => {
                 write!(f, "{}", x)?;
-                if !self.units.is_empty() { 
+                if !self.units.is_empty() {
                     write!(f, " ({})", self.units)?;
                 }
-                return Ok(())
+                return Ok(());
             }
             BasicValue::Vec(ref v) => {
                 write!(f, "[")?;
                 let as_strings: Vec<String> = v.iter().map(|x| x.to_string()).collect();
                 let joined = as_strings.join(", ");
                 write!(f, "{}]", joined)?;
-                if !self.units.is_empty() { 
+                if !self.units.is_empty() {
                     write!(f, " ({})", self.units)?;
                 }
-                return Ok(())
+                return Ok(());
             }
         }
     }
@@ -388,7 +385,7 @@ pub enum PreAdjustedValue<T: FitFieldParseable + FitF64Convertible + Clone> {
     NotYetParsedSingle,
     NotYetParsedVec,
     Single(T),
-    Vec(Vec<T>)
+    Vec(Vec<T>),
 }
 
 #[derive(Debug, PartialEq)]
@@ -400,15 +397,14 @@ pub struct FitFieldAdjustedValue<T: FitFieldParseable + FitF64Convertible + Clon
     pub offset: f64,
 }
 
-impl<T: FitFieldParseable + FitF64Convertible + Clone > FitFieldAdjustedValue<T> {
-
+impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> {
     fn new_single(units: String, scale: f64, offset: f64) -> FitFieldAdjustedValue<T> {
         FitFieldAdjustedValue {
             value: AdjustedValue::NotYetParsedSingle,
             parsed_value: PreAdjustedValue::NotYetParsedSingle,
             units: units,
             scale: scale,
-            offset: offset, 
+            offset: offset,
         }
     }
 
@@ -430,7 +426,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone > FitFieldAdjustedValue<T>
                 self.parsed_value = PreAdjustedValue::Single(x);
                 self.value = val;
                 Ok(())
-            },
+            }
             AdjustedValue::NotYetParsedVec | AdjustedValue::Vec(_) => {
                 let mut outp = input;
                 let mut num_to_parse = parse_config.num_in_field();
@@ -452,7 +448,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone > FitFieldAdjustedValue<T>
 
         // special handling for lat/long; convert from semicircles to degrees
         if self.units == "deg" {
-            return FitFloat64::new(adjusted * (180.0_f64 / 2_f64.powf(31.0)))
+            return FitFloat64::new(adjusted * (180.0_f64 / 2_f64.powf(31.0)));
         }
 
         if self.scale != 1.0 {
@@ -467,52 +463,52 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone > FitFieldAdjustedValue<T>
 
     fn get_single(&self) -> Result<f64> {
         match self.value {
-            AdjustedValue::Single(ref v) => {
-                return Ok(v.to_f64())
-            },
-            _ => return Err(Error::bad_adjusted_value_call())
+            AdjustedValue::Single(ref v) => return Ok(v.to_f64()),
+            _ => return Err(Error::bad_adjusted_value_call()),
         }
     }
 
     fn get_vec(&self) -> Result<Vec<f64>> {
         match self.value {
             AdjustedValue::Vec(ref v) => Ok(v.iter().map(|x| x.to_f64()).collect()),
-            _ => Err(Error::bad_adjusted_value_call())
+            _ => Err(Error::bad_adjusted_value_call()),
         }
     }
 }
 
-impl<T: fmt::Display + FitFieldParseable + FitF64Convertible + Clone> fmt::Display for FitFieldAdjustedValue<T> {
+impl<T: fmt::Display + FitFieldParseable + FitF64Convertible + Clone> fmt::Display
+    for FitFieldAdjustedValue<T>
+{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.value {
             AdjustedValue::NotYetParsedSingle => write!(f, "<not yet parsed, single>"),
             AdjustedValue::NotYetParsedVec => write!(f, "<not yet parsed, vec>"),
             AdjustedValue::Single(ref x) => {
                 write!(f, "{}", x)?;
-                if !self.units.is_empty() { 
+                if !self.units.is_empty() {
                     write!(f, " ({})", self.units)?;
                 }
-                return Ok(())
+                return Ok(());
             }
             AdjustedValue::Vec(ref v) => {
                 write!(f, "[")?;
                 let as_strings: Vec<String> = v.iter().map(|x| x.to_string()).collect();
                 let joined = as_strings.join(", ");
                 write!(f, "{}]", joined)?;
-                if !self.units.is_empty() { 
+                if !self.units.is_empty() {
                     write!(f, " ({})", self.units)?;
                 }
-                return Ok(())
+                return Ok(());
             }
         }
     }
 }
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct FitFieldParseInstruction {
     field_definition: Option<FitFieldDefinition>,
     parse_config: FitParseConfig,
-    bit_range: Option<(usize, usize)>,   
+    bit_range: Option<(usize, usize)>,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -525,7 +521,7 @@ pub struct FitParseConfig {
 
 macro_rules! fit_parse_config {
     ($endianness:expr) => {
-        FitParseConfig { 
+        FitParseConfig {
             field_definition: None,
             endianness: Some($endianness),
             tz_offset_secs: None,
@@ -533,7 +529,7 @@ macro_rules! fit_parse_config {
         }
     };
     ($endianness:expr, $size:expr) => {
-        FitParseConfig { 
+        FitParseConfig {
             field_definition: None,
             endianness: Some($endianness),
             tz_offset_secs: None,
@@ -541,7 +537,7 @@ macro_rules! fit_parse_config {
         }
     };
     ($endianness:expr, $size:expr, $tz_offset_secs:expr) => {
-        FitParseConfig { 
+        FitParseConfig {
             field_definition: None,
             endianness: Some($endianness),
             tz_offset_secs: Some($tz_offset_secs),
@@ -551,9 +547,11 @@ macro_rules! fit_parse_config {
 }
 
 impl FitParseConfig {
-
-    
-    pub fn new(field: FitFieldDefinition, endianness: nom::Endianness, tz_offset: f64) -> FitParseConfig {
+    pub fn new(
+        field: FitFieldDefinition,
+        endianness: nom::Endianness,
+        tz_offset: f64,
+    ) -> FitParseConfig {
         FitParseConfig {
             field_definition: Some(field),
             endianness: Some(endianness),
@@ -562,13 +560,19 @@ impl FitParseConfig {
         }
     }
 
-    pub fn new_from_component(definition_number: u8, field_size: usize, base_type: u8, endianness: nom::Endianness, bit_start: usize, num_bits: usize) -> FitParseConfig {
+    pub fn new_from_component(
+        definition_number: u8,
+        field_size: usize,
+        base_type: u8,
+        endianness: nom::Endianness,
+        bit_start: usize,
+        num_bits: usize,
+    ) -> FitParseConfig {
         FitParseConfig {
-            field_definition: Some(
-                FitFieldDefinition {
-                    definition_number: definition_number,
-                    field_size: field_size,
-                    base_type: base_type
+            field_definition: Some(FitFieldDefinition {
+                definition_number: definition_number,
+                field_size: field_size,
+                base_type: base_type,
             }),
             endianness: Some(endianness),
             tz_offset_secs: None,
@@ -579,14 +583,14 @@ impl FitParseConfig {
     pub fn field_definition_number(&self) -> u8 {
         match self.field_definition {
             None => panic!("called field_definition_number without field_definiton set"),
-            Some(fd) => fd.definition_number
+            Some(fd) => fd.definition_number,
         }
     }
 
     pub fn is_array(&self) -> bool {
         match self.field_definition {
             Some(field) => field.is_array(),
-            None => false
+            None => false,
         }
     }
 
@@ -621,7 +625,6 @@ impl FitParseConfig {
         }
     }
 
-
     pub fn tz_offset_secs(&self) -> f64 {
         match self.tz_offset_secs {
             None => panic!("used empty FitParseConfig.tz_offset_secs"),
@@ -632,9 +635,7 @@ impl FitParseConfig {
     pub fn base_type(&self) -> FitFieldFitBaseType {
         match self.field_definition {
             None => panic!("called FitParseConfig.base_type() without setting field_definition"),
-            Some(v) => {
-                FitFieldFitBaseType::from(v.base_type)
-            }
+            Some(v) => FitFieldFitBaseType::from(v.base_type),
         }
     }
 
@@ -717,7 +718,7 @@ impl FitMessageUnknownToSdk {
                 parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description =
                 dev_data_definition.get_field_description(dev_field.definition_number)?;
-            
+
             let base_type_num = u8::from(field_description.fit_base_type_id.get_single()?);
 
             let field_def = FitFieldDefinition {
@@ -725,19 +726,16 @@ impl FitMessageUnknownToSdk {
                 field_size: dev_field.field_size,
                 base_type: base_type_num,
             };
-            let parse_config = FitParseConfig::new(field_def, message.definition_message.endianness, 0.0);
-            let dd = FitFieldDeveloperData::parse(
-                inp2,
-                field_description.clone(),
-                parse_config
-            )?;
+            let parse_config =
+                FitParseConfig::new(field_def, message.definition_message.endianness, 0.0);
+            let dd = FitFieldDeveloperData::parse(inp2, field_description.clone(), parse_config)?;
             message.developer_fields.push(dd);
             // we can run out of input before all fields are consumed. according
             // to the spec, buffering with zero-padded fields is appropriate
             if inp2.len() < parse_config.field_size() {
                 inp2 = &inp2[inp2.len()..];
             } else {
-                inp2 = &inp2[parse_config.field_size()..]; 
+                inp2 = &inp2[parse_config.field_size()..];
             }
         }
 
@@ -751,11 +749,9 @@ impl FitMessageUnknownToSdk {
     ) -> Result<&'a [u8]> {
         let mut inp = input;
         for field in &message.definition_message.field_definitions {
-            let parse_config = FitParseConfig::new(*field, message.definition_message.endianness, tz_offset);
-            let val = FitBaseValue::parse(
-                inp,
-                parse_config
-            )?;
+            let parse_config =
+                FitParseConfig::new(*field, message.definition_message.endianness, tz_offset);
+            let val = FitBaseValue::parse(inp, parse_config)?;
             inp = &inp[field.field_size..];
             message.unknown_fields.insert(field.definition_number, val);
         }
@@ -783,7 +779,7 @@ impl FitGlobalMesgNum {
         let parse_config = fit_parse_config!(endianness);
         let (raw_num, o) = match parse_uint16(input, parse_config) {
             Err(_) => return Err(Error::parse_error("error parsing FitGlobalMesgNum")),
-            Ok(raw_num) => (raw_num, &input[2..])
+            Ok(raw_num) => (raw_num, &input[2..]),
         };
 
         match FitFieldMesgNum::from(raw_num) {
@@ -801,7 +797,6 @@ pub struct FitFieldDefinition {
 }
 
 impl FitFieldDefinition {
-
     pub fn field_name(&self, mesg_num: &FitGlobalMesgNum) -> &'static str {
         FitDataMessage::field_name(mesg_num, self.definition_number)
     }
@@ -809,7 +804,7 @@ impl FitFieldDefinition {
     pub fn is_array(&self) -> bool {
         match self.base_type {
             7 | 13 => false, // strings and bytes are never arrays
-            _ => self.array_size() > 1
+            _ => self.array_size() > 1,
         }
     }
 
@@ -944,7 +939,7 @@ impl FitDefinitionMessage {
     ) -> Result<(Rc<FitDefinitionMessage>, &[u8])> {
         match parse_definition_message(input, header) {
             Ok((fdm, o)) => Ok((Rc::new(fdm), o)),
-            Err(e) => Err(e)
+            Err(e) => Err(e),
         }
     }
 }
@@ -1095,12 +1090,12 @@ macro_rules! fit_base_type_base {
         #[derive(Debug, PartialEq, Clone)]
         pub enum $name_enum {
             InvalidValue,
-            ValidValue($type)
+            ValidValue($type),
         }
-        
+
         #[derive(Debug, PartialEq, Clone)]
         pub struct $name(pub $name_enum);
-        
+
         type $name_vec = Vec<$name>;
 
         impl $name {
@@ -1124,10 +1119,10 @@ macro_rules! fit_base_type_base {
         impl FitFieldParseable for $name_vec {
             fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<$name_vec> {
                 let mut num_to_parse = parse_config.num_in_field();
-           
+
                 let mut outp = input;
                 let mut v: Vec<$name> = vec![];
-        
+
                 while num_to_parse > 0 {
                     v.push($name::parse(outp, parse_config)?);
                     outp = &outp[parse_config.base_type_size()..];
@@ -1151,12 +1146,10 @@ macro_rules! fit_base_type {
             fn to_f64(&self) -> f64 {
                 match self.0 {
                     $name_enum::InvalidValue => 0.0,
-                    $name_enum::ValidValue(v) => {
-                        match f64::value_from(v) {
-                            Err(_) => 0.0,
-                            Ok(x) => x
-                        }
-                    }
+                    $name_enum::ValidValue(v) => match f64::value_from(v) {
+                        Err(_) => 0.0,
+                        Ok(x) => x,
+                    },
                 }
             }
         }
@@ -1165,7 +1158,7 @@ macro_rules! fit_base_type {
             fn from(t: $name) -> $type {
                 match t.0 {
                     $name_enum::InvalidValue => 0 as $type,
-                    $name_enum::ValidValue(v) => v as $type
+                    $name_enum::ValidValue(v) => v as $type,
                 }
             }
         }
@@ -1174,7 +1167,7 @@ macro_rules! fit_base_type {
             fn from(t: &$name) -> $type {
                 match t.0 {
                     $name_enum::InvalidValue => 0 as $type,
-                    $name_enum::ValidValue(v) => v as $type
+                    $name_enum::ValidValue(v) => v as $type,
                 }
             }
         }
@@ -1183,7 +1176,7 @@ macro_rules! fit_base_type {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self.0 {
                     $name_enum::InvalidValue => write!(f, "InvalidValue"),
-                    $name_enum::ValidValue(x) => write!(f, "{}", x)
+                    $name_enum::ValidValue(x) => write!(f, "{}", x),
                 }
             }
         }
@@ -1196,16 +1189,46 @@ fit_base_type!(FitUint8, FitUint8Options, FitUint8Vec, u8, parse_uint8);
 fit_base_type!(FitUint8z, FitUint8zOptions, FitUint8zVec, u8, parse_uint8z);
 fit_base_type!(FitSint8, FitSint8Options, FitSint8Vec, i8, parse_sint8);
 fit_base_type!(FitUint16, FitUint16Options, FitUint16Vec, u16, parse_uint16);
-fit_base_type!(FitUint16z, FitUint16zOptions, FitUint16zVec, u16, parse_uint16z);
+fit_base_type!(
+    FitUint16z,
+    FitUint16zOptions,
+    FitUint16zVec,
+    u16,
+    parse_uint16z
+);
 fit_base_type!(FitSint16, FitSint16Options, FitSint16Vec, i16, parse_sint16);
 fit_base_type!(FitUint32, FitUint32Options, FitUint32Vec, u32, parse_uint32);
-fit_base_type!(FitUint32z, FitUint32zOptions, FitUint32zVec, u32, parse_uint32z);
+fit_base_type!(
+    FitUint32z,
+    FitUint32zOptions,
+    FitUint32zVec,
+    u32,
+    parse_uint32z
+);
 fit_base_type!(FitSint32, FitSint32Options, FitSint32Vec, i32, parse_sint32);
-fit_base_type!(FitFloat32, FitFloat32Options, FitFloat32Vec, f32, parse_float32);
+fit_base_type!(
+    FitFloat32,
+    FitFloat32Options,
+    FitFloat32Vec,
+    f32,
+    parse_float32
+);
 fit_base_type!(FitUint64, FitUint64Options, FitUint64Vec, u64, parse_uint64);
-fit_base_type!(FitUint64z, FitUint64zOptions, FitUint64zVec, u64, parse_uint64z);
+fit_base_type!(
+    FitUint64z,
+    FitUint64zOptions,
+    FitUint64zVec,
+    u64,
+    parse_uint64z
+);
 fit_base_type!(FitSint64, FitSint64Options, FitSint64Vec, i64, parse_sint64);
-fit_base_type!(FitFloat64, FitFloat64Options, FitFloat64Vec, f64, parse_float64);
+fit_base_type!(
+    FitFloat64,
+    FitFloat64Options,
+    FitFloat64Vec,
+    f64,
+    parse_float64
+);
 
 impl From<f64> for FitFloat64 {
     fn from(x: f64) -> FitFloat64 {
@@ -1213,7 +1236,13 @@ impl From<f64> for FitFloat64 {
     }
 }
 
-fit_base_type_base!(FitString, FitStringOptions, FitStringVec, String, parse_string);
+fit_base_type_base!(
+    FitString,
+    FitStringOptions,
+    FitStringVec,
+    String,
+    parse_string
+);
 fit_base_type_base!(FitByte, FitByteOptions, FitByteVec, Vec<u8>, parse_byte);
 
 // These need to be implemented manually, as FitByte is a Vec<u8>
@@ -1223,7 +1252,7 @@ impl fmt::Display for FitBool {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.0 {
             FitBoolOptions::InvalidValue => write!(f, "InvalidValue"),
-            FitBoolOptions::ValidValue(x) => write!(f, "{}", x)
+            FitBoolOptions::ValidValue(x) => write!(f, "{}", x),
         }
     }
 }
@@ -1232,7 +1261,7 @@ impl fmt::Display for FitEnum {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.0 {
             FitEnumOptions::InvalidValue => write!(f, "InvalidValue"),
-            FitEnumOptions::ValidValue(x) => write!(f, "{}", x)
+            FitEnumOptions::ValidValue(x) => write!(f, "{}", x),
         }
     }
 }
@@ -1256,7 +1285,7 @@ impl fmt::Display for FitString {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.0 {
             FitStringOptions::InvalidValue => write!(f, "InvalidValue"),
-            FitStringOptions::ValidValue(ref x) => write!(f, "{}", x)
+            FitStringOptions::ValidValue(ref x) => write!(f, "{}", x),
         }
     }
 }
@@ -1303,7 +1332,6 @@ macro_rules! base_type_formatter {
     };
 }
 
-
 macro_rules! base_type_vec_formatter {
     ($vals:ident, $f:ident) => {{
         write!($f, "[")?;
@@ -1313,7 +1341,6 @@ macro_rules! base_type_vec_formatter {
         write!($f, "{}] ", $vals[$vals.len() - 1])
     }};
 }
-
 
 impl fmt::Display for FitBaseValue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -1361,34 +1388,68 @@ macro_rules! fit_base_parse {
             let v: Vec<$ty_long> = FitFieldParseable::parse($input, $parse_config)?;
             Ok(FitBaseValue::$ty_vec(v))
         } else {
-            Ok(FitBaseValue::$ty_short($ty_long::parse($input, $parse_config)?))
+            Ok(FitBaseValue::$ty_short($ty_long::parse(
+                $input,
+                $parse_config,
+            )?))
         }
     }};
 }
 
 impl FitBaseValue {
-    fn parse<'a>(
-        input: &'a [u8],
-        parse_config: FitParseConfig,
-    ) -> Result<FitBaseValue> {
+    fn parse<'a>(input: &'a [u8], parse_config: FitParseConfig) -> Result<FitBaseValue> {
         match parse_config.base_type() {
-            FitFieldFitBaseType::Enum => fit_base_parse!(Enum, FitEnum, EnumVec, input, parse_config),
-            FitFieldFitBaseType::Uint8 => fit_base_parse!(Uint8, FitUint8, Uint8Vec, input, parse_config),
-            FitFieldFitBaseType::Uint8z => fit_base_parse!(Uint8z, FitUint8z, Uint8zVec, input, parse_config),
-            FitFieldFitBaseType::Sint8 => fit_base_parse!(Sint8, FitSint8, Sint8Vec, input, parse_config),
-            FitFieldFitBaseType::Uint16 => fit_base_parse!(Uint16, FitUint16, Uint16Vec, input, parse_config),
-            FitFieldFitBaseType::Uint16z => fit_base_parse!(Uint16z, FitUint16z, Uint16zVec, input, parse_config),
-            FitFieldFitBaseType::Sint16 => fit_base_parse!(Sint16, FitSint16, Sint16Vec, input, parse_config),
-            FitFieldFitBaseType::Uint32 => fit_base_parse!(Uint32, FitUint32, Uint32Vec, input, parse_config),
-            FitFieldFitBaseType::Uint32z => fit_base_parse!(Uint32z, FitUint32z, Uint32zVec, input, parse_config),
-            FitFieldFitBaseType::Sint32 => fit_base_parse!(Sint32, FitSint32, Sint32Vec, input, parse_config),
-            FitFieldFitBaseType::Float32 => fit_base_parse!(Float32, FitFloat32, Float32Vec, input, parse_config),
-            FitFieldFitBaseType::Uint64 => fit_base_parse!(Uint64, FitUint64, Uint64Vec, input, parse_config),
-            FitFieldFitBaseType::Uint64z => fit_base_parse!(Uint64z, FitUint64z, Uint64zVec, input, parse_config),
-            FitFieldFitBaseType::Sint64 => fit_base_parse!(Sint64, FitSint64, Sint64Vec, input, parse_config),
-            FitFieldFitBaseType::Float64 => fit_base_parse!(Float64, FitFloat64, Float64Vec, input, parse_config),
-            FitFieldFitBaseType::Byte => Ok(FitBaseValue::Byte(FitByte::parse(input, parse_config)?)),
-            FitFieldFitBaseType::String => Ok(FitBaseValue::String(FitString::parse(input, parse_config)?)),
+            FitFieldFitBaseType::Enum => {
+                fit_base_parse!(Enum, FitEnum, EnumVec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint8 => {
+                fit_base_parse!(Uint8, FitUint8, Uint8Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint8z => {
+                fit_base_parse!(Uint8z, FitUint8z, Uint8zVec, input, parse_config)
+            }
+            FitFieldFitBaseType::Sint8 => {
+                fit_base_parse!(Sint8, FitSint8, Sint8Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint16 => {
+                fit_base_parse!(Uint16, FitUint16, Uint16Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint16z => {
+                fit_base_parse!(Uint16z, FitUint16z, Uint16zVec, input, parse_config)
+            }
+            FitFieldFitBaseType::Sint16 => {
+                fit_base_parse!(Sint16, FitSint16, Sint16Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint32 => {
+                fit_base_parse!(Uint32, FitUint32, Uint32Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint32z => {
+                fit_base_parse!(Uint32z, FitUint32z, Uint32zVec, input, parse_config)
+            }
+            FitFieldFitBaseType::Sint32 => {
+                fit_base_parse!(Sint32, FitSint32, Sint32Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Float32 => {
+                fit_base_parse!(Float32, FitFloat32, Float32Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint64 => {
+                fit_base_parse!(Uint64, FitUint64, Uint64Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Uint64z => {
+                fit_base_parse!(Uint64z, FitUint64z, Uint64zVec, input, parse_config)
+            }
+            FitFieldFitBaseType::Sint64 => {
+                fit_base_parse!(Sint64, FitSint64, Sint64Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Float64 => {
+                fit_base_parse!(Float64, FitFloat64, Float64Vec, input, parse_config)
+            }
+            FitFieldFitBaseType::Byte => {
+                Ok(FitBaseValue::Byte(FitByte::parse(input, parse_config)?))
+            }
+            FitFieldFitBaseType::String => {
+                Ok(FitBaseValue::String(FitString::parse(input, parse_config)?))
+            }
             _ => Err(Error::parse_unknown_base_value()),
         }
     }
@@ -1407,12 +1468,10 @@ impl FitFieldDeveloperData {
         parse_config: FitParseConfig,
     ) -> Result<FitFieldDeveloperData> {
         let val = FitBaseValue::parse(input, parse_config)?;
-        Ok(
-            FitFieldDeveloperData {
-                field_description: field_description.clone(),
-                value: val
-            }
-        )
+        Ok(FitFieldDeveloperData {
+            field_description: field_description.clone(),
+            value: val,
+        })
     }
 }
 
@@ -1426,7 +1485,6 @@ fn format_bits(input: &Vec<u8>) -> String {
 }
 
 pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
-
     // 1. Figure out how many bytes we need from the input, get rid of excess
     let mut desired_byte_length = num_bits / 8;
     let remainder = num_bits % 8;

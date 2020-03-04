@@ -1,10 +1,9 @@
 extern crate fitparse;
 
 use fitparse::fitfile::FitFile;
-use fitparse::{FitMessage, FitFieldBasicValue, FitFieldAdjustedValue};
 use fitparse::fittypes::FitDataMessage;
-use fitparse::{BasicValue, AdjustedValue, PreAdjustedValue, FitFloat64, FitUint32, FitUint16};
-
+use fitparse::{AdjustedValue, BasicValue, FitFloat64, FitUint16, FitUint32, PreAdjustedValue};
+use fitparse::{FitFieldAdjustedValue, FitFieldBasicValue, FitMessage};
 
 #[test]
 fn smoke() {
@@ -57,7 +56,7 @@ macro_rules! ffav {
             parsed_value: PreAdjustedValue::<$ty>::NotYetParsedSingle,
             units: "".to_string(),
             scale: $scale,
-            offset: $offset, 
+            offset: $offset,
         }
     };
     ("unparsed", $ty:ty, $scale:expr, $offset:expr, "vec") => {
@@ -66,7 +65,7 @@ macro_rules! ffav {
             parsed_value: PreAdjustedValue::<$ty>::NotYetParsedVec,
             units: "".to_string(),
             scale: $scale,
-            offset: $offset, 
+            offset: $offset,
         }
     };
     ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "single") => {
@@ -75,7 +74,7 @@ macro_rules! ffav {
             parsed_value: PreAdjustedValue::<$ty>::Single($preadjusted_value),
             units: $units,
             scale: $scale,
-            offset: $offset, 
+            offset: $offset,
         }
     };
     ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "vec") => {
@@ -84,7 +83,7 @@ macro_rules! ffav {
             parsed_value: PreAdjustedValue::<$ty>::Vec($preadjusted_value),
             units: $units,
             scale: $scale,
-            offset: $offset, 
+            offset: $offset,
         }
     };
 }
@@ -208,31 +207,72 @@ fn activity_test() {
     let mut ff = FitFile::new(1024 * 1024 * 10, true);
     let slice: &mut &[u8] = &mut data.as_ref();
 
-    match ff.parse(slice) {  
+    match ff.parse(slice) {
         Err(e) => panic!("failed to parse file: {:?}", e),
         _ => (),
     }
 
     assert_eq!(32, ff.messages.len());
-    
 
     match ff.messages[29] {
         FitMessage::Data(FitDataMessage::Session(ref m)) => {
-            assert_eq!(m.num_laps, ffbv!(FitUint16::new(1), FitUint16, "".to_string(), "single"));
-            assert_eq!(m.avg_speed, ffav!(FitUint16::new(417), FitFloat64::new(0.417), FitUint16, 1000.0, 0.0, "m/s".to_string(), "single")); 
-            assert_eq!(m.max_speed, ffav!(FitUint16::new(368), FitFloat64::new(0.368), FitUint16, 1000.0, 0.0, "m/s".to_string(), "single")); 
-            assert_eq!(m.enhanced_max_speed, ffav!(FitUint32::new(368), FitFloat64::new(0.368), FitUint32, 1000.0, 0.0, "m/s".to_string(), "single")); 
-        },
-        _ => panic!("message 29 should be Activity with enhanced_max_speed = 0.368")
-    }
-    
-    match ff.messages[31] {
-        FitMessage::Data(FitDataMessage::Activity(ref m)) => {
             assert_eq!(
-                m.total_timer_time, 
-                ffav!(FitUint32::new(13749), FitFloat64::new(13.749), FitUint32, 1000.0, 0.0, "s".to_string(), "single")
+                m.num_laps,
+                ffbv!(FitUint16::new(1), FitUint16, "".to_string(), "single")
+            );
+            assert_eq!(
+                m.avg_speed,
+                ffav!(
+                    FitUint16::new(417),
+                    FitFloat64::new(0.417),
+                    FitUint16,
+                    1000.0,
+                    0.0,
+                    "m/s".to_string(),
+                    "single"
+                )
+            );
+            assert_eq!(
+                m.max_speed,
+                ffav!(
+                    FitUint16::new(368),
+                    FitFloat64::new(0.368),
+                    FitUint16,
+                    1000.0,
+                    0.0,
+                    "m/s".to_string(),
+                    "single"
+                )
+            );
+            assert_eq!(
+                m.enhanced_max_speed,
+                ffav!(
+                    FitUint32::new(368),
+                    FitFloat64::new(0.368),
+                    FitUint32,
+                    1000.0,
+                    0.0,
+                    "m/s".to_string(),
+                    "single"
+                )
+            );
+        }
+        _ => panic!("message 29 should be Activity with enhanced_max_speed = 0.368"),
+    }
+
+    match ff.messages[31] {
+        FitMessage::Data(FitDataMessage::Activity(ref m)) => assert_eq!(
+            m.total_timer_time,
+            ffav!(
+                FitUint32::new(13749),
+                FitFloat64::new(13.749),
+                FitUint32,
+                1000.0,
+                0.0,
+                "s".to_string(),
+                "single"
             )
-        },
-        _ => panic!("message 31 should be Activity with total_timer_time = 13.749")
+        ),
+        _ => panic!("message 31 should be Activity with total_timer_time = 13.749"),
     }
 }
