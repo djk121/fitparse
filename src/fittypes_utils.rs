@@ -56,42 +56,6 @@ macro_rules! fit_field_parse_instruction {
     };
 }
 
-/*
-#[macro_export]
-macro_rules! fit_field_basic_value {
-    ($units:expr) => {
-        FitFieldValue {
-            value: None,
-            units: $units.to_string(),
-            scale: None,
-            offset: None,
-            is_array: false,
-            components: vec![],
-        }
-    };
-    ($units:expr, $scale:expr) => {
-        FitFieldValue {
-            value: None,
-            units: $units.to_string(),
-            scale: Some($scale),
-            offset: None,
-            is_array: false,
-            components: vec![],
-        }
-    };
-    ($units:expr, $scale:expr, $offset:expr) => {
-        FitFieldValue {
-            value: None,
-            units: $units.to_string(),
-            scale: Some($scale),
-            offset: Some($offset),
-            is_array: false,
-            components: vec![],
-        }
-    };
-}
-*/
-
 #[macro_export]
 macro_rules! parse_internal_field {
     ($components_bit_range:expr, $inp:expr, $field:expr, $message:expr, $message_field:expr, "base_type", $is_degrees:expr, $scale_and_offset:expr) => {
@@ -223,152 +187,12 @@ macro_rules! field_parser_base_type {
     };
 }
 
-/*
-#[macro_export]
-macro_rules! field_parser_base_type {
-    ("string", $bytes:expr, $field:expr) => {
-        parse_string(&$bytes[0..$field.field_size], $field.field_size);
-    };
-    ("byte", $bytes:expr, $field:expr) => {
-        parse_byte(&$bytes[0..$field.field_size], $field.field_size);
-    };
-    ("bool", $bytes:expr, $field:expr) => {
-        parse_bool(&$bytes[0..$field.field_size]);
-    };
-    ("enum", $bytes:expr, $field:expr) => {
-        parse_enum(&$bytes[0..$field.field_size]);
-    };
-    ("uint8", $bytes:expr, $field:expr) => {
-        parse_uint8(&$bytes[0..$field.field_size]);
-    };
-    ("uint8z", $bytes:expr, $field:expr) => {
-        parse_uint8z(&$bytes[0..$field.field_size]);
-    };
-    ("sint8", $bytes:expr, $field:expr) => {
-        parse_sint8(&$bytes[0..$field.field_size]);
-    };
-    ("uint16", $bytes:expr, $field:expr, $message:expr) => {
-        parse_uint16(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("uint16z", $bytes:expr, $field:expr, $message:expr) => {
-        parse_uint16z(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("sint16", $bytes:expr, $field:expr, $message:expr) => {
-        parse_sint16(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("uint32", $bytes:expr, $field:expr, $message:expr) => {
-        parse_uint32(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("uint32z", $bytes:expr, $field:expr, $message:expr) => {
-        parse_uint32z(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("sint32", $bytes:expr, $field:expr, $message:expr) => {
-        parse_sint32(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("float32", $bytes:expr, $field:expr, $message:expr) => {
-        parse_float32(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("uint64", $bytes:expr, $field:expr, $message:expr) => {
-        parse_uint64(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("uint64z", $bytes:expr, $field:expr, $message:expr) => {
-        parse_uint64z(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("sint64", $bytes:expr, $field:expr, $message:expr) => {
-        parse_sint64(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-    ("float64", $bytes:expr, $field:expr, $message:expr) => {
-        parse_float32(
-            &$bytes[0..$field.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-}
-*/
-
-/*
-#[macro_export]
-macro_rules! field_parser_fit_type_fn {
-    ($field:ty, $bytes:expr, $f:expr, $message:expr, $tz_offset:expr, $fn_name:expr) => {
-        fn field_parser_$fn_name() -> Result<$fn_name> {
-            <$field>::parse(
-                &$bytes[0..$f.field_size],
-                $message.definition_message.endianness,
-                $tz_offset,
-        );
-    };
-    ($field:ty, $bytes:expr, $f:expr, $message:expr) => {
-        <$field>::parse(
-            &$bytes[0..$f.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-
-    ($field:ty, $bytes:expr, $f:expr) => {
-        <$field>::parse(&$bytes[0..$f.field_size]);
-    };
-}
-*/
-
 #[macro_export]
 macro_rules! field_parser_fit_type {
     ($field:ty, $bytes:expr, $parse_config:expr) => {
         <$field>::parse(&$bytes[0..$parse_config.size()], $parse_config);
     };
 }
-
-/*
-#[macro_export]
-macro_rules! field_parser_fit_type {
-    ($field:ty, $bytes:expr, $f:expr, $message:expr, $tz_offset:expr) => {
-        <$field>::parse(
-            &$bytes[0..$f.field_size],
-            $message.definition_message.endianness,
-            $tz_offset,
-        );
-    };
-    ($field:ty, $bytes:expr, $f:expr, $message:expr) => {
-        <$field>::parse(
-            &$bytes[0..$f.field_size],
-            $message.definition_message.endianness,
-        );
-    };
-
-    ($field:ty, $bytes:expr, $f:expr) => {
-        <$field>::parse(&$bytes[0..$f.field_size]);
-    };
-}
-*/
 
 #[macro_export]
 macro_rules! scale_and_offset_parse_assignment {
@@ -483,15 +307,11 @@ macro_rules! parse_subfields {
 #[macro_export]
 macro_rules! parse_developer_fields {
     ($inp2:expr, $message:expr, $parsing_state:expr) => {
-        //println!("parse_developer_fields, inp2: {:?}", $inp2);
-        //println!("dev_fields: {:?}", &$message.definition_message.developer_field_definitions);
         for dev_field in &$message.definition_message.developer_field_definitions {
             let dev_data_definition =
                 $parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             let field_description =
                 dev_data_definition.get_field_description(dev_field.definition_number)?;
-            //let parse_config = fit_parse_config!($message.definition_message.endianness, dev_field.field_size);
-            //let parse_config = FitParseConfig{ endianness: Some($message.definition_message.endianness), size: Some(dev_field.field_size) };
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -536,13 +356,11 @@ macro_rules! parse_developer_fields {
             $message.developer_fields.push(dd);
             // we can run out of input before all fields are consumed. according
             // to the spec, buffering with zero-padded fields is appropriate
-            //println!("dev_field post parse, inp2.len(): {}", $inp2.len());
             if $inp2.len() < parse_config.field_size() {
                 $inp2 = &$inp2[$inp2.len()..];
             } else {
                 $inp2 = &$inp2[parse_config.field_size()..]; 
             }
-                //$inp2 = outp;
         }
     };
 }
@@ -657,59 +475,6 @@ macro_rules! fmt_message_field {
         writeln!($f, "  {: >28}: {}", $thingname, $thing)
     };
 }
-/*
-#[macro_export]
-macro_rules! fmt_message_field {
-    ($thing:expr, $thingname:expr, false, $f:ident) => {
-        let val = match &$thing.value {
-            BasicValue::NotYetParsedSingle | BasicValue::NotYetParsedVec  => "not yet parsed".to_string(),
-            BasicValue::Single(a) => format!("{}", a),
-            BasicValue::Vec(v) => {
-                let mut s = "[".to_string();
-                for i in 0..v.len() - 1 {
-                    let x = v[i];
-                    let y = x.to_string();
-                    s.push_str(&y);
-                }
-                let x = (&v[v.len()-1]).to_string();
-                s.push_str(&format!("{}]", &(x.to_string())));
-                s
-            }
-        };
-        writeln!($f, "  {: >28}: {}", $thingname, &val)?
-    };
-    ($thing:expr, $thingname:expr, true, $f:ident) => {
-        let val = match &$thing.value {
-            AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => "not yet parsed".to_string(),
-            AdjustedValue::Single(v) => format!("{}", v),
-            AdjustedValue::Vec(v) => {
-                let mut s = "[".to_string();
-                for i in 0..v.len() - 1 {
-                    s.push_str(&(&v[i]).to_string())
-                    //s.push_str(&format!("{}, ", v[i]));
-                }
-                s.push_str(&format!("{}]", &(&v[v.len()-1]).to_string()));
-                s
-            }
-        };
-        writeln!($f, "  {: >28}: {}", $thingname, &val)?;        
-    };
-}
-*/
-/*
-#[macro_export]
-macro_rules! fmt_message_field {
-    ($thing:expr, $thingname:expr, $f:ident) => {
-        if let Some(v) = &$thing.get_option()? {
-            write!($f, "  {: >28}: {:?}", $thingname, v)?;
-            if $thing.units.len() > 0 {
-                write!($f, " [{}]", &$thing.units)?;
-            }
-            writeln!($f)?;
-        }
-    };
-}
-*/
 
 #[macro_export]
 macro_rules! fmt_message_subfield {
@@ -764,7 +529,6 @@ impl FitFieldDateTime {
         };
 
         let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
-        //let parse_config = FitParseConfig{ endianness: Some(Endianness::Big), size: None };
         let parse_config = fit_parse_config!(Endianness::Big);
         let result = FitFieldDateTime::parse(&bytes, parse_config)?;
         Ok(result)
@@ -866,65 +630,11 @@ impl FitMessageHr {
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageHr",
             timestamp: FitFieldBasicValue::new_single("".to_string()),
-            //timestamp: fit_field_value!(""),
             fractional_timestamp: FitFieldAdjustedValue::new_single("s".to_string(), 32768.0, 0.0),
-            //fractional_timestamp: fit_field_value!("s", 32768_f64),
             time256: FitFieldAdjustedValue::new_single("s".to_string(), 256.0, 0.0),
-            //time256: fit_field_value!("s", 256_f64),
             filtered_bpm: FitFieldBasicValue::new_vec("bpm".to_string()),
-            //filtered_bpm: fit_field_value!("bpm"),
             event_timestamp: FitFieldAdjustedValue::new_vec("s".to_string(), 1024.0, 0.0),
-            //event_timestamp: fit_field_value!("s", 1024_f64),
-            //event_timestamp_12: fit_field_value!("s", 1024_f64),
             event_timestamp_12: FitFieldAdjustedValue::new_vec("s".to_string(), 1024.0, 0.0),
-
-            /*
-            timestamp: FitFieldValue {
-                value: None,
-                units: "".to_string(),
-                scale: None,
-                offset: None,
-                parser: None,
-            },
-            fractional_timestamp: FitFieldValue {
-                value: None,
-                units: "s".to_string(),
-                scale: Some(32768_f64),
-                offset: None,
-                parser: None,
-            },
-            time256: FitFieldValue {
-                value: None,
-                units: "s".to_string(),
-                scale: Some(256_f64),
-                offset: None,
-                parser: None,
-            },
-            filtered_bpm: FitFieldValue {
-                value: None,
-                units: "bpm".to_string(),
-                scale: None,
-                offset: None,
-                parser: None,
-            },
-            event_timestamp: FitFieldValue {
-                value: None,
-                units: "s".to_string(),
-                scale: Some(1024_f64),
-                offset: None,
-                parser: None,
-            },
-            event_timestamp_12: FitFieldValue {
-                value: None,
-                units: "s".to_string(),
-                scale: Some(1024_f64),
-                //scale: Some(
-                //    1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024_f64,
-                //),
-                offset: None,
-                parser: None,
-            },
-            */
         };
 
         let o = main_parse_message!(input, message, parsing_state, FitMessageHr);
@@ -951,13 +661,10 @@ impl FitMessageHr {
                 tz_offset,
             )];
 
-            //let mut actions: Vec<(FitFieldDefinition, Option<(usize, usize)>)> =
-            //    vec![(*field, None)];
-
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
                
-                let alternate_input: Vec<u8>; // = Vec::with_capacity(parse_config.field_size());
+                let alternate_input: Vec<u8>;
                 let mut parse_input = inp;
 
                 if let Some((start, num_bits)) = parse_config.bit_range {
@@ -965,23 +672,7 @@ impl FitMessageHr {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(
-                        &inp[0..parse_config.field_size()],
-                        start,
-                        num_bits,
-                        parse_config.endianness(),
-                    )?,
-                };
-                */
-
-                //let (f, components_bit_range) = actions.remove(0);
-
-                //let parse_config = fit_parse_config!(message.definition_message.endianness, f.field_size);
-
-                //let _parse_result: Result<()> = match f.definition_number {
+               
                 match parse_config.field_definition_number() {
                     253 => {
                         // timestamp
@@ -1076,11 +767,6 @@ impl FitMessageHr {
                     },
 
                     unknown_field_num => {
-                        //let parse_config = FitParseConfig::new(
-                        //    f,
-                        //    message.definition_message.endianness,
-                        //    tz_offset,
-                        //);
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
                         saved_outp = &inp[parse_config.field_size()..];

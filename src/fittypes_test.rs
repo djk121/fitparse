@@ -333,13 +333,6 @@ fn fit_message_record_with_developer_fields() {
                 value: BasicValue::<FitString>::Vec(ref field_names),
                 ..
             } => {
-            /*
-            FitFieldValue {
-                value: Some(ref field_names),
-                units: _,
-            } => {
-                */
-                //Some(ref field_names) => {
                 if field_names[0] == fp_field_name {
                     assert_eq!(ffdd.value, FitBaseValue::Uint16(FitUint16::new(57)));
                     return;

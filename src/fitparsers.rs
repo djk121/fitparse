@@ -7,8 +7,6 @@ use errors::{Error, Result};
 
 use FitParseConfig;
 
-//trace_macros!(true);
-
 named!(pub parse_bool_internal<&[u8], bool>,
     do_parse!(
         u: take!(1) >>
@@ -85,7 +83,6 @@ named_args!(parse_byte_internal(num_bytes: usize)<Vec<u8>>,
     )
 );
 
-//pub static GARMIN_EPOCH: DateTime<UTC> = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
 fn parse_date_time_internal(
     input: &[u8],
     parse_config: FitParseConfig,

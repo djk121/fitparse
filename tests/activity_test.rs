@@ -215,19 +215,13 @@ fn activity_test() {
 
     assert_eq!(32, ff.messages.len());
     
-    //println!("session: {:#?}", ff.messages[29]);
 
     match ff.messages[29] {
         FitMessage::Data(FitDataMessage::Session(ref m)) => {
-            //assert_eq!(m.num_laps, FitFieldValue{ value: Some(1), units: "".to_string() });
             assert_eq!(m.num_laps, ffbv!(FitUint16::new(1), FitUint16, "".to_string(), "single"));
-            //assert_eq!(m.avg_speed, FitFieldValue{ value: Some(0.417), units: "m/s".to_string() });
             assert_eq!(m.avg_speed, ffav!(FitUint16::new(417), FitFloat64::new(0.417), FitUint16, 1000.0, 0.0, "m/s".to_string(), "single")); 
-            //assert_eq!(m.max_speed, FitFieldValue{ value: Some(0.368), units: "m/s".to_string() });
             assert_eq!(m.max_speed, ffav!(FitUint16::new(368), FitFloat64::new(0.368), FitUint16, 1000.0, 0.0, "m/s".to_string(), "single")); 
-            //assert_eq!(m.enhanced_max_speed, FitFieldValue{ value: Some(0.368), units: "m/s".to_string() });
             assert_eq!(m.enhanced_max_speed, ffav!(FitUint32::new(368), FitFloat64::new(0.368), FitUint32, 1000.0, 0.0, "m/s".to_string(), "single")); 
-
         },
         _ => panic!("message 29 should be Activity with enhanced_max_speed = 0.368")
     }
@@ -236,7 +230,6 @@ fn activity_test() {
         FitMessage::Data(FitDataMessage::Activity(ref m)) => {
             assert_eq!(
                 m.total_timer_time, 
-                //FitFieldValue{ value: Some(13.749), units: "s".to_string() })
                 ffav!(FitUint32::new(13749), FitFloat64::new(13.749), FitUint32, 1000.0, 0.0, "s".to_string(), "single")
             )
         },
