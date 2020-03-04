@@ -17742,12 +17742,10 @@ impl FitMessageAccelerometerData {
 
     fn parse_internal<'a>(message: &mut FitMessageAccelerometerData, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -17759,104 +17757,79 @@ impl FitMessageAccelerometerData {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sample_time_offset
                         message.sample_time_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // accel_x
                         message.accel_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // accel_y
                         message.accel_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // accel_z
                         message.accel_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // calibrated_accel_x
                         message.calibrated_accel_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // calibrated_accel_y
                         message.calibrated_accel_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // calibrated_accel_z
                         message.calibrated_accel_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // compressed_calibrated_accel_x
                         message.compressed_calibrated_accel_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // compressed_calibrated_accel_y
                         message.compressed_calibrated_accel_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // compressed_calibrated_accel_z
                         message.compressed_calibrated_accel_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -17969,12 +17942,10 @@ impl FitMessageActivity {
 
     fn parse_internal<'a>(message: &mut FitMessageActivity, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -17986,80 +17957,59 @@ impl FitMessageActivity {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // total_timer_time
                         message.total_timer_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // num_sessions
                         message.num_sessions.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // event
                         message.event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // event_type
                         message.event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // local_timestamp
                         message.local_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // event_group
                         message.event_group.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -18155,12 +18105,10 @@ impl FitMessageAntChannelId {
 
     fn parse_internal<'a>(message: &mut FitMessageAntChannelId, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -18172,62 +18120,44 @@ impl FitMessageAntChannelId {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // channel_number
                         message.channel_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // device_type
                         message.device_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // device_number
                         message.device_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // transmission_type
                         message.transmission_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // device_index
                         message.device_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -18330,12 +18260,10 @@ impl FitMessageAntRx {
 
     fn parse_internal<'a>(message: &mut FitMessageAntRx, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -18347,72 +18275,51 @@ impl FitMessageAntRx {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // fractional_timestamp
                         message.fractional_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // mesg_id
                         message.mesg_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // mesg_data
                         message.mesg_data.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // channel_number
                         message.channel_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // data
                         message.data.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -18515,12 +18422,10 @@ impl FitMessageAntTx {
 
     fn parse_internal<'a>(message: &mut FitMessageAntTx, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -18532,72 +18437,51 @@ impl FitMessageAntTx {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // fractional_timestamp
                         message.fractional_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // mesg_id
                         message.mesg_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // mesg_data
                         message.mesg_data.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 0, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 8, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 16, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 24, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 32, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 40, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 48, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 56, 8),FitParseConfig::new_from_component(4, 1, 13, message.definition_message.endianness, 64, 8)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // channel_number
                         message.channel_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // data
                         message.data.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -18730,12 +18614,10 @@ impl FitMessageAviationAttitude {
 
     fn parse_internal<'a>(message: &mut FitMessageAviationAttitude, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -18747,104 +18629,79 @@ impl FitMessageAviationAttitude {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // system_time
                         message.system_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // pitch
                         message.pitch.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // roll
                         message.roll.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // accel_lateral
                         message.accel_lateral.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // accel_normal
                         message.accel_normal.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // turn_rate
                         message.turn_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // stage
                         message.stage.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // attitude_stage_complete
                         message.attitude_stage_complete.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // track
                         message.track.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // validity
                         message.validity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -18937,12 +18794,10 @@ impl FitMessageBarometerData {
 
     fn parse_internal<'a>(message: &mut FitMessageBarometerData, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -18954,56 +18809,39 @@ impl FitMessageBarometerData {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sample_time_offset
                         message.sample_time_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // baro_pres
                         message.baro_pres.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -19234,12 +19072,10 @@ impl FitMessageBikeProfile {
 
     fn parse_internal<'a>(message: &mut FitMessageBikeProfile, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -19251,224 +19087,179 @@ impl FitMessageBikeProfile {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // odometer
                         message.odometer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // bike_spd_ant_id
                         message.bike_spd_ant_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // bike_cad_ant_id
                         message.bike_cad_ant_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // bike_spdcad_ant_id
                         message.bike_spdcad_ant_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // bike_power_ant_id
                         message.bike_power_ant_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // custom_wheelsize
                         message.custom_wheelsize.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // auto_wheelsize
                         message.auto_wheelsize.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // bike_weight
                         message.bike_weight.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // power_cal_factor
                         message.power_cal_factor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // auto_wheel_cal
                         message.auto_wheel_cal.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // auto_power_zero
                         message.auto_power_zero.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // id
                         message.id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // spd_enabled
                         message.spd_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // cad_enabled
                         message.cad_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     17 => {  // spdcad_enabled
                         message.spdcad_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // power_enabled
                         message.power_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // crank_length
                         message.crank_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     20 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // bike_spd_ant_id_trans_type
                         message.bike_spd_ant_id_trans_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     22 => {  // bike_cad_ant_id_trans_type
                         message.bike_cad_ant_id_trans_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     23 => {  // bike_spdcad_ant_id_trans_type
                         message.bike_spdcad_ant_id_trans_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     24 => {  // bike_power_ant_id_trans_type
                         message.bike_power_ant_id_trans_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     37 => {  // odometer_rollover
                         message.odometer_rollover.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     38 => {  // front_gear_num
                         message.front_gear_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     39 => {  // front_gear
                         message.front_gear.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     40 => {  // rear_gear_num
                         message.rear_gear_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     41 => {  // rear_gear
                         message.rear_gear.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     44 => {  // shimano_di2_enabled
                         message.shimano_di2_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -19596,12 +19387,10 @@ impl FitMessageBloodPressure {
 
     fn parse_internal<'a>(message: &mut FitMessageBloodPressure, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -19613,98 +19402,74 @@ impl FitMessageBloodPressure {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // systolic_pressure
                         message.systolic_pressure.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // diastolic_pressure
                         message.diastolic_pressure.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // mean_arterial_pressure
                         message.mean_arterial_pressure.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // map_3_sample_mean
                         message.map_3_sample_mean.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // map_morning_values
                         message.map_morning_values.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // map_evening_values
                         message.map_evening_values.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // heart_rate
                         message.heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // heart_rate_type
                         message.heart_rate_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // status
                         message.status.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // user_profile_index
                         message.user_profile_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -19790,12 +19555,10 @@ impl FitMessageCadenceZone {
 
     fn parse_internal<'a>(message: &mut FitMessageCadenceZone, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -19807,50 +19570,34 @@ impl FitMessageCadenceZone {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // high_value
                         message.high_value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -19948,12 +19695,10 @@ impl FitMessageCameraEvent {
 
     fn parse_internal<'a>(message: &mut FitMessageCameraEvent, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -19965,62 +19710,44 @@ impl FitMessageCameraEvent {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // camera_event_type
                         message.camera_event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // camera_file_uuid
                         message.camera_file_uuid.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // camera_orientation
                         message.camera_orientation.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -20111,12 +19838,10 @@ impl FitMessageCapabilities {
 
     fn parse_internal<'a>(message: &mut FitMessageCapabilities, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -20128,56 +19853,39 @@ impl FitMessageCapabilities {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // languages
                         message.languages.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sports
                         message.sports.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // workouts_supported
                         message.workouts_supported.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     23 => {  // connectivity_supported
                         message.connectivity_supported.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -20313,12 +20021,10 @@ impl FitMessageConnectivity {
 
     fn parse_internal<'a>(message: &mut FitMessageConnectivity, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -20330,110 +20036,84 @@ impl FitMessageConnectivity {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // bluetooth_enabled
                         message.bluetooth_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // bluetooth_le_enabled
                         message.bluetooth_le_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // ant_enabled
                         message.ant_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // live_tracking_enabled
                         message.live_tracking_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // weather_conditions_enabled
                         message.weather_conditions_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // weather_alerts_enabled
                         message.weather_alerts_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // auto_activity_upload_enabled
                         message.auto_activity_upload_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // course_download_enabled
                         message.course_download_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // workout_download_enabled
                         message.workout_download_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // gps_ephemeris_download_enabled
                         message.gps_ephemeris_download_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // incident_detection_enabled
                         message.incident_detection_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // grouptrack_enabled
                         message.grouptrack_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -20524,12 +20204,10 @@ impl FitMessageCourse {
 
     fn parse_internal<'a>(message: &mut FitMessageCourse, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -20541,56 +20219,39 @@ impl FitMessageCourse {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     4 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // capabilities
                         message.capabilities.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -20703,12 +20364,10 @@ impl FitMessageCoursePoint {
 
     fn parse_internal<'a>(message: &mut FitMessageCoursePoint, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -20720,80 +20379,59 @@ impl FitMessageCoursePoint {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // position_lat
                         message.position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // position_long
                         message.position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // distance
                         message.distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // favorite
                         message.favorite.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -20889,12 +20527,10 @@ impl FitMessageDeveloperDataId {
 
     fn parse_internal<'a>(message: &mut FitMessageDeveloperDataId, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -20906,62 +20542,44 @@ impl FitMessageDeveloperDataId {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // developer_id
                         message.developer_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // application_id
                         message.application_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // manufacturer_id
                         message.manufacturer_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // developer_data_index
                         message.developer_data_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // application_version
                         message.application_version.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -21007,8 +20625,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -21200,14 +20818,12 @@ impl FitMessageDeviceInfo {
     fn parse_subfields(message: &mut FitMessageDeviceInfo, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 1).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageDeviceInfoSubfieldDeviceType::parse(message, &message.device_type_subfield_bytes, parse_config)?;
             message.device_type = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 4).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageDeviceInfoSubfieldProduct::parse(message, &message.product_subfield_bytes, parse_config)?;
             message.product = val;
@@ -21219,12 +20835,10 @@ impl FitMessageDeviceInfo {
 
     fn parse_internal<'a>(message: &mut FitMessageDeviceInfo, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -21236,128 +20850,99 @@ impl FitMessageDeviceInfo {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // device_index
                         message.device_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // manufacturer
                         message.manufacturer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // serial_number
                         message.serial_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // software_version
                         message.software_version.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // hardware_version
                         message.hardware_version.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // cum_operating_time
                         message.cum_operating_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // battery_voltage
                         message.battery_voltage.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // battery_status
                         message.battery_status.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // sensor_position
                         message.sensor_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // descriptor
                         message.descriptor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     20 => {  // ant_transmission_type
                         message.ant_transmission_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // ant_device_number
                         message.ant_device_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     22 => {  // ant_network
                         message.ant_network.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     25 => {  // source_type
                         message.source_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     27 => {  // product_name
                         message.product_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -21543,12 +21128,10 @@ impl FitMessageDeviceSettings {
 
     fn parse_internal<'a>(message: &mut FitMessageDeviceSettings, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -21560,170 +21143,134 @@ impl FitMessageDeviceSettings {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // active_time_zone
                         message.active_time_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // utc_offset
                         message.utc_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // time_offset
                         message.time_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // time_mode
                         message.time_mode.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // time_zone_offset
                         message.time_zone_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // backlight_mode
                         message.backlight_mode.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     36 => {  // activity_tracker_enabled
                         message.activity_tracker_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     39 => {  // clock_time
                         message.clock_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     40 => {  // pages_enabled
                         message.pages_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     46 => {  // move_alert_enabled
                         message.move_alert_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     47 => {  // date_mode
                         message.date_mode.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     55 => {  // display_orientation
                         message.display_orientation.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     56 => {  // mounting_side
                         message.mounting_side.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     57 => {  // default_page
                         message.default_page.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     58 => {  // autosync_min_steps
                         message.autosync_min_steps.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     59 => {  // autosync_min_time
                         message.autosync_min_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     80 => {  // lactate_threshold_autodetect_enabled
                         message.lactate_threshold_autodetect_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     86 => {  // ble_auto_upload_enabled
                         message.ble_auto_upload_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     89 => {  // auto_sync_frequency
                         message.auto_sync_frequency.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     90 => {  // auto_activity_detect
                         message.auto_activity_detect.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     94 => {  // number_of_screens
                         message.number_of_screens.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     95 => {  // smart_notification_display_orientation
                         message.smart_notification_display_orientation.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     134 => {  // tap_interface
                         message.tap_interface.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -21829,12 +21376,10 @@ impl FitMessageDiveAlarm {
 
     fn parse_internal<'a>(message: &mut FitMessageDiveAlarm, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -21846,74 +21391,54 @@ impl FitMessageDiveAlarm {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // depth
                         message.depth.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // time
                         message.time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // alarm_type
                         message.alarm_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // sound
                         message.sound.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // dive_types
                         message.dive_types.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -22004,12 +21529,10 @@ impl FitMessageDiveGas {
 
     fn parse_internal<'a>(message: &mut FitMessageDiveGas, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -22021,56 +21544,39 @@ impl FitMessageDiveGas {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // helium_content
                         message.helium_content.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // oxygen_content
                         message.oxygen_content.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // status
                         message.status.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -22285,7 +21791,6 @@ impl FitMessageDiveSettings {
     fn parse_subfields(message: &mut FitMessageDiveSettings, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 20).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageDiveSettingsSubfieldHeartRateSource::parse(message, &message.heart_rate_source_subfield_bytes, parse_config)?;
             message.heart_rate_source = val;
@@ -22297,12 +21802,10 @@ impl FitMessageDiveSettings {
 
     fn parse_internal<'a>(message: &mut FitMessageDiveSettings, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -22314,158 +21817,124 @@ impl FitMessageDiveSettings {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // model
                         message.model.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // gf_low
                         message.gf_low.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // gf_high
                         message.gf_high.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // water_type
                         message.water_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // water_density
                         message.water_density.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // po2_warn
                         message.po2_warn.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // po2_critical
                         message.po2_critical.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // po2_deco
                         message.po2_deco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // safety_stop_enabled
                         message.safety_stop_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // bottom_depth
                         message.bottom_depth.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // bottom_time
                         message.bottom_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // apnea_countdown_enabled
                         message.apnea_countdown_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // apnea_countdown_time
                         message.apnea_countdown_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // backlight_mode
                         message.backlight_mode.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // backlight_brightness
                         message.backlight_brightness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // backlight_timeout
                         message.backlight_timeout.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     17 => {  // repeat_dive_interval
                         message.repeat_dive_interval.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // safety_stop_time
                         message.safety_stop_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // heart_rate_source_type
                         message.heart_rate_source_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -22603,12 +22072,10 @@ impl FitMessageDiveSummary {
 
     fn parse_internal<'a>(message: &mut FitMessageDiveSummary, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -22620,110 +22087,84 @@ impl FitMessageDiveSummary {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // reference_mesg
                         message.reference_mesg.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // reference_index
                         message.reference_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // avg_depth
                         message.avg_depth.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // max_depth
                         message.max_depth.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // surface_interval
                         message.surface_interval.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // start_cns
                         message.start_cns.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // end_cns
                         message.end_cns.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // start_n2
                         message.start_n2.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // end_n2
                         message.end_n2.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // o2_toxicity
                         message.o2_toxicity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // dive_number
                         message.dive_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // bottom_time
                         message.bottom_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -22739,26 +22180,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    HrHighAlert(FitUint8),
-    PowerLowAlert(FitUint16),
-    CadLowAlert(FitUint16),
-    TimeDurationAlert(FitUint32),
-    BatteryLevel(FitUint16),
-    SpeedLowAlert(FitUint32),
-    PowerHighAlert(FitUint16),
-    VirtualPartnerSpeed(FitUint16),
-    DistanceDurationAlert(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    SportPoint(FitUint32),
-    SpeedHighAlert(FitUint32),
-    HrLowAlert(FitUint8),
-    CommTimeout(FitFieldCommTimeoutType),
-    GearChangeData(FitUint32),
-    TimerTrigger(FitFieldTimerTrigger),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
     CoursePointIndex(FitFieldMessageIndex),
     CadHighAlert(FitUint16),
+    SportPoint(FitUint32),
+    CadLowAlert(FitUint16),
+    HrHighAlert(FitUint8),
+    PowerHighAlert(FitUint16),
+    GearChangeData(FitUint32),
+    HrLowAlert(FitUint8),
     RiderPosition(FitFieldRiderPositionType),
+    VirtualPartnerSpeed(FitUint16),
+    TimeDurationAlert(FitUint32),
+    CommTimeout(FitFieldCommTimeoutType),
+    DistanceDurationAlert(FitUint32),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    BatteryLevel(FitUint16),
+    SpeedHighAlert(FitUint32),
+    CalorieDurationAlert(FitUint32),
+    PowerLowAlert(FitUint16),
+    SpeedLowAlert(FitUint32),
+    TimerTrigger(FitFieldTimerTrigger),
 }
 
 impl FitMessageEventSubfieldData {
@@ -23008,7 +22449,6 @@ impl FitMessageEvent {
     fn parse_subfields(message: &mut FitMessageEvent, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 3).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageEventSubfieldData::parse(message, &message.data_subfield_bytes, parse_config)?;
             message.data = val;
@@ -23020,12 +22460,10 @@ impl FitMessageEvent {
 
     fn parse_internal<'a>(message: &mut FitMessageEvent, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -23037,108 +22475,81 @@ impl FitMessageEvent {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // event
                         message.event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // event_type
                         message.event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // data16
                         message.data16.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(3, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(3, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // event_group
                         message.event_group.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // score
                         message.score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // opponent_score
                         message.opponent_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // front_gear_num
                         message.front_gear_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // front_gear
                         message.front_gear.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // rear_gear_num
                         message.rear_gear_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // rear_gear
                         message.rear_gear.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // device_index
                         message.device_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -23264,12 +22675,10 @@ impl FitMessageExdDataConceptConfiguration {
 
     fn parse_internal<'a>(message: &mut FitMessageExdDataConceptConfiguration, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -23281,102 +22690,76 @@ impl FitMessageExdDataConceptConfiguration {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // screen_index
                         message.screen_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // concept_field
                         message.concept_field.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // field_id
                         message.field_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // concept_index
                         message.concept_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // data_page
                         message.data_page.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // concept_key
                         message.concept_key.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // scaling
                         message.scaling.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // data_units
                         message.data_units.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // qualifier
                         message.qualifier.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // descriptor
                         message.descriptor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // is_signed
                         message.is_signed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -23477,12 +22860,10 @@ impl FitMessageExdDataFieldConfiguration {
 
     fn parse_internal<'a>(message: &mut FitMessageExdDataFieldConfiguration, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -23494,72 +22875,51 @@ impl FitMessageExdDataFieldConfiguration {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // screen_index
                         message.screen_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // concept_field
                         message.concept_field.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(2, 1, 2, message.definition_message.endianness, 0, 4),FitParseConfig::new_from_component(3, 1, 2, message.definition_message.endianness, 4, 4)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // field_id
                         message.field_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // concept_count
                         message.concept_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // display_type
                         message.display_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // title
                         message.title.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -23650,12 +23010,10 @@ impl FitMessageExdScreenConfiguration {
 
     fn parse_internal<'a>(message: &mut FitMessageExdScreenConfiguration, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -23667,56 +23025,39 @@ impl FitMessageExdScreenConfiguration {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // screen_index
                         message.screen_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // field_count
                         message.field_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // layout
                         message.layout.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // screen_enabled
                         message.screen_enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -23807,12 +23148,10 @@ impl FitMessageExerciseTitle {
 
     fn parse_internal<'a>(message: &mut FitMessageExerciseTitle, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -23824,56 +23163,39 @@ impl FitMessageExerciseTitle {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // exercise_category
                         message.exercise_category.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // exercise_name
                         message.exercise_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // wkt_step_name
                         message.wkt_step_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -23969,12 +23291,10 @@ impl FitMessageFieldCapabilities {
 
     fn parse_internal<'a>(message: &mut FitMessageFieldCapabilities, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -23986,62 +23306,44 @@ impl FitMessageFieldCapabilities {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // file
                         message.file.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // mesg_num
                         message.mesg_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // field_num
                         message.field_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // count
                         message.count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -24182,12 +23484,10 @@ impl FitMessageFieldDescription {
 
     fn parse_internal<'a>(message: &mut FitMessageFieldDescription, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -24199,116 +23499,89 @@ impl FitMessageFieldDescription {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // developer_data_index
                         message.developer_data_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // field_definition_number
                         message.field_definition_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // fit_base_type_id
                         message.fit_base_type_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // field_name
                         message.field_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // array
                         message.array.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // components
                         message.components.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // scale
                         message.scale.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // offset
                         message.offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // units
                         message.units.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // bits
                         message.bits.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // accumulate
                         message.accumulate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // fit_base_unit_id
                         message.fit_base_unit_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // native_mesg_num
                         message.native_mesg_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // native_field_num
                         message.native_field_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -24409,12 +23682,10 @@ impl FitMessageFileCapabilities {
 
     fn parse_internal<'a>(message: &mut FitMessageFileCapabilities, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -24426,68 +23697,49 @@ impl FitMessageFileCapabilities {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // flags
                         message.flags.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // directory
                         message.directory.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // max_count
                         message.max_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // max_size
                         message.max_size.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -24568,12 +23820,10 @@ impl FitMessageFileCreator {
 
     fn parse_internal<'a>(message: &mut FitMessageFileCreator, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -24585,44 +23835,29 @@ impl FitMessageFileCreator {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // software_version
                         message.software_version.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // hardware_version
                         message.hardware_version.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -24638,8 +23873,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -24772,7 +24007,6 @@ impl FitMessageFileId {
     fn parse_subfields(message: &mut FitMessageFileId, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 2).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageFileIdSubfieldProduct::parse(message, &message.product_subfield_bytes, parse_config)?;
             message.product = val;
@@ -24784,12 +24018,10 @@ impl FitMessageFileId {
 
     fn parse_internal<'a>(message: &mut FitMessageFileId, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -24801,68 +24033,49 @@ impl FitMessageFileId {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // manufacturer
                         message.manufacturer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // serial_number
                         message.serial_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // time_created
                         message.time_created.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // number
                         message.number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // product_name
                         message.product_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -24998,12 +24211,10 @@ impl FitMessageGoal {
 
     fn parse_internal<'a>(message: &mut FitMessageGoal, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -25015,110 +24226,84 @@ impl FitMessageGoal {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // start_date
                         message.start_date.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // end_date
                         message.end_date.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // value
                         message.value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // repeat
                         message.repeat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // target_value
                         message.target_value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // recurrence
                         message.recurrence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // recurrence_value
                         message.recurrence_value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // source
                         message.source.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -25236,12 +24421,10 @@ impl FitMessageGpsMetadata {
 
     fn parse_internal<'a>(message: &mut FitMessageGpsMetadata, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -25253,86 +24436,64 @@ impl FitMessageGpsMetadata {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // position_lat
                         message.position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // position_long
                         message.position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // enhanced_altitude
                         message.enhanced_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // enhanced_speed
                         message.enhanced_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // heading
                         message.heading.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // utc_timestamp
                         message.utc_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // velocity
                         message.velocity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -25450,12 +24611,10 @@ impl FitMessageGyroscopeData {
 
     fn parse_internal<'a>(message: &mut FitMessageGyroscopeData, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -25467,86 +24626,64 @@ impl FitMessageGyroscopeData {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sample_time_offset
                         message.sample_time_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // gyro_x
                         message.gyro_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // gyro_y
                         message.gyro_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // gyro_z
                         message.gyro_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // calibrated_gyro_x
                         message.calibrated_gyro_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // calibrated_gyro_y
                         message.calibrated_gyro_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // calibrated_gyro_z
                         message.calibrated_gyro_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -25649,12 +24786,10 @@ impl FitMessageHr {
 
     fn parse_internal<'a>(message: &mut FitMessageHr, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -25666,76 +24801,53 @@ impl FitMessageHr {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // fractional_timestamp
                         message.fractional_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // time256
                         message.time256.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(0, 2, 132, message.definition_message.endianness, 0, 8)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(0, 2, 132, message.definition_message.endianness, 0, 8)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // filtered_bpm
                         message.filtered_bpm.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // event_timestamp
                         message.event_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // event_timestamp_12
                         message.event_timestamp_12.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 12, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 24, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 36, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 48, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 60, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 72, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 84, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 96, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 108, 12)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 12, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 24, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 36, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 48, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 60, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 72, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 84, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 96, 12),FitParseConfig::new_from_component(9, 4, 134, message.definition_message.endianness, 108, 12)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -25821,12 +24933,10 @@ impl FitMessageHrZone {
 
     fn parse_internal<'a>(message: &mut FitMessageHrZone, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -25838,50 +24948,34 @@ impl FitMessageHrZone {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // high_bpm
                         message.high_bpm.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -25977,12 +25071,10 @@ impl FitMessageHrmProfile {
 
     fn parse_internal<'a>(message: &mut FitMessageHrmProfile, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -25994,62 +25086,44 @@ impl FitMessageHrmProfile {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // hrm_ant_id
                         message.hrm_ant_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // log_hrv
                         message.log_hrv.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // hrm_ant_id_trans_type
                         message.hrm_ant_id_trans_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -26125,12 +25199,10 @@ impl FitMessageHrv {
 
     fn parse_internal<'a>(message: &mut FitMessageHrv, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -26142,38 +25214,24 @@ impl FitMessageHrv {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // time
                         message.time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -26861,21 +25919,18 @@ impl FitMessageLap {
     fn parse_subfields(message: &mut FitMessageLap, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 10).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageLapSubfieldTotalCycles::parse(message, &message.total_cycles_subfield_bytes, parse_config)?;
             message.total_cycles = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 17).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageLapSubfieldAvgCadence::parse(message, &message.avg_cadence_subfield_bytes, parse_config)?;
             message.avg_cadence = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 18).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageLapSubfieldMaxCadence::parse(message, &message.max_cadence_subfield_bytes, parse_config)?;
             message.max_cadence = val;
@@ -26887,12 +25942,10 @@ impl FitMessageLap {
 
     fn parse_internal<'a>(message: &mut FitMessageLap, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -26904,670 +25957,544 @@ impl FitMessageLap {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // event
                         message.event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // event_type
                         message.event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // start_time
                         message.start_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // start_position_lat
                         message.start_position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // start_position_long
                         message.start_position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // end_position_lat
                         message.end_position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // end_position_long
                         message.end_position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // total_elapsed_time
                         message.total_elapsed_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // total_timer_time
                         message.total_timer_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // total_distance
                         message.total_distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // total_calories
                         message.total_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // total_fat_calories
                         message.total_fat_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // avg_speed
                         message.avg_speed.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(110, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(110, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // max_speed
                         message.max_speed.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(111, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(111, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // avg_heart_rate
                         message.avg_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // max_heart_rate
                         message.max_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // avg_power
                         message.avg_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     20 => {  // max_power
                         message.max_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // total_ascent
                         message.total_ascent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     22 => {  // total_descent
                         message.total_descent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     23 => {  // intensity
                         message.intensity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     24 => {  // lap_trigger
                         message.lap_trigger.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     25 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     26 => {  // event_group
                         message.event_group.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     32 => {  // num_lengths
                         message.num_lengths.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     33 => {  // normalized_power
                         message.normalized_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     34 => {  // left_right_balance
                         message.left_right_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     35 => {  // first_length_index
                         message.first_length_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     37 => {  // avg_stroke_distance
                         message.avg_stroke_distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     38 => {  // swim_stroke
                         message.swim_stroke.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     39 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     40 => {  // num_active_lengths
                         message.num_active_lengths.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     41 => {  // total_work
                         message.total_work.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     42 => {  // avg_altitude
                         message.avg_altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(112, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(112, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     43 => {  // max_altitude
                         message.max_altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(114, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(114, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     44 => {  // gps_accuracy
                         message.gps_accuracy.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     45 => {  // avg_grade
                         message.avg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     46 => {  // avg_pos_grade
                         message.avg_pos_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     47 => {  // avg_neg_grade
                         message.avg_neg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     48 => {  // max_pos_grade
                         message.max_pos_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     49 => {  // max_neg_grade
                         message.max_neg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     50 => {  // avg_temperature
                         message.avg_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     51 => {  // max_temperature
                         message.max_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     52 => {  // total_moving_time
                         message.total_moving_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     53 => {  // avg_pos_vertical_speed
                         message.avg_pos_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     54 => {  // avg_neg_vertical_speed
                         message.avg_neg_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     55 => {  // max_pos_vertical_speed
                         message.max_pos_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     56 => {  // max_neg_vertical_speed
                         message.max_neg_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     57 => {  // time_in_hr_zone
                         message.time_in_hr_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     58 => {  // time_in_speed_zone
                         message.time_in_speed_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     59 => {  // time_in_cadence_zone
                         message.time_in_cadence_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     60 => {  // time_in_power_zone
                         message.time_in_power_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     61 => {  // repetition_num
                         message.repetition_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     62 => {  // min_altitude
                         message.min_altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(113, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(113, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     63 => {  // min_heart_rate
                         message.min_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     71 => {  // wkt_step_index
                         message.wkt_step_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     74 => {  // opponent_score
                         message.opponent_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     75 => {  // stroke_count
                         message.stroke_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     76 => {  // zone_count
                         message.zone_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     77 => {  // avg_vertical_oscillation
                         message.avg_vertical_oscillation.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     78 => {  // avg_stance_time_percent
                         message.avg_stance_time_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     79 => {  // avg_stance_time
                         message.avg_stance_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     80 => {  // avg_fractional_cadence
                         message.avg_fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     81 => {  // max_fractional_cadence
                         message.max_fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     82 => {  // total_fractional_cycles
                         message.total_fractional_cycles.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     83 => {  // player_score
                         message.player_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     84 => {  // avg_total_hemoglobin_conc
                         message.avg_total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     85 => {  // min_total_hemoglobin_conc
                         message.min_total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     86 => {  // max_total_hemoglobin_conc
                         message.max_total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     87 => {  // avg_saturated_hemoglobin_percent
                         message.avg_saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     88 => {  // min_saturated_hemoglobin_percent
                         message.min_saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     89 => {  // max_saturated_hemoglobin_percent
                         message.max_saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     91 => {  // avg_left_torque_effectiveness
                         message.avg_left_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     92 => {  // avg_right_torque_effectiveness
                         message.avg_right_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     93 => {  // avg_left_pedal_smoothness
                         message.avg_left_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     94 => {  // avg_right_pedal_smoothness
                         message.avg_right_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     95 => {  // avg_combined_pedal_smoothness
                         message.avg_combined_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     98 => {  // time_standing
                         message.time_standing.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     99 => {  // stand_count
                         message.stand_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     100 => {  // avg_left_pco
                         message.avg_left_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     101 => {  // avg_right_pco
                         message.avg_right_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     102 => {  // avg_left_power_phase
                         message.avg_left_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     103 => {  // avg_left_power_phase_peak
                         message.avg_left_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     104 => {  // avg_right_power_phase
                         message.avg_right_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     105 => {  // avg_right_power_phase_peak
                         message.avg_right_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     106 => {  // avg_power_position
                         message.avg_power_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     107 => {  // max_power_position
                         message.max_power_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     108 => {  // avg_cadence_position
                         message.avg_cadence_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     109 => {  // max_cadence_position
                         message.max_cadence_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     110 => {  // enhanced_avg_speed
                         message.enhanced_avg_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     111 => {  // enhanced_max_speed
                         message.enhanced_max_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     112 => {  // enhanced_avg_altitude
                         message.enhanced_avg_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     113 => {  // enhanced_min_altitude
                         message.enhanced_min_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     114 => {  // enhanced_max_altitude
                         message.enhanced_max_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     115 => {  // avg_lev_motor_power
                         message.avg_lev_motor_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     116 => {  // max_lev_motor_power
                         message.max_lev_motor_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     117 => {  // lev_battery_consumption
                         message.lev_battery_consumption.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     118 => {  // avg_vertical_ratio
                         message.avg_vertical_ratio.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     119 => {  // avg_stance_time_balance
                         message.avg_stance_time_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     120 => {  // avg_step_length
                         message.avg_step_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     121 => {  // avg_vam
                         message.avg_vam.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -27730,12 +26657,10 @@ impl FitMessageLength {
 
     fn parse_internal<'a>(message: &mut FitMessageLength, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -27747,140 +26672,109 @@ impl FitMessageLength {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // event
                         message.event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // event_type
                         message.event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // start_time
                         message.start_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // total_elapsed_time
                         message.total_elapsed_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // total_timer_time
                         message.total_timer_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // total_strokes
                         message.total_strokes.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // avg_speed
                         message.avg_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // swim_stroke
                         message.swim_stroke.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // avg_swimming_cadence
                         message.avg_swimming_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // event_group
                         message.event_group.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // total_calories
                         message.total_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // length_type
                         message.length_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // player_score
                         message.player_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // opponent_score
                         message.opponent_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     20 => {  // stroke_count
                         message.stroke_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // zone_count
                         message.zone_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -27998,12 +26892,10 @@ impl FitMessageMagnetometerData {
 
     fn parse_internal<'a>(message: &mut FitMessageMagnetometerData, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -28015,86 +26907,64 @@ impl FitMessageMagnetometerData {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sample_time_offset
                         message.sample_time_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // mag_x
                         message.mag_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // mag_y
                         message.mag_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // mag_z
                         message.mag_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // calibrated_mag_x
                         message.calibrated_mag_x.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // calibrated_mag_y
                         message.calibrated_mag_y.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // calibrated_mag_z
                         message.calibrated_mag_z.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -28185,12 +27055,10 @@ impl FitMessageMemoGlob {
 
     fn parse_internal<'a>(message: &mut FitMessageMemoGlob, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -28202,56 +27070,39 @@ impl FitMessageMemoGlob {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     250 => {  // part_index
                         message.part_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // memo
                         message.memo.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // message_number
                         message.message_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -28267,9 +27118,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
+    MaxPerFile(FitUint16),
     NumPerFile(FitUint16),
     MaxPerFileType(FitUint16),
-    MaxPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -28387,7 +27238,6 @@ impl FitMessageMesgCapabilities {
     fn parse_subfields(message: &mut FitMessageMesgCapabilities, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 3).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageMesgCapabilitiesSubfieldCount::parse(message, &message.count_subfield_bytes, parse_config)?;
             message.count = val;
@@ -28399,12 +27249,10 @@ impl FitMessageMesgCapabilities {
 
     fn parse_internal<'a>(message: &mut FitMessageMesgCapabilities, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -28416,56 +27264,39 @@ impl FitMessageMesgCapabilities {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // file
                         message.file.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // mesg_num
                         message.mesg_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // count_type
                         message.count_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -28556,12 +27387,10 @@ impl FitMessageMetZone {
 
     fn parse_internal<'a>(message: &mut FitMessageMetZone, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -28573,56 +27402,39 @@ impl FitMessageMetZone {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // high_bpm
                         message.high_bpm.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // calories
                         message.calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // fat_calories
                         message.fat_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -28638,8 +27450,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitUint32),
-    Strokes(FitUint32),
     Steps(FitUint32),
+    Strokes(FitUint32),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -28884,7 +27696,6 @@ impl FitMessageMonitoring {
     fn parse_subfields(message: &mut FitMessageMonitoring, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 3).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageMonitoringSubfieldCycles::parse(message, &message.cycles_subfield_bytes, parse_config)?;
             message.cycles = val;
@@ -28896,12 +27707,10 @@ impl FitMessageMonitoring {
 
     fn parse_internal<'a>(message: &mut FitMessageMonitoring, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -28913,204 +27722,161 @@ impl FitMessageMonitoring {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // device_index
                         message.device_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // calories
                         message.calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // distance
                         message.distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // active_time
                         message.active_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // activity_type
                         message.activity_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // activity_subtype
                         message.activity_subtype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // activity_level
                         message.activity_level.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // distance_16
                         message.distance_16.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // cycles_16
                         message.cycles_16.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // active_time_16
                         message.active_time_16.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // local_timestamp
                         message.local_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // temperature
                         message.temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // temperature_min
                         message.temperature_min.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // temperature_max
                         message.temperature_max.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // activity_time
                         message.activity_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // active_calories
                         message.active_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     24 => {  // current_activity_type_intensity
                         message.current_activity_type_intensity.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(5, 1, 0, message.definition_message.endianness, 0, 5),FitParseConfig::new_from_component(28, 1, 2, message.definition_message.endianness, 5, 3)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(5, 1, 0, message.definition_message.endianness, 0, 5),FitParseConfig::new_from_component(28, 1, 2, message.definition_message.endianness, 5, 3)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     25 => {  // timestamp_min_8
                         message.timestamp_min_8.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     26 => {  // timestamp_16
                         message.timestamp_16.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     27 => {  // heart_rate
                         message.heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     28 => {  // intensity
                         message.intensity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     29 => {  // duration_min
                         message.duration_min.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     30 => {  // duration
                         message.duration.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     31 => {  // ascent
                         message.ascent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     32 => {  // descent
                         message.descent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     33 => {  // moderate_activity_minutes
                         message.moderate_activity_minutes.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     34 => {  // vigorous_activity_minutes
                         message.vigorous_activity_minutes.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -29213,12 +27979,10 @@ impl FitMessageMonitoringInfo {
 
     fn parse_internal<'a>(message: &mut FitMessageMonitoringInfo, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -29230,68 +27994,49 @@ impl FitMessageMonitoringInfo {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // local_timestamp
                         message.local_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // activity_type
                         message.activity_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // cycles_to_distance
                         message.cycles_to_distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // cycles_to_calories
                         message.cycles_to_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // resting_metabolic_rate
                         message.resting_metabolic_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -29379,12 +28124,10 @@ impl FitMessageNmeaSentence {
 
     fn parse_internal<'a>(message: &mut FitMessageNmeaSentence, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -29396,50 +28139,34 @@ impl FitMessageNmeaSentence {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sentence
                         message.sentence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -29557,12 +28284,10 @@ impl FitMessageObdiiData {
 
     fn parse_internal<'a>(message: &mut FitMessageObdiiData, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -29574,86 +28299,64 @@ impl FitMessageObdiiData {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // time_offset
                         message.time_offset.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // pid
                         message.pid.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // raw_data
                         message.raw_data.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // pid_data_size
                         message.pid_data_size.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // system_time
                         message.system_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // start_timestamp
                         message.start_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // start_timestamp_ms
                         message.start_timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -29736,12 +28439,10 @@ impl FitMessageOhrSettings {
 
     fn parse_internal<'a>(message: &mut FitMessageOhrSettings, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -29753,44 +28454,29 @@ impl FitMessageOhrSettings {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -29921,7 +28607,6 @@ impl FitMessageOneDSensorCalibration {
     fn parse_subfields(message: &mut FitMessageOneDSensorCalibration, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 1).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::parse(message, &message.calibration_factor_subfield_bytes, parse_config)?;
             message.calibration_factor = val;
@@ -29933,12 +28618,10 @@ impl FitMessageOneDSensorCalibration {
 
     fn parse_internal<'a>(message: &mut FitMessageOneDSensorCalibration, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -29950,62 +28633,44 @@ impl FitMessageOneDSensorCalibration {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // sensor_type
                         message.sensor_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // calibration_divisor
                         message.calibration_divisor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // level_shift
                         message.level_shift.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // offset_cal
                         message.offset_cal.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -30091,12 +28756,10 @@ impl FitMessagePowerZone {
 
     fn parse_internal<'a>(message: &mut FitMessagePowerZone, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -30108,50 +28771,34 @@ impl FitMessagePowerZone {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // high_value
                         message.high_value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -30559,12 +29206,10 @@ impl FitMessageRecord {
 
     fn parse_internal<'a>(message: &mut FitMessageRecord, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -30576,454 +29221,364 @@ impl FitMessageRecord {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // position_lat
                         message.position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // position_long
                         message.position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // altitude
                         message.altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(78, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(78, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // heart_rate
                         message.heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // cadence
                         message.cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // distance
                         message.distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // speed
                         message.speed.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(73, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(73, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // power
                         message.power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // compressed_speed_distance
                         message.compressed_speed_distance.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(6, 2, 132, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(5, 4, 134, message.definition_message.endianness, 12, 12)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(6, 2, 132, message.definition_message.endianness, 0, 12),FitParseConfig::new_from_component(5, 4, 134, message.definition_message.endianness, 12, 12)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // grade
                         message.grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // resistance
                         message.resistance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // time_from_course
                         message.time_from_course.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // cycle_length
                         message.cycle_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // temperature
                         message.temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     17 => {  // speed_1s
                         message.speed_1s.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // cycles
                         message.cycles.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(19, 4, 134, message.definition_message.endianness, 0, 8)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(19, 4, 134, message.definition_message.endianness, 0, 8)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // total_cycles
                         message.total_cycles.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     28 => {  // compressed_accumulated_power
                         message.compressed_accumulated_power.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(29, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(29, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     29 => {  // accumulated_power
                         message.accumulated_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     30 => {  // left_right_balance
                         message.left_right_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     31 => {  // gps_accuracy
                         message.gps_accuracy.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     32 => {  // vertical_speed
                         message.vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     33 => {  // calories
                         message.calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     39 => {  // vertical_oscillation
                         message.vertical_oscillation.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     40 => {  // stance_time_percent
                         message.stance_time_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     41 => {  // stance_time
                         message.stance_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     42 => {  // activity_type
                         message.activity_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     43 => {  // left_torque_effectiveness
                         message.left_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     44 => {  // right_torque_effectiveness
                         message.right_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     45 => {  // left_pedal_smoothness
                         message.left_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     46 => {  // right_pedal_smoothness
                         message.right_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     47 => {  // combined_pedal_smoothness
                         message.combined_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     48 => {  // time128
                         message.time128.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     49 => {  // stroke_type
                         message.stroke_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     50 => {  // zone
                         message.zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     51 => {  // ball_speed
                         message.ball_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     52 => {  // cadence256
                         message.cadence256.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     53 => {  // fractional_cadence
                         message.fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     54 => {  // total_hemoglobin_conc
                         message.total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     55 => {  // total_hemoglobin_conc_min
                         message.total_hemoglobin_conc_min.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     56 => {  // total_hemoglobin_conc_max
                         message.total_hemoglobin_conc_max.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     57 => {  // saturated_hemoglobin_percent
                         message.saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     58 => {  // saturated_hemoglobin_percent_min
                         message.saturated_hemoglobin_percent_min.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     59 => {  // saturated_hemoglobin_percent_max
                         message.saturated_hemoglobin_percent_max.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     62 => {  // device_index
                         message.device_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     67 => {  // left_pco
                         message.left_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     68 => {  // right_pco
                         message.right_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     69 => {  // left_power_phase
                         message.left_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     70 => {  // left_power_phase_peak
                         message.left_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     71 => {  // right_power_phase
                         message.right_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     72 => {  // right_power_phase_peak
                         message.right_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     73 => {  // enhanced_speed
                         message.enhanced_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     78 => {  // enhanced_altitude
                         message.enhanced_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     81 => {  // battery_soc
                         message.battery_soc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     82 => {  // motor_power
                         message.motor_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     83 => {  // vertical_ratio
                         message.vertical_ratio.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     84 => {  // stance_time_balance
                         message.stance_time_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     85 => {  // step_length
                         message.step_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     91 => {  // absolute_pressure
                         message.absolute_pressure.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     92 => {  // depth
                         message.depth.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     93 => {  // next_stop_depth
                         message.next_stop_depth.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     94 => {  // next_stop_time
                         message.next_stop_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     95 => {  // time_to_surface
                         message.time_to_surface.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     96 => {  // ndl_time
                         message.ndl_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     97 => {  // cns_load
                         message.cns_load.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     98 => {  // n2_load
                         message.n2_load.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -31039,8 +29594,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -31173,7 +29728,6 @@ impl FitMessageSchedule {
     fn parse_subfields(message: &mut FitMessageSchedule, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 1).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageScheduleSubfieldProduct::parse(message, &message.product_subfield_bytes, parse_config)?;
             message.product = val;
@@ -31185,12 +29739,10 @@ impl FitMessageSchedule {
 
     fn parse_internal<'a>(message: &mut FitMessageSchedule, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -31202,68 +29754,49 @@ impl FitMessageSchedule {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // manufacturer
                         message.manufacturer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // serial_number
                         message.serial_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // time_created
                         message.time_created.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // completed
                         message.completed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // scheduled_time
                         message.scheduled_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -31374,12 +29907,10 @@ impl FitMessageSdmProfile {
 
     fn parse_internal<'a>(message: &mut FitMessageSdmProfile, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -31391,80 +29922,59 @@ impl FitMessageSdmProfile {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sdm_ant_id
                         message.sdm_ant_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // sdm_cal_factor
                         message.sdm_cal_factor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // odometer
                         message.odometer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // speed_source
                         message.speed_source.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // sdm_ant_id_trans_type
                         message.sdm_ant_id_trans_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // odometer_rollover
                         message.odometer_rollover.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -31580,12 +30090,10 @@ impl FitMessageSegmentFile {
 
     fn parse_internal<'a>(message: &mut FitMessageSegmentFile, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -31597,86 +30105,64 @@ impl FitMessageSegmentFile {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // file_uuid
                         message.file_uuid.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // user_profile_primary_key
                         message.user_profile_primary_key.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // leader_type
                         message.leader_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // leader_group_primary_key
                         message.leader_group_primary_key.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // leader_activity_id
                         message.leader_activity_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // leader_activity_id_string
                         message.leader_activity_id_string.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // default_race_leader
                         message.default_race_leader.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -31792,12 +30278,10 @@ impl FitMessageSegmentId {
 
     fn parse_internal<'a>(message: &mut FitMessageSegmentId, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -31809,86 +30293,64 @@ impl FitMessageSegmentId {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // uuid
                         message.uuid.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // enabled
                         message.enabled.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // user_profile_primary_key
                         message.user_profile_primary_key.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // device_id
                         message.device_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // default_race_leader
                         message.default_race_leader.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // delete_status
                         message.delete_status.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // selection_type
                         message.selection_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -32419,7 +30881,6 @@ impl FitMessageSegmentLap {
     fn parse_subfields(message: &mut FitMessageSegmentLap, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 10).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageSegmentLapSubfieldTotalCycles::parse(message, &message.total_cycles_subfield_bytes, parse_config)?;
             message.total_cycles = val;
@@ -32431,12 +30892,10 @@ impl FitMessageSegmentLap {
 
     fn parse_internal<'a>(message: &mut FitMessageSegmentLap, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -32448,542 +30907,444 @@ impl FitMessageSegmentLap {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // event
                         message.event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // event_type
                         message.event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // start_time
                         message.start_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // start_position_lat
                         message.start_position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // start_position_long
                         message.start_position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // end_position_lat
                         message.end_position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // end_position_long
                         message.end_position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // total_elapsed_time
                         message.total_elapsed_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // total_timer_time
                         message.total_timer_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // total_distance
                         message.total_distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // total_calories
                         message.total_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // total_fat_calories
                         message.total_fat_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // avg_speed
                         message.avg_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // max_speed
                         message.max_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // avg_heart_rate
                         message.avg_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // max_heart_rate
                         message.max_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     17 => {  // avg_cadence
                         message.avg_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // max_cadence
                         message.max_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     19 => {  // avg_power
                         message.avg_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     20 => {  // max_power
                         message.max_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // total_ascent
                         message.total_ascent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     22 => {  // total_descent
                         message.total_descent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     23 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     24 => {  // event_group
                         message.event_group.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     25 => {  // nec_lat
                         message.nec_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     26 => {  // nec_long
                         message.nec_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     27 => {  // swc_lat
                         message.swc_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     28 => {  // swc_long
                         message.swc_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     29 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     30 => {  // normalized_power
                         message.normalized_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     31 => {  // left_right_balance
                         message.left_right_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     32 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     33 => {  // total_work
                         message.total_work.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     34 => {  // avg_altitude
                         message.avg_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     35 => {  // max_altitude
                         message.max_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     36 => {  // gps_accuracy
                         message.gps_accuracy.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     37 => {  // avg_grade
                         message.avg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     38 => {  // avg_pos_grade
                         message.avg_pos_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     39 => {  // avg_neg_grade
                         message.avg_neg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     40 => {  // max_pos_grade
                         message.max_pos_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     41 => {  // max_neg_grade
                         message.max_neg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     42 => {  // avg_temperature
                         message.avg_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     43 => {  // max_temperature
                         message.max_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     44 => {  // total_moving_time
                         message.total_moving_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     45 => {  // avg_pos_vertical_speed
                         message.avg_pos_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     46 => {  // avg_neg_vertical_speed
                         message.avg_neg_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     47 => {  // max_pos_vertical_speed
                         message.max_pos_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     48 => {  // max_neg_vertical_speed
                         message.max_neg_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     49 => {  // time_in_hr_zone
                         message.time_in_hr_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     50 => {  // time_in_speed_zone
                         message.time_in_speed_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     51 => {  // time_in_cadence_zone
                         message.time_in_cadence_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     52 => {  // time_in_power_zone
                         message.time_in_power_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     53 => {  // repetition_num
                         message.repetition_num.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     54 => {  // min_altitude
                         message.min_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     55 => {  // min_heart_rate
                         message.min_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     56 => {  // active_time
                         message.active_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     57 => {  // wkt_step_index
                         message.wkt_step_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     58 => {  // sport_event
                         message.sport_event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     59 => {  // avg_left_torque_effectiveness
                         message.avg_left_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     60 => {  // avg_right_torque_effectiveness
                         message.avg_right_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     61 => {  // avg_left_pedal_smoothness
                         message.avg_left_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     62 => {  // avg_right_pedal_smoothness
                         message.avg_right_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     63 => {  // avg_combined_pedal_smoothness
                         message.avg_combined_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     64 => {  // status
                         message.status.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     65 => {  // uuid
                         message.uuid.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     66 => {  // avg_fractional_cadence
                         message.avg_fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     67 => {  // max_fractional_cadence
                         message.max_fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     68 => {  // total_fractional_cycles
                         message.total_fractional_cycles.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     69 => {  // front_gear_shift_count
                         message.front_gear_shift_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     70 => {  // rear_gear_shift_count
                         message.rear_gear_shift_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     71 => {  // time_standing
                         message.time_standing.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     72 => {  // stand_count
                         message.stand_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     73 => {  // avg_left_pco
                         message.avg_left_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     74 => {  // avg_right_pco
                         message.avg_right_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     75 => {  // avg_left_power_phase
                         message.avg_left_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     76 => {  // avg_left_power_phase_peak
                         message.avg_left_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     77 => {  // avg_right_power_phase
                         message.avg_right_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     78 => {  // avg_right_power_phase_peak
                         message.avg_right_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     79 => {  // avg_power_position
                         message.avg_power_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     80 => {  // max_power_position
                         message.max_power_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     81 => {  // avg_cadence_position
                         message.avg_cadence_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     82 => {  // max_cadence_position
                         message.max_cadence_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     83 => {  // manufacturer
                         message.manufacturer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -33089,12 +31450,10 @@ impl FitMessageSegmentLeaderboardEntry {
 
     fn parse_internal<'a>(message: &mut FitMessageSegmentLeaderboardEntry, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -33106,74 +31465,54 @@ impl FitMessageSegmentLeaderboardEntry {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // group_primary_key
                         message.group_primary_key.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // activity_id
                         message.activity_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // segment_time
                         message.segment_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // activity_id_string
                         message.activity_id_string.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -33274,12 +31613,10 @@ impl FitMessageSegmentPoint {
 
     fn parse_internal<'a>(message: &mut FitMessageSegmentPoint, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -33291,68 +31628,49 @@ impl FitMessageSegmentPoint {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // position_lat
                         message.position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // position_long
                         message.position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // distance
                         message.distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // altitude
                         message.altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // leader_time
                         message.leader_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -34105,21 +32423,18 @@ impl FitMessageSession {
     fn parse_subfields(message: &mut FitMessageSession, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 10).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageSessionSubfieldTotalCycles::parse(message, &message.total_cycles_subfield_bytes, parse_config)?;
             message.total_cycles = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 18).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageSessionSubfieldAvgCadence::parse(message, &message.avg_cadence_subfield_bytes, parse_config)?;
             message.avg_cadence = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 19).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageSessionSubfieldMaxCadence::parse(message, &message.max_cadence_subfield_bytes, parse_config)?;
             message.max_cadence = val;
@@ -34131,12 +32446,10 @@ impl FitMessageSession {
 
     fn parse_internal<'a>(message: &mut FitMessageSession, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -34148,748 +32461,609 @@ impl FitMessageSession {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // event
                         message.event.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // event_type
                         message.event_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // start_time
                         message.start_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // start_position_lat
                         message.start_position_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // start_position_long
                         message.start_position_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // total_elapsed_time
                         message.total_elapsed_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // total_timer_time
                         message.total_timer_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // total_distance
                         message.total_distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // total_calories
                         message.total_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // total_fat_calories
                         message.total_fat_calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // avg_speed
                         message.avg_speed.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(124, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(124, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // max_speed
                         message.max_speed.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(125, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(125, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // avg_heart_rate
                         message.avg_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     17 => {  // max_heart_rate
                         message.max_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     20 => {  // avg_power
                         message.avg_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // max_power
                         message.max_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     22 => {  // total_ascent
                         message.total_ascent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     23 => {  // total_descent
                         message.total_descent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     24 => {  // total_training_effect
                         message.total_training_effect.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     25 => {  // first_lap_index
                         message.first_lap_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     26 => {  // num_laps
                         message.num_laps.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     27 => {  // event_group
                         message.event_group.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     28 => {  // trigger
                         message.trigger.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     29 => {  // nec_lat
                         message.nec_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     30 => {  // nec_long
                         message.nec_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     31 => {  // swc_lat
                         message.swc_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     32 => {  // swc_long
                         message.swc_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     34 => {  // normalized_power
                         message.normalized_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     35 => {  // training_stress_score
                         message.training_stress_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     36 => {  // intensity_factor
                         message.intensity_factor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     37 => {  // left_right_balance
                         message.left_right_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     41 => {  // avg_stroke_count
                         message.avg_stroke_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     42 => {  // avg_stroke_distance
                         message.avg_stroke_distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     43 => {  // swim_stroke
                         message.swim_stroke.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     44 => {  // pool_length
                         message.pool_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     45 => {  // threshold_power
                         message.threshold_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     46 => {  // pool_length_unit
                         message.pool_length_unit.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     47 => {  // num_active_lengths
                         message.num_active_lengths.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     48 => {  // total_work
                         message.total_work.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     49 => {  // avg_altitude
                         message.avg_altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(126, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(126, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     50 => {  // max_altitude
                         message.max_altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(128, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(128, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     51 => {  // gps_accuracy
                         message.gps_accuracy.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     52 => {  // avg_grade
                         message.avg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     53 => {  // avg_pos_grade
                         message.avg_pos_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     54 => {  // avg_neg_grade
                         message.avg_neg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     55 => {  // max_pos_grade
                         message.max_pos_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     56 => {  // max_neg_grade
                         message.max_neg_grade.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     57 => {  // avg_temperature
                         message.avg_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     58 => {  // max_temperature
                         message.max_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     59 => {  // total_moving_time
                         message.total_moving_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     60 => {  // avg_pos_vertical_speed
                         message.avg_pos_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     61 => {  // avg_neg_vertical_speed
                         message.avg_neg_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     62 => {  // max_pos_vertical_speed
                         message.max_pos_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     63 => {  // max_neg_vertical_speed
                         message.max_neg_vertical_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     64 => {  // min_heart_rate
                         message.min_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     65 => {  // time_in_hr_zone
                         message.time_in_hr_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     66 => {  // time_in_speed_zone
                         message.time_in_speed_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     67 => {  // time_in_cadence_zone
                         message.time_in_cadence_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     68 => {  // time_in_power_zone
                         message.time_in_power_zone.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     69 => {  // avg_lap_time
                         message.avg_lap_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     70 => {  // best_lap_index
                         message.best_lap_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     71 => {  // min_altitude
                         message.min_altitude.parse(parse_input, parse_config)?;
                         
-                        //let components = vec![FitParseConfig::new_from_component(127, 4, 134, message.definition_message.endianness, 0, 16)];
-                        //let actions_extend: Vec<(FitParseConfig, bool)> = components.into_iter().map(|c| (c, false)).collect();
                         actions.extend(vec![FitParseConfig::new_from_component(127, 4, 134, message.definition_message.endianness, 0, 16)]);
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     82 => {  // player_score
                         message.player_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     83 => {  // opponent_score
                         message.opponent_score.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     84 => {  // opponent_name
                         message.opponent_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     85 => {  // stroke_count
                         message.stroke_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     86 => {  // zone_count
                         message.zone_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     87 => {  // max_ball_speed
                         message.max_ball_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     88 => {  // avg_ball_speed
                         message.avg_ball_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     89 => {  // avg_vertical_oscillation
                         message.avg_vertical_oscillation.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     90 => {  // avg_stance_time_percent
                         message.avg_stance_time_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     91 => {  // avg_stance_time
                         message.avg_stance_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     92 => {  // avg_fractional_cadence
                         message.avg_fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     93 => {  // max_fractional_cadence
                         message.max_fractional_cadence.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     94 => {  // total_fractional_cycles
                         message.total_fractional_cycles.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     95 => {  // avg_total_hemoglobin_conc
                         message.avg_total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     96 => {  // min_total_hemoglobin_conc
                         message.min_total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     97 => {  // max_total_hemoglobin_conc
                         message.max_total_hemoglobin_conc.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     98 => {  // avg_saturated_hemoglobin_percent
                         message.avg_saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     99 => {  // min_saturated_hemoglobin_percent
                         message.min_saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     100 => {  // max_saturated_hemoglobin_percent
                         message.max_saturated_hemoglobin_percent.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     101 => {  // avg_left_torque_effectiveness
                         message.avg_left_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     102 => {  // avg_right_torque_effectiveness
                         message.avg_right_torque_effectiveness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     103 => {  // avg_left_pedal_smoothness
                         message.avg_left_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     104 => {  // avg_right_pedal_smoothness
                         message.avg_right_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     105 => {  // avg_combined_pedal_smoothness
                         message.avg_combined_pedal_smoothness.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     111 => {  // sport_index
                         message.sport_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     112 => {  // time_standing
                         message.time_standing.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     113 => {  // stand_count
                         message.stand_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     114 => {  // avg_left_pco
                         message.avg_left_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     115 => {  // avg_right_pco
                         message.avg_right_pco.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     116 => {  // avg_left_power_phase
                         message.avg_left_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     117 => {  // avg_left_power_phase_peak
                         message.avg_left_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     118 => {  // avg_right_power_phase
                         message.avg_right_power_phase.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     119 => {  // avg_right_power_phase_peak
                         message.avg_right_power_phase_peak.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     120 => {  // avg_power_position
                         message.avg_power_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     121 => {  // max_power_position
                         message.max_power_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     122 => {  // avg_cadence_position
                         message.avg_cadence_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     123 => {  // max_cadence_position
                         message.max_cadence_position.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     124 => {  // enhanced_avg_speed
                         message.enhanced_avg_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     125 => {  // enhanced_max_speed
                         message.enhanced_max_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     126 => {  // enhanced_avg_altitude
                         message.enhanced_avg_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     127 => {  // enhanced_min_altitude
                         message.enhanced_min_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     128 => {  // enhanced_max_altitude
                         message.enhanced_max_altitude.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     129 => {  // avg_lev_motor_power
                         message.avg_lev_motor_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     130 => {  // max_lev_motor_power
                         message.max_lev_motor_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     131 => {  // lev_battery_consumption
                         message.lev_battery_consumption.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     132 => {  // avg_vertical_ratio
                         message.avg_vertical_ratio.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     133 => {  // avg_stance_time_balance
                         message.avg_stance_time_balance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     134 => {  // avg_step_length
                         message.avg_step_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     137 => {  // total_anaerobic_training_effect
                         message.total_anaerobic_training_effect.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     139 => {  // avg_vam
                         message.avg_vam.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35017,12 +33191,10 @@ impl FitMessageSet {
 
     fn parse_internal<'a>(message: &mut FitMessageSet, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -35034,98 +33206,74 @@ impl FitMessageSet {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // duration
                         message.duration.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // repetitions
                         message.repetitions.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // weight
                         message.weight.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // set_type
                         message.set_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // start_time
                         message.start_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // category
                         message.category.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // category_subtype
                         message.category_subtype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // weight_display_unit
                         message.weight_display_unit.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // wkt_step_index
                         message.wkt_step_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35141,8 +33289,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -35250,7 +33398,6 @@ impl FitMessageSlaveDevice {
     fn parse_subfields(message: &mut FitMessageSlaveDevice, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 1).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageSlaveDeviceSubfieldProduct::parse(message, &message.product_subfield_bytes, parse_config)?;
             message.product = val;
@@ -35262,12 +33409,10 @@ impl FitMessageSlaveDevice {
 
     fn parse_internal<'a>(message: &mut FitMessageSlaveDevice, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -35279,38 +33424,24 @@ impl FitMessageSlaveDevice {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // manufacturer
                         message.manufacturer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35396,12 +33527,10 @@ impl FitMessageSoftware {
 
     fn parse_internal<'a>(message: &mut FitMessageSoftware, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -35413,50 +33542,34 @@ impl FitMessageSoftware {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // version
                         message.version.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // part_number
                         message.part_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35542,12 +33655,10 @@ impl FitMessageSpeedZone {
 
     fn parse_internal<'a>(message: &mut FitMessageSpeedZone, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -35559,50 +33670,34 @@ impl FitMessageSpeedZone {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // high_value
                         message.high_value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35688,12 +33783,10 @@ impl FitMessageSport {
 
     fn parse_internal<'a>(message: &mut FitMessageSport, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -35705,50 +33798,34 @@ impl FitMessageSport {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // name
                         message.name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35829,12 +33906,10 @@ impl FitMessageStressLevel {
 
     fn parse_internal<'a>(message: &mut FitMessageStressLevel, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -35846,44 +33921,29 @@ impl FitMessageStressLevel {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // stress_level_value
                         message.stress_level_value.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // stress_level_time
                         message.stress_level_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -35899,8 +33959,8 @@ impl FitRecord for FitMessageStressLevel {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    GyroCalFactor(FitUint32),
     AccelCalFactor(FitUint32),
+    GyroCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -36025,7 +34085,6 @@ impl FitMessageThreeDSensorCalibration {
     fn parse_subfields(message: &mut FitMessageThreeDSensorCalibration, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 1).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::parse(message, &message.calibration_factor_subfield_bytes, parse_config)?;
             message.calibration_factor = val;
@@ -36037,12 +34096,10 @@ impl FitMessageThreeDSensorCalibration {
 
     fn parse_internal<'a>(message: &mut FitMessageThreeDSensorCalibration, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -36054,68 +34111,49 @@ impl FitMessageThreeDSensorCalibration {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // sensor_type
                         message.sensor_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // calibration_divisor
                         message.calibration_divisor.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // level_shift
                         message.level_shift.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // offset_cal
                         message.offset_cal.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // orientation_matrix
                         message.orientation_matrix.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -36223,12 +34261,10 @@ impl FitMessageTimestampCorrelation {
 
     fn parse_internal<'a>(message: &mut FitMessageTimestampCorrelation, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -36240,74 +34276,54 @@ impl FitMessageTimestampCorrelation {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // fractional_timestamp
                         message.fractional_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // system_timestamp
                         message.system_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // fractional_system_timestamp
                         message.fractional_system_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // local_timestamp
                         message.local_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // system_timestamp_ms
                         message.system_timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -36430,12 +34446,10 @@ impl FitMessageTotals {
 
     fn parse_internal<'a>(message: &mut FitMessageTotals, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -36447,92 +34461,69 @@ impl FitMessageTotals {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timer_time
                         message.timer_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // distance
                         message.distance.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // calories
                         message.calories.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // elapsed_time
                         message.elapsed_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // sessions
                         message.sessions.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // active_time
                         message.active_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // sport_index
                         message.sport_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -36548,8 +34539,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -36679,7 +34670,6 @@ impl FitMessageTrainingFile {
     fn parse_subfields(message: &mut FitMessageTrainingFile, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 2).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageTrainingFileSubfieldProduct::parse(message, &message.product_subfield_bytes, parse_config)?;
             message.product = val;
@@ -36691,12 +34681,10 @@ impl FitMessageTrainingFile {
 
     fn parse_internal<'a>(message: &mut FitMessageTrainingFile, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -36708,62 +34696,44 @@ impl FitMessageTrainingFile {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // manufacturer
                         message.manufacturer.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // serial_number
                         message.serial_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // time_created
                         message.time_created.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -36979,12 +34949,10 @@ impl FitMessageUserProfile {
 
     fn parse_internal<'a>(message: &mut FitMessageUserProfile, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -36996,206 +34964,164 @@ impl FitMessageUserProfile {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // friendly_name
                         message.friendly_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // gender
                         message.gender.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // age
                         message.age.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // height
                         message.height.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // weight
                         message.weight.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // language
                         message.language.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // elev_setting
                         message.elev_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // weight_setting
                         message.weight_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // resting_heart_rate
                         message.resting_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // default_max_running_heart_rate
                         message.default_max_running_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // default_max_biking_heart_rate
                         message.default_max_biking_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // default_max_heart_rate
                         message.default_max_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // hr_setting
                         message.hr_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // speed_setting
                         message.speed_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // dist_setting
                         message.dist_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     16 => {  // power_setting
                         message.power_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     17 => {  // activity_class
                         message.activity_class.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     18 => {  // position_setting
                         message.position_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     21 => {  // temperature_setting
                         message.temperature_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     22 => {  // local_id
                         message.local_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     23 => {  // global_id
                         message.global_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     28 => {  // wake_time
                         message.wake_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     29 => {  // sleep_time
                         message.sleep_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     30 => {  // height_setting
                         message.height_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     31 => {  // user_running_step_length
                         message.user_running_step_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     32 => {  // user_walking_step_length
                         message.user_walking_step_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     47 => {  // depth_setting
                         message.depth_setting.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     49 => {  // dive_count
                         message.dive_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -37281,12 +35207,10 @@ impl FitMessageVideo {
 
     fn parse_internal<'a>(message: &mut FitMessageVideo, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -37298,50 +35222,34 @@ impl FitMessageVideo {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // url
                         message.url.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // hosting_provider
                         message.hosting_provider.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // duration
                         message.duration.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -37447,12 +35355,10 @@ impl FitMessageVideoClip {
 
     fn parse_internal<'a>(message: &mut FitMessageVideoClip, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -37464,74 +35370,54 @@ impl FitMessageVideoClip {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     0 => {  // clip_number
                         message.clip_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // start_timestamp
                         message.start_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // start_timestamp_ms
                         message.start_timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // end_timestamp
                         message.end_timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // end_timestamp_ms
                         message.end_timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // clip_start
                         message.clip_start.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // clip_end
                         message.clip_end.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -37617,12 +35503,10 @@ impl FitMessageVideoDescription {
 
     fn parse_internal<'a>(message: &mut FitMessageVideoDescription, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -37634,50 +35518,34 @@ impl FitMessageVideoDescription {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // message_count
                         message.message_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // text
                         message.text.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -37765,12 +35633,10 @@ impl FitMessageVideoFrame {
 
     fn parse_internal<'a>(message: &mut FitMessageVideoFrame, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -37782,50 +35648,34 @@ impl FitMessageVideoFrame {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // timestamp_ms
                         message.timestamp_ms.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // frame_number
                         message.frame_number.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -37911,12 +35761,10 @@ impl FitMessageVideoTitle {
 
     fn parse_internal<'a>(message: &mut FitMessageVideoTitle, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -37928,50 +35776,34 @@ impl FitMessageVideoTitle {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // message_count
                         message.message_count.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // text
                         message.text.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -38091,7 +35923,6 @@ impl FitMessageWatchfaceSettings {
     fn parse_subfields(message: &mut FitMessageWatchfaceSettings, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 1).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageWatchfaceSettingsSubfieldLayout::parse(message, &message.layout_subfield_bytes, parse_config)?;
             message.layout = val;
@@ -38103,12 +35934,10 @@ impl FitMessageWatchfaceSettings {
 
     fn parse_internal<'a>(message: &mut FitMessageWatchfaceSettings, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -38120,44 +35949,29 @@ impl FitMessageWatchfaceSettings {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // mode
                         message.mode.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -38260,12 +36074,10 @@ impl FitMessageWeatherAlert {
 
     fn parse_internal<'a>(message: &mut FitMessageWeatherAlert, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -38277,68 +36089,49 @@ impl FitMessageWeatherAlert {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // report_id
                         message.report_id.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // issue_time
                         message.issue_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // expire_time
                         message.expire_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // severity
                         message.severity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // ftype
                         message.ftype.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -38491,12 +36284,10 @@ impl FitMessageWeatherConditions {
 
     fn parse_internal<'a>(message: &mut FitMessageWeatherConditions, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -38508,128 +36299,99 @@ impl FitMessageWeatherConditions {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // weather_report
                         message.weather_report.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // temperature
                         message.temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // condition
                         message.condition.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // wind_direction
                         message.wind_direction.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // wind_speed
                         message.wind_speed.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // precipitation_probability
                         message.precipitation_probability.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // temperature_feels_like
                         message.temperature_feels_like.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // relative_humidity
                         message.relative_humidity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // location
                         message.location.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // observed_at_time
                         message.observed_at_time.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // observed_location_lat
                         message.observed_location_lat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // observed_location_long
                         message.observed_location_long.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // day_of_week
                         message.day_of_week.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // high_temperature
                         message.high_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // low_temperature
                         message.low_temperature.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -38767,12 +36529,10 @@ impl FitMessageWeightScale {
 
     fn parse_internal<'a>(message: &mut FitMessageWeightScale, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -38784,110 +36544,84 @@ impl FitMessageWeightScale {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     253 => {  // timestamp
                         message.timestamp.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // weight
                         message.weight.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // percent_fat
                         message.percent_fat.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // percent_hydration
                         message.percent_hydration.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // visceral_fat_mass
                         message.visceral_fat_mass.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // bone_mass
                         message.bone_mass.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // muscle_mass
                         message.muscle_mass.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // basal_met
                         message.basal_met.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // physique_rating
                         message.physique_rating.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // active_met
                         message.active_met.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // metabolic_age
                         message.metabolic_age.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // visceral_fat_rating
                         message.visceral_fat_rating.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // user_profile_index
                         message.user_profile_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -38993,12 +36727,10 @@ impl FitMessageWorkout {
 
     fn parse_internal<'a>(message: &mut FitMessageWorkout, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -39010,74 +36742,54 @@ impl FitMessageWorkout {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     4 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // capabilities
                         message.capabilities.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     6 => {  // num_valid_steps
                         message.num_valid_steps.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // wkt_name
                         message.wkt_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     14 => {  // pool_length
                         message.pool_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     15 => {  // pool_length_unit
                         message.pool_length_unit.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -39183,12 +36895,10 @@ impl FitMessageWorkoutSession {
 
     fn parse_internal<'a>(message: &mut FitMessageWorkoutSession, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -39200,74 +36910,54 @@ impl FitMessageWorkoutSession {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // sport
                         message.sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // sub_sport
                         message.sub_sport.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // num_valid_steps
                         message.num_valid_steps.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // first_step_index
                         message.first_step_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     4 => {  // pool_length
                         message.pool_length.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // pool_length_unit
                         message.pool_length_unit.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -39283,13 +36973,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationStep(FitUint32),
-    DurationReps(FitUint32),
     DurationDistance(FitUint32),
     DurationTime(FitUint32),
     DurationHr(FitFieldWorkoutHr),
-    DurationCalories(FitUint32),
     DurationPower(FitFieldWorkoutPower),
+    DurationCalories(FitUint32),
+    DurationStep(FitUint32),
+    DurationReps(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -39393,17 +37083,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetHrZone(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    TargetStrokeType(FitFieldSwimStroke),
-    RepeatSteps(FitUint32),
-    RepeatTime(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    RepeatDistance(FitUint32),
-    TargetCadenceZone(FitUint32),
-    TargetSpeedZone(FitUint32),
-    RepeatCalories(FitUint32),
     TargetPowerZone(FitUint32),
+    RepeatSteps(FitUint32),
+    RepeatDistance(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
+    TargetStrokeType(FitFieldSwimStroke),
+    RepeatTime(FitUint32),
+    TargetCadenceZone(FitUint32),
+    RepeatCalories(FitUint32),
+    TargetSpeedZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    TargetHrZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -39492,10 +37182,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetSpeedLow(FitUint32),
     CustomTargetCadenceLow(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -39534,10 +37224,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
-    CustomTargetCadenceHigh(FitUint32),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetSpeedHigh(FitUint32),
+    CustomTargetCadenceHigh(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -39716,28 +37406,24 @@ impl FitMessageWorkoutStep {
     fn parse_subfields(message: &mut FitMessageWorkoutStep, tz_offset: f64) -> Result<()> {
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 2).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageWorkoutStepSubfieldDurationValue::parse(message, &message.duration_value_subfield_bytes, parse_config)?;
             message.duration_value = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 4).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageWorkoutStepSubfieldTargetValue::parse(message, &message.target_value_subfield_bytes, parse_config)?;
             message.target_value = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 5).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageWorkoutStepSubfieldCustomTargetValueLow::parse(message, &message.custom_target_value_low_subfield_bytes, parse_config)?;
             message.custom_target_value_low = val;
         }
         let fds: Vec<_> = message.definition_message.field_definitions.iter().filter(|f| f.definition_number == 6).collect();
         if fds.len() == 1 {
-            // let field = fds[0];
             let parse_config = FitParseConfig::new(*fds[0], message.definition_message.endianness, tz_offset);
             let val = FitMessageWorkoutStepSubfieldCustomTargetValueHigh::parse(message, &message.custom_target_value_high_subfield_bytes, parse_config)?;
             message.custom_target_value_high = val;
@@ -39749,12 +37435,10 @@ impl FitMessageWorkoutStep {
 
     fn parse_internal<'a>(message: &mut FitMessageWorkoutStep, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -39766,98 +37450,74 @@ impl FitMessageWorkoutStep {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     254 => {  // message_index
                         message.message_index.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     0 => {  // wkt_step_name
                         message.wkt_step_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     1 => {  // duration_type
                         message.duration_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // target_type
                         message.target_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // intensity
                         message.intensity.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     8 => {  // notes
                         message.notes.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     9 => {  // equipment
                         message.equipment.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     10 => {  // exercise_category
                         message.exercise_category.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     11 => {  // exercise_name
                         message.exercise_name.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     12 => {  // exercise_weight
                         message.exercise_weight.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     13 => {  // weight_display_unit
                         message.weight_display_unit.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
@@ -39953,12 +37613,10 @@ impl FitMessageZonesTarget {
 
     fn parse_internal<'a>(message: &mut FitMessageZonesTarget, input: &'a [u8], tz_offset: f64) -> Result<&'a [u8]> {
         let mut inp = input;
-        //let mut saved_outp = input;
         for field in &message.definition_message.field_definitions {
 
             let orig_field_size = field.field_size;
             let mut actions = vec![FitParseConfig::new(*field, message.definition_message.endianness, tz_offset)];
-            //let should_advance_inp = false;
 
             while actions.len() > 0 {
                 let parse_config = actions.remove(0);
@@ -39970,62 +37628,44 @@ impl FitMessageZonesTarget {
                         start, num_bits, parse_config.endianness())?;
                     parse_input = &alternate_input;
                 };
-                /*
-                let parse_input = match parse_config.bit_range {
-                    None => inp,
-                    Some((start, num_bits)) => &subset_with_pad(&inp[0..parse_config.field_size()], 
-                        start, num_bits, parse_config.endianness())?
-                };
-                */
-
-                //println!("parse_config: {:?}", parse_config);
-                //println!("parse_input: {:?}", parse_input);
 
                 match parse_config.field_definition_number() {
                 
                     1 => {  // max_heart_rate
                         message.max_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     2 => {  // threshold_heart_rate
                         message.threshold_heart_rate.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     3 => {  // functional_threshold_power
                         message.functional_threshold_power.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     5 => {  // hr_calc_type
                         message.hr_calc_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     7 => {  // pwr_calc_type
                         message.pwr_calc_type.parse(parse_input, parse_config)?;
                         
-                        //saved_outp = &inp[parse_config.field_size()..];
                     },
                 
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
-                        //saved_outp = &inp[parse_config.field_size()..];
                     }
                 };
 
                 if actions.len() == 0 {
-                    //println!("advancing inp by {}", orig_field_size);
                     inp = &inp[orig_field_size..];
                 }
             }
-            //inp = saved_outp;
         }
         Ok(inp)
     }
