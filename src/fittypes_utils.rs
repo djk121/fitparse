@@ -621,6 +621,7 @@ impl FitMessageHr {
         }
     }
 
+    #[allow(dead_code)]
     fn parse<'a>(
         input: &'a [u8],
         header: FitRecordHeader,
@@ -653,6 +654,7 @@ impl FitMessageHr {
         Ok((Rc::new(message), inp2))
     }
 
+    #[allow(dead_code)]
     fn parse_internal<'a>(
         message: &mut FitMessageHr,
         input: &'a [u8],

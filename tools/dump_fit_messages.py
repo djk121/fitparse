@@ -243,8 +243,6 @@ use std::fmt;
 use std::rc::Rc;
 use std::collections::HashMap;
 
-use nom::Endianness;
-
 use {FitFieldBasicValue, FitFieldAdjustedValue};
 use FitRecord;
 use FitRecordHeader;
@@ -257,16 +255,16 @@ use FitBaseValue;
 use FitParseConfig;
 use FitFieldParseable;
 use fitparsingstate::FitParsingState;
-use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_sint8, parse_bool, parse_sint16, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_sint32, parse_byte, parse_string, parse_float32};
+use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_uint16, parse_uint32, parse_uint32z};
 
-use {vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields, deg_parse_assignment, scale_and_offset_parse_assignment, field_parser_fit_type, field_parser_base_type}; 
+use {vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
-use {FitBool, FitBoolVec, FitEnum, FitEnumVec, FitUint8, FitUint8Vec, FitUint8z, FitUint8zVec, FitSint8, FitSint8Vec, FitUint16, FitUint16Vec, 
-     FitUint16z, FitUint16zVec, FitSint16, FitSint16Vec, FitUint32, FitUint32Vec, FitUint32z, FitUint32zVec, FitSint32, FitSint32Vec,
-     FitFloat32, FitFloat32Vec, FitUint64, FitUint64Vec, FitUint64z, FitUint64zVec, FitSint64, FitSint64Vec, FitFloat64, FitFloat64Vec,
-     FitByte, FitByteVec, FitString, FitStringVec};
+use {FitBool, FitUint8, FitUint8z, FitSint8, FitUint16, 
+     FitUint16z, FitSint16, FitUint32, FitUint32z, FitSint32,
+     FitFloat32,
+     FitByte, FitString};
 
-use {BasicValue, PreAdjustedValue, AdjustedValue};
+use BasicValue;
 
 use subset_with_pad;
 

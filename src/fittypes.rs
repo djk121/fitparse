@@ -2,12 +2,8 @@ use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
 
-use nom::Endianness;
-
 use fitparsers::{
-    parse_bool, parse_byte, parse_enum, parse_float32, parse_sint16, parse_sint32, parse_sint8,
-    parse_string, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z, parse_uint8,
-    parse_uint8z,
+    parse_enum, parse_uint16, parse_uint32, parse_uint32z, parse_uint8, parse_uint8z,
 };
 use fitparsingstate::FitParsingState;
 use FitBaseValue;
@@ -24,20 +20,15 @@ use {FitFieldAdjustedValue, FitFieldBasicValue};
 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
 use {
-    deg_parse_assignment, field_parser_base_type, field_parser_fit_type, fmt_developer_fields,
-    fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, main_parse_message,
-    parse_developer_fields, parse_subfields, parsing_state_set_timestamp,
-    scale_and_offset_parse_assignment, vec_fit_field_parseable,
+    fmt_developer_fields, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, main_parse_message,
+    parse_developer_fields, parse_subfields, parsing_state_set_timestamp, vec_fit_field_parseable,
 };
 use {
-    FitBool, FitBoolVec, FitByte, FitByteVec, FitEnum, FitEnumVec, FitFloat32, FitFloat32Vec,
-    FitFloat64, FitFloat64Vec, FitSint16, FitSint16Vec, FitSint32, FitSint32Vec, FitSint64,
-    FitSint64Vec, FitSint8, FitSint8Vec, FitString, FitStringVec, FitUint16, FitUint16Vec,
-    FitUint16z, FitUint16zVec, FitUint32, FitUint32Vec, FitUint32z, FitUint32zVec, FitUint64,
-    FitUint64Vec, FitUint64z, FitUint64zVec, FitUint8, FitUint8Vec, FitUint8z, FitUint8zVec,
+    FitBool, FitByte, FitFloat32, FitSint16, FitSint32, FitSint8, FitString, FitUint16, FitUint16z,
+    FitUint32, FitUint32z, FitUint8, FitUint8z,
 };
 
-use {AdjustedValue, BasicValue, PreAdjustedValue};
+use BasicValue;
 
 use subset_with_pad;
 
@@ -22343,8 +22334,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntDeviceType(FitUint8),
     AntplusDeviceType(FitFieldAntplusDeviceType),
+    AntDeviceType(FitUint8),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -22377,8 +22368,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -23441,8 +23432,8 @@ impl FitRecord for FitMessageDiveGas {
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
-    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
     HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
+    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
 }
 
 impl FitMessageDiveSettingsSubfieldHeartRateSource {
@@ -24085,26 +24076,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
+    CadLowAlert(FitUint16),
+    SpeedLowAlert(FitUint32),
+    CalorieDurationAlert(FitUint32),
+    VirtualPartnerSpeed(FitUint16),
+    CommTimeout(FitFieldCommTimeoutType),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    PowerLowAlert(FitUint16),
+    TimeDurationAlert(FitUint32),
     CoursePointIndex(FitFieldMessageIndex),
+    HrLowAlert(FitUint8),
+    HrHighAlert(FitUint8),
+    RiderPosition(FitFieldRiderPositionType),
+    TimerTrigger(FitFieldTimerTrigger),
+    DistanceDurationAlert(FitUint32),
+    SpeedHighAlert(FitUint32),
+    PowerHighAlert(FitUint16),
+    BatteryLevel(FitUint16),
     CadHighAlert(FitUint16),
     SportPoint(FitUint32),
-    CadLowAlert(FitUint16),
-    HrHighAlert(FitUint8),
-    PowerHighAlert(FitUint16),
     GearChangeData(FitUint32),
-    HrLowAlert(FitUint8),
-    RiderPosition(FitFieldRiderPositionType),
-    VirtualPartnerSpeed(FitUint16),
-    TimeDurationAlert(FitUint32),
-    CommTimeout(FitFieldCommTimeoutType),
-    DistanceDurationAlert(FitUint32),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    BatteryLevel(FitUint16),
-    SpeedHighAlert(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    PowerLowAlert(FitUint16),
-    SpeedLowAlert(FitUint32),
-    TimerTrigger(FitFieldTimerTrigger),
 }
 
 impl FitMessageEventSubfieldData {
@@ -25904,8 +25895,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -29741,8 +29732,8 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    MaxPerFile(FitUint16),
     NumPerFile(FitUint16),
+    MaxPerFile(FitUint16),
     MaxPerFileType(FitUint16),
 }
 
@@ -30099,8 +30090,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitUint32),
-    Steps(FitUint32),
     Strokes(FitUint32),
+    Steps(FitUint32),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -32596,8 +32587,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -37049,8 +37040,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -37762,8 +37753,8 @@ impl FitRecord for FitMessageStressLevel {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    AccelCalFactor(FitUint32),
     GyroCalFactor(FitUint32),
+    AccelCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -38414,8 +38405,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -39794,8 +39785,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    AnalogLayout(FitFieldAnalogWatchfaceLayout),
     DigitalLayout(FitFieldDigitalWatchfaceLayout),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -41023,13 +41014,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationDistance(FitUint32),
-    DurationTime(FitUint32),
-    DurationHr(FitFieldWorkoutHr),
     DurationPower(FitFieldWorkoutPower),
     DurationCalories(FitUint32),
-    DurationStep(FitUint32),
     DurationReps(FitUint32),
+    DurationStep(FitUint32),
+    DurationHr(FitFieldWorkoutHr),
+    DurationTime(FitUint32),
+    DurationDistance(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -41161,17 +41152,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetPowerZone(FitUint32),
-    RepeatSteps(FitUint32),
-    RepeatDistance(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    TargetStrokeType(FitFieldSwimStroke),
     RepeatTime(FitUint32),
-    TargetCadenceZone(FitUint32),
     RepeatCalories(FitUint32),
-    TargetSpeedZone(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
     TargetHrZone(FitUint32),
+    TargetStrokeType(FitFieldSwimStroke),
+    TargetPowerZone(FitUint32),
+    RepeatDistance(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    TargetCadenceZone(FitUint32),
+    TargetSpeedZone(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
+    RepeatSteps(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -41180,43 +41171,6 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         inp: &'a [u8],
         parse_config: FitParseConfig,
     ) -> Result<FitMessageWorkoutStepSubfieldTargetValue> {
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let val = FitUint32::parse(inp, parse_config)?;
-                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(
-                    val,
-                ));
-            }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let val = FitUint32::parse(inp, parse_config)?;
-                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let val = FitUint32::parse(inp, parse_config)?;
-                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(
-                    val,
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let val = FitUint32::parse(inp, parse_config)?;
-                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(
-                    val,
-                ));
-            }
-
-            FitFieldWktStepTarget::SwimStroke => {
-                let val = FitFieldSwimStroke::parse(inp, parse_config)?;
-                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(
-                    val,
-                ));
-            }
-
-            _ => (),
-        }
-
         match message.duration_type.get_single()? {
             FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
                 let val = FitUint32::parse(inp, parse_config)?;
@@ -41265,6 +41219,43 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             _ => (),
         }
 
+        match message.target_type.get_single()? {
+            FitFieldWktStepTarget::Speed => {
+                let val = FitUint32::parse(inp, parse_config)?;
+                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(
+                    val,
+                ));
+            }
+
+            FitFieldWktStepTarget::HeartRate => {
+                let val = FitUint32::parse(inp, parse_config)?;
+                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val));
+            }
+
+            FitFieldWktStepTarget::Cadence => {
+                let val = FitUint32::parse(inp, parse_config)?;
+                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(
+                    val,
+                ));
+            }
+
+            FitFieldWktStepTarget::Power => {
+                let val = FitUint32::parse(inp, parse_config)?;
+                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(
+                    val,
+                ));
+            }
+
+            FitFieldWktStepTarget::SwimStroke => {
+                let val = FitFieldSwimStroke::parse(inp, parse_config)?;
+                return Ok(FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(
+                    val,
+                ));
+            }
+
+            _ => (),
+        }
+
         let val = FitUint32::parse(inp, parse_config)?;
         Ok(FitMessageWorkoutStepSubfieldTargetValue::Default(val))
     }
@@ -41273,8 +41264,8 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetSpeedLow(FitUint32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetCadenceLow(FitUint32),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
 }
@@ -41329,10 +41320,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerHigh(FitFieldWorkoutPower),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetSpeedHigh(FitUint32),
     CustomTargetCadenceHigh(FitUint32),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {

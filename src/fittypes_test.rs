@@ -9,6 +9,10 @@ use FitDeveloperFieldDefinition;
 use FitNormalRecordHeader;
 use FitNormalRecordHeaderMessageType;
 
+use {PreAdjustedValue, AdjustedValue};
+
+use FitFloat64; 
+
 fn make_definition_message() -> FitDefinitionMessage {
     FitDefinitionMessage {
         header: FitNormalRecordHeader {

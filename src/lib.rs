@@ -238,7 +238,7 @@ pub fn parse_fit_message<'a>(
                             // = +13500 seconds
                             if let AdjustedValue::Vec(v) = &time_zone_offset.value {
                                 parsing_state
-                                    .set_timezone_offset((<f64>::from(v[0].clone()) * 15.0 * 60.0));
+                                    .set_timezone_offset(<f64>::from(v[0].clone()) * 15.0 * 60.0);
                             }
                         }
                     }
@@ -273,6 +273,7 @@ pub enum BasicValue<T: FitFieldParseable + Clone> {
 }
 
 impl<T: FitFieldParseable + Clone> BasicValue<T> {
+    #[allow(dead_code)]
     fn get_single(&self) -> Result<T> {
         match self {
             BasicValue::Single(x) => Ok(x.clone()),
@@ -280,6 +281,7 @@ impl<T: FitFieldParseable + Clone> BasicValue<T> {
         }
     }
 
+    #[allow(dead_code)]
     fn get_vec(&self) -> Result<Vec<T>> {
         match self {
             BasicValue::Vec(x) => Ok(x.to_vec()),
@@ -461,6 +463,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
         FitFloat64::new(adjusted)
     }
 
+    #[allow(dead_code)]
     fn get_single(&self) -> Result<f64> {
         match self.value {
             AdjustedValue::Single(ref v) => return Ok(v.to_f64()),
@@ -468,6 +471,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
         }
     }
 
+    #[allow(dead_code)]
     fn get_vec(&self) -> Result<Vec<f64>> {
         match self.value {
             AdjustedValue::Vec(ref v) => Ok(v.iter().map(|x| x.to_f64()).collect()),
@@ -1475,6 +1479,7 @@ impl FitFieldDeveloperData {
     }
 }
 
+#[allow(dead_code)]
 fn format_bits(input: &Vec<u8>) -> String {
     let mut s = String::new();
     for item in input {
