@@ -23432,8 +23432,8 @@ impl FitRecord for FitMessageDiveGas {
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
-    HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
     HeartRateLocalDeviceType(FitFieldLocalDeviceType),
+    HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDiveSettingsSubfieldHeartRateSource {
@@ -24076,26 +24076,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
+    SportPoint(FitUint32),
+    PowerLowAlert(FitUint16),
+    DistanceDurationAlert(FitUint32),
+    CadHighAlert(FitUint16),
+    GearChangeData(FitUint32),
+    HrHighAlert(FitUint8),
+    TimerTrigger(FitFieldTimerTrigger),
     CadLowAlert(FitUint16),
-    SpeedLowAlert(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    VirtualPartnerSpeed(FitUint16),
+    TimeDurationAlert(FitUint32),
+    RiderPosition(FitFieldRiderPositionType),
     CommTimeout(FitFieldCommTimeoutType),
     FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    PowerLowAlert(FitUint16),
-    TimeDurationAlert(FitUint32),
-    CoursePointIndex(FitFieldMessageIndex),
+    BatteryLevel(FitUint16),
+    SpeedLowAlert(FitUint32),
+    CalorieDurationAlert(FitUint32),
     HrLowAlert(FitUint8),
-    HrHighAlert(FitUint8),
-    RiderPosition(FitFieldRiderPositionType),
-    TimerTrigger(FitFieldTimerTrigger),
-    DistanceDurationAlert(FitUint32),
     SpeedHighAlert(FitUint32),
     PowerHighAlert(FitUint16),
-    BatteryLevel(FitUint16),
-    CadHighAlert(FitUint16),
-    SportPoint(FitUint32),
-    GearChangeData(FitUint32),
+    VirtualPartnerSpeed(FitUint16),
+    CoursePointIndex(FitFieldMessageIndex),
 }
 
 impl FitMessageEventSubfieldData {
@@ -29733,8 +29733,8 @@ pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
     NumPerFile(FitUint16),
-    MaxPerFile(FitUint16),
     MaxPerFileType(FitUint16),
+    MaxPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -37753,8 +37753,8 @@ impl FitRecord for FitMessageStressLevel {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    GyroCalFactor(FitUint32),
     AccelCalFactor(FitUint32),
+    GyroCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -41015,11 +41015,11 @@ pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
     DurationPower(FitFieldWorkoutPower),
-    DurationCalories(FitUint32),
-    DurationReps(FitUint32),
-    DurationStep(FitUint32),
     DurationHr(FitFieldWorkoutHr),
     DurationTime(FitUint32),
+    DurationStep(FitUint32),
+    DurationCalories(FitUint32),
+    DurationReps(FitUint32),
     DurationDistance(FitUint32),
 }
 
@@ -41152,17 +41152,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatTime(FitUint32),
-    RepeatCalories(FitUint32),
-    TargetHrZone(FitUint32),
-    TargetStrokeType(FitFieldSwimStroke),
+    RepeatSteps(FitUint32),
     TargetPowerZone(FitUint32),
     RepeatDistance(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
+    TargetStrokeType(FitFieldSwimStroke),
     TargetCadenceZone(FitUint32),
+    RepeatTime(FitUint32),
     TargetSpeedZone(FitUint32),
     RepeatHr(FitFieldWorkoutHr),
-    RepeatSteps(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    RepeatCalories(FitUint32),
+    TargetHrZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -41264,10 +41264,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetSpeedLow(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetCadenceLow(FitUint32),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetSpeedLow(FitUint32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -41320,10 +41320,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
     CustomTargetSpeedHigh(FitUint32),
     CustomTargetCadenceHigh(FitUint32),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
-    CustomTargetPowerHigh(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -42410,116 +42410,116 @@ impl FitDataMessage {
         header: FitRecordHeader,
         parsing_state: &mut FitParsingState,
         timestamp: Option<FitFieldDateTime>,
-    ) -> Result<(Option<FitDataMessage>, &'a [u8])> {
+    ) -> Result<(FitDataMessage, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
                 let (val, o) =
                     FitMessageAccelerometerData::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::AccelerometerData(val)), o))
+                Ok((FitDataMessage::AccelerometerData(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Activity) => {
                 let (val, o) = FitMessageActivity::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Activity(val)), o))
+                Ok((FitDataMessage::Activity(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntChannelId) => {
                 let (val, o) =
                     FitMessageAntChannelId::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::AntChannelId(val)), o))
+                Ok((FitDataMessage::AntChannelId(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntRx) => {
                 let (val, o) = FitMessageAntRx::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::AntRx(val)), o))
+                Ok((FitDataMessage::AntRx(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntTx) => {
                 let (val, o) = FitMessageAntTx::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::AntTx(val)), o))
+                Ok((FitDataMessage::AntTx(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::AviationAttitude) => {
                 let (val, o) =
                     FitMessageAviationAttitude::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::AviationAttitude(val)), o))
+                Ok((FitDataMessage::AviationAttitude(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::BarometerData) => {
                 let (val, o) =
                     FitMessageBarometerData::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::BarometerData(val)), o))
+                Ok((FitDataMessage::BarometerData(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::BikeProfile) => {
                 let (val, o) =
                     FitMessageBikeProfile::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::BikeProfile(val)), o))
+                Ok((FitDataMessage::BikeProfile(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::BloodPressure) => {
                 let (val, o) =
                     FitMessageBloodPressure::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::BloodPressure(val)), o))
+                Ok((FitDataMessage::BloodPressure(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::CadenceZone) => {
                 let (val, o) =
                     FitMessageCadenceZone::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::CadenceZone(val)), o))
+                Ok((FitDataMessage::CadenceZone(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::CameraEvent) => {
                 let (val, o) =
                     FitMessageCameraEvent::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::CameraEvent(val)), o))
+                Ok((FitDataMessage::CameraEvent(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
                 let (val, o) =
                     FitMessageCapabilities::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Capabilities(val)), o))
+                Ok((FitDataMessage::Capabilities(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
                 let (val, o) =
                     FitMessageConnectivity::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Connectivity(val)), o))
+                Ok((FitDataMessage::Connectivity(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Course) => {
                 let (val, o) = FitMessageCourse::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Course(val)), o))
+                Ok((FitDataMessage::Course(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::CoursePoint) => {
                 let (val, o) =
                     FitMessageCoursePoint::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::CoursePoint(val)), o))
+                Ok((FitDataMessage::CoursePoint(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeveloperDataId) => {
                 let (val, o) =
                     FitMessageDeveloperDataId::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DeveloperDataId(val)), o))
+                Ok((FitDataMessage::DeveloperDataId(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceInfo) => {
                 let (val, o) =
                     FitMessageDeviceInfo::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DeviceInfo(val)), o))
+                Ok((FitDataMessage::DeviceInfo(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceSettings) => {
                 let (val, o) =
                     FitMessageDeviceSettings::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DeviceSettings(val)), o))
+                Ok((FitDataMessage::DeviceSettings(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveAlarm) => {
                 let (val, o) = FitMessageDiveAlarm::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DiveAlarm(val)), o))
+                Ok((FitDataMessage::DiveAlarm(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveGas) => {
                 let (val, o) = FitMessageDiveGas::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DiveGas(val)), o))
+                Ok((FitDataMessage::DiveGas(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSettings) => {
                 let (val, o) =
                     FitMessageDiveSettings::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DiveSettings(val)), o))
+                Ok((FitDataMessage::DiveSettings(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSummary) => {
                 let (val, o) =
                     FitMessageDiveSummary::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::DiveSummary(val)), o))
+                Ok((FitDataMessage::DiveSummary(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Event) => {
                 let (val, o) = FitMessageEvent::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Event(val)), o))
+                Ok((FitDataMessage::Event(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataConceptConfiguration) => {
                 let (val, o) = FitMessageExdDataConceptConfiguration::parse(
@@ -42528,7 +42528,7 @@ impl FitDataMessage {
                     parsing_state,
                     timestamp,
                 )?;
-                Ok((Some(FitDataMessage::ExdDataConceptConfiguration(val)), o))
+                Ok((FitDataMessage::ExdDataConceptConfiguration(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataFieldConfiguration) => {
                 let (val, o) = FitMessageExdDataFieldConfiguration::parse(
@@ -42537,7 +42537,7 @@ impl FitDataMessage {
                     parsing_state,
                     timestamp,
                 )?;
-                Ok((Some(FitDataMessage::ExdDataFieldConfiguration(val)), o))
+                Ok((FitDataMessage::ExdDataFieldConfiguration(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdScreenConfiguration) => {
                 let (val, o) = FitMessageExdScreenConfiguration::parse(
@@ -42546,117 +42546,117 @@ impl FitDataMessage {
                     parsing_state,
                     timestamp,
                 )?;
-                Ok((Some(FitDataMessage::ExdScreenConfiguration(val)), o))
+                Ok((FitDataMessage::ExdScreenConfiguration(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExerciseTitle) => {
                 let (val, o) =
                     FitMessageExerciseTitle::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::ExerciseTitle(val)), o))
+                Ok((FitDataMessage::ExerciseTitle(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::FieldCapabilities) => {
                 let (val, o) =
                     FitMessageFieldCapabilities::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::FieldCapabilities(val)), o))
+                Ok((FitDataMessage::FieldCapabilities(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription) => {
                 let (val, o) =
                     FitMessageFieldDescription::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::FieldDescription(val)), o))
+                Ok((FitDataMessage::FieldDescription(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileCapabilities) => {
                 let (val, o) =
                     FitMessageFileCapabilities::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::FileCapabilities(val)), o))
+                Ok((FitDataMessage::FileCapabilities(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileCreator) => {
                 let (val, o) =
                     FitMessageFileCreator::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::FileCreator(val)), o))
+                Ok((FitDataMessage::FileCreator(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileId) => {
                 let (val, o) = FitMessageFileId::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::FileId(val)), o))
+                Ok((FitDataMessage::FileId(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Goal) => {
                 let (val, o) = FitMessageGoal::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Goal(val)), o))
+                Ok((FitDataMessage::Goal(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::GpsMetadata) => {
                 let (val, o) =
                     FitMessageGpsMetadata::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::GpsMetadata(val)), o))
+                Ok((FitDataMessage::GpsMetadata(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::GyroscopeData) => {
                 let (val, o) =
                     FitMessageGyroscopeData::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::GyroscopeData(val)), o))
+                Ok((FitDataMessage::GyroscopeData(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hr) => {
                 let (val, o) = FitMessageHr::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Hr(val)), o))
+                Ok((FitDataMessage::Hr(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::HrZone) => {
                 let (val, o) = FitMessageHrZone::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::HrZone(val)), o))
+                Ok((FitDataMessage::HrZone(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::HrmProfile) => {
                 let (val, o) =
                     FitMessageHrmProfile::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::HrmProfile(val)), o))
+                Ok((FitDataMessage::HrmProfile(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hrv) => {
                 let (val, o) = FitMessageHrv::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Hrv(val)), o))
+                Ok((FitDataMessage::Hrv(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
                 let (val, o) = FitMessageLap::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Lap(val)), o))
+                Ok((FitDataMessage::Lap(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Length) => {
                 let (val, o) = FitMessageLength::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Length(val)), o))
+                Ok((FitDataMessage::Length(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MagnetometerData) => {
                 let (val, o) =
                     FitMessageMagnetometerData::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::MagnetometerData(val)), o))
+                Ok((FitDataMessage::MagnetometerData(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MemoGlob) => {
                 let (val, o) = FitMessageMemoGlob::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::MemoGlob(val)), o))
+                Ok((FitDataMessage::MemoGlob(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MesgCapabilities) => {
                 let (val, o) =
                     FitMessageMesgCapabilities::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::MesgCapabilities(val)), o))
+                Ok((FitDataMessage::MesgCapabilities(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MetZone) => {
                 let (val, o) = FitMessageMetZone::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::MetZone(val)), o))
+                Ok((FitDataMessage::MetZone(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Monitoring) => {
                 let (val, o) =
                     FitMessageMonitoring::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Monitoring(val)), o))
+                Ok((FitDataMessage::Monitoring(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MonitoringInfo) => {
                 let (val, o) =
                     FitMessageMonitoringInfo::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::MonitoringInfo(val)), o))
+                Ok((FitDataMessage::MonitoringInfo(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
                 let (val, o) =
                     FitMessageNmeaSentence::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::NmeaSentence(val)), o))
+                Ok((FitDataMessage::NmeaSentence(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ObdiiData) => {
                 let (val, o) = FitMessageObdiiData::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::ObdiiData(val)), o))
+                Ok((FitDataMessage::ObdiiData(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::OhrSettings) => {
                 let (val, o) =
                     FitMessageOhrSettings::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::OhrSettings(val)), o))
+                Ok((FitDataMessage::OhrSettings(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::OneDSensorCalibration) => {
                 let (val, o) = FitMessageOneDSensorCalibration::parse(
@@ -42665,38 +42665,38 @@ impl FitDataMessage {
                     parsing_state,
                     timestamp,
                 )?;
-                Ok((Some(FitDataMessage::OneDSensorCalibration(val)), o))
+                Ok((FitDataMessage::OneDSensorCalibration(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::PowerZone) => {
                 let (val, o) = FitMessagePowerZone::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::PowerZone(val)), o))
+                Ok((FitDataMessage::PowerZone(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Record) => {
                 let (val, o) = FitMessageRecord::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Record(val)), o))
+                Ok((FitDataMessage::Record(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Schedule) => {
                 let (val, o) = FitMessageSchedule::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Schedule(val)), o))
+                Ok((FitDataMessage::Schedule(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SdmProfile) => {
                 let (val, o) =
                     FitMessageSdmProfile::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SdmProfile(val)), o))
+                Ok((FitDataMessage::SdmProfile(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentFile) => {
                 let (val, o) =
                     FitMessageSegmentFile::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SegmentFile(val)), o))
+                Ok((FitDataMessage::SegmentFile(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentId) => {
                 let (val, o) = FitMessageSegmentId::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SegmentId(val)), o))
+                Ok((FitDataMessage::SegmentId(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLap) => {
                 let (val, o) =
                     FitMessageSegmentLap::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SegmentLap(val)), o))
+                Ok((FitDataMessage::SegmentLap(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLeaderboardEntry) => {
                 let (val, o) = FitMessageSegmentLeaderboardEntry::parse(
@@ -42705,42 +42705,42 @@ impl FitDataMessage {
                     parsing_state,
                     timestamp,
                 )?;
-                Ok((Some(FitDataMessage::SegmentLeaderboardEntry(val)), o))
+                Ok((FitDataMessage::SegmentLeaderboardEntry(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentPoint) => {
                 let (val, o) =
                     FitMessageSegmentPoint::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SegmentPoint(val)), o))
+                Ok((FitDataMessage::SegmentPoint(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Session) => {
                 let (val, o) = FitMessageSession::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Session(val)), o))
+                Ok((FitDataMessage::Session(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Set) => {
                 let (val, o) = FitMessageSet::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Set(val)), o))
+                Ok((FitDataMessage::Set(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
                 let (val, o) =
                     FitMessageSlaveDevice::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SlaveDevice(val)), o))
+                Ok((FitDataMessage::SlaveDevice(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Software) => {
                 let (val, o) = FitMessageSoftware::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Software(val)), o))
+                Ok((FitDataMessage::Software(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::SpeedZone) => {
                 let (val, o) = FitMessageSpeedZone::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::SpeedZone(val)), o))
+                Ok((FitDataMessage::SpeedZone(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Sport) => {
                 let (val, o) = FitMessageSport::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Sport(val)), o))
+                Ok((FitDataMessage::Sport(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::StressLevel) => {
                 let (val, o) =
                     FitMessageStressLevel::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::StressLevel(val)), o))
+                Ok((FitDataMessage::StressLevel(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ThreeDSensorCalibration) => {
                 let (val, o) = FitMessageThreeDSensorCalibration::parse(
@@ -42749,95 +42749,111 @@ impl FitDataMessage {
                     parsing_state,
                     timestamp,
                 )?;
-                Ok((Some(FitDataMessage::ThreeDSensorCalibration(val)), o))
+                Ok((FitDataMessage::ThreeDSensorCalibration(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::TimestampCorrelation) => {
                 let (val, o) =
                     FitMessageTimestampCorrelation::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::TimestampCorrelation(val)), o))
+                Ok((FitDataMessage::TimestampCorrelation(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Totals) => {
                 let (val, o) = FitMessageTotals::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Totals(val)), o))
+                Ok((FitDataMessage::Totals(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingFile) => {
                 let (val, o) =
                     FitMessageTrainingFile::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::TrainingFile(val)), o))
+                Ok((FitDataMessage::TrainingFile(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::UserProfile) => {
                 let (val, o) =
                     FitMessageUserProfile::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::UserProfile(val)), o))
+                Ok((FitDataMessage::UserProfile(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Video) => {
                 let (val, o) = FitMessageVideo::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Video(val)), o))
+                Ok((FitDataMessage::Video(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoClip) => {
                 let (val, o) = FitMessageVideoClip::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::VideoClip(val)), o))
+                Ok((FitDataMessage::VideoClip(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoDescription) => {
                 let (val, o) =
                     FitMessageVideoDescription::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::VideoDescription(val)), o))
+                Ok((FitDataMessage::VideoDescription(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoFrame) => {
                 let (val, o) =
                     FitMessageVideoFrame::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::VideoFrame(val)), o))
+                Ok((FitDataMessage::VideoFrame(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoTitle) => {
                 let (val, o) =
                     FitMessageVideoTitle::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::VideoTitle(val)), o))
+                Ok((FitDataMessage::VideoTitle(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::WatchfaceSettings) => {
                 let (val, o) =
                     FitMessageWatchfaceSettings::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::WatchfaceSettings(val)), o))
+                Ok((FitDataMessage::WatchfaceSettings(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherAlert) => {
                 let (val, o) =
                     FitMessageWeatherAlert::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::WeatherAlert(val)), o))
+                Ok((FitDataMessage::WeatherAlert(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherConditions) => {
                 let (val, o) =
                     FitMessageWeatherConditions::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::WeatherConditions(val)), o))
+                Ok((FitDataMessage::WeatherConditions(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeightScale) => {
                 let (val, o) =
                     FitMessageWeightScale::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::WeightScale(val)), o))
+                Ok((FitDataMessage::WeightScale(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::Workout) => {
                 let (val, o) = FitMessageWorkout::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::Workout(val)), o))
+                Ok((FitDataMessage::Workout(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutSession) => {
                 let (val, o) =
                     FitMessageWorkoutSession::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::WorkoutSession(val)), o))
+                Ok((FitDataMessage::WorkoutSession(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutStep) => {
                 let (val, o) =
                     FitMessageWorkoutStep::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::WorkoutStep(val)), o))
+                Ok((FitDataMessage::WorkoutStep(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::ZonesTarget) => {
                 let (val, o) =
                     FitMessageZonesTarget::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::ZonesTarget(val)), o))
+                Ok((FitDataMessage::ZonesTarget(val), o))
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MesgNum(number)) => {
+                let (val, o) =
+                    FitMessageUnknownToSdk::parse(number, input, header, parsing_state, timestamp)?;
+                Ok((FitDataMessage::UnknownToSdk(val), o))
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMin) => {
+                Err(Error::field_mfg_range_min())
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMax) => {
+                Err(Error::field_mfg_range_max())
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::InvalidFieldValue) => {
+                Err(Error::field_invalid_value())
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::UnknownToSdk) => {
+                Err(Error::field_unknown_to_sdk())
             }
             FitGlobalMesgNum::Unknown(number) => {
                 let (val, o) =
                     FitMessageUnknownToSdk::parse(number, input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::UnknownToSdk(val)), o))
-            }
-            _ => Ok((None, &input[definition_message.message_size..])),
+                Ok((FitDataMessage::UnknownToSdk(val), o))
+            } //_ => Ok((None, &input[definition_message.message_size..])),
         }
     }
 

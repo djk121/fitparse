@@ -173,7 +173,9 @@ impl FitMessage {
 pub fn parse_fit_message<'a>(
     input: &'a [u8],
     parsing_state: &mut FitParsingState,
-) -> Result<(Option<FitMessage>, &'a [u8])> {
+) -> Result<(FitMessage, &'a [u8])> {
+
+    // failing to parse the header is unrecoverable
     let (header, o) = match parse_record_header(input) {
         Ok((header, o)) => (header, o),
         Err(e) => {
@@ -183,19 +185,17 @@ pub fn parse_fit_message<'a>(
 
     let (fit_message, out) = match header {
         FitRecordHeader::Normal(normal_header) => match normal_header.message_type {
-            FitNormalRecordHeaderMessageType::Data => {
+            FitNormalRecordHeaderMessageType::Data => {                
                 let (data_message, o) = FitDataMessage::parse(
                     o,
                     FitRecordHeader::Normal(normal_header),
                     parsing_state,
                     None,
                 )?;
-                match data_message {
-                    None => return Ok((None, o)),
-                    Some(dm) => (FitMessage::Data(dm), o),
-                }
+                (FitMessage::Data(data_message), o)
             }
             FitNormalRecordHeaderMessageType::Definition => {
+
                 let (definition_message, o) = FitDefinitionMessage::parse(o, normal_header)?;
                 parsing_state.add(
                     definition_message.header.local_mesg_num,
@@ -211,16 +211,14 @@ pub fn parse_fit_message<'a>(
             let last_full_timestamp = parsing_state.get_last_timestamp()?;
             let new_from_offset = last_full_timestamp
                 .new_from_compressed_timestamp(compressed_timestamp_header.offset_secs)?;
+            
             let (data_message, o) = FitDataMessage::parse(
                 o,
                 FitRecordHeader::CompressedTimestamp(compressed_timestamp_header),
                 parsing_state,
                 Some(new_from_offset),
             )?;
-            match data_message {
-                None => return Ok((None, o)),
-                Some(dm) => (FitMessage::Data(dm), o),
-            }
+            (FitMessage::Data(data_message), o)
         }
     };
 
@@ -257,7 +255,7 @@ pub fn parse_fit_message<'a>(
         _ => {}
     }
 
-    Ok((Some(fit_message), out))
+    Ok((fit_message, out))
 }
 
 pub trait FitFieldParseable: Sized {
@@ -311,6 +309,13 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
         }
     }
 
+    fn is_parsed(&self) -> bool {
+        match self.value {
+            BasicValue::NotYetParsedSingle | BasicValue::NotYetParsedVec => false,
+            _ => true
+        }
+    }
+
     fn parse(&mut self, input: &[u8], parse_config: FitParseConfig) -> Result<()> {
         match self.value {
             BasicValue::NotYetParsedSingle | BasicValue::Single(_) => {
@@ -351,8 +356,8 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
 impl<T: fmt::Display + FitFieldParseable + Clone> fmt::Display for FitFieldBasicValue<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.value {
-            BasicValue::NotYetParsedSingle => write!(f, "<not yet parsed, single>"),
-            BasicValue::NotYetParsedVec => write!(f, "<not yet parsed, vec>"),
+            BasicValue::NotYetParsedSingle => return Ok(()), // write!(f, "<not yet parsed, single>"),
+            BasicValue::NotYetParsedVec => return Ok(()), // write!(f, "<not yet parsed, vec>"),
             BasicValue::Single(ref x) => {
                 write!(f, "{}", x)?;
                 if !self.units.is_empty() {
@@ -417,6 +422,13 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
             units: units,
             scale: scale,
             offset: offset,
+        }
+    }
+
+    fn is_parsed(&self) -> bool {
+        match self.value {
+            AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => false,
+            _ => true
         }
     }
 
@@ -485,8 +497,8 @@ impl<T: fmt::Display + FitFieldParseable + FitF64Convertible + Clone> fmt::Displ
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.value {
-            AdjustedValue::NotYetParsedSingle => write!(f, "<not yet parsed, single>"),
-            AdjustedValue::NotYetParsedVec => write!(f, "<not yet parsed, vec>"),
+            AdjustedValue::NotYetParsedSingle => return Ok(()), //write!(f, "<not yet parsed, single>"),
+            AdjustedValue::NotYetParsedVec => return Ok(()), // write!(f, "<not yet parsed, vec>"),
             AdjustedValue::Single(ref x) => {
                 write!(f, "{}", x)?;
                 if !self.units.is_empty() {

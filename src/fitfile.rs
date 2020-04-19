@@ -10,6 +10,12 @@ pub struct FitFile {
     pub messages: Vec<FitMessage>,
 }
 
+
+enum FitMessageParseResult {
+    Message(FitMessage),
+    Error(Error)
+}
+
 impl FitFile {
     pub fn new(max_file_size: usize, retain_bytes: bool) -> Self {
         FitFile {
@@ -64,17 +70,13 @@ impl FitFile {
 
         while inp.len() > 2 {
             match parse_fit_message(inp, ps) {
-                Ok((Some(_fm), out)) => {
-                    self.messages.push(_fm);
+                Ok((fm, out)) => {
+                    self.messages.push(fm);
                     inp = out;
-                }
-                Ok((None, out)) => {
-                    println!("index #{}: unknown message", num);
-                    inp = out;
-                }
+                },
                 Err(e) => {
-                    println!("error: {}", e);
-                    break;
+                    panic!("error: {}", e);
+                    //self.messages.push(FitMessageParseResult::Error(e))
                 }
             }
             num = num + 1;

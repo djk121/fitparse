@@ -390,21 +390,37 @@ impl FitDataMessage {
         }
     }
 
-    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(Option<FitDataMessage>, &'a [u8])> {
+    pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(FitDataMessage, &'a [u8])> {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             {% for message in messages %}
             FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
                 let (val, o) =
                     {{ message.full_name }}::parse(input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::{{ message.short_name }}(val)), o))
+                Ok((FitDataMessage::{{ message.short_name }}(val), o))
             }
             {%- endfor %}
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MesgNum(number)) => {
+                let (val, o) = FitMessageUnknownToSdk::parse(number, input, header, parsing_state, timestamp)?;
+                Ok((FitDataMessage::UnknownToSdk(val), o))
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMin) => {
+                Err(Error::field_mfg_range_min())
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMax) => {
+                Err(Error::field_mfg_range_max())
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::InvalidFieldValue) => {
+                Err(Error::field_invalid_value())
+            }
+            FitGlobalMesgNum::Known(FitFieldMesgNum::UnknownToSdk) => {
+                Err(Error::field_unknown_to_sdk())
+            }
             FitGlobalMesgNum::Unknown(number) => {
                 let (val, o) = FitMessageUnknownToSdk::parse(number, input, header, parsing_state, timestamp)?;
-                Ok((Some(FitDataMessage::UnknownToSdk(val)), o))
+                Ok((FitDataMessage::UnknownToSdk(val), o))
             }
-            _ => Ok((None, &input[definition_message.message_size..])),
+            //_ => Ok((None, &input[definition_message.message_size..])),
         }
     }
 

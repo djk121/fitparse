@@ -424,48 +424,6 @@ macro_rules! fmt_raw_bytes {
 }
 
 #[macro_export]
-macro_rules! fmt_message_field_basic {
-    ($thing:expr, $thingname:expr, $f:ident) => {
-        let val = match &$thing.value {
-            BasicValue::NotYetParsedSingle | BasicValue::NotYetParsedVec => {
-                "not yet parsed".to_string()
-            }
-            BasicValue::Single(v) => format!("{:?}", v),
-            BasicValue::Vec(v) => {
-                let s = "[".to_string();
-                for i in 0..v.len() - 1 {
-                    s.push(format!("{}, ", v[i]));
-                }
-                s.push(format!("{}]", v[v.len() - 1]));
-                s
-            }
-        };
-        write!($f, "  {: >28}: {:?}", $thingname, val)?;
-    };
-}
-
-#[macro_export]
-macro_rules! fmt_message_field_adjusted {
-    ($thing:expr, $thingname:expr, $f:ident) => {
-        let val = match &$thing.value {
-            AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => {
-                "not yet parsed".to_string()
-            }
-            AdjustedValue::Single(v) => format!("{:?}", v),
-            AdjustedValue::Vec(v) => {
-                let s = "[".to_string();
-                for i in 0..v.len() - 1 {
-                    s.push(format!("{}, ", v[i]));
-                }
-                s.push(format!("{}]", v[v.len() - 1]));
-                s
-            }
-        };
-        write!($f, "  {: >28}: {:?}", $thingname, val)?;
-    };
-}
-
-#[macro_export]
 macro_rules! fmt_message_field {
     ($thing:expr, $thingname:expr, false, $f:ident) => {
         writeln!($f, "  {: >28}: {}", $thingname, $thing)

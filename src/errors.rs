@@ -159,6 +159,26 @@ impl Error {
     pub(crate) fn hr_message_timestamp() -> Error {
         Error::from(ErrorKind::HrMessageTimestamp)
     }
+
+    #[allow(dead_code)]
+    pub(crate) fn field_mfg_range_min() -> Error {
+        Error::from(ErrorKind::FieldMfgRangeMin)
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn field_mfg_range_max() -> Error {
+        Error::from(ErrorKind::FieldMfgRangeMax)
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn field_invalid_value() -> Error {
+        Error::from(ErrorKind::FieldInvalidValue)
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn field_unknown_to_sdk() -> Error {
+        Error::from(ErrorKind::FieldUnknownToSdk)
+    }
 }
 
 impl Fail for Error {
@@ -209,6 +229,10 @@ pub enum ErrorKind {
     InvalidFitBaseTypeParse,
     FitFileTooLarge((usize, usize)),
     HrMessageTimestamp,
+    FieldMfgRangeMin,
+    FieldMfgRangeMax,
+    FieldUnknownToSdk,
+    FieldInvalidValue,
 }
 
 impl fmt::Display for ErrorKind {
@@ -295,6 +319,11 @@ impl fmt::Display for ErrorKind {
                 fftl.0, fftl.1
             ),
             ErrorKind::HrMessageTimestamp => write!(f, "Error parsing timestamps in Hr message"),
+            ErrorKind::FieldMfgRangeMin => write!(f, "Field: Manufacture Range Min"),
+            ErrorKind::FieldMfgRangeMax => write!(f, "Field: Manufacture Range Max"),
+            ErrorKind::FieldInvalidValue => write!(f, "Field: Invalid Value"),
+            ErrorKind::FieldUnknownToSdk => write!(f, "Field: Unknown to SDK"),
+
         }
     }
 }
