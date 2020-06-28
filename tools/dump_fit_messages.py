@@ -255,7 +255,7 @@ use FitBaseValue;
 use FitParseConfig;
 use FitFieldParseable;
 use fitparsingstate::FitParsingState;
-use fitparsers::{parse_enum, parse_uint8, parse_uint8z, parse_uint16, parse_uint32, parse_uint32z};
+use fitparsers::{parse_enum, parse_uint8, parse_uint8_as_bytes, parse_uint8z, parse_uint16, parse_uint16_as_bytes, parse_uint32, parse_uint32_as_bytes, parse_uint32z, parse_byte_as_bytes};
 
 use {vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields, parsing_state_set_timestamp, parse_developer_fields, main_parse_message, parse_subfields}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
@@ -588,14 +588,21 @@ impl {{ message_name }} {
                 };
 
                 match parse_config.field_definition_number() {
-                {% for field in fields if not field.has_subfields %}
+            
+
+                {% for field in fields %}
                     {{ field.number }} => {  // {{ field.name }}
+                        {% if field.has_subfields %}
+                        message.{{ field.name }}_subfield_bytes = parse_{{ field.type }}_as_bytes(parse_input, parse_config)?;
+                        {% else %}
                         message.{{ field.name }}.parse(parse_input, parse_config)?;
                         {% if field.has_components %}
                         actions.extend({{ field.calculate_components_vec() }});
                         {% endif %}
+                        {% endif %}
                     },
                 {% endfor %}
+
                     unknown_field_num => {
                         let val = FitBaseValue::parse(inp, parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);

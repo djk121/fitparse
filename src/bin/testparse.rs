@@ -43,7 +43,7 @@ fn main() {
         _ => (),
     }
 
-    for rec in ff.iter_message_name("Record") {
+    for rec in ff.iter_message_names(vec!["Record"]) {
         if let FitMessage::Data(FitDataMessage::Record(ref r)) = *rec {
             if silent == false {
                 println!("distance: {:?}", r.distance);

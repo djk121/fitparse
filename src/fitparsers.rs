@@ -252,21 +252,46 @@ macro_rules! nom_parser {
         pub fn parse_enum(input: &[u8], _parse_config: FitParseConfig) -> Result<u8> {
             nom_internal_parser!(parse_uint8_internal, input, 0xFF)
         }
+
+        pub fn parse_enum_as_bytes(input: &[u8], _parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            Ok(vec![parse_enum(input, _parse_config)?])
+        }
     };
     ("sint8") => {
         pub fn parse_sint8(input: &[u8], _parse_config: FitParseConfig) -> Result<i8> {
             nom_internal_parser!(parse_sint8_internal, input, 0x7F)
+        }
+
+        pub fn parse_sint8_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_sint8(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
+            }
         }
     };
     ("uint8") => {
         pub fn parse_uint8(input: &[u8], _parse_config: FitParseConfig) -> Result<u8> {
             nom_internal_parser!(parse_uint8_internal, input, 0xFF)
         }
+
+        pub fn parse_uint8_as_bytes(input: &[u8], _parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            Ok(vec![parse_uint8(input, _parse_config)?])
+        }
     };
     ("uint8z") => {
         pub fn parse_uint8z(input: &[u8], _parse_config: FitParseConfig) -> Result<u8> {
             nom_internal_parser!(parse_uint8_internal, input, 0x00)
         }
+
+        pub fn parse_uint8z_as_bytes(input: &[u8], _parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            Ok(vec![parse_uint8z(input, _parse_config)?])
+        }
+
     };
     ("sint16") => {
         pub fn parse_sint16(input: &[u8], parse_config: FitParseConfig) -> Result<i16> {
@@ -285,6 +310,18 @@ macro_rules! nom_parser {
                     0x7FFF,
                     parse_config.endianness()
                 )
+            }
+        }
+
+        pub fn parse_sint16_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_sint16(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
             }
         }
     };
@@ -307,6 +344,18 @@ macro_rules! nom_parser {
                 )
             }
         }
+
+        pub fn parse_uint16_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_uint16(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
+            }
+        }
     };
     ("uint16z") => {
         pub fn parse_uint16z(input: &[u8], parse_config: FitParseConfig) -> Result<u16> {
@@ -325,6 +374,18 @@ macro_rules! nom_parser {
                     0x0000,
                     parse_config.endianness()
                 )
+            }
+        }
+
+        pub fn parse_uint16z_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_uint16z(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
             }
         }
     };
@@ -347,6 +408,18 @@ macro_rules! nom_parser {
                 )
             }
         }
+
+        pub fn parse_sint32_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_sint32(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
+            }
+        }
     };
     ("uint32") => {
         pub fn parse_uint32(input: &[u8], parse_config: FitParseConfig) -> Result<u32> {
@@ -365,6 +438,18 @@ macro_rules! nom_parser {
                     0xFFFFFFFF,
                     parse_config.endianness()
                 )
+            }
+        }
+
+        pub fn parse_uint32_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_uint32(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
             }
         }
     };
@@ -387,6 +472,18 @@ macro_rules! nom_parser {
                 )
             }
         }
+
+        pub fn parse_uint32z_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_uint32z(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
+            }
+        }
     };
     ("float32") => {
         pub fn parse_float32(input: &[u8], parse_config: FitParseConfig) -> Result<f32> {
@@ -395,6 +492,18 @@ macro_rules! nom_parser {
                 nom_basic_internal_parser!(parse_float32_internal, &inp, parse_config.endianness())
             } else {
                 nom_basic_internal_parser!(parse_float32_internal, input, parse_config.endianness())
+            }
+        }
+
+        pub fn parse_float32_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_float32(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
             }
         }
     };
@@ -407,6 +516,18 @@ macro_rules! nom_parser {
                 nom_basic_internal_parser!(parse_sint64_internal, input, parse_config.endianness())
             }
         }
+
+        pub fn parse_sint64_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_sint64(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
+            }
+        }
     };
     ("uint64") => {
         pub fn parse_uint64(input: &[u8], parse_config: FitParseConfig) -> Result<u64> {
@@ -415,6 +536,18 @@ macro_rules! nom_parser {
                 nom_basic_internal_parser!(parse_uint64_internal, &inp, parse_config.endianness())
             } else {
                 nom_basic_internal_parser!(parse_uint64_internal, input, parse_config.endianness())
+            }
+        }
+
+        pub fn parse_uint64_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_uint64(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
             }
         }
     };
@@ -437,6 +570,18 @@ macro_rules! nom_parser {
                 )
             }
         }
+
+        pub fn parse_uint64z_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_uint64z(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
+            }
+        }
     };
     ("float64") => {
         pub fn parse_float64(input: &[u8], parse_config: FitParseConfig) -> Result<f64> {
@@ -445,6 +590,18 @@ macro_rules! nom_parser {
                 nom_basic_internal_parser!(parse_float64_internal, &inp, parse_config.endianness())
             } else {
                 nom_basic_internal_parser!(parse_float64_internal, input, parse_config.endianness())
+            }
+        }
+
+        pub fn parse_float64_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            let val = parse_float64(input, parse_config)?;
+            match parse_config.endianness() {
+                Endianness::Big => {
+                    Ok(val.to_be_bytes().to_vec())
+                },
+                Endianness::Little => {
+                    Ok(val.to_le_bytes().to_vec())
+                }
             }
         }
     };
@@ -456,6 +613,10 @@ macro_rules! nom_parser {
     ("byte") => {
         pub fn parse_byte(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
             nom_basic_internal_parser!(parse_byte_internal, input, parse_config.field_size())
+        }
+
+        pub fn parse_byte_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+            parse_byte(input, parse_config)
         }
     };
     ("date_time") => {

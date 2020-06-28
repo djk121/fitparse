@@ -89,22 +89,22 @@ impl FitFile {
         IterFitFile {
             inner: self,
             pos: 0,
-            message_name: "",
+            message_names: vec![],
         }
     }
 
-    pub fn iter_message_name<'a>(&'a self, message_name: &'static str) -> IterFitFile<'a> {
+    pub fn iter_message_names<'a>(&'a self, message_names: Vec<&'static str>) -> IterFitFile<'a> {
         IterFitFile {
             inner: self,
             pos: 0,
-            message_name: message_name,
+            message_names: message_names,
         }
     }
 }
 
 pub struct IterFitFile<'a> {
     inner: &'a FitFile,
-    message_name: &'static str,
+    message_names: Vec<&'static str>,
     pos: usize,
 }
 
@@ -115,7 +115,7 @@ impl<'a> Iterator for IterFitFile<'a> {
         if self.pos >= self.inner.messages.len() {
             None
         } else {
-            if self.message_name == "" {
+            if self.message_names.is_empty() {
                 self.pos += 1;
                 self.inner.messages.get(self.pos - 1)
             } else {
@@ -125,7 +125,7 @@ impl<'a> Iterator for IterFitFile<'a> {
                     }
                     self.pos += 1;
                     if let Some(m) = self.inner.messages.get(self.pos - 1) {
-                        if m.message_name() == self.message_name {
+                        if self.message_names.iter().any(|&x| x == m.message_name()) {
                             return self.inner.messages.get(self.pos - 1);
                         }
                     }

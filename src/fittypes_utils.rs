@@ -183,7 +183,7 @@ macro_rules! field_parser_base_type {
         parse_sint64(&$bytes[0..$parse_config.field_size()], $parse_config);
     };
     ("float64", $bytes:expr, $parse_config:expr) => {
-        parse_float32(&$bytes[0..$parse_config.field_size()], $parse_config);
+        parse_float64(&$bytes[0..$parse_config.field_size()], $parse_config);
     };
 }
 
@@ -492,6 +492,10 @@ impl FitFieldDateTime {
         let parse_config = fit_parse_config!(Endianness::Big);
         let result = FitFieldDateTime::parse(&bytes, parse_config)?;
         Ok(result)
+    }
+
+    pub fn as_datetime(&self) -> DateTime<UTC> {
+        self.rust_time
     }
 }
 

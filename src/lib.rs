@@ -338,14 +338,14 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
         }
     }
 
-    fn get_single(&self) -> Result<T> {
+    pub fn get_single(&self) -> Result<T> {
         match self.value {
             BasicValue::Single(ref v) => return Ok(v.clone()),
             _ => return Err(Error::bad_basic_value_call()),
         }
     }
 
-    fn get_vec(&self) -> Result<Vec<T>> {
+    pub fn get_vec(&self) -> Result<Vec<T>> {
         match self.value {
             BasicValue::Vec(ref v) => Ok(v.clone()),
             _ => Err(Error::bad_basic_value_call()),
@@ -476,7 +476,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
     }
 
     #[allow(dead_code)]
-    fn get_single(&self) -> Result<f64> {
+    pub fn get_single(&self) -> Result<f64> {
         match self.value {
             AdjustedValue::Single(ref v) => return Ok(v.to_f64()),
             _ => return Err(Error::bad_adjusted_value_call()),
@@ -484,7 +484,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
     }
 
     #[allow(dead_code)]
-    fn get_vec(&self) -> Result<Vec<f64>> {
+    pub fn get_vec(&self) -> Result<Vec<f64>> {
         match self.value {
             AdjustedValue::Vec(ref v) => Ok(v.iter().map(|x| x.to_f64()).collect()),
             _ => Err(Error::bad_adjusted_value_call()),
@@ -790,7 +790,9 @@ impl fmt::Display for FitGlobalMesgNum {
     }
 }
 
+
 impl FitGlobalMesgNum {
+    // can I just parse FitFieldMesgNum directly?
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
         let parse_config = fit_parse_config!(endianness);
         let (raw_num, o) = match parse_uint16(input, parse_config) {
