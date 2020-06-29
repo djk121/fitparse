@@ -4,7 +4,7 @@ use std::io;
 //use backtrace::Backtrace;
 
 use errors::{Error, Result};
-use failure::{Backtrace, Context, Fail};
+use failure::Fail;
 
 use fitparsingstate::FitParsingState;
 use {parse_fit_message, FitFileHeader, FitMessage};
@@ -15,11 +15,12 @@ pub struct FitFile {
     pub messages: Vec<FitMessage>,
 }
 
-
+/*
 enum FitMessageParseResult {
     Message(FitMessage),
     Error(Error)
 }
+*/
 
 impl FitFile {
     pub fn new(max_file_size: usize, retain_bytes: bool) -> Self {
@@ -80,11 +81,8 @@ impl FitFile {
                     inp = out;
                 },
                 Err(e) => {
-                    //let bt = Backtrace::new();
-                    //println!("{:?}", bt);
                     println!("backtrace: {:?}", e.backtrace());
                     panic!("error: {}", e);
-                    //self.messages.push(FitMessageParseResult::Error(e))
                 }
             }
             num = num + 1;

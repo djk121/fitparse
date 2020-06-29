@@ -7,6 +7,7 @@ use std::fmt;
 
 extern crate bitvec;
 use bitvec::prelude as bv;
+use bitvec::order as bitvec_order;
 
 extern crate chrono;
 extern crate failure;
@@ -425,6 +426,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
         }
     }
 
+    #[allow(dead_code)]
     fn is_parsed(&self) -> bool {
         match self.value {
             AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => false,
@@ -1523,7 +1525,7 @@ pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -
     }
 
     // 2. make the bit vector, shift as needed
-    let mut bv = bv::BitVec::<bv::BigEndian, u8>::from_vec(raw_input);
+    let mut bv = bv::BitVec::<bitvec_order::Msb0, u8>::from_vec(raw_input);
     bv.rotate_left(start);
 
     // 3. zero out the bits after the range we're interested in
