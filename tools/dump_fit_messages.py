@@ -736,29 +736,30 @@ class Field(object):
             for i in range(0, len(components)):
                 self.components.append((components[i], bit_ranges[i]))
         
-        # units apply to this field
-        if len(units) == 1:        
+
+        # units apply to this field        
+        if len(units):
             self.units = units[0]
 
-            # only base types can have scale/offset. the weight message
-            # type screws this up in the fit profile, so protect here
-            if not self.type in FIT_TYPE_MAP.keys():
-                return
+        # only base types can have scale/offset. the weight message
+        # type screws this up in the fit profile, so protect here
+        if not self.type in FIT_TYPE_MAP.keys():
+            return
 
-            if len(scale) == 0 and len(offset) == 0:
-                self.is_adjusted = False
-            elif len(scale) == 1 and len(offset) == 0:
-                self.scale = float(scale[0])
-                self.offset = 0.0
-                self.is_adjusted = True
-            elif len(scale) == 0 and len(offset) == 1:
-                self.offset = float(offset[0])
-                self.scale = 0.0
-                self.is_adjusted = True
-            elif len(scale) == 1 and len(offset) == 1:
-                self.offset = float(offset[0])
-                self.scale = float(scale[0])
-                self.is_adjusted = True
+        if len(scale) == 0 and len(offset) == 0:
+            self.is_adjusted = False
+        elif len(scale) == 1 and len(offset) == 0:
+            self.scale = float(scale[0])
+            self.offset = 0.0
+            self.is_adjusted = True
+        elif len(scale) == 0 and len(offset) == 1:
+            self.offset = float(offset[0])
+            self.scale = 0.0
+            self.is_adjusted = True
+        elif len(scale) == 1 and len(offset) == 1:
+            self.offset = float(offset[0])
+            self.scale = float(scale[0])
+            self.is_adjusted = True
 
     def set_bit_ranges(self, bits): 
         bit_ranges = []
@@ -922,7 +923,7 @@ class Field(object):
         if self.is_adjusted or self.is_semicircles:
             return "FitFieldAdjustedValue::new{}(\"{}\".to_string(), {}, {})".format(array_spec, self.units, self.scale, self.offset)
         else:
-            print("units: {}".format(self.units), file=sys.stderr)
+            #print("units: {}".format(self.units), file=sys.stderr)
             return "FitFieldBasicValue::new{}(\"{}\".to_string())".format(array_spec, self.units)
 
     def output_parsed_field_assignment(self):

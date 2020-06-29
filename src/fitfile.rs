@@ -1,6 +1,11 @@
 use std::io;
 
+//extern crate backtrace;
+//use backtrace::Backtrace;
+
 use errors::{Error, Result};
+use failure::{Backtrace, Context, Fail};
+
 use fitparsingstate::FitParsingState;
 use {parse_fit_message, FitFileHeader, FitMessage};
 
@@ -75,6 +80,9 @@ impl FitFile {
                     inp = out;
                 },
                 Err(e) => {
+                    //let bt = Backtrace::new();
+                    //println!("{:?}", bt);
+                    println!("backtrace: {:?}", e.backtrace());
                     panic!("error: {}", e);
                     //self.messages.push(FitMessageParseResult::Error(e))
                 }

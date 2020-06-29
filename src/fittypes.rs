@@ -22473,8 +22473,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntplusDeviceType(FitFieldAntplusDeviceType),
     AntDeviceType(FitUint8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -22507,8 +22507,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -22561,7 +22561,7 @@ pub struct FitMessageDeviceInfo {
     pub serial_number: FitFieldBasicValue<FitUint32z>,
     pub product_subfield_bytes: Vec<u8>,
     pub product: FitMessageDeviceInfoSubfieldProduct,
-    pub software_version: FitFieldBasicValue<FitUint16>,
+    pub software_version: FitFieldAdjustedValue<FitUint16>,
     pub hardware_version: FitFieldBasicValue<FitUint8>,
     pub cum_operating_time: FitFieldBasicValue<FitUint32>, // Reset by new battery or charge.
     pub battery_voltage: FitFieldAdjustedValue<FitUint16>,
@@ -22599,7 +22599,7 @@ impl fmt::Display for FitMessageDeviceInfo {
         )?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
 
-        fmt_message_field!(self.software_version, "software_version", false, f)?;
+        fmt_message_field!(self.software_version, "software_version", true, f)?;
 
         fmt_message_field!(self.hardware_version, "hardware_version", false, f)?;
 
@@ -22682,7 +22682,7 @@ impl FitMessageDeviceInfo {
             serial_number: FitFieldBasicValue::new_single("".to_string()),
             product_subfield_bytes: vec![],
             product: FitMessageDeviceInfoSubfieldProduct::NotYetParsed,
-            software_version: FitFieldBasicValue::new_single("".to_string()),
+            software_version: FitFieldAdjustedValue::new_single("".to_string(), 100.0, 0.0),
             hardware_version: FitFieldBasicValue::new_single("".to_string()),
             cum_operating_time: FitFieldBasicValue::new_single("s".to_string()),
             battery_voltage: FitFieldAdjustedValue::new_single("V".to_string(), 256.0, 0.0),
@@ -24320,25 +24320,25 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    PowerLowAlert(FitUint16),
-    HrHighAlert(FitUint8),
-    PowerHighAlert(FitUint16),
-    TimeDurationAlert(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    VirtualPartnerSpeed(FitUint16),
-    CommTimeout(FitFieldCommTimeoutType),
-    HrLowAlert(FitUint8),
-    DistanceDurationAlert(FitUint32),
-    RiderPosition(FitFieldRiderPositionType),
-    BatteryLevel(FitUint16),
-    CadLowAlert(FitUint16),
-    SpeedLowAlert(FitUint32),
-    SpeedHighAlert(FitUint32),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
     CoursePointIndex(FitFieldMessageIndex),
     TimerTrigger(FitFieldTimerTrigger),
-    GearChangeData(FitUint32),
+    CadLowAlert(FitUint16),
     SportPoint(FitUint32),
+    RiderPosition(FitFieldRiderPositionType),
+    DistanceDurationAlert(FitUint32),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    PowerLowAlert(FitUint16),
+    CommTimeout(FitFieldCommTimeoutType),
+    TimeDurationAlert(FitUint32),
+    SpeedLowAlert(FitUint32),
+    BatteryLevel(FitUint16),
+    VirtualPartnerSpeed(FitUint16),
+    PowerHighAlert(FitUint16),
+    CalorieDurationAlert(FitUint32),
+    HrHighAlert(FitUint8),
+    SpeedHighAlert(FitUint32),
+    GearChangeData(FitUint32),
+    HrLowAlert(FitUint8),
     CadHighAlert(FitUint16),
 }
 
@@ -26210,8 +26210,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -30261,8 +30261,8 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    MaxPerFile(FitUint16),
     MaxPerFileType(FitUint16),
+    MaxPerFile(FitUint16),
     NumPerFile(FitUint16),
 }
 
@@ -30634,8 +30634,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitUint32),
-    Steps(FitUint32),
     Strokes(FitUint32),
+    Steps(FitUint32),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -30703,7 +30703,7 @@ pub struct FitMessageMonitoring {
     pub timestamp_min_8: FitFieldBasicValue<FitUint8>,
     pub timestamp_16: FitFieldBasicValue<FitUint16>,
     pub heart_rate: FitFieldBasicValue<FitUint8>,
-    pub intensity: FitFieldBasicValue<FitUint8>,
+    pub intensity: FitFieldAdjustedValue<FitUint8>,
     pub duration_min: FitFieldBasicValue<FitUint16>,
     pub duration: FitFieldBasicValue<FitUint32>,
     pub ascent: FitFieldAdjustedValue<FitUint32>,
@@ -30769,7 +30769,7 @@ impl fmt::Display for FitMessageMonitoring {
 
         fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
 
-        fmt_message_field!(self.intensity, "intensity", false, f)?;
+        fmt_message_field!(self.intensity, "intensity", true, f)?;
 
         fmt_message_field!(self.duration_min, "duration_min", false, f)?;
 
@@ -30873,7 +30873,7 @@ impl FitMessageMonitoring {
             timestamp_min_8: FitFieldBasicValue::new_single("min".to_string()),
             timestamp_16: FitFieldBasicValue::new_single("s".to_string()),
             heart_rate: FitFieldBasicValue::new_single("bpm".to_string()),
-            intensity: FitFieldBasicValue::new_single("".to_string()),
+            intensity: FitFieldAdjustedValue::new_single("".to_string(), 10.0, 0.0),
             duration_min: FitFieldBasicValue::new_single("min".to_string()),
             duration: FitFieldBasicValue::new_single("s".to_string()),
             ascent: FitFieldAdjustedValue::new_single("m".to_string(), 1000.0, 0.0),
@@ -32582,7 +32582,7 @@ impl FitMessageRecord {
             distance: FitFieldAdjustedValue::new_single("m".to_string(), 100.0, 0.0),
             speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
             power: FitFieldBasicValue::new_single("watts".to_string()),
-            compressed_speed_distance: FitFieldBasicValue::new_single("".to_string()),
+            compressed_speed_distance: FitFieldBasicValue::new_single("m/s".to_string()),
             grade: FitFieldAdjustedValue::new_single("%".to_string(), 100.0, 0.0),
             resistance: FitFieldBasicValue::new_single("".to_string()),
             time_from_course: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
@@ -33268,8 +33268,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -35938,7 +35938,7 @@ pub struct FitMessageSession {
     pub max_power: FitFieldBasicValue<FitUint16>,
     pub total_ascent: FitFieldBasicValue<FitUint16>,
     pub total_descent: FitFieldBasicValue<FitUint16>,
-    pub total_training_effect: FitFieldBasicValue<FitUint8>,
+    pub total_training_effect: FitFieldAdjustedValue<FitUint8>,
     pub first_lap_index: FitFieldBasicValue<FitUint16>,
     pub num_laps: FitFieldBasicValue<FitUint16>,
     pub event_group: FitFieldBasicValue<FitUint8>,
@@ -36030,7 +36030,7 @@ pub struct FitMessageSession {
     pub avg_vertical_ratio: FitFieldAdjustedValue<FitUint16>,
     pub avg_stance_time_balance: FitFieldAdjustedValue<FitUint16>,
     pub avg_step_length: FitFieldAdjustedValue<FitUint16>,
-    pub total_anaerobic_training_effect: FitFieldBasicValue<FitUint8>,
+    pub total_anaerobic_training_effect: FitFieldAdjustedValue<FitUint8>,
     pub avg_vam: FitFieldAdjustedValue<FitUint16>,
 }
 
@@ -36100,12 +36100,7 @@ impl fmt::Display for FitMessageSession {
 
         fmt_message_field!(self.total_descent, "total_descent", false, f)?;
 
-        fmt_message_field!(
-            self.total_training_effect,
-            "total_training_effect",
-            false,
-            f
-        )?;
+        fmt_message_field!(self.total_training_effect, "total_training_effect", true, f)?;
 
         fmt_message_field!(self.first_lap_index, "first_lap_index", false, f)?;
 
@@ -36412,7 +36407,7 @@ impl fmt::Display for FitMessageSession {
         fmt_message_field!(
             self.total_anaerobic_training_effect,
             "total_anaerobic_training_effect",
-            false,
+            true,
             f
         )?;
 
@@ -36593,7 +36588,7 @@ impl FitMessageSession {
             max_power: FitFieldBasicValue::new_single("watts".to_string()),
             total_ascent: FitFieldBasicValue::new_single("m".to_string()),
             total_descent: FitFieldBasicValue::new_single("m".to_string()),
-            total_training_effect: FitFieldBasicValue::new_single("".to_string()),
+            total_training_effect: FitFieldAdjustedValue::new_single("".to_string(), 10.0, 0.0),
             first_lap_index: FitFieldBasicValue::new_single("".to_string()),
             num_laps: FitFieldBasicValue::new_single("".to_string()),
             event_group: FitFieldBasicValue::new_single("".to_string()),
@@ -36797,7 +36792,11 @@ impl FitMessageSession {
                 0.0,
             ),
             avg_step_length: FitFieldAdjustedValue::new_single("mm".to_string(), 10.0, 0.0),
-            total_anaerobic_training_effect: FitFieldBasicValue::new_single("".to_string()),
+            total_anaerobic_training_effect: FitFieldAdjustedValue::new_single(
+                "".to_string(),
+                10.0,
+                0.0,
+            ),
             avg_vam: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
         };
 
@@ -38013,8 +38012,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -38215,7 +38214,7 @@ pub struct FitMessageSoftware {
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,
-    pub version: FitFieldBasicValue<FitUint16>,
+    pub version: FitFieldAdjustedValue<FitUint16>,
     pub part_number: FitFieldBasicValue<FitString>,
 }
 
@@ -38225,7 +38224,7 @@ impl fmt::Display for FitMessageSoftware {
 
         fmt_message_field!(self.message_index, "message_index", false, f)?;
 
-        fmt_message_field!(self.version, "version", false, f)?;
+        fmt_message_field!(self.version, "version", true, f)?;
 
         fmt_message_field!(self.part_number, "part_number", false, f)?;
 
@@ -38261,7 +38260,7 @@ impl FitMessageSoftware {
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageSoftware",
             message_index: FitFieldBasicValue::new_single("".to_string()),
-            version: FitFieldBasicValue::new_single("".to_string()),
+            version: FitFieldAdjustedValue::new_single("".to_string(), 100.0, 0.0),
             part_number: FitFieldBasicValue::new_single("".to_string()),
         };
 
@@ -38792,7 +38791,7 @@ pub struct FitMessageThreeDSensorCalibration {
     pub calibration_divisor: FitFieldBasicValue<FitUint32>, // Calibration factor divisor
     pub level_shift: FitFieldBasicValue<FitUint32>, // Level shift value used to shift the ADC value back into range
     pub offset_cal: FitFieldBasicValue<FitSint32>, // Internal calibration factors, one for each: xy, yx, zx
-    pub orientation_matrix: FitFieldBasicValue<FitSint32>, // 3 x 3 rotation matrix (row major)
+    pub orientation_matrix: FitFieldAdjustedValue<FitSint32>, // 3 x 3 rotation matrix (row major)
 }
 
 impl fmt::Display for FitMessageThreeDSensorCalibration {
@@ -38819,7 +38818,7 @@ impl fmt::Display for FitMessageThreeDSensorCalibration {
 
         fmt_message_field!(self.offset_cal, "offset_cal", false, f)?;
 
-        fmt_message_field!(self.orientation_matrix, "orientation_matrix", false, f)?;
+        fmt_message_field!(self.orientation_matrix, "orientation_matrix", true, f)?;
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -38864,7 +38863,7 @@ impl FitMessageThreeDSensorCalibration {
             calibration_divisor: FitFieldBasicValue::new_single("counts".to_string()),
             level_shift: FitFieldBasicValue::new_single("".to_string()),
             offset_cal: FitFieldBasicValue::new_vec("".to_string()),
-            orientation_matrix: FitFieldBasicValue::new_vec("".to_string()),
+            orientation_matrix: FitFieldAdjustedValue::new_vec("".to_string(), 65535.0, 0.0),
         };
 
         let o = main_parse_message!(
@@ -39427,8 +39426,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -40867,8 +40866,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    DigitalLayout(FitFieldDigitalWatchfaceLayout),
     AnalogLayout(FitFieldAnalogWatchfaceLayout),
+    DigitalLayout(FitFieldDigitalWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -42154,12 +42153,12 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationDistance(FitUint32),
-    DurationReps(FitUint32),
-    DurationHr(FitFieldWorkoutHr),
     DurationPower(FitFieldWorkoutPower),
-    DurationTime(FitUint32),
     DurationStep(FitUint32),
+    DurationReps(FitUint32),
+    DurationTime(FitUint32),
+    DurationDistance(FitUint32),
+    DurationHr(FitFieldWorkoutHr),
     DurationCalories(FitUint32),
 }
 
@@ -42292,17 +42291,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatDistance(FitUint32),
+    TargetHrZone(FitUint32),
     TargetPowerZone(FitUint32),
-    RepeatTime(FitUint32),
+    RepeatCalories(FitUint32),
     TargetCadenceZone(FitUint32),
     TargetStrokeType(FitFieldSwimStroke),
+    RepeatTime(FitUint32),
+    RepeatSteps(FitUint32),
+    RepeatDistance(FitUint32),
+    TargetSpeedZone(FitUint32),
     RepeatHr(FitFieldWorkoutHr),
     RepeatPower(FitFieldWorkoutPower),
-    RepeatCalories(FitUint32),
-    TargetSpeedZone(FitUint32),
-    RepeatSteps(FitUint32),
-    TargetHrZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -42404,10 +42403,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetSpeedLow(FitUint32),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetSpeedLow(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -42461,8 +42460,8 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
-    CustomTargetSpeedHigh(FitUint32),
     CustomTargetCadenceHigh(FitUint32),
+    CustomTargetSpeedHigh(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
 }
 

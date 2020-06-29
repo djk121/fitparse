@@ -327,7 +327,7 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
                 let mut num_to_parse = parse_config.num_in_field();
                 let mut v = vec![];
                 while num_to_parse > 0 {
-                    let val = T::parse(input, parse_config)?;
+                    let val = T::parse(outp, parse_config)?;
                     v.push(val);
                     outp = &outp[parse_config.base_type_size()..];
                     num_to_parse = num_to_parse - 1;
@@ -446,7 +446,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
                 let mut num_to_parse = parse_config.num_in_field();
                 let mut v = vec![];
                 while num_to_parse > 0 {
-                    let val = T::parse(input, parse_config)?;
+                    let val = T::parse(outp, parse_config)?;
                     v.push(val);
                     outp = &outp[parse_config.base_type_size()..];
                     num_to_parse = num_to_parse - 1;

@@ -368,8 +368,10 @@ macro_rules! parsing_state_set_timestamp {
                 $message.timestamp.value = BasicValue::Single(ts);
             }
             None => {
-                let ts = $message.timestamp.get_single()?;
-                $parsing_state.set_last_timestamp(ts);
+                if $message.timestamp.is_parsed() {
+                    let ts = $message.timestamp.get_single()?;
+                    $parsing_state.set_last_timestamp(ts);
+                }
             }
         }
     };
