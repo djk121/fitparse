@@ -415,7 +415,7 @@ macro_rules! fmt_developer_fields {
 macro_rules! fmt_raw_bytes {
     ($s:ident, $f:ident) => {{
         write!($f, "  {: >28}: [", "raw_bytes")?;
-        for i in 0..$s.raw_bytes.len() - 1 {
+        for i in 0..$s.raw_bytes.len() {
             write!($f, "{:08b}", $s.raw_bytes[i])?;
             if i < $s.raw_bytes.len() - 1 {
                 write!($f, ",")?;

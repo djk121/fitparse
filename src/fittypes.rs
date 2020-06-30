@@ -30941,6 +30941,7 @@ impl FitMessageMonitoring {
                         num_bits,
                         parse_config.endianness(),
                     )?;
+                 
                     parse_input = &alternate_input;
                 };
 

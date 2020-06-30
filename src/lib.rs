@@ -1524,16 +1524,17 @@ pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -
         raw_input.reverse();
     }
 
-    // 2. make the bit vector, shift as needed
+    // 3. make the bit vector, shift as needed
     let mut bv = bv::BitVec::<bitvec_order::Msb0, u8>::from_vec(raw_input);
-    bv.rotate_left(start);
+    if start > 0 {
+        bv.rotate_right(start);
+    }
 
-    // 3. zero out the bits after the range we're interested in
-    let bit_length = inp.len() * 8;
-    let mut bit_zeroing_index = bit_length;
-    while bit_zeroing_index < bit_length {
-        bv.set(bit_zeroing_index, false);
-        bit_zeroing_index = bit_zeroing_index + 1;
+    // 4. zero out any higher bits
+    let mut clear_pos = 0;    
+    while clear_pos < (bv.len() - num_bits) {
+        bv.set(clear_pos, false);
+        clear_pos = clear_pos + 1;
     }
 
     let mut ret = bv.as_slice().to_vec();
@@ -1556,6 +1557,9 @@ pub fn subset_with_pad(
     let output_size = inp.len();
     // bit_subset should return us an even number of bytes
     let mut subset_bytes = num_bits / 8;
+    if subset_bytes == 0 {
+        subset_bytes = 1;
+    }
 
     let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
 
@@ -1573,6 +1577,31 @@ pub fn subset_with_pad(
 #[cfg(test)]
 mod tests {
     use *;
+
+    #[test]
+    fn subset_with_pad_test() {
+        // input = 72
+        // 0,5 and 5,3 should decode into 8 and 2
+        
+        let data= vec![0b01001000];
+
+        let output1 = subset_with_pad(
+            &data, // input
+            0, // start
+            5, // num_bits
+            Endianness::Big).unwrap();
+        
+        assert_eq!(output1[0], 0b00001000);
+
+        let output2 = subset_with_pad(
+            &data, // input
+            5, // start
+            3, // num_bits
+            Endianness::Big).unwrap();
+        
+        assert_eq!(output2[0], 0b00000010);
+
+    }
 
     #[test]
     fn normal_record_header_test() {
