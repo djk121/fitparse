@@ -499,11 +499,18 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
             return FitFloat64::new(adjusted * (180.0_f64 / 2_f64.powf(31.0)));
         }
 
+        // FIXME: there should be a cleaner way to configure this, but if
+        // this is a component, and scale/offset are in the Fit Profile
+        // for the target field, but not for the component definition, 
+        // we don't want to adjust the field at all.
+        if parse_config.use_stored_input() && parse_config.scale_and_offset.is_none() {
+            return FitFloat64::new(adjusted)
+        }
+
         // if scale/offset are present in a component definition, they are
         // carried through the parse_config to here. If they are present on the
         // parse_config, use them instead of scale/offset as defined in 
         // the field definition row.
-
         let (scale, offset) = match parse_config.scale_and_offset {
             Some(scale_and_offset) => scale_and_offset,
             None => (self.scale, self.offset)

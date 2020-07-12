@@ -26,7 +26,7 @@ use {FitFloat64, FitUint16, FitUint32, FitUint8};
 macro_rules! vec_fit_field_parseable {
     ($name:ident) => {
         impl FitFieldParseable for Vec<$name> {
-            fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<$name>> {
+            fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<$name>> {
                 let mut num_to_parse = parse_config.num_in_field();
 
                 let mut outp = input;
@@ -336,18 +336,17 @@ macro_rules! parse_developer_fields {
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
 
-            let parse_config = FitParseConfig {
-                field_definition: Some(FitFieldDefinition {
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition {
                     definition_number: def_num,
                     field_size: dev_field.field_size,
                     base_type: base_type_num,
-                }),
-                endianness: Some($message.definition_message.endianness),
-                tz_offset_secs: None,
-                bit_range: None,
-            };
+                },
+                $message.definition_message.endianness,
+                0.0
+            );
 
-            let dd = FitFieldDeveloperData::parse($inp2, field_description.clone(), parse_config)?;
+            let dd = FitFieldDeveloperData::parse($inp2, field_description.clone(), &parse_config)?;
             $message.developer_fields.push(dd);
             // we can run out of input before all fields are consumed. according
             // to the spec, buffering with zero-padded fields is appropriate
@@ -459,7 +458,7 @@ impl fmt::Display for FitFieldDateTime {
 }
 
 impl FitFieldParseable for FitFieldDateTime {
-    fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<FitFieldDateTime> {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldDateTime> {
         let (utc_dt, garmin_epoch_offset) = parse_date_time(input, parse_config)?;
         Ok(FitFieldDateTime {
             seconds_since_garmin_epoch: garmin_epoch_offset,
@@ -492,7 +491,7 @@ impl FitFieldDateTime {
 
         let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
         let parse_config = fit_parse_config!(Endianness::Big);
-        let result = FitFieldDateTime::parse(&bytes, parse_config)?;
+        let result = FitFieldDateTime::parse(&bytes, &parse_config)?;
         Ok(result)
     }
 
@@ -518,7 +517,7 @@ impl fmt::Display for FitFieldLocalDateTime {
 }
 
 impl FitFieldParseable for FitFieldLocalDateTime {
-    fn parse(input: &[u8], parse_config: FitParseConfig) -> Result<FitFieldLocalDateTime> {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldLocalDateTime> {
         let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let garmin_epoch_offset = parse_uint32(input, parse_config)?;
         let local_dt = FixedOffset::east(parse_config.tz_offset_secs() as i32).timestamp(
@@ -652,7 +651,7 @@ impl FitMessageHr {
                 match parse_config.field_definition_number() {
                     253 => {
                         // timestamp
-                        let _components = message.timestamp.parse(parse_input, parse_config)?;
+                        let _components = message.timestamp.parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
@@ -660,37 +659,29 @@ impl FitMessageHr {
                         // fractional_timestamp
                         let _components = message
                             .fractional_timestamp
-                            .parse(parse_input, parse_config)?;
+                            .parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
                     1 => {
                         // time256
-                        let _components = message.time256.parse(parse_input, parse_config)?;
+                        let _components = message.time256.parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
 
-                        actions.push(FitParseConfig {
-                            field_definition: Some(FitFieldDefinition {
-                                definition_number: 0,
-                                field_size: 2,
-                                base_type: 0,
-                            }),
-                            endianness: parse_config.endianness,
-                            tz_offset_secs: parse_config.tz_offset_secs,
-                            bit_range: Some((0, 8)),
-                        });
+                        let action = FitParseConfig::new_from_component(0, 2, 0, parse_config.endianness(), 0, 0, Some((1.0, 0.0)), None);
+                        actions.push(action);
                     }
 
                     6 => {
                         // filtered_bpm
-                        let _components = message.filtered_bpm.parse(parse_input, parse_config)?;
+                        let _components = message.filtered_bpm.parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
                     9 => {
                         // event_timestamp
                         let _components =
-                            message.event_timestamp.parse(parse_input, parse_config)?;
+                            message.event_timestamp.parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
                     }
 
@@ -698,7 +689,7 @@ impl FitMessageHr {
                         // event_timestamp_12
                         let _components = message
                             .event_timestamp_12
-                            .parse(parse_input, parse_config)?;
+                            .parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
 
                         // special stuff for FitMessageHr
@@ -709,6 +700,7 @@ impl FitMessageHr {
                                 units: _,
                                 scale: s,
                                 offset: _,
+                                components: _,
                             } => {
                                 if cts.len() == 0 {
                                     return Err(Error::hr_message_timestamp());
@@ -733,7 +725,7 @@ impl FitMessageHr {
                                 range[i] + 12,
                                 message.definition_message.endianness,
                             )?;
-                            let val = field_parser_base_type!("uint32", &bytes, parse_config)?;
+                            let val = field_parser_base_type!("uint32", &bytes, &parse_config)?;
 
                             let new_ts = current_timestamp + (val as f64 / scale);
                             match message.event_timestamp {
@@ -743,6 +735,7 @@ impl FitMessageHr {
                                     units: _,
                                     scale: _,
                                     offset: _,
+                                    components: _,
                                 } => v.push(FitFloat64::new(new_ts)),
                                 _ => return Err(Error::hr_message_timestamp()),
                             }
@@ -750,7 +743,7 @@ impl FitMessageHr {
                     }
 
                     unknown_field_num => {
-                        let val = FitBaseValue::parse(inp, parse_config)?;
+                        let val = FitBaseValue::parse(inp, &parse_config)?;
                         message.unknown_fields.insert(unknown_field_num, val);
                         saved_outp = &inp[parse_config.field_size()..];
                     }
