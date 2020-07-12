@@ -85,7 +85,7 @@ named_args!(parse_byte_internal(num_bytes: usize)<Vec<u8>>,
 
 fn parse_date_time_internal(
     input: &[u8],
-    parse_config: FitParseConfig,
+    parse_config: &FitParseConfig,
 ) -> Result<(DateTime<UTC>, u32)> {
     // if the value is < 0x10000000, it's relative to device power on, else
     // it's a normal unix timestamp, relative to the garmin epoch time
@@ -104,6 +104,34 @@ fn parse_date_time_internal(
     }
 }
 
+fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> {
+    // peculiarly, shifting stuff right seems to be the right way to handle the input
+    // being smaller than desired. 
+
+    let mut res = std::vec::from_elem(0, desired_size);
+
+    match endianness {
+        Endianness::Big => {
+            let mut write_idx = desired_size;
+            let mut read_idx = input.len();
+
+            while read_idx > 0 {
+                read_idx = read_idx - 1;
+                write_idx = write_idx - 1;
+                res[write_idx] = input[read_idx];
+            }
+        },
+        _ => {
+            for i in 0..input.len() {
+                res[i] = input[i];
+            }
+           
+        }
+    };
+    res
+}
+
+/*
 fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> {
     let mut res = std::vec::from_elem(0, desired_size);
 
@@ -131,6 +159,7 @@ fn buffer(input: &[u8], desired_size: usize, endianness: Endianness) -> Vec<u8> 
 
     res
 }
+*/
 
 #[macro_export]
 macro_rules! nom_returning_internal_parser {
@@ -244,27 +273,27 @@ macro_rules! nom_internal_nonzero_parser {
 
 macro_rules! nom_parser {
     ("bool") => {
-        pub fn parse_bool(input: &[u8], _parse_config: FitParseConfig) -> Result<bool> {
+        pub fn parse_bool(input: &[u8], _parse_config: &FitParseConfig) -> Result<bool> {
             nom_basic_internal_parser!(parse_bool_internal, input)
         }
     };
     ("enum") => {
-        pub fn parse_enum(input: &[u8], _parse_config: FitParseConfig) -> Result<u8> {
+        pub fn parse_enum(input: &[u8], _parse_config: &FitParseConfig) -> Result<u8> {
             nom_internal_parser!(parse_uint8_internal, input, 0xFF)
         }
 
         #[allow(dead_code)]
-        pub fn parse_enum_as_bytes(input: &[u8], _parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_enum_as_bytes(input: &[u8], _parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             Ok(vec![parse_enum(input, _parse_config)?])
         }
     };
     ("sint8") => {
-        pub fn parse_sint8(input: &[u8], _parse_config: FitParseConfig) -> Result<i8> {
+        pub fn parse_sint8(input: &[u8], _parse_config: &FitParseConfig) -> Result<i8> {
             nom_internal_parser!(parse_sint8_internal, input, 0x7F)
         }
 
         #[allow(dead_code)]
-        pub fn parse_sint8_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_sint8_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_sint8(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -277,27 +306,27 @@ macro_rules! nom_parser {
         }
     };
     ("uint8") => {
-        pub fn parse_uint8(input: &[u8], _parse_config: FitParseConfig) -> Result<u8> {
+        pub fn parse_uint8(input: &[u8], _parse_config: &FitParseConfig) -> Result<u8> {
             nom_internal_parser!(parse_uint8_internal, input, 0xFF)
         }
 
-        pub fn parse_uint8_as_bytes(input: &[u8], _parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint8_as_bytes(input: &[u8], _parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             Ok(vec![parse_uint8(input, _parse_config)?])
         }
     };
     ("uint8z") => {
-        pub fn parse_uint8z(input: &[u8], _parse_config: FitParseConfig) -> Result<u8> {
+        pub fn parse_uint8z(input: &[u8], _parse_config: &FitParseConfig) -> Result<u8> {
             nom_internal_parser!(parse_uint8_internal, input, 0x00)
         }
 
         #[allow(dead_code)]
-        pub fn parse_uint8z_as_bytes(input: &[u8], _parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint8z_as_bytes(input: &[u8], _parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             Ok(vec![parse_uint8z(input, _parse_config)?])
         }
 
     };
     ("sint16") => {
-        pub fn parse_sint16(input: &[u8], parse_config: FitParseConfig) -> Result<i16> {
+        pub fn parse_sint16(input: &[u8], parse_config: &FitParseConfig) -> Result<i16> {
             if input.len() < 2 {
                 let inp = buffer(input, 2, parse_config.endianness());
                 nom_internal_parser!(
@@ -317,7 +346,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_sint16_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_sint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_sint16(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -330,7 +359,7 @@ macro_rules! nom_parser {
         }
     };
     ("uint16") => {
-        pub fn parse_uint16(input: &[u8], parse_config: FitParseConfig) -> Result<u16> {
+        pub fn parse_uint16(input: &[u8], parse_config: &FitParseConfig) -> Result<u16> {
             if input.len() < 2 {
                 let inp = buffer(input, 2, parse_config.endianness());
                 nom_internal_parser!(
@@ -349,7 +378,7 @@ macro_rules! nom_parser {
             }
         }
 
-        pub fn parse_uint16_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_uint16(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -362,7 +391,7 @@ macro_rules! nom_parser {
         }
     };
     ("uint16z") => {
-        pub fn parse_uint16z(input: &[u8], parse_config: FitParseConfig) -> Result<u16> {
+        pub fn parse_uint16z(input: &[u8], parse_config: &FitParseConfig) -> Result<u16> {
             if input.len() < 2 {
                 let inp = buffer(input, 2, parse_config.endianness());
                 nom_internal_parser!(
@@ -382,7 +411,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_uint16z_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint16z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_uint16z(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -395,7 +424,7 @@ macro_rules! nom_parser {
         }
     };
     ("sint32") => {
-        pub fn parse_sint32(input: &[u8], parse_config: FitParseConfig) -> Result<i32> {
+        pub fn parse_sint32(input: &[u8], parse_config: &FitParseConfig) -> Result<i32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
                 nom_internal_parser!(
@@ -415,7 +444,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_sint32_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_sint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_sint32(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -428,7 +457,7 @@ macro_rules! nom_parser {
         }
     };
     ("uint32") => {
-        pub fn parse_uint32(input: &[u8], parse_config: FitParseConfig) -> Result<u32> {
+        pub fn parse_uint32(input: &[u8], parse_config: &FitParseConfig) -> Result<u32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
                 nom_internal_parser!(
@@ -447,7 +476,7 @@ macro_rules! nom_parser {
             }
         }
 
-        pub fn parse_uint32_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_uint32(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -460,7 +489,7 @@ macro_rules! nom_parser {
         }
     };
     ("uint32z") => {
-        pub fn parse_uint32z(input: &[u8], parse_config: FitParseConfig) -> Result<u32> {
+        pub fn parse_uint32z(input: &[u8], parse_config: &FitParseConfig) -> Result<u32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
                 nom_internal_parser!(
@@ -480,7 +509,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_uint32z_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint32z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_uint32z(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -493,7 +522,7 @@ macro_rules! nom_parser {
         }
     };
     ("float32") => {
-        pub fn parse_float32(input: &[u8], parse_config: FitParseConfig) -> Result<f32> {
+        pub fn parse_float32(input: &[u8], parse_config: &FitParseConfig) -> Result<f32> {
             if input.len() < 4 {
                 let inp = buffer(input, 4, parse_config.endianness());
                 nom_basic_internal_parser!(parse_float32_internal, &inp, parse_config.endianness())
@@ -503,7 +532,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_float32_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_float32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_float32(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -516,7 +545,7 @@ macro_rules! nom_parser {
         }
     };
     ("sint64") => {
-        pub fn parse_sint64(input: &[u8], parse_config: FitParseConfig) -> Result<i64> {
+        pub fn parse_sint64(input: &[u8], parse_config: &FitParseConfig) -> Result<i64> {
             if input.len() < 8 {
                 let inp = buffer(input, 8, parse_config.endianness());
                 nom_basic_internal_parser!(parse_sint64_internal, &inp, parse_config.endianness())
@@ -526,7 +555,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_sint64_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_sint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_sint64(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -539,7 +568,7 @@ macro_rules! nom_parser {
         }
     };
     ("uint64") => {
-        pub fn parse_uint64(input: &[u8], parse_config: FitParseConfig) -> Result<u64> {
+        pub fn parse_uint64(input: &[u8], parse_config: &FitParseConfig) -> Result<u64> {
             if input.len() < 8 {
                 let inp = buffer(input, 8, parse_config.endianness());
                 nom_basic_internal_parser!(parse_uint64_internal, &inp, parse_config.endianness())
@@ -549,7 +578,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_uint64_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_uint64(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -562,7 +591,7 @@ macro_rules! nom_parser {
         }
     };
     ("uint64z") => {
-        pub fn parse_uint64z(input: &[u8], parse_config: FitParseConfig) -> Result<u64> {
+        pub fn parse_uint64z(input: &[u8], parse_config: &FitParseConfig) -> Result<u64> {
             if input.len() < 8 {
                 let inp = buffer(input, 8, parse_config.endianness());
                 nom_internal_parser!(
@@ -582,7 +611,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_uint64z_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_uint64z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_uint64z(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -595,7 +624,7 @@ macro_rules! nom_parser {
         }
     };
     ("float64") => {
-        pub fn parse_float64(input: &[u8], parse_config: FitParseConfig) -> Result<f64> {
+        pub fn parse_float64(input: &[u8], parse_config: &FitParseConfig) -> Result<f64> {
             if input.len() < 8 {
                 let inp = buffer(input, 8, parse_config.endianness());
                 nom_basic_internal_parser!(parse_float64_internal, &inp, parse_config.endianness())
@@ -605,7 +634,7 @@ macro_rules! nom_parser {
         }
 
         #[allow(dead_code)]
-        pub fn parse_float64_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_float64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_float64(input, parse_config)?;
             match parse_config.endianness() {
                 Endianness::Big => {
@@ -618,23 +647,23 @@ macro_rules! nom_parser {
         }
     };
     ("string") => {
-        pub fn parse_string(input: &[u8], parse_config: FitParseConfig) -> Result<String> {
+        pub fn parse_string(input: &[u8], parse_config: &FitParseConfig) -> Result<String> {
             nom_basic_internal_parser!(parse_string_internal, input, parse_config.field_size())
         }
     };
     ("byte") => {
-        pub fn parse_byte(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_byte(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             nom_basic_internal_parser!(parse_byte_internal, input, parse_config.field_size())
         }
 
-        pub fn parse_byte_as_bytes(input: &[u8], parse_config: FitParseConfig) -> Result<Vec<u8>> {
+        pub fn parse_byte_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             parse_byte(input, parse_config)
         }
     };
     ("date_time") => {
         pub fn parse_date_time(
             input: &[u8],
-            parse_config: FitParseConfig,
+            parse_config: &FitParseConfig,
         ) -> Result<(DateTime<UTC>, u32)> {
             parse_date_time_internal(input, parse_config)
         }

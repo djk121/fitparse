@@ -9,9 +9,9 @@ use FitDeveloperFieldDefinition;
 use FitNormalRecordHeader;
 use FitNormalRecordHeaderMessageType;
 
-use {PreAdjustedValue, AdjustedValue};
+use {AdjustedValue, PreAdjustedValue};
 
-use FitFloat64; 
+use FitFloat64;
 
 fn make_definition_message() -> FitDefinitionMessage {
     FitDefinitionMessage {
@@ -60,36 +60,42 @@ macro_rules! ffbv {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::NotYetParsedSingle,
             units: "".to_string(),
+            components: vec![],
         }
     };
     ("unparsed", $ty:ty, "vec") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::NotYetParsedVec,
             units: "".to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, "single") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Single($s),
             units: "".to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, "vec") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Vec($s),
             units: "".to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, $u:expr, "single") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Single($s),
             units: $u.to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, $u:expr, "vec") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Vec($s),
             units: $u.to_string(),
+            components: vec![],
         }
     };
 }
@@ -102,6 +108,7 @@ macro_rules! ffav {
             units: "".to_string(),
             scale: $scale,
             offset: $offset,
+            components: vec![],
         }
     };
     ("unparsed", $ty:ty, $scale:expr, $offset:expr, "vec") => {
@@ -111,6 +118,7 @@ macro_rules! ffav {
             units: "".to_string(),
             scale: $scale,
             offset: $offset,
+            components: vec![],
         }
     };
     ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "single") => {
@@ -120,6 +128,7 @@ macro_rules! ffav {
             units: $units,
             scale: $scale,
             offset: $offset,
+            components: vec![],
         }
     };
     ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "vec") => {
@@ -129,6 +138,7 @@ macro_rules! ffav {
             units: $units,
             scale: $scale,
             offset: $offset,
+            components: vec![],
         }
     };
 }
@@ -172,6 +182,7 @@ fn make_field_description(
         developer_fields: vec![],
         unknown_fields: HashMap::new(),
         raw_bytes: vec![],
+        subfield_field_numbers: vec![],
         message_name: "FitMessageFieldDescription",
         developer_data_index: ffbv!(FitUint8::new(0), FitUint8, "single"),
         field_definition_number: ffbv!(field_definition_number, FitUint8, "single"),
@@ -209,7 +220,9 @@ fn fit_message_record() {
         local_mesg_num: 0,
     });
 
-    let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
+    let mut rec = FitMessageRecord::new(header, &mut parsing_state).unwrap();
+    rec.parse(&data, &mut parsing_state, None).unwrap();
+    //let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
     assert_eq!(
         rec.position_lat,
         ffav!(
@@ -350,7 +363,9 @@ fn fit_message_record_with_developer_fields() {
         local_mesg_num: 0,
     });
 
-    let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
+    let mut rec = FitMessageRecord::new(header, &mut parsing_state).unwrap();
+    rec.parse(&data, &mut parsing_state, None).unwrap();
+    //let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
     assert_eq!(
         rec.position_lat,
         ffav!(

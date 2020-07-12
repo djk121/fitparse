@@ -146,6 +146,11 @@ impl Error {
     }
 
     #[allow(dead_code)]
+    pub(crate) fn bad_subfield_field_number(bn: u8) -> Error {
+        Error::from(ErrorKind::BadSubfieldFieldNumber(bn))
+    }
+
+    #[allow(dead_code)]
     pub(crate) fn invalid_fit_base_type_parse() -> Error {
         Error::from(ErrorKind::InvalidFitBaseTypeParse)
     }
@@ -226,6 +231,7 @@ pub enum ErrorKind {
     InsufficientDataForShift,
     IncorrectShiftInput,
     FieldDefinitionNumberNotFound(u8),
+    BadSubfieldFieldNumber(u8),
     InvalidFitBaseTypeParse,
     FitFileTooLarge((usize, usize)),
     HrMessageTimestamp,
@@ -311,6 +317,9 @@ impl fmt::Display for ErrorKind {
             ErrorKind::IncorrectShiftInput => write!(f, "bad inputs for shift operation"),
             ErrorKind::FieldDefinitionNumberNotFound(ref fdn) => {
                 write!(f, "field definition number not found: {:?}", fdn)
+            }
+            ErrorKind::BadSubfieldFieldNumber(ref bn) => {
+                write!(f, "asked to parse bad subfield field number: {:?}", bn)
             }
             ErrorKind::InvalidFitBaseTypeParse => write!(f, "invalid fit base type parse result"),
             ErrorKind::FitFileTooLarge(ref fftl) => write!(

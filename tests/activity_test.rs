@@ -3,7 +3,10 @@ extern crate fitparse;
 use fitparse::fitfile::FitFile;
 use fitparse::fittypes::FitDataMessage;
 use fitparse::{AdjustedValue, BasicValue, FitFloat64, FitUint16, FitUint32, PreAdjustedValue};
-use fitparse::{FitFieldAdjustedValue, FitFieldBasicValue, FitMessage};
+use fitparse::{FitFieldAdjustedValue, FitFieldBasicValue, FitMessage, FitParseConfig};
+
+extern crate nom;
+use nom::Endianness;
 
 #[test]
 fn smoke() {
@@ -15,36 +18,42 @@ macro_rules! ffbv {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::NotYetParsedSingle,
             units: "".to_string(),
+            components: vec![],
         }
     };
     ("unparsed", $ty:ty, "vec") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::NotYetParsedVec,
             units: "".to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, "single") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Single($s),
             units: "".to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, "vec") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Vec($s),
             units: "".to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, $u:expr, "single") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Single($s),
             units: $u.to_string(),
+            components: vec![],
         }
     };
     ($s:expr, $ty:ty, $u:expr, "vec") => {
         FitFieldBasicValue {
             value: BasicValue::<$ty>::Vec($s),
             units: $u.to_string(),
+            components: vec![],
         }
     };
 }
@@ -57,6 +66,7 @@ macro_rules! ffav {
             units: "".to_string(),
             scale: $scale,
             offset: $offset,
+            components: vec![],
         }
     };
     ("unparsed", $ty:ty, $scale:expr, $offset:expr, "vec") => {
@@ -66,24 +76,27 @@ macro_rules! ffav {
             units: "".to_string(),
             scale: $scale,
             offset: $offset,
+            components: vec![],
         }
     };
-    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "single") => {
+    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, $components:expr, "single") => {
         FitFieldAdjustedValue {
             value: AdjustedValue::Single($value),
             parsed_value: PreAdjustedValue::<$ty>::Single($preadjusted_value),
             units: $units,
             scale: $scale,
             offset: $offset,
+            components: $components,
         }
     };
-    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, "vec") => {
+    ($preadjusted_value:expr, $value:expr, $ty:ty, $scale:expr, $offset:expr, $units:expr, $components:expr, "vec") => {
         FitFieldAdjustedValue {
             value: AdjustedValue::Vec($value),
             parsed_value: PreAdjustedValue::<$ty>::Vec($preadjusted_value),
             units: $units,
             scale: $scale,
             offset: $offset,
+            components: $components,
         }
     };
 }
@@ -229,6 +242,9 @@ fn activity_test() {
                     1000.0,
                     0.0,
                     "m/s".to_string(),
+                    vec![
+                        FitParseConfig::new_from_component(124, 4, 134, Endianness::Big, 0, 16, Some((1000.0, 0.0)), Some("m/s".to_string())),
+                    ],
                     "single"
                 )
             );
@@ -241,6 +257,9 @@ fn activity_test() {
                     1000.0,
                     0.0,
                     "m/s".to_string(),
+                    vec![
+                        FitParseConfig::new_from_component(125, 4, 134, Endianness::Big, 0, 16, Some((1000.0, 0.0)), Some("m/s".to_string())),
+                    ],
                     "single"
                 )
             );
@@ -253,6 +272,7 @@ fn activity_test() {
                     1000.0,
                     0.0,
                     "m/s".to_string(),
+                    vec![],
                     "single"
                 )
             );
@@ -270,6 +290,7 @@ fn activity_test() {
                 1000.0,
                 0.0,
                 "s".to_string(),
+                vec![],
                 "single"
             )
         ),

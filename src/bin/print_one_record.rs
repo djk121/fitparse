@@ -16,13 +16,13 @@ fn main() {
             Arg::with_name("index")
                 .help("index # of record to print")
                 .required(true)
-                .index(1),
+                .index(2),
         )
         .arg(
             Arg::with_name("input")
                 .help("fit file to parse")
                 .required(true)
-                .index(2),
+                .index(1),
         )
         .arg(
             Arg::with_name("expanded")
