@@ -23888,9 +23888,14 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDeviceInfoSubfieldDeviceType::AntplusDeviceType(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -23900,9 +23905,14 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDeviceInfoSubfieldDeviceType::AntDeviceType(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -23940,9 +23950,14 @@ impl FitMessageDeviceInfoSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDeviceInfoSubfieldProduct::FaveroProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -23953,9 +23968,14 @@ impl FitMessageDeviceInfoSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -23966,9 +23986,14 @@ impl FitMessageDeviceInfoSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -23979,9 +24004,14 @@ impl FitMessageDeviceInfoSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -25387,8 +25417,8 @@ impl FitRecord for FitMessageDiveGas {
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
-    HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
     HeartRateLocalDeviceType(FitFieldLocalDeviceType),
+    HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDiveSettingsSubfieldHeartRateSource {
@@ -25408,9 +25438,14 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateAntplusDeviceType(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -25421,9 +25456,14 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateLocalDeviceType(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -26241,25 +26281,25 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    TimeDurationAlert(FitFloat64),
+    SpeedHighAlert(FitFloat64),
     SportPoint(FitUint32),
-    TimerTrigger(FitFieldTimerTrigger),
+    HrLowAlert(FitUint8),
+    GearChangeData(FitUint32),
+    HrHighAlert(FitUint8),
+    TimeDurationAlert(FitFloat64),
+    CadLowAlert(FitUint16),
+    PowerLowAlert(FitUint16),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    CoursePointIndex(FitFieldMessageIndex),
     VirtualPartnerSpeed(FitFloat64),
+    CommTimeout(FitFieldCommTimeoutType),
+    TimerTrigger(FitFieldTimerTrigger),
     CalorieDurationAlert(FitUint32),
     RiderPosition(FitFieldRiderPositionType),
-    SpeedHighAlert(FitFloat64),
-    GearChangeData(FitUint32),
-    CoursePointIndex(FitFieldMessageIndex),
-    CadLowAlert(FitUint16),
-    PowerHighAlert(FitUint16),
     CadHighAlert(FitUint16),
-    PowerLowAlert(FitUint16),
-    CommTimeout(FitFieldCommTimeoutType),
-    HrLowAlert(FitUint8),
-    HrHighAlert(FitUint8),
     DistanceDurationAlert(FitFloat64),
     BatteryLevel(FitFloat64),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    PowerHighAlert(FitUint16),
     SpeedLowAlert(FitFloat64),
 }
 
@@ -26279,7 +26319,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::TimerTrigger(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::TimerTrigger(val), new_actions));
             }
 
             FitFieldEvent::CoursePoint => {
@@ -26289,7 +26334,15 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::CoursePointIndex(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageEventSubfieldData::CoursePointIndex(val),
+                    new_actions,
+                ));
             }
 
             FitFieldEvent::Battery => {
@@ -26299,7 +26352,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageEventSubfieldData::BatteryLevel(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::BatteryLevel(val), new_actions));
             }
 
             FitFieldEvent::VirtualPartnerPace => {
@@ -26309,9 +26367,14 @@ impl FitMessageEventSubfieldData {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageEventSubfieldData::VirtualPartnerSpeed(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -26321,7 +26384,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::HrHighAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::HrHighAlert(val), new_actions));
             }
 
             FitFieldEvent::HrLowAlert => {
@@ -26330,7 +26398,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::HrLowAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::HrLowAlert(val), new_actions));
             }
 
             FitFieldEvent::SpeedHighAlert => {
@@ -26340,7 +26413,15 @@ impl FitMessageEventSubfieldData {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageEventSubfieldData::SpeedHighAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageEventSubfieldData::SpeedHighAlert(val),
+                    new_actions,
+                ));
             }
 
             FitFieldEvent::SpeedLowAlert => {
@@ -26350,7 +26431,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageEventSubfieldData::SpeedLowAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::SpeedLowAlert(val), new_actions));
             }
 
             FitFieldEvent::CadHighAlert => {
@@ -26359,7 +26445,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::CadHighAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::CadHighAlert(val), new_actions));
             }
 
             FitFieldEvent::CadLowAlert => {
@@ -26368,7 +26459,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::CadLowAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::CadLowAlert(val), new_actions));
             }
 
             FitFieldEvent::PowerHighAlert => {
@@ -26377,7 +26473,15 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::PowerHighAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageEventSubfieldData::PowerHighAlert(val),
+                    new_actions,
+                ));
             }
 
             FitFieldEvent::PowerLowAlert => {
@@ -26386,7 +26490,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::PowerLowAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::PowerLowAlert(val), new_actions));
             }
 
             FitFieldEvent::TimeDurationAlert => {
@@ -26396,7 +26505,15 @@ impl FitMessageEventSubfieldData {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageEventSubfieldData::TimeDurationAlert(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageEventSubfieldData::TimeDurationAlert(val),
+                    new_actions,
+                ));
             }
 
             FitFieldEvent::DistanceDurationAlert => {
@@ -26406,9 +26523,14 @@ impl FitMessageEventSubfieldData {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageEventSubfieldData::DistanceDurationAlert(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -26419,9 +26541,14 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageEventSubfieldData::CalorieDurationAlert(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -26432,9 +26559,14 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageEventSubfieldData::FitnessEquipmentState(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -26444,31 +26576,33 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((
-                    FitMessageEventSubfieldData::SportPoint(val),
-                    vec![
-                        FitParseConfig::new_from_component(
-                            7,
-                            2,
-                            132,
-                            endianness,
-                            0,
-                            16,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            8,
-                            2,
-                            132,
-                            endianness,
-                            16,
-                            16,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                    ],
-                ));
+                let new_actions: Vec<FitParseConfig> = vec![
+                    FitParseConfig::new_from_component(
+                        7,
+                        2,
+                        132,
+                        endianness,
+                        0,
+                        16,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        8,
+                        2,
+                        132,
+                        endianness,
+                        16,
+                        16,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                ]
+                .iter()
+                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                .collect();
+
+                return Ok((FitMessageEventSubfieldData::SportPoint(val), new_actions));
             }
 
             FitFieldEvent::FrontGearChange => {
@@ -26477,50 +26611,55 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![
+                    FitParseConfig::new_from_component(
+                        11,
+                        1,
+                        10,
+                        endianness,
+                        0,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        12,
+                        1,
+                        10,
+                        endianness,
+                        8,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        9,
+                        1,
+                        10,
+                        endianness,
+                        16,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        10,
+                        1,
+                        10,
+                        endianness,
+                        24,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                ]
+                .iter()
+                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                .collect();
+
                 return Ok((
                     FitMessageEventSubfieldData::GearChangeData(val),
-                    vec![
-                        FitParseConfig::new_from_component(
-                            11,
-                            1,
-                            10,
-                            endianness,
-                            0,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            12,
-                            1,
-                            10,
-                            endianness,
-                            8,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            9,
-                            1,
-                            10,
-                            endianness,
-                            16,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            10,
-                            1,
-                            10,
-                            endianness,
-                            24,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                    ],
+                    new_actions,
                 ));
             }
 
@@ -26530,50 +26669,55 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![
+                    FitParseConfig::new_from_component(
+                        11,
+                        1,
+                        10,
+                        endianness,
+                        0,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        12,
+                        1,
+                        10,
+                        endianness,
+                        8,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        9,
+                        1,
+                        10,
+                        endianness,
+                        16,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        10,
+                        1,
+                        10,
+                        endianness,
+                        24,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                ]
+                .iter()
+                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                .collect();
+
                 return Ok((
                     FitMessageEventSubfieldData::GearChangeData(val),
-                    vec![
-                        FitParseConfig::new_from_component(
-                            11,
-                            1,
-                            10,
-                            endianness,
-                            0,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            12,
-                            1,
-                            10,
-                            endianness,
-                            8,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            9,
-                            1,
-                            10,
-                            endianness,
-                            16,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                        FitParseConfig::new_from_component(
-                            10,
-                            1,
-                            10,
-                            endianness,
-                            24,
-                            8,
-                            Some((1.0, 0.0)),
-                            Some("".to_string()),
-                        ),
-                    ],
+                    new_actions,
                 ));
             }
 
@@ -26584,7 +26728,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::RiderPosition(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::RiderPosition(val), new_actions));
             }
 
             FitFieldEvent::CommTimeout => {
@@ -26594,7 +26743,12 @@ impl FitMessageEventSubfieldData {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageEventSubfieldData::CommTimeout(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageEventSubfieldData::CommTimeout(val), new_actions));
             }
 
             _ => (),
@@ -29189,7 +29343,15 @@ impl FitMessageFileIdSubfieldProduct {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageFileIdSubfieldProduct::FaveroProduct(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageFileIdSubfieldProduct::FaveroProduct(val),
+                    new_actions,
+                ));
             }
 
             FitFieldManufacturer::Garmin => {
@@ -29199,7 +29361,15 @@ impl FitMessageFileIdSubfieldProduct {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageFileIdSubfieldProduct::GarminProduct(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageFileIdSubfieldProduct::GarminProduct(val),
+                    new_actions,
+                ));
             }
 
             FitFieldManufacturer::Dynastream => {
@@ -29209,7 +29379,15 @@ impl FitMessageFileIdSubfieldProduct {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageFileIdSubfieldProduct::GarminProduct(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageFileIdSubfieldProduct::GarminProduct(val),
+                    new_actions,
+                ));
             }
 
             FitFieldManufacturer::DynastreamOem => {
@@ -29219,7 +29397,15 @@ impl FitMessageFileIdSubfieldProduct {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageFileIdSubfieldProduct::GarminProduct(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageFileIdSubfieldProduct::GarminProduct(val),
+                    new_actions,
+                ));
             }
 
             _ => (),
@@ -31568,7 +31754,15 @@ impl FitMessageLapSubfieldTotalCycles {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageLapSubfieldTotalCycles::TotalStrides(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageLapSubfieldTotalCycles::TotalStrides(val),
+                    new_actions,
+                ));
             }
 
             FitFieldSport::Walking => {
@@ -31577,7 +31771,15 @@ impl FitMessageLapSubfieldTotalCycles {
 
                 let val = parser.get_single()?;
 
-                return Ok((FitMessageLapSubfieldTotalCycles::TotalStrides(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageLapSubfieldTotalCycles::TotalStrides(val),
+                    new_actions,
+                ));
             }
 
             _ => (),
@@ -31613,9 +31815,14 @@ impl FitMessageLapSubfieldAvgCadence {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageLapSubfieldAvgCadence::AvgRunningCadence(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -31652,9 +31859,14 @@ impl FitMessageLapSubfieldMaxCadence {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageLapSubfieldMaxCadence::MaxRunningCadence(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -34050,9 +34262,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    MaxPerFile(FitUint16),
     NumPerFile(FitUint16),
     MaxPerFileType(FitUint16),
+    MaxPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -34068,9 +34280,14 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageMesgCapabilitiesSubfieldCount::NumPerFile(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -34080,9 +34297,14 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageMesgCapabilitiesSubfieldCount::MaxPerFile(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -34092,9 +34314,14 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageMesgCapabilitiesSubfieldCount::MaxPerFileType(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -34675,8 +34902,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Steps(FitFloat64),
     Strokes(FitFloat64),
+    Steps(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -34693,7 +34920,12 @@ impl FitMessageMonitoringSubfieldCycles {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), new_actions));
             }
 
             FitFieldActivityType::Running => {
@@ -34703,7 +34935,12 @@ impl FitMessageMonitoringSubfieldCycles {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), new_actions));
             }
 
             FitFieldActivityType::Cycling => {
@@ -34713,7 +34950,15 @@ impl FitMessageMonitoringSubfieldCycles {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageMonitoringSubfieldCycles::Strokes(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageMonitoringSubfieldCycles::Strokes(val),
+                    new_actions,
+                ));
             }
 
             FitFieldActivityType::Swimming => {
@@ -34723,7 +34968,15 @@ impl FitMessageMonitoringSubfieldCycles {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
-                return Ok((FitMessageMonitoringSubfieldCycles::Strokes(val), vec![]));
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageMonitoringSubfieldCycles::Strokes(val),
+                    new_actions,
+                ));
             }
 
             _ => (),
@@ -36385,9 +36638,14 @@ impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::BaroCalFactor(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -37964,9 +38222,14 @@ impl FitMessageScheduleSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageScheduleSubfieldProduct::FaveroProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -37977,9 +38240,14 @@ impl FitMessageScheduleSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageScheduleSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -37990,9 +38258,14 @@ impl FitMessageScheduleSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageScheduleSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -38003,9 +38276,14 @@ impl FitMessageScheduleSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageScheduleSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -39245,9 +39523,14 @@ impl FitMessageSegmentLapSubfieldTotalCycles {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSegmentLapSubfieldTotalCycles::TotalStrokes(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -40950,9 +41233,14 @@ impl FitMessageSessionSubfieldTotalCycles {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSessionSubfieldTotalCycles::TotalStrides(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -40962,9 +41250,14 @@ impl FitMessageSessionSubfieldTotalCycles {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSessionSubfieldTotalCycles::TotalStrides(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -41001,9 +41294,14 @@ impl FitMessageSessionSubfieldAvgCadence {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSessionSubfieldAvgCadence::AvgRunningCadence(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -41040,9 +41338,14 @@ impl FitMessageSessionSubfieldMaxCadence {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSessionSubfieldMaxCadence::MaxRunningCadence(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -42983,9 +43286,14 @@ impl FitMessageSlaveDeviceSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSlaveDeviceSubfieldProduct::FaveroProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -42996,9 +43304,14 @@ impl FitMessageSlaveDeviceSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -43009,9 +43322,14 @@ impl FitMessageSlaveDeviceSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -43022,9 +43340,14 @@ impl FitMessageSlaveDeviceSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -44267,8 +44590,8 @@ impl FitRecord for FitMessageStressLevel {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    GyroCalFactor(FitUint32),
     AccelCalFactor(FitUint32),
+    GyroCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -44287,9 +44610,14 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::AccelCalFactor(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -44299,9 +44627,14 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::GyroCalFactor(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -45282,9 +45615,14 @@ impl FitMessageTrainingFileSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageTrainingFileSubfieldProduct::FaveroProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -45295,9 +45633,14 @@ impl FitMessageTrainingFileSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -45308,9 +45651,14 @@ impl FitMessageTrainingFileSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -45321,9 +45669,14 @@ impl FitMessageTrainingFileSubfieldProduct {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -47380,8 +47733,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    AnalogLayout(FitFieldAnalogWatchfaceLayout),
     DigitalLayout(FitFieldDigitalWatchfaceLayout),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -47402,9 +47755,14 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWatchfaceSettingsSubfieldLayout::DigitalLayout(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -47415,9 +47773,14 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWatchfaceSettingsSubfieldLayout::AnalogLayout(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49245,13 +49608,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationHr(FitFieldWorkoutHr),
-    DurationStep(FitUint32),
-    DurationCalories(FitUint32),
-    DurationReps(FitUint32),
-    DurationTime(FitFloat64),
-    DurationDistance(FitFloat64),
     DurationPower(FitFieldWorkoutPower),
+    DurationHr(FitFieldWorkoutHr),
+    DurationDistance(FitFloat64),
+    DurationReps(FitUint32),
+    DurationCalories(FitUint32),
+    DurationStep(FitUint32),
+    DurationTime(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -49271,9 +49634,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationTime(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49284,9 +49652,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationTime(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49297,9 +49670,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationDistance(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49310,9 +49688,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationHr(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49323,9 +49706,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationHr(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49336,9 +49724,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationCalories(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49348,9 +49741,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49360,9 +49758,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49372,9 +49775,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49384,9 +49792,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49396,9 +49809,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49408,9 +49826,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49420,9 +49843,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49432,9 +49860,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49446,9 +49879,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49460,9 +49898,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49472,9 +49915,14 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldDurationValue::DurationReps(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49497,17 +49945,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    RepeatSteps(FitUint32),
-    TargetStrokeType(FitFieldSwimStroke),
-    TargetSpeedZone(FitUint32),
-    TargetHrZone(FitUint32),
-    TargetPowerZone(FitUint32),
-    RepeatTime(FitFloat64),
     RepeatCalories(FitUint32),
+    RepeatTime(FitFloat64),
+    TargetPowerZone(FitUint32),
+    TargetCadenceZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    TargetHrZone(FitUint32),
+    TargetSpeedZone(FitUint32),
     RepeatHr(FitFieldWorkoutHr),
     RepeatDistance(FitFloat64),
-    TargetCadenceZone(FitUint32),
+    RepeatSteps(FitUint32),
+    TargetStrokeType(FitFieldSwimStroke),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -49519,6 +49967,96 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
+        match message.target_type.get_single()? {
+            FitFieldWktStepTarget::Speed => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::HeartRate => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::Cadence => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::Power => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::SwimStroke => {
+                let mut parser =
+                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                    new_actions,
+                ));
+            }
+
+            _ => (),
+        }
+
         match message.duration_type.get_single()? {
             FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
                 let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -49526,9 +50064,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatSteps(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49539,9 +50082,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatTime(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49552,9 +50100,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatDistance(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49565,9 +50118,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatCalories(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49578,9 +50136,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49591,9 +50154,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49605,9 +50173,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49619,74 +50192,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(val),
-                    vec![],
-                ));
-            }
-
-            _ => (),
-        }
-
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                    vec![],
-                ));
-            }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                    vec![],
-                ));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                    vec![],
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                    vec![],
-                ));
-            }
-
-            FitFieldWktStepTarget::SwimStroke => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49710,9 +50223,9 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -49732,9 +50245,14 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetSpeedLow(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49745,11 +50263,16 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetHeartRateLow(
                         val,
                     ),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49759,9 +50282,14 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetCadenceLow(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49773,9 +50301,14 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetPowerLow(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49798,8 +50331,8 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetSpeedHigh(FitFloat64),
     CustomTargetCadenceHigh(FitUint32),
 }
@@ -49821,9 +50354,14 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
 
                 let val = <FitFloat64>::from(parser.get_single()?);
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetSpeedHigh(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49834,11 +50372,16 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetHeartRateHigh(
                         val,
                     ),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49848,11 +50391,16 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetCadenceHigh(
                         val,
                     ),
-                    vec![],
+                    new_actions,
                 ));
             }
 
@@ -49864,9 +50412,14 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
 
                 let val = parser.get_single()?;
 
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
                 return Ok((
                     FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetPowerHigh(val),
-                    vec![],
+                    new_actions,
                 ));
             }
 

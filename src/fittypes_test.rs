@@ -2,7 +2,7 @@ use super::*;
 
 use std::rc::Rc;
 
-use nom::Endianness::Little;
+use nom::Endianness;
 
 use FitBaseValue;
 use FitDeveloperFieldDefinition;
@@ -13,14 +13,14 @@ use {AdjustedValue, PreAdjustedValue};
 
 use FitFloat64;
 
-fn make_definition_message() -> FitDefinitionMessage {
+fn make_definition_message_record() -> FitDefinitionMessage {
     FitDefinitionMessage {
         header: FitNormalRecordHeader {
             message_type: FitNormalRecordHeaderMessageType::Definition,
             developer_fields_present: false,
             local_mesg_num: 0,
         },
-        endianness: Little,
+        endianness: Endianness::Little,
         global_mesg_num: FitGlobalMesgNum::Known(FitFieldMesgNum::Record),
         num_fields: 11,
         message_size: 28,
@@ -36,6 +36,27 @@ fn make_definition_message() -> FitDefinitionMessage {
             (4, 1, 2),
             (39, 2, 131),
             (41, 2, 131),
+        ]),
+        num_developer_fields: 0,
+        developer_field_definitions: vec![],
+    }
+}
+
+fn make_definition_message_event() -> FitDefinitionMessage {
+    FitDefinitionMessage {
+        header: FitNormalRecordHeader {
+            message_type: FitNormalRecordHeaderMessageType::Definition,
+            developer_fields_present: false,
+            local_mesg_num: 0,
+        },
+        endianness: Endianness::Big,
+        global_mesg_num: FitGlobalMesgNum::Known(FitFieldMesgNum::Event),
+        num_fields: 3,
+        message_size: 9,
+        field_definitions: make_field_definitions(vec![
+            (253, 4, 134), // timestamp, uint32
+            (0, 1, 0), // event, enum
+            (3, 4, 134), // data, uint32
         ]),
         num_developer_fields: 0,
         developer_field_definitions: vec![],
@@ -168,7 +189,7 @@ fn make_field_description(
                 developer_fields_present: false,
                 local_mesg_num: 0,
             },
-            endianness: Little,
+            endianness: Endianness::Little,
             global_mesg_num: FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription),
             num_fields: field_definitions.len() as u8,
             message_size: field_definitions
@@ -203,7 +224,7 @@ fn make_field_description(
 
 #[test]
 fn fit_message_record() {
-    let definition_message = Rc::new(make_definition_message());
+    let definition_message = Rc::new(make_definition_message_record());
     let data = [
         0b00101011, 0b00111100, 0b10101001, 0b00110011, 0b10100000, 0b01111001, 0b01000101,
         0b00011110, 0b11000000, 0b01111101, 0b01111110, 0b11001101, 0b10011000, 0b00001000,
@@ -222,7 +243,7 @@ fn fit_message_record() {
 
     let mut rec = FitMessageRecord::new(header, &mut parsing_state).unwrap();
     rec.parse(&data, &mut parsing_state, None).unwrap();
-    //let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
+
     assert_eq!(
         rec.position_lat,
         ffav!(
@@ -259,7 +280,7 @@ fn fit_message_record() {
 
 #[test]
 fn fit_message_record_with_developer_fields() {
-    let mut definition_message = make_definition_message();
+    let mut definition_message = make_definition_message_record();
 
     definition_message.num_fields = 11;
     definition_message.message_size = 42;
@@ -416,4 +437,35 @@ fn fit_message_record_with_developer_fields() {
         }
     }
     assert_eq!(1, 2);
+}
+
+#[test]
+fn fit_message_event_with_subfield() {
+    // test subfield that extracts components if a specific subfield is set
+
+    let definition_message = Rc::new(make_definition_message_event());
+
+    let data = [
+        0b00101001, 0b10111011, 0b00001001, 0b01000000, // timestamp
+        0b00101010, // event
+        0b00100111, 0b00000001, 0b00001110, 0b00001000, // data
+    ];
+
+    let mut parsing_state = FitParsingState::new();
+    parsing_state.add(0, definition_message.clone());
+
+    let header = FitRecordHeader::Normal(FitNormalRecordHeader {
+        message_type: FitNormalRecordHeaderMessageType::Data,
+        developer_fields_present: false,
+        local_mesg_num: 0,
+    });
+
+    let mut rec = FitMessageEvent::new(header, &mut parsing_state).unwrap();
+    rec.parse(&data, &mut parsing_state, None).unwrap();
+
+    assert_eq!(rec.event, ffbv!(FitFieldEvent::FrontGearChange, FitFieldEvent, "", "single"));
+    assert_eq!(rec.rear_gear_num, ffbv!(FitUint8z::new(8), FitUint8z, "", "single"));
+    assert_eq!(rec.rear_gear, ffbv!(FitUint8z::new(14), FitUint8z, "", "single"));
+    assert_eq!(rec.front_gear_num, ffbv!(FitUint8z::new(1), FitUint8z, "", "single"));
+    assert_eq!(rec.front_gear, ffbv!(FitUint8z::new(39), FitUint8z, "", "single"));
 }

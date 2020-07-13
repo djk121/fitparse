@@ -693,7 +693,7 @@ impl FitParseConfig {
         let (start, num_bits) = self.bit_range.unwrap();
 
         if let Some(ref bytes) = self.bytes_to_parse {
-            let o = subset_with_pad(bytes, start, num_bits, self.endianness.unwrap())?;
+            let o = bit_subset(bytes, start, num_bits, self.endianness.unwrap(), self.field_size())?;
             Ok(o)
         } else {
             panic!("FitParseConfig::get_stored_input without bytes_to_parse set")
@@ -1617,32 +1617,108 @@ fn format_bits(input: &Vec<u8>) -> String {
     s
 }
 
-pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
-    // 1. Figure out how many bytes we need from the input, get rid of excess
-    let mut desired_byte_length = num_bits / 8;
-    let remainder = num_bits % 8;
-    if remainder != 0 {
-        desired_byte_length = desired_byte_length + 1;
-    }
+// pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
+//     println!("inp: {:?}, start: {}, num_bits: {}", inp, start, num_bits);
+    
+//     // 1. Figure out how many bytes we need from the input, get rid of excess
+//     let mut desired_byte_length = num_bits / 8;
+//     println!("desired_byte_length: {}", desired_byte_length);
+//     let remainder = num_bits % 8;
+//     if remainder != 0 {
+//         desired_byte_length = desired_byte_length + 1;
+//     }
+
+//     let mut raw_input = inp.to_vec();
+
+//     // [39, 1, 14, 8]   
+//     //while raw_input.len() > desired_byte_length {
+//     //    raw_input.remove(raw_input.len() - 1);
+//     //}
+
+//     // 2. flip endianness if need be
+//     if big_endian == false {
+//         raw_input.reverse();
+//     }
+
+//     // 3. make the bit vector, shift as needed
+//     let mut bv = bv::BitVec::<bitvec_order::Msb0, u8>::from_vec(raw_input);
+//     if start > 0 {
+//         bv.rotate_right(start);
+//     }
+
+//     println!("bv, post-rotate: {:?}", bv);
+
+//     // 4. zero out any higher bits
+//     let mut clear_pos = 0;    
+//     while clear_pos < (bv.len() - num_bits) {
+//         bv.set(clear_pos, false);
+//         clear_pos = clear_pos + 1;
+//     }
+
+//     let mut ret = bv.as_slice().to_vec();
+//     println!("ret: {:?}", ret);
+
+//     // 5. if little-endian, reverse
+//     if big_endian == false {
+//         ret.reverse();
+//     }
+
+//     return Ok(ret);
+// }
+
+// pub fn subset_with_pad(
+//     inp: &[u8],
+//     start: usize,
+//     num_bits: usize,
+//     endianness: Endianness,
+// ) -> Result<Vec<u8>> {
+//     // we're passed however many bytes the output should end up being
+//     let output_size = inp.len();
+//     // bit_subset should return us an even number of bytes
+//     let mut subset_bytes = num_bits / 8;
+//     if subset_bytes == 0 {
+//         subset_bytes = 1;
+//     }
+
+//     println!("subset_with_pad inp: {:?}", inp);
+//     let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
+
+//     while subset_bytes < output_size {
+//         subset_bytes = subset_bytes + 1;
+//         match endianness {
+//             nom::Endianness::Big => bytes.insert(0, 0),
+//             nom::Endianness::Little => bytes.push(0),
+//         }
+//     }
+
+//     println!("subset_with_pad ret: {:?}", bytes);
+
+
+//     Ok(bytes)
+// }
+
+pub fn bit_subset(
+    inp: &[u8],
+    start: usize,
+    num_bits: usize,
+    endianness: Endianness,
+    output_size: usize
+) -> Result<Vec<u8>> {
 
     let mut raw_input = inp.to_vec();
 
-    while raw_input.len() > desired_byte_length {
-        raw_input.remove(raw_input.len() - 1);
-    }
-
-    // 2. flip endianness if need be
-    if big_endian == false {
+    // flip endianness if need be
+    if endianness == Endianness::Little {
         raw_input.reverse();
     }
 
-    // 3. make the bit vector, shift as needed
+    // make the bit vector, shift as needed
     let mut bv = bv::BitVec::<bitvec_order::Msb0, u8>::from_vec(raw_input);
     if start > 0 {
         bv.rotate_right(start);
     }
 
-    // 4. zero out any higher bits
+    // zero out any higher bits
     let mut clear_pos = 0;    
     while clear_pos < (bv.len() - num_bits) {
         bv.set(clear_pos, false);
@@ -1651,39 +1727,17 @@ pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -
 
     let mut ret = bv.as_slice().to_vec();
 
-    // 5. if little-endian, reverse
-    if big_endian == false {
+    // shrink to fit, discarding high-order bytes
+    while ret.len() > output_size {
+        ret.remove(0);
+    }
+
+    // if little-endian, reverse
+    if endianness == Endianness::Little {
         ret.reverse();
     }
 
     return Ok(ret);
-}
-
-pub fn subset_with_pad(
-    inp: &[u8],
-    start: usize,
-    num_bits: usize,
-    endianness: Endianness,
-) -> Result<Vec<u8>> {
-    // we're passed however many bytes the output should end up being
-    let output_size = inp.len();
-    // bit_subset should return us an even number of bytes
-    let mut subset_bytes = num_bits / 8;
-    if subset_bytes == 0 {
-        subset_bytes = 1;
-    }
-
-    let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
-
-    while subset_bytes < output_size {
-        subset_bytes = subset_bytes + 1;
-        match endianness {
-            nom::Endianness::Big => bytes.insert(0, 0),
-            nom::Endianness::Little => bytes.push(0),
-        }
-    }
-
-    Ok(bytes)
 }
 
 #[cfg(test)]
@@ -1691,25 +1745,29 @@ mod tests {
     use *;
 
     #[test]
-    fn subset_with_pad_test() {
+    fn bit_subset_test() {
         // input = 72
         // 0,5 and 5,3 should decode into 8 and 2
         
         let data= vec![0b01001000];
 
-        let output1 = subset_with_pad(
+        let output1 = bit_subset(
             &data, // input
             0, // start
             5, // num_bits
-            Endianness::Big).unwrap();
+            Endianness::Big,
+            1, // output_size
+        ).unwrap();
         
         assert_eq!(output1[0], 0b00001000);
 
-        let output2 = subset_with_pad(
+        let output2 = bit_subset(
             &data, // input
             5, // start
             3, // num_bits
-            Endianness::Big).unwrap();
+            Endianness::Big,
+            1, // output_size
+        ).unwrap();
         
         assert_eq!(output2[0], 0b00000010);
 

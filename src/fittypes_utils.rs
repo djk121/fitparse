@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::fmt;
 use std::mem::transmute;
 use std::rc::Rc;
-use subset_with_pad;
+use bit_subset;
 use FitBaseValue;
 use FitDefinitionMessage;
 use FitFieldDefinition;
@@ -61,11 +61,12 @@ macro_rules! parse_internal_field {
     ($components_bit_range:expr, $inp:expr, $field:expr, $message:expr, $message_field:expr, "base_type", $is_degrees:expr, $scale_and_offset:expr) => {
         match $components_bit_range {
             Some((bit_range_start, num_bits)) => {
-                let bytes = subset_with_pad(
+                let bytes = bit_subset(
                     &$inp[0..$field.field_size],
                     bit_range_start,
                     num_bits,
                     $message.definition_message.endianness,
+                    $field.field_size,
                 )?;
 
                 match field.is_array() {
@@ -639,11 +640,12 @@ impl FitMessageHr {
                 let mut parse_input = inp;
 
                 if let Some((start, num_bits)) = parse_config.bit_range {
-                    alternate_input = subset_with_pad(
+                    alternate_input = bit_subset(
                         &inp[0..parse_config.field_size()],
                         start,
                         num_bits,
                         parse_config.endianness(),
+                        parse_config.field_size(),
                     )?;
                     parse_input = &alternate_input;
                 };
@@ -719,11 +721,12 @@ impl FitMessageHr {
                         };
 
                         for i in 0..range.len() {
-                            let bytes = subset_with_pad(
+                            let bytes = bit_subset(
                                 &inp[0..f.field_size],
                                 range[i],
                                 range[i] + 12,
                                 message.definition_message.endianness,
+                                f.field_size,
                             )?;
                             let val = field_parser_base_type!("uint32", &bytes, &parse_config)?;
 

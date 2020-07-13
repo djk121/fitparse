@@ -1196,7 +1196,9 @@ impl {{ subfield_name }} {
                 {% else %}
                 let val = parser.get_single()?;
                 {% endif %}
-                return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(val), {{ sf.calculate_components_vec() }}))
+                let new_actions: Vec<FitParseConfig> = {{ sf.calculate_components_vec() }}.iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
+                
+                return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(val), new_actions))
             },
         {% endfor %}
             _ => (),
