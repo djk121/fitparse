@@ -217,6 +217,8 @@ pub enum FitFieldMesgNum {
     DiveAlarm,                   // 262
     ExerciseTitle,               // 264
     DiveSummary,                 // 268
+    Jump,                        // 285
+    ClimbPro,                    // 317
     MfgRangeMin, // 65280  0xFF00 - 0xFFFE reserved for manufacturer specific messages
     MfgRangeMax, // 65534  0xFF00 - 0xFFFE reserved for manufacturer specific messages
     MesgNum(u16),
@@ -316,6 +318,8 @@ impl fmt::Display for FitFieldMesgNum {
             FitFieldMesgNum::DiveAlarm => write!(f, "{}", "DiveAlarm"),
             FitFieldMesgNum::ExerciseTitle => write!(f, "{}", "ExerciseTitle"),
             FitFieldMesgNum::DiveSummary => write!(f, "{}", "DiveSummary"),
+            FitFieldMesgNum::Jump => write!(f, "{}", "Jump"),
+            FitFieldMesgNum::ClimbPro => write!(f, "{}", "ClimbPro"),
             FitFieldMesgNum::MfgRangeMin => write!(f, "{}", "MfgRangeMin"),
             FitFieldMesgNum::MfgRangeMax => write!(f, "{}", "MfgRangeMax"),
             FitFieldMesgNum::MesgNum(x) => write!(f, "{}({})", "MesgNum", x),
@@ -416,6 +420,8 @@ impl FitFieldParseable for FitFieldMesgNum {
                 262 => Ok(FitFieldMesgNum::from(v)),
                 264 => Ok(FitFieldMesgNum::from(v)),
                 268 => Ok(FitFieldMesgNum::from(v)),
+                285 => Ok(FitFieldMesgNum::from(v)),
+                317 => Ok(FitFieldMesgNum::from(v)),
                 65280 => Ok(FitFieldMesgNum::from(v)),
                 65534 => Ok(FitFieldMesgNum::from(v)),
                 v => Ok(FitFieldMesgNum::MesgNum(v)),
@@ -514,6 +520,8 @@ impl From<u16> for FitFieldMesgNum {
             262 => FitFieldMesgNum::DiveAlarm,
             264 => FitFieldMesgNum::ExerciseTitle,
             268 => FitFieldMesgNum::DiveSummary,
+            285 => FitFieldMesgNum::Jump,
+            317 => FitFieldMesgNum::ClimbPro,
             65280 => FitFieldMesgNum::MfgRangeMin,
             65534 => FitFieldMesgNum::MfgRangeMax,
             _ => FitFieldMesgNum::UnknownToSdk,
@@ -3450,6 +3458,7 @@ pub enum FitFieldEvent {
     ElevHighAlert = 45,        // Group 0.  Start / stop when in alert condition.
     ElevLowAlert = 46,         // Group 0.  Start / stop when in alert condition.
     CommTimeout = 47,          // marker
+    RadarThreatAlert = 75,     // start/stop/marker
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
 }
@@ -3493,6 +3502,7 @@ impl fmt::Display for FitFieldEvent {
             FitFieldEvent::ElevHighAlert => write!(f, "{}", "ElevHighAlert"),
             FitFieldEvent::ElevLowAlert => write!(f, "{}", "ElevLowAlert"),
             FitFieldEvent::CommTimeout => write!(f, "{}", "CommTimeout"),
+            FitFieldEvent::RadarThreatAlert => write!(f, "{}", "RadarThreatAlert"),
             FitFieldEvent::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldEvent::UnknownToSdk => write!(f, "UnknownToSdk"),
         }
@@ -3550,6 +3560,7 @@ impl From<u8> for FitFieldEvent {
             45 => FitFieldEvent::ElevHighAlert,
             46 => FitFieldEvent::ElevLowAlert,
             47 => FitFieldEvent::CommTimeout,
+            75 => FitFieldEvent::RadarThreatAlert,
             _ => FitFieldEvent::UnknownToSdk,
         }
     }
@@ -3975,6 +3986,7 @@ pub enum FitFieldWktStepDuration {
     RepeatUntilTrainingPeaksTss = 27,
     RepetitionTime = 28,
     Reps = 29,
+    TimeOnly = 31,
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
 }
@@ -4028,6 +4040,7 @@ impl fmt::Display for FitFieldWktStepDuration {
             }
             FitFieldWktStepDuration::RepetitionTime => write!(f, "{}", "RepetitionTime"),
             FitFieldWktStepDuration::Reps => write!(f, "{}", "Reps"),
+            FitFieldWktStepDuration::TimeOnly => write!(f, "{}", "TimeOnly"),
             FitFieldWktStepDuration::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldWktStepDuration::UnknownToSdk => write!(f, "UnknownToSdk"),
         }
@@ -4079,6 +4092,7 @@ impl From<u8> for FitFieldWktStepDuration {
             27 => FitFieldWktStepDuration::RepeatUntilTrainingPeaksTss,
             28 => FitFieldWktStepDuration::RepetitionTime,
             29 => FitFieldWktStepDuration::Reps,
+            31 => FitFieldWktStepDuration::TimeOnly,
             _ => FitFieldWktStepDuration::UnknownToSdk,
         }
     }
@@ -4598,6 +4612,12 @@ pub enum FitFieldManufacturer {
     Seesense,               // 124
     NciTechnology,          // 125
     Iqsquare,               // 126
+    Leomo,                  // 127
+    IfitCom,                // 128
+    CorosByte,              // 129
+    VersaDesign,            // 130
+    Chileaf,                // 131
+    Cycplus,                // 132
     Development,            // 255
     Healthandlife,          // 257
     Lezyne,                 // 258
@@ -4641,6 +4661,12 @@ pub enum FitFieldManufacturer {
     Velosense,              // 296
     Cycligentinc,           // 297
     Trailforks,             // 298
+    MahleEbikemotion,       // 299
+    Nurvv,                  // 300
+    Microprogram,           // 301
+    Zone5cloud,             // 302
+    Greenteg,               // 303
+    YamahaMotors,           // 304
     Actigraphcorp,          // 5759
     Manufacturer(u16),
     InvalidFieldValue,
@@ -4773,6 +4799,12 @@ impl fmt::Display for FitFieldManufacturer {
             FitFieldManufacturer::Seesense => write!(f, "{}", "Seesense"),
             FitFieldManufacturer::NciTechnology => write!(f, "{}", "NciTechnology"),
             FitFieldManufacturer::Iqsquare => write!(f, "{}", "Iqsquare"),
+            FitFieldManufacturer::Leomo => write!(f, "{}", "Leomo"),
+            FitFieldManufacturer::IfitCom => write!(f, "{}", "IfitCom"),
+            FitFieldManufacturer::CorosByte => write!(f, "{}", "CorosByte"),
+            FitFieldManufacturer::VersaDesign => write!(f, "{}", "VersaDesign"),
+            FitFieldManufacturer::Chileaf => write!(f, "{}", "Chileaf"),
+            FitFieldManufacturer::Cycplus => write!(f, "{}", "Cycplus"),
             FitFieldManufacturer::Development => write!(f, "{}", "Development"),
             FitFieldManufacturer::Healthandlife => write!(f, "{}", "Healthandlife"),
             FitFieldManufacturer::Lezyne => write!(f, "{}", "Lezyne"),
@@ -4816,6 +4848,12 @@ impl fmt::Display for FitFieldManufacturer {
             FitFieldManufacturer::Velosense => write!(f, "{}", "Velosense"),
             FitFieldManufacturer::Cycligentinc => write!(f, "{}", "Cycligentinc"),
             FitFieldManufacturer::Trailforks => write!(f, "{}", "Trailforks"),
+            FitFieldManufacturer::MahleEbikemotion => write!(f, "{}", "MahleEbikemotion"),
+            FitFieldManufacturer::Nurvv => write!(f, "{}", "Nurvv"),
+            FitFieldManufacturer::Microprogram => write!(f, "{}", "Microprogram"),
+            FitFieldManufacturer::Zone5cloud => write!(f, "{}", "Zone5cloud"),
+            FitFieldManufacturer::Greenteg => write!(f, "{}", "Greenteg"),
+            FitFieldManufacturer::YamahaMotors => write!(f, "{}", "YamahaMotors"),
             FitFieldManufacturer::Actigraphcorp => write!(f, "{}", "Actigraphcorp"),
             FitFieldManufacturer::Manufacturer(x) => write!(f, "{}({})", "Manufacturer", x),
             FitFieldManufacturer::InvalidFieldValue => write!(f, "InvalidFieldValue"),
@@ -4951,6 +4989,12 @@ impl FitFieldParseable for FitFieldManufacturer {
                 124 => Ok(FitFieldManufacturer::from(v)),
                 125 => Ok(FitFieldManufacturer::from(v)),
                 126 => Ok(FitFieldManufacturer::from(v)),
+                127 => Ok(FitFieldManufacturer::from(v)),
+                128 => Ok(FitFieldManufacturer::from(v)),
+                129 => Ok(FitFieldManufacturer::from(v)),
+                130 => Ok(FitFieldManufacturer::from(v)),
+                131 => Ok(FitFieldManufacturer::from(v)),
+                132 => Ok(FitFieldManufacturer::from(v)),
                 255 => Ok(FitFieldManufacturer::from(v)),
                 257 => Ok(FitFieldManufacturer::from(v)),
                 258 => Ok(FitFieldManufacturer::from(v)),
@@ -4994,6 +5038,12 @@ impl FitFieldParseable for FitFieldManufacturer {
                 296 => Ok(FitFieldManufacturer::from(v)),
                 297 => Ok(FitFieldManufacturer::from(v)),
                 298 => Ok(FitFieldManufacturer::from(v)),
+                299 => Ok(FitFieldManufacturer::from(v)),
+                300 => Ok(FitFieldManufacturer::from(v)),
+                301 => Ok(FitFieldManufacturer::from(v)),
+                302 => Ok(FitFieldManufacturer::from(v)),
+                303 => Ok(FitFieldManufacturer::from(v)),
+                304 => Ok(FitFieldManufacturer::from(v)),
                 5759 => Ok(FitFieldManufacturer::from(v)),
                 v => Ok(FitFieldManufacturer::Manufacturer(v)),
             },
@@ -5127,6 +5177,12 @@ impl From<u16> for FitFieldManufacturer {
             124 => FitFieldManufacturer::Seesense,
             125 => FitFieldManufacturer::NciTechnology,
             126 => FitFieldManufacturer::Iqsquare,
+            127 => FitFieldManufacturer::Leomo,
+            128 => FitFieldManufacturer::IfitCom,
+            129 => FitFieldManufacturer::CorosByte,
+            130 => FitFieldManufacturer::VersaDesign,
+            131 => FitFieldManufacturer::Chileaf,
+            132 => FitFieldManufacturer::Cycplus,
             255 => FitFieldManufacturer::Development,
             257 => FitFieldManufacturer::Healthandlife,
             258 => FitFieldManufacturer::Lezyne,
@@ -5170,6 +5226,12 @@ impl From<u16> for FitFieldManufacturer {
             296 => FitFieldManufacturer::Velosense,
             297 => FitFieldManufacturer::Cycligentinc,
             298 => FitFieldManufacturer::Trailforks,
+            299 => FitFieldManufacturer::MahleEbikemotion,
+            300 => FitFieldManufacturer::Nurvv,
+            301 => FitFieldManufacturer::Microprogram,
+            302 => FitFieldManufacturer::Zone5cloud,
+            303 => FitFieldManufacturer::Greenteg,
+            304 => FitFieldManufacturer::YamahaMotors,
             5759 => FitFieldManufacturer::Actigraphcorp,
             _ => FitFieldManufacturer::UnknownToSdk,
         }
@@ -5179,163 +5241,301 @@ impl From<u16> for FitFieldManufacturer {
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum FitFieldGarminProduct {
     // fit base type: uint16
-    Hrm1,                      // 1
-    Axh01,                     // 2  AXH01 HRM chipset
-    Axb01,                     // 3
-    Axb02,                     // 4
-    Hrm2ss,                    // 5
-    DsiAlf02,                  // 6
-    Hrm3ss,                    // 7
-    HrmRunSingleByteProductId, // 8  hrm_run model for HRM ANT+ messaging
-    Bsm,                       // 9  BSM model for ANT+ messaging
-    Bcm,                       // 10  BCM model for ANT+ messaging
-    Axs01,                     // 11  AXS01 HRM Bike Chipset model for ANT+ messaging
-    HrmTriSingleByteProductId, // 12  hrm_tri model for HRM ANT+ messaging
-    Fr225SingleByteProductId,  // 14  fr225 model for HRM ANT+ messaging
-    Fr301China,                // 473
-    Fr301Japan,                // 474
-    Fr301Korea,                // 475
-    Fr301Taiwan,               // 494
-    Fr405,                     // 717  Forerunner 405
-    Fr50,                      // 782  Forerunner 50
-    Fr405Japan,                // 987
-    Fr60,                      // 988  Forerunner 60
-    DsiAlf01,                  // 1011
-    Fr310xt,                   // 1018  Forerunner 310
-    Edge500,                   // 1036
-    Fr110,                     // 1124  Forerunner 110
-    Edge800,                   // 1169
-    Edge500Taiwan,             // 1199
-    Edge500Japan,              // 1213
-    Chirp,                     // 1253
-    Fr110Japan,                // 1274
-    Edge200,                   // 1325
-    Fr910xt,                   // 1328
-    Edge800Taiwan,             // 1333
-    Edge800Japan,              // 1334
-    Alf04,                     // 1341
-    Fr610,                     // 1345
-    Fr210Japan,                // 1360
-    VectorSs,                  // 1380
-    VectorCp,                  // 1381
-    Edge800China,              // 1386
-    Edge500China,              // 1387
-    Fr610Japan,                // 1410
-    Edge500Korea,              // 1422
-    Fr70,                      // 1436
-    Fr310xt4t,                 // 1446
-    Amx,                       // 1461
-    Fr10,                      // 1482
-    Edge800Korea,              // 1497
-    Swim,                      // 1499
-    Fr910xtChina,              // 1537
-    Fenix,                     // 1551
-    Edge200Taiwan,             // 1555
-    Edge510,                   // 1561
-    Edge810,                   // 1567
-    Tempe,                     // 1570
-    Fr910xtJapan,              // 1600
-    Fr620,                     // 1623
-    Fr220,                     // 1632
-    Fr910xtKorea,              // 1664
-    Fr10Japan,                 // 1688
-    Edge810Japan,              // 1721
-    VirbElite,                 // 1735
-    EdgeTouring,               // 1736  Also Edge Touring Plus
-    Edge510Japan,              // 1742
-    HrmTri,                    // 1743
-    HrmRun,                    // 1752
-    Fr920xt,                   // 1765
-    Edge510Asia,               // 1821
-    Edge810China,              // 1822
-    Edge810Taiwan,             // 1823
-    Edge1000,                  // 1836
-    VivoFit,                   // 1837
-    VirbRemote,                // 1853
-    VivoKi,                    // 1885
-    Fr15,                      // 1903
-    VivoActive,                // 1907
-    Edge510Korea,              // 1918
-    Fr620Japan,                // 1928
-    Fr620China,                // 1929
-    Fr220Japan,                // 1930
-    Fr220China,                // 1931
-    ApproachS6,                // 1936
-    VivoSmart,                 // 1956
-    Fenix2,                    // 1967
-    Epix,                      // 1988
-    Fenix3,                    // 2050
-    Edge1000Taiwan,            // 2052
-    Edge1000Japan,             // 2053
-    Fr15Japan,                 // 2061
-    Edge520,                   // 2067
-    Edge1000China,             // 2070
-    Fr620Russia,               // 2072
-    Fr220Russia,               // 2073
-    VectorS,                   // 2079
-    Edge1000Korea,             // 2100
-    Fr920xtTaiwan,             // 2130
-    Fr920xtChina,              // 2131
-    Fr920xtJapan,              // 2132
-    Virbx,                     // 2134
-    VivoSmartApac,             // 2135
-    EtrexTouch,                // 2140
-    Edge25,                    // 2147
-    Fr25,                      // 2148
-    VivoFit2,                  // 2150
-    Fr225,                     // 2153
-    Fr630,                     // 2156
-    Fr230,                     // 2157
-    VivoActiveApac,            // 2160
-    Vector2,                   // 2161
-    Vector2s,                  // 2162
-    Virbxe,                    // 2172
-    Fr620Taiwan,               // 2173
-    Fr220Taiwan,               // 2174
-    Truswing,                  // 2175
-    Fenix3China,               // 2188
-    Fenix3Twn,                 // 2189
-    VariaHeadlight,            // 2192
-    VariaTaillightOld,         // 2193
-    EdgeExplore1000,           // 2204
-    Fr225Asia,                 // 2219
-    VariaRadarTaillight,       // 2225
-    VariaRadarDisplay,         // 2226
-    Edge20,                    // 2238
-    D2Bravo,                   // 2262
-    ApproachS20,               // 2266
-    VariaRemote,               // 2276
-    Hrm4Run,                   // 2327
-    VivoActiveHr,              // 2337
-    VivoSmartGpsHr,            // 2347
-    VivoSmartHr,               // 2348
-    VivoMove,                  // 2368
-    VariaVision,               // 2398
-    VivoFit3,                  // 2406
-    Fenix3Hr,                  // 2413
-    VirbUltra30,               // 2417
-    IndexSmartScale,           // 2429
-    Fr235,                     // 2431
-    Fenix3Chronos,             // 2432
-    Oregon7xx,                 // 2441
-    Rino7xx,                   // 2444
-    Nautix,                    // 2496
-    Edge820,                   // 2530
-    EdgeExplore820,            // 2531
-    Fenix5s,                   // 2544
-    D2BravoTitanium,           // 2547
-    VariaUt800,                // 2567  Varia UT 800 SW
-    RunningDynamicsPod,        // 2593
-    Fenix5x,                   // 2604
-    VivoFitJr,                 // 2606
-    Fr935,                     // 2691
-    Fenix5,                    // 2697
-    Sdm4,                      // 10007  SDM4 footpod
-    EdgeRemote,                // 10014
-    TrainingCenter,            // 20119
-    ConnectiqSimulator,        // 65531
-    AndroidAntplusPlugin,      // 65532
-    Connect,                   // 65534  Garmin Connect website
+    Hrm1,                       // 1
+    Axh01,                      // 2  AXH01 HRM chipset
+    Axb01,                      // 3
+    Axb02,                      // 4
+    Hrm2ss,                     // 5
+    DsiAlf02,                   // 6
+    Hrm3ss,                     // 7
+    HrmRunSingleByteProductId,  // 8  hrm_run model for HRM ANT+ messaging
+    Bsm,                        // 9  BSM model for ANT+ messaging
+    Bcm,                        // 10  BCM model for ANT+ messaging
+    Axs01,                      // 11  AXS01 HRM Bike Chipset model for ANT+ messaging
+    HrmTriSingleByteProductId,  // 12  hrm_tri model for HRM ANT+ messaging
+    Hrm4RunSingleByteProductId, // 13  hrm4 run model for HRM ANT+ messaging
+    Fr225SingleByteProductId,   // 14  fr225 model for HRM ANT+ messaging
+    Fr301China,                 // 473
+    Fr301Japan,                 // 474
+    Fr301Korea,                 // 475
+    Fr301Taiwan,                // 494
+    Fr405,                      // 717  Forerunner 405
+    Fr50,                       // 782  Forerunner 50
+    Fr405Japan,                 // 987
+    Fr60,                       // 988  Forerunner 60
+    DsiAlf01,                   // 1011
+    Fr310xt,                    // 1018  Forerunner 310
+    Edge500,                    // 1036
+    Fr110,                      // 1124  Forerunner 110
+    Edge800,                    // 1169
+    Edge500Taiwan,              // 1199
+    Edge500Japan,               // 1213
+    Chirp,                      // 1253
+    Fr110Japan,                 // 1274
+    Edge200,                    // 1325
+    Fr910xt,                    // 1328
+    Edge800Taiwan,              // 1333
+    Edge800Japan,               // 1334
+    Alf04,                      // 1341
+    Fr610,                      // 1345
+    Fr210Japan,                 // 1360
+    VectorSs,                   // 1380
+    VectorCp,                   // 1381
+    Edge800China,               // 1386
+    Edge500China,               // 1387
+    ApproachG10,                // 1405
+    Fr610Japan,                 // 1410
+    Edge500Korea,               // 1422
+    Fr70,                       // 1436
+    Fr310xt4t,                  // 1446
+    Amx,                        // 1461
+    Fr10,                       // 1482
+    Edge800Korea,               // 1497
+    Swim,                       // 1499
+    Fr910xtChina,               // 1537
+    Fenix,                      // 1551
+    Edge200Taiwan,              // 1555
+    Edge510,                    // 1561
+    Edge810,                    // 1567
+    Tempe,                      // 1570
+    Fr910xtJapan,               // 1600
+    Fr620,                      // 1623
+    Fr220,                      // 1632
+    Fr910xtKorea,               // 1664
+    Fr10Japan,                  // 1688
+    Edge810Japan,               // 1721
+    VirbElite,                  // 1735
+    EdgeTouring,                // 1736  Also Edge Touring Plus
+    Edge510Japan,               // 1742
+    HrmTri,                     // 1743
+    HrmRun,                     // 1752
+    Fr920xt,                    // 1765
+    Edge510Asia,                // 1821
+    Edge810China,               // 1822
+    Edge810Taiwan,              // 1823
+    Edge1000,                   // 1836
+    VivoFit,                    // 1837
+    VirbRemote,                 // 1853
+    VivoKi,                     // 1885
+    Fr15,                       // 1903
+    VivoActive,                 // 1907
+    Edge510Korea,               // 1918
+    Fr620Japan,                 // 1928
+    Fr620China,                 // 1929
+    Fr220Japan,                 // 1930
+    Fr220China,                 // 1931
+    ApproachS6,                 // 1936
+    VivoSmart,                  // 1956
+    Fenix2,                     // 1967
+    Epix,                       // 1988
+    Fenix3,                     // 2050
+    Edge1000Taiwan,             // 2052
+    Edge1000Japan,              // 2053
+    Fr15Japan,                  // 2061
+    Edge520,                    // 2067
+    Edge1000China,              // 2070
+    Fr620Russia,                // 2072
+    Fr220Russia,                // 2073
+    VectorS,                    // 2079
+    Edge1000Korea,              // 2100
+    Fr920xtTaiwan,              // 2130
+    Fr920xtChina,               // 2131
+    Fr920xtJapan,               // 2132
+    Virbx,                      // 2134
+    VivoSmartApac,              // 2135
+    EtrexTouch,                 // 2140
+    Edge25,                     // 2147
+    Fr25,                       // 2148
+    VivoFit2,                   // 2150
+    Fr225,                      // 2153
+    Fr630,                      // 2156
+    Fr230,                      // 2157
+    Fr735xt,                    // 2158
+    VivoActiveApac,             // 2160
+    Vector2,                    // 2161
+    Vector2s,                   // 2162
+    Virbxe,                     // 2172
+    Fr620Taiwan,                // 2173
+    Fr220Taiwan,                // 2174
+    Truswing,                   // 2175
+    Fenix3China,                // 2188
+    Fenix3Twn,                  // 2189
+    VariaHeadlight,             // 2192
+    VariaTaillightOld,          // 2193
+    EdgeExplore1000,            // 2204
+    Fr225Asia,                  // 2219
+    VariaRadarTaillight,        // 2225
+    VariaRadarDisplay,          // 2226
+    Edge20,                     // 2238
+    Edge520Asia,                // 2260
+    Edge520Japan,               // 2261
+    D2Bravo,                    // 2262
+    ApproachS20,                // 2266
+    VivoSmart2,                 // 2271
+    Edge1000Thai,               // 2274
+    VariaRemote,                // 2276
+    Edge25Asia,                 // 2288
+    Edge25Jpn,                  // 2289
+    Edge20Asia,                 // 2290
+    ApproachX40,                // 2292
+    Fenix3Japan,                // 2293
+    VivoSmartEmea,              // 2294
+    Fr630Asia,                  // 2310
+    Fr630Jpn,                   // 2311
+    Fr230Jpn,                   // 2313
+    Hrm4Run,                    // 2327
+    EpixJapan,                  // 2332
+    VivoActiveHr,               // 2337
+    VivoSmartGpsHr,             // 2347
+    VivoSmartHr,                // 2348
+    VivoSmartHrAsia,            // 2361
+    VivoSmartGpsHrAsia,         // 2362
+    VivoMove,                   // 2368
+    VariaTaillight,             // 2379
+    Fr235Japan,                 // 2397
+    VariaVision,                // 2398
+    VivoFit3,                   // 2406
+    Fenix3Korea,                // 2407
+    Fenix3Sea,                  // 2408
+    Fenix3Hr,                   // 2413
+    VirbUltra30,                // 2417
+    IndexSmartScale,            // 2429
+    Fr235,                      // 2431
+    Fenix3Chronos,              // 2432
+    Oregon7xx,                  // 2441
+    Rino7xx,                    // 2444
+    EpixKorea,                  // 2457
+    Fenix3HrChn,                // 2473
+    Fenix3HrTwn,                // 2474
+    Fenix3HrJpn,                // 2475
+    Fenix3HrSea,                // 2476
+    Fenix3HrKor,                // 2477
+    Nautix,                     // 2496
+    VivoActiveHrApac,           // 2497
+    Oregon7xxWw,                // 2512
+    Edge820,                    // 2530
+    EdgeExplore820,             // 2531
+    Fr735xtApac,                // 2533
+    Fr735xtJapan,               // 2534
+    Fenix5s,                    // 2544
+    D2BravoTitanium,            // 2547
+    VariaUt800,                 // 2567  Varia UT 800 SW
+    RunningDynamicsPod,         // 2593
+    Edge820China,               // 2599
+    Edge820Japan,               // 2600
+    Fenix5x,                    // 2604
+    VivoFitJr,                  // 2606
+    VivoSmart3,                 // 2622
+    VivoSport,                  // 2623
+    Edge820Taiwan,              // 2628
+    Edge820Korea,               // 2629
+    Edge820Sea,                 // 2630
+    Fr35Hebrew,                 // 2650
+    ApproachS60,                // 2656
+    Fr35Apac,                   // 2667
+    Fr35Japan,                  // 2668
+    Fenix3ChronosAsia,          // 2675
+    Virb360,                    // 2687
+    Fr935,                      // 2691
+    Fenix5,                     // 2697
+    Vivoactive3,                // 2700
+    Fr235ChinaNfc,              // 2733
+    Foretrex601701,             // 2769
+    VivoMoveHr,                 // 2772
+    Edge1030,                   // 2713
+    Fenix5Asia,                 // 2796
+    Fenix5sAsia,                // 2797
+    Fenix5xAsia,                // 2798
+    ApproachZ80,                // 2806
+    Fr35Korea,                  // 2814
+    D2charlie,                  // 2819
+    VivoSmart3Apac,             // 2831
+    VivoSportApac,              // 2832
+    Fr935Asia,                  // 2833
+    Descent,                    // 2859
+    Fr645,                      // 2886
+    Fr645m,                     // 2888
+    Fr30,                       // 2891
+    Fenix5sPlus,                // 2900
+    Edge130,                    // 2909
+    Edge1030Asia,               // 2924
+    Vivosmart4,                 // 2927
+    VivoMoveHrAsia,             // 2945
+    ApproachX10,                // 2962
+    Fr30Asia,                   // 2977
+    Vivoactive3mW,              // 2988
+    Fr645Asia,                  // 3003
+    Fr645mAsia,                 // 3004
+    EdgeExplore,                // 3011
+    Gpsmap66,                   // 3028
+    ApproachS10,                // 3049
+    Vivoactive3mL,              // 3066
+    ApproachG80,                // 3085
+    Edge130Asia,                // 3092
+    Edge1030Bontrager,          // 3095
+    Fenix5Plus,                 // 3110
+    Fenix5xPlus,                // 3111
+    Edge520Plus,                // 3112
+    Edge530,                    // 3121
+    Edge830,                    // 3122
+    Fenix5sPlusApac,            // 3134
+    Fenix5xPlusApac,            // 3135
+    Edge520PlusApac,            // 3142
+    Fr235lAsia,                 // 3144
+    Fr245Asia,                  // 3145
+    VivoActive3mApac,           // 3163
+    VivoSmart4Asia,             // 3218
+    Vivoactive4Small,           // 3224
+    Vivoactive4Large,           // 3225
+    Venu,                       // 3226
+    MarqDriver,                 // 3246
+    MarqAviator,                // 3247
+    MarqCaptain,                // 3248
+    MarqCommander,              // 3249
+    MarqExpedition,             // 3250
+    MarqAthlete,                // 3251
+    Fenix6SSport,               // 3287
+    Fenix6S,                    // 3288
+    Fenix6Sport,                // 3289
+    Fenix6,                     // 3290
+    Fenix6x,                    // 3291
+    HrmDual,                    // 3299  HRM-Dual
+    VivoMove3Premium,           // 3308
+    ApproachS40,                // 3314
+    Fr245mAsia,                 // 3321
+    Edge530Apac,                // 3349
+    Edge830Apac,                // 3350
+    VivoMove3,                  // 3378
+    VivoActive4SmallAsia,       // 3387
+    VivoActive4LargeAsia,       // 3388
+    VivoActive4OledAsia,        // 3389
+    Swim2,                      // 3405
+    MarqDriverAsia,             // 3420
+    MarqAviatorAsia,            // 3421
+    VivoMove3Asia,              // 3422
+    VivoActive3tChn,            // 3446
+    MarqCaptainAsia,            // 3448
+    MarqCommanderAsia,          // 3449
+    MarqExpeditionAsia,         // 3450
+    MarqAthleteAsia,            // 3451
+    Fr45Asia,                   // 3469
+    Vivoactive3Daimler,         // 3473
+    Fenix6sSportAsia,           // 3512
+    Fenix6sAsia,                // 3513
+    Fenix6SportAsia,            // 3514
+    Fenix6Asia,                 // 3515
+    Fenix6xAsia,                // 3516
+    MarqAdventurer,             // 3624
+    MarqAdventurerAsia,         // 3648
+    Swim2Apac,                  // 3639
+    VenuDaimlerAsia,            // 3737
+    VenuDaimler,                // 3740
+    Sdm4,                       // 10007  SDM4 footpod
+    EdgeRemote,                 // 10014
+    TrainingCenter,             // 20119
+    ConnectiqSimulator,         // 65531
+    AndroidAntplusPlugin,       // 65532
+    Connect,                    // 65534  Garmin Connect website
     GarminProduct(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -5359,6 +5559,9 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Axs01 => write!(f, "{}", "Axs01"),
             FitFieldGarminProduct::HrmTriSingleByteProductId => {
                 write!(f, "{}", "HrmTriSingleByteProductId")
+            }
+            FitFieldGarminProduct::Hrm4RunSingleByteProductId => {
+                write!(f, "{}", "Hrm4RunSingleByteProductId")
             }
             FitFieldGarminProduct::Fr225SingleByteProductId => {
                 write!(f, "{}", "Fr225SingleByteProductId")
@@ -5391,6 +5594,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::VectorCp => write!(f, "{}", "VectorCp"),
             FitFieldGarminProduct::Edge800China => write!(f, "{}", "Edge800China"),
             FitFieldGarminProduct::Edge500China => write!(f, "{}", "Edge500China"),
+            FitFieldGarminProduct::ApproachG10 => write!(f, "{}", "ApproachG10"),
             FitFieldGarminProduct::Fr610Japan => write!(f, "{}", "Fr610Japan"),
             FitFieldGarminProduct::Edge500Korea => write!(f, "{}", "Edge500Korea"),
             FitFieldGarminProduct::Fr70 => write!(f, "{}", "Fr70"),
@@ -5457,6 +5661,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Fr225 => write!(f, "{}", "Fr225"),
             FitFieldGarminProduct::Fr630 => write!(f, "{}", "Fr630"),
             FitFieldGarminProduct::Fr230 => write!(f, "{}", "Fr230"),
+            FitFieldGarminProduct::Fr735xt => write!(f, "{}", "Fr735xt"),
             FitFieldGarminProduct::VivoActiveApac => write!(f, "{}", "VivoActiveApac"),
             FitFieldGarminProduct::Vector2 => write!(f, "{}", "Vector2"),
             FitFieldGarminProduct::Vector2s => write!(f, "{}", "Vector2s"),
@@ -5473,16 +5678,36 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::VariaRadarTaillight => write!(f, "{}", "VariaRadarTaillight"),
             FitFieldGarminProduct::VariaRadarDisplay => write!(f, "{}", "VariaRadarDisplay"),
             FitFieldGarminProduct::Edge20 => write!(f, "{}", "Edge20"),
+            FitFieldGarminProduct::Edge520Asia => write!(f, "{}", "Edge520Asia"),
+            FitFieldGarminProduct::Edge520Japan => write!(f, "{}", "Edge520Japan"),
             FitFieldGarminProduct::D2Bravo => write!(f, "{}", "D2Bravo"),
             FitFieldGarminProduct::ApproachS20 => write!(f, "{}", "ApproachS20"),
+            FitFieldGarminProduct::VivoSmart2 => write!(f, "{}", "VivoSmart2"),
+            FitFieldGarminProduct::Edge1000Thai => write!(f, "{}", "Edge1000Thai"),
             FitFieldGarminProduct::VariaRemote => write!(f, "{}", "VariaRemote"),
+            FitFieldGarminProduct::Edge25Asia => write!(f, "{}", "Edge25Asia"),
+            FitFieldGarminProduct::Edge25Jpn => write!(f, "{}", "Edge25Jpn"),
+            FitFieldGarminProduct::Edge20Asia => write!(f, "{}", "Edge20Asia"),
+            FitFieldGarminProduct::ApproachX40 => write!(f, "{}", "ApproachX40"),
+            FitFieldGarminProduct::Fenix3Japan => write!(f, "{}", "Fenix3Japan"),
+            FitFieldGarminProduct::VivoSmartEmea => write!(f, "{}", "VivoSmartEmea"),
+            FitFieldGarminProduct::Fr630Asia => write!(f, "{}", "Fr630Asia"),
+            FitFieldGarminProduct::Fr630Jpn => write!(f, "{}", "Fr630Jpn"),
+            FitFieldGarminProduct::Fr230Jpn => write!(f, "{}", "Fr230Jpn"),
             FitFieldGarminProduct::Hrm4Run => write!(f, "{}", "Hrm4Run"),
+            FitFieldGarminProduct::EpixJapan => write!(f, "{}", "EpixJapan"),
             FitFieldGarminProduct::VivoActiveHr => write!(f, "{}", "VivoActiveHr"),
             FitFieldGarminProduct::VivoSmartGpsHr => write!(f, "{}", "VivoSmartGpsHr"),
             FitFieldGarminProduct::VivoSmartHr => write!(f, "{}", "VivoSmartHr"),
+            FitFieldGarminProduct::VivoSmartHrAsia => write!(f, "{}", "VivoSmartHrAsia"),
+            FitFieldGarminProduct::VivoSmartGpsHrAsia => write!(f, "{}", "VivoSmartGpsHrAsia"),
             FitFieldGarminProduct::VivoMove => write!(f, "{}", "VivoMove"),
+            FitFieldGarminProduct::VariaTaillight => write!(f, "{}", "VariaTaillight"),
+            FitFieldGarminProduct::Fr235Japan => write!(f, "{}", "Fr235Japan"),
             FitFieldGarminProduct::VariaVision => write!(f, "{}", "VariaVision"),
             FitFieldGarminProduct::VivoFit3 => write!(f, "{}", "VivoFit3"),
+            FitFieldGarminProduct::Fenix3Korea => write!(f, "{}", "Fenix3Korea"),
+            FitFieldGarminProduct::Fenix3Sea => write!(f, "{}", "Fenix3Sea"),
             FitFieldGarminProduct::Fenix3Hr => write!(f, "{}", "Fenix3Hr"),
             FitFieldGarminProduct::VirbUltra30 => write!(f, "{}", "VirbUltra30"),
             FitFieldGarminProduct::IndexSmartScale => write!(f, "{}", "IndexSmartScale"),
@@ -5490,17 +5715,132 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Fenix3Chronos => write!(f, "{}", "Fenix3Chronos"),
             FitFieldGarminProduct::Oregon7xx => write!(f, "{}", "Oregon7xx"),
             FitFieldGarminProduct::Rino7xx => write!(f, "{}", "Rino7xx"),
+            FitFieldGarminProduct::EpixKorea => write!(f, "{}", "EpixKorea"),
+            FitFieldGarminProduct::Fenix3HrChn => write!(f, "{}", "Fenix3HrChn"),
+            FitFieldGarminProduct::Fenix3HrTwn => write!(f, "{}", "Fenix3HrTwn"),
+            FitFieldGarminProduct::Fenix3HrJpn => write!(f, "{}", "Fenix3HrJpn"),
+            FitFieldGarminProduct::Fenix3HrSea => write!(f, "{}", "Fenix3HrSea"),
+            FitFieldGarminProduct::Fenix3HrKor => write!(f, "{}", "Fenix3HrKor"),
             FitFieldGarminProduct::Nautix => write!(f, "{}", "Nautix"),
+            FitFieldGarminProduct::VivoActiveHrApac => write!(f, "{}", "VivoActiveHrApac"),
+            FitFieldGarminProduct::Oregon7xxWw => write!(f, "{}", "Oregon7xxWw"),
             FitFieldGarminProduct::Edge820 => write!(f, "{}", "Edge820"),
             FitFieldGarminProduct::EdgeExplore820 => write!(f, "{}", "EdgeExplore820"),
+            FitFieldGarminProduct::Fr735xtApac => write!(f, "{}", "Fr735xtApac"),
+            FitFieldGarminProduct::Fr735xtJapan => write!(f, "{}", "Fr735xtJapan"),
             FitFieldGarminProduct::Fenix5s => write!(f, "{}", "Fenix5s"),
             FitFieldGarminProduct::D2BravoTitanium => write!(f, "{}", "D2BravoTitanium"),
             FitFieldGarminProduct::VariaUt800 => write!(f, "{}", "VariaUt800"),
             FitFieldGarminProduct::RunningDynamicsPod => write!(f, "{}", "RunningDynamicsPod"),
+            FitFieldGarminProduct::Edge820China => write!(f, "{}", "Edge820China"),
+            FitFieldGarminProduct::Edge820Japan => write!(f, "{}", "Edge820Japan"),
             FitFieldGarminProduct::Fenix5x => write!(f, "{}", "Fenix5x"),
             FitFieldGarminProduct::VivoFitJr => write!(f, "{}", "VivoFitJr"),
+            FitFieldGarminProduct::VivoSmart3 => write!(f, "{}", "VivoSmart3"),
+            FitFieldGarminProduct::VivoSport => write!(f, "{}", "VivoSport"),
+            FitFieldGarminProduct::Edge820Taiwan => write!(f, "{}", "Edge820Taiwan"),
+            FitFieldGarminProduct::Edge820Korea => write!(f, "{}", "Edge820Korea"),
+            FitFieldGarminProduct::Edge820Sea => write!(f, "{}", "Edge820Sea"),
+            FitFieldGarminProduct::Fr35Hebrew => write!(f, "{}", "Fr35Hebrew"),
+            FitFieldGarminProduct::ApproachS60 => write!(f, "{}", "ApproachS60"),
+            FitFieldGarminProduct::Fr35Apac => write!(f, "{}", "Fr35Apac"),
+            FitFieldGarminProduct::Fr35Japan => write!(f, "{}", "Fr35Japan"),
+            FitFieldGarminProduct::Fenix3ChronosAsia => write!(f, "{}", "Fenix3ChronosAsia"),
+            FitFieldGarminProduct::Virb360 => write!(f, "{}", "Virb360"),
             FitFieldGarminProduct::Fr935 => write!(f, "{}", "Fr935"),
             FitFieldGarminProduct::Fenix5 => write!(f, "{}", "Fenix5"),
+            FitFieldGarminProduct::Vivoactive3 => write!(f, "{}", "Vivoactive3"),
+            FitFieldGarminProduct::Fr235ChinaNfc => write!(f, "{}", "Fr235ChinaNfc"),
+            FitFieldGarminProduct::Foretrex601701 => write!(f, "{}", "Foretrex601701"),
+            FitFieldGarminProduct::VivoMoveHr => write!(f, "{}", "VivoMoveHr"),
+            FitFieldGarminProduct::Edge1030 => write!(f, "{}", "Edge1030"),
+            FitFieldGarminProduct::Fenix5Asia => write!(f, "{}", "Fenix5Asia"),
+            FitFieldGarminProduct::Fenix5sAsia => write!(f, "{}", "Fenix5sAsia"),
+            FitFieldGarminProduct::Fenix5xAsia => write!(f, "{}", "Fenix5xAsia"),
+            FitFieldGarminProduct::ApproachZ80 => write!(f, "{}", "ApproachZ80"),
+            FitFieldGarminProduct::Fr35Korea => write!(f, "{}", "Fr35Korea"),
+            FitFieldGarminProduct::D2charlie => write!(f, "{}", "D2charlie"),
+            FitFieldGarminProduct::VivoSmart3Apac => write!(f, "{}", "VivoSmart3Apac"),
+            FitFieldGarminProduct::VivoSportApac => write!(f, "{}", "VivoSportApac"),
+            FitFieldGarminProduct::Fr935Asia => write!(f, "{}", "Fr935Asia"),
+            FitFieldGarminProduct::Descent => write!(f, "{}", "Descent"),
+            FitFieldGarminProduct::Fr645 => write!(f, "{}", "Fr645"),
+            FitFieldGarminProduct::Fr645m => write!(f, "{}", "Fr645m"),
+            FitFieldGarminProduct::Fr30 => write!(f, "{}", "Fr30"),
+            FitFieldGarminProduct::Fenix5sPlus => write!(f, "{}", "Fenix5sPlus"),
+            FitFieldGarminProduct::Edge130 => write!(f, "{}", "Edge130"),
+            FitFieldGarminProduct::Edge1030Asia => write!(f, "{}", "Edge1030Asia"),
+            FitFieldGarminProduct::Vivosmart4 => write!(f, "{}", "Vivosmart4"),
+            FitFieldGarminProduct::VivoMoveHrAsia => write!(f, "{}", "VivoMoveHrAsia"),
+            FitFieldGarminProduct::ApproachX10 => write!(f, "{}", "ApproachX10"),
+            FitFieldGarminProduct::Fr30Asia => write!(f, "{}", "Fr30Asia"),
+            FitFieldGarminProduct::Vivoactive3mW => write!(f, "{}", "Vivoactive3mW"),
+            FitFieldGarminProduct::Fr645Asia => write!(f, "{}", "Fr645Asia"),
+            FitFieldGarminProduct::Fr645mAsia => write!(f, "{}", "Fr645mAsia"),
+            FitFieldGarminProduct::EdgeExplore => write!(f, "{}", "EdgeExplore"),
+            FitFieldGarminProduct::Gpsmap66 => write!(f, "{}", "Gpsmap66"),
+            FitFieldGarminProduct::ApproachS10 => write!(f, "{}", "ApproachS10"),
+            FitFieldGarminProduct::Vivoactive3mL => write!(f, "{}", "Vivoactive3mL"),
+            FitFieldGarminProduct::ApproachG80 => write!(f, "{}", "ApproachG80"),
+            FitFieldGarminProduct::Edge130Asia => write!(f, "{}", "Edge130Asia"),
+            FitFieldGarminProduct::Edge1030Bontrager => write!(f, "{}", "Edge1030Bontrager"),
+            FitFieldGarminProduct::Fenix5Plus => write!(f, "{}", "Fenix5Plus"),
+            FitFieldGarminProduct::Fenix5xPlus => write!(f, "{}", "Fenix5xPlus"),
+            FitFieldGarminProduct::Edge520Plus => write!(f, "{}", "Edge520Plus"),
+            FitFieldGarminProduct::Edge530 => write!(f, "{}", "Edge530"),
+            FitFieldGarminProduct::Edge830 => write!(f, "{}", "Edge830"),
+            FitFieldGarminProduct::Fenix5sPlusApac => write!(f, "{}", "Fenix5sPlusApac"),
+            FitFieldGarminProduct::Fenix5xPlusApac => write!(f, "{}", "Fenix5xPlusApac"),
+            FitFieldGarminProduct::Edge520PlusApac => write!(f, "{}", "Edge520PlusApac"),
+            FitFieldGarminProduct::Fr235lAsia => write!(f, "{}", "Fr235lAsia"),
+            FitFieldGarminProduct::Fr245Asia => write!(f, "{}", "Fr245Asia"),
+            FitFieldGarminProduct::VivoActive3mApac => write!(f, "{}", "VivoActive3mApac"),
+            FitFieldGarminProduct::VivoSmart4Asia => write!(f, "{}", "VivoSmart4Asia"),
+            FitFieldGarminProduct::Vivoactive4Small => write!(f, "{}", "Vivoactive4Small"),
+            FitFieldGarminProduct::Vivoactive4Large => write!(f, "{}", "Vivoactive4Large"),
+            FitFieldGarminProduct::Venu => write!(f, "{}", "Venu"),
+            FitFieldGarminProduct::MarqDriver => write!(f, "{}", "MarqDriver"),
+            FitFieldGarminProduct::MarqAviator => write!(f, "{}", "MarqAviator"),
+            FitFieldGarminProduct::MarqCaptain => write!(f, "{}", "MarqCaptain"),
+            FitFieldGarminProduct::MarqCommander => write!(f, "{}", "MarqCommander"),
+            FitFieldGarminProduct::MarqExpedition => write!(f, "{}", "MarqExpedition"),
+            FitFieldGarminProduct::MarqAthlete => write!(f, "{}", "MarqAthlete"),
+            FitFieldGarminProduct::Fenix6SSport => write!(f, "{}", "Fenix6SSport"),
+            FitFieldGarminProduct::Fenix6S => write!(f, "{}", "Fenix6S"),
+            FitFieldGarminProduct::Fenix6Sport => write!(f, "{}", "Fenix6Sport"),
+            FitFieldGarminProduct::Fenix6 => write!(f, "{}", "Fenix6"),
+            FitFieldGarminProduct::Fenix6x => write!(f, "{}", "Fenix6x"),
+            FitFieldGarminProduct::HrmDual => write!(f, "{}", "HrmDual"),
+            FitFieldGarminProduct::VivoMove3Premium => write!(f, "{}", "VivoMove3Premium"),
+            FitFieldGarminProduct::ApproachS40 => write!(f, "{}", "ApproachS40"),
+            FitFieldGarminProduct::Fr245mAsia => write!(f, "{}", "Fr245mAsia"),
+            FitFieldGarminProduct::Edge530Apac => write!(f, "{}", "Edge530Apac"),
+            FitFieldGarminProduct::Edge830Apac => write!(f, "{}", "Edge830Apac"),
+            FitFieldGarminProduct::VivoMove3 => write!(f, "{}", "VivoMove3"),
+            FitFieldGarminProduct::VivoActive4SmallAsia => write!(f, "{}", "VivoActive4SmallAsia"),
+            FitFieldGarminProduct::VivoActive4LargeAsia => write!(f, "{}", "VivoActive4LargeAsia"),
+            FitFieldGarminProduct::VivoActive4OledAsia => write!(f, "{}", "VivoActive4OledAsia"),
+            FitFieldGarminProduct::Swim2 => write!(f, "{}", "Swim2"),
+            FitFieldGarminProduct::MarqDriverAsia => write!(f, "{}", "MarqDriverAsia"),
+            FitFieldGarminProduct::MarqAviatorAsia => write!(f, "{}", "MarqAviatorAsia"),
+            FitFieldGarminProduct::VivoMove3Asia => write!(f, "{}", "VivoMove3Asia"),
+            FitFieldGarminProduct::VivoActive3tChn => write!(f, "{}", "VivoActive3tChn"),
+            FitFieldGarminProduct::MarqCaptainAsia => write!(f, "{}", "MarqCaptainAsia"),
+            FitFieldGarminProduct::MarqCommanderAsia => write!(f, "{}", "MarqCommanderAsia"),
+            FitFieldGarminProduct::MarqExpeditionAsia => write!(f, "{}", "MarqExpeditionAsia"),
+            FitFieldGarminProduct::MarqAthleteAsia => write!(f, "{}", "MarqAthleteAsia"),
+            FitFieldGarminProduct::Fr45Asia => write!(f, "{}", "Fr45Asia"),
+            FitFieldGarminProduct::Vivoactive3Daimler => write!(f, "{}", "Vivoactive3Daimler"),
+            FitFieldGarminProduct::Fenix6sSportAsia => write!(f, "{}", "Fenix6sSportAsia"),
+            FitFieldGarminProduct::Fenix6sAsia => write!(f, "{}", "Fenix6sAsia"),
+            FitFieldGarminProduct::Fenix6SportAsia => write!(f, "{}", "Fenix6SportAsia"),
+            FitFieldGarminProduct::Fenix6Asia => write!(f, "{}", "Fenix6Asia"),
+            FitFieldGarminProduct::Fenix6xAsia => write!(f, "{}", "Fenix6xAsia"),
+            FitFieldGarminProduct::MarqAdventurer => write!(f, "{}", "MarqAdventurer"),
+            FitFieldGarminProduct::MarqAdventurerAsia => write!(f, "{}", "MarqAdventurerAsia"),
+            FitFieldGarminProduct::Swim2Apac => write!(f, "{}", "Swim2Apac"),
+            FitFieldGarminProduct::VenuDaimlerAsia => write!(f, "{}", "VenuDaimlerAsia"),
+            FitFieldGarminProduct::VenuDaimler => write!(f, "{}", "VenuDaimler"),
             FitFieldGarminProduct::Sdm4 => write!(f, "{}", "Sdm4"),
             FitFieldGarminProduct::EdgeRemote => write!(f, "{}", "EdgeRemote"),
             FitFieldGarminProduct::TrainingCenter => write!(f, "{}", "TrainingCenter"),
@@ -5532,6 +5872,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 10 => Ok(FitFieldGarminProduct::from(v)),
                 11 => Ok(FitFieldGarminProduct::from(v)),
                 12 => Ok(FitFieldGarminProduct::from(v)),
+                13 => Ok(FitFieldGarminProduct::from(v)),
                 14 => Ok(FitFieldGarminProduct::from(v)),
                 473 => Ok(FitFieldGarminProduct::from(v)),
                 474 => Ok(FitFieldGarminProduct::from(v)),
@@ -5561,6 +5902,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 1381 => Ok(FitFieldGarminProduct::from(v)),
                 1386 => Ok(FitFieldGarminProduct::from(v)),
                 1387 => Ok(FitFieldGarminProduct::from(v)),
+                1405 => Ok(FitFieldGarminProduct::from(v)),
                 1410 => Ok(FitFieldGarminProduct::from(v)),
                 1422 => Ok(FitFieldGarminProduct::from(v)),
                 1436 => Ok(FitFieldGarminProduct::from(v)),
@@ -5627,6 +5969,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 2153 => Ok(FitFieldGarminProduct::from(v)),
                 2156 => Ok(FitFieldGarminProduct::from(v)),
                 2157 => Ok(FitFieldGarminProduct::from(v)),
+                2158 => Ok(FitFieldGarminProduct::from(v)),
                 2160 => Ok(FitFieldGarminProduct::from(v)),
                 2161 => Ok(FitFieldGarminProduct::from(v)),
                 2162 => Ok(FitFieldGarminProduct::from(v)),
@@ -5643,16 +5986,36 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 2225 => Ok(FitFieldGarminProduct::from(v)),
                 2226 => Ok(FitFieldGarminProduct::from(v)),
                 2238 => Ok(FitFieldGarminProduct::from(v)),
+                2260 => Ok(FitFieldGarminProduct::from(v)),
+                2261 => Ok(FitFieldGarminProduct::from(v)),
                 2262 => Ok(FitFieldGarminProduct::from(v)),
                 2266 => Ok(FitFieldGarminProduct::from(v)),
+                2271 => Ok(FitFieldGarminProduct::from(v)),
+                2274 => Ok(FitFieldGarminProduct::from(v)),
                 2276 => Ok(FitFieldGarminProduct::from(v)),
+                2288 => Ok(FitFieldGarminProduct::from(v)),
+                2289 => Ok(FitFieldGarminProduct::from(v)),
+                2290 => Ok(FitFieldGarminProduct::from(v)),
+                2292 => Ok(FitFieldGarminProduct::from(v)),
+                2293 => Ok(FitFieldGarminProduct::from(v)),
+                2294 => Ok(FitFieldGarminProduct::from(v)),
+                2310 => Ok(FitFieldGarminProduct::from(v)),
+                2311 => Ok(FitFieldGarminProduct::from(v)),
+                2313 => Ok(FitFieldGarminProduct::from(v)),
                 2327 => Ok(FitFieldGarminProduct::from(v)),
+                2332 => Ok(FitFieldGarminProduct::from(v)),
                 2337 => Ok(FitFieldGarminProduct::from(v)),
                 2347 => Ok(FitFieldGarminProduct::from(v)),
                 2348 => Ok(FitFieldGarminProduct::from(v)),
+                2361 => Ok(FitFieldGarminProduct::from(v)),
+                2362 => Ok(FitFieldGarminProduct::from(v)),
                 2368 => Ok(FitFieldGarminProduct::from(v)),
+                2379 => Ok(FitFieldGarminProduct::from(v)),
+                2397 => Ok(FitFieldGarminProduct::from(v)),
                 2398 => Ok(FitFieldGarminProduct::from(v)),
                 2406 => Ok(FitFieldGarminProduct::from(v)),
+                2407 => Ok(FitFieldGarminProduct::from(v)),
+                2408 => Ok(FitFieldGarminProduct::from(v)),
                 2413 => Ok(FitFieldGarminProduct::from(v)),
                 2417 => Ok(FitFieldGarminProduct::from(v)),
                 2429 => Ok(FitFieldGarminProduct::from(v)),
@@ -5660,17 +6023,132 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 2432 => Ok(FitFieldGarminProduct::from(v)),
                 2441 => Ok(FitFieldGarminProduct::from(v)),
                 2444 => Ok(FitFieldGarminProduct::from(v)),
+                2457 => Ok(FitFieldGarminProduct::from(v)),
+                2473 => Ok(FitFieldGarminProduct::from(v)),
+                2474 => Ok(FitFieldGarminProduct::from(v)),
+                2475 => Ok(FitFieldGarminProduct::from(v)),
+                2476 => Ok(FitFieldGarminProduct::from(v)),
+                2477 => Ok(FitFieldGarminProduct::from(v)),
                 2496 => Ok(FitFieldGarminProduct::from(v)),
+                2497 => Ok(FitFieldGarminProduct::from(v)),
+                2512 => Ok(FitFieldGarminProduct::from(v)),
                 2530 => Ok(FitFieldGarminProduct::from(v)),
                 2531 => Ok(FitFieldGarminProduct::from(v)),
+                2533 => Ok(FitFieldGarminProduct::from(v)),
+                2534 => Ok(FitFieldGarminProduct::from(v)),
                 2544 => Ok(FitFieldGarminProduct::from(v)),
                 2547 => Ok(FitFieldGarminProduct::from(v)),
                 2567 => Ok(FitFieldGarminProduct::from(v)),
                 2593 => Ok(FitFieldGarminProduct::from(v)),
+                2599 => Ok(FitFieldGarminProduct::from(v)),
+                2600 => Ok(FitFieldGarminProduct::from(v)),
                 2604 => Ok(FitFieldGarminProduct::from(v)),
                 2606 => Ok(FitFieldGarminProduct::from(v)),
+                2622 => Ok(FitFieldGarminProduct::from(v)),
+                2623 => Ok(FitFieldGarminProduct::from(v)),
+                2628 => Ok(FitFieldGarminProduct::from(v)),
+                2629 => Ok(FitFieldGarminProduct::from(v)),
+                2630 => Ok(FitFieldGarminProduct::from(v)),
+                2650 => Ok(FitFieldGarminProduct::from(v)),
+                2656 => Ok(FitFieldGarminProduct::from(v)),
+                2667 => Ok(FitFieldGarminProduct::from(v)),
+                2668 => Ok(FitFieldGarminProduct::from(v)),
+                2675 => Ok(FitFieldGarminProduct::from(v)),
+                2687 => Ok(FitFieldGarminProduct::from(v)),
                 2691 => Ok(FitFieldGarminProduct::from(v)),
                 2697 => Ok(FitFieldGarminProduct::from(v)),
+                2700 => Ok(FitFieldGarminProduct::from(v)),
+                2733 => Ok(FitFieldGarminProduct::from(v)),
+                2769 => Ok(FitFieldGarminProduct::from(v)),
+                2772 => Ok(FitFieldGarminProduct::from(v)),
+                2713 => Ok(FitFieldGarminProduct::from(v)),
+                2796 => Ok(FitFieldGarminProduct::from(v)),
+                2797 => Ok(FitFieldGarminProduct::from(v)),
+                2798 => Ok(FitFieldGarminProduct::from(v)),
+                2806 => Ok(FitFieldGarminProduct::from(v)),
+                2814 => Ok(FitFieldGarminProduct::from(v)),
+                2819 => Ok(FitFieldGarminProduct::from(v)),
+                2831 => Ok(FitFieldGarminProduct::from(v)),
+                2832 => Ok(FitFieldGarminProduct::from(v)),
+                2833 => Ok(FitFieldGarminProduct::from(v)),
+                2859 => Ok(FitFieldGarminProduct::from(v)),
+                2886 => Ok(FitFieldGarminProduct::from(v)),
+                2888 => Ok(FitFieldGarminProduct::from(v)),
+                2891 => Ok(FitFieldGarminProduct::from(v)),
+                2900 => Ok(FitFieldGarminProduct::from(v)),
+                2909 => Ok(FitFieldGarminProduct::from(v)),
+                2924 => Ok(FitFieldGarminProduct::from(v)),
+                2927 => Ok(FitFieldGarminProduct::from(v)),
+                2945 => Ok(FitFieldGarminProduct::from(v)),
+                2962 => Ok(FitFieldGarminProduct::from(v)),
+                2977 => Ok(FitFieldGarminProduct::from(v)),
+                2988 => Ok(FitFieldGarminProduct::from(v)),
+                3003 => Ok(FitFieldGarminProduct::from(v)),
+                3004 => Ok(FitFieldGarminProduct::from(v)),
+                3011 => Ok(FitFieldGarminProduct::from(v)),
+                3028 => Ok(FitFieldGarminProduct::from(v)),
+                3049 => Ok(FitFieldGarminProduct::from(v)),
+                3066 => Ok(FitFieldGarminProduct::from(v)),
+                3085 => Ok(FitFieldGarminProduct::from(v)),
+                3092 => Ok(FitFieldGarminProduct::from(v)),
+                3095 => Ok(FitFieldGarminProduct::from(v)),
+                3110 => Ok(FitFieldGarminProduct::from(v)),
+                3111 => Ok(FitFieldGarminProduct::from(v)),
+                3112 => Ok(FitFieldGarminProduct::from(v)),
+                3121 => Ok(FitFieldGarminProduct::from(v)),
+                3122 => Ok(FitFieldGarminProduct::from(v)),
+                3134 => Ok(FitFieldGarminProduct::from(v)),
+                3135 => Ok(FitFieldGarminProduct::from(v)),
+                3142 => Ok(FitFieldGarminProduct::from(v)),
+                3144 => Ok(FitFieldGarminProduct::from(v)),
+                3145 => Ok(FitFieldGarminProduct::from(v)),
+                3163 => Ok(FitFieldGarminProduct::from(v)),
+                3218 => Ok(FitFieldGarminProduct::from(v)),
+                3224 => Ok(FitFieldGarminProduct::from(v)),
+                3225 => Ok(FitFieldGarminProduct::from(v)),
+                3226 => Ok(FitFieldGarminProduct::from(v)),
+                3246 => Ok(FitFieldGarminProduct::from(v)),
+                3247 => Ok(FitFieldGarminProduct::from(v)),
+                3248 => Ok(FitFieldGarminProduct::from(v)),
+                3249 => Ok(FitFieldGarminProduct::from(v)),
+                3250 => Ok(FitFieldGarminProduct::from(v)),
+                3251 => Ok(FitFieldGarminProduct::from(v)),
+                3287 => Ok(FitFieldGarminProduct::from(v)),
+                3288 => Ok(FitFieldGarminProduct::from(v)),
+                3289 => Ok(FitFieldGarminProduct::from(v)),
+                3290 => Ok(FitFieldGarminProduct::from(v)),
+                3291 => Ok(FitFieldGarminProduct::from(v)),
+                3299 => Ok(FitFieldGarminProduct::from(v)),
+                3308 => Ok(FitFieldGarminProduct::from(v)),
+                3314 => Ok(FitFieldGarminProduct::from(v)),
+                3321 => Ok(FitFieldGarminProduct::from(v)),
+                3349 => Ok(FitFieldGarminProduct::from(v)),
+                3350 => Ok(FitFieldGarminProduct::from(v)),
+                3378 => Ok(FitFieldGarminProduct::from(v)),
+                3387 => Ok(FitFieldGarminProduct::from(v)),
+                3388 => Ok(FitFieldGarminProduct::from(v)),
+                3389 => Ok(FitFieldGarminProduct::from(v)),
+                3405 => Ok(FitFieldGarminProduct::from(v)),
+                3420 => Ok(FitFieldGarminProduct::from(v)),
+                3421 => Ok(FitFieldGarminProduct::from(v)),
+                3422 => Ok(FitFieldGarminProduct::from(v)),
+                3446 => Ok(FitFieldGarminProduct::from(v)),
+                3448 => Ok(FitFieldGarminProduct::from(v)),
+                3449 => Ok(FitFieldGarminProduct::from(v)),
+                3450 => Ok(FitFieldGarminProduct::from(v)),
+                3451 => Ok(FitFieldGarminProduct::from(v)),
+                3469 => Ok(FitFieldGarminProduct::from(v)),
+                3473 => Ok(FitFieldGarminProduct::from(v)),
+                3512 => Ok(FitFieldGarminProduct::from(v)),
+                3513 => Ok(FitFieldGarminProduct::from(v)),
+                3514 => Ok(FitFieldGarminProduct::from(v)),
+                3515 => Ok(FitFieldGarminProduct::from(v)),
+                3516 => Ok(FitFieldGarminProduct::from(v)),
+                3624 => Ok(FitFieldGarminProduct::from(v)),
+                3648 => Ok(FitFieldGarminProduct::from(v)),
+                3639 => Ok(FitFieldGarminProduct::from(v)),
+                3737 => Ok(FitFieldGarminProduct::from(v)),
+                3740 => Ok(FitFieldGarminProduct::from(v)),
                 10007 => Ok(FitFieldGarminProduct::from(v)),
                 10014 => Ok(FitFieldGarminProduct::from(v)),
                 20119 => Ok(FitFieldGarminProduct::from(v)),
@@ -5700,6 +6178,7 @@ impl From<u16> for FitFieldGarminProduct {
             10 => FitFieldGarminProduct::Bcm,
             11 => FitFieldGarminProduct::Axs01,
             12 => FitFieldGarminProduct::HrmTriSingleByteProductId,
+            13 => FitFieldGarminProduct::Hrm4RunSingleByteProductId,
             14 => FitFieldGarminProduct::Fr225SingleByteProductId,
             473 => FitFieldGarminProduct::Fr301China,
             474 => FitFieldGarminProduct::Fr301Japan,
@@ -5729,6 +6208,7 @@ impl From<u16> for FitFieldGarminProduct {
             1381 => FitFieldGarminProduct::VectorCp,
             1386 => FitFieldGarminProduct::Edge800China,
             1387 => FitFieldGarminProduct::Edge500China,
+            1405 => FitFieldGarminProduct::ApproachG10,
             1410 => FitFieldGarminProduct::Fr610Japan,
             1422 => FitFieldGarminProduct::Edge500Korea,
             1436 => FitFieldGarminProduct::Fr70,
@@ -5795,6 +6275,7 @@ impl From<u16> for FitFieldGarminProduct {
             2153 => FitFieldGarminProduct::Fr225,
             2156 => FitFieldGarminProduct::Fr630,
             2157 => FitFieldGarminProduct::Fr230,
+            2158 => FitFieldGarminProduct::Fr735xt,
             2160 => FitFieldGarminProduct::VivoActiveApac,
             2161 => FitFieldGarminProduct::Vector2,
             2162 => FitFieldGarminProduct::Vector2s,
@@ -5811,16 +6292,36 @@ impl From<u16> for FitFieldGarminProduct {
             2225 => FitFieldGarminProduct::VariaRadarTaillight,
             2226 => FitFieldGarminProduct::VariaRadarDisplay,
             2238 => FitFieldGarminProduct::Edge20,
+            2260 => FitFieldGarminProduct::Edge520Asia,
+            2261 => FitFieldGarminProduct::Edge520Japan,
             2262 => FitFieldGarminProduct::D2Bravo,
             2266 => FitFieldGarminProduct::ApproachS20,
+            2271 => FitFieldGarminProduct::VivoSmart2,
+            2274 => FitFieldGarminProduct::Edge1000Thai,
             2276 => FitFieldGarminProduct::VariaRemote,
+            2288 => FitFieldGarminProduct::Edge25Asia,
+            2289 => FitFieldGarminProduct::Edge25Jpn,
+            2290 => FitFieldGarminProduct::Edge20Asia,
+            2292 => FitFieldGarminProduct::ApproachX40,
+            2293 => FitFieldGarminProduct::Fenix3Japan,
+            2294 => FitFieldGarminProduct::VivoSmartEmea,
+            2310 => FitFieldGarminProduct::Fr630Asia,
+            2311 => FitFieldGarminProduct::Fr630Jpn,
+            2313 => FitFieldGarminProduct::Fr230Jpn,
             2327 => FitFieldGarminProduct::Hrm4Run,
+            2332 => FitFieldGarminProduct::EpixJapan,
             2337 => FitFieldGarminProduct::VivoActiveHr,
             2347 => FitFieldGarminProduct::VivoSmartGpsHr,
             2348 => FitFieldGarminProduct::VivoSmartHr,
+            2361 => FitFieldGarminProduct::VivoSmartHrAsia,
+            2362 => FitFieldGarminProduct::VivoSmartGpsHrAsia,
             2368 => FitFieldGarminProduct::VivoMove,
+            2379 => FitFieldGarminProduct::VariaTaillight,
+            2397 => FitFieldGarminProduct::Fr235Japan,
             2398 => FitFieldGarminProduct::VariaVision,
             2406 => FitFieldGarminProduct::VivoFit3,
+            2407 => FitFieldGarminProduct::Fenix3Korea,
+            2408 => FitFieldGarminProduct::Fenix3Sea,
             2413 => FitFieldGarminProduct::Fenix3Hr,
             2417 => FitFieldGarminProduct::VirbUltra30,
             2429 => FitFieldGarminProduct::IndexSmartScale,
@@ -5828,17 +6329,132 @@ impl From<u16> for FitFieldGarminProduct {
             2432 => FitFieldGarminProduct::Fenix3Chronos,
             2441 => FitFieldGarminProduct::Oregon7xx,
             2444 => FitFieldGarminProduct::Rino7xx,
+            2457 => FitFieldGarminProduct::EpixKorea,
+            2473 => FitFieldGarminProduct::Fenix3HrChn,
+            2474 => FitFieldGarminProduct::Fenix3HrTwn,
+            2475 => FitFieldGarminProduct::Fenix3HrJpn,
+            2476 => FitFieldGarminProduct::Fenix3HrSea,
+            2477 => FitFieldGarminProduct::Fenix3HrKor,
             2496 => FitFieldGarminProduct::Nautix,
+            2497 => FitFieldGarminProduct::VivoActiveHrApac,
+            2512 => FitFieldGarminProduct::Oregon7xxWw,
             2530 => FitFieldGarminProduct::Edge820,
             2531 => FitFieldGarminProduct::EdgeExplore820,
+            2533 => FitFieldGarminProduct::Fr735xtApac,
+            2534 => FitFieldGarminProduct::Fr735xtJapan,
             2544 => FitFieldGarminProduct::Fenix5s,
             2547 => FitFieldGarminProduct::D2BravoTitanium,
             2567 => FitFieldGarminProduct::VariaUt800,
             2593 => FitFieldGarminProduct::RunningDynamicsPod,
+            2599 => FitFieldGarminProduct::Edge820China,
+            2600 => FitFieldGarminProduct::Edge820Japan,
             2604 => FitFieldGarminProduct::Fenix5x,
             2606 => FitFieldGarminProduct::VivoFitJr,
+            2622 => FitFieldGarminProduct::VivoSmart3,
+            2623 => FitFieldGarminProduct::VivoSport,
+            2628 => FitFieldGarminProduct::Edge820Taiwan,
+            2629 => FitFieldGarminProduct::Edge820Korea,
+            2630 => FitFieldGarminProduct::Edge820Sea,
+            2650 => FitFieldGarminProduct::Fr35Hebrew,
+            2656 => FitFieldGarminProduct::ApproachS60,
+            2667 => FitFieldGarminProduct::Fr35Apac,
+            2668 => FitFieldGarminProduct::Fr35Japan,
+            2675 => FitFieldGarminProduct::Fenix3ChronosAsia,
+            2687 => FitFieldGarminProduct::Virb360,
             2691 => FitFieldGarminProduct::Fr935,
             2697 => FitFieldGarminProduct::Fenix5,
+            2700 => FitFieldGarminProduct::Vivoactive3,
+            2733 => FitFieldGarminProduct::Fr235ChinaNfc,
+            2769 => FitFieldGarminProduct::Foretrex601701,
+            2772 => FitFieldGarminProduct::VivoMoveHr,
+            2713 => FitFieldGarminProduct::Edge1030,
+            2796 => FitFieldGarminProduct::Fenix5Asia,
+            2797 => FitFieldGarminProduct::Fenix5sAsia,
+            2798 => FitFieldGarminProduct::Fenix5xAsia,
+            2806 => FitFieldGarminProduct::ApproachZ80,
+            2814 => FitFieldGarminProduct::Fr35Korea,
+            2819 => FitFieldGarminProduct::D2charlie,
+            2831 => FitFieldGarminProduct::VivoSmart3Apac,
+            2832 => FitFieldGarminProduct::VivoSportApac,
+            2833 => FitFieldGarminProduct::Fr935Asia,
+            2859 => FitFieldGarminProduct::Descent,
+            2886 => FitFieldGarminProduct::Fr645,
+            2888 => FitFieldGarminProduct::Fr645m,
+            2891 => FitFieldGarminProduct::Fr30,
+            2900 => FitFieldGarminProduct::Fenix5sPlus,
+            2909 => FitFieldGarminProduct::Edge130,
+            2924 => FitFieldGarminProduct::Edge1030Asia,
+            2927 => FitFieldGarminProduct::Vivosmart4,
+            2945 => FitFieldGarminProduct::VivoMoveHrAsia,
+            2962 => FitFieldGarminProduct::ApproachX10,
+            2977 => FitFieldGarminProduct::Fr30Asia,
+            2988 => FitFieldGarminProduct::Vivoactive3mW,
+            3003 => FitFieldGarminProduct::Fr645Asia,
+            3004 => FitFieldGarminProduct::Fr645mAsia,
+            3011 => FitFieldGarminProduct::EdgeExplore,
+            3028 => FitFieldGarminProduct::Gpsmap66,
+            3049 => FitFieldGarminProduct::ApproachS10,
+            3066 => FitFieldGarminProduct::Vivoactive3mL,
+            3085 => FitFieldGarminProduct::ApproachG80,
+            3092 => FitFieldGarminProduct::Edge130Asia,
+            3095 => FitFieldGarminProduct::Edge1030Bontrager,
+            3110 => FitFieldGarminProduct::Fenix5Plus,
+            3111 => FitFieldGarminProduct::Fenix5xPlus,
+            3112 => FitFieldGarminProduct::Edge520Plus,
+            3121 => FitFieldGarminProduct::Edge530,
+            3122 => FitFieldGarminProduct::Edge830,
+            3134 => FitFieldGarminProduct::Fenix5sPlusApac,
+            3135 => FitFieldGarminProduct::Fenix5xPlusApac,
+            3142 => FitFieldGarminProduct::Edge520PlusApac,
+            3144 => FitFieldGarminProduct::Fr235lAsia,
+            3145 => FitFieldGarminProduct::Fr245Asia,
+            3163 => FitFieldGarminProduct::VivoActive3mApac,
+            3218 => FitFieldGarminProduct::VivoSmart4Asia,
+            3224 => FitFieldGarminProduct::Vivoactive4Small,
+            3225 => FitFieldGarminProduct::Vivoactive4Large,
+            3226 => FitFieldGarminProduct::Venu,
+            3246 => FitFieldGarminProduct::MarqDriver,
+            3247 => FitFieldGarminProduct::MarqAviator,
+            3248 => FitFieldGarminProduct::MarqCaptain,
+            3249 => FitFieldGarminProduct::MarqCommander,
+            3250 => FitFieldGarminProduct::MarqExpedition,
+            3251 => FitFieldGarminProduct::MarqAthlete,
+            3287 => FitFieldGarminProduct::Fenix6SSport,
+            3288 => FitFieldGarminProduct::Fenix6S,
+            3289 => FitFieldGarminProduct::Fenix6Sport,
+            3290 => FitFieldGarminProduct::Fenix6,
+            3291 => FitFieldGarminProduct::Fenix6x,
+            3299 => FitFieldGarminProduct::HrmDual,
+            3308 => FitFieldGarminProduct::VivoMove3Premium,
+            3314 => FitFieldGarminProduct::ApproachS40,
+            3321 => FitFieldGarminProduct::Fr245mAsia,
+            3349 => FitFieldGarminProduct::Edge530Apac,
+            3350 => FitFieldGarminProduct::Edge830Apac,
+            3378 => FitFieldGarminProduct::VivoMove3,
+            3387 => FitFieldGarminProduct::VivoActive4SmallAsia,
+            3388 => FitFieldGarminProduct::VivoActive4LargeAsia,
+            3389 => FitFieldGarminProduct::VivoActive4OledAsia,
+            3405 => FitFieldGarminProduct::Swim2,
+            3420 => FitFieldGarminProduct::MarqDriverAsia,
+            3421 => FitFieldGarminProduct::MarqAviatorAsia,
+            3422 => FitFieldGarminProduct::VivoMove3Asia,
+            3446 => FitFieldGarminProduct::VivoActive3tChn,
+            3448 => FitFieldGarminProduct::MarqCaptainAsia,
+            3449 => FitFieldGarminProduct::MarqCommanderAsia,
+            3450 => FitFieldGarminProduct::MarqExpeditionAsia,
+            3451 => FitFieldGarminProduct::MarqAthleteAsia,
+            3469 => FitFieldGarminProduct::Fr45Asia,
+            3473 => FitFieldGarminProduct::Vivoactive3Daimler,
+            3512 => FitFieldGarminProduct::Fenix6sSportAsia,
+            3513 => FitFieldGarminProduct::Fenix6sAsia,
+            3514 => FitFieldGarminProduct::Fenix6SportAsia,
+            3515 => FitFieldGarminProduct::Fenix6Asia,
+            3516 => FitFieldGarminProduct::Fenix6xAsia,
+            3624 => FitFieldGarminProduct::MarqAdventurer,
+            3648 => FitFieldGarminProduct::MarqAdventurerAsia,
+            3639 => FitFieldGarminProduct::Swim2Apac,
+            3737 => FitFieldGarminProduct::VenuDaimlerAsia,
+            3740 => FitFieldGarminProduct::VenuDaimler,
             10007 => FitFieldGarminProduct::Sdm4,
             10014 => FitFieldGarminProduct::EdgeRemote,
             20119 => FitFieldGarminProduct::TrainingCenter,
@@ -18981,6 +19597,146 @@ impl From<u16> for FitFieldFaveroProduct {
         }
     }
 }
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldClimbProEvent {
+    // fit base type: enum
+    Approach = 0,
+    Start = 1,
+    Complete = 2,
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldClimbProEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldClimbProEvent::Approach => write!(f, "{}", "Approach"),
+            FitFieldClimbProEvent::Start => write!(f, "{}", "Start"),
+            FitFieldClimbProEvent::Complete => write!(f, "{}", "Complete"),
+            FitFieldClimbProEvent::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldClimbProEvent::UnknownToSdk => write!(f, "UnknownToSdk"),
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldClimbProEvent {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldClimbProEvent> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldClimbProEvent::from(v)),
+            Err(_) => Ok(FitFieldClimbProEvent::InvalidFieldValue),
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldClimbProEvent);
+
+impl From<u8> for FitFieldClimbProEvent {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldClimbProEvent::Approach,
+            1 => FitFieldClimbProEvent::Start,
+            2 => FitFieldClimbProEvent::Complete,
+            _ => FitFieldClimbProEvent::UnknownToSdk,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldTapSensitivity {
+    // fit base type: enum
+    High = 0,
+    Medium = 1,
+    Low = 2,
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldTapSensitivity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldTapSensitivity::High => write!(f, "{}", "High"),
+            FitFieldTapSensitivity::Medium => write!(f, "{}", "Medium"),
+            FitFieldTapSensitivity::Low => write!(f, "{}", "Low"),
+            FitFieldTapSensitivity::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTapSensitivity::UnknownToSdk => write!(f, "UnknownToSdk"),
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldTapSensitivity {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldTapSensitivity> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldTapSensitivity::from(v)),
+            Err(_) => Ok(FitFieldTapSensitivity::InvalidFieldValue),
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldTapSensitivity);
+
+impl From<u8> for FitFieldTapSensitivity {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldTapSensitivity::High,
+            1 => FitFieldTapSensitivity::Medium,
+            2 => FitFieldTapSensitivity::Low,
+            _ => FitFieldTapSensitivity::UnknownToSdk,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldRadarThreatLevelType {
+    // fit base type: enum
+    ThreatUnknown = 0,
+    ThreatNone = 1,
+    ThreatApproaching = 2,
+    ThreatApproachingFast = 3,
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldRadarThreatLevelType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldRadarThreatLevelType::ThreatUnknown => write!(f, "{}", "ThreatUnknown"),
+            FitFieldRadarThreatLevelType::ThreatNone => write!(f, "{}", "ThreatNone"),
+            FitFieldRadarThreatLevelType::ThreatApproaching => write!(f, "{}", "ThreatApproaching"),
+            FitFieldRadarThreatLevelType::ThreatApproachingFast => {
+                write!(f, "{}", "ThreatApproachingFast")
+            }
+            FitFieldRadarThreatLevelType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldRadarThreatLevelType::UnknownToSdk => write!(f, "UnknownToSdk"),
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldRadarThreatLevelType {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldRadarThreatLevelType> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldRadarThreatLevelType::from(v)),
+            Err(_) => Ok(FitFieldRadarThreatLevelType::InvalidFieldValue),
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldRadarThreatLevelType);
+
+impl From<u8> for FitFieldRadarThreatLevelType {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldRadarThreatLevelType::ThreatUnknown,
+            1 => FitFieldRadarThreatLevelType::ThreatNone,
+            2 => FitFieldRadarThreatLevelType::ThreatApproaching,
+            3 => FitFieldRadarThreatLevelType::ThreatApproachingFast,
+            _ => FitFieldRadarThreatLevelType::UnknownToSdk,
+        }
+    }
+}
 #[derive(Debug)]
 pub struct FitMessageAccelerometerData {
     header: FitRecordHeader,
@@ -22736,6 +23492,289 @@ impl FitRecord for FitMessageCapabilities {
 }
 
 #[derive(Debug)]
+pub struct FitMessageClimbPro {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,
+    pub position_lat: FitFieldAdjustedValue<FitSint32>,
+    pub position_long: FitFieldAdjustedValue<FitSint32>,
+    pub climb_pro_event: FitFieldBasicValue<FitFieldClimbProEvent>,
+    pub climb_number: FitFieldBasicValue<FitUint16>,
+    pub climb_category: FitFieldBasicValue<FitUint8>,
+    pub current_dist: FitFieldBasicValue<FitFloat32>,
+}
+
+impl fmt::Display for FitMessageClimbPro {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageClimbPro")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.position_lat, "position_lat", f);
+        fmt_message_field!(self.position_long, "position_long", f);
+        fmt_message_field!(self.climb_pro_event, "climb_pro_event", f);
+        fmt_message_field!(self.climb_number, "climb_number", f);
+        fmt_message_field!(self.climb_category, "climb_category", f);
+        fmt_message_field!(self.current_dist, "current_dist", f);
+
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageClimbPro {
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "position_lat",
+            1 => "position_long",
+            2 => "climb_pro_event",
+            3 => "climb_number",
+            4 => "climb_category",
+            5 => "current_dist",
+            _ => "unknown",
+        }
+    }
+
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<FitMessageClimbPro> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+
+        let message = FitMessageClimbPro {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: HashMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageClimbPro",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            position_lat: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            position_long: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            climb_pro_event: FitFieldBasicValue::new_single("".to_string()),
+            climb_number: FitFieldBasicValue::new_single("".to_string()),
+            climb_category: FitFieldBasicValue::new_single("".to_string()),
+            current_dist: FitFieldBasicValue::new_single("m".to_string()),
+        };
+
+        Ok(message)
+    }
+
+    fn parse_developer_fields<'a, 'b>(
+        &'a mut self,
+        input: &'b [u8],
+        parsing_state: &FitParsingState,
+    ) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let dev_data_definition =
+                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description =
+                dev_data_definition.get_field_description(dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(Error::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition {
+                    definition_number: def_num,
+                    field_size: dev_field.field_size,
+                    base_type: base_type_num,
+                },
+                self.definition_message.endianness,
+                0.0,
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(
+        &'a mut self,
+        input: &'b [u8],
+        parsing_state: &mut FitParsingState,
+        _timestamp: Option<FitFieldDateTime>,
+    ) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self.raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string = String::from(concat!(
+                    "Error parsing ",
+                    stringify!(FitMessageClimbPro),
+                    ":"
+                ));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+        };
+        inp = outp;
+
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(
+        &'a mut self,
+        input: &'b [u8],
+        parse_config: &FitParseConfig,
+    ) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+            253 => {
+                // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+            }
+            0 => {
+                // position_lat
+                self.position_lat.parse(parse_input, parse_config)?
+            }
+            1 => {
+                // position_long
+                self.position_long.parse(parse_input, parse_config)?
+            }
+            2 => {
+                // climb_pro_event
+                self.climb_pro_event.parse(parse_input, parse_config)?
+            }
+            3 => {
+                // climb_number
+                self.climb_number.parse(parse_input, parse_config)?
+            }
+            4 => {
+                // climb_category
+                self.climb_category.parse(parse_input, parse_config)?
+            }
+            5 => {
+                // current_dist
+                self.current_dist.parse(parse_input, parse_config)?
+            }
+
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(
+                *field,
+                self.definition_message.endianness,
+                tz_offset,
+            ));
+        }
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+            }
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageClimbPro {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageClimbPro";
+    }
+}
+
+#[derive(Debug)]
 pub struct FitMessageConnectivity {
     header: FitRecordHeader,
     definition_message: Rc<FitDefinitionMessage>,
@@ -24513,6 +25552,7 @@ pub struct FitMessageDeviceSettings {
     pub number_of_screens: FitFieldBasicValue<FitUint8>, // Number of screens configured to display
     pub smart_notification_display_orientation: FitFieldBasicValue<FitFieldDisplayOrientation>, // Smart Notification display orientation
     pub tap_interface: FitFieldBasicValue<FitFieldSwitch>,
+    pub tap_sensitivity: FitFieldBasicValue<FitFieldTapSensitivity>, // Used to hold the tap threshold setting
 }
 
 impl fmt::Display for FitMessageDeviceSettings {
@@ -24549,6 +25589,7 @@ impl fmt::Display for FitMessageDeviceSettings {
             f
         );
         fmt_message_field!(self.tap_interface, "tap_interface", f);
+        fmt_message_field!(self.tap_sensitivity, "tap_sensitivity", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -24583,6 +25624,7 @@ impl FitMessageDeviceSettings {
             94 => "number_of_screens",
             95 => "smart_notification_display_orientation",
             134 => "tap_interface",
+            174 => "tap_sensitivity",
             _ => "unknown",
         }
     }
@@ -24624,6 +25666,7 @@ impl FitMessageDeviceSettings {
             number_of_screens: FitFieldBasicValue::new_single("".to_string()),
             smart_notification_display_orientation: FitFieldBasicValue::new_single("".to_string()),
             tap_interface: FitFieldBasicValue::new_single("".to_string()),
+            tap_sensitivity: FitFieldBasicValue::new_single("".to_string()),
         };
 
         Ok(message)
@@ -24836,6 +25879,10 @@ impl FitMessageDeviceSettings {
             134 => {
                 // tap_interface
                 self.tap_interface.parse(parse_input, parse_config)?
+            }
+            174 => {
+                // tap_sensitivity
+                self.tap_sensitivity.parse(parse_input, parse_config)?
             }
 
             unknown_field_num => {
@@ -26274,26 +27321,27 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    DistanceDurationAlert(FitFloat64),
-    CadHighAlert(FitUint16),
-    PowerLowAlert(FitUint16),
-    BatteryLevel(FitFloat64),
-    PowerHighAlert(FitUint16),
-    VirtualPartnerSpeed(FitFloat64),
-    CoursePointIndex(FitFieldMessageIndex),
-    CadLowAlert(FitUint16),
-    TimerTrigger(FitFieldTimerTrigger),
     TimeDurationAlert(FitFloat64),
-    SportPoint(FitUint32),
+    VirtualPartnerSpeed(FitFloat64),
+    RadarThreatAlert(FitUint32),
+    PowerHighAlert(FitUint16),
+    CadLowAlert(FitUint16),
+    BatteryLevel(FitFloat64),
+    CoursePointIndex(FitFieldMessageIndex),
+    GearChangeData(FitUint32),
+    PowerLowAlert(FitUint16),
+    DistanceDurationAlert(FitFloat64),
     FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    RiderPosition(FitFieldRiderPositionType),
-    CommTimeout(FitFieldCommTimeoutType),
-    CalorieDurationAlert(FitUint32),
-    SpeedHighAlert(FitFloat64),
+    CadHighAlert(FitUint16),
     SpeedLowAlert(FitFloat64),
+    CommTimeout(FitFieldCommTimeoutType),
+    SportPoint(FitUint32),
+    CalorieDurationAlert(FitUint32),
     HrHighAlert(FitUint8),
     HrLowAlert(FitUint8),
-    GearChangeData(FitUint32),
+    TimerTrigger(FitFieldTimerTrigger),
+    SpeedHighAlert(FitFloat64),
+    RiderPosition(FitFieldRiderPositionType),
 }
 
 impl FitMessageEventSubfieldData {
@@ -26744,6 +27792,44 @@ impl FitMessageEventSubfieldData {
                 return Ok((FitMessageEventSubfieldData::CommTimeout(val), new_actions));
             }
 
+            FitFieldEvent::RadarThreatAlert => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![
+                    FitParseConfig::new_from_component(
+                        21,
+                        1,
+                        0,
+                        endianness,
+                        0,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                    FitParseConfig::new_from_component(
+                        22,
+                        1,
+                        2,
+                        endianness,
+                        8,
+                        8,
+                        Some((1.0, 0.0)),
+                        Some("".to_string()),
+                    ),
+                ]
+                .iter()
+                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                .collect();
+
+                return Ok((
+                    FitMessageEventSubfieldData::RadarThreatAlert(val),
+                    new_actions,
+                ));
+            }
+
             _ => (),
         }
 
@@ -26772,13 +27858,15 @@ pub struct FitMessageEvent {
     pub data_subfield_bytes: Vec<u8>,
     pub data: FitMessageEventSubfieldData,
     pub event_group: FitFieldBasicValue<FitUint8>,
-    pub score: FitFieldBasicValue<FitUint16>, // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
-    pub opponent_score: FitFieldBasicValue<FitUint16>, // Do not populate directly.  Autogenerated by decoder for sport_point subfield components
-    pub front_gear_num: FitFieldBasicValue<FitUint8z>, // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Front gear number. 1 is innermost.
-    pub front_gear: FitFieldBasicValue<FitUint8z>, // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Number of front teeth.
-    pub rear_gear_num: FitFieldBasicValue<FitUint8z>, // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Rear gear number. 1 is innermost.
-    pub rear_gear: FitFieldBasicValue<FitUint8z>, // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Number of rear teeth.
+    pub score: FitFieldBasicValue<FitUint16>, // Do not populate directly. Autogenerated by decoder for sport_point subfield components
+    pub opponent_score: FitFieldBasicValue<FitUint16>, // Do not populate directly. Autogenerated by decoder for sport_point subfield components
+    pub front_gear_num: FitFieldBasicValue<FitUint8z>, // Do not populate directly. Autogenerated by decoder for gear_change subfield components.  Front gear number. 1 is innermost.
+    pub front_gear: FitFieldBasicValue<FitUint8z>, // Do not populate directly. Autogenerated by decoder for gear_change subfield components.  Number of front teeth.
+    pub rear_gear_num: FitFieldBasicValue<FitUint8z>, // Do not populate directly. Autogenerated by decoder for gear_change subfield components.  Rear gear number. 1 is innermost.
+    pub rear_gear: FitFieldBasicValue<FitUint8z>, // Do not populate directly. Autogenerated by decoder for gear_change subfield components.  Number of rear teeth.
     pub device_index: FitFieldBasicValue<FitFieldDeviceIndex>,
+    pub radar_threat_level_max: FitFieldBasicValue<FitFieldRadarThreatLevelType>, // Do not populate directly. Autogenerated by decoder for threat_alert subfield components.
+    pub radar_threat_count: FitFieldBasicValue<FitUint8>, // Do not populate directly. Autogenerated by decoder for threat_alert subfield components.
 }
 
 impl fmt::Display for FitMessageEvent {
@@ -26802,6 +27890,8 @@ impl fmt::Display for FitMessageEvent {
         fmt_message_field!(self.rear_gear_num, "rear_gear_num", f);
         fmt_message_field!(self.rear_gear, "rear_gear", f);
         fmt_message_field!(self.device_index, "device_index", f);
+        fmt_message_field!(self.radar_threat_level_max, "radar_threat_level_max", f);
+        fmt_message_field!(self.radar_threat_count, "radar_threat_count", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -26826,6 +27916,8 @@ impl FitMessageEvent {
             11 => "rear_gear_num",
             12 => "rear_gear",
             13 => "device_index",
+            21 => "radar_threat_level_max",
+            22 => "radar_threat_count",
             _ => "unknown",
         }
     }
@@ -26869,6 +27961,8 @@ impl FitMessageEvent {
             rear_gear_num: FitFieldBasicValue::new_single("".to_string()),
             rear_gear: FitFieldBasicValue::new_single("".to_string()),
             device_index: FitFieldBasicValue::new_single("".to_string()),
+            radar_threat_level_max: FitFieldBasicValue::new_single("".to_string()),
+            radar_threat_count: FitFieldBasicValue::new_single("".to_string()),
         };
 
         Ok(message)
@@ -27047,6 +28141,15 @@ impl FitMessageEvent {
             13 => {
                 // device_index
                 self.device_index.parse(parse_input, parse_config)?
+            }
+            21 => {
+                // radar_threat_level_max
+                self.radar_threat_level_max
+                    .parse(parse_input, parse_config)?
+            }
+            22 => {
+                // radar_threat_count
+                self.radar_threat_count.parse(parse_input, parse_config)?
             }
 
             unknown_field_num => {
@@ -31769,6 +32872,317 @@ impl FitRecord for FitMessageHrv {
 }
 
 #[derive(Debug)]
+pub struct FitMessageJump {
+    header: FitRecordHeader,
+    definition_message: Rc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: HashMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,
+    pub distance: FitFieldBasicValue<FitFloat32>,
+    pub height: FitFieldBasicValue<FitFloat32>,
+    pub rotations: FitFieldBasicValue<FitUint8>,
+    pub hang_time: FitFieldBasicValue<FitFloat32>,
+    pub score: FitFieldBasicValue<FitFloat32>, // A score for a jump calculated based on hang time, rotations, and distance.
+    pub position_lat: FitFieldAdjustedValue<FitSint32>,
+    pub position_long: FitFieldAdjustedValue<FitSint32>,
+    pub speed: FitFieldAdjustedValue<FitUint16>,
+    pub enhanced_speed: FitFieldAdjustedValue<FitUint32>,
+}
+
+impl fmt::Display for FitMessageJump {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageJump")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.distance, "distance", f);
+        fmt_message_field!(self.height, "height", f);
+        fmt_message_field!(self.rotations, "rotations", f);
+        fmt_message_field!(self.hang_time, "hang_time", f);
+        fmt_message_field!(self.score, "score", f);
+        fmt_message_field!(self.position_lat, "position_lat", f);
+        fmt_message_field!(self.position_long, "position_long", f);
+        fmt_message_field!(self.speed, "speed", f);
+        fmt_message_field!(self.enhanced_speed, "enhanced_speed", f);
+
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageJump {
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "distance",
+            1 => "height",
+            2 => "rotations",
+            3 => "hang_time",
+            4 => "score",
+            5 => "position_lat",
+            6 => "position_long",
+            7 => "speed",
+            8 => "enhanced_speed",
+            _ => "unknown",
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageJump> {
+        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let endianness = definition_message.endianness;
+        let message = FitMessageJump {
+            header: header,
+            definition_message: Rc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: HashMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageJump",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            distance: FitFieldBasicValue::new_single("m".to_string()),
+            height: FitFieldBasicValue::new_single("m".to_string()),
+            rotations: FitFieldBasicValue::new_single("".to_string()),
+            hang_time: FitFieldBasicValue::new_single("s".to_string()),
+            score: FitFieldBasicValue::new_single("".to_string()),
+            position_lat: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            position_long: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0)
+                .add_components(vec![FitParseConfig::new_from_component(
+                    8,
+                    4,
+                    134,
+                    endianness,
+                    0,
+                    16,
+                    Some((1000.0, 0.0)),
+                    Some("m/s".to_string()),
+                )]),
+            enhanced_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+        };
+
+        Ok(message)
+    }
+
+    fn parse_developer_fields<'a, 'b>(
+        &'a mut self,
+        input: &'b [u8],
+        parsing_state: &FitParsingState,
+    ) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let dev_data_definition =
+                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            let field_description =
+                dev_data_definition.get_field_description(dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(Error::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition {
+                    definition_number: def_num,
+                    field_size: dev_field.field_size,
+                    base_type: base_type_num,
+                },
+                self.definition_message.endianness,
+                0.0,
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(
+        &'a mut self,
+        input: &'b [u8],
+        parsing_state: &mut FitParsingState,
+        _timestamp: Option<FitFieldDateTime>,
+    ) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self.raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                let mut err_string =
+                    String::from(concat!("Error parsing ", stringify!(FitMessageJump), ":"));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(Error::message_parse_failed(err_string));
+            }
+        };
+        inp = outp;
+
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(
+        &'a mut self,
+        input: &'b [u8],
+        parse_config: &FitParseConfig,
+    ) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+            253 => {
+                // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+            }
+            0 => {
+                // distance
+                self.distance.parse(parse_input, parse_config)?
+            }
+            1 => {
+                // height
+                self.height.parse(parse_input, parse_config)?
+            }
+            2 => {
+                // rotations
+                self.rotations.parse(parse_input, parse_config)?
+            }
+            3 => {
+                // hang_time
+                self.hang_time.parse(parse_input, parse_config)?
+            }
+            4 => {
+                // score
+                self.score.parse(parse_input, parse_config)?
+            }
+            5 => {
+                // position_lat
+                self.position_lat.parse(parse_input, parse_config)?
+            }
+            6 => {
+                // position_long
+                self.position_long.parse(parse_input, parse_config)?
+            }
+            7 => {
+                // speed
+                self.speed.parse(parse_input, parse_config)?
+            }
+            8 => {
+                // enhanced_speed
+                self.enhanced_speed.parse(parse_input, parse_config)?
+            }
+
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(
+                *field,
+                self.definition_message.endianness,
+                tz_offset,
+            ));
+        }
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+            }
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageJump {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageJump";
+    }
+}
+
+#[derive(Debug)]
 pub enum FitMessageLapSubfieldTotalCycles {
     NotYetParsed,
     Default(FitUint32),
@@ -32034,6 +33448,11 @@ pub struct FitMessageLap {
     pub avg_stance_time_balance: FitFieldAdjustedValue<FitUint16>,
     pub avg_step_length: FitFieldAdjustedValue<FitUint16>,
     pub avg_vam: FitFieldAdjustedValue<FitUint16>,
+    pub total_grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub total_flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
+    pub jump_count: FitFieldBasicValue<FitUint16>,
+    pub avg_grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub avg_flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
 }
 
 impl fmt::Display for FitMessageLap {
@@ -32212,6 +33631,11 @@ impl fmt::Display for FitMessageLap {
         fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", f);
         fmt_message_field!(self.avg_step_length, "avg_step_length", f);
         fmt_message_field!(self.avg_vam, "avg_vam", f);
+        fmt_message_field!(self.total_grit, "total_grit", f);
+        fmt_message_field!(self.total_flow, "total_flow", f);
+        fmt_message_field!(self.jump_count, "jump_count", f);
+        fmt_message_field!(self.avg_grit, "avg_grit", f);
+        fmt_message_field!(self.avg_flow, "avg_flow", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -32329,6 +33753,11 @@ impl FitMessageLap {
             119 => "avg_stance_time_balance",
             120 => "avg_step_length",
             121 => "avg_vam",
+            149 => "total_grit",
+            150 => "total_flow",
+            151 => "jump_count",
+            153 => "avg_grit",
+            154 => "avg_flow",
             _ => "unknown",
         }
     }
@@ -32611,6 +34040,11 @@ impl FitMessageLap {
             ),
             avg_step_length: FitFieldAdjustedValue::new_single("mm".to_string(), 10.0, 0.0),
             avg_vam: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            total_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
+            total_flow: FitFieldBasicValue::new_single("Flow".to_string()),
+            jump_count: FitFieldBasicValue::new_single("".to_string()),
+            avg_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
+            avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
         };
 
         Ok(message)
@@ -33192,6 +34626,26 @@ impl FitMessageLap {
             121 => {
                 // avg_vam
                 self.avg_vam.parse(parse_input, parse_config)?
+            }
+            149 => {
+                // total_grit
+                self.total_grit.parse(parse_input, parse_config)?
+            }
+            150 => {
+                // total_flow
+                self.total_flow.parse(parse_input, parse_config)?
+            }
+            151 => {
+                // jump_count
+                self.jump_count.parse(parse_input, parse_config)?
+            }
+            153 => {
+                // avg_grit
+                self.avg_grit.parse(parse_input, parse_config)?
+            }
+            154 => {
+                // avg_flow
+                self.avg_flow.parse(parse_input, parse_config)?
             }
 
             unknown_field_num => {
@@ -34240,9 +35694,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
+    MaxPerFileType(FitUint16),
     NumPerFile(FitUint16),
     MaxPerFile(FitUint16),
-    MaxPerFileType(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -34886,8 +36340,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Steps(FitFloat64),
     Strokes(FitFloat64),
+    Steps(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -37314,6 +38768,12 @@ pub struct FitMessageRecord {
     pub ndl_time: FitFieldAdjustedValue<FitUint32>,
     pub cns_load: FitFieldBasicValue<FitUint8>,
     pub n2_load: FitFieldAdjustedValue<FitUint16>,
+    pub grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
+    pub ebike_travel_range: FitFieldBasicValue<FitUint16>,
+    pub ebike_battery_level: FitFieldBasicValue<FitUint8>,
+    pub ebike_assist_mode: FitFieldBasicValue<FitUint8>,
+    pub ebike_assist_level_percent: FitFieldBasicValue<FitUint8>,
 }
 
 impl fmt::Display for FitMessageRecord {
@@ -37426,6 +38886,16 @@ impl fmt::Display for FitMessageRecord {
         fmt_message_field!(self.ndl_time, "ndl_time", f);
         fmt_message_field!(self.cns_load, "cns_load", f);
         fmt_message_field!(self.n2_load, "n2_load", f);
+        fmt_message_field!(self.grit, "grit", f);
+        fmt_message_field!(self.flow, "flow", f);
+        fmt_message_field!(self.ebike_travel_range, "ebike_travel_range", f);
+        fmt_message_field!(self.ebike_battery_level, "ebike_battery_level", f);
+        fmt_message_field!(self.ebike_assist_mode, "ebike_assist_mode", f);
+        fmt_message_field!(
+            self.ebike_assist_level_percent,
+            "ebike_assist_level_percent",
+            f
+        );
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -37504,6 +38974,12 @@ impl FitMessageRecord {
             96 => "ndl_time",
             97 => "cns_load",
             98 => "n2_load",
+            114 => "grit",
+            115 => "flow",
+            117 => "ebike_travel_range",
+            118 => "ebike_battery_level",
+            119 => "ebike_assist_mode",
+            120 => "ebike_assist_level_percent",
             _ => "unknown",
         }
     }
@@ -37716,6 +39192,12 @@ impl FitMessageRecord {
             ndl_time: FitFieldAdjustedValue::new_single("s".to_string(), 1.0, 0.0),
             cns_load: FitFieldBasicValue::new_single("percent".to_string()),
             n2_load: FitFieldAdjustedValue::new_single("percent".to_string(), 1.0, 0.0),
+            grit: FitFieldBasicValue::new_single("".to_string()),
+            flow: FitFieldBasicValue::new_single("".to_string()),
+            ebike_travel_range: FitFieldBasicValue::new_single("km".to_string()),
+            ebike_battery_level: FitFieldBasicValue::new_single("percent".to_string()),
+            ebike_assist_mode: FitFieldBasicValue::new_single("depends on sensor".to_string()),
+            ebike_assist_level_percent: FitFieldBasicValue::new_single("percent".to_string()),
         };
 
         Ok(message)
@@ -38124,6 +39606,31 @@ impl FitMessageRecord {
             98 => {
                 // n2_load
                 self.n2_load.parse(parse_input, parse_config)?
+            }
+            114 => {
+                // grit
+                self.grit.parse(parse_input, parse_config)?
+            }
+            115 => {
+                // flow
+                self.flow.parse(parse_input, parse_config)?
+            }
+            117 => {
+                // ebike_travel_range
+                self.ebike_travel_range.parse(parse_input, parse_config)?
+            }
+            118 => {
+                // ebike_battery_level
+                self.ebike_battery_level.parse(parse_input, parse_config)?
+            }
+            119 => {
+                // ebike_assist_mode
+                self.ebike_assist_mode.parse(parse_input, parse_config)?
+            }
+            120 => {
+                // ebike_assist_level_percent
+                self.ebike_assist_level_percent
+                    .parse(parse_input, parse_config)?
             }
 
             unknown_field_num => {
@@ -39616,6 +41123,10 @@ pub struct FitMessageSegmentLap {
     pub avg_cadence_position: FitFieldBasicValue<FitUint8>, // Average cadence by position. Data value indexes defined by rider_position_type.
     pub max_cadence_position: FitFieldBasicValue<FitUint8>, // Maximum cadence by position. Data value indexes defined by rider_position_type.
     pub manufacturer: FitFieldBasicValue<FitFieldManufacturer>, // Manufacturer that produced the segment
+    pub total_grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub total_flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
+    pub avg_grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub avg_flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
 }
 
 impl fmt::Display for FitMessageSegmentLap {
@@ -39740,6 +41251,10 @@ impl fmt::Display for FitMessageSegmentLap {
         fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", f);
         fmt_message_field!(self.max_cadence_position, "max_cadence_position", f);
         fmt_message_field!(self.manufacturer, "manufacturer", f);
+        fmt_message_field!(self.total_grit, "total_grit", f);
+        fmt_message_field!(self.total_flow, "total_flow", f);
+        fmt_message_field!(self.avg_grit, "avg_grit", f);
+        fmt_message_field!(self.avg_flow, "avg_flow", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -39837,6 +41352,10 @@ impl FitMessageSegmentLap {
             81 => "avg_cadence_position",
             82 => "max_cadence_position",
             83 => "manufacturer",
+            84 => "total_grit",
+            85 => "total_flow",
+            86 => "avg_grit",
+            87 => "avg_flow",
             _ => "unknown",
         }
     }
@@ -40006,6 +41525,10 @@ impl FitMessageSegmentLap {
             avg_cadence_position: FitFieldBasicValue::new_vec("rpm".to_string()),
             max_cadence_position: FitFieldBasicValue::new_vec("rpm".to_string()),
             manufacturer: FitFieldBasicValue::new_single("".to_string()),
+            total_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
+            total_flow: FitFieldBasicValue::new_single("Flow".to_string()),
+            avg_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
+            avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
         };
 
         Ok(message)
@@ -40497,6 +42020,22 @@ impl FitMessageSegmentLap {
             83 => {
                 // manufacturer
                 self.manufacturer.parse(parse_input, parse_config)?
+            }
+            84 => {
+                // total_grit
+                self.total_grit.parse(parse_input, parse_config)?
+            }
+            85 => {
+                // total_flow
+                self.total_flow.parse(parse_input, parse_config)?
+            }
+            86 => {
+                // avg_grit
+                self.avg_grit.parse(parse_input, parse_config)?
+            }
+            87 => {
+                // avg_flow
+                self.avg_flow.parse(parse_input, parse_config)?
             }
 
             unknown_field_num => {
@@ -41331,10 +42870,10 @@ pub struct FitMessageSession {
     pub num_laps: FitFieldBasicValue<FitUint16>,
     pub event_group: FitFieldBasicValue<FitUint8>,
     pub trigger: FitFieldBasicValue<FitFieldSessionTrigger>,
-    pub nec_lat: FitFieldAdjustedValue<FitSint32>,
-    pub nec_long: FitFieldAdjustedValue<FitSint32>,
-    pub swc_lat: FitFieldAdjustedValue<FitSint32>,
-    pub swc_long: FitFieldAdjustedValue<FitSint32>,
+    pub nec_lat: FitFieldAdjustedValue<FitSint32>, // North east corner latitude
+    pub nec_long: FitFieldAdjustedValue<FitSint32>, // North east corner longitude
+    pub swc_lat: FitFieldAdjustedValue<FitSint32>, // South west corner latitude
+    pub swc_long: FitFieldAdjustedValue<FitSint32>, // South west corner longitude
     pub normalized_power: FitFieldBasicValue<FitUint16>,
     pub training_stress_score: FitFieldAdjustedValue<FitUint16>,
     pub intensity_factor: FitFieldAdjustedValue<FitUint16>,
@@ -41420,6 +42959,11 @@ pub struct FitMessageSession {
     pub avg_step_length: FitFieldAdjustedValue<FitUint16>,
     pub total_anaerobic_training_effect: FitFieldAdjustedValue<FitUint8>,
     pub avg_vam: FitFieldAdjustedValue<FitUint16>,
+    pub total_grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub total_flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
+    pub jump_count: FitFieldBasicValue<FitUint16>,
+    pub avg_grit: FitFieldBasicValue<FitFloat32>, // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
+    pub avg_flow: FitFieldBasicValue<FitFloat32>, // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
 }
 
 impl fmt::Display for FitMessageSession {
@@ -41615,6 +43159,11 @@ impl fmt::Display for FitMessageSession {
             f
         );
         fmt_message_field!(self.avg_vam, "avg_vam", f);
+        fmt_message_field!(self.total_grit, "total_grit", f);
+        fmt_message_field!(self.total_flow, "total_flow", f);
+        fmt_message_field!(self.jump_count, "jump_count", f);
+        fmt_message_field!(self.avg_grit, "avg_grit", f);
+        fmt_message_field!(self.avg_flow, "avg_flow", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -41745,6 +43294,11 @@ impl FitMessageSession {
             134 => "avg_step_length",
             137 => "total_anaerobic_training_effect",
             139 => "avg_vam",
+            181 => "total_grit",
+            182 => "total_flow",
+            183 => "jump_count",
+            186 => "avg_grit",
+            187 => "avg_flow",
             _ => "unknown",
         }
     }
@@ -42051,6 +43605,11 @@ impl FitMessageSession {
                 0.0,
             ),
             avg_vam: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            total_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
+            total_flow: FitFieldBasicValue::new_single("Flow".to_string()),
+            jump_count: FitFieldBasicValue::new_single("".to_string()),
+            avg_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
+            avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
         };
 
         Ok(message)
@@ -42690,6 +44249,26 @@ impl FitMessageSession {
             139 => {
                 // avg_vam
                 self.avg_vam.parse(parse_input, parse_config)?
+            }
+            181 => {
+                // total_grit
+                self.total_grit.parse(parse_input, parse_config)?
+            }
+            182 => {
+                // total_flow
+                self.total_flow.parse(parse_input, parse_config)?
+            }
+            183 => {
+                // jump_count
+                self.jump_count.parse(parse_input, parse_config)?
+            }
+            186 => {
+                // avg_grit
+                self.avg_grit.parse(parse_input, parse_config)?
+            }
+            187 => {
+                // avg_flow
+                self.avg_flow.parse(parse_input, parse_config)?
             }
 
             unknown_field_num => {
@@ -44470,8 +46049,8 @@ impl FitRecord for FitMessageStressLevel {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    AccelCalFactor(FitUint32),
     GyroCalFactor(FitUint32),
+    AccelCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -47625,8 +49204,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    AnalogLayout(FitFieldAnalogWatchfaceLayout),
     DigitalLayout(FitFieldDigitalWatchfaceLayout),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -49507,13 +51086,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationStep(FitUint32),
-    DurationPower(FitFieldWorkoutPower),
-    DurationHr(FitFieldWorkoutHr),
-    DurationTime(FitFloat64),
-    DurationReps(FitUint32),
     DurationCalories(FitUint32),
+    DurationStep(FitUint32),
+    DurationTime(FitFloat64),
     DurationDistance(FitFloat64),
+    DurationPower(FitFieldWorkoutPower),
+    DurationReps(FitUint32),
+    DurationHr(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -49844,17 +51423,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
+    TargetHrZone(FitUint32),
     RepeatDistance(FitFloat64),
-    RepeatPower(FitFieldWorkoutPower),
     TargetStrokeType(FitFieldSwimStroke),
-    TargetCadenceZone(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
+    TargetPowerZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
     TargetSpeedZone(FitUint32),
     RepeatSteps(FitUint32),
-    TargetPowerZone(FitUint32),
-    RepeatCalories(FitUint32),
     RepeatTime(FitFloat64),
-    TargetHrZone(FitUint32),
+    RepeatCalories(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
+    TargetCadenceZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -50121,10 +51700,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetCadenceLow(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetCadenceLow(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -50230,10 +51809,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetSpeedHigh(FitFloat64),
-    CustomTargetCadenceHigh(FitUint32),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetCadenceHigh(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetSpeedHigh(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -51076,6 +52655,7 @@ pub enum FitDataMessage {
     CadenceZone(Rc<FitMessageCadenceZone>),
     CameraEvent(Rc<FitMessageCameraEvent>),
     Capabilities(Rc<FitMessageCapabilities>),
+    ClimbPro(Rc<FitMessageClimbPro>),
     Connectivity(Rc<FitMessageConnectivity>),
     Course(Rc<FitMessageCourse>),
     CoursePoint(Rc<FitMessageCoursePoint>),
@@ -51103,6 +52683,7 @@ pub enum FitDataMessage {
     HrZone(Rc<FitMessageHrZone>),
     HrmProfile(Rc<FitMessageHrmProfile>),
     Hrv(Rc<FitMessageHrv>),
+    Jump(Rc<FitMessageJump>),
     Lap(Rc<FitMessageLap>),
     Length(Rc<FitMessageLength>),
     MagnetometerData(Rc<FitMessageMagnetometerData>),
@@ -51167,6 +52748,7 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::CadenceZone(m) => write!(f, "{}", m),
             FitDataMessage::CameraEvent(m) => write!(f, "{}", m),
             FitDataMessage::Capabilities(m) => write!(f, "{}", m),
+            FitDataMessage::ClimbPro(m) => write!(f, "{}", m),
             FitDataMessage::Connectivity(m) => write!(f, "{}", m),
             FitDataMessage::Course(m) => write!(f, "{}", m),
             FitDataMessage::CoursePoint(m) => write!(f, "{}", m),
@@ -51194,6 +52776,7 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::HrZone(m) => write!(f, "{}", m),
             FitDataMessage::HrmProfile(m) => write!(f, "{}", m),
             FitDataMessage::Hrv(m) => write!(f, "{}", m),
+            FitDataMessage::Jump(m) => write!(f, "{}", m),
             FitDataMessage::Lap(m) => write!(f, "{}", m),
             FitDataMessage::Length(m) => write!(f, "{}", m),
             FitDataMessage::MagnetometerData(m) => write!(f, "{}", m),
@@ -51294,6 +52877,10 @@ impl FitDataMessage {
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
                 FitMessageCapabilities::field_name(field_number)
+            }
+
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ClimbPro) => {
+                FitMessageClimbPro::field_name(field_number)
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
@@ -51400,6 +52987,10 @@ impl FitDataMessage {
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hrv) => {
                 FitMessageHrv::field_name(field_number)
+            }
+
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Jump) => {
+                FitMessageJump::field_name(field_number)
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
@@ -51671,6 +53262,12 @@ impl FitDataMessage {
                 Ok((FitDataMessage::Capabilities(Rc::new(m)), o))
             }
 
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ClimbPro) => {
+                let mut m = FitMessageClimbPro::new(header, parsing_state)?;
+                let o = m.parse(input, parsing_state, timestamp)?;
+                Ok((FitDataMessage::ClimbPro(Rc::new(m)), o))
+            }
+
             FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
                 let mut m = FitMessageConnectivity::new(header, parsing_state)?;
                 let o = m.parse(input, parsing_state, timestamp)?;
@@ -51831,6 +53428,12 @@ impl FitDataMessage {
                 let mut m = FitMessageHrv::new(header, parsing_state)?;
                 let o = m.parse(input, parsing_state, timestamp)?;
                 Ok((FitDataMessage::Hrv(Rc::new(m)), o))
+            }
+
+            FitGlobalMesgNum::Known(FitFieldMesgNum::Jump) => {
+                let mut m = FitMessageJump::new(header, parsing_state)?;
+                let o = m.parse(input, parsing_state, timestamp)?;
+                Ok((FitDataMessage::Jump(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
@@ -52148,6 +53751,7 @@ impl FitDataMessage {
             FitDataMessage::CadenceZone(_) => "CadenceZone",
             FitDataMessage::CameraEvent(_) => "CameraEvent",
             FitDataMessage::Capabilities(_) => "Capabilities",
+            FitDataMessage::ClimbPro(_) => "ClimbPro",
             FitDataMessage::Connectivity(_) => "Connectivity",
             FitDataMessage::Course(_) => "Course",
             FitDataMessage::CoursePoint(_) => "CoursePoint",
@@ -52175,6 +53779,7 @@ impl FitDataMessage {
             FitDataMessage::HrZone(_) => "HrZone",
             FitDataMessage::HrmProfile(_) => "HrmProfile",
             FitDataMessage::Hrv(_) => "Hrv",
+            FitDataMessage::Jump(_) => "Jump",
             FitDataMessage::Lap(_) => "Lap",
             FitDataMessage::Length(_) => "Length",
             FitDataMessage::MagnetometerData(_) => "MagnetometerData",
@@ -52305,6 +53910,13 @@ impl FitDataMessage {
     pub fn is_capabilities(&self) -> bool {
         match *self {
             FitDataMessage::Capabilities(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_climb_pro(&self) -> bool {
+        match *self {
+            FitDataMessage::ClimbPro(_) => true,
             _ => false,
         }
     }
@@ -52494,6 +54106,13 @@ impl FitDataMessage {
     pub fn is_hrv(&self) -> bool {
         match *self {
             FitDataMessage::Hrv(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_jump(&self) -> bool {
+        match *self {
+            FitDataMessage::Jump(_) => true,
             _ => false,
         }
     }
