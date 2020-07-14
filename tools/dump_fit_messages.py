@@ -503,7 +503,7 @@ impl fmt::Display for {{ message_name }} {
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}_subfield_bytes", self.{{ field.name }}_subfield_bytes)?;
         writeln!(f, "  {: >28}: {:?}", "{{ field.name }}", self.{{field.name }})?;
         {% else -%}
-        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", {% if field.is_adjusted or field.is_semicircles %}true{% else %}false{% endif %}, f)?;
+        fmt_message_field!(self.{{ field.name }}, "{{ field.name }}", f);
         {% endif -%}
         {% endfor %}
             

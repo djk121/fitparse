@@ -19007,33 +19007,30 @@ pub struct FitMessageAccelerometerData {
 impl fmt::Display for FitMessageAccelerometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAccelerometerData")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
-        fmt_message_field!(self.accel_x, "accel_x", false, f)?;
-        fmt_message_field!(self.accel_y, "accel_y", false, f)?;
-        fmt_message_field!(self.accel_z, "accel_z", false, f)?;
-        fmt_message_field!(self.calibrated_accel_x, "calibrated_accel_x", false, f)?;
-        fmt_message_field!(self.calibrated_accel_y, "calibrated_accel_y", false, f)?;
-        fmt_message_field!(self.calibrated_accel_z, "calibrated_accel_z", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", f);
+        fmt_message_field!(self.accel_x, "accel_x", f);
+        fmt_message_field!(self.accel_y, "accel_y", f);
+        fmt_message_field!(self.accel_z, "accel_z", f);
+        fmt_message_field!(self.calibrated_accel_x, "calibrated_accel_x", f);
+        fmt_message_field!(self.calibrated_accel_y, "calibrated_accel_y", f);
+        fmt_message_field!(self.calibrated_accel_z, "calibrated_accel_z", f);
         fmt_message_field!(
             self.compressed_calibrated_accel_x,
             "compressed_calibrated_accel_x",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.compressed_calibrated_accel_y,
             "compressed_calibrated_accel_y",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.compressed_calibrated_accel_z,
             "compressed_calibrated_accel_z",
-            false,
             f
-        )?;
+        );
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -19344,14 +19341,14 @@ pub struct FitMessageActivity {
 impl fmt::Display for FitMessageActivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageActivity")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
-        fmt_message_field!(self.num_sessions, "num_sessions", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.event, "event", false, f)?;
-        fmt_message_field!(self.event_type, "event_type", false, f)?;
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
-        fmt_message_field!(self.event_group, "event_group", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", f);
+        fmt_message_field!(self.num_sessions, "num_sessions", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.event, "event", f);
+        fmt_message_field!(self.event_type, "event_type", f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", f);
+        fmt_message_field!(self.event_group, "event_group", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -19632,11 +19629,11 @@ pub struct FitMessageAntChannelId {
 impl fmt::Display for FitMessageAntChannelId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntChannelId")?;
-        fmt_message_field!(self.channel_number, "channel_number", false, f)?;
-        fmt_message_field!(self.device_type, "device_type", false, f)?;
-        fmt_message_field!(self.device_number, "device_number", false, f)?;
-        fmt_message_field!(self.transmission_type, "transmission_type", false, f)?;
-        fmt_message_field!(self.device_index, "device_index", false, f)?;
+        fmt_message_field!(self.channel_number, "channel_number", f);
+        fmt_message_field!(self.device_type, "device_type", f);
+        fmt_message_field!(self.device_number, "device_number", f);
+        fmt_message_field!(self.transmission_type, "transmission_type", f);
+        fmt_message_field!(self.device_index, "device_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -19888,12 +19885,12 @@ pub struct FitMessageAntRx {
 impl fmt::Display for FitMessageAntRx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntRx")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
-        fmt_message_field!(self.mesg_id, "mesg_id", false, f)?;
-        fmt_message_field!(self.mesg_data, "mesg_data", false, f)?;
-        fmt_message_field!(self.channel_number, "channel_number", false, f)?;
-        fmt_message_field!(self.data, "data", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", f);
+        fmt_message_field!(self.mesg_id, "mesg_id", f);
+        fmt_message_field!(self.mesg_data, "mesg_data", f);
+        fmt_message_field!(self.channel_number, "channel_number", f);
+        fmt_message_field!(self.data, "data", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -20251,12 +20248,12 @@ pub struct FitMessageAntTx {
 impl fmt::Display for FitMessageAntTx {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAntTx")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
-        fmt_message_field!(self.mesg_id, "mesg_id", false, f)?;
-        fmt_message_field!(self.mesg_data, "mesg_data", false, f)?;
-        fmt_message_field!(self.channel_number, "channel_number", false, f)?;
-        fmt_message_field!(self.data, "data", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", f);
+        fmt_message_field!(self.mesg_id, "mesg_id", f);
+        fmt_message_field!(self.mesg_data, "mesg_data", f);
+        fmt_message_field!(self.channel_number, "channel_number", f);
+        fmt_message_field!(self.data, "data", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -20620,23 +20617,18 @@ pub struct FitMessageAviationAttitude {
 impl fmt::Display for FitMessageAviationAttitude {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageAviationAttitude")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.system_time, "system_time", false, f)?;
-        fmt_message_field!(self.pitch, "pitch", true, f)?;
-        fmt_message_field!(self.roll, "roll", true, f)?;
-        fmt_message_field!(self.accel_lateral, "accel_lateral", true, f)?;
-        fmt_message_field!(self.accel_normal, "accel_normal", true, f)?;
-        fmt_message_field!(self.turn_rate, "turn_rate", true, f)?;
-        fmt_message_field!(self.stage, "stage", false, f)?;
-        fmt_message_field!(
-            self.attitude_stage_complete,
-            "attitude_stage_complete",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.track, "track", true, f)?;
-        fmt_message_field!(self.validity, "validity", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.system_time, "system_time", f);
+        fmt_message_field!(self.pitch, "pitch", f);
+        fmt_message_field!(self.roll, "roll", f);
+        fmt_message_field!(self.accel_lateral, "accel_lateral", f);
+        fmt_message_field!(self.accel_normal, "accel_normal", f);
+        fmt_message_field!(self.turn_rate, "turn_rate", f);
+        fmt_message_field!(self.stage, "stage", f);
+        fmt_message_field!(self.attitude_stage_complete, "attitude_stage_complete", f);
+        fmt_message_field!(self.track, "track", f);
+        fmt_message_field!(self.validity, "validity", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -20941,10 +20933,10 @@ pub struct FitMessageBarometerData {
 impl fmt::Display for FitMessageBarometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBarometerData")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
-        fmt_message_field!(self.baro_pres, "baro_pres", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", f);
+        fmt_message_field!(self.baro_pres, "baro_pres", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -21228,58 +21220,54 @@ pub struct FitMessageBikeProfile {
 impl fmt::Display for FitMessageBikeProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBikeProfile")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.odometer, "odometer", true, f)?;
-        fmt_message_field!(self.bike_spd_ant_id, "bike_spd_ant_id", false, f)?;
-        fmt_message_field!(self.bike_cad_ant_id, "bike_cad_ant_id", false, f)?;
-        fmt_message_field!(self.bike_spdcad_ant_id, "bike_spdcad_ant_id", false, f)?;
-        fmt_message_field!(self.bike_power_ant_id, "bike_power_ant_id", false, f)?;
-        fmt_message_field!(self.custom_wheelsize, "custom_wheelsize", true, f)?;
-        fmt_message_field!(self.auto_wheelsize, "auto_wheelsize", true, f)?;
-        fmt_message_field!(self.bike_weight, "bike_weight", true, f)?;
-        fmt_message_field!(self.power_cal_factor, "power_cal_factor", true, f)?;
-        fmt_message_field!(self.auto_wheel_cal, "auto_wheel_cal", false, f)?;
-        fmt_message_field!(self.auto_power_zero, "auto_power_zero", false, f)?;
-        fmt_message_field!(self.id, "id", false, f)?;
-        fmt_message_field!(self.spd_enabled, "spd_enabled", false, f)?;
-        fmt_message_field!(self.cad_enabled, "cad_enabled", false, f)?;
-        fmt_message_field!(self.spdcad_enabled, "spdcad_enabled", false, f)?;
-        fmt_message_field!(self.power_enabled, "power_enabled", false, f)?;
-        fmt_message_field!(self.crank_length, "crank_length", true, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.odometer, "odometer", f);
+        fmt_message_field!(self.bike_spd_ant_id, "bike_spd_ant_id", f);
+        fmt_message_field!(self.bike_cad_ant_id, "bike_cad_ant_id", f);
+        fmt_message_field!(self.bike_spdcad_ant_id, "bike_spdcad_ant_id", f);
+        fmt_message_field!(self.bike_power_ant_id, "bike_power_ant_id", f);
+        fmt_message_field!(self.custom_wheelsize, "custom_wheelsize", f);
+        fmt_message_field!(self.auto_wheelsize, "auto_wheelsize", f);
+        fmt_message_field!(self.bike_weight, "bike_weight", f);
+        fmt_message_field!(self.power_cal_factor, "power_cal_factor", f);
+        fmt_message_field!(self.auto_wheel_cal, "auto_wheel_cal", f);
+        fmt_message_field!(self.auto_power_zero, "auto_power_zero", f);
+        fmt_message_field!(self.id, "id", f);
+        fmt_message_field!(self.spd_enabled, "spd_enabled", f);
+        fmt_message_field!(self.cad_enabled, "cad_enabled", f);
+        fmt_message_field!(self.spdcad_enabled, "spdcad_enabled", f);
+        fmt_message_field!(self.power_enabled, "power_enabled", f);
+        fmt_message_field!(self.crank_length, "crank_length", f);
+        fmt_message_field!(self.enabled, "enabled", f);
         fmt_message_field!(
             self.bike_spd_ant_id_trans_type,
             "bike_spd_ant_id_trans_type",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.bike_cad_ant_id_trans_type,
             "bike_cad_ant_id_trans_type",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.bike_spdcad_ant_id_trans_type,
             "bike_spdcad_ant_id_trans_type",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.bike_power_ant_id_trans_type,
             "bike_power_ant_id_trans_type",
-            false,
             f
-        )?;
-        fmt_message_field!(self.odometer_rollover, "odometer_rollover", false, f)?;
-        fmt_message_field!(self.front_gear_num, "front_gear_num", false, f)?;
-        fmt_message_field!(self.front_gear, "front_gear", false, f)?;
-        fmt_message_field!(self.rear_gear_num, "rear_gear_num", false, f)?;
-        fmt_message_field!(self.rear_gear, "rear_gear", false, f)?;
-        fmt_message_field!(self.shimano_di2_enabled, "shimano_di2_enabled", false, f)?;
+        );
+        fmt_message_field!(self.odometer_rollover, "odometer_rollover", f);
+        fmt_message_field!(self.front_gear_num, "front_gear_num", f);
+        fmt_message_field!(self.front_gear, "front_gear", f);
+        fmt_message_field!(self.rear_gear_num, "rear_gear_num", f);
+        fmt_message_field!(self.rear_gear, "rear_gear", f);
+        fmt_message_field!(self.shimano_di2_enabled, "shimano_di2_enabled", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -21702,22 +21690,17 @@ pub struct FitMessageBloodPressure {
 impl fmt::Display for FitMessageBloodPressure {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageBloodPressure")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.systolic_pressure, "systolic_pressure", false, f)?;
-        fmt_message_field!(self.diastolic_pressure, "diastolic_pressure", false, f)?;
-        fmt_message_field!(
-            self.mean_arterial_pressure,
-            "mean_arterial_pressure",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.map_3_sample_mean, "map_3_sample_mean", false, f)?;
-        fmt_message_field!(self.map_morning_values, "map_morning_values", false, f)?;
-        fmt_message_field!(self.map_evening_values, "map_evening_values", false, f)?;
-        fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
-        fmt_message_field!(self.heart_rate_type, "heart_rate_type", false, f)?;
-        fmt_message_field!(self.status, "status", false, f)?;
-        fmt_message_field!(self.user_profile_index, "user_profile_index", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.systolic_pressure, "systolic_pressure", f);
+        fmt_message_field!(self.diastolic_pressure, "diastolic_pressure", f);
+        fmt_message_field!(self.mean_arterial_pressure, "mean_arterial_pressure", f);
+        fmt_message_field!(self.map_3_sample_mean, "map_3_sample_mean", f);
+        fmt_message_field!(self.map_morning_values, "map_morning_values", f);
+        fmt_message_field!(self.map_evening_values, "map_evening_values", f);
+        fmt_message_field!(self.heart_rate, "heart_rate", f);
+        fmt_message_field!(self.heart_rate_type, "heart_rate_type", f);
+        fmt_message_field!(self.status, "status", f);
+        fmt_message_field!(self.user_profile_index, "user_profile_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -22015,9 +21998,9 @@ pub struct FitMessageCadenceZone {
 impl fmt::Display for FitMessageCadenceZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCadenceZone")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.high_value, "high_value", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.high_value, "high_value", f);
+        fmt_message_field!(self.name, "name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -22256,11 +22239,11 @@ pub struct FitMessageCameraEvent {
 impl fmt::Display for FitMessageCameraEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCameraEvent")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.camera_event_type, "camera_event_type", false, f)?;
-        fmt_message_field!(self.camera_file_uuid, "camera_file_uuid", false, f)?;
-        fmt_message_field!(self.camera_orientation, "camera_orientation", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.camera_event_type, "camera_event_type", f);
+        fmt_message_field!(self.camera_file_uuid, "camera_file_uuid", f);
+        fmt_message_field!(self.camera_orientation, "camera_orientation", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -22522,15 +22505,10 @@ pub struct FitMessageCapabilities {
 impl fmt::Display for FitMessageCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCapabilities")?;
-        fmt_message_field!(self.languages, "languages", false, f)?;
-        fmt_message_field!(self.sports, "sports", false, f)?;
-        fmt_message_field!(self.workouts_supported, "workouts_supported", false, f)?;
-        fmt_message_field!(
-            self.connectivity_supported,
-            "connectivity_supported",
-            false,
-            f
-        )?;
+        fmt_message_field!(self.languages, "languages", f);
+        fmt_message_field!(self.sports, "sports", f);
+        fmt_message_field!(self.workouts_supported, "workouts_supported", f);
+        fmt_message_field!(self.connectivity_supported, "connectivity_supported", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -22784,59 +22762,35 @@ pub struct FitMessageConnectivity {
 impl fmt::Display for FitMessageConnectivity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageConnectivity")?;
-        fmt_message_field!(self.bluetooth_enabled, "bluetooth_enabled", false, f)?;
-        fmt_message_field!(self.bluetooth_le_enabled, "bluetooth_le_enabled", false, f)?;
-        fmt_message_field!(self.ant_enabled, "ant_enabled", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(
-            self.live_tracking_enabled,
-            "live_tracking_enabled",
-            false,
-            f
-        )?;
+        fmt_message_field!(self.bluetooth_enabled, "bluetooth_enabled", f);
+        fmt_message_field!(self.bluetooth_le_enabled, "bluetooth_le_enabled", f);
+        fmt_message_field!(self.ant_enabled, "ant_enabled", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.live_tracking_enabled, "live_tracking_enabled", f);
         fmt_message_field!(
             self.weather_conditions_enabled,
             "weather_conditions_enabled",
-            false,
             f
-        )?;
-        fmt_message_field!(
-            self.weather_alerts_enabled,
-            "weather_alerts_enabled",
-            false,
-            f
-        )?;
+        );
+        fmt_message_field!(self.weather_alerts_enabled, "weather_alerts_enabled", f);
         fmt_message_field!(
             self.auto_activity_upload_enabled,
             "auto_activity_upload_enabled",
-            false,
             f
-        )?;
-        fmt_message_field!(
-            self.course_download_enabled,
-            "course_download_enabled",
-            false,
-            f
-        )?;
-        fmt_message_field!(
-            self.workout_download_enabled,
-            "workout_download_enabled",
-            false,
-            f
-        )?;
+        );
+        fmt_message_field!(self.course_download_enabled, "course_download_enabled", f);
+        fmt_message_field!(self.workout_download_enabled, "workout_download_enabled", f);
         fmt_message_field!(
             self.gps_ephemeris_download_enabled,
             "gps_ephemeris_download_enabled",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.incident_detection_enabled,
             "incident_detection_enabled",
-            false,
             f
-        )?;
-        fmt_message_field!(self.grouptrack_enabled, "grouptrack_enabled", false, f)?;
+        );
+        fmt_message_field!(self.grouptrack_enabled, "grouptrack_enabled", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -23142,10 +23096,10 @@ pub struct FitMessageCourse {
 impl fmt::Display for FitMessageCourse {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCourse")?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.capabilities, "capabilities", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.capabilities, "capabilities", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -23390,14 +23344,14 @@ pub struct FitMessageCoursePoint {
 impl fmt::Display for FitMessageCoursePoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageCoursePoint")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
-        fmt_message_field!(self.position_long, "position_long", true, f)?;
-        fmt_message_field!(self.distance, "distance", true, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.favorite, "favorite", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.position_lat, "position_lat", f);
+        fmt_message_field!(self.position_long, "position_long", f);
+        fmt_message_field!(self.distance, "distance", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.favorite, "favorite", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -23678,11 +23632,11 @@ pub struct FitMessageDeveloperDataId {
 impl fmt::Display for FitMessageDeveloperDataId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeveloperDataId")?;
-        fmt_message_field!(self.developer_id, "developer_id", false, f)?;
-        fmt_message_field!(self.application_id, "application_id", false, f)?;
-        fmt_message_field!(self.manufacturer_id, "manufacturer_id", false, f)?;
-        fmt_message_field!(self.developer_data_index, "developer_data_index", false, f)?;
-        fmt_message_field!(self.application_version, "application_version", false, f)?;
+        fmt_message_field!(self.developer_id, "developer_id", f);
+        fmt_message_field!(self.application_id, "application_id", f);
+        fmt_message_field!(self.manufacturer_id, "manufacturer_id", f);
+        fmt_message_field!(self.developer_data_index, "developer_data_index", f);
+        fmt_message_field!(self.application_version, "application_version", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -23980,8 +23934,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -24109,39 +24063,34 @@ pub struct FitMessageDeviceInfo {
 impl fmt::Display for FitMessageDeviceInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeviceInfo")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.device_index, "device_index", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.device_index, "device_index", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "device_type_subfield_bytes", self.device_type_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "device_type", self.device_type)?;
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
-        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
+        fmt_message_field!(self.manufacturer, "manufacturer", f);
+        fmt_message_field!(self.serial_number, "serial_number", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "product_subfield_bytes", self.product_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
-        fmt_message_field!(self.software_version, "software_version", true, f)?;
-        fmt_message_field!(self.hardware_version, "hardware_version", false, f)?;
-        fmt_message_field!(self.cum_operating_time, "cum_operating_time", false, f)?;
-        fmt_message_field!(self.battery_voltage, "battery_voltage", true, f)?;
-        fmt_message_field!(self.battery_status, "battery_status", false, f)?;
-        fmt_message_field!(self.sensor_position, "sensor_position", false, f)?;
-        fmt_message_field!(self.descriptor, "descriptor", false, f)?;
-        fmt_message_field!(
-            self.ant_transmission_type,
-            "ant_transmission_type",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.ant_device_number, "ant_device_number", false, f)?;
-        fmt_message_field!(self.ant_network, "ant_network", false, f)?;
-        fmt_message_field!(self.source_type, "source_type", false, f)?;
-        fmt_message_field!(self.product_name, "product_name", false, f)?;
+        fmt_message_field!(self.software_version, "software_version", f);
+        fmt_message_field!(self.hardware_version, "hardware_version", f);
+        fmt_message_field!(self.cum_operating_time, "cum_operating_time", f);
+        fmt_message_field!(self.battery_voltage, "battery_voltage", f);
+        fmt_message_field!(self.battery_status, "battery_status", f);
+        fmt_message_field!(self.sensor_position, "sensor_position", f);
+        fmt_message_field!(self.descriptor, "descriptor", f);
+        fmt_message_field!(self.ant_transmission_type, "ant_transmission_type", f);
+        fmt_message_field!(self.ant_device_number, "ant_device_number", f);
+        fmt_message_field!(self.ant_network, "ant_network", f);
+        fmt_message_field!(self.source_type, "source_type", f);
+        fmt_message_field!(self.product_name, "product_name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -24569,49 +24518,37 @@ pub struct FitMessageDeviceSettings {
 impl fmt::Display for FitMessageDeviceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDeviceSettings")?;
-        fmt_message_field!(self.active_time_zone, "active_time_zone", false, f)?;
-        fmt_message_field!(self.utc_offset, "utc_offset", false, f)?;
-        fmt_message_field!(self.time_offset, "time_offset", false, f)?;
-        fmt_message_field!(self.time_mode, "time_mode", false, f)?;
-        fmt_message_field!(self.time_zone_offset, "time_zone_offset", true, f)?;
-        fmt_message_field!(self.backlight_mode, "backlight_mode", false, f)?;
-        fmt_message_field!(
-            self.activity_tracker_enabled,
-            "activity_tracker_enabled",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.clock_time, "clock_time", false, f)?;
-        fmt_message_field!(self.pages_enabled, "pages_enabled", false, f)?;
-        fmt_message_field!(self.move_alert_enabled, "move_alert_enabled", false, f)?;
-        fmt_message_field!(self.date_mode, "date_mode", false, f)?;
-        fmt_message_field!(self.display_orientation, "display_orientation", false, f)?;
-        fmt_message_field!(self.mounting_side, "mounting_side", false, f)?;
-        fmt_message_field!(self.default_page, "default_page", false, f)?;
-        fmt_message_field!(self.autosync_min_steps, "autosync_min_steps", false, f)?;
-        fmt_message_field!(self.autosync_min_time, "autosync_min_time", false, f)?;
+        fmt_message_field!(self.active_time_zone, "active_time_zone", f);
+        fmt_message_field!(self.utc_offset, "utc_offset", f);
+        fmt_message_field!(self.time_offset, "time_offset", f);
+        fmt_message_field!(self.time_mode, "time_mode", f);
+        fmt_message_field!(self.time_zone_offset, "time_zone_offset", f);
+        fmt_message_field!(self.backlight_mode, "backlight_mode", f);
+        fmt_message_field!(self.activity_tracker_enabled, "activity_tracker_enabled", f);
+        fmt_message_field!(self.clock_time, "clock_time", f);
+        fmt_message_field!(self.pages_enabled, "pages_enabled", f);
+        fmt_message_field!(self.move_alert_enabled, "move_alert_enabled", f);
+        fmt_message_field!(self.date_mode, "date_mode", f);
+        fmt_message_field!(self.display_orientation, "display_orientation", f);
+        fmt_message_field!(self.mounting_side, "mounting_side", f);
+        fmt_message_field!(self.default_page, "default_page", f);
+        fmt_message_field!(self.autosync_min_steps, "autosync_min_steps", f);
+        fmt_message_field!(self.autosync_min_time, "autosync_min_time", f);
         fmt_message_field!(
             self.lactate_threshold_autodetect_enabled,
             "lactate_threshold_autodetect_enabled",
-            false,
             f
-        )?;
-        fmt_message_field!(
-            self.ble_auto_upload_enabled,
-            "ble_auto_upload_enabled",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.auto_sync_frequency, "auto_sync_frequency", false, f)?;
-        fmt_message_field!(self.auto_activity_detect, "auto_activity_detect", false, f)?;
-        fmt_message_field!(self.number_of_screens, "number_of_screens", false, f)?;
+        );
+        fmt_message_field!(self.ble_auto_upload_enabled, "ble_auto_upload_enabled", f);
+        fmt_message_field!(self.auto_sync_frequency, "auto_sync_frequency", f);
+        fmt_message_field!(self.auto_activity_detect, "auto_activity_detect", f);
+        fmt_message_field!(self.number_of_screens, "number_of_screens", f);
         fmt_message_field!(
             self.smart_notification_display_orientation,
             "smart_notification_display_orientation",
-            false,
             f
-        )?;
-        fmt_message_field!(self.tap_interface, "tap_interface", false, f)?;
+        );
+        fmt_message_field!(self.tap_interface, "tap_interface", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -24976,13 +24913,13 @@ pub struct FitMessageDiveAlarm {
 impl fmt::Display for FitMessageDiveAlarm {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveAlarm")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.depth, "depth", true, f)?;
-        fmt_message_field!(self.time, "time", true, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
-        fmt_message_field!(self.alarm_type, "alarm_type", false, f)?;
-        fmt_message_field!(self.sound, "sound", false, f)?;
-        fmt_message_field!(self.dive_types, "dive_types", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.depth, "depth", f);
+        fmt_message_field!(self.time, "time", f);
+        fmt_message_field!(self.enabled, "enabled", f);
+        fmt_message_field!(self.alarm_type, "alarm_type", f);
+        fmt_message_field!(self.sound, "sound", f);
+        fmt_message_field!(self.dive_types, "dive_types", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -25244,10 +25181,10 @@ pub struct FitMessageDiveGas {
 impl fmt::Display for FitMessageDiveGas {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveGas")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.helium_content, "helium_content", false, f)?;
-        fmt_message_field!(self.oxygen_content, "oxygen_content", false, f)?;
-        fmt_message_field!(self.status, "status", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.helium_content, "helium_content", f);
+        fmt_message_field!(self.oxygen_content, "oxygen_content", f);
+        fmt_message_field!(self.status, "status", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -25477,8 +25414,8 @@ impl FitRecord for FitMessageDiveGas {
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
-    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
     HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
+    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
 }
 
 impl FitMessageDiveSettingsSubfieldHeartRateSource {
@@ -25579,37 +25516,27 @@ pub struct FitMessageDiveSettings {
 impl fmt::Display for FitMessageDiveSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveSettings")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.model, "model", false, f)?;
-        fmt_message_field!(self.gf_low, "gf_low", false, f)?;
-        fmt_message_field!(self.gf_high, "gf_high", false, f)?;
-        fmt_message_field!(self.water_type, "water_type", false, f)?;
-        fmt_message_field!(self.water_density, "water_density", false, f)?;
-        fmt_message_field!(self.po2_warn, "po2_warn", true, f)?;
-        fmt_message_field!(self.po2_critical, "po2_critical", true, f)?;
-        fmt_message_field!(self.po2_deco, "po2_deco", true, f)?;
-        fmt_message_field!(self.safety_stop_enabled, "safety_stop_enabled", false, f)?;
-        fmt_message_field!(self.bottom_depth, "bottom_depth", false, f)?;
-        fmt_message_field!(self.bottom_time, "bottom_time", false, f)?;
-        fmt_message_field!(
-            self.apnea_countdown_enabled,
-            "apnea_countdown_enabled",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.apnea_countdown_time, "apnea_countdown_time", false, f)?;
-        fmt_message_field!(self.backlight_mode, "backlight_mode", false, f)?;
-        fmt_message_field!(self.backlight_brightness, "backlight_brightness", false, f)?;
-        fmt_message_field!(self.backlight_timeout, "backlight_timeout", false, f)?;
-        fmt_message_field!(self.repeat_dive_interval, "repeat_dive_interval", true, f)?;
-        fmt_message_field!(self.safety_stop_time, "safety_stop_time", true, f)?;
-        fmt_message_field!(
-            self.heart_rate_source_type,
-            "heart_rate_source_type",
-            false,
-            f
-        )?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.model, "model", f);
+        fmt_message_field!(self.gf_low, "gf_low", f);
+        fmt_message_field!(self.gf_high, "gf_high", f);
+        fmt_message_field!(self.water_type, "water_type", f);
+        fmt_message_field!(self.water_density, "water_density", f);
+        fmt_message_field!(self.po2_warn, "po2_warn", f);
+        fmt_message_field!(self.po2_critical, "po2_critical", f);
+        fmt_message_field!(self.po2_deco, "po2_deco", f);
+        fmt_message_field!(self.safety_stop_enabled, "safety_stop_enabled", f);
+        fmt_message_field!(self.bottom_depth, "bottom_depth", f);
+        fmt_message_field!(self.bottom_time, "bottom_time", f);
+        fmt_message_field!(self.apnea_countdown_enabled, "apnea_countdown_enabled", f);
+        fmt_message_field!(self.apnea_countdown_time, "apnea_countdown_time", f);
+        fmt_message_field!(self.backlight_mode, "backlight_mode", f);
+        fmt_message_field!(self.backlight_brightness, "backlight_brightness", f);
+        fmt_message_field!(self.backlight_timeout, "backlight_timeout", f);
+        fmt_message_field!(self.repeat_dive_interval, "repeat_dive_interval", f);
+        fmt_message_field!(self.safety_stop_time, "safety_stop_time", f);
+        fmt_message_field!(self.heart_rate_source_type, "heart_rate_source_type", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -26039,19 +25966,19 @@ pub struct FitMessageDiveSummary {
 impl fmt::Display for FitMessageDiveSummary {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageDiveSummary")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.reference_mesg, "reference_mesg", false, f)?;
-        fmt_message_field!(self.reference_index, "reference_index", false, f)?;
-        fmt_message_field!(self.avg_depth, "avg_depth", true, f)?;
-        fmt_message_field!(self.max_depth, "max_depth", true, f)?;
-        fmt_message_field!(self.surface_interval, "surface_interval", true, f)?;
-        fmt_message_field!(self.start_cns, "start_cns", true, f)?;
-        fmt_message_field!(self.end_cns, "end_cns", true, f)?;
-        fmt_message_field!(self.start_n2, "start_n2", true, f)?;
-        fmt_message_field!(self.end_n2, "end_n2", true, f)?;
-        fmt_message_field!(self.o2_toxicity, "o2_toxicity", false, f)?;
-        fmt_message_field!(self.dive_number, "dive_number", false, f)?;
-        fmt_message_field!(self.bottom_time, "bottom_time", true, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.reference_mesg, "reference_mesg", f);
+        fmt_message_field!(self.reference_index, "reference_index", f);
+        fmt_message_field!(self.avg_depth, "avg_depth", f);
+        fmt_message_field!(self.max_depth, "max_depth", f);
+        fmt_message_field!(self.surface_interval, "surface_interval", f);
+        fmt_message_field!(self.start_cns, "start_cns", f);
+        fmt_message_field!(self.end_cns, "end_cns", f);
+        fmt_message_field!(self.start_n2, "start_n2", f);
+        fmt_message_field!(self.end_n2, "end_n2", f);
+        fmt_message_field!(self.o2_toxicity, "o2_toxicity", f);
+        fmt_message_field!(self.dive_number, "dive_number", f);
+        fmt_message_field!(self.bottom_time, "bottom_time", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -26347,26 +26274,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    CommTimeout(FitFieldCommTimeoutType),
-    SportPoint(FitUint32),
     DistanceDurationAlert(FitFloat64),
-    BatteryLevel(FitFloat64),
-    TimeDurationAlert(FitFloat64),
-    HrHighAlert(FitUint8),
-    CoursePointIndex(FitFieldMessageIndex),
     CadHighAlert(FitUint16),
+    PowerLowAlert(FitUint16),
+    BatteryLevel(FitFloat64),
+    PowerHighAlert(FitUint16),
+    VirtualPartnerSpeed(FitFloat64),
+    CoursePointIndex(FitFieldMessageIndex),
+    CadLowAlert(FitUint16),
+    TimerTrigger(FitFieldTimerTrigger),
+    TimeDurationAlert(FitFloat64),
+    SportPoint(FitUint32),
     FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    RiderPosition(FitFieldRiderPositionType),
+    CommTimeout(FitFieldCommTimeoutType),
+    CalorieDurationAlert(FitUint32),
+    SpeedHighAlert(FitFloat64),
+    SpeedLowAlert(FitFloat64),
+    HrHighAlert(FitUint8),
     HrLowAlert(FitUint8),
     GearChangeData(FitUint32),
-    VirtualPartnerSpeed(FitFloat64),
-    CadLowAlert(FitUint16),
-    RiderPosition(FitFieldRiderPositionType),
-    TimerTrigger(FitFieldTimerTrigger),
-    PowerLowAlert(FitUint16),
-    PowerHighAlert(FitUint16),
-    CalorieDurationAlert(FitUint32),
-    SpeedLowAlert(FitFloat64),
-    SpeedHighAlert(FitFloat64),
 }
 
 impl FitMessageEventSubfieldData {
@@ -26857,24 +26784,24 @@ pub struct FitMessageEvent {
 impl fmt::Display for FitMessageEvent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageEvent")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.event, "event", false, f)?;
-        fmt_message_field!(self.event_type, "event_type", false, f)?;
-        fmt_message_field!(self.data16, "data16", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.event, "event", f);
+        fmt_message_field!(self.event_type, "event_type", f);
+        fmt_message_field!(self.data16, "data16", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "data_subfield_bytes", self.data_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "data", self.data)?;
-        fmt_message_field!(self.event_group, "event_group", false, f)?;
-        fmt_message_field!(self.score, "score", false, f)?;
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
-        fmt_message_field!(self.front_gear_num, "front_gear_num", false, f)?;
-        fmt_message_field!(self.front_gear, "front_gear", false, f)?;
-        fmt_message_field!(self.rear_gear_num, "rear_gear_num", false, f)?;
-        fmt_message_field!(self.rear_gear, "rear_gear", false, f)?;
-        fmt_message_field!(self.device_index, "device_index", false, f)?;
+        fmt_message_field!(self.event_group, "event_group", f);
+        fmt_message_field!(self.score, "score", f);
+        fmt_message_field!(self.opponent_score, "opponent_score", f);
+        fmt_message_field!(self.front_gear_num, "front_gear_num", f);
+        fmt_message_field!(self.front_gear, "front_gear", f);
+        fmt_message_field!(self.rear_gear_num, "rear_gear_num", f);
+        fmt_message_field!(self.rear_gear, "rear_gear", f);
+        fmt_message_field!(self.device_index, "device_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -27255,17 +27182,17 @@ pub struct FitMessageExdDataConceptConfiguration {
 impl fmt::Display for FitMessageExdDataConceptConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdDataConceptConfiguration")?;
-        fmt_message_field!(self.screen_index, "screen_index", false, f)?;
-        fmt_message_field!(self.concept_field, "concept_field", false, f)?;
-        fmt_message_field!(self.field_id, "field_id", false, f)?;
-        fmt_message_field!(self.concept_index, "concept_index", false, f)?;
-        fmt_message_field!(self.data_page, "data_page", false, f)?;
-        fmt_message_field!(self.concept_key, "concept_key", false, f)?;
-        fmt_message_field!(self.scaling, "scaling", false, f)?;
-        fmt_message_field!(self.data_units, "data_units", false, f)?;
-        fmt_message_field!(self.qualifier, "qualifier", false, f)?;
-        fmt_message_field!(self.descriptor, "descriptor", false, f)?;
-        fmt_message_field!(self.is_signed, "is_signed", false, f)?;
+        fmt_message_field!(self.screen_index, "screen_index", f);
+        fmt_message_field!(self.concept_field, "concept_field", f);
+        fmt_message_field!(self.field_id, "field_id", f);
+        fmt_message_field!(self.concept_index, "concept_index", f);
+        fmt_message_field!(self.data_page, "data_page", f);
+        fmt_message_field!(self.concept_key, "concept_key", f);
+        fmt_message_field!(self.scaling, "scaling", f);
+        fmt_message_field!(self.data_units, "data_units", f);
+        fmt_message_field!(self.qualifier, "qualifier", f);
+        fmt_message_field!(self.descriptor, "descriptor", f);
+        fmt_message_field!(self.is_signed, "is_signed", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -27574,12 +27501,12 @@ pub struct FitMessageExdDataFieldConfiguration {
 impl fmt::Display for FitMessageExdDataFieldConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdDataFieldConfiguration")?;
-        fmt_message_field!(self.screen_index, "screen_index", false, f)?;
-        fmt_message_field!(self.concept_field, "concept_field", false, f)?;
-        fmt_message_field!(self.field_id, "field_id", false, f)?;
-        fmt_message_field!(self.concept_count, "concept_count", false, f)?;
-        fmt_message_field!(self.display_type, "display_type", false, f)?;
-        fmt_message_field!(self.title, "title", false, f)?;
+        fmt_message_field!(self.screen_index, "screen_index", f);
+        fmt_message_field!(self.concept_field, "concept_field", f);
+        fmt_message_field!(self.field_id, "field_id", f);
+        fmt_message_field!(self.concept_count, "concept_count", f);
+        fmt_message_field!(self.display_type, "display_type", f);
+        fmt_message_field!(self.title, "title", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -27856,10 +27783,10 @@ pub struct FitMessageExdScreenConfiguration {
 impl fmt::Display for FitMessageExdScreenConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExdScreenConfiguration")?;
-        fmt_message_field!(self.screen_index, "screen_index", false, f)?;
-        fmt_message_field!(self.field_count, "field_count", false, f)?;
-        fmt_message_field!(self.layout, "layout", false, f)?;
-        fmt_message_field!(self.screen_enabled, "screen_enabled", false, f)?;
+        fmt_message_field!(self.screen_index, "screen_index", f);
+        fmt_message_field!(self.field_count, "field_count", f);
+        fmt_message_field!(self.layout, "layout", f);
+        fmt_message_field!(self.screen_enabled, "screen_enabled", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -28103,10 +28030,10 @@ pub struct FitMessageExerciseTitle {
 impl fmt::Display for FitMessageExerciseTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageExerciseTitle")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.exercise_category, "exercise_category", false, f)?;
-        fmt_message_field!(self.exercise_name, "exercise_name", false, f)?;
-        fmt_message_field!(self.wkt_step_name, "wkt_step_name", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.exercise_category, "exercise_category", f);
+        fmt_message_field!(self.exercise_name, "exercise_name", f);
+        fmt_message_field!(self.wkt_step_name, "wkt_step_name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -28351,11 +28278,11 @@ pub struct FitMessageFieldCapabilities {
 impl fmt::Display for FitMessageFieldCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFieldCapabilities")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.file, "file", false, f)?;
-        fmt_message_field!(self.mesg_num, "mesg_num", false, f)?;
-        fmt_message_field!(self.field_num, "field_num", false, f)?;
-        fmt_message_field!(self.count, "count", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.file, "file", f);
+        fmt_message_field!(self.mesg_num, "mesg_num", f);
+        fmt_message_field!(self.field_num, "field_num", f);
+        fmt_message_field!(self.count, "count", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -28615,25 +28542,20 @@ pub struct FitMessageFieldDescription {
 impl fmt::Display for FitMessageFieldDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFieldDescription")?;
-        fmt_message_field!(self.developer_data_index, "developer_data_index", false, f)?;
-        fmt_message_field!(
-            self.field_definition_number,
-            "field_definition_number",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.fit_base_type_id, "fit_base_type_id", false, f)?;
-        fmt_message_field!(self.field_name, "field_name", false, f)?;
-        fmt_message_field!(self.array, "array", false, f)?;
-        fmt_message_field!(self.components, "components", false, f)?;
-        fmt_message_field!(self.scale, "scale", false, f)?;
-        fmt_message_field!(self.offset, "offset", false, f)?;
-        fmt_message_field!(self.units, "units", false, f)?;
-        fmt_message_field!(self.bits, "bits", false, f)?;
-        fmt_message_field!(self.accumulate, "accumulate", false, f)?;
-        fmt_message_field!(self.fit_base_unit_id, "fit_base_unit_id", false, f)?;
-        fmt_message_field!(self.native_mesg_num, "native_mesg_num", false, f)?;
-        fmt_message_field!(self.native_field_num, "native_field_num", false, f)?;
+        fmt_message_field!(self.developer_data_index, "developer_data_index", f);
+        fmt_message_field!(self.field_definition_number, "field_definition_number", f);
+        fmt_message_field!(self.fit_base_type_id, "fit_base_type_id", f);
+        fmt_message_field!(self.field_name, "field_name", f);
+        fmt_message_field!(self.array, "array", f);
+        fmt_message_field!(self.components, "components", f);
+        fmt_message_field!(self.scale, "scale", f);
+        fmt_message_field!(self.offset, "offset", f);
+        fmt_message_field!(self.units, "units", f);
+        fmt_message_field!(self.bits, "bits", f);
+        fmt_message_field!(self.accumulate, "accumulate", f);
+        fmt_message_field!(self.fit_base_unit_id, "fit_base_unit_id", f);
+        fmt_message_field!(self.native_mesg_num, "native_mesg_num", f);
+        fmt_message_field!(self.native_field_num, "native_field_num", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -28940,12 +28862,12 @@ pub struct FitMessageFileCapabilities {
 impl fmt::Display for FitMessageFileCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileCapabilities")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.flags, "flags", false, f)?;
-        fmt_message_field!(self.directory, "directory", false, f)?;
-        fmt_message_field!(self.max_count, "max_count", false, f)?;
-        fmt_message_field!(self.max_size, "max_size", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.flags, "flags", f);
+        fmt_message_field!(self.directory, "directory", f);
+        fmt_message_field!(self.max_count, "max_count", f);
+        fmt_message_field!(self.max_size, "max_size", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -29199,8 +29121,8 @@ pub struct FitMessageFileCreator {
 impl fmt::Display for FitMessageFileCreator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileCreator")?;
-        fmt_message_field!(self.software_version, "software_version", false, f)?;
-        fmt_message_field!(self.hardware_version, "hardware_version", false, f)?;
+        fmt_message_field!(self.software_version, "software_version", f);
+        fmt_message_field!(self.hardware_version, "hardware_version", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -29418,8 +29340,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -29535,18 +29457,18 @@ pub struct FitMessageFileId {
 impl fmt::Display for FitMessageFileId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageFileId")?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.manufacturer, "manufacturer", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "product_subfield_bytes", self.product_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
-        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
-        fmt_message_field!(self.time_created, "time_created", false, f)?;
-        fmt_message_field!(self.number, "number", false, f)?;
-        fmt_message_field!(self.product_name, "product_name", false, f)?;
+        fmt_message_field!(self.serial_number, "serial_number", f);
+        fmt_message_field!(self.time_created, "time_created", f);
+        fmt_message_field!(self.number, "number", f);
+        fmt_message_field!(self.product_name, "product_name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -29870,19 +29792,19 @@ pub struct FitMessageGoal {
 impl fmt::Display for FitMessageGoal {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGoal")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.start_date, "start_date", false, f)?;
-        fmt_message_field!(self.end_date, "end_date", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.value, "value", false, f)?;
-        fmt_message_field!(self.repeat, "repeat", false, f)?;
-        fmt_message_field!(self.target_value, "target_value", false, f)?;
-        fmt_message_field!(self.recurrence, "recurrence", false, f)?;
-        fmt_message_field!(self.recurrence_value, "recurrence_value", false, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
-        fmt_message_field!(self.source, "source", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.start_date, "start_date", f);
+        fmt_message_field!(self.end_date, "end_date", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.value, "value", f);
+        fmt_message_field!(self.repeat, "repeat", f);
+        fmt_message_field!(self.target_value, "target_value", f);
+        fmt_message_field!(self.recurrence, "recurrence", f);
+        fmt_message_field!(self.recurrence_value, "recurrence_value", f);
+        fmt_message_field!(self.enabled, "enabled", f);
+        fmt_message_field!(self.source, "source", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -30179,15 +30101,15 @@ pub struct FitMessageGpsMetadata {
 impl fmt::Display for FitMessageGpsMetadata {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGpsMetadata")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
-        fmt_message_field!(self.position_long, "position_long", true, f)?;
-        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", true, f)?;
-        fmt_message_field!(self.enhanced_speed, "enhanced_speed", true, f)?;
-        fmt_message_field!(self.heading, "heading", true, f)?;
-        fmt_message_field!(self.utc_timestamp, "utc_timestamp", false, f)?;
-        fmt_message_field!(self.velocity, "velocity", true, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.position_lat, "position_lat", f);
+        fmt_message_field!(self.position_long, "position_long", f);
+        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", f);
+        fmt_message_field!(self.enhanced_speed, "enhanced_speed", f);
+        fmt_message_field!(self.heading, "heading", f);
+        fmt_message_field!(self.utc_timestamp, "utc_timestamp", f);
+        fmt_message_field!(self.velocity, "velocity", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -30478,15 +30400,15 @@ pub struct FitMessageGyroscopeData {
 impl fmt::Display for FitMessageGyroscopeData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageGyroscopeData")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
-        fmt_message_field!(self.gyro_x, "gyro_x", false, f)?;
-        fmt_message_field!(self.gyro_y, "gyro_y", false, f)?;
-        fmt_message_field!(self.gyro_z, "gyro_z", false, f)?;
-        fmt_message_field!(self.calibrated_gyro_x, "calibrated_gyro_x", false, f)?;
-        fmt_message_field!(self.calibrated_gyro_y, "calibrated_gyro_y", false, f)?;
-        fmt_message_field!(self.calibrated_gyro_z, "calibrated_gyro_z", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", f);
+        fmt_message_field!(self.gyro_x, "gyro_x", f);
+        fmt_message_field!(self.gyro_y, "gyro_y", f);
+        fmt_message_field!(self.gyro_z, "gyro_z", f);
+        fmt_message_field!(self.calibrated_gyro_x, "calibrated_gyro_x", f);
+        fmt_message_field!(self.calibrated_gyro_y, "calibrated_gyro_y", f);
+        fmt_message_field!(self.calibrated_gyro_z, "calibrated_gyro_z", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -30774,12 +30696,12 @@ pub struct FitMessageHr {
 impl fmt::Display for FitMessageHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHr")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
-        fmt_message_field!(self.time256, "time256", true, f)?;
-        fmt_message_field!(self.filtered_bpm, "filtered_bpm", false, f)?;
-        fmt_message_field!(self.event_timestamp, "event_timestamp", true, f)?;
-        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", f);
+        fmt_message_field!(self.time256, "time256", f);
+        fmt_message_field!(self.filtered_bpm, "filtered_bpm", f);
+        fmt_message_field!(self.event_timestamp, "event_timestamp", f);
+        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -31154,9 +31076,9 @@ pub struct FitMessageHrZone {
 impl fmt::Display for FitMessageHrZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrZone")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.high_bpm, "high_bpm", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.high_bpm, "high_bpm", f);
+        fmt_message_field!(self.name, "name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -31392,16 +31314,11 @@ pub struct FitMessageHrmProfile {
 impl fmt::Display for FitMessageHrmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrmProfile")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
-        fmt_message_field!(self.hrm_ant_id, "hrm_ant_id", false, f)?;
-        fmt_message_field!(self.log_hrv, "log_hrv", false, f)?;
-        fmt_message_field!(
-            self.hrm_ant_id_trans_type,
-            "hrm_ant_id_trans_type",
-            false,
-            f
-        )?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.enabled, "enabled", f);
+        fmt_message_field!(self.hrm_ant_id, "hrm_ant_id", f);
+        fmt_message_field!(self.log_hrv, "log_hrv", f);
+        fmt_message_field!(self.hrm_ant_id_trans_type, "hrm_ant_id_trans_type", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -31649,7 +31566,7 @@ pub struct FitMessageHrv {
 impl fmt::Display for FitMessageHrv {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHrv")?;
-        fmt_message_field!(self.time, "time", true, f)?;
+        fmt_message_field!(self.time, "time", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -32122,30 +32039,30 @@ pub struct FitMessageLap {
 impl fmt::Display for FitMessageLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageLap")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.event, "event", false, f)?;
-        fmt_message_field!(self.event_type, "event_type", false, f)?;
-        fmt_message_field!(self.start_time, "start_time", false, f)?;
-        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f)?;
-        fmt_message_field!(self.start_position_long, "start_position_long", true, f)?;
-        fmt_message_field!(self.end_position_lat, "end_position_lat", true, f)?;
-        fmt_message_field!(self.end_position_long, "end_position_long", true, f)?;
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
-        fmt_message_field!(self.total_distance, "total_distance", true, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.event, "event", f);
+        fmt_message_field!(self.event_type, "event_type", f);
+        fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", f);
+        fmt_message_field!(self.start_position_long, "start_position_long", f);
+        fmt_message_field!(self.end_position_lat, "end_position_lat", f);
+        fmt_message_field!(self.end_position_long, "end_position_long", f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", f);
+        fmt_message_field!(self.total_distance, "total_distance", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles", self.total_cycles)?;
-        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
-        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f)?;
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
-        fmt_message_field!(self.max_speed, "max_speed", true, f)?;
-        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f)?;
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
+        fmt_message_field!(self.total_calories, "total_calories", f);
+        fmt_message_field!(self.total_fat_calories, "total_fat_calories", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
+        fmt_message_field!(self.max_speed, "max_speed", f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -32158,211 +32075,143 @@ impl fmt::Display for FitMessageLap {
             "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "max_cadence", self.max_cadence)?;
-        fmt_message_field!(self.avg_power, "avg_power", false, f)?;
-        fmt_message_field!(self.max_power, "max_power", false, f)?;
-        fmt_message_field!(self.total_ascent, "total_ascent", false, f)?;
-        fmt_message_field!(self.total_descent, "total_descent", false, f)?;
-        fmt_message_field!(self.intensity, "intensity", false, f)?;
-        fmt_message_field!(self.lap_trigger, "lap_trigger", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.event_group, "event_group", false, f)?;
-        fmt_message_field!(self.num_lengths, "num_lengths", false, f)?;
-        fmt_message_field!(self.normalized_power, "normalized_power", false, f)?;
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
-        fmt_message_field!(self.first_length_index, "first_length_index", false, f)?;
-        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", true, f)?;
-        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.num_active_lengths, "num_active_lengths", false, f)?;
-        fmt_message_field!(self.total_work, "total_work", false, f)?;
-        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f)?;
-        fmt_message_field!(self.max_altitude, "max_altitude", true, f)?;
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
-        fmt_message_field!(self.avg_grade, "avg_grade", true, f)?;
-        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f)?;
-        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f)?;
-        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f)?;
-        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f)?;
-        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f)?;
-        fmt_message_field!(self.max_temperature, "max_temperature", false, f)?;
-        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f)?;
-        fmt_message_field!(
-            self.avg_pos_vertical_speed,
-            "avg_pos_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.avg_neg_vertical_speed,
-            "avg_neg_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_pos_vertical_speed,
-            "max_pos_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_neg_vertical_speed,
-            "max_neg_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f)?;
-        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f)?;
-        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f)?;
-        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f)?;
-        fmt_message_field!(self.repetition_num, "repetition_num", false, f)?;
-        fmt_message_field!(self.min_altitude, "min_altitude", true, f)?;
-        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f)?;
-        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f)?;
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
-        fmt_message_field!(self.stroke_count, "stroke_count", false, f)?;
-        fmt_message_field!(self.zone_count, "zone_count", false, f)?;
-        fmt_message_field!(
-            self.avg_vertical_oscillation,
-            "avg_vertical_oscillation",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.avg_stance_time_percent,
-            "avg_stance_time_percent",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.avg_stance_time, "avg_stance_time", true, f)?;
-        fmt_message_field!(
-            self.avg_fractional_cadence,
-            "avg_fractional_cadence",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_fractional_cadence,
-            "max_fractional_cadence",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.total_fractional_cycles,
-            "total_fractional_cycles",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.player_score, "player_score", false, f)?;
+        fmt_message_field!(self.avg_power, "avg_power", f);
+        fmt_message_field!(self.max_power, "max_power", f);
+        fmt_message_field!(self.total_ascent, "total_ascent", f);
+        fmt_message_field!(self.total_descent, "total_descent", f);
+        fmt_message_field!(self.intensity, "intensity", f);
+        fmt_message_field!(self.lap_trigger, "lap_trigger", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.event_group, "event_group", f);
+        fmt_message_field!(self.num_lengths, "num_lengths", f);
+        fmt_message_field!(self.normalized_power, "normalized_power", f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", f);
+        fmt_message_field!(self.first_length_index, "first_length_index", f);
+        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", f);
+        fmt_message_field!(self.swim_stroke, "swim_stroke", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.num_active_lengths, "num_active_lengths", f);
+        fmt_message_field!(self.total_work, "total_work", f);
+        fmt_message_field!(self.avg_altitude, "avg_altitude", f);
+        fmt_message_field!(self.max_altitude, "max_altitude", f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", f);
+        fmt_message_field!(self.avg_grade, "avg_grade", f);
+        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", f);
+        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", f);
+        fmt_message_field!(self.max_pos_grade, "max_pos_grade", f);
+        fmt_message_field!(self.max_neg_grade, "max_neg_grade", f);
+        fmt_message_field!(self.avg_temperature, "avg_temperature", f);
+        fmt_message_field!(self.max_temperature, "max_temperature", f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", f);
+        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", f);
+        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", f);
+        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", f);
+        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", f);
+        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", f);
+        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", f);
+        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", f);
+        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", f);
+        fmt_message_field!(self.repetition_num, "repetition_num", f);
+        fmt_message_field!(self.min_altitude, "min_altitude", f);
+        fmt_message_field!(self.min_heart_rate, "min_heart_rate", f);
+        fmt_message_field!(self.wkt_step_index, "wkt_step_index", f);
+        fmt_message_field!(self.opponent_score, "opponent_score", f);
+        fmt_message_field!(self.stroke_count, "stroke_count", f);
+        fmt_message_field!(self.zone_count, "zone_count", f);
+        fmt_message_field!(self.avg_vertical_oscillation, "avg_vertical_oscillation", f);
+        fmt_message_field!(self.avg_stance_time_percent, "avg_stance_time_percent", f);
+        fmt_message_field!(self.avg_stance_time, "avg_stance_time", f);
+        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", f);
+        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", f);
+        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", f);
+        fmt_message_field!(self.player_score, "player_score", f);
         fmt_message_field!(
             self.avg_total_hemoglobin_conc,
             "avg_total_hemoglobin_conc",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.min_total_hemoglobin_conc,
             "min_total_hemoglobin_conc",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.max_total_hemoglobin_conc,
             "max_total_hemoglobin_conc",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_saturated_hemoglobin_percent,
             "avg_saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.min_saturated_hemoglobin_percent,
             "min_saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.max_saturated_hemoglobin_percent,
             "max_saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_left_torque_effectiveness,
             "avg_left_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_right_torque_effectiveness,
             "avg_right_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_left_pedal_smoothness,
             "avg_left_pedal_smoothness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_right_pedal_smoothness,
             "avg_right_pedal_smoothness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_combined_pedal_smoothness,
             "avg_combined_pedal_smoothness",
-            true,
             f
-        )?;
-        fmt_message_field!(self.time_standing, "time_standing", true, f)?;
-        fmt_message_field!(self.stand_count, "stand_count", false, f)?;
-        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f)?;
-        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f)?;
-        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f)?;
+        );
+        fmt_message_field!(self.time_standing, "time_standing", f);
+        fmt_message_field!(self.stand_count, "stand_count", f);
+        fmt_message_field!(self.avg_left_pco, "avg_left_pco", f);
+        fmt_message_field!(self.avg_right_pco, "avg_right_pco", f);
+        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", f);
         fmt_message_field!(
             self.avg_left_power_phase_peak,
             "avg_left_power_phase_peak",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f)?;
+        );
+        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", f);
         fmt_message_field!(
             self.avg_right_power_phase_peak,
             "avg_right_power_phase_peak",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f)?;
-        fmt_message_field!(self.max_power_position, "max_power_position", false, f)?;
-        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f)?;
-        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f)?;
-        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", true, f)?;
-        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", true, f)?;
-        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", true, f)?;
-        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", true, f)?;
-        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", true, f)?;
-        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", false, f)?;
-        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", false, f)?;
-        fmt_message_field!(
-            self.lev_battery_consumption,
-            "lev_battery_consumption",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", true, f)?;
-        fmt_message_field!(
-            self.avg_stance_time_balance,
-            "avg_stance_time_balance",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.avg_step_length, "avg_step_length", true, f)?;
-        fmt_message_field!(self.avg_vam, "avg_vam", true, f)?;
+        );
+        fmt_message_field!(self.avg_power_position, "avg_power_position", f);
+        fmt_message_field!(self.max_power_position, "max_power_position", f);
+        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", f);
+        fmt_message_field!(self.max_cadence_position, "max_cadence_position", f);
+        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", f);
+        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", f);
+        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", f);
+        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", f);
+        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", f);
+        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", f);
+        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", f);
+        fmt_message_field!(self.lev_battery_consumption, "lev_battery_consumption", f);
+        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", f);
+        fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", f);
+        fmt_message_field!(self.avg_step_length, "avg_step_length", f);
+        fmt_message_field!(self.avg_vam, "avg_vam", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -33505,24 +33354,24 @@ pub struct FitMessageLength {
 impl fmt::Display for FitMessageLength {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageLength")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.event, "event", false, f)?;
-        fmt_message_field!(self.event_type, "event_type", false, f)?;
-        fmt_message_field!(self.start_time, "start_time", false, f)?;
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
-        fmt_message_field!(self.total_strokes, "total_strokes", false, f)?;
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
-        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f)?;
-        fmt_message_field!(self.avg_swimming_cadence, "avg_swimming_cadence", false, f)?;
-        fmt_message_field!(self.event_group, "event_group", false, f)?;
-        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
-        fmt_message_field!(self.length_type, "length_type", false, f)?;
-        fmt_message_field!(self.player_score, "player_score", false, f)?;
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
-        fmt_message_field!(self.stroke_count, "stroke_count", false, f)?;
-        fmt_message_field!(self.zone_count, "zone_count", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.event, "event", f);
+        fmt_message_field!(self.event_type, "event_type", f);
+        fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", f);
+        fmt_message_field!(self.total_strokes, "total_strokes", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
+        fmt_message_field!(self.swim_stroke, "swim_stroke", f);
+        fmt_message_field!(self.avg_swimming_cadence, "avg_swimming_cadence", f);
+        fmt_message_field!(self.event_group, "event_group", f);
+        fmt_message_field!(self.total_calories, "total_calories", f);
+        fmt_message_field!(self.length_type, "length_type", f);
+        fmt_message_field!(self.player_score, "player_score", f);
+        fmt_message_field!(self.opponent_score, "opponent_score", f);
+        fmt_message_field!(self.stroke_count, "stroke_count", f);
+        fmt_message_field!(self.zone_count, "zone_count", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -33864,15 +33713,15 @@ pub struct FitMessageMagnetometerData {
 impl fmt::Display for FitMessageMagnetometerData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMagnetometerData")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.sample_time_offset, "sample_time_offset", false, f)?;
-        fmt_message_field!(self.mag_x, "mag_x", false, f)?;
-        fmt_message_field!(self.mag_y, "mag_y", false, f)?;
-        fmt_message_field!(self.mag_z, "mag_z", false, f)?;
-        fmt_message_field!(self.calibrated_mag_x, "calibrated_mag_x", false, f)?;
-        fmt_message_field!(self.calibrated_mag_y, "calibrated_mag_y", false, f)?;
-        fmt_message_field!(self.calibrated_mag_z, "calibrated_mag_z", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sample_time_offset, "sample_time_offset", f);
+        fmt_message_field!(self.mag_x, "mag_x", f);
+        fmt_message_field!(self.mag_y, "mag_y", f);
+        fmt_message_field!(self.mag_z, "mag_z", f);
+        fmt_message_field!(self.calibrated_mag_x, "calibrated_mag_x", f);
+        fmt_message_field!(self.calibrated_mag_y, "calibrated_mag_y", f);
+        fmt_message_field!(self.calibrated_mag_z, "calibrated_mag_z", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -34158,10 +34007,10 @@ pub struct FitMessageMemoGlob {
 impl fmt::Display for FitMessageMemoGlob {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMemoGlob")?;
-        fmt_message_field!(self.part_index, "part_index", false, f)?;
-        fmt_message_field!(self.memo, "memo", false, f)?;
-        fmt_message_field!(self.message_number, "message_number", false, f)?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
+        fmt_message_field!(self.part_index, "part_index", f);
+        fmt_message_field!(self.memo, "memo", f);
+        fmt_message_field!(self.message_number, "message_number", f);
+        fmt_message_field!(self.message_index, "message_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -34391,9 +34240,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
+    NumPerFile(FitUint16),
     MaxPerFile(FitUint16),
     MaxPerFileType(FitUint16),
-    NumPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -34489,10 +34338,10 @@ pub struct FitMessageMesgCapabilities {
 impl fmt::Display for FitMessageMesgCapabilities {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMesgCapabilities")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.file, "file", false, f)?;
-        fmt_message_field!(self.mesg_num, "mesg_num", false, f)?;
-        fmt_message_field!(self.count_type, "count_type", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.file, "file", f);
+        fmt_message_field!(self.mesg_num, "mesg_num", f);
+        fmt_message_field!(self.count_type, "count_type", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -34804,10 +34653,10 @@ pub struct FitMessageMetZone {
 impl fmt::Display for FitMessageMetZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMetZone")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.high_bpm, "high_bpm", false, f)?;
-        fmt_message_field!(self.calories, "calories", true, f)?;
-        fmt_message_field!(self.fat_calories, "fat_calories", true, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.high_bpm, "high_bpm", f);
+        fmt_message_field!(self.calories, "calories", f);
+        fmt_message_field!(self.fat_calories, "fat_calories", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -35170,55 +35019,52 @@ pub struct FitMessageMonitoring {
 impl fmt::Display for FitMessageMonitoring {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMonitoring")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.device_index, "device_index", false, f)?;
-        fmt_message_field!(self.calories, "calories", false, f)?;
-        fmt_message_field!(self.distance, "distance", true, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.device_index, "device_index", f);
+        fmt_message_field!(self.calories, "calories", f);
+        fmt_message_field!(self.distance, "distance", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "cycles_subfield_bytes", self.cycles_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "cycles", self.cycles)?;
-        fmt_message_field!(self.active_time, "active_time", true, f)?;
-        fmt_message_field!(self.activity_type, "activity_type", false, f)?;
-        fmt_message_field!(self.activity_subtype, "activity_subtype", false, f)?;
-        fmt_message_field!(self.activity_level, "activity_level", false, f)?;
-        fmt_message_field!(self.distance_16, "distance_16", false, f)?;
-        fmt_message_field!(self.cycles_16, "cycles_16", false, f)?;
-        fmt_message_field!(self.active_time_16, "active_time_16", false, f)?;
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
-        fmt_message_field!(self.temperature, "temperature", true, f)?;
-        fmt_message_field!(self.temperature_min, "temperature_min", true, f)?;
-        fmt_message_field!(self.temperature_max, "temperature_max", true, f)?;
-        fmt_message_field!(self.activity_time, "activity_time", false, f)?;
-        fmt_message_field!(self.active_calories, "active_calories", false, f)?;
+        fmt_message_field!(self.active_time, "active_time", f);
+        fmt_message_field!(self.activity_type, "activity_type", f);
+        fmt_message_field!(self.activity_subtype, "activity_subtype", f);
+        fmt_message_field!(self.activity_level, "activity_level", f);
+        fmt_message_field!(self.distance_16, "distance_16", f);
+        fmt_message_field!(self.cycles_16, "cycles_16", f);
+        fmt_message_field!(self.active_time_16, "active_time_16", f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", f);
+        fmt_message_field!(self.temperature, "temperature", f);
+        fmt_message_field!(self.temperature_min, "temperature_min", f);
+        fmt_message_field!(self.temperature_max, "temperature_max", f);
+        fmt_message_field!(self.activity_time, "activity_time", f);
+        fmt_message_field!(self.active_calories, "active_calories", f);
         fmt_message_field!(
             self.current_activity_type_intensity,
             "current_activity_type_intensity",
-            false,
             f
-        )?;
-        fmt_message_field!(self.timestamp_min_8, "timestamp_min_8", false, f)?;
-        fmt_message_field!(self.timestamp_16, "timestamp_16", false, f)?;
-        fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
-        fmt_message_field!(self.intensity, "intensity", true, f)?;
-        fmt_message_field!(self.duration_min, "duration_min", false, f)?;
-        fmt_message_field!(self.duration, "duration", false, f)?;
-        fmt_message_field!(self.ascent, "ascent", true, f)?;
-        fmt_message_field!(self.descent, "descent", true, f)?;
+        );
+        fmt_message_field!(self.timestamp_min_8, "timestamp_min_8", f);
+        fmt_message_field!(self.timestamp_16, "timestamp_16", f);
+        fmt_message_field!(self.heart_rate, "heart_rate", f);
+        fmt_message_field!(self.intensity, "intensity", f);
+        fmt_message_field!(self.duration_min, "duration_min", f);
+        fmt_message_field!(self.duration, "duration", f);
+        fmt_message_field!(self.ascent, "ascent", f);
+        fmt_message_field!(self.descent, "descent", f);
         fmt_message_field!(
             self.moderate_activity_minutes,
             "moderate_activity_minutes",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.vigorous_activity_minutes,
             "vigorous_activity_minutes",
-            false,
             f
-        )?;
+        );
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -35707,17 +35553,12 @@ pub struct FitMessageMonitoringInfo {
 impl fmt::Display for FitMessageMonitoringInfo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageMonitoringInfo")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
-        fmt_message_field!(self.activity_type, "activity_type", false, f)?;
-        fmt_message_field!(self.cycles_to_distance, "cycles_to_distance", true, f)?;
-        fmt_message_field!(self.cycles_to_calories, "cycles_to_calories", true, f)?;
-        fmt_message_field!(
-            self.resting_metabolic_rate,
-            "resting_metabolic_rate",
-            false,
-            f
-        )?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", f);
+        fmt_message_field!(self.activity_type, "activity_type", f);
+        fmt_message_field!(self.cycles_to_distance, "cycles_to_distance", f);
+        fmt_message_field!(self.cycles_to_calories, "cycles_to_calories", f);
+        fmt_message_field!(self.resting_metabolic_rate, "resting_metabolic_rate", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -35989,9 +35830,9 @@ pub struct FitMessageNmeaSentence {
 impl fmt::Display for FitMessageNmeaSentence {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageNmeaSentence")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.sentence, "sentence", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sentence, "sentence", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -36246,15 +36087,15 @@ pub struct FitMessageObdiiData {
 impl fmt::Display for FitMessageObdiiData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageObdiiData")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.time_offset, "time_offset", false, f)?;
-        fmt_message_field!(self.pid, "pid", false, f)?;
-        fmt_message_field!(self.raw_data, "raw_data", false, f)?;
-        fmt_message_field!(self.pid_data_size, "pid_data_size", false, f)?;
-        fmt_message_field!(self.system_time, "system_time", false, f)?;
-        fmt_message_field!(self.start_timestamp, "start_timestamp", false, f)?;
-        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.time_offset, "time_offset", f);
+        fmt_message_field!(self.pid, "pid", f);
+        fmt_message_field!(self.raw_data, "raw_data", f);
+        fmt_message_field!(self.pid_data_size, "pid_data_size", f);
+        fmt_message_field!(self.system_time, "system_time", f);
+        fmt_message_field!(self.start_timestamp, "start_timestamp", f);
+        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -36538,8 +36379,8 @@ pub struct FitMessageOhrSettings {
 impl fmt::Display for FitMessageOhrSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageOhrSettings")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.enabled, "enabled", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -36835,8 +36676,8 @@ pub struct FitMessageOneDSensorCalibration {
 impl fmt::Display for FitMessageOneDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageOneDSensorCalibration")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.sensor_type, "sensor_type", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.sensor_type, "sensor_type", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -36847,9 +36688,9 @@ impl fmt::Display for FitMessageOneDSensorCalibration {
             "  {: >28}: {:?}",
             "calibration_factor", self.calibration_factor
         )?;
-        fmt_message_field!(self.calibration_divisor, "calibration_divisor", false, f)?;
-        fmt_message_field!(self.level_shift, "level_shift", false, f)?;
-        fmt_message_field!(self.offset_cal, "offset_cal", false, f)?;
+        fmt_message_field!(self.calibration_divisor, "calibration_divisor", f);
+        fmt_message_field!(self.level_shift, "level_shift", f);
+        fmt_message_field!(self.offset_cal, "offset_cal", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -37175,9 +37016,9 @@ pub struct FitMessagePowerZone {
 impl fmt::Display for FitMessagePowerZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessagePowerZone")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.high_value, "high_value", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.high_value, "high_value", f);
+        fmt_message_field!(self.name, "name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -37478,133 +37319,113 @@ pub struct FitMessageRecord {
 impl fmt::Display for FitMessageRecord {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageRecord")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
-        fmt_message_field!(self.position_long, "position_long", true, f)?;
-        fmt_message_field!(self.altitude, "altitude", true, f)?;
-        fmt_message_field!(self.heart_rate, "heart_rate", false, f)?;
-        fmt_message_field!(self.cadence, "cadence", false, f)?;
-        fmt_message_field!(self.distance, "distance", true, f)?;
-        fmt_message_field!(self.speed, "speed", true, f)?;
-        fmt_message_field!(self.power, "power", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.position_lat, "position_lat", f);
+        fmt_message_field!(self.position_long, "position_long", f);
+        fmt_message_field!(self.altitude, "altitude", f);
+        fmt_message_field!(self.heart_rate, "heart_rate", f);
+        fmt_message_field!(self.cadence, "cadence", f);
+        fmt_message_field!(self.distance, "distance", f);
+        fmt_message_field!(self.speed, "speed", f);
+        fmt_message_field!(self.power, "power", f);
         fmt_message_field!(
             self.compressed_speed_distance,
             "compressed_speed_distance",
-            false,
             f
-        )?;
-        fmt_message_field!(self.grade, "grade", true, f)?;
-        fmt_message_field!(self.resistance, "resistance", false, f)?;
-        fmt_message_field!(self.time_from_course, "time_from_course", true, f)?;
-        fmt_message_field!(self.cycle_length, "cycle_length", true, f)?;
-        fmt_message_field!(self.temperature, "temperature", false, f)?;
-        fmt_message_field!(self.speed_1s, "speed_1s", true, f)?;
-        fmt_message_field!(self.cycles, "cycles", false, f)?;
-        fmt_message_field!(self.total_cycles, "total_cycles", false, f)?;
+        );
+        fmt_message_field!(self.grade, "grade", f);
+        fmt_message_field!(self.resistance, "resistance", f);
+        fmt_message_field!(self.time_from_course, "time_from_course", f);
+        fmt_message_field!(self.cycle_length, "cycle_length", f);
+        fmt_message_field!(self.temperature, "temperature", f);
+        fmt_message_field!(self.speed_1s, "speed_1s", f);
+        fmt_message_field!(self.cycles, "cycles", f);
+        fmt_message_field!(self.total_cycles, "total_cycles", f);
         fmt_message_field!(
             self.compressed_accumulated_power,
             "compressed_accumulated_power",
-            false,
             f
-        )?;
-        fmt_message_field!(self.accumulated_power, "accumulated_power", false, f)?;
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
-        fmt_message_field!(self.vertical_speed, "vertical_speed", true, f)?;
-        fmt_message_field!(self.calories, "calories", false, f)?;
-        fmt_message_field!(self.vertical_oscillation, "vertical_oscillation", true, f)?;
-        fmt_message_field!(self.stance_time_percent, "stance_time_percent", true, f)?;
-        fmt_message_field!(self.stance_time, "stance_time", true, f)?;
-        fmt_message_field!(self.activity_type, "activity_type", false, f)?;
+        );
+        fmt_message_field!(self.accumulated_power, "accumulated_power", f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", f);
+        fmt_message_field!(self.vertical_speed, "vertical_speed", f);
+        fmt_message_field!(self.calories, "calories", f);
+        fmt_message_field!(self.vertical_oscillation, "vertical_oscillation", f);
+        fmt_message_field!(self.stance_time_percent, "stance_time_percent", f);
+        fmt_message_field!(self.stance_time, "stance_time", f);
+        fmt_message_field!(self.activity_type, "activity_type", f);
         fmt_message_field!(
             self.left_torque_effectiveness,
             "left_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.right_torque_effectiveness,
             "right_torque_effectiveness",
-            true,
             f
-        )?;
-        fmt_message_field!(self.left_pedal_smoothness, "left_pedal_smoothness", true, f)?;
-        fmt_message_field!(
-            self.right_pedal_smoothness,
-            "right_pedal_smoothness",
-            true,
-            f
-        )?;
+        );
+        fmt_message_field!(self.left_pedal_smoothness, "left_pedal_smoothness", f);
+        fmt_message_field!(self.right_pedal_smoothness, "right_pedal_smoothness", f);
         fmt_message_field!(
             self.combined_pedal_smoothness,
             "combined_pedal_smoothness",
-            true,
             f
-        )?;
-        fmt_message_field!(self.time128, "time128", true, f)?;
-        fmt_message_field!(self.stroke_type, "stroke_type", false, f)?;
-        fmt_message_field!(self.zone, "zone", false, f)?;
-        fmt_message_field!(self.ball_speed, "ball_speed", true, f)?;
-        fmt_message_field!(self.cadence256, "cadence256", true, f)?;
-        fmt_message_field!(self.fractional_cadence, "fractional_cadence", true, f)?;
-        fmt_message_field!(self.total_hemoglobin_conc, "total_hemoglobin_conc", true, f)?;
+        );
+        fmt_message_field!(self.time128, "time128", f);
+        fmt_message_field!(self.stroke_type, "stroke_type", f);
+        fmt_message_field!(self.zone, "zone", f);
+        fmt_message_field!(self.ball_speed, "ball_speed", f);
+        fmt_message_field!(self.cadence256, "cadence256", f);
+        fmt_message_field!(self.fractional_cadence, "fractional_cadence", f);
+        fmt_message_field!(self.total_hemoglobin_conc, "total_hemoglobin_conc", f);
         fmt_message_field!(
             self.total_hemoglobin_conc_min,
             "total_hemoglobin_conc_min",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.total_hemoglobin_conc_max,
             "total_hemoglobin_conc_max",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.saturated_hemoglobin_percent,
             "saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.saturated_hemoglobin_percent_min,
             "saturated_hemoglobin_percent_min",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.saturated_hemoglobin_percent_max,
             "saturated_hemoglobin_percent_max",
-            true,
             f
-        )?;
-        fmt_message_field!(self.device_index, "device_index", false, f)?;
-        fmt_message_field!(self.left_pco, "left_pco", false, f)?;
-        fmt_message_field!(self.right_pco, "right_pco", false, f)?;
-        fmt_message_field!(self.left_power_phase, "left_power_phase", true, f)?;
-        fmt_message_field!(self.left_power_phase_peak, "left_power_phase_peak", true, f)?;
-        fmt_message_field!(self.right_power_phase, "right_power_phase", true, f)?;
-        fmt_message_field!(
-            self.right_power_phase_peak,
-            "right_power_phase_peak",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.enhanced_speed, "enhanced_speed", true, f)?;
-        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", true, f)?;
-        fmt_message_field!(self.battery_soc, "battery_soc", true, f)?;
-        fmt_message_field!(self.motor_power, "motor_power", false, f)?;
-        fmt_message_field!(self.vertical_ratio, "vertical_ratio", true, f)?;
-        fmt_message_field!(self.stance_time_balance, "stance_time_balance", true, f)?;
-        fmt_message_field!(self.step_length, "step_length", true, f)?;
-        fmt_message_field!(self.absolute_pressure, "absolute_pressure", false, f)?;
-        fmt_message_field!(self.depth, "depth", true, f)?;
-        fmt_message_field!(self.next_stop_depth, "next_stop_depth", true, f)?;
-        fmt_message_field!(self.next_stop_time, "next_stop_time", true, f)?;
-        fmt_message_field!(self.time_to_surface, "time_to_surface", true, f)?;
-        fmt_message_field!(self.ndl_time, "ndl_time", true, f)?;
-        fmt_message_field!(self.cns_load, "cns_load", false, f)?;
-        fmt_message_field!(self.n2_load, "n2_load", true, f)?;
+        );
+        fmt_message_field!(self.device_index, "device_index", f);
+        fmt_message_field!(self.left_pco, "left_pco", f);
+        fmt_message_field!(self.right_pco, "right_pco", f);
+        fmt_message_field!(self.left_power_phase, "left_power_phase", f);
+        fmt_message_field!(self.left_power_phase_peak, "left_power_phase_peak", f);
+        fmt_message_field!(self.right_power_phase, "right_power_phase", f);
+        fmt_message_field!(self.right_power_phase_peak, "right_power_phase_peak", f);
+        fmt_message_field!(self.enhanced_speed, "enhanced_speed", f);
+        fmt_message_field!(self.enhanced_altitude, "enhanced_altitude", f);
+        fmt_message_field!(self.battery_soc, "battery_soc", f);
+        fmt_message_field!(self.motor_power, "motor_power", f);
+        fmt_message_field!(self.vertical_ratio, "vertical_ratio", f);
+        fmt_message_field!(self.stance_time_balance, "stance_time_balance", f);
+        fmt_message_field!(self.step_length, "step_length", f);
+        fmt_message_field!(self.absolute_pressure, "absolute_pressure", f);
+        fmt_message_field!(self.depth, "depth", f);
+        fmt_message_field!(self.next_stop_depth, "next_stop_depth", f);
+        fmt_message_field!(self.next_stop_time, "next_stop_time", f);
+        fmt_message_field!(self.time_to_surface, "time_to_surface", f);
+        fmt_message_field!(self.ndl_time, "ndl_time", f);
+        fmt_message_field!(self.cns_load, "cns_load", f);
+        fmt_message_field!(self.n2_load, "n2_load", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -38363,8 +38184,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -38480,18 +38301,18 @@ pub struct FitMessageSchedule {
 impl fmt::Display for FitMessageSchedule {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSchedule")?;
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
+        fmt_message_field!(self.manufacturer, "manufacturer", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "product_subfield_bytes", self.product_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
-        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
-        fmt_message_field!(self.time_created, "time_created", false, f)?;
-        fmt_message_field!(self.completed, "completed", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.scheduled_time, "scheduled_time", false, f)?;
+        fmt_message_field!(self.serial_number, "serial_number", f);
+        fmt_message_field!(self.time_created, "time_created", f);
+        fmt_message_field!(self.completed, "completed", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.scheduled_time, "scheduled_time", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -38813,19 +38634,14 @@ pub struct FitMessageSdmProfile {
 impl fmt::Display for FitMessageSdmProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSdmProfile")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
-        fmt_message_field!(self.sdm_ant_id, "sdm_ant_id", false, f)?;
-        fmt_message_field!(self.sdm_cal_factor, "sdm_cal_factor", true, f)?;
-        fmt_message_field!(self.odometer, "odometer", true, f)?;
-        fmt_message_field!(self.speed_source, "speed_source", false, f)?;
-        fmt_message_field!(
-            self.sdm_ant_id_trans_type,
-            "sdm_ant_id_trans_type",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.odometer_rollover, "odometer_rollover", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.enabled, "enabled", f);
+        fmt_message_field!(self.sdm_ant_id, "sdm_ant_id", f);
+        fmt_message_field!(self.sdm_cal_factor, "sdm_cal_factor", f);
+        fmt_message_field!(self.odometer, "odometer", f);
+        fmt_message_field!(self.speed_source, "speed_source", f);
+        fmt_message_field!(self.sdm_ant_id_trans_type, "sdm_ant_id_trans_type", f);
+        fmt_message_field!(self.odometer_rollover, "odometer_rollover", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -39099,30 +38915,19 @@ pub struct FitMessageSegmentFile {
 impl fmt::Display for FitMessageSegmentFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentFile")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.file_uuid, "file_uuid", false, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
-        fmt_message_field!(
-            self.user_profile_primary_key,
-            "user_profile_primary_key",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.leader_type, "leader_type", false, f)?;
-        fmt_message_field!(
-            self.leader_group_primary_key,
-            "leader_group_primary_key",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.leader_activity_id, "leader_activity_id", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.file_uuid, "file_uuid", f);
+        fmt_message_field!(self.enabled, "enabled", f);
+        fmt_message_field!(self.user_profile_primary_key, "user_profile_primary_key", f);
+        fmt_message_field!(self.leader_type, "leader_type", f);
+        fmt_message_field!(self.leader_group_primary_key, "leader_group_primary_key", f);
+        fmt_message_field!(self.leader_activity_id, "leader_activity_id", f);
         fmt_message_field!(
             self.leader_activity_id_string,
             "leader_activity_id_string",
-            false,
             f
-        )?;
-        fmt_message_field!(self.default_race_leader, "default_race_leader", false, f)?;
+        );
+        fmt_message_field!(self.default_race_leader, "default_race_leader", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -39404,20 +39209,15 @@ pub struct FitMessageSegmentId {
 impl fmt::Display for FitMessageSegmentId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentId")?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.uuid, "uuid", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.enabled, "enabled", false, f)?;
-        fmt_message_field!(
-            self.user_profile_primary_key,
-            "user_profile_primary_key",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.device_id, "device_id", false, f)?;
-        fmt_message_field!(self.default_race_leader, "default_race_leader", false, f)?;
-        fmt_message_field!(self.delete_status, "delete_status", false, f)?;
-        fmt_message_field!(self.selection_type, "selection_type", false, f)?;
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.uuid, "uuid", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.enabled, "enabled", f);
+        fmt_message_field!(self.user_profile_primary_key, "user_profile_primary_key", f);
+        fmt_message_field!(self.device_id, "device_id", f);
+        fmt_message_field!(self.default_race_leader, "default_race_leader", f);
+        fmt_message_field!(self.delete_status, "delete_status", f);
+        fmt_message_field!(self.selection_type, "selection_type", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -39821,177 +39621,125 @@ pub struct FitMessageSegmentLap {
 impl fmt::Display for FitMessageSegmentLap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentLap")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.event, "event", false, f)?;
-        fmt_message_field!(self.event_type, "event_type", false, f)?;
-        fmt_message_field!(self.start_time, "start_time", false, f)?;
-        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f)?;
-        fmt_message_field!(self.start_position_long, "start_position_long", true, f)?;
-        fmt_message_field!(self.end_position_lat, "end_position_lat", true, f)?;
-        fmt_message_field!(self.end_position_long, "end_position_long", true, f)?;
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
-        fmt_message_field!(self.total_distance, "total_distance", true, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.event, "event", f);
+        fmt_message_field!(self.event_type, "event_type", f);
+        fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", f);
+        fmt_message_field!(self.start_position_long, "start_position_long", f);
+        fmt_message_field!(self.end_position_lat, "end_position_lat", f);
+        fmt_message_field!(self.end_position_long, "end_position_long", f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", f);
+        fmt_message_field!(self.total_distance, "total_distance", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles", self.total_cycles)?;
-        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
-        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f)?;
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
-        fmt_message_field!(self.max_speed, "max_speed", true, f)?;
-        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f)?;
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
-        fmt_message_field!(self.avg_cadence, "avg_cadence", false, f)?;
-        fmt_message_field!(self.max_cadence, "max_cadence", false, f)?;
-        fmt_message_field!(self.avg_power, "avg_power", false, f)?;
-        fmt_message_field!(self.max_power, "max_power", false, f)?;
-        fmt_message_field!(self.total_ascent, "total_ascent", false, f)?;
-        fmt_message_field!(self.total_descent, "total_descent", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.event_group, "event_group", false, f)?;
-        fmt_message_field!(self.nec_lat, "nec_lat", true, f)?;
-        fmt_message_field!(self.nec_long, "nec_long", true, f)?;
-        fmt_message_field!(self.swc_lat, "swc_lat", true, f)?;
-        fmt_message_field!(self.swc_long, "swc_long", true, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.normalized_power, "normalized_power", false, f)?;
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.total_work, "total_work", false, f)?;
-        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f)?;
-        fmt_message_field!(self.max_altitude, "max_altitude", true, f)?;
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
-        fmt_message_field!(self.avg_grade, "avg_grade", true, f)?;
-        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f)?;
-        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f)?;
-        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f)?;
-        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f)?;
-        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f)?;
-        fmt_message_field!(self.max_temperature, "max_temperature", false, f)?;
-        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f)?;
-        fmt_message_field!(
-            self.avg_pos_vertical_speed,
-            "avg_pos_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.avg_neg_vertical_speed,
-            "avg_neg_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_pos_vertical_speed,
-            "max_pos_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_neg_vertical_speed,
-            "max_neg_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f)?;
-        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f)?;
-        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f)?;
-        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f)?;
-        fmt_message_field!(self.repetition_num, "repetition_num", false, f)?;
-        fmt_message_field!(self.min_altitude, "min_altitude", true, f)?;
-        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f)?;
-        fmt_message_field!(self.active_time, "active_time", true, f)?;
-        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f)?;
-        fmt_message_field!(self.sport_event, "sport_event", false, f)?;
+        fmt_message_field!(self.total_calories, "total_calories", f);
+        fmt_message_field!(self.total_fat_calories, "total_fat_calories", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
+        fmt_message_field!(self.max_speed, "max_speed", f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", f);
+        fmt_message_field!(self.avg_cadence, "avg_cadence", f);
+        fmt_message_field!(self.max_cadence, "max_cadence", f);
+        fmt_message_field!(self.avg_power, "avg_power", f);
+        fmt_message_field!(self.max_power, "max_power", f);
+        fmt_message_field!(self.total_ascent, "total_ascent", f);
+        fmt_message_field!(self.total_descent, "total_descent", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.event_group, "event_group", f);
+        fmt_message_field!(self.nec_lat, "nec_lat", f);
+        fmt_message_field!(self.nec_long, "nec_long", f);
+        fmt_message_field!(self.swc_lat, "swc_lat", f);
+        fmt_message_field!(self.swc_long, "swc_long", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.normalized_power, "normalized_power", f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.total_work, "total_work", f);
+        fmt_message_field!(self.avg_altitude, "avg_altitude", f);
+        fmt_message_field!(self.max_altitude, "max_altitude", f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", f);
+        fmt_message_field!(self.avg_grade, "avg_grade", f);
+        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", f);
+        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", f);
+        fmt_message_field!(self.max_pos_grade, "max_pos_grade", f);
+        fmt_message_field!(self.max_neg_grade, "max_neg_grade", f);
+        fmt_message_field!(self.avg_temperature, "avg_temperature", f);
+        fmt_message_field!(self.max_temperature, "max_temperature", f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", f);
+        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", f);
+        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", f);
+        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", f);
+        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", f);
+        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", f);
+        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", f);
+        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", f);
+        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", f);
+        fmt_message_field!(self.repetition_num, "repetition_num", f);
+        fmt_message_field!(self.min_altitude, "min_altitude", f);
+        fmt_message_field!(self.min_heart_rate, "min_heart_rate", f);
+        fmt_message_field!(self.active_time, "active_time", f);
+        fmt_message_field!(self.wkt_step_index, "wkt_step_index", f);
+        fmt_message_field!(self.sport_event, "sport_event", f);
         fmt_message_field!(
             self.avg_left_torque_effectiveness,
             "avg_left_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_right_torque_effectiveness,
             "avg_right_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_left_pedal_smoothness,
             "avg_left_pedal_smoothness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_right_pedal_smoothness,
             "avg_right_pedal_smoothness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_combined_pedal_smoothness,
             "avg_combined_pedal_smoothness",
-            true,
             f
-        )?;
-        fmt_message_field!(self.status, "status", false, f)?;
-        fmt_message_field!(self.uuid, "uuid", false, f)?;
-        fmt_message_field!(
-            self.avg_fractional_cadence,
-            "avg_fractional_cadence",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_fractional_cadence,
-            "max_fractional_cadence",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.total_fractional_cycles,
-            "total_fractional_cycles",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.front_gear_shift_count,
-            "front_gear_shift_count",
-            false,
-            f
-        )?;
-        fmt_message_field!(
-            self.rear_gear_shift_count,
-            "rear_gear_shift_count",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.time_standing, "time_standing", true, f)?;
-        fmt_message_field!(self.stand_count, "stand_count", false, f)?;
-        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f)?;
-        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f)?;
-        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f)?;
+        );
+        fmt_message_field!(self.status, "status", f);
+        fmt_message_field!(self.uuid, "uuid", f);
+        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", f);
+        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", f);
+        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", f);
+        fmt_message_field!(self.front_gear_shift_count, "front_gear_shift_count", f);
+        fmt_message_field!(self.rear_gear_shift_count, "rear_gear_shift_count", f);
+        fmt_message_field!(self.time_standing, "time_standing", f);
+        fmt_message_field!(self.stand_count, "stand_count", f);
+        fmt_message_field!(self.avg_left_pco, "avg_left_pco", f);
+        fmt_message_field!(self.avg_right_pco, "avg_right_pco", f);
+        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", f);
         fmt_message_field!(
             self.avg_left_power_phase_peak,
             "avg_left_power_phase_peak",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f)?;
+        );
+        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", f);
         fmt_message_field!(
             self.avg_right_power_phase_peak,
             "avg_right_power_phase_peak",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f)?;
-        fmt_message_field!(self.max_power_position, "max_power_position", false, f)?;
-        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f)?;
-        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f)?;
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
+        );
+        fmt_message_field!(self.avg_power_position, "avg_power_position", f);
+        fmt_message_field!(self.max_power_position, "max_power_position", f);
+        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", f);
+        fmt_message_field!(self.max_cadence_position, "max_cadence_position", f);
+        fmt_message_field!(self.manufacturer, "manufacturer", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -40880,13 +40628,13 @@ pub struct FitMessageSegmentLeaderboardEntry {
 impl fmt::Display for FitMessageSegmentLeaderboardEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentLeaderboardEntry")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.group_primary_key, "group_primary_key", false, f)?;
-        fmt_message_field!(self.activity_id, "activity_id", false, f)?;
-        fmt_message_field!(self.segment_time, "segment_time", true, f)?;
-        fmt_message_field!(self.activity_id_string, "activity_id_string", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.name, "name", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.group_primary_key, "group_primary_key", f);
+        fmt_message_field!(self.activity_id, "activity_id", f);
+        fmt_message_field!(self.segment_time, "segment_time", f);
+        fmt_message_field!(self.activity_id_string, "activity_id_string", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -41150,12 +40898,12 @@ pub struct FitMessageSegmentPoint {
 impl fmt::Display for FitMessageSegmentPoint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSegmentPoint")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.position_lat, "position_lat", true, f)?;
-        fmt_message_field!(self.position_long, "position_long", true, f)?;
-        fmt_message_field!(self.distance, "distance", true, f)?;
-        fmt_message_field!(self.altitude, "altitude", true, f)?;
-        fmt_message_field!(self.leader_time, "leader_time", true, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.position_lat, "position_lat", f);
+        fmt_message_field!(self.position_long, "position_long", f);
+        fmt_message_field!(self.distance, "distance", f);
+        fmt_message_field!(self.altitude, "altitude", f);
+        fmt_message_field!(self.leader_time, "leader_time", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -41677,30 +41425,30 @@ pub struct FitMessageSession {
 impl fmt::Display for FitMessageSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSession")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.event, "event", false, f)?;
-        fmt_message_field!(self.event_type, "event_type", false, f)?;
-        fmt_message_field!(self.start_time, "start_time", false, f)?;
-        fmt_message_field!(self.start_position_lat, "start_position_lat", true, f)?;
-        fmt_message_field!(self.start_position_long, "start_position_long", true, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", true, f)?;
-        fmt_message_field!(self.total_timer_time, "total_timer_time", true, f)?;
-        fmt_message_field!(self.total_distance, "total_distance", true, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.event, "event", f);
+        fmt_message_field!(self.event_type, "event_type", f);
+        fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", f);
+        fmt_message_field!(self.start_position_long, "start_position_long", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", f);
+        fmt_message_field!(self.total_distance, "total_distance", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "total_cycles_subfield_bytes", self.total_cycles_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "total_cycles", self.total_cycles)?;
-        fmt_message_field!(self.total_calories, "total_calories", false, f)?;
-        fmt_message_field!(self.total_fat_calories, "total_fat_calories", false, f)?;
-        fmt_message_field!(self.avg_speed, "avg_speed", true, f)?;
-        fmt_message_field!(self.max_speed, "max_speed", true, f)?;
-        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", false, f)?;
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
+        fmt_message_field!(self.total_calories, "total_calories", f);
+        fmt_message_field!(self.total_fat_calories, "total_fat_calories", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
+        fmt_message_field!(self.max_speed, "max_speed", f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -41713,229 +41461,160 @@ impl fmt::Display for FitMessageSession {
             "max_cadence_subfield_bytes", self.max_cadence_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "max_cadence", self.max_cadence)?;
-        fmt_message_field!(self.avg_power, "avg_power", false, f)?;
-        fmt_message_field!(self.max_power, "max_power", false, f)?;
-        fmt_message_field!(self.total_ascent, "total_ascent", false, f)?;
-        fmt_message_field!(self.total_descent, "total_descent", false, f)?;
-        fmt_message_field!(self.total_training_effect, "total_training_effect", true, f)?;
-        fmt_message_field!(self.first_lap_index, "first_lap_index", false, f)?;
-        fmt_message_field!(self.num_laps, "num_laps", false, f)?;
-        fmt_message_field!(self.event_group, "event_group", false, f)?;
-        fmt_message_field!(self.trigger, "trigger", false, f)?;
-        fmt_message_field!(self.nec_lat, "nec_lat", true, f)?;
-        fmt_message_field!(self.nec_long, "nec_long", true, f)?;
-        fmt_message_field!(self.swc_lat, "swc_lat", true, f)?;
-        fmt_message_field!(self.swc_long, "swc_long", true, f)?;
-        fmt_message_field!(self.normalized_power, "normalized_power", false, f)?;
-        fmt_message_field!(self.training_stress_score, "training_stress_score", true, f)?;
-        fmt_message_field!(self.intensity_factor, "intensity_factor", true, f)?;
-        fmt_message_field!(self.left_right_balance, "left_right_balance", false, f)?;
-        fmt_message_field!(self.avg_stroke_count, "avg_stroke_count", true, f)?;
-        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", true, f)?;
-        fmt_message_field!(self.swim_stroke, "swim_stroke", false, f)?;
-        fmt_message_field!(self.pool_length, "pool_length", true, f)?;
-        fmt_message_field!(self.threshold_power, "threshold_power", false, f)?;
-        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f)?;
-        fmt_message_field!(self.num_active_lengths, "num_active_lengths", false, f)?;
-        fmt_message_field!(self.total_work, "total_work", false, f)?;
-        fmt_message_field!(self.avg_altitude, "avg_altitude", true, f)?;
-        fmt_message_field!(self.max_altitude, "max_altitude", true, f)?;
-        fmt_message_field!(self.gps_accuracy, "gps_accuracy", false, f)?;
-        fmt_message_field!(self.avg_grade, "avg_grade", true, f)?;
-        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", true, f)?;
-        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", true, f)?;
-        fmt_message_field!(self.max_pos_grade, "max_pos_grade", true, f)?;
-        fmt_message_field!(self.max_neg_grade, "max_neg_grade", true, f)?;
-        fmt_message_field!(self.avg_temperature, "avg_temperature", false, f)?;
-        fmt_message_field!(self.max_temperature, "max_temperature", false, f)?;
-        fmt_message_field!(self.total_moving_time, "total_moving_time", true, f)?;
-        fmt_message_field!(
-            self.avg_pos_vertical_speed,
-            "avg_pos_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.avg_neg_vertical_speed,
-            "avg_neg_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_pos_vertical_speed,
-            "max_pos_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_neg_vertical_speed,
-            "max_neg_vertical_speed",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.min_heart_rate, "min_heart_rate", false, f)?;
-        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", true, f)?;
-        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", true, f)?;
-        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", true, f)?;
-        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", true, f)?;
-        fmt_message_field!(self.avg_lap_time, "avg_lap_time", true, f)?;
-        fmt_message_field!(self.best_lap_index, "best_lap_index", false, f)?;
-        fmt_message_field!(self.min_altitude, "min_altitude", true, f)?;
-        fmt_message_field!(self.player_score, "player_score", false, f)?;
-        fmt_message_field!(self.opponent_score, "opponent_score", false, f)?;
-        fmt_message_field!(self.opponent_name, "opponent_name", false, f)?;
-        fmt_message_field!(self.stroke_count, "stroke_count", false, f)?;
-        fmt_message_field!(self.zone_count, "zone_count", false, f)?;
-        fmt_message_field!(self.max_ball_speed, "max_ball_speed", true, f)?;
-        fmt_message_field!(self.avg_ball_speed, "avg_ball_speed", true, f)?;
-        fmt_message_field!(
-            self.avg_vertical_oscillation,
-            "avg_vertical_oscillation",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.avg_stance_time_percent,
-            "avg_stance_time_percent",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.avg_stance_time, "avg_stance_time", true, f)?;
-        fmt_message_field!(
-            self.avg_fractional_cadence,
-            "avg_fractional_cadence",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.max_fractional_cadence,
-            "max_fractional_cadence",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.total_fractional_cycles,
-            "total_fractional_cycles",
-            true,
-            f
-        )?;
+        fmt_message_field!(self.avg_power, "avg_power", f);
+        fmt_message_field!(self.max_power, "max_power", f);
+        fmt_message_field!(self.total_ascent, "total_ascent", f);
+        fmt_message_field!(self.total_descent, "total_descent", f);
+        fmt_message_field!(self.total_training_effect, "total_training_effect", f);
+        fmt_message_field!(self.first_lap_index, "first_lap_index", f);
+        fmt_message_field!(self.num_laps, "num_laps", f);
+        fmt_message_field!(self.event_group, "event_group", f);
+        fmt_message_field!(self.trigger, "trigger", f);
+        fmt_message_field!(self.nec_lat, "nec_lat", f);
+        fmt_message_field!(self.nec_long, "nec_long", f);
+        fmt_message_field!(self.swc_lat, "swc_lat", f);
+        fmt_message_field!(self.swc_long, "swc_long", f);
+        fmt_message_field!(self.normalized_power, "normalized_power", f);
+        fmt_message_field!(self.training_stress_score, "training_stress_score", f);
+        fmt_message_field!(self.intensity_factor, "intensity_factor", f);
+        fmt_message_field!(self.left_right_balance, "left_right_balance", f);
+        fmt_message_field!(self.avg_stroke_count, "avg_stroke_count", f);
+        fmt_message_field!(self.avg_stroke_distance, "avg_stroke_distance", f);
+        fmt_message_field!(self.swim_stroke, "swim_stroke", f);
+        fmt_message_field!(self.pool_length, "pool_length", f);
+        fmt_message_field!(self.threshold_power, "threshold_power", f);
+        fmt_message_field!(self.pool_length_unit, "pool_length_unit", f);
+        fmt_message_field!(self.num_active_lengths, "num_active_lengths", f);
+        fmt_message_field!(self.total_work, "total_work", f);
+        fmt_message_field!(self.avg_altitude, "avg_altitude", f);
+        fmt_message_field!(self.max_altitude, "max_altitude", f);
+        fmt_message_field!(self.gps_accuracy, "gps_accuracy", f);
+        fmt_message_field!(self.avg_grade, "avg_grade", f);
+        fmt_message_field!(self.avg_pos_grade, "avg_pos_grade", f);
+        fmt_message_field!(self.avg_neg_grade, "avg_neg_grade", f);
+        fmt_message_field!(self.max_pos_grade, "max_pos_grade", f);
+        fmt_message_field!(self.max_neg_grade, "max_neg_grade", f);
+        fmt_message_field!(self.avg_temperature, "avg_temperature", f);
+        fmt_message_field!(self.max_temperature, "max_temperature", f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", f);
+        fmt_message_field!(self.avg_pos_vertical_speed, "avg_pos_vertical_speed", f);
+        fmt_message_field!(self.avg_neg_vertical_speed, "avg_neg_vertical_speed", f);
+        fmt_message_field!(self.max_pos_vertical_speed, "max_pos_vertical_speed", f);
+        fmt_message_field!(self.max_neg_vertical_speed, "max_neg_vertical_speed", f);
+        fmt_message_field!(self.min_heart_rate, "min_heart_rate", f);
+        fmt_message_field!(self.time_in_hr_zone, "time_in_hr_zone", f);
+        fmt_message_field!(self.time_in_speed_zone, "time_in_speed_zone", f);
+        fmt_message_field!(self.time_in_cadence_zone, "time_in_cadence_zone", f);
+        fmt_message_field!(self.time_in_power_zone, "time_in_power_zone", f);
+        fmt_message_field!(self.avg_lap_time, "avg_lap_time", f);
+        fmt_message_field!(self.best_lap_index, "best_lap_index", f);
+        fmt_message_field!(self.min_altitude, "min_altitude", f);
+        fmt_message_field!(self.player_score, "player_score", f);
+        fmt_message_field!(self.opponent_score, "opponent_score", f);
+        fmt_message_field!(self.opponent_name, "opponent_name", f);
+        fmt_message_field!(self.stroke_count, "stroke_count", f);
+        fmt_message_field!(self.zone_count, "zone_count", f);
+        fmt_message_field!(self.max_ball_speed, "max_ball_speed", f);
+        fmt_message_field!(self.avg_ball_speed, "avg_ball_speed", f);
+        fmt_message_field!(self.avg_vertical_oscillation, "avg_vertical_oscillation", f);
+        fmt_message_field!(self.avg_stance_time_percent, "avg_stance_time_percent", f);
+        fmt_message_field!(self.avg_stance_time, "avg_stance_time", f);
+        fmt_message_field!(self.avg_fractional_cadence, "avg_fractional_cadence", f);
+        fmt_message_field!(self.max_fractional_cadence, "max_fractional_cadence", f);
+        fmt_message_field!(self.total_fractional_cycles, "total_fractional_cycles", f);
         fmt_message_field!(
             self.avg_total_hemoglobin_conc,
             "avg_total_hemoglobin_conc",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.min_total_hemoglobin_conc,
             "min_total_hemoglobin_conc",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.max_total_hemoglobin_conc,
             "max_total_hemoglobin_conc",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_saturated_hemoglobin_percent,
             "avg_saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.min_saturated_hemoglobin_percent,
             "min_saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.max_saturated_hemoglobin_percent,
             "max_saturated_hemoglobin_percent",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_left_torque_effectiveness,
             "avg_left_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_right_torque_effectiveness,
             "avg_right_torque_effectiveness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_left_pedal_smoothness,
             "avg_left_pedal_smoothness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_right_pedal_smoothness,
             "avg_right_pedal_smoothness",
-            true,
             f
-        )?;
+        );
         fmt_message_field!(
             self.avg_combined_pedal_smoothness,
             "avg_combined_pedal_smoothness",
-            true,
             f
-        )?;
-        fmt_message_field!(self.sport_index, "sport_index", false, f)?;
-        fmt_message_field!(self.time_standing, "time_standing", true, f)?;
-        fmt_message_field!(self.stand_count, "stand_count", false, f)?;
-        fmt_message_field!(self.avg_left_pco, "avg_left_pco", false, f)?;
-        fmt_message_field!(self.avg_right_pco, "avg_right_pco", false, f)?;
-        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", true, f)?;
+        );
+        fmt_message_field!(self.sport_index, "sport_index", f);
+        fmt_message_field!(self.time_standing, "time_standing", f);
+        fmt_message_field!(self.stand_count, "stand_count", f);
+        fmt_message_field!(self.avg_left_pco, "avg_left_pco", f);
+        fmt_message_field!(self.avg_right_pco, "avg_right_pco", f);
+        fmt_message_field!(self.avg_left_power_phase, "avg_left_power_phase", f);
         fmt_message_field!(
             self.avg_left_power_phase_peak,
             "avg_left_power_phase_peak",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", true, f)?;
+        );
+        fmt_message_field!(self.avg_right_power_phase, "avg_right_power_phase", f);
         fmt_message_field!(
             self.avg_right_power_phase_peak,
             "avg_right_power_phase_peak",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_power_position, "avg_power_position", false, f)?;
-        fmt_message_field!(self.max_power_position, "max_power_position", false, f)?;
-        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", false, f)?;
-        fmt_message_field!(self.max_cadence_position, "max_cadence_position", false, f)?;
-        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", true, f)?;
-        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", true, f)?;
-        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", true, f)?;
-        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", true, f)?;
-        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", true, f)?;
-        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", false, f)?;
-        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", false, f)?;
-        fmt_message_field!(
-            self.lev_battery_consumption,
-            "lev_battery_consumption",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", true, f)?;
-        fmt_message_field!(
-            self.avg_stance_time_balance,
-            "avg_stance_time_balance",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.avg_step_length, "avg_step_length", true, f)?;
+        );
+        fmt_message_field!(self.avg_power_position, "avg_power_position", f);
+        fmt_message_field!(self.max_power_position, "max_power_position", f);
+        fmt_message_field!(self.avg_cadence_position, "avg_cadence_position", f);
+        fmt_message_field!(self.max_cadence_position, "max_cadence_position", f);
+        fmt_message_field!(self.enhanced_avg_speed, "enhanced_avg_speed", f);
+        fmt_message_field!(self.enhanced_max_speed, "enhanced_max_speed", f);
+        fmt_message_field!(self.enhanced_avg_altitude, "enhanced_avg_altitude", f);
+        fmt_message_field!(self.enhanced_min_altitude, "enhanced_min_altitude", f);
+        fmt_message_field!(self.enhanced_max_altitude, "enhanced_max_altitude", f);
+        fmt_message_field!(self.avg_lev_motor_power, "avg_lev_motor_power", f);
+        fmt_message_field!(self.max_lev_motor_power, "max_lev_motor_power", f);
+        fmt_message_field!(self.lev_battery_consumption, "lev_battery_consumption", f);
+        fmt_message_field!(self.avg_vertical_ratio, "avg_vertical_ratio", f);
+        fmt_message_field!(self.avg_stance_time_balance, "avg_stance_time_balance", f);
+        fmt_message_field!(self.avg_step_length, "avg_step_length", f);
         fmt_message_field!(
             self.total_anaerobic_training_effect,
             "total_anaerobic_training_effect",
-            true,
             f
-        )?;
-        fmt_message_field!(self.avg_vam, "avg_vam", true, f)?;
+        );
+        fmt_message_field!(self.avg_vam, "avg_vam", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -43166,17 +42845,17 @@ pub struct FitMessageSet {
 impl fmt::Display for FitMessageSet {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSet")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.duration, "duration", true, f)?;
-        fmt_message_field!(self.repetitions, "repetitions", false, f)?;
-        fmt_message_field!(self.weight, "weight", true, f)?;
-        fmt_message_field!(self.set_type, "set_type", false, f)?;
-        fmt_message_field!(self.start_time, "start_time", false, f)?;
-        fmt_message_field!(self.category, "category", false, f)?;
-        fmt_message_field!(self.category_subtype, "category_subtype", false, f)?;
-        fmt_message_field!(self.weight_display_unit, "weight_display_unit", false, f)?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.wkt_step_index, "wkt_step_index", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.duration, "duration", f);
+        fmt_message_field!(self.repetitions, "repetitions", f);
+        fmt_message_field!(self.weight, "weight", f);
+        fmt_message_field!(self.set_type, "set_type", f);
+        fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.category, "category", f);
+        fmt_message_field!(self.category_subtype, "category_subtype", f);
+        fmt_message_field!(self.weight_display_unit, "weight_display_unit", f);
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.wkt_step_index, "wkt_step_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -43454,8 +43133,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -43566,7 +43245,7 @@ pub struct FitMessageSlaveDevice {
 impl fmt::Display for FitMessageSlaveDevice {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSlaveDevice")?;
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
+        fmt_message_field!(self.manufacturer, "manufacturer", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -43859,9 +43538,9 @@ pub struct FitMessageSoftware {
 impl fmt::Display for FitMessageSoftware {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSoftware")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.version, "version", true, f)?;
-        fmt_message_field!(self.part_number, "part_number", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.version, "version", f);
+        fmt_message_field!(self.part_number, "part_number", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -44098,9 +43777,9 @@ pub struct FitMessageSpeedZone {
 impl fmt::Display for FitMessageSpeedZone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSpeedZone")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.high_value, "high_value", true, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.high_value, "high_value", f);
+        fmt_message_field!(self.name, "name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -44337,9 +44016,9 @@ pub struct FitMessageSport {
 impl fmt::Display for FitMessageSport {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSport")?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.name, "name", false, f)?;
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.name, "name", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -44572,8 +44251,8 @@ pub struct FitMessageStressLevel {
 impl fmt::Display for FitMessageStressLevel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageStressLevel")?;
-        fmt_message_field!(self.stress_level_value, "stress_level_value", false, f)?;
-        fmt_message_field!(self.stress_level_time, "stress_level_time", false, f)?;
+        fmt_message_field!(self.stress_level_value, "stress_level_value", f);
+        fmt_message_field!(self.stress_level_time, "stress_level_time", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -44876,8 +44555,8 @@ pub struct FitMessageThreeDSensorCalibration {
 impl fmt::Display for FitMessageThreeDSensorCalibration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageThreeDSensorCalibration")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.sensor_type, "sensor_type", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.sensor_type, "sensor_type", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -44888,10 +44567,10 @@ impl fmt::Display for FitMessageThreeDSensorCalibration {
             "  {: >28}: {:?}",
             "calibration_factor", self.calibration_factor
         )?;
-        fmt_message_field!(self.calibration_divisor, "calibration_divisor", false, f)?;
-        fmt_message_field!(self.level_shift, "level_shift", false, f)?;
-        fmt_message_field!(self.offset_cal, "offset_cal", false, f)?;
-        fmt_message_field!(self.orientation_matrix, "orientation_matrix", true, f)?;
+        fmt_message_field!(self.calibration_divisor, "calibration_divisor", f);
+        fmt_message_field!(self.level_shift, "level_shift", f);
+        fmt_message_field!(self.offset_cal, "offset_cal", f);
+        fmt_message_field!(self.orientation_matrix, "orientation_matrix", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -45227,18 +44906,17 @@ pub struct FitMessageTimestampCorrelation {
 impl fmt::Display for FitMessageTimestampCorrelation {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTimestampCorrelation")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
-        fmt_message_field!(self.system_timestamp, "system_timestamp", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", f);
+        fmt_message_field!(self.system_timestamp, "system_timestamp", f);
         fmt_message_field!(
             self.fractional_system_timestamp,
             "fractional_system_timestamp",
-            true,
             f
-        )?;
-        fmt_message_field!(self.local_timestamp, "local_timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.system_timestamp_ms, "system_timestamp_ms", false, f)?;
+        );
+        fmt_message_field!(self.local_timestamp, "local_timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.system_timestamp_ms, "system_timestamp_ms", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -45523,16 +45201,16 @@ pub struct FitMessageTotals {
 impl fmt::Display for FitMessageTotals {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTotals")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timer_time, "timer_time", false, f)?;
-        fmt_message_field!(self.distance, "distance", false, f)?;
-        fmt_message_field!(self.calories, "calories", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.elapsed_time, "elapsed_time", false, f)?;
-        fmt_message_field!(self.sessions, "sessions", false, f)?;
-        fmt_message_field!(self.active_time, "active_time", false, f)?;
-        fmt_message_field!(self.sport_index, "sport_index", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timer_time, "timer_time", f);
+        fmt_message_field!(self.distance, "distance", f);
+        fmt_message_field!(self.calories, "calories", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.elapsed_time, "elapsed_time", f);
+        fmt_message_field!(self.sessions, "sessions", f);
+        fmt_message_field!(self.active_time, "active_time", f);
+        fmt_message_field!(self.sport_index, "sport_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -45807,8 +45485,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    FaveroProduct(FitFieldFaveroProduct),
     GarminProduct(FitFieldGarminProduct),
+    FaveroProduct(FitFieldFaveroProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -45923,17 +45601,17 @@ pub struct FitMessageTrainingFile {
 impl fmt::Display for FitMessageTrainingFile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageTrainingFile")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
-        fmt_message_field!(self.manufacturer, "manufacturer", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.ftype, "ftype", f);
+        fmt_message_field!(self.manufacturer, "manufacturer", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "product_subfield_bytes", self.product_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "product", self.product)?;
-        fmt_message_field!(self.serial_number, "serial_number", false, f)?;
-        fmt_message_field!(self.time_created, "time_created", false, f)?;
+        fmt_message_field!(self.serial_number, "serial_number", f);
+        fmt_message_field!(self.time_created, "time_created", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -46282,60 +45960,43 @@ pub struct FitMessageUserProfile {
 impl fmt::Display for FitMessageUserProfile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageUserProfile")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.friendly_name, "friendly_name", false, f)?;
-        fmt_message_field!(self.gender, "gender", false, f)?;
-        fmt_message_field!(self.age, "age", false, f)?;
-        fmt_message_field!(self.height, "height", true, f)?;
-        fmt_message_field!(self.weight, "weight", true, f)?;
-        fmt_message_field!(self.language, "language", false, f)?;
-        fmt_message_field!(self.elev_setting, "elev_setting", false, f)?;
-        fmt_message_field!(self.weight_setting, "weight_setting", false, f)?;
-        fmt_message_field!(self.resting_heart_rate, "resting_heart_rate", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.friendly_name, "friendly_name", f);
+        fmt_message_field!(self.gender, "gender", f);
+        fmt_message_field!(self.age, "age", f);
+        fmt_message_field!(self.height, "height", f);
+        fmt_message_field!(self.weight, "weight", f);
+        fmt_message_field!(self.language, "language", f);
+        fmt_message_field!(self.elev_setting, "elev_setting", f);
+        fmt_message_field!(self.weight_setting, "weight_setting", f);
+        fmt_message_field!(self.resting_heart_rate, "resting_heart_rate", f);
         fmt_message_field!(
             self.default_max_running_heart_rate,
             "default_max_running_heart_rate",
-            false,
             f
-        )?;
+        );
         fmt_message_field!(
             self.default_max_biking_heart_rate,
             "default_max_biking_heart_rate",
-            false,
             f
-        )?;
-        fmt_message_field!(
-            self.default_max_heart_rate,
-            "default_max_heart_rate",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.hr_setting, "hr_setting", false, f)?;
-        fmt_message_field!(self.speed_setting, "speed_setting", false, f)?;
-        fmt_message_field!(self.dist_setting, "dist_setting", false, f)?;
-        fmt_message_field!(self.power_setting, "power_setting", false, f)?;
-        fmt_message_field!(self.activity_class, "activity_class", false, f)?;
-        fmt_message_field!(self.position_setting, "position_setting", false, f)?;
-        fmt_message_field!(self.temperature_setting, "temperature_setting", false, f)?;
-        fmt_message_field!(self.local_id, "local_id", false, f)?;
-        fmt_message_field!(self.global_id, "global_id", false, f)?;
-        fmt_message_field!(self.wake_time, "wake_time", false, f)?;
-        fmt_message_field!(self.sleep_time, "sleep_time", false, f)?;
-        fmt_message_field!(self.height_setting, "height_setting", false, f)?;
-        fmt_message_field!(
-            self.user_running_step_length,
-            "user_running_step_length",
-            true,
-            f
-        )?;
-        fmt_message_field!(
-            self.user_walking_step_length,
-            "user_walking_step_length",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.depth_setting, "depth_setting", false, f)?;
-        fmt_message_field!(self.dive_count, "dive_count", false, f)?;
+        );
+        fmt_message_field!(self.default_max_heart_rate, "default_max_heart_rate", f);
+        fmt_message_field!(self.hr_setting, "hr_setting", f);
+        fmt_message_field!(self.speed_setting, "speed_setting", f);
+        fmt_message_field!(self.dist_setting, "dist_setting", f);
+        fmt_message_field!(self.power_setting, "power_setting", f);
+        fmt_message_field!(self.activity_class, "activity_class", f);
+        fmt_message_field!(self.position_setting, "position_setting", f);
+        fmt_message_field!(self.temperature_setting, "temperature_setting", f);
+        fmt_message_field!(self.local_id, "local_id", f);
+        fmt_message_field!(self.global_id, "global_id", f);
+        fmt_message_field!(self.wake_time, "wake_time", f);
+        fmt_message_field!(self.sleep_time, "sleep_time", f);
+        fmt_message_field!(self.height_setting, "height_setting", f);
+        fmt_message_field!(self.user_running_step_length, "user_running_step_length", f);
+        fmt_message_field!(self.user_walking_step_length, "user_walking_step_length", f);
+        fmt_message_field!(self.depth_setting, "depth_setting", f);
+        fmt_message_field!(self.dive_count, "dive_count", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -46741,9 +46402,9 @@ pub struct FitMessageVideo {
 impl fmt::Display for FitMessageVideo {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideo")?;
-        fmt_message_field!(self.url, "url", false, f)?;
-        fmt_message_field!(self.hosting_provider, "hosting_provider", false, f)?;
-        fmt_message_field!(self.duration, "duration", false, f)?;
+        fmt_message_field!(self.url, "url", f);
+        fmt_message_field!(self.hosting_provider, "hosting_provider", f);
+        fmt_message_field!(self.duration, "duration", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -46981,13 +46642,13 @@ pub struct FitMessageVideoClip {
 impl fmt::Display for FitMessageVideoClip {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoClip")?;
-        fmt_message_field!(self.clip_number, "clip_number", false, f)?;
-        fmt_message_field!(self.start_timestamp, "start_timestamp", false, f)?;
-        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", false, f)?;
-        fmt_message_field!(self.end_timestamp, "end_timestamp", false, f)?;
-        fmt_message_field!(self.end_timestamp_ms, "end_timestamp_ms", false, f)?;
-        fmt_message_field!(self.clip_start, "clip_start", false, f)?;
-        fmt_message_field!(self.clip_end, "clip_end", false, f)?;
+        fmt_message_field!(self.clip_number, "clip_number", f);
+        fmt_message_field!(self.start_timestamp, "start_timestamp", f);
+        fmt_message_field!(self.start_timestamp_ms, "start_timestamp_ms", f);
+        fmt_message_field!(self.end_timestamp, "end_timestamp", f);
+        fmt_message_field!(self.end_timestamp_ms, "end_timestamp_ms", f);
+        fmt_message_field!(self.clip_start, "clip_start", f);
+        fmt_message_field!(self.clip_end, "clip_end", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -47248,9 +46909,9 @@ pub struct FitMessageVideoDescription {
 impl fmt::Display for FitMessageVideoDescription {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoDescription")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.message_count, "message_count", false, f)?;
-        fmt_message_field!(self.text, "text", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.message_count, "message_count", f);
+        fmt_message_field!(self.text, "text", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -47487,9 +47148,9 @@ pub struct FitMessageVideoFrame {
 impl fmt::Display for FitMessageVideoFrame {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoFrame")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.timestamp_ms, "timestamp_ms", false, f)?;
-        fmt_message_field!(self.frame_number, "frame_number", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.frame_number, "frame_number", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -47738,9 +47399,9 @@ pub struct FitMessageVideoTitle {
 impl fmt::Display for FitMessageVideoTitle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageVideoTitle")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.message_count, "message_count", false, f)?;
-        fmt_message_field!(self.text, "text", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.message_count, "message_count", f);
+        fmt_message_field!(self.text, "text", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -47964,8 +47625,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    DigitalLayout(FitFieldDigitalWatchfaceLayout),
     AnalogLayout(FitFieldAnalogWatchfaceLayout),
+    DigitalLayout(FitFieldDigitalWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -48048,8 +47709,8 @@ pub struct FitMessageWatchfaceSettings {
 impl fmt::Display for FitMessageWatchfaceSettings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWatchfaceSettings")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.mode, "mode", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.mode, "mode", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -48351,12 +48012,12 @@ pub struct FitMessageWeatherAlert {
 impl fmt::Display for FitMessageWeatherAlert {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeatherAlert")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.report_id, "report_id", false, f)?;
-        fmt_message_field!(self.issue_time, "issue_time", false, f)?;
-        fmt_message_field!(self.expire_time, "expire_time", false, f)?;
-        fmt_message_field!(self.severity, "severity", false, f)?;
-        fmt_message_field!(self.ftype, "ftype", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.report_id, "report_id", f);
+        fmt_message_field!(self.issue_time, "issue_time", f);
+        fmt_message_field!(self.expire_time, "expire_time", f);
+        fmt_message_field!(self.severity, "severity", f);
+        fmt_message_field!(self.ftype, "ftype", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -48636,37 +48297,26 @@ pub struct FitMessageWeatherConditions {
 impl fmt::Display for FitMessageWeatherConditions {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeatherConditions")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.weather_report, "weather_report", false, f)?;
-        fmt_message_field!(self.temperature, "temperature", false, f)?;
-        fmt_message_field!(self.condition, "condition", false, f)?;
-        fmt_message_field!(self.wind_direction, "wind_direction", false, f)?;
-        fmt_message_field!(self.wind_speed, "wind_speed", true, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.weather_report, "weather_report", f);
+        fmt_message_field!(self.temperature, "temperature", f);
+        fmt_message_field!(self.condition, "condition", f);
+        fmt_message_field!(self.wind_direction, "wind_direction", f);
+        fmt_message_field!(self.wind_speed, "wind_speed", f);
         fmt_message_field!(
             self.precipitation_probability,
             "precipitation_probability",
-            false,
             f
-        )?;
-        fmt_message_field!(
-            self.temperature_feels_like,
-            "temperature_feels_like",
-            false,
-            f
-        )?;
-        fmt_message_field!(self.relative_humidity, "relative_humidity", false, f)?;
-        fmt_message_field!(self.location, "location", false, f)?;
-        fmt_message_field!(self.observed_at_time, "observed_at_time", false, f)?;
-        fmt_message_field!(self.observed_location_lat, "observed_location_lat", true, f)?;
-        fmt_message_field!(
-            self.observed_location_long,
-            "observed_location_long",
-            true,
-            f
-        )?;
-        fmt_message_field!(self.day_of_week, "day_of_week", false, f)?;
-        fmt_message_field!(self.high_temperature, "high_temperature", false, f)?;
-        fmt_message_field!(self.low_temperature, "low_temperature", false, f)?;
+        );
+        fmt_message_field!(self.temperature_feels_like, "temperature_feels_like", f);
+        fmt_message_field!(self.relative_humidity, "relative_humidity", f);
+        fmt_message_field!(self.location, "location", f);
+        fmt_message_field!(self.observed_at_time, "observed_at_time", f);
+        fmt_message_field!(self.observed_location_lat, "observed_location_lat", f);
+        fmt_message_field!(self.observed_location_long, "observed_location_long", f);
+        fmt_message_field!(self.day_of_week, "day_of_week", f);
+        fmt_message_field!(self.high_temperature, "high_temperature", f);
+        fmt_message_field!(self.low_temperature, "low_temperature", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -49007,19 +48657,19 @@ pub struct FitMessageWeightScale {
 impl fmt::Display for FitMessageWeightScale {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWeightScale")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.weight, "weight", false, f)?;
-        fmt_message_field!(self.percent_fat, "percent_fat", true, f)?;
-        fmt_message_field!(self.percent_hydration, "percent_hydration", true, f)?;
-        fmt_message_field!(self.visceral_fat_mass, "visceral_fat_mass", true, f)?;
-        fmt_message_field!(self.bone_mass, "bone_mass", true, f)?;
-        fmt_message_field!(self.muscle_mass, "muscle_mass", true, f)?;
-        fmt_message_field!(self.basal_met, "basal_met", true, f)?;
-        fmt_message_field!(self.physique_rating, "physique_rating", false, f)?;
-        fmt_message_field!(self.active_met, "active_met", true, f)?;
-        fmt_message_field!(self.metabolic_age, "metabolic_age", false, f)?;
-        fmt_message_field!(self.visceral_fat_rating, "visceral_fat_rating", false, f)?;
-        fmt_message_field!(self.user_profile_index, "user_profile_index", false, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.weight, "weight", f);
+        fmt_message_field!(self.percent_fat, "percent_fat", f);
+        fmt_message_field!(self.percent_hydration, "percent_hydration", f);
+        fmt_message_field!(self.visceral_fat_mass, "visceral_fat_mass", f);
+        fmt_message_field!(self.bone_mass, "bone_mass", f);
+        fmt_message_field!(self.muscle_mass, "muscle_mass", f);
+        fmt_message_field!(self.basal_met, "basal_met", f);
+        fmt_message_field!(self.physique_rating, "physique_rating", f);
+        fmt_message_field!(self.active_met, "active_met", f);
+        fmt_message_field!(self.metabolic_age, "metabolic_age", f);
+        fmt_message_field!(self.visceral_fat_rating, "visceral_fat_rating", f);
+        fmt_message_field!(self.user_profile_index, "user_profile_index", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -49332,13 +48982,13 @@ pub struct FitMessageWorkout {
 impl fmt::Display for FitMessageWorkout {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkout")?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.capabilities, "capabilities", false, f)?;
-        fmt_message_field!(self.num_valid_steps, "num_valid_steps", false, f)?;
-        fmt_message_field!(self.wkt_name, "wkt_name", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.pool_length, "pool_length", true, f)?;
-        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f)?;
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.capabilities, "capabilities", f);
+        fmt_message_field!(self.num_valid_steps, "num_valid_steps", f);
+        fmt_message_field!(self.wkt_name, "wkt_name", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.pool_length, "pool_length", f);
+        fmt_message_field!(self.pool_length_unit, "pool_length_unit", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -49603,13 +49253,13 @@ pub struct FitMessageWorkoutSession {
 impl fmt::Display for FitMessageWorkoutSession {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkoutSession")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.sport, "sport", false, f)?;
-        fmt_message_field!(self.sub_sport, "sub_sport", false, f)?;
-        fmt_message_field!(self.num_valid_steps, "num_valid_steps", false, f)?;
-        fmt_message_field!(self.first_step_index, "first_step_index", false, f)?;
-        fmt_message_field!(self.pool_length, "pool_length", true, f)?;
-        fmt_message_field!(self.pool_length_unit, "pool_length_unit", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.sport, "sport", f);
+        fmt_message_field!(self.sub_sport, "sub_sport", f);
+        fmt_message_field!(self.num_valid_steps, "num_valid_steps", f);
+        fmt_message_field!(self.first_step_index, "first_step_index", f);
+        fmt_message_field!(self.pool_length, "pool_length", f);
+        fmt_message_field!(self.pool_length_unit, "pool_length_unit", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -49857,13 +49507,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationPower(FitFieldWorkoutPower),
-    DurationCalories(FitUint32),
     DurationStep(FitUint32),
-    DurationDistance(FitFloat64),
+    DurationPower(FitFieldWorkoutPower),
     DurationHr(FitFieldWorkoutHr),
-    DurationReps(FitUint32),
     DurationTime(FitFloat64),
+    DurationReps(FitUint32),
+    DurationCalories(FitUint32),
+    DurationDistance(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -50194,16 +49844,16 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetStrokeType(FitFieldSwimStroke),
     RepeatDistance(FitFloat64),
+    RepeatPower(FitFieldWorkoutPower),
+    TargetStrokeType(FitFieldSwimStroke),
     TargetCadenceZone(FitUint32),
     RepeatHr(FitFieldWorkoutHr),
-    TargetPowerZone(FitUint32),
     TargetSpeedZone(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    RepeatTime(FitFloat64),
-    RepeatCalories(FitUint32),
     RepeatSteps(FitUint32),
+    TargetPowerZone(FitUint32),
+    RepeatCalories(FitUint32),
+    RepeatTime(FitFloat64),
     TargetHrZone(FitUint32),
 }
 
@@ -50216,6 +49866,96 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
+        match message.target_type.get_single()? {
+            FitFieldWktStepTarget::Speed => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::HeartRate => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::Cadence => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::Power => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::SwimStroke => {
+                let mut parser =
+                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                    new_actions,
+                ));
+            }
+
+            _ => (),
+        }
+
         match message.duration_type.get_single()? {
             FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
                 let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -50365,96 +50105,6 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             _ => (),
         }
 
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::SwimStroke => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
-        }
-
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
         parser.parse(inp, parse_config)?;
 
@@ -50471,10 +50121,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetSpeedLow(FitFloat64),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetSpeedLow(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -50580,10 +50230,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerHigh(FitFieldWorkoutPower),
     CustomTargetSpeedHigh(FitFloat64),
     CustomTargetCadenceHigh(FitUint32),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -50720,16 +50370,16 @@ pub struct FitMessageWorkoutStep {
 impl fmt::Display for FitMessageWorkoutStep {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageWorkoutStep")?;
-        fmt_message_field!(self.message_index, "message_index", false, f)?;
-        fmt_message_field!(self.wkt_step_name, "wkt_step_name", false, f)?;
-        fmt_message_field!(self.duration_type, "duration_type", false, f)?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.wkt_step_name, "wkt_step_name", f);
+        fmt_message_field!(self.duration_type, "duration_type", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
             "duration_value_subfield_bytes", self.duration_value_subfield_bytes
         )?;
         writeln!(f, "  {: >28}: {:?}", "duration_value", self.duration_value)?;
-        fmt_message_field!(self.target_type, "target_type", false, f)?;
+        fmt_message_field!(self.target_type, "target_type", f);
         writeln!(
             f,
             "  {: >28}: {:?}",
@@ -50756,13 +50406,13 @@ impl fmt::Display for FitMessageWorkoutStep {
             "  {: >28}: {:?}",
             "custom_target_value_high", self.custom_target_value_high
         )?;
-        fmt_message_field!(self.intensity, "intensity", false, f)?;
-        fmt_message_field!(self.notes, "notes", false, f)?;
-        fmt_message_field!(self.equipment, "equipment", false, f)?;
-        fmt_message_field!(self.exercise_category, "exercise_category", false, f)?;
-        fmt_message_field!(self.exercise_name, "exercise_name", false, f)?;
-        fmt_message_field!(self.exercise_weight, "exercise_weight", true, f)?;
-        fmt_message_field!(self.weight_display_unit, "weight_display_unit", false, f)?;
+        fmt_message_field!(self.intensity, "intensity", f);
+        fmt_message_field!(self.notes, "notes", f);
+        fmt_message_field!(self.equipment, "equipment", f);
+        fmt_message_field!(self.exercise_category, "exercise_category", f);
+        fmt_message_field!(self.exercise_name, "exercise_name", f);
+        fmt_message_field!(self.exercise_weight, "exercise_weight", f);
+        fmt_message_field!(self.weight_display_unit, "weight_display_unit", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
@@ -51171,16 +50821,15 @@ pub struct FitMessageZonesTarget {
 impl fmt::Display for FitMessageZonesTarget {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageZonesTarget")?;
-        fmt_message_field!(self.max_heart_rate, "max_heart_rate", false, f)?;
-        fmt_message_field!(self.threshold_heart_rate, "threshold_heart_rate", false, f)?;
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", f);
+        fmt_message_field!(self.threshold_heart_rate, "threshold_heart_rate", f);
         fmt_message_field!(
             self.functional_threshold_power,
             "functional_threshold_power",
-            false,
             f
-        )?;
-        fmt_message_field!(self.hr_calc_type, "hr_calc_type", false, f)?;
-        fmt_message_field!(self.pwr_calc_type, "pwr_calc_type", false, f)?;
+        );
+        fmt_message_field!(self.hr_calc_type, "hr_calc_type", f);
+        fmt_message_field!(self.pwr_calc_type, "pwr_calc_type", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);

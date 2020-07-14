@@ -427,11 +427,8 @@ macro_rules! fmt_raw_bytes {
 
 #[macro_export]
 macro_rules! fmt_message_field {
-    ($thing:expr, $thingname:expr, false, $f:ident) => {
-        writeln!($f, "  {: >28}: {}", $thingname, $thing)
-    };
-    ($thing:expr, $thingname:expr, true, $f:ident) => {
-        writeln!($f, "  {: >28}: {}", $thingname, $thing)
+    ($thing:expr, $thingname:expr, $f:ident) => {
+        if $thing.is_parsed() { writeln!($f, "  {: >28}: {}", $thingname, $thing)?; }
     };
 }
 
@@ -558,12 +555,12 @@ pub struct FitMessageHr {
 impl fmt::Display for FitMessageHr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageHr")?;
-        fmt_message_field!(self.timestamp, "timestamp", false, f)?;
-        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", true, f)?;
-        fmt_message_field!(self.time256, "time256", true, f)?;
-        fmt_message_field!(self.filtered_bpm, "filtered_bpm", false, f)?;
-        fmt_message_field!(self.event_timestamp, "event_timestamp", true, f)?;
-        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", true, f)?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.fractional_timestamp, "fractional_timestamp", f);
+        fmt_message_field!(self.time256, "time256", f);
+        fmt_message_field!(self.filtered_bpm, "filtered_bpm", f);
+        fmt_message_field!(self.event_timestamp, "event_timestamp", f);
+        fmt_message_field!(self.event_timestamp_12, "event_timestamp_12", f);
 
         fmt_unknown_fields!(self, f);
         fmt_developer_fields!(self, f);
