@@ -1240,8 +1240,9 @@ macro_rules! fit_base_type_base {
             fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<$name> {
                 match $parser(input, parse_config) {
                     Ok(val) => Ok($name($name_enum::ValidValue(val))),
-                    Err(e) => {
-                        eprintln!("error parsing: {:?}", e);
+                    Err(_e) => {
+                        //println!("error parsing: {:?}", e);
+                        //eprintln!("error parsing: {:?}", e);
                         Ok($name($name_enum::InvalidValue))
                     }
                 }

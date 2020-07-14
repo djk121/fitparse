@@ -284,7 +284,8 @@ macro_rules! nom_parser {
 
         #[allow(dead_code)]
         pub fn parse_enum_as_bytes(input: &[u8], _parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            Ok(vec![parse_enum(input, _parse_config)?])
+            let val = nom_basic_internal_parser!(parse_uint8_internal, input)?;
+            Ok(vec![val])
         }
     };
     ("sint8") => {
@@ -294,7 +295,8 @@ macro_rules! nom_parser {
 
         #[allow(dead_code)]
         pub fn parse_sint8_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            let val = parse_sint8(input, parse_config)?;
+            let val = nom_basic_internal_parser!(parse_sint8_internal, input)?;
+
             match parse_config.endianness() {
                 Endianness::Big => {
                     Ok(val.to_be_bytes().to_vec())
@@ -311,7 +313,8 @@ macro_rules! nom_parser {
         }
 
         pub fn parse_uint8_as_bytes(input: &[u8], _parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            Ok(vec![parse_uint8(input, _parse_config)?])
+            let val = nom_basic_internal_parser!(parse_uint8_internal, input)?;
+            Ok(vec![val])
         }
     };
     ("uint8z") => {
@@ -347,7 +350,7 @@ macro_rules! nom_parser {
 
         #[allow(dead_code)]
         pub fn parse_sint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            let val = parse_sint16(input, parse_config)?;
+            let val = nom_basic_internal_parser!(parse_sint16_internal, input, parse_config.endianness())?;
             match parse_config.endianness() {
                 Endianness::Big => {
                     Ok(val.to_be_bytes().to_vec())
@@ -379,7 +382,7 @@ macro_rules! nom_parser {
         }
 
         pub fn parse_uint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            let val = parse_uint16(input, parse_config)?;
+            let val = nom_basic_internal_parser!(parse_uint16_internal, input, parse_config.endianness())?;
             match parse_config.endianness() {
                 Endianness::Big => {
                     Ok(val.to_be_bytes().to_vec())
@@ -445,7 +448,8 @@ macro_rules! nom_parser {
 
         #[allow(dead_code)]
         pub fn parse_sint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            let val = parse_sint32(input, parse_config)?;
+            let val = nom_basic_internal_parser!(parse_sint32_internal, input, parse_config.endianness())?;
+           
             match parse_config.endianness() {
                 Endianness::Big => {
                     Ok(val.to_be_bytes().to_vec())
@@ -477,7 +481,8 @@ macro_rules! nom_parser {
         }
 
         pub fn parse_uint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-            let val = parse_uint32(input, parse_config)?;
+            let val = nom_basic_internal_parser!(parse_uint32_internal, input, parse_config.endianness())?;
+            
             match parse_config.endianness() {
                 Endianness::Big => {
                     Ok(val.to_be_bytes().to_vec())
@@ -534,6 +539,7 @@ macro_rules! nom_parser {
         #[allow(dead_code)]
         pub fn parse_float32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
             let val = parse_float32(input, parse_config)?;
+          
             match parse_config.endianness() {
                 Endianness::Big => {
                     Ok(val.to_be_bytes().to_vec())

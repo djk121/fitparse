@@ -620,7 +620,7 @@ impl {{ message_name }} {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!({{ message_name }}), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }

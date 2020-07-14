@@ -19176,7 +19176,10 @@ impl FitMessageAccelerometerData {
                     stringify!(FitMessageAccelerometerData),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -19483,7 +19486,10 @@ impl FitMessageActivity {
                     stringify!(FitMessageActivity),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -19759,7 +19765,10 @@ impl FitMessageAntChannelId {
                     stringify!(FitMessageAntChannelId),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -20103,7 +20112,10 @@ impl FitMessageAntRx {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageAntRx), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -20463,7 +20475,10 @@ impl FitMessageAntTx {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageAntTx), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -20764,7 +20779,10 @@ impl FitMessageAviationAttitude {
                     stringify!(FitMessageAviationAttitude),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -21053,7 +21071,10 @@ impl FitMessageBarometerData {
                     stringify!(FitMessageBarometerData),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -21441,7 +21462,10 @@ impl FitMessageBikeProfile {
                     stringify!(FitMessageBikeProfile),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -21834,7 +21858,10 @@ impl FitMessageBloodPressure {
                     stringify!(FitMessageBloodPressure),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -22115,7 +22142,10 @@ impl FitMessageCadenceZone {
                     stringify!(FitMessageCadenceZone),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -22359,7 +22389,10 @@ impl FitMessageCameraEvent {
                     stringify!(FitMessageCameraEvent),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -22624,7 +22657,10 @@ impl FitMessageCapabilities {
                     stringify!(FitMessageCapabilities),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -22945,7 +22981,10 @@ impl FitMessageConnectivity {
                     stringify!(FitMessageConnectivity),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -23230,7 +23269,10 @@ impl FitMessageCourse {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageCourse), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -23490,7 +23532,10 @@ impl FitMessageCoursePoint {
                     stringify!(FitMessageCoursePoint),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -23766,7 +23811,10 @@ impl FitMessageDeveloperDataId {
                     stringify!(FitMessageDeveloperDataId),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -23870,8 +23918,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntplusDeviceType(FitFieldAntplusDeviceType),
     AntDeviceType(FitUint8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -23932,8 +23980,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -24250,7 +24298,10 @@ impl FitMessageDeviceInfo {
                     stringify!(FitMessageDeviceInfo),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -24725,7 +24776,10 @@ impl FitMessageDeviceSettings {
                     stringify!(FitMessageDeviceSettings),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -25061,7 +25115,10 @@ impl FitMessageDiveAlarm {
                     stringify!(FitMessageDiveAlarm),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -25317,7 +25374,10 @@ impl FitMessageDiveGas {
                     stringify!(FitMessageDiveGas),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -25723,7 +25783,10 @@ impl FitMessageDiveSettings {
                     stringify!(FitMessageDiveSettings),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -26133,7 +26196,10 @@ impl FitMessageDiveSummary {
                     stringify!(FitMessageDiveSummary),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -26281,26 +26347,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    SpeedHighAlert(FitFloat64),
-    SportPoint(FitUint32),
-    HrLowAlert(FitUint8),
-    GearChangeData(FitUint32),
-    HrHighAlert(FitUint8),
-    TimeDurationAlert(FitFloat64),
-    CadLowAlert(FitUint16),
-    PowerLowAlert(FitUint16),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    CoursePointIndex(FitFieldMessageIndex),
-    VirtualPartnerSpeed(FitFloat64),
     CommTimeout(FitFieldCommTimeoutType),
-    TimerTrigger(FitFieldTimerTrigger),
-    CalorieDurationAlert(FitUint32),
-    RiderPosition(FitFieldRiderPositionType),
-    CadHighAlert(FitUint16),
+    SportPoint(FitUint32),
     DistanceDurationAlert(FitFloat64),
     BatteryLevel(FitFloat64),
+    TimeDurationAlert(FitFloat64),
+    HrHighAlert(FitUint8),
+    CoursePointIndex(FitFieldMessageIndex),
+    CadHighAlert(FitUint16),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    HrLowAlert(FitUint8),
+    GearChangeData(FitUint32),
+    VirtualPartnerSpeed(FitFloat64),
+    CadLowAlert(FitUint16),
+    RiderPosition(FitFieldRiderPositionType),
+    TimerTrigger(FitFieldTimerTrigger),
+    PowerLowAlert(FitUint16),
     PowerHighAlert(FitUint16),
+    CalorieDurationAlert(FitUint32),
     SpeedLowAlert(FitFloat64),
+    SpeedHighAlert(FitFloat64),
 }
 
 impl FitMessageEventSubfieldData {
@@ -26962,7 +27028,10 @@ impl FitMessageEvent {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageEvent), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -27358,7 +27427,10 @@ impl FitMessageExdDataConceptConfiguration {
                     stringify!(FitMessageExdDataConceptConfiguration),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -27659,7 +27731,10 @@ impl FitMessageExdDataFieldConfiguration {
                     stringify!(FitMessageExdDataFieldConfiguration),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -27911,7 +27986,10 @@ impl FitMessageExdScreenConfiguration {
                     stringify!(FitMessageExdScreenConfiguration),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -28155,7 +28233,10 @@ impl FitMessageExerciseTitle {
                     stringify!(FitMessageExerciseTitle),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -28403,7 +28484,10 @@ impl FitMessageFieldCapabilities {
                     stringify!(FitMessageFieldCapabilities),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -28696,7 +28780,10 @@ impl FitMessageFieldDescription {
                     stringify!(FitMessageFieldDescription),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -28989,7 +29076,10 @@ impl FitMessageFileCapabilities {
                     stringify!(FitMessageFileCapabilities),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -29233,7 +29323,10 @@ impl FitMessageFileCreator {
                     stringify!(FitMessageFileCreator),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -29325,8 +29418,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -29584,7 +29677,10 @@ impl FitMessageFileId {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageFileId), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -29925,7 +30021,10 @@ impl FitMessageGoal {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageGoal), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -30225,7 +30324,10 @@ impl FitMessageGpsMetadata {
                     stringify!(FitMessageGpsMetadata),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -30521,7 +30623,10 @@ impl FitMessageGyroscopeData {
                     stringify!(FitMessageGyroscopeData),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -30913,7 +31018,10 @@ impl FitMessageHr {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageHr), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -31170,7 +31278,10 @@ impl FitMessageHrZone {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageHrZone), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -31419,7 +31530,10 @@ impl FitMessageHrmProfile {
                     stringify!(FitMessageHrmProfile),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -31650,7 +31764,10 @@ impl FitMessageHrv {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageHrv), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -32731,7 +32848,10 @@ impl FitMessageLap {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageLap), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -33554,7 +33674,10 @@ impl FitMessageLength {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageLength), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -33886,7 +34009,10 @@ impl FitMessageMagnetometerData {
                     stringify!(FitMessageMagnetometerData),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -34162,7 +34288,10 @@ impl FitMessageMemoGlob {
                     stringify!(FitMessageMemoGlob),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -34262,9 +34391,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    NumPerFile(FitUint16),
-    MaxPerFileType(FitUint16),
     MaxPerFile(FitUint16),
+    MaxPerFileType(FitUint16),
+    NumPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -34499,7 +34628,10 @@ impl FitMessageMesgCapabilities {
                     stringify!(FitMessageMesgCapabilities),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -34802,7 +34934,10 @@ impl FitMessageMetZone {
                     stringify!(FitMessageMetZone),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -34902,8 +35037,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Strokes(FitFloat64),
     Steps(FitFloat64),
+    Strokes(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -35283,7 +35418,10 @@ impl FitMessageMonitoring {
                     stringify!(FitMessageMonitoring),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -35714,7 +35852,10 @@ impl FitMessageMonitoringInfo {
                     stringify!(FitMessageMonitoringInfo),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -35975,7 +36116,10 @@ impl FitMessageNmeaSentence {
                     stringify!(FitMessageNmeaSentence),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -36247,7 +36391,10 @@ impl FitMessageObdiiData {
                     stringify!(FitMessageObdiiData),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -36515,7 +36662,10 @@ impl FitMessageOhrSettings {
                     stringify!(FitMessageOhrSettings),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -36832,7 +36982,10 @@ impl FitMessageOneDSensorCalibration {
                     stringify!(FitMessageOneDSensorCalibration),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -37149,7 +37302,10 @@ impl FitMessagePowerZone {
                     stringify!(FitMessagePowerZone),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -37825,7 +37981,10 @@ impl FitMessageRecord {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageRecord), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -38204,8 +38363,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -38466,7 +38625,10 @@ impl FitMessageSchedule {
                     stringify!(FitMessageSchedule),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -38798,7 +38960,10 @@ impl FitMessageSdmProfile {
                     stringify!(FitMessageSdmProfile),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -39094,7 +39259,10 @@ impl FitMessageSegmentFile {
                     stringify!(FitMessageSegmentFile),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -39386,7 +39554,10 @@ impl FitMessageSegmentId {
                     stringify!(FitMessageSegmentId),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -40176,7 +40347,10 @@ impl FitMessageSegmentLap {
                     stringify!(FitMessageSegmentLap),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -40845,7 +41019,10 @@ impl FitMessageSegmentLeaderboardEntry {
                     stringify!(FitMessageSegmentLeaderboardEntry),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -41109,7 +41286,10 @@ impl FitMessageSegmentPoint {
                     stringify!(FitMessageSegmentPoint),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -42281,7 +42461,10 @@ impl FitMessageSession {
                     stringify!(FitMessageSession),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -43128,7 +43311,10 @@ impl FitMessageSet {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageSet), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -43268,8 +43454,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -43510,7 +43696,10 @@ impl FitMessageSlaveDevice {
                     stringify!(FitMessageSlaveDevice),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -43797,7 +43986,10 @@ impl FitMessageSoftware {
                     stringify!(FitMessageSoftware),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -44033,7 +44225,10 @@ impl FitMessageSpeedZone {
                     stringify!(FitMessageSpeedZone),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -44266,7 +44461,10 @@ impl FitMessageSport {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageSport), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -44498,7 +44696,10 @@ impl FitMessageStressLevel {
                     stringify!(FitMessageStressLevel),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -44825,7 +45026,10 @@ impl FitMessageThreeDSensorCalibration {
                     stringify!(FitMessageThreeDSensorCalibration),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -45171,7 +45375,10 @@ impl FitMessageTimestampCorrelation {
                     stringify!(FitMessageTimestampCorrelation),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -45461,7 +45668,10 @@ impl FitMessageTotals {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageTotals), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -45597,8 +45807,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -45855,7 +46065,10 @@ impl FitMessageTrainingFile {
                     stringify!(FitMessageTrainingFile),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -46307,7 +46520,10 @@ impl FitMessageUserProfile {
                     stringify!(FitMessageUserProfile),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -46649,7 +46865,10 @@ impl FitMessageVideo {
             Err(e) => {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!(FitMessageVideo), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -46901,7 +47120,10 @@ impl FitMessageVideoClip {
                     stringify!(FitMessageVideoClip),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -47153,7 +47375,10 @@ impl FitMessageVideoDescription {
                     stringify!(FitMessageVideoDescription),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -47389,7 +47614,10 @@ impl FitMessageVideoFrame {
                     stringify!(FitMessageVideoFrame),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -47637,7 +47865,10 @@ impl FitMessageVideoTitle {
                     stringify!(FitMessageVideoTitle),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -47950,7 +48181,10 @@ impl FitMessageWatchfaceSettings {
                     stringify!(FitMessageWatchfaceSettings),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -48253,7 +48487,10 @@ impl FitMessageWeatherAlert {
                     stringify!(FitMessageWeatherAlert),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -48580,7 +48817,10 @@ impl FitMessageWeatherConditions {
                     stringify!(FitMessageWeatherConditions),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -48924,7 +49164,10 @@ impl FitMessageWeightScale {
                     stringify!(FitMessageWeightScale),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -49228,7 +49471,10 @@ impl FitMessageWorkout {
                     stringify!(FitMessageWorkout),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -49496,7 +49742,10 @@ impl FitMessageWorkoutSession {
                     stringify!(FitMessageWorkoutSession),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -49609,11 +49858,11 @@ pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
     DurationPower(FitFieldWorkoutPower),
-    DurationHr(FitFieldWorkoutHr),
-    DurationDistance(FitFloat64),
-    DurationReps(FitUint32),
     DurationCalories(FitUint32),
     DurationStep(FitUint32),
+    DurationDistance(FitFloat64),
+    DurationHr(FitFieldWorkoutHr),
+    DurationReps(FitUint32),
     DurationTime(FitFloat64),
 }
 
@@ -49945,17 +50194,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatCalories(FitUint32),
-    RepeatTime(FitFloat64),
-    TargetPowerZone(FitUint32),
-    TargetCadenceZone(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    TargetHrZone(FitUint32),
-    TargetSpeedZone(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    RepeatDistance(FitFloat64),
-    RepeatSteps(FitUint32),
     TargetStrokeType(FitFieldSwimStroke),
+    RepeatDistance(FitFloat64),
+    TargetCadenceZone(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
+    TargetPowerZone(FitUint32),
+    TargetSpeedZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    RepeatTime(FitFloat64),
+    RepeatCalories(FitUint32),
+    RepeatSteps(FitUint32),
+    TargetHrZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -49967,96 +50216,6 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::SwimStroke => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
-        }
-
         match message.duration_type.get_single()? {
             FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
                 let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -50206,6 +50365,96 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             _ => (),
         }
 
+        match message.target_type.get_single()? {
+            FitFieldWktStepTarget::Speed => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::HeartRate => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::Cadence => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::Power => {
+                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                    new_actions,
+                ));
+            }
+
+            FitFieldWktStepTarget::SwimStroke => {
+                let mut parser =
+                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                parser.parse(inp, parse_config)?;
+
+                let val = parser.get_single()?;
+
+                let new_actions: Vec<FitParseConfig> = vec![]
+                    .iter()
+                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                    .collect();
+
+                return Ok((
+                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                    new_actions,
+                ));
+            }
+
+            _ => (),
+        }
+
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
         parser.parse(inp, parse_config)?;
 
@@ -50222,10 +50471,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetSpeedLow(FitFloat64),
-    CustomTargetCadenceLow(FitUint32),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
     CustomTargetPowerLow(FitFieldWorkoutPower),
+    CustomTargetSpeedLow(FitFloat64),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetCadenceLow(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -50332,9 +50581,9 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetSpeedHigh(FitFloat64),
     CustomTargetCadenceHigh(FitUint32),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -50668,7 +50917,10 @@ impl FitMessageWorkoutStep {
                     stringify!(FitMessageWorkoutStep),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -51057,7 +51309,10 @@ impl FitMessageZonesTarget {
                     stringify!(FitMessageZonesTarget),
                     ":"
                 ));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                err_string.push_str(&format!(
+                    "  parsing these bytes: '{:x?}'",
+                    &inp[..self.definition_message.message_size]
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
