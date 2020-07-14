@@ -2,9 +2,19 @@
 name = "fitparse"
 version = "0.1.0"
 authors = ["dan kelley <djk121@gmail.com>"]
+description = "Rust library for parsing files in Garmin FIT format"
+readme = "README.md"
+repository = "https://github.com/djk121/fitparse"
+license = "MIT"
+keywords = ["FIT"]
+
 include = [
   "Cargo.toml",
   "src/*.rs",
+  "tests/*.rs",
+  "bin/*.rs",
+  "tools/*.py",
+  "Pipfile",
 ]
 
 [profile.release]
