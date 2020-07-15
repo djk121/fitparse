@@ -1,6 +1,18 @@
 ## Fitparse
 Fitparse is a Rust library which implements a parser for [Garmin's FIT file format](https://www.thisisant.com/developer/ant/ant-fs-and-fit1/).
 
+## Capabilities
+  - Implments most of the FIT standard, including:
+    - Basic parsing of Definition and Data messages
+    - Developer Fields
+    - Unknown (i.e., not in FIT profile) fields
+    - Subfields
+    - Components
+  - Not yet supported:
+    - Accumulators
+    - Chained FIT files
+    - File CRC verification
+
 ## Example
 
 ```rust
