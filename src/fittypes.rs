@@ -19933,6 +19933,10 @@ impl FitMessageAccelerometerData {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -20243,6 +20247,10 @@ impl FitMessageActivity {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -20521,6 +20529,10 @@ impl FitMessageAntChannelId {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -20868,6 +20880,10 @@ impl FitMessageAntRx {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -21232,6 +21248,10 @@ impl FitMessageAntTx {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -21531,6 +21551,10 @@ impl FitMessageAviationAttitude {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -21822,6 +21846,10 @@ impl FitMessageBarometerData {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -22209,6 +22237,10 @@ impl FitMessageBikeProfile {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -22601,6 +22633,10 @@ impl FitMessageBloodPressure {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -22885,6 +22921,10 @@ impl FitMessageCadenceZone {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -23131,6 +23171,10 @@ impl FitMessageCameraEvent {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -23395,6 +23439,10 @@ impl FitMessageCapabilities {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -23654,6 +23702,10 @@ impl FitMessageClimbPro {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -23978,6 +24030,10 @@ impl FitMessageConnectivity {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -24266,6 +24322,10 @@ impl FitMessageCourse {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -24528,6 +24588,10 @@ impl FitMessageCoursePoint {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -24808,6 +24872,10 @@ impl FitMessageDeveloperDataId {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -24911,8 +24979,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntDeviceType(FitUint8),
     AntplusDeviceType(FitFieldAntplusDeviceType),
+    AntDeviceType(FitUint8),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -24921,43 +24989,45 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageDeviceInfoSubfieldDeviceType, Vec<FitParseConfig>)> {
-        match message.source_type.get_single()? {
-            FitFieldSourceType::Antplus => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldAntplusDeviceType>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.source_type.is_parsed() {
+            match message.source_type.get_single()? {
+                FitFieldSourceType::Antplus => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldAntplusDeviceType>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageDeviceInfoSubfieldDeviceType::AntplusDeviceType(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageDeviceInfoSubfieldDeviceType::AntplusDeviceType(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldSourceType::Ant => {
+                    let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageDeviceInfoSubfieldDeviceType::AntDeviceType(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldSourceType::Ant => {
-                let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageDeviceInfoSubfieldDeviceType::AntDeviceType(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
@@ -24983,80 +25053,82 @@ impl FitMessageDeviceInfoSubfieldProduct {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageDeviceInfoSubfieldProduct, Vec<FitParseConfig>)> {
-        match message.manufacturer.get_single()? {
-            FitFieldManufacturer::FaveroElectronics => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.manufacturer.is_parsed() {
+            match message.manufacturer.get_single()? {
+                FitFieldManufacturer::FaveroElectronics => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageDeviceInfoSubfieldProduct::FaveroProduct(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageDeviceInfoSubfieldProduct::FaveroProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Garmin => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Dynastream => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::DynastreamOem => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldManufacturer::Garmin => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::Dynastream => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::DynastreamOem => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageDeviceInfoSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
@@ -25289,6 +25361,10 @@ impl FitMessageDeviceInfo {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -25760,6 +25836,10 @@ impl FitMessageDeviceSettings {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -26103,6 +26183,10 @@ impl FitMessageDiveAlarm {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -26362,6 +26446,10 @@ impl FitMessageDiveGas {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -26474,44 +26562,50 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
         FitMessageDiveSettingsSubfieldHeartRateSource,
         Vec<FitParseConfig>,
     )> {
-        match message.heart_rate_source_type.get_single()? {
-            FitFieldSourceType::Antplus => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldAntplusDeviceType>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.heart_rate_source_type.is_parsed() {
+            match message.heart_rate_source_type.get_single()? {
+                FitFieldSourceType::Antplus => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldAntplusDeviceType>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateAntplusDeviceType(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateAntplusDeviceType(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldSourceType::Local => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldLocalDeviceType>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateLocalDeviceType(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldSourceType::Local => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldLocalDeviceType>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageDiveSettingsSubfieldHeartRateSource::HeartRateLocalDeviceType(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
@@ -26760,6 +26854,10 @@ impl FitMessageDiveSettings {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -27174,6 +27272,10 @@ impl FitMessageDiveSummary {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -27321,27 +27423,27 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    TimeDurationAlert(FitFloat64),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    RiderPosition(FitFieldRiderPositionType),
+    PowerLowAlert(FitUint16),
+    HrHighAlert(FitUint8),
     VirtualPartnerSpeed(FitFloat64),
+    CommTimeout(FitFieldCommTimeoutType),
+    CadHighAlert(FitUint16),
+    BatteryLevel(FitFloat64),
+    DistanceDurationAlert(FitFloat64),
+    CalorieDurationAlert(FitUint32),
+    SportPoint(FitUint32),
+    TimeDurationAlert(FitFloat64),
+    GearChangeData(FitUint32),
+    CoursePointIndex(FitFieldMessageIndex),
+    CadLowAlert(FitUint16),
+    SpeedLowAlert(FitFloat64),
+    SpeedHighAlert(FitFloat64),
+    TimerTrigger(FitFieldTimerTrigger),
+    HrLowAlert(FitUint8),
     RadarThreatAlert(FitUint32),
     PowerHighAlert(FitUint16),
-    CadLowAlert(FitUint16),
-    BatteryLevel(FitFloat64),
-    CoursePointIndex(FitFieldMessageIndex),
-    GearChangeData(FitUint32),
-    PowerLowAlert(FitUint16),
-    DistanceDurationAlert(FitFloat64),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    CadHighAlert(FitUint16),
-    SpeedLowAlert(FitFloat64),
-    CommTimeout(FitFieldCommTimeoutType),
-    SportPoint(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    HrHighAlert(FitUint8),
-    HrLowAlert(FitUint8),
-    TimerTrigger(FitFieldTimerTrigger),
-    SpeedHighAlert(FitFloat64),
-    RiderPosition(FitFieldRiderPositionType),
 }
 
 impl FitMessageEventSubfieldData {
@@ -27352,485 +27454,506 @@ impl FitMessageEventSubfieldData {
     ) -> Result<(FitMessageEventSubfieldData, Vec<FitParseConfig>)> {
         let endianness = parse_config.endianness();
 
-        match message.event.get_single()? {
-            FitFieldEvent::Timer => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldTimerTrigger>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.event.is_parsed() {
+            match message.event.get_single()? {
+                FitFieldEvent::Timer => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldTimerTrigger>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::TimerTrigger(val), new_actions));
+                }
+
+                FitFieldEvent::CoursePoint => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldMessageIndex>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::CoursePointIndex(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::Battery => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint16>::new_single(
+                        "V".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::BatteryLevel(val), new_actions));
+                }
+
+                FitFieldEvent::VirtualPartnerPace => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint16>::new_single(
+                        "m/s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::VirtualPartnerSpeed(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::HrHighAlert => {
+                    let mut parser = FitFieldBasicValue::<FitUint8>::new_single("bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::HrHighAlert(val), new_actions));
+                }
+
+                FitFieldEvent::HrLowAlert => {
+                    let mut parser = FitFieldBasicValue::<FitUint8>::new_single("bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::HrLowAlert(val), new_actions));
+                }
+
+                FitFieldEvent::SpeedHighAlert => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "m/s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::SpeedHighAlert(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::SpeedLowAlert => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "m/s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::SpeedLowAlert(val), new_actions));
+                }
+
+                FitFieldEvent::CadHighAlert => {
+                    let mut parser = FitFieldBasicValue::<FitUint16>::new_single("rpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::CadHighAlert(val), new_actions));
+                }
+
+                FitFieldEvent::CadLowAlert => {
+                    let mut parser = FitFieldBasicValue::<FitUint16>::new_single("rpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::CadLowAlert(val), new_actions));
+                }
+
+                FitFieldEvent::PowerHighAlert => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint16>::new_single("watts".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::PowerHighAlert(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::PowerLowAlert => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint16>::new_single("watts".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::PowerLowAlert(val), new_actions));
+                }
+
+                FitFieldEvent::TimeDurationAlert => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::TimeDurationAlert(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::DistanceDurationAlert => {
+                    let mut parser =
+                        FitFieldAdjustedValue::<FitUint32>::new_single("m".to_string(), 100.0, 0.0);
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::DistanceDurationAlert(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::CalorieDurationAlert => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("calories".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::CalorieDurationAlert(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::FitnessEquipment => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldFitnessEquipmentState>::new_single(
+                            "".to_string(),
+                        );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageEventSubfieldData::FitnessEquipmentState(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldEvent::SportPoint => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![
+                        FitParseConfig::new_from_component(
+                            7,
+                            2,
+                            132,
+                            endianness,
+                            0,
+                            16,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            8,
+                            2,
+                            132,
+                            endianness,
+                            16,
+                            16,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                    ]
                     .iter()
                     .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
                     .collect();
 
-                return Ok((FitMessageEventSubfieldData::TimerTrigger(val), new_actions));
-            }
+                    return Ok((FitMessageEventSubfieldData::SportPoint(val), new_actions));
+                }
 
-            FitFieldEvent::CoursePoint => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldMessageIndex>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+                FitFieldEvent::FrontGearChange => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
+                    let new_actions: Vec<FitParseConfig> = vec![
+                        FitParseConfig::new_from_component(
+                            11,
+                            1,
+                            10,
+                            endianness,
+                            0,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            12,
+                            1,
+                            10,
+                            endianness,
+                            8,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            9,
+                            1,
+                            10,
+                            endianness,
+                            16,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            10,
+                            1,
+                            10,
+                            endianness,
+                            24,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                    ]
                     .iter()
                     .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
                     .collect();
 
-                return Ok((
-                    FitMessageEventSubfieldData::CoursePointIndex(val),
-                    new_actions,
-                ));
-            }
+                    return Ok((
+                        FitMessageEventSubfieldData::GearChangeData(val),
+                        new_actions,
+                    ));
+                }
 
-            FitFieldEvent::Battery => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint16>::new_single("V".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
+                FitFieldEvent::RearGearChange => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = <FitFloat64>::from(parser.get_single()?);
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
+                    let new_actions: Vec<FitParseConfig> = vec![
+                        FitParseConfig::new_from_component(
+                            11,
+                            1,
+                            10,
+                            endianness,
+                            0,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            12,
+                            1,
+                            10,
+                            endianness,
+                            8,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            9,
+                            1,
+                            10,
+                            endianness,
+                            16,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            10,
+                            1,
+                            10,
+                            endianness,
+                            24,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                    ]
                     .iter()
                     .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
                     .collect();
 
-                return Ok((FitMessageEventSubfieldData::BatteryLevel(val), new_actions));
-            }
+                    return Ok((
+                        FitMessageEventSubfieldData::GearChangeData(val),
+                        new_actions,
+                    ));
+                }
 
-            FitFieldEvent::VirtualPartnerPace => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint16>::new_single("m/s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
+                FitFieldEvent::RiderPositionChange => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldRiderPositionType>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = <FitFloat64>::from(parser.get_single()?);
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::RiderPosition(val), new_actions));
+                }
+
+                FitFieldEvent::CommTimeout => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldCommTimeoutType>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageEventSubfieldData::CommTimeout(val), new_actions));
+                }
+
+                FitFieldEvent::RadarThreatAlert => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![
+                        FitParseConfig::new_from_component(
+                            21,
+                            1,
+                            0,
+                            endianness,
+                            0,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                        FitParseConfig::new_from_component(
+                            22,
+                            1,
+                            2,
+                            endianness,
+                            8,
+                            8,
+                            Some((1.0, 0.0)),
+                            Some("".to_string()),
+                        ),
+                    ]
                     .iter()
                     .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
                     .collect();
 
-                return Ok((
-                    FitMessageEventSubfieldData::VirtualPartnerSpeed(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageEventSubfieldData::RadarThreatAlert(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldEvent::HrHighAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint8>::new_single("bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::HrHighAlert(val), new_actions));
-            }
-
-            FitFieldEvent::HrLowAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint8>::new_single("bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::HrLowAlert(val), new_actions));
-            }
-
-            FitFieldEvent::SpeedHighAlert => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m/s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::SpeedHighAlert(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::SpeedLowAlert => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m/s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::SpeedLowAlert(val), new_actions));
-            }
-
-            FitFieldEvent::CadHighAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("rpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::CadHighAlert(val), new_actions));
-            }
-
-            FitFieldEvent::CadLowAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("rpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::CadLowAlert(val), new_actions));
-            }
-
-            FitFieldEvent::PowerHighAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("watts".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::PowerHighAlert(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::PowerLowAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("watts".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::PowerLowAlert(val), new_actions));
-            }
-
-            FitFieldEvent::TimeDurationAlert => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::TimeDurationAlert(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::DistanceDurationAlert => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m".to_string(), 100.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::DistanceDurationAlert(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::CalorieDurationAlert => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint32>::new_single("calories".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::CalorieDurationAlert(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::FitnessEquipment => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldFitnessEquipmentState>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::FitnessEquipmentState(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::SportPoint => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![
-                    FitParseConfig::new_from_component(
-                        7,
-                        2,
-                        132,
-                        endianness,
-                        0,
-                        16,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        8,
-                        2,
-                        132,
-                        endianness,
-                        16,
-                        16,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                ]
-                .iter()
-                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                .collect();
-
-                return Ok((FitMessageEventSubfieldData::SportPoint(val), new_actions));
-            }
-
-            FitFieldEvent::FrontGearChange => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![
-                    FitParseConfig::new_from_component(
-                        11,
-                        1,
-                        10,
-                        endianness,
-                        0,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        12,
-                        1,
-                        10,
-                        endianness,
-                        8,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        9,
-                        1,
-                        10,
-                        endianness,
-                        16,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        10,
-                        1,
-                        10,
-                        endianness,
-                        24,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                ]
-                .iter()
-                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::GearChangeData(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::RearGearChange => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![
-                    FitParseConfig::new_from_component(
-                        11,
-                        1,
-                        10,
-                        endianness,
-                        0,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        12,
-                        1,
-                        10,
-                        endianness,
-                        8,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        9,
-                        1,
-                        10,
-                        endianness,
-                        16,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        10,
-                        1,
-                        10,
-                        endianness,
-                        24,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                ]
-                .iter()
-                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::GearChangeData(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldEvent::RiderPositionChange => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldRiderPositionType>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::RiderPosition(val), new_actions));
-            }
-
-            FitFieldEvent::CommTimeout => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldCommTimeoutType>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageEventSubfieldData::CommTimeout(val), new_actions));
-            }
-
-            FitFieldEvent::RadarThreatAlert => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![
-                    FitParseConfig::new_from_component(
-                        21,
-                        1,
-                        0,
-                        endianness,
-                        0,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                    FitParseConfig::new_from_component(
-                        22,
-                        1,
-                        2,
-                        endianness,
-                        8,
-                        8,
-                        Some((1.0, 0.0)),
-                        Some("".to_string()),
-                    ),
-                ]
-                .iter()
-                .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                .collect();
-
-                return Ok((
-                    FitMessageEventSubfieldData::RadarThreatAlert(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -28052,6 +28175,10 @@ impl FitMessageEvent {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -28461,6 +28588,10 @@ impl FitMessageExdDataConceptConfiguration {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -28765,6 +28896,10 @@ impl FitMessageExdDataFieldConfiguration {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -29020,6 +29155,10 @@ impl FitMessageExdScreenConfiguration {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -29266,6 +29405,10 @@ impl FitMessageExerciseTitle {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -29517,6 +29660,10 @@ impl FitMessageFieldCapabilities {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -29808,6 +29955,10 @@ impl FitMessageFieldDescription {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -30105,6 +30256,10 @@ impl FitMessageFileCapabilities {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -30352,6 +30507,10 @@ impl FitMessageFileCreator {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -30453,80 +30612,82 @@ impl FitMessageFileIdSubfieldProduct {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageFileIdSubfieldProduct, Vec<FitParseConfig>)> {
-        match message.manufacturer.get_single()? {
-            FitFieldManufacturer::FaveroElectronics => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.manufacturer.is_parsed() {
+            match message.manufacturer.get_single()? {
+                FitFieldManufacturer::FaveroElectronics => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageFileIdSubfieldProduct::FaveroProduct(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageFileIdSubfieldProduct::FaveroProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Garmin => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageFileIdSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Dynastream => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageFileIdSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::DynastreamOem => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageFileIdSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldManufacturer::Garmin => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageFileIdSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::Dynastream => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageFileIdSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::DynastreamOem => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageFileIdSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
@@ -30705,6 +30866,10 @@ impl FitMessageFileId {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -31050,6 +31215,10 @@ impl FitMessageGoal {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -31353,6 +31522,10 @@ impl FitMessageGpsMetadata {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -31651,6 +31824,10 @@ impl FitMessageGyroscopeData {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -32047,6 +32224,10 @@ impl FitMessageHr {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -32307,6 +32488,10 @@ impl FitMessageHrZone {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -32554,6 +32739,10 @@ impl FitMessageHrmProfile {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -32787,6 +32976,10 @@ impl FitMessageHrv {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -33051,6 +33244,10 @@ impl FitMessageJump {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -33195,42 +33392,46 @@ impl FitMessageLapSubfieldTotalCycles {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageLapSubfieldTotalCycles, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Running => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Running => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageLapSubfieldTotalCycles::TotalStrides(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageLapSubfieldTotalCycles::TotalStrides(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldSport::Walking => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageLapSubfieldTotalCycles::TotalStrides(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldSport::Walking => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageLapSubfieldTotalCycles::TotalStrides(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -33255,26 +33456,28 @@ impl FitMessageLapSubfieldAvgCadence {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageLapSubfieldAvgCadence, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Running => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Running => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageLapSubfieldAvgCadence::AvgRunningCadence(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageLapSubfieldAvgCadence::AvgRunningCadence(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
@@ -33299,26 +33502,28 @@ impl FitMessageLapSubfieldMaxCadence {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageLapSubfieldMaxCadence, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Running => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Running => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageLapSubfieldMaxCadence::MaxRunningCadence(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageLapSubfieldMaxCadence::MaxRunningCadence(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
@@ -34134,6 +34339,10 @@ impl FitMessageLap {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -34981,6 +35190,10 @@ impl FitMessageLength {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -35316,6 +35529,10 @@ impl FitMessageMagnetometerData {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -35595,6 +35812,10 @@ impl FitMessageMemoGlob {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -35694,8 +35915,8 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    MaxPerFileType(FitUint16),
     NumPerFile(FitUint16),
+    MaxPerFileType(FitUint16),
     MaxPerFile(FitUint16),
 }
 
@@ -35705,59 +35926,61 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageMesgCapabilitiesSubfieldCount, Vec<FitParseConfig>)> {
-        match message.count_type.get_single()? {
-            FitFieldMesgCount::NumPerFile => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.count_type.is_parsed() {
+            match message.count_type.get_single()? {
+                FitFieldMesgCount::NumPerFile => {
+                    let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageMesgCapabilitiesSubfieldCount::NumPerFile(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageMesgCapabilitiesSubfieldCount::NumPerFile(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldMesgCount::MaxPerFile => {
+                    let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageMesgCapabilitiesSubfieldCount::MaxPerFile(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldMesgCount::MaxPerFileType => {
+                    let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageMesgCapabilitiesSubfieldCount::MaxPerFileType(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldMesgCount::MaxPerFile => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageMesgCapabilitiesSubfieldCount::MaxPerFile(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldMesgCount::MaxPerFileType => {
-                let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageMesgCapabilitiesSubfieldCount::MaxPerFileType(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
@@ -35934,6 +36157,10 @@ impl FitMessageMesgCapabilities {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -36241,6 +36468,10 @@ impl FitMessageMetZone {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -36350,74 +36581,88 @@ impl FitMessageMonitoringSubfieldCycles {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageMonitoringSubfieldCycles, Vec<FitParseConfig>)> {
-        match message.activity_type.get_single()? {
-            FitFieldActivityType::Walking => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("steps".to_string(), 1.0, 0.0);
-                parser.parse(inp, parse_config)?;
+        if message.activity_type.is_parsed() {
+            match message.activity_type.get_single()? {
+                FitFieldActivityType::Walking => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "steps".to_string(),
+                        1.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
 
-                let val = <FitFloat64>::from(parser.get_single()?);
+                    let val = <FitFloat64>::from(parser.get_single()?);
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), new_actions));
+                    return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), new_actions));
+                }
+
+                FitFieldActivityType::Running => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "steps".to_string(),
+                        1.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), new_actions));
+                }
+
+                FitFieldActivityType::Cycling => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "strokes".to_string(),
+                        2.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageMonitoringSubfieldCycles::Strokes(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldActivityType::Swimming => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "strokes".to_string(),
+                        2.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageMonitoringSubfieldCycles::Strokes(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldActivityType::Running => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("steps".to_string(), 1.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((FitMessageMonitoringSubfieldCycles::Steps(val), new_actions));
-            }
-
-            FitFieldActivityType::Cycling => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("strokes".to_string(), 2.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageMonitoringSubfieldCycles::Strokes(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldActivityType::Swimming => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("strokes".to_string(), 2.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageMonitoringSubfieldCycles::Strokes(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldAdjustedValue::<FitFloat64>::new_single("".to_string(), 2.0, 0.0);
@@ -36721,6 +36966,10 @@ impl FitMessageMonitoring {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -37151,6 +37400,10 @@ impl FitMessageMonitoringInfo {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -37414,6 +37667,10 @@ impl FitMessageNmeaSentence {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -37690,6 +37947,10 @@ impl FitMessageObdiiData {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -37961,6 +38222,10 @@ impl FitMessageOhrSettings {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -38076,25 +38341,29 @@ impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
         FitMessageOneDSensorCalibrationSubfieldCalibrationFactor,
         Vec<FitParseConfig>,
     )> {
-        match message.sensor_type.get_single()? {
-            FitFieldSensorType::Barometer => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("Pa".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sensor_type.is_parsed() {
+            match message.sensor_type.get_single()? {
+                FitFieldSensorType::Barometer => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("Pa".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::BaroCalFactor(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageOneDSensorCalibrationSubfieldCalibrationFactor::BaroCalFactor(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -38280,6 +38549,10 @@ impl FitMessageOneDSensorCalibration {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -38600,6 +38873,10 @@ impl FitMessagePowerZone {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -39288,6 +39565,10 @@ impl FitMessageRecord {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -39701,80 +39982,82 @@ impl FitMessageScheduleSubfieldProduct {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageScheduleSubfieldProduct, Vec<FitParseConfig>)> {
-        match message.manufacturer.get_single()? {
-            FitFieldManufacturer::FaveroElectronics => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.manufacturer.is_parsed() {
+            match message.manufacturer.get_single()? {
+                FitFieldManufacturer::FaveroElectronics => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageScheduleSubfieldProduct::FaveroProduct(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageScheduleSubfieldProduct::FaveroProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Garmin => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageScheduleSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Dynastream => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageScheduleSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::DynastreamOem => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageScheduleSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldManufacturer::Garmin => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageScheduleSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::Dynastream => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageScheduleSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::DynastreamOem => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageScheduleSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
@@ -39956,6 +40239,10 @@ impl FitMessageSchedule {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -40287,6 +40574,10 @@ impl FitMessageSdmProfile {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -40574,6 +40865,10 @@ impl FitMessageSegmentFile {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -40865,6 +41160,10 @@ impl FitMessageSegmentId {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -40994,25 +41293,28 @@ impl FitMessageSegmentLapSubfieldTotalCycles {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageSegmentLapSubfieldTotalCycles, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Cycling => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("strokes".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Cycling => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("strokes".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageSegmentLapSubfieldTotalCycles::TotalStrokes(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageSegmentLapSubfieldTotalCycles::TotalStrokes(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -41621,6 +41923,10 @@ impl FitMessageSegmentLap {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -42310,6 +42616,10 @@ impl FitMessageSegmentLeaderboardEntry {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -42577,6 +42887,10 @@ impl FitMessageSegmentPoint {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -42693,42 +43007,46 @@ impl FitMessageSessionSubfieldTotalCycles {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageSessionSubfieldTotalCycles, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Running => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Running => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageSessionSubfieldTotalCycles::TotalStrides(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageSessionSubfieldTotalCycles::TotalStrides(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldSport::Walking => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageSessionSubfieldTotalCycles::TotalStrides(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldSport::Walking => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageSessionSubfieldTotalCycles::TotalStrides(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -42753,26 +43071,28 @@ impl FitMessageSessionSubfieldAvgCadence {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageSessionSubfieldAvgCadence, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Running => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Running => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageSessionSubfieldAvgCadence::AvgRunningCadence(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageSessionSubfieldAvgCadence::AvgRunningCadence(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
@@ -42797,26 +43117,28 @@ impl FitMessageSessionSubfieldMaxCadence {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageSessionSubfieldMaxCadence, Vec<FitParseConfig>)> {
-        match message.sport.get_single()? {
-            FitFieldSport::Running => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sport.is_parsed() {
+            match message.sport.get_single()? {
+                FitFieldSport::Running => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint8>::new_single("strides/min".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageSessionSubfieldMaxCadence::MaxRunningCadence(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageSessionSubfieldMaxCadence::MaxRunningCadence(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint8>::new_single("".to_string());
@@ -43703,6 +44025,10 @@ impl FitMessageSession {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -44573,6 +44899,10 @@ impl FitMessageSet {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -44722,80 +45052,82 @@ impl FitMessageSlaveDeviceSubfieldProduct {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageSlaveDeviceSubfieldProduct, Vec<FitParseConfig>)> {
-        match message.manufacturer.get_single()? {
-            FitFieldManufacturer::FaveroElectronics => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.manufacturer.is_parsed() {
+            match message.manufacturer.get_single()? {
+                FitFieldManufacturer::FaveroElectronics => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageSlaveDeviceSubfieldProduct::FaveroProduct(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageSlaveDeviceSubfieldProduct::FaveroProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Garmin => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Dynastream => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::DynastreamOem => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldManufacturer::Garmin => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::Dynastream => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::DynastreamOem => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageSlaveDeviceSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
@@ -44957,6 +45289,10 @@ impl FitMessageSlaveDevice {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -45248,6 +45584,10 @@ impl FitMessageSoftware {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -45487,6 +45827,10 @@ impl FitMessageSpeedZone {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -45723,6 +46067,10 @@ impl FitMessageSport {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -45958,6 +46306,10 @@ impl FitMessageStressLevel {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -46062,42 +46414,49 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
         FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor,
         Vec<FitParseConfig>,
     )> {
-        match message.sensor_type.get_single()? {
-            FitFieldSensorType::Accelerometer => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("g".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.sensor_type.is_parsed() {
+            match message.sensor_type.get_single()? {
+                FitFieldSensorType::Accelerometer => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("g".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::AccelCalFactor(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::AccelCalFactor(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldSensorType::Gyroscope => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("deg/s".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::GyroCalFactor(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldSensorType::Gyroscope => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("deg/s".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor::GyroCalFactor(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -46287,6 +46646,10 @@ impl FitMessageThreeDSensorCalibration {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -46636,6 +46999,10 @@ impl FitMessageTimestampCorrelation {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -46929,6 +47296,10 @@ impl FitMessageTotals {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -47074,80 +47445,82 @@ impl FitMessageTrainingFileSubfieldProduct {
         inp: &'a [u8],
         parse_config: &FitParseConfig,
     ) -> Result<(FitMessageTrainingFileSubfieldProduct, Vec<FitParseConfig>)> {
-        match message.manufacturer.get_single()? {
-            FitFieldManufacturer::FaveroElectronics => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.manufacturer.is_parsed() {
+            match message.manufacturer.get_single()? {
+                FitFieldManufacturer::FaveroElectronics => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldFaveroProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageTrainingFileSubfieldProduct::FaveroProduct(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageTrainingFileSubfieldProduct::FaveroProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Garmin => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::Dynastream => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldManufacturer::DynastreamOem => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldManufacturer::Garmin => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::Dynastream => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldManufacturer::DynastreamOem => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldGarminProduct>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageTrainingFileSubfieldProduct::GarminProduct(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint16>::new_single("".to_string());
@@ -47325,6 +47698,10 @@ impl FitMessageTrainingFile {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -47764,6 +48141,10 @@ impl FitMessageUserProfile {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -48109,6 +48490,10 @@ impl FitMessageVideo {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -48363,6 +48748,10 @@ impl FitMessageVideoClip {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -48619,6 +49008,10 @@ impl FitMessageVideoDescription {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -48857,6 +49250,10 @@ impl FitMessageVideoFrame {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -49109,6 +49506,10 @@ impl FitMessageVideoTitle {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -49217,45 +49618,50 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
         FitMessageWatchfaceSettingsSubfieldLayout,
         Vec<FitParseConfig>,
     )> {
-        match message.mode.get_single()? {
-            FitFieldWatchfaceMode::Digital => {
-                let mut parser = FitFieldBasicValue::<FitFieldDigitalWatchfaceLayout>::new_single(
-                    "".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
+        if message.mode.is_parsed() {
+            match message.mode.get_single()? {
+                FitFieldWatchfaceMode::Digital => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldDigitalWatchfaceLayout>::new_single(
+                            "".to_string(),
+                        );
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageWatchfaceSettingsSubfieldLayout::DigitalLayout(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageWatchfaceSettingsSubfieldLayout::DigitalLayout(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWatchfaceMode::Analog => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldAnalogWatchfaceLayout>::new_single(
+                            "".to_string(),
+                        );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWatchfaceSettingsSubfieldLayout::AnalogLayout(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldWatchfaceMode::Analog => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldAnalogWatchfaceLayout>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWatchfaceSettingsSubfieldLayout::AnalogLayout(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitByte>::new_single("".to_string());
@@ -49424,6 +49830,10 @@ impl FitMessageWatchfaceSettings {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -49730,6 +50140,10 @@ impl FitMessageWeatherAlert {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -50049,6 +50463,10 @@ impl FitMessageWeatherConditions {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -50397,6 +50815,10 @@ impl FitMessageWeightScale {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -50704,6 +51126,10 @@ impl FitMessageWorkout {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -50975,6 +51401,10 @@ impl FitMessageWorkoutSession {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -51086,13 +51516,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationCalories(FitUint32),
-    DurationStep(FitUint32),
-    DurationTime(FitFloat64),
-    DurationDistance(FitFloat64),
-    DurationPower(FitFieldWorkoutPower),
     DurationReps(FitUint32),
     DurationHr(FitFieldWorkoutHr),
+    DurationPower(FitFieldWorkoutPower),
+    DurationStep(FitUint32),
+    DurationDistance(FitFloat64),
+    DurationTime(FitFloat64),
+    DurationCalories(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -51104,307 +51534,315 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
         FitMessageWorkoutStepSubfieldDurationValue,
         Vec<FitParseConfig>,
     )> {
-        match message.duration_type.get_single()? {
-            FitFieldWktStepDuration::Time => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
+        if message.duration_type.is_parsed() {
+            match message.duration_type.get_single()? {
+                FitFieldWktStepDuration::Time => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
 
-                let val = <FitFloat64>::from(parser.get_single()?);
+                    let val = <FitFloat64>::from(parser.get_single()?);
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationTime(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationTime(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepetitionTime => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationTime(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::Distance => {
+                    let mut parser =
+                        FitFieldAdjustedValue::<FitUint32>::new_single("m".to_string(), 100.0, 0.0);
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationDistance(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::HrLessThan => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationHr(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::HrGreaterThan => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationHr(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::Calories => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("calories".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationCalories(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilTime => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilDistance => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilCalories => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilHrLessThan => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilHrGreaterThan => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilPowerLessThan => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilPowerGreaterThan => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::PowerLessThan => {
+                    let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
+                        "% or watts".to_string(),
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::PowerGreaterThan => {
+                    let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
+                        "% or watts".to_string(),
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::Reps => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldDurationValue::DurationReps(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldWktStepDuration::RepetitionTime => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationTime(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::Distance => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m".to_string(), 100.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationDistance(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::HrLessThan => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationHr(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::HrGreaterThan => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationHr(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::Calories => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint32>::new_single("calories".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationCalories(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilTime => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilDistance => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilCalories => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilHrLessThan => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilHrGreaterThan => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilPowerLessThan => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilPowerGreaterThan => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationStep(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::PowerLessThan => {
-                let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
-                    "% or watts".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::PowerGreaterThan => {
-                let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
-                    "% or watts".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationPower(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::Reps => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldDurationValue::DurationReps(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -51423,17 +51861,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetHrZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    RepeatHr(FitFieldWorkoutHr),
+    RepeatCalories(FitUint32),
     RepeatDistance(FitFloat64),
     TargetStrokeType(FitFieldSwimStroke),
-    TargetPowerZone(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    TargetSpeedZone(FitUint32),
     RepeatSteps(FitUint32),
-    RepeatTime(FitFloat64),
-    RepeatCalories(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
+    TargetSpeedZone(FitUint32),
     TargetCadenceZone(FitUint32),
+    TargetHrZone(FitUint32),
+    TargetPowerZone(FitUint32),
+    RepeatTime(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -51445,243 +51883,250 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.duration_type.is_parsed() {
+            match message.duration_type.get_single()? {
+                FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatSteps(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilTime => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatTime(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilDistance => {
+                    let mut parser =
+                        FitFieldAdjustedValue::<FitUint32>::new_single("m".to_string(), 100.0, 0.0);
+                    parser.parse(inp, parse_config)?;
+
+                    let val = <FitFloat64>::from(parser.get_single()?);
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatDistance(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilCalories => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitUint32>::new_single("calories".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatCalories(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilHrLessThan => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilHrGreaterThan => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilPowerLessThan => {
+                    let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
+                        "% or watts".to_string(),
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepDuration::RepeatUntilPowerGreaterThan => {
+                    let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
+                        "% or watts".to_string(),
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::SwimStroke => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
-        match message.duration_type.get_single()? {
-            FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                parser.parse(inp, parse_config)?;
+        if message.target_type.is_parsed() {
+            match message.target_type.get_single()? {
+                FitFieldWktStepTarget::Speed => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
 
-                let val = parser.get_single()?;
+                    let val = parser.get_single()?;
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatSteps(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::HeartRate => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Cadence => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Power => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::SwimStroke => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldWktStepDuration::RepeatUntilTime => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatTime(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilDistance => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m".to_string(), 100.0, 0.0);
-                parser.parse(inp, parse_config)?;
-
-                let val = <FitFloat64>::from(parser.get_single()?);
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatDistance(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilCalories => {
-                let mut parser =
-                    FitFieldBasicValue::<FitUint32>::new_single("calories".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatCalories(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilHrLessThan => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilHrGreaterThan => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatHr(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilPowerLessThan => {
-                let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
-                    "% or watts".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepDuration::RepeatUntilPowerGreaterThan => {
-                let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
-                    "% or watts".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldTargetValue::RepeatPower(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -51702,8 +52147,8 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     Default(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
     CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -51715,82 +52160,93 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
         FitMessageWorkoutStepSubfieldCustomTargetValueLow,
         Vec<FitParseConfig>,
     )> {
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m/s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
+        if message.target_type.is_parsed() {
+            match message.target_type.get_single()? {
+                FitFieldWktStepTarget::Speed => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "m/s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
 
-                let val = <FitFloat64>::from(parser.get_single()?);
+                    let val = <FitFloat64>::from(parser.get_single()?);
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetSpeedLow(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetSpeedLow(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::HeartRate => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetHeartRateLow(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Cadence => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("rpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetCadenceLow(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Power => {
+                    let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
+                        "% or watts".to_string(),
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetPowerLow(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetHeartRateLow(
-                        val,
-                    ),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("rpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetCadenceLow(val),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
-                    "% or watts".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueLow::CustomTargetPowerLow(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -51809,10 +52265,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
-    CustomTargetCadenceHigh(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetCadenceHigh(FitUint32),
     CustomTargetSpeedHigh(FitFloat64),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -51824,84 +52280,88 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
         FitMessageWorkoutStepSubfieldCustomTargetValueHigh,
         Vec<FitParseConfig>,
     )> {
-        match message.target_type.get_single()? {
-            FitFieldWktStepTarget::Speed => {
-                let mut parser =
-                    FitFieldAdjustedValue::<FitUint32>::new_single("m/s".to_string(), 1000.0, 0.0);
-                parser.parse(inp, parse_config)?;
+        if message.target_type.is_parsed() {
+            match message.target_type.get_single()? {
+                FitFieldWktStepTarget::Speed => {
+                    let mut parser = FitFieldAdjustedValue::<FitUint32>::new_single(
+                        "m/s".to_string(),
+                        1000.0,
+                        0.0,
+                    );
+                    parser.parse(inp, parse_config)?;
 
-                let val = <FitFloat64>::from(parser.get_single()?);
+                    let val = <FitFloat64>::from(parser.get_single()?);
 
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
 
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetSpeedHigh(val),
-                    new_actions,
-                ));
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetSpeedHigh(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::HeartRate => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetHeartRateHigh(val), new_actions));
+                }
+
+                FitFieldWktStepTarget::Cadence => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("rpm".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetCadenceHigh(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Power => {
+                    let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
+                        "% or watts".to_string(),
+                    );
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetPowerHigh(
+                            val,
+                        ),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
             }
-
-            FitFieldWktStepTarget::HeartRate => {
-                let mut parser =
-                    FitFieldBasicValue::<FitFieldWorkoutHr>::new_single("% or bpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetHeartRateHigh(
-                        val,
-                    ),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Cadence => {
-                let mut parser = FitFieldBasicValue::<FitUint32>::new_single("rpm".to_string());
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetCadenceHigh(
-                        val,
-                    ),
-                    new_actions,
-                ));
-            }
-
-            FitFieldWktStepTarget::Power => {
-                let mut parser = FitFieldBasicValue::<FitFieldWorkoutPower>::new_single(
-                    "% or watts".to_string(),
-                );
-                parser.parse(inp, parse_config)?;
-
-                let val = parser.get_single()?;
-
-                let new_actions: Vec<FitParseConfig> = vec![]
-                    .iter()
-                    .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                    .collect();
-
-                return Ok((
-                    FitMessageWorkoutStepSubfieldCustomTargetValueHigh::CustomTargetPowerHigh(val),
-                    new_actions,
-                ));
-            }
-
-            _ => (),
         }
 
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
@@ -52149,6 +52609,10 @@ impl FitMessageWorkoutStep {
                 err_string.push_str(&format!(
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
+                ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
@@ -52541,6 +53005,10 @@ impl FitMessageZonesTarget {
                     "  parsing these bytes: '{:x?}'",
                     &inp[..self.definition_message.message_size]
                 ));
+                err_string.push_str(&format!(
+                    "  with this definition message: '{:?}'",
+                    self.definition_message
+                ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -52731,6 +53199,7 @@ pub enum FitDataMessage {
     WorkoutStep(Rc<FitMessageWorkoutStep>),
     ZonesTarget(Rc<FitMessageZonesTarget>),
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
+    ParseError(Error),
 }
 
 impl fmt::Display for FitDataMessage {
@@ -52823,6 +53292,7 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::WorkoutSession(m) => write!(f, "{}", m),
             FitDataMessage::WorkoutStep(m) => write!(f, "{}", m),
             FitDataMessage::ZonesTarget(m) => write!(f, "{}", m),
+            FitDataMessage::ParseError(e) => write!(f, "{}", e),
             FitDataMessage::UnknownToSdk(m) => write!(f, "{}", m),
         }
     }
@@ -53192,524 +53662,1133 @@ impl FitDataMessage {
         match definition_message.global_mesg_num {
             FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
                 let mut m = FitMessageAccelerometerData::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::AccelerometerData(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::AccelerometerData(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::AccelerometerData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Activity) => {
                 let mut m = FitMessageActivity::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Activity(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Activity(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Activity(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntChannelId) => {
                 let mut m = FitMessageAntChannelId::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::AntChannelId(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::AntChannelId(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::AntChannelId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntRx) => {
                 let mut m = FitMessageAntRx::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::AntRx(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::AntRx(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::AntRx(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntTx) => {
                 let mut m = FitMessageAntTx::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::AntTx(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::AntTx(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::AntTx(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AviationAttitude) => {
                 let mut m = FitMessageAviationAttitude::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::AviationAttitude(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::AviationAttitude(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::AviationAttitude(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::BarometerData) => {
                 let mut m = FitMessageBarometerData::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::BarometerData(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::BarometerData(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::BarometerData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::BikeProfile) => {
                 let mut m = FitMessageBikeProfile::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::BikeProfile(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::BikeProfile(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::BikeProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::BloodPressure) => {
                 let mut m = FitMessageBloodPressure::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::BloodPressure(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::BloodPressure(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::BloodPressure(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::CadenceZone) => {
                 let mut m = FitMessageCadenceZone::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::CadenceZone(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::CadenceZone(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::CadenceZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::CameraEvent) => {
                 let mut m = FitMessageCameraEvent::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::CameraEvent(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::CameraEvent(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::CameraEvent(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
                 let mut m = FitMessageCapabilities::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Capabilities(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Capabilities(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Capabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ClimbPro) => {
                 let mut m = FitMessageClimbPro::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ClimbPro(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ClimbPro(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ClimbPro(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
                 let mut m = FitMessageConnectivity::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Connectivity(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Connectivity(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Connectivity(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Course) => {
                 let mut m = FitMessageCourse::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Course(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Course(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Course(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::CoursePoint) => {
                 let mut m = FitMessageCoursePoint::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::CoursePoint(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::CoursePoint(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::CoursePoint(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeveloperDataId) => {
                 let mut m = FitMessageDeveloperDataId::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DeveloperDataId(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DeveloperDataId(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DeveloperDataId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceInfo) => {
                 let mut m = FitMessageDeviceInfo::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DeviceInfo(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DeviceInfo(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DeviceInfo(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceSettings) => {
                 let mut m = FitMessageDeviceSettings::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DeviceSettings(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DeviceSettings(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DeviceSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveAlarm) => {
                 let mut m = FitMessageDiveAlarm::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DiveAlarm(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DiveAlarm(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DiveAlarm(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveGas) => {
                 let mut m = FitMessageDiveGas::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DiveGas(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DiveGas(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DiveGas(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSettings) => {
                 let mut m = FitMessageDiveSettings::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DiveSettings(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DiveSettings(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DiveSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSummary) => {
                 let mut m = FitMessageDiveSummary::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::DiveSummary(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::DiveSummary(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::DiveSummary(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Event) => {
                 let mut m = FitMessageEvent::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Event(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Event(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Event(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataConceptConfiguration) => {
                 let mut m = FitMessageExdDataConceptConfiguration::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ExdDataConceptConfiguration(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ExdDataConceptConfiguration(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ExdDataConceptConfiguration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataFieldConfiguration) => {
                 let mut m = FitMessageExdDataFieldConfiguration::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ExdDataFieldConfiguration(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ExdDataFieldConfiguration(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ExdDataFieldConfiguration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdScreenConfiguration) => {
                 let mut m = FitMessageExdScreenConfiguration::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ExdScreenConfiguration(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ExdScreenConfiguration(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ExdScreenConfiguration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExerciseTitle) => {
                 let mut m = FitMessageExerciseTitle::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ExerciseTitle(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ExerciseTitle(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ExerciseTitle(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FieldCapabilities) => {
                 let mut m = FitMessageFieldCapabilities::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::FieldCapabilities(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::FieldCapabilities(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::FieldCapabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription) => {
                 let mut m = FitMessageFieldDescription::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::FieldDescription(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::FieldDescription(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::FieldDescription(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileCapabilities) => {
                 let mut m = FitMessageFileCapabilities::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::FileCapabilities(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::FileCapabilities(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::FileCapabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileCreator) => {
                 let mut m = FitMessageFileCreator::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::FileCreator(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::FileCreator(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::FileCreator(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileId) => {
                 let mut m = FitMessageFileId::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::FileId(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::FileId(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::FileId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Goal) => {
                 let mut m = FitMessageGoal::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Goal(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Goal(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Goal(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::GpsMetadata) => {
                 let mut m = FitMessageGpsMetadata::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::GpsMetadata(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::GpsMetadata(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::GpsMetadata(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::GyroscopeData) => {
                 let mut m = FitMessageGyroscopeData::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::GyroscopeData(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::GyroscopeData(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::GyroscopeData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hr) => {
                 let mut m = FitMessageHr::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Hr(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Hr(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Hr(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::HrZone) => {
                 let mut m = FitMessageHrZone::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::HrZone(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::HrZone(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::HrZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::HrmProfile) => {
                 let mut m = FitMessageHrmProfile::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::HrmProfile(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::HrmProfile(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::HrmProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hrv) => {
                 let mut m = FitMessageHrv::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Hrv(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Hrv(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Hrv(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Jump) => {
                 let mut m = FitMessageJump::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Jump(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Jump(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Jump(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
                 let mut m = FitMessageLap::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Lap(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Lap(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Lap(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Length) => {
                 let mut m = FitMessageLength::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Length(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Length(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Length(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MagnetometerData) => {
                 let mut m = FitMessageMagnetometerData::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::MagnetometerData(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::MagnetometerData(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::MagnetometerData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MemoGlob) => {
                 let mut m = FitMessageMemoGlob::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::MemoGlob(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::MemoGlob(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::MemoGlob(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MesgCapabilities) => {
                 let mut m = FitMessageMesgCapabilities::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::MesgCapabilities(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::MesgCapabilities(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::MesgCapabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MetZone) => {
                 let mut m = FitMessageMetZone::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::MetZone(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::MetZone(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::MetZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Monitoring) => {
                 let mut m = FitMessageMonitoring::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Monitoring(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Monitoring(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Monitoring(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MonitoringInfo) => {
                 let mut m = FitMessageMonitoringInfo::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::MonitoringInfo(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::MonitoringInfo(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::MonitoringInfo(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
                 let mut m = FitMessageNmeaSentence::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::NmeaSentence(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::NmeaSentence(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::NmeaSentence(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ObdiiData) => {
                 let mut m = FitMessageObdiiData::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ObdiiData(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ObdiiData(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ObdiiData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::OhrSettings) => {
                 let mut m = FitMessageOhrSettings::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::OhrSettings(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::OhrSettings(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::OhrSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::OneDSensorCalibration) => {
                 let mut m = FitMessageOneDSensorCalibration::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::OneDSensorCalibration(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::OneDSensorCalibration(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::OneDSensorCalibration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::PowerZone) => {
                 let mut m = FitMessagePowerZone::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::PowerZone(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::PowerZone(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::PowerZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Record) => {
                 let mut m = FitMessageRecord::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Record(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Record(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Record(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Schedule) => {
                 let mut m = FitMessageSchedule::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Schedule(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Schedule(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Schedule(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SdmProfile) => {
                 let mut m = FitMessageSdmProfile::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SdmProfile(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SdmProfile(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SdmProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentFile) => {
                 let mut m = FitMessageSegmentFile::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SegmentFile(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SegmentFile(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SegmentFile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentId) => {
                 let mut m = FitMessageSegmentId::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SegmentId(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SegmentId(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SegmentId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLap) => {
                 let mut m = FitMessageSegmentLap::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SegmentLap(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SegmentLap(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SegmentLap(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLeaderboardEntry) => {
                 let mut m = FitMessageSegmentLeaderboardEntry::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SegmentLeaderboardEntry(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SegmentLeaderboardEntry(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SegmentLeaderboardEntry(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentPoint) => {
                 let mut m = FitMessageSegmentPoint::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SegmentPoint(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SegmentPoint(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SegmentPoint(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Session) => {
                 let mut m = FitMessageSession::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Session(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Session(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Session(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Set) => {
                 let mut m = FitMessageSet::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Set(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Set(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Set(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
                 let mut m = FitMessageSlaveDevice::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SlaveDevice(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SlaveDevice(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SlaveDevice(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Software) => {
                 let mut m = FitMessageSoftware::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Software(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Software(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Software(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SpeedZone) => {
                 let mut m = FitMessageSpeedZone::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::SpeedZone(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::SpeedZone(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::SpeedZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Sport) => {
                 let mut m = FitMessageSport::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Sport(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Sport(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Sport(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::StressLevel) => {
                 let mut m = FitMessageStressLevel::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::StressLevel(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::StressLevel(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::StressLevel(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ThreeDSensorCalibration) => {
                 let mut m = FitMessageThreeDSensorCalibration::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ThreeDSensorCalibration(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ThreeDSensorCalibration(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ThreeDSensorCalibration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::TimestampCorrelation) => {
                 let mut m = FitMessageTimestampCorrelation::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::TimestampCorrelation(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::TimestampCorrelation(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::TimestampCorrelation(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Totals) => {
                 let mut m = FitMessageTotals::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Totals(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Totals(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Totals(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingFile) => {
                 let mut m = FitMessageTrainingFile::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::TrainingFile(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::TrainingFile(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::TrainingFile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::UserProfile) => {
                 let mut m = FitMessageUserProfile::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::UserProfile(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::UserProfile(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::UserProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Video) => {
                 let mut m = FitMessageVideo::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Video(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Video(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Video(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoClip) => {
                 let mut m = FitMessageVideoClip::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::VideoClip(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::VideoClip(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::VideoClip(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoDescription) => {
                 let mut m = FitMessageVideoDescription::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::VideoDescription(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::VideoDescription(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::VideoDescription(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoFrame) => {
                 let mut m = FitMessageVideoFrame::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::VideoFrame(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::VideoFrame(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::VideoFrame(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoTitle) => {
                 let mut m = FitMessageVideoTitle::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::VideoTitle(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::VideoTitle(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::VideoTitle(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WatchfaceSettings) => {
                 let mut m = FitMessageWatchfaceSettings::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::WatchfaceSettings(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::WatchfaceSettings(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::WatchfaceSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherAlert) => {
                 let mut m = FitMessageWeatherAlert::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::WeatherAlert(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::WeatherAlert(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::WeatherAlert(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherConditions) => {
                 let mut m = FitMessageWeatherConditions::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::WeatherConditions(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::WeatherConditions(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::WeatherConditions(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeightScale) => {
                 let mut m = FitMessageWeightScale::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::WeightScale(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::WeightScale(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::WeightScale(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Workout) => {
                 let mut m = FitMessageWorkout::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::Workout(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::Workout(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::Workout(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutSession) => {
                 let mut m = FitMessageWorkoutSession::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::WorkoutSession(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::WorkoutSession(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::WorkoutSession(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutStep) => {
                 let mut m = FitMessageWorkoutStep::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::WorkoutStep(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::WorkoutStep(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::WorkoutStep(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ZonesTarget) => {
                 let mut m = FitMessageZonesTarget::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::ZonesTarget(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => Ok((
+                        FitDataMessage::ParseError(e),
+                        &input[definition_message.message_size..],
+                    )),
+                    Ok(o) => Ok((FitDataMessage::ZonesTarget(Rc::new(m)), o)),
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::ZonesTarget(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MesgNum(number)) => {
@@ -53826,6 +54905,7 @@ impl FitDataMessage {
             FitDataMessage::WorkoutSession(_) => "WorkoutSession",
             FitDataMessage::WorkoutStep(_) => "WorkoutStep",
             FitDataMessage::ZonesTarget(_) => "ZonesTarget",
+            FitDataMessage::ParseError(_) => "ParseError",
             FitDataMessage::UnknownToSdk(_) => "UnknownToSdk",
         }
     }

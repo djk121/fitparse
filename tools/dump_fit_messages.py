@@ -361,6 +361,7 @@ pub enum FitDataMessage {
     {{ message.short_name }}(Rc<{{ message.full_name }}>),
     {%- endfor %}
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
+    ParseError(Error)
 }
 
 impl fmt::Display for FitDataMessage {
@@ -369,6 +370,7 @@ impl fmt::Display for FitDataMessage {
             {%- for message in messages -%}
             FitDataMessage::{{ message.short_name }}(m) => write!(f, "{}", m),
             {% endfor -%}
+            FitDataMessage::ParseError(e) => write!(f, "{}", e),
             FitDataMessage::UnknownToSdk(m) => write!(f, "{}", m)
         }
     }
@@ -394,8 +396,16 @@ impl FitDataMessage {
             {% for message in messages %}
             FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
                 let mut m = {{ message.full_name }}::new(header, parsing_state)?;
-                let o = m.parse(input, parsing_state, timestamp)?;
-                Ok((FitDataMessage::{{ message.short_name }}(Rc::new(m)), o))
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::{{ message.short_name }}(Rc::new(m)), o))
+                    }
+                }
+                //let o = m.parse(input, parsing_state, timestamp)?;
+                //Ok((FitDataMessage::{{ message.short_name }}(Rc::new(m)), o))
             }
             {#
             FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
@@ -434,6 +444,7 @@ impl FitDataMessage {
             {%- for message in messages -%}
             FitDataMessage::{{ message.short_name }}(_) => "{{ message.short_name }}",
             {% endfor -%}
+            FitDataMessage::ParseError(_) => "ParseError",
             FitDataMessage::UnknownToSdk(_) => "UnknownToSdk",
         }
     }
@@ -621,6 +632,7 @@ impl {{ message_name }} {
                 let mut err_string =
                     String::from(concat!("Error parsing ", stringify!({{ message_name }}), ":"));
                 err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
                 err_string.push_str(&format!("  specific error: {:?}", e));
                 return Err(Error::message_parse_failed(err_string));
             }
@@ -1186,23 +1198,25 @@ impl {{ subfield_name }} {
     fn parse<'a>(message: &{{ message_name }}, inp: &'a [u8], parse_config: &FitParseConfig) -> Result<({{ subfield_name }}, Vec<FitParseConfig>)> {
         {% if has_components %}let endianness = parse_config.endianness();{% endif %}
         {% for sf_name in subfield_ref_names %}
-        match message.{{ sf_name }}.get_single()? {
-        {% for sf in subfield_options[sf_name] %}
-            FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }} => {
-                let mut parser = {{ sf.output_field_parser(field.types, field.message.rustified_name) }};
-                parser.parse(inp, parse_config)?;
-                {% if sf.is_adjusted %}
-                let val = <FitFloat64>::from(parser.get_single()?);
-                {% else %}
-                let val = parser.get_single()?;
-                {% endif %}
-                let new_actions: Vec<FitParseConfig> = {{ sf.calculate_components_vec() }}.iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
-                
-                return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(val), new_actions))
-            },
-        {% endfor %}
-            _ => (),
-        }
+        if message.{{ sf_name }}.is_parsed() {
+            match message.{{ sf_name }}.get_single()? {
+            {% for sf in subfield_options[sf_name] %}
+                FitField{{ sf.ref_field_type_rustified }}::{{ sf.ref_field_value_rustified }} => {
+                    let mut parser = {{ sf.output_field_parser(field.types, field.message.rustified_name) }};
+                    parser.parse(inp, parse_config)?;
+                    {% if sf.is_adjusted %}
+                    let val = <FitFloat64>::from(parser.get_single()?);
+                    {% else %}
+                    let val = parser.get_single()?;
+                    {% endif %}
+                    let new_actions: Vec<FitParseConfig> = {{ sf.calculate_components_vec() }}.iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
+                    
+                    return Ok(({{ subfield_name }}::{{ sf.field_name_rustified }}(val), new_actions))
+                },
+            {% endfor %}
+                _ => (),
+            }
+        } 
         {% endfor %}
         let mut parser = {{ subfield_default_parser }};
         parser.parse(inp, parse_config)?;

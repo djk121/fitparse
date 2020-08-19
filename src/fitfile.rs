@@ -7,7 +7,7 @@ use errors::{Error, Result};
 use failure::Fail;
 
 use fitparsingstate::FitParsingState;
-use {parse_fit_message, FitFileHeader, FitMessage};
+use {parse_fit_message, FitFileHeader, FitMessage, FitDataMessage};
 
 pub struct FitFile {
     max_file_size: usize,
@@ -40,6 +40,9 @@ impl FitFile {
             Err(e) => panic!("error reading file header: {:?}", e),
             _ => (),
         }
+
+        //println!("header bytes: {:x?}", &header_bytes);
+        //println!("{:?}", &header_bytes);
 
         let file_header = match FitFileHeader::parse(&header_bytes) {
             Ok((ffh, _)) => ffh,
@@ -77,6 +80,7 @@ impl FitFile {
         while inp.len() > 2 {
             match parse_fit_message(inp, ps) {
                 Ok((fm, out)) => {
+                    //println!("{}", fm);
                     self.messages.push(fm);
                     inp = out;
                 },
@@ -105,6 +109,15 @@ impl FitFile {
             pos: 0,
             message_names: message_names,
         }
+    }
+
+    pub fn sport(&self) -> Result<String> {
+        for sport_mesg in self.iter_message_names(vec!["Sport"]) {
+            if let FitMessage::Data(FitDataMessage::Sport(ref m)) = sport_mesg {
+                return Ok(m.sport.get_single()?.to_string());
+            }
+        }
+        Err(Error::sport_message_not_present())
     }
 }
 

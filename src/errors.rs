@@ -184,6 +184,11 @@ impl Error {
     pub(crate) fn field_unknown_to_sdk() -> Error {
         Error::from(ErrorKind::FieldUnknownToSdk)
     }
+
+    #[allow(dead_code)]
+    pub(crate) fn sport_message_not_present() -> Error {
+        Error::from(ErrorKind::SportMessageNotPresent)
+    }
 }
 
 impl Fail for Error {
@@ -239,6 +244,7 @@ pub enum ErrorKind {
     FieldMfgRangeMax,
     FieldUnknownToSdk,
     FieldInvalidValue,
+    SportMessageNotPresent
 }
 
 impl fmt::Display for ErrorKind {
@@ -332,7 +338,7 @@ impl fmt::Display for ErrorKind {
             ErrorKind::FieldMfgRangeMax => write!(f, "Field: Manufacture Range Max"),
             ErrorKind::FieldInvalidValue => write!(f, "Field: Invalid Value"),
             ErrorKind::FieldUnknownToSdk => write!(f, "Field: Unknown to SDK"),
-
+            ErrorKind::SportMessageNotPresent => write!(f, "no FitMessageSport found in Fit File"),
         }
     }
 }
