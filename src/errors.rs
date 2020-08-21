@@ -2,6 +2,8 @@
 use thiserror::Error;
 //use std::error::Error;
 
+use FitFieldFitBaseType;
+
 pub type Result<T> = anyhow::Result<T, FitParseError>;
 
 #[derive(Error, Debug)]
@@ -77,7 +79,7 @@ pub enum FitParseError {
     #[error("no FitMessageSport found in Fit File")]
     SportMessageNotPresent,
     #[error("unexpected FitField base_type {0}")]
-    UnexpectedFitFieldBaseType(usize)
+    UnexpectedFitFieldBaseType(FitFieldFitBaseType)
 }
 
 impl From<FitParseError> for std::fmt::Error {
@@ -85,8 +87,6 @@ impl From<FitParseError> for std::fmt::Error {
         panic!("lol")
     }
 } 
-
-
 
 #[allow(dead_code)]
 pub(crate) fn parse_incomplete(pi: usize) -> FitParseError {
@@ -263,7 +263,7 @@ pub(crate) fn sport_message_not_present() -> FitParseError {
     FitParseError::SportMessageNotPresent
 }
 
-pub fn unexpected_fit_field_base_type(unexpected: usize) -> FitParseError {
+pub fn unexpected_fit_field_base_type(unexpected: FitFieldFitBaseType) -> FitParseError {
     FitParseError::UnexpectedFitFieldBaseType(unexpected)
 }
 

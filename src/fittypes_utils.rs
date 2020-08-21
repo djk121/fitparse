@@ -339,11 +339,7 @@ macro_rules! parse_developer_fields {
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
 
             let parse_config = FitParseConfig::new(
-                FitFieldDefinition {
-                    definition_number: def_num,
-                    field_size: dev_field.field_size,
-                    base_type: base_type_num,
-                },
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
                 $message.definition_message.endianness,
                 0.0
             );
@@ -668,7 +664,7 @@ impl FitMessageHr {
                         let _components = message.time256.parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
 
-                        let action = FitParseConfig::new_from_component(0, 2, 0, parse_config.endianness(), 0, 0, Some((1.0, 0.0)), None);
+                        let action = FitParseConfig::new_from_component(0, 2, 0, parse_config.endianness(), 0, 0, Some((1.0, 0.0)), None)?;
                         actions.push(action);
                     }
 
@@ -712,11 +708,11 @@ impl FitMessageHr {
                         };
 
                         let range = vec![0, 12, 24, 36, 48, 60, 72, 84, 96, 108];
-                        let f = FitFieldDefinition {
-                            definition_number: 9,
-                            field_size: 4,
-                            base_type: 0,
-                        };
+                        let f = FitFieldDefinition::new(
+                            9, // definition_number
+                            4, // field_size
+                            0, // base_type
+                        )?; 
 
                         for i in 0..range.len() {
                             let bytes = bit_subset(

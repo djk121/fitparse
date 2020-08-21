@@ -639,6 +639,20 @@ impl FitParseConfig {
         }
     }
 
+    // useful for cases where a FPC is needed due to the API,
+    // but not actually used
+    pub fn new_empty() -> FitParseConfig {
+        FitParseConfig {
+            field_definition: None,
+            endianness: None,
+            tz_offset_secs: None,
+            bit_range: None,
+            bytes_to_parse: None,
+            scale_and_offset: None,
+            units: None
+        }
+    }
+
     pub fn new_from_component(
         definition_number: u8,
         field_size: usize,
@@ -648,20 +662,22 @@ impl FitParseConfig {
         num_bits: usize,
         scale_and_offset: Option<(f64, f64)>,
         units: Option<String>
-    ) -> FitParseConfig {
-        FitParseConfig {
-            field_definition: Some(FitFieldDefinition {
-                definition_number: definition_number,
-                field_size: field_size,
-                base_type: base_type,
-            }),
+    ) -> Result<FitParseConfig> {
+        Ok(FitParseConfig {
+            field_definition: Some(
+                FitFieldDefinition::new(
+                    definition_number,
+                    field_size,
+                    base_type
+                )?    
+            ),
             endianness: Some(endianness),
             tz_offset_secs: None,
             bit_range: Some((bit_start, num_bits)),
             bytes_to_parse: None,
             scale_and_offset: scale_and_offset,
             units: units,
-        }
+        })
     }
 
     pub fn add_bytes_to_parse(&self, bytes: &[u8]) -> FitParseConfig {
@@ -846,11 +862,11 @@ impl FitMessageUnknownToSdk {
 
             let base_type_num = u8::from(field_description.fit_base_type_id.get_single()?);
 
-            let field_def = FitFieldDefinition {
-                definition_number: dev_field.definition_number,
-                field_size: dev_field.field_size,
-                base_type: base_type_num,
-            };
+            let field_def = FitFieldDefinition::new(
+                dev_field.definition_number,
+                dev_field.field_size,
+                base_type_num
+            )?;
             let parse_config =
                 FitParseConfig::new(field_def, message.definition_message.endianness, 0.0);
             let dd = FitFieldDeveloperData::parse(inp2, field_description.clone(), &parse_config)?;
@@ -920,17 +936,24 @@ impl FitGlobalMesgNum {
 pub struct FitFieldDefinition {
     definition_number: u8,
     field_size: usize,
-    base_type: u8,
+    base_type: FitFieldFitBaseType,
 }
 
 impl FitFieldDefinition {
 
-    pub fn new(definition_number: u8, field_size: usize, base_type: u8) -> FitFieldDefinition {
-        FitFieldDefinition {
+    pub fn new(definition_number: u8, field_size: usize, base_type: u8) -> Result<FitFieldDefinition> {
+        let bt = match FitFieldFitBaseType::from(base_type) {
+            FitFieldFitBaseType::UnknownToSdk => {
+                return Err(errors::unexpected_fit_field_base_type(FitFieldFitBaseType::UnknownToSdk))
+            },
+            t => t,
+        };
+
+        Ok(FitFieldDefinition {
             definition_number: definition_number,
             field_size: field_size,
-            base_type: base_type
-        }
+            base_type: bt
+        })
     }
 
     pub fn field_name(&self, mesg_num: &FitGlobalMesgNum) -> &'static str {
@@ -939,7 +962,7 @@ impl FitFieldDefinition {
 
     pub fn is_array(&self) -> bool {
         match self.base_type {
-            7 | 13 => false, // strings and bytes are never arrays
+            FitFieldFitBaseType::String | FitFieldFitBaseType::Byte => false,
             _ => self.array_size() > 1,
         }
     }
@@ -949,18 +972,20 @@ impl FitFieldDefinition {
     }
 
     pub fn is_string(&self) -> bool {
-        self.base_type == 7
+        self.base_type == FitFieldFitBaseType::String
     }
 
     pub fn is_byte(&self) -> bool {
-        self.base_type == 13
+        self.base_type == FitFieldFitBaseType::Byte
     }
 
     pub fn num_in_field(&self) -> usize {
         self.field_size / self.base_type_size()
     }
 
-    pub fn base_type_name(&self) -> &'static str {
+    pub fn base_type_name(&self) -> String { 
+        self.base_type.to_string()
+        /*
         match self.base_type {
             0 => "enum",
             1 => "sint8",
@@ -981,9 +1006,34 @@ impl FitFieldDefinition {
             144 => "uint64z",
             _ => "unknown",
         }
+        */
     }
 
     pub fn base_type_size(&self) -> usize {
+        let sz = match self.base_type {
+            FitFieldFitBaseType::String => 1 * self.field_size,
+            FitFieldFitBaseType::Byte => 1 * self.field_size,
+            FitFieldFitBaseType::Enum => 1,
+            FitFieldFitBaseType::Sint8 => 1,
+            FitFieldFitBaseType::Uint8 => 1,
+            FitFieldFitBaseType::Uint8z => 1,
+            FitFieldFitBaseType::Sint16 => 2,
+            FitFieldFitBaseType::Uint16 => 2,
+            FitFieldFitBaseType::Uint16z => 2,
+            FitFieldFitBaseType::Sint32 => 4,
+            FitFieldFitBaseType::Uint32 => 4,
+            FitFieldFitBaseType::Uint32z => 4,
+            FitFieldFitBaseType::Float32 => 4,
+            FitFieldFitBaseType::Float64 => 8,
+            FitFieldFitBaseType::Sint64 => 8,
+            FitFieldFitBaseType::Uint64 => 8,
+            FitFieldFitBaseType::Uint64z => 8,
+            other => {
+                panic!("should be impossible: bad base_type ({:?}) after construction", other)
+            }
+        };
+        sz
+        /*
         match self.base_type {
             0 => 1,                    // enum
             1 => 1,                    // sint8
@@ -1004,6 +1054,7 @@ impl FitFieldDefinition {
             144 => 8,                  // uint64z
             _ => panic!("unexpected FitField base_type"),
         }
+        */
     }
 }
 
@@ -1113,11 +1164,18 @@ named!(field_definition<&[u8], FitFieldDefinition>,
         definition_number: take!(1) >>
         field_size: take!(1) >>
         base_type_byte: take!(1) >>
+        (FitFieldDefinition::new(
+            definition_number[0],
+            field_size[0] as usize,
+            base_type_byte[0]
+        ).unwrap())
+        /*
         (FitFieldDefinition{
             definition_number: definition_number[0],
             field_size: field_size[0] as usize,
             base_type: base_type_byte[0]
         })
+        */
     )
 );
 

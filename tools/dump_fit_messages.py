@@ -592,11 +592,12 @@ impl {{ message_name }} {
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
 
             let parse_config = FitParseConfig::new(
-                FitFieldDefinition {
-                        definition_number: def_num,
-                        field_size: dev_field.field_size,
-                        base_type: base_type_num,
-                },
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                //FitFieldDefinition {
+                //        definition_number: def_num,
+                //        field_size: dev_field.field_size,
+                //        base_type: base_type_num,
+                //},
                 self.definition_message.endianness,
                 0.0
             );
@@ -1384,7 +1385,7 @@ def calculate_components_vec(components, message, types):
 
                     (bit_start, bit_len) = components[i][1]
 
-                    components_parts.append("FitParseConfig::new_from_component({}, {}, {}, endianness, {}, {}, {}, {})".format(field.number, field_size, base_type_num, bit_start, bit_len, scale_and_offset, units))
+                    components_parts.append("FitParseConfig::new_from_component({}, {}, {}, endianness, {}, {}, {}, {})?".format(field.number, field_size, base_type_num, bit_start, bit_len, scale_and_offset, units))
     return "vec![{}]".format(",".join(components_parts))
 
 class Subfield(object):
