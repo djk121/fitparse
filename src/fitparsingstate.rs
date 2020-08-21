@@ -4,7 +4,9 @@ use std::rc::Rc;
 use FitDefinitionMessage;
 use FitDeveloperDataDefinition;
 
-use errors::{Error, Result};
+//use anyhow::Result;
+use errors;
+use errors::Result;
 use fittypes::FitDataMessage;
 use fittypes_utils::FitFieldDateTime;
 
@@ -35,7 +37,7 @@ impl FitParsingState {
     pub fn get(&self, local_num: u16) -> Result<Rc<FitDefinitionMessage>> {
         match self.map.get(&local_num) {
             Some(def) => Ok(Rc::clone(def)),
-            None => Err(Error::invalid_local_mesg_num(local_num.to_string())),
+            None => Err(errors::invalid_local_mesg_num(local_num.to_string())),
         }
     }
 
@@ -46,7 +48,7 @@ impl FitParsingState {
     pub fn get_last_timestamp(&self) -> Result<FitFieldDateTime> {
         match self.last_timestamp {
             Some(ts) => Ok(ts),
-            None => Err(Error::timestamp_base_not_set()),
+            None => Err(errors::timestamp_base_not_set()),
         }
     }
 
@@ -57,7 +59,7 @@ impl FitParsingState {
     pub fn get_timezone_offset(&self) -> f64 {
         match self.timezone_offset_secs {
             Some(tzos) => tzos,
-            //None => Err(Error::timezone_offset_not_set())
+            //None => Err(errors::timezone_offset_not_set())
             None => 0.0,
         }
     }
@@ -76,7 +78,7 @@ impl FitParsingState {
     ) -> Result<&FitDeveloperDataDefinition> {
         match self.developer_data_definitions.get(&developer_data_index) {
             Some(ddd) => Ok(ddd),
-            None => Err(Error::developer_data_definition_not_found(
+            None => Err(errors::developer_data_definition_not_found(
                 developer_data_index,
             )),
         }

@@ -3,7 +3,10 @@ use chrono::{DateTime, Duration, TimeZone, UTC};
 use nom;
 use nom::{be_f32, be_f64, le_f32, le_f64, Endianness};
 
-use errors::{Error, Result};
+//use errors::{Error, Result};
+//use anyhow::Result;
+use errors;
+use errors::Result;
 
 use FitParseConfig;
 
@@ -93,14 +96,14 @@ fn parse_date_time_internal(
         Ok(garmin_epoch_offset) => {
             let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
             match garmin_epoch_offset < 0x10000000 {
-                true => Err(Error::unsupported_relative_timestamp()),
+                true => Err(errors::unsupported_relative_timestamp()),
                 false => {
                     let utc_dt = garmin_epoch + Duration::seconds(garmin_epoch_offset.into());
                     Ok((utc_dt, garmin_epoch_offset))
                 }
             }
         }
-        _ => Err(Error::parse_error("error parsing date time")),
+        _ => Err(errors::parse_error("error parsing date time")),
     }
 }
 
@@ -167,24 +170,24 @@ macro_rules! nom_returning_internal_parser {
         match $func($input, $endianness) {
             nom::IResult::Done(o, f) => Ok((f, o)),
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
-                Err(Error::parse_incomplete(amount))
+                Err(errors::parse_incomplete(amount))
             }
             nom::IResult::Incomplete(nom::Needed::Unknown) => {
-                Err(Error::parse_incomplete_unknown())
+                Err(errors::parse_incomplete_unknown())
             }
-            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+            nom::IResult::Error(e) => Err(errors::parse_error(e.description())),
         }
     };
     ($func:ident, $input:expr) => {
         match $func($input) {
             nom::IResult::Done(o, f) => Ok((f, o)),
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
-                Err(Error::parse_incomplete(amount))
+                Err(errors::parse_incomplete(amount))
             }
             nom::IResult::Incomplete(nom::Needed::Unknown) => {
-                Err(Error::parse_incomplete_unknown())
+                Err(errors::parse_incomplete_unknown())
             }
-            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+            nom::IResult::Error(e) => Err(errors::parse_error(e.description())),
         }
     };
 }
@@ -195,24 +198,24 @@ macro_rules! nom_basic_internal_parser {
         match $func($input, $endianness) {
             nom::IResult::Done(_, f) => Ok(f),
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
-                Err(Error::parse_incomplete(amount))
+                Err(errors::parse_incomplete(amount))
             }
             nom::IResult::Incomplete(nom::Needed::Unknown) => {
-                Err(Error::parse_incomplete_unknown())
+                Err(errors::parse_incomplete_unknown())
             }
-            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+            nom::IResult::Error(e) => Err(errors::parse_error(e.description())),
         }
     };
     ($func:ident, $input:expr) => {
         match $func($input) {
             nom::IResult::Done(_, f) => Ok(f),
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
-                Err(Error::parse_incomplete(amount))
+                Err(errors::parse_incomplete(amount))
             }
             nom::IResult::Incomplete(nom::Needed::Unknown) => {
-                Err(Error::parse_incomplete_unknown())
+                Err(errors::parse_incomplete_unknown())
             }
-            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+            nom::IResult::Error(e) => Err(errors::parse_error(e.description())),
         }
     };
 }
@@ -222,31 +225,31 @@ macro_rules! nom_internal_parser {
     ($func:ident, $input:expr, $invalid_field_value:expr, $endianness:expr) => {
         match $func($input, $endianness) {
             nom::IResult::Done(_, f) => match f == $invalid_field_value {
-                true => Err(Error::parse_invalid_field_value()),
+                true => Err(errors::parse_invalid_field_value()),
                 false => Ok(f),
             },
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
-                Err(Error::parse_incomplete(amount))
+                Err(errors::parse_incomplete(amount))
             }
             nom::IResult::Incomplete(nom::Needed::Unknown) => {
-                Err(Error::parse_incomplete_unknown())
+                Err(errors::parse_incomplete_unknown())
             }
-            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+            nom::IResult::Error(e) => Err(errors::parse_error(e.description())),
         }
     };
     ($func:ident, $input:expr, $invalid_field_value:expr) => {
         match $func($input) {
             nom::IResult::Done(_, f) => match f == $invalid_field_value {
-                true => Err(Error::parse_invalid_field_value()),
+                true => Err(errors::parse_invalid_field_value()),
                 false => Ok(f),
             },
             nom::IResult::Incomplete(nom::Needed::Size(amount)) => {
-                Err(Error::parse_incomplete(amount))
+                Err(errors::parse_incomplete(amount))
             }
             nom::IResult::Incomplete(nom::Needed::Unknown) => {
-                Err(Error::parse_incomplete_unknown())
+                Err(errors::parse_incomplete_unknown())
             }
-            nom::IResult::Error(e) => Err(Error::parse_error(e.description())),
+            nom::IResult::Error(e) => Err(errors::parse_error(e.description())),
         }
     };
 }
@@ -256,7 +259,7 @@ macro_rules! nom_internal_nonzero_parser {
     ($func:ident, $input:expr) => {
         match nom_internal_parser!($func, $input)? {
             (num, _) => match num {
-                0 => Err(Error::parse_invalid_field_value()),
+                0 => Err(errors::parse_invalid_field_value()),
                 _ => Ok(num),
             },
         }
@@ -264,7 +267,7 @@ macro_rules! nom_internal_nonzero_parser {
     ($func:ident, $input:expr, $endianness:expr) => {
         match nom_internal_parser!($func, $input, $endianness)? {
             (num, _) => match num {
-                0 => Err(Error::parse_invalid_field_value()),
+                0 => Err(errors::parse_invalid_field_value()),
                 _ => Ok(num),
             },
         }

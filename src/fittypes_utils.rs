@@ -1,5 +1,6 @@
 use chrono::{DateTime, Duration, FixedOffset, TimeZone, UTC};
-use errors::{Error, Result};
+use errors;
+use errors::Result;
 use fitparsers::{parse_date_time, parse_uint32};
 use fitparsingstate::FitParsingState;
 use nom::Endianness;
@@ -279,7 +280,7 @@ macro_rules! main_parse_message {
                     String::from(concat!("Error parsing ", stringify!($output_type), ":"));
                 err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
 
@@ -298,7 +299,7 @@ macro_rules! parse_subfields {
                     ":"
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
             Ok(_) => (),
         }
@@ -332,7 +333,7 @@ macro_rules! parse_developer_fields {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -702,12 +703,12 @@ impl FitMessageHr {
                                 components: _,
                             } => {
                                 if cts.len() == 0 {
-                                    return Err(Error::hr_message_timestamp());
+                                    return Err(errors::hr_message_timestamp());
                                 } else {
                                     (<f64>::from(cts[cts.len() - 1].clone()), s)
                                 }
                             }
-                            _ => return Err(Error::hr_message_timestamp()),
+                            _ => return Err(errors::hr_message_timestamp()),
                         };
 
                         let range = vec![0, 12, 24, 36, 48, 60, 72, 84, 96, 108];
@@ -737,7 +738,7 @@ impl FitMessageHr {
                                     offset: _,
                                     components: _,
                                 } => v.push(FitFloat64::new(new_ts)),
-                                _ => return Err(Error::hr_message_timestamp()),
+                                _ => return Err(errors::hr_message_timestamp()),
                             }
                         }
                     }

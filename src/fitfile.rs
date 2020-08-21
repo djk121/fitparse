@@ -3,8 +3,8 @@ use std::io;
 //extern crate backtrace;
 //use backtrace::Backtrace;
 
-use errors::{Error, Result};
-use failure::Fail;
+use errors;
+use errors::Result;
 
 use fitparsingstate::FitParsingState;
 use {parse_fit_message, FitFileHeader, FitMessage, FitDataMessage};
@@ -50,7 +50,7 @@ impl FitFile {
         };
 
         if file_header.data_size as usize > self.max_file_size {
-            return Err(Error::fit_file_too_large(
+            return Err(errors::fit_file_too_large(
                 self.max_file_size,
                 file_header.data_size as usize,
             ));
@@ -85,7 +85,6 @@ impl FitFile {
                     inp = out;
                 },
                 Err(e) => {
-                    println!("backtrace: {:?}", e.backtrace());
                     panic!("error: {}", e);
                 }
             }
@@ -117,7 +116,7 @@ impl FitFile {
                 return Ok(m.sport.get_single()?.to_string());
             }
         }
-        Err(Error::sport_message_not_present())
+        Err(errors::sport_message_not_present())
     }
 }
 

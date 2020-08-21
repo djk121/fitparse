@@ -31,7 +31,8 @@ use {
 
 use BasicValue;
 
-use errors::{Error, Result};
+use errors;
+use errors::{FitParseError, Result};
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum FitFieldFile {
@@ -19876,7 +19877,7 @@ impl FitMessageAccelerometerData {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -19938,7 +19939,7 @@ impl FitMessageAccelerometerData {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -20190,7 +20191,7 @@ impl FitMessageActivity {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -20252,7 +20253,7 @@ impl FitMessageActivity {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -20473,7 +20474,7 @@ impl FitMessageAntChannelId {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -20535,7 +20536,7 @@ impl FitMessageAntChannelId {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -20827,7 +20828,7 @@ impl FitMessageAntRx {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -20886,7 +20887,7 @@ impl FitMessageAntRx {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -21194,7 +21195,7 @@ impl FitMessageAntTx {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -21253,7 +21254,7 @@ impl FitMessageAntTx {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -21494,7 +21495,7 @@ impl FitMessageAviationAttitude {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -21556,7 +21557,7 @@ impl FitMessageAviationAttitude {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -21790,7 +21791,7 @@ impl FitMessageBarometerData {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -21852,7 +21853,7 @@ impl FitMessageBarometerData {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -22181,7 +22182,7 @@ impl FitMessageBikeProfile {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -22243,7 +22244,7 @@ impl FitMessageBikeProfile {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -22576,7 +22577,7 @@ impl FitMessageBloodPressure {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -22638,7 +22639,7 @@ impl FitMessageBloodPressure {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -22864,7 +22865,7 @@ impl FitMessageCadenceZone {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -22926,7 +22927,7 @@ impl FitMessageCadenceZone {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -23115,7 +23116,7 @@ impl FitMessageCameraEvent {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -23177,7 +23178,7 @@ impl FitMessageCameraEvent {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -23382,7 +23383,7 @@ impl FitMessageCapabilities {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -23444,7 +23445,7 @@ impl FitMessageCapabilities {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -23646,7 +23647,7 @@ impl FitMessageClimbPro {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -23708,7 +23709,7 @@ impl FitMessageClimbPro {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -23973,7 +23974,7 @@ impl FitMessageConnectivity {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -24035,7 +24036,7 @@ impl FitMessageConnectivity {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -24268,7 +24269,7 @@ impl FitMessageCourse {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -24327,7 +24328,7 @@ impl FitMessageCourse {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -24532,7 +24533,7 @@ impl FitMessageCoursePoint {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -24594,7 +24595,7 @@ impl FitMessageCoursePoint {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -24815,7 +24816,7 @@ impl FitMessageDeveloperDataId {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -24877,7 +24878,7 @@ impl FitMessageDeveloperDataId {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -24979,8 +24980,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntplusDeviceType(FitFieldAntplusDeviceType),
     AntDeviceType(FitUint8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -25043,8 +25044,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -25305,7 +25306,7 @@ impl FitMessageDeviceInfo {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -25367,7 +25368,7 @@ impl FitMessageDeviceInfo {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -25513,7 +25514,7 @@ impl FitMessageDeviceInfo {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -25779,7 +25780,7 @@ impl FitMessageDeviceSettings {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -25841,7 +25842,7 @@ impl FitMessageDeviceSettings {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -26126,7 +26127,7 @@ impl FitMessageDiveAlarm {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -26188,7 +26189,7 @@ impl FitMessageDiveAlarm {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -26389,7 +26390,7 @@ impl FitMessageDiveGas {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -26451,7 +26452,7 @@ impl FitMessageDiveGas {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -26798,7 +26799,7 @@ impl FitMessageDiveSettings {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -26860,7 +26861,7 @@ impl FitMessageDiveSettings {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -27001,7 +27002,7 @@ impl FitMessageDiveSettings {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -27215,7 +27216,7 @@ impl FitMessageDiveSummary {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -27277,7 +27278,7 @@ impl FitMessageDiveSummary {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -27423,27 +27424,27 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    RiderPosition(FitFieldRiderPositionType),
-    PowerLowAlert(FitUint16),
-    HrHighAlert(FitUint8),
-    VirtualPartnerSpeed(FitFloat64),
-    CommTimeout(FitFieldCommTimeoutType),
-    CadHighAlert(FitUint16),
     BatteryLevel(FitFloat64),
     DistanceDurationAlert(FitFloat64),
-    CalorieDurationAlert(FitUint32),
-    SportPoint(FitUint32),
-    TimeDurationAlert(FitFloat64),
-    GearChangeData(FitUint32),
     CoursePointIndex(FitFieldMessageIndex),
-    CadLowAlert(FitUint16),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    SportPoint(FitUint32),
+    HrHighAlert(FitUint8),
     SpeedLowAlert(FitFloat64),
-    SpeedHighAlert(FitFloat64),
-    TimerTrigger(FitFieldTimerTrigger),
+    RiderPosition(FitFieldRiderPositionType),
+    CadLowAlert(FitUint16),
+    PowerLowAlert(FitUint16),
     HrLowAlert(FitUint8),
+    CadHighAlert(FitUint16),
+    VirtualPartnerSpeed(FitFloat64),
     RadarThreatAlert(FitUint32),
+    CalorieDurationAlert(FitUint32),
+    GearChangeData(FitUint32),
+    CommTimeout(FitFieldCommTimeoutType),
+    TimeDurationAlert(FitFloat64),
+    SpeedHighAlert(FitFloat64),
     PowerHighAlert(FitUint16),
+    TimerTrigger(FitFieldTimerTrigger),
 }
 
 impl FitMessageEventSubfieldData {
@@ -28122,7 +28123,7 @@ impl FitMessageEvent {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -28181,7 +28182,7 @@ impl FitMessageEvent {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -28304,7 +28305,7 @@ impl FitMessageEvent {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -28531,7 +28532,7 @@ impl FitMessageExdDataConceptConfiguration {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -28593,7 +28594,7 @@ impl FitMessageExdDataConceptConfiguration {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -28839,7 +28840,7 @@ impl FitMessageExdDataFieldConfiguration {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -28901,7 +28902,7 @@ impl FitMessageExdDataFieldConfiguration {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -29098,7 +29099,7 @@ impl FitMessageExdScreenConfiguration {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -29160,7 +29161,7 @@ impl FitMessageExdScreenConfiguration {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -29349,7 +29350,7 @@ impl FitMessageExerciseTitle {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -29411,7 +29412,7 @@ impl FitMessageExerciseTitle {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -29604,7 +29605,7 @@ impl FitMessageFieldCapabilities {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -29666,7 +29667,7 @@ impl FitMessageFieldCapabilities {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -29899,7 +29900,7 @@ impl FitMessageFieldDescription {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -29961,7 +29962,7 @@ impl FitMessageFieldDescription {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -30199,7 +30200,7 @@ impl FitMessageFileCapabilities {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -30261,7 +30262,7 @@ impl FitMessageFileCapabilities {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -30450,7 +30451,7 @@ impl FitMessageFileCreator {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -30512,7 +30513,7 @@ impl FitMessageFileCreator {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -30602,8 +30603,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -30813,7 +30814,7 @@ impl FitMessageFileId {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -30872,7 +30873,7 @@ impl FitMessageFileId {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -30950,7 +30951,7 @@ impl FitMessageFileId {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -31161,7 +31162,7 @@ impl FitMessageGoal {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -31220,7 +31221,7 @@ impl FitMessageGoal {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -31465,7 +31466,7 @@ impl FitMessageGpsMetadata {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -31527,7 +31528,7 @@ impl FitMessageGpsMetadata {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -31768,7 +31769,7 @@ impl FitMessageGyroscopeData {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -31830,7 +31831,7 @@ impl FitMessageGyroscopeData {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -32170,7 +32171,7 @@ impl FitMessageHr {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -32229,7 +32230,7 @@ impl FitMessageHr {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -32434,7 +32435,7 @@ impl FitMessageHrZone {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -32493,7 +32494,7 @@ impl FitMessageHrZone {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -32682,7 +32683,7 @@ impl FitMessageHrmProfile {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -32744,7 +32745,7 @@ impl FitMessageHrmProfile {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -32923,7 +32924,7 @@ impl FitMessageHrv {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -32982,7 +32983,7 @@ impl FitMessageHrv {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -33190,7 +33191,7 @@ impl FitMessageJump {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -33249,7 +33250,7 @@ impl FitMessageJump {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -34286,7 +34287,7 @@ impl FitMessageLap {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -34345,7 +34346,7 @@ impl FitMessageLap {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -34902,7 +34903,7 @@ impl FitMessageLap {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -35136,7 +35137,7 @@ impl FitMessageLength {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -35195,7 +35196,7 @@ impl FitMessageLength {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -35472,7 +35473,7 @@ impl FitMessageMagnetometerData {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -35534,7 +35535,7 @@ impl FitMessageMagnetometerData {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -35755,7 +35756,7 @@ impl FitMessageMemoGlob {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -35817,7 +35818,7 @@ impl FitMessageMemoGlob {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -35915,9 +35916,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    NumPerFile(FitUint16),
     MaxPerFileType(FitUint16),
     MaxPerFile(FitUint16),
+    NumPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -36101,7 +36102,7 @@ impl FitMessageMesgCapabilities {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -36163,7 +36164,7 @@ impl FitMessageMesgCapabilities {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -36233,7 +36234,7 @@ impl FitMessageMesgCapabilities {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -36411,7 +36412,7 @@ impl FitMessageMetZone {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -36473,7 +36474,7 @@ impl FitMessageMetZone {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -36571,8 +36572,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Strokes(FitFloat64),
     Steps(FitFloat64),
+    Strokes(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -36910,7 +36911,7 @@ impl FitMessageMonitoring {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -36972,7 +36973,7 @@ impl FitMessageMonitoring {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -37153,7 +37154,7 @@ impl FitMessageMonitoring {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -37343,7 +37344,7 @@ impl FitMessageMonitoringInfo {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -37405,7 +37406,7 @@ impl FitMessageMonitoringInfo {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -37611,7 +37612,7 @@ impl FitMessageNmeaSentence {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -37673,7 +37674,7 @@ impl FitMessageNmeaSentence {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -37890,7 +37891,7 @@ impl FitMessageObdiiData {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -37952,7 +37953,7 @@ impl FitMessageObdiiData {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -38165,7 +38166,7 @@ impl FitMessageOhrSettings {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -38227,7 +38228,7 @@ impl FitMessageOhrSettings {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -38493,7 +38494,7 @@ impl FitMessageOneDSensorCalibration {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -38555,7 +38556,7 @@ impl FitMessageOneDSensorCalibration {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -38643,7 +38644,7 @@ impl FitMessageOneDSensorCalibration {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -38817,7 +38818,7 @@ impl FitMessagePowerZone {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -38879,7 +38880,7 @@ impl FitMessagePowerZone {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -39511,7 +39512,7 @@ impl FitMessageRecord {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -39570,7 +39571,7 @@ impl FitMessageRecord {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -39972,8 +39973,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -40183,7 +40184,7 @@ impl FitMessageSchedule {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -40245,7 +40246,7 @@ impl FitMessageSchedule {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -40323,7 +40324,7 @@ impl FitMessageSchedule {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -40517,7 +40518,7 @@ impl FitMessageSdmProfile {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -40579,7 +40580,7 @@ impl FitMessageSdmProfile {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -40809,7 +40810,7 @@ impl FitMessageSegmentFile {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -40871,7 +40872,7 @@ impl FitMessageSegmentFile {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -41103,7 +41104,7 @@ impl FitMessageSegmentId {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -41165,7 +41166,7 @@ impl FitMessageSegmentId {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -41867,7 +41868,7 @@ impl FitMessageSegmentLap {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -41929,7 +41930,7 @@ impl FitMessageSegmentLap {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -42369,7 +42370,7 @@ impl FitMessageSegmentLap {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -42559,7 +42560,7 @@ impl FitMessageSegmentLeaderboardEntry {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -42621,7 +42622,7 @@ impl FitMessageSegmentLeaderboardEntry {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -42830,7 +42831,7 @@ impl FitMessageSegmentPoint {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -42892,7 +42893,7 @@ impl FitMessageSegmentPoint {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -43968,7 +43969,7 @@ impl FitMessageSession {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -44030,7 +44031,7 @@ impl FitMessageSession {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -44642,7 +44643,7 @@ impl FitMessageSession {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -44845,7 +44846,7 @@ impl FitMessageSet {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -44904,7 +44905,7 @@ impl FitMessageSet {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -45042,8 +45043,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -45233,7 +45234,7 @@ impl FitMessageSlaveDevice {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -45295,7 +45296,7 @@ impl FitMessageSlaveDevice {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -45353,7 +45354,7 @@ impl FitMessageSlaveDevice {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -45527,7 +45528,7 @@ impl FitMessageSoftware {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -45589,7 +45590,7 @@ impl FitMessageSoftware {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -45770,7 +45771,7 @@ impl FitMessageSpeedZone {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -45832,7 +45833,7 @@ impl FitMessageSpeedZone {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -46013,7 +46014,7 @@ impl FitMessageSport {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -46072,7 +46073,7 @@ impl FitMessageSport {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -46249,7 +46250,7 @@ impl FitMessageStressLevel {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -46311,7 +46312,7 @@ impl FitMessageStressLevel {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -46401,8 +46402,8 @@ impl FitRecord for FitMessageStressLevel {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    GyroCalFactor(FitUint32),
     AccelCalFactor(FitUint32),
+    GyroCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -46590,7 +46591,7 @@ impl FitMessageThreeDSensorCalibration {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -46652,7 +46653,7 @@ impl FitMessageThreeDSensorCalibration {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -46744,7 +46745,7 @@ impl FitMessageThreeDSensorCalibration {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -46942,7 +46943,7 @@ impl FitMessageTimestampCorrelation {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -47004,7 +47005,7 @@ impl FitMessageTimestampCorrelation {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -47242,7 +47243,7 @@ impl FitMessageTotals {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -47301,7 +47302,7 @@ impl FitMessageTotals {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -47435,8 +47436,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -47642,7 +47643,7 @@ impl FitMessageTrainingFile {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -47704,7 +47705,7 @@ impl FitMessageTrainingFile {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -47790,7 +47791,7 @@ impl FitMessageTrainingFile {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -48084,7 +48085,7 @@ impl FitMessageUserProfile {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -48146,7 +48147,7 @@ impl FitMessageUserProfile {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -48436,7 +48437,7 @@ impl FitMessageVideo {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -48495,7 +48496,7 @@ impl FitMessageVideo {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -48692,7 +48693,7 @@ impl FitMessageVideoClip {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -48754,7 +48755,7 @@ impl FitMessageVideoClip {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -48951,7 +48952,7 @@ impl FitMessageVideoDescription {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -49013,7 +49014,7 @@ impl FitMessageVideoDescription {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -49194,7 +49195,7 @@ impl FitMessageVideoFrame {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -49256,7 +49257,7 @@ impl FitMessageVideoFrame {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -49449,7 +49450,7 @@ impl FitMessageVideoTitle {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -49511,7 +49512,7 @@ impl FitMessageVideoTitle {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -49774,7 +49775,7 @@ impl FitMessageWatchfaceSettings {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -49836,7 +49837,7 @@ impl FitMessageWatchfaceSettings {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -49898,7 +49899,7 @@ impl FitMessageWatchfaceSettings {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -50084,7 +50085,7 @@ impl FitMessageWeatherAlert {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -50146,7 +50147,7 @@ impl FitMessageWeatherAlert {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -50407,7 +50408,7 @@ impl FitMessageWeatherConditions {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -50469,7 +50470,7 @@ impl FitMessageWeatherConditions {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -50758,7 +50759,7 @@ impl FitMessageWeightScale {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -50820,7 +50821,7 @@ impl FitMessageWeightScale {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -51069,7 +51070,7 @@ impl FitMessageWorkout {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -51131,7 +51132,7 @@ impl FitMessageWorkout {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -51344,7 +51345,7 @@ impl FitMessageWorkoutSession {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -51406,7 +51407,7 @@ impl FitMessageWorkoutSession {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -51516,12 +51517,12 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
+    DurationTime(FitFloat64),
     DurationReps(FitUint32),
+    DurationStep(FitUint32),
     DurationHr(FitFieldWorkoutHr),
     DurationPower(FitFieldWorkoutPower),
-    DurationStep(FitUint32),
     DurationDistance(FitFloat64),
-    DurationTime(FitFloat64),
     DurationCalories(FitUint32),
 }
 
@@ -51861,17 +51862,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
+    RepeatTime(FitFloat64),
     RepeatPower(FitFieldWorkoutPower),
-    RepeatHr(FitFieldWorkoutHr),
-    RepeatCalories(FitUint32),
-    RepeatDistance(FitFloat64),
     TargetStrokeType(FitFieldSwimStroke),
-    RepeatSteps(FitUint32),
     TargetSpeedZone(FitUint32),
     TargetCadenceZone(FitUint32),
-    TargetHrZone(FitUint32),
     TargetPowerZone(FitUint32),
-    RepeatTime(FitFloat64),
+    TargetHrZone(FitUint32),
+    RepeatDistance(FitFloat64),
+    RepeatCalories(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
+    RepeatSteps(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -51883,6 +51884,98 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
+        if message.target_type.is_parsed() {
+            match message.target_type.get_single()? {
+                FitFieldWktStepTarget::Speed => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::HeartRate => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Cadence => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Power => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::SwimStroke => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
+            }
+        }
+
         if message.duration_type.is_parsed() {
             match message.duration_type.get_single()? {
                 FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
@@ -52037,98 +52130,6 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
         }
 
-        if message.target_type.is_parsed() {
-            match message.target_type.get_single()? {
-                FitFieldWktStepTarget::Speed => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::HeartRate => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::Cadence => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::Power => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::SwimStroke => {
-                    let mut parser =
-                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                        new_actions,
-                    ));
-                }
-
-                _ => (),
-            }
-        }
-
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
         parser.parse(inp, parse_config)?;
 
@@ -52145,9 +52146,9 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
+    CustomTargetCadenceLow(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
     CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetCadenceLow(FitUint32),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
 }
 
@@ -52553,7 +52554,7 @@ impl FitMessageWorkoutStep {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -52615,7 +52616,7 @@ impl FitMessageWorkoutStep {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -52762,7 +52763,7 @@ impl FitMessageWorkoutStep {
                 new_actions
             }
 
-            bad_number => return Err(Error::bad_subfield_field_number(bad_number)),
+            bad_number => return Err(errors::bad_subfield_field_number(bad_number)),
         };
         Ok(new_actions)
     }
@@ -52948,7 +52949,7 @@ impl FitMessageZonesTarget {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -53010,7 +53011,7 @@ impl FitMessageZonesTarget {
                     self.definition_message
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -53199,7 +53200,7 @@ pub enum FitDataMessage {
     WorkoutStep(Rc<FitMessageWorkoutStep>),
     ZonesTarget(Rc<FitMessageZonesTarget>),
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
-    ParseError(Error),
+    ParseError(FitParseError),
 }
 
 impl fmt::Display for FitDataMessage {
@@ -54797,16 +54798,16 @@ impl FitDataMessage {
                 Ok((FitDataMessage::UnknownToSdk(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMin) => {
-                Err(Error::field_mfg_range_min())
+                Err(errors::field_mfg_range_min())
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMax) => {
-                Err(Error::field_mfg_range_max())
+                Err(errors::field_mfg_range_max())
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::InvalidFieldValue) => {
-                Err(Error::field_invalid_value())
+                Err(errors::field_invalid_value())
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::UnknownToSdk) => {
-                Err(Error::field_unknown_to_sdk())
+                Err(errors::field_unknown_to_sdk())
             }
             FitGlobalMesgNum::Unknown(number) => {
                 let (val, o) =

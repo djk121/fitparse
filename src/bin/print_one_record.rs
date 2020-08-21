@@ -1,5 +1,4 @@
 extern crate clap;
-extern crate failure;
 extern crate fitparse;
 
 use clap::{App, Arg};

@@ -10,7 +10,6 @@ use bitvec::prelude as bv;
 use bitvec::order as bitvec_order;
 
 extern crate chrono;
-extern crate failure;
 
 #[macro_use]
 extern crate nom;
@@ -19,7 +18,11 @@ use nom::Endianness;
 extern crate conv;
 use conv::*;
 
-pub use errors::{Error, ErrorKind, Result};
+extern crate thiserror;
+extern crate anyhow;
+//use anyhow::Result;
+
+use errors::Result;
 
 use fitparsers::{
     parse_bool, parse_byte, parse_enum, parse_float32, parse_float64, parse_sint16, parse_sint32,
@@ -180,7 +183,8 @@ pub fn parse_fit_message<'a>(
     let (header, o) = match parse_record_header(input) {
         Ok((header, o)) => (header, o),
         Err(e) => {
-            return Err(Error::parse_error(format!("error parsing header: {}", e)));
+            //return Err(errors::parse_error(format!("error parsing header: {}", e)));
+            return Err(errors::FitParseError::ParseError(e.to_string()))
         }
     };
 
@@ -260,7 +264,7 @@ pub fn parse_fit_message<'a>(
 }
 
 pub trait FitFieldParseable: Sized {
-    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<Self>;
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> errors::Result<Self>;
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -276,7 +280,7 @@ impl<T: FitFieldParseable + Clone> BasicValue<T> {
     fn get_single(&self) -> Result<T> {
         match self {
             BasicValue::Single(x) => Ok(x.clone()),
-            _ => Err(Error::bad_basic_value_call()),
+            _ => Err(errors::bad_basic_value_call()),
         }
     }
 
@@ -284,7 +288,7 @@ impl<T: FitFieldParseable + Clone> BasicValue<T> {
     fn get_vec(&self) -> Result<Vec<T>> {
         match self {
             BasicValue::Vec(x) => Ok(x.to_vec()),
-            _ => Err(Error::bad_basic_value_call()),
+            _ => Err(errors::bad_basic_value_call()),
         }
     }
 }
@@ -357,14 +361,14 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
     pub fn get_single(&self) -> Result<T> {
         match self.value {
             BasicValue::Single(ref v) => return Ok(v.clone()),
-            _ => return Err(Error::bad_basic_value_call()),
+            _ => return Err(errors::bad_basic_value_call()),
         }
     }
 
     pub fn get_vec(&self) -> Result<Vec<T>> {
         match self.value {
             BasicValue::Vec(ref v) => Ok(v.clone()),
-            _ => Err(Error::bad_basic_value_call()),
+            _ => Err(errors::bad_basic_value_call()),
         }
     }
 }
@@ -530,7 +534,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
     pub fn get_single(&self) -> Result<f64> {
         match self.value {
             AdjustedValue::Single(ref v) => return Ok(v.to_f64()),
-            _ => return Err(Error::bad_adjusted_value_call()),
+            _ => return Err(errors::bad_adjusted_value_call()),
         }
     }
 
@@ -538,7 +542,7 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
     pub fn get_vec(&self) -> Result<Vec<f64>> {
         match self.value {
             AdjustedValue::Vec(ref v) => Ok(v.iter().map(|x| x.to_f64()).collect()),
-            _ => Err(Error::bad_adjusted_value_call()),
+            _ => Err(errors::bad_adjusted_value_call()),
         }
     }
 }
@@ -829,7 +833,7 @@ impl FitMessageUnknownToSdk {
                 let mut err_string = String::from("Error parsing FitMessageUnknownToSdk:");
                 err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
 
@@ -901,7 +905,7 @@ impl FitGlobalMesgNum {
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
         let parse_config = fit_parse_config!(endianness);
         let (raw_num, o) = match parse_uint16(input, &parse_config) {
-            Err(_) => return Err(Error::parse_error("error parsing FitGlobalMesgNum")),
+            Err(_) => return Err(errors::parse_error("error parsing FitGlobalMesgNum")),
             Ok(raw_num) => (raw_num, &input[2..]),
         };
 
@@ -1208,7 +1212,7 @@ impl FitDeveloperDataDefinition {
     fn get_field_description(&self, field_number: u8) -> Result<Rc<FitMessageFieldDescription>> {
         match self.field_descriptions.get(&field_number) {
             Some(fd) => Ok(fd.clone()),
-            None => Err(Error::developer_field_description_not_found(field_number)),
+            None => Err(errors::developer_field_description_not_found(field_number)),
         }
     }
 }
@@ -1583,7 +1587,7 @@ impl FitBaseValue {
             FitFieldFitBaseType::String => {
                 Ok(FitBaseValue::String(FitString::parse(input, parse_config)?))
             }
-            _ => Err(Error::parse_unknown_base_value()),
+            _ => Err(errors::parse_unknown_base_value()),
         }
     }
 }

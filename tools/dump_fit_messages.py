@@ -266,7 +266,8 @@ use {FitBool, FitUint8, FitUint8z, FitSint8, FitUint16,
 
 use BasicValue;
 
-use errors::{Error, Result};
+use errors;
+use errors::{FitParseError, Result};
 """
 
     sys.stdout.write(special_types)
@@ -361,7 +362,7 @@ pub enum FitDataMessage {
     {{ message.short_name }}(Rc<{{ message.full_name }}>),
     {%- endfor %}
     UnknownToSdk(Rc<FitMessageUnknownToSdk>),
-    ParseError(Error)
+    ParseError(FitParseError)
 }
 
 impl fmt::Display for FitDataMessage {
@@ -420,16 +421,16 @@ impl FitDataMessage {
                 Ok((FitDataMessage::UnknownToSdk(val), o))
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMin) => {
-                Err(Error::field_mfg_range_min())
+                Err(errors::field_mfg_range_min())
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::MfgRangeMax) => {
-                Err(Error::field_mfg_range_max())
+                Err(errors::field_mfg_range_max())
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::InvalidFieldValue) => {
-                Err(Error::field_invalid_value())
+                Err(errors::field_invalid_value())
             }
             FitGlobalMesgNum::Known(FitFieldMesgNum::UnknownToSdk) => {
-                Err(Error::field_unknown_to_sdk())
+                Err(errors::field_unknown_to_sdk())
             }
             FitGlobalMesgNum::Unknown(number) => {
                 let (val, o) = FitMessageUnknownToSdk::parse(number, input, header, parsing_state, timestamp)?;
@@ -585,7 +586,7 @@ impl {{ message_name }} {
                 FitFieldFitBaseType::Sint64 => 142,
                 FitFieldFitBaseType::Uint64 => 143,
                 FitFieldFitBaseType::Uint64z => 144,
-                _ => return Err(Error::unknown_error()),
+                _ => return Err(errors::unknown_error()),
             };
 
             let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
@@ -634,7 +635,7 @@ impl {{ message_name }} {
                 err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
                 err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(Error::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string));
             }
         };
         inp = outp;
@@ -698,7 +699,7 @@ impl {{ message_name }} {
                 new_actions
             },
             {% endfor %}
-            bad_number => { return Err(Error::bad_subfield_field_number(bad_number)) }
+            bad_number => { return Err(errors::bad_subfield_field_number(bad_number)) }
         };
         Ok(new_actions)
     }
