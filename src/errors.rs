@@ -1,8 +1,15 @@
 
 use thiserror::Error;
 //use std::error::Error;
+use std::backtrace::Backtrace;
+use std::boxed::Box;
+use std::rc::Rc;
+
+//use fmt;
+use fmt::Debug;
 
 use FitFieldFitBaseType;
+use FitDefinitionMessage;
 
 pub type Result<T> = anyhow::Result<T, FitParseError>;
 
@@ -12,8 +19,10 @@ pub enum FitParseError {
     ParseIncomplete(usize),
     #[error("insufficient data to finish parse, unknown amount needed")]
     ParseIncompleteUnknown,
-    #[error("invalid field value for field")]
-    ParseInvalidFieldValue,
+    #[error("invalid field value for field\n bt:\n{backtrace}")]
+    ParseInvalidFieldValue{
+        backtrace: Backtrace,
+    },
     #[error("error during parse: {0:?}")]
     ParseError(String),
     #[error("zero value found for type requiring non-zero")]
@@ -38,8 +47,13 @@ pub enum FitParseError {
     MissingTimestampField,
     #[error("attempt to parse field number not present in defintion message: {0}")]
     InvalidFieldNumber(u8),
-    #[error("MessageParseFailed: {0}")]
-    MessageParseFailed(String),
+    #[error("MessageParseFailed: {message_name}\n definition: {definition_message:?}\n bytes: {bytes:?}\n source: {source:#?}")]
+    MessageParseFailed {
+        message_name: String,
+        definition_message: Rc<FitDefinitionMessage>,
+        bytes: Vec<u8>,
+        source: Box<FitParseError>,
+    },
     #[error("bad call to as_64 or as_64_vec: not initialized or wrong variant")]
     BadAdjustedValueCall,
     #[error("bad call to as_single or as_vec: not initialized or wrong variant")]
@@ -79,8 +93,20 @@ pub enum FitParseError {
     #[error("no FitMessageSport found in Fit File")]
     SportMessageNotPresent,
     #[error("unexpected FitField base_type {0}")]
-    UnexpectedFitFieldBaseType(FitFieldFitBaseType)
+    UnexpectedFitFieldBaseType(FitFieldFitBaseType),
+    #[error("nom parsing error: {0}")]
+    NomParsingError(String)
+    //NomParsingError {
+    //    #[from]
+    //    source: nom::Err<E>
+    //}
 }
+
+impl<T> From<nom::Err<T>> for FitParseError where T: Debug {
+    fn from(ne: nom::Err<T>) -> FitParseError {
+        FitParseError::NomParsingError(format!("{:?}", ne))
+    }
+} 
 
 impl From<FitParseError> for std::fmt::Error {
     fn from(_t: FitParseError) -> Self {
@@ -89,7 +115,7 @@ impl From<FitParseError> for std::fmt::Error {
 } 
 
 #[allow(dead_code)]
-pub(crate) fn parse_incomplete(pi: usize) -> FitParseError {
+pub(crate) fn parse_incomplete<E>(pi: usize) -> FitParseError {
     FitParseError::ParseIncomplete(pi)
 }
 
@@ -100,7 +126,8 @@ pub(crate) fn parse_incomplete_unknown() -> FitParseError {
 
 #[allow(dead_code)]
 pub(crate) fn parse_invalid_field_value() -> FitParseError {
-    FitParseError::ParseInvalidFieldValue
+    let bt = Backtrace::force_capture();
+    FitParseError::ParseInvalidFieldValue{ backtrace: bt }
 }
 
 #[allow(dead_code)]
@@ -163,9 +190,19 @@ pub(crate) fn invalid_field_number(ifn: u8) -> FitParseError {
     FitParseError::InvalidFieldNumber(ifn)
 }
 
+//#[allow(dead_code)]
+//pub(crate) fn message_parse_failed<T: AsRef<str>>(fm: T, bt: Backtrace) -> FitParseError {
+//    FitParseError::MessageParseFailed(fm.as_ref().to_string(), bt)
+//}
+
 #[allow(dead_code)]
-pub(crate) fn message_parse_failed<T: AsRef<str>>(fm: T) -> FitParseError {
-    FitParseError::MessageParseFailed(fm.as_ref().to_string())
+pub fn message_parse_failed(message_name: String, definition_message: Rc<FitDefinitionMessage>, bytes: Vec<u8>, source: FitParseError) -> FitParseError {
+    FitParseError::MessageParseFailed {
+        message_name,
+        definition_message,
+        bytes,
+        source: Box::new(source)
+    }
 }
 
 #[allow(dead_code)]
@@ -265,6 +302,10 @@ pub(crate) fn sport_message_not_present() -> FitParseError {
 
 pub fn unexpected_fit_field_base_type(unexpected: FitFieldFitBaseType) -> FitParseError {
     FitParseError::UnexpectedFitFieldBaseType(unexpected)
+}
+
+pub fn nom_parsing_error(e: String) -> FitParseError {
+    FitParseError::NomParsingError(e)
 }
 
 /*

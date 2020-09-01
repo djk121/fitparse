@@ -1,3 +1,6 @@
+#![feature(backtrace)]
+
+use std::backtrace::Backtrace;
 use std::collections::HashMap;
 use std::convert::From;
 use std::ops::Deref;
@@ -13,7 +16,9 @@ extern crate chrono;
 
 #[macro_use]
 extern crate nom;
-use nom::Endianness;
+//use nom::{IResult, Err, Needed, error::ErrorKind, bytes, character};
+//use nom;
+use nom::number::Endianness;
 
 extern crate conv;
 use conv::*;
@@ -28,6 +33,7 @@ use fitparsers::{
     parse_bool, parse_byte, parse_enum, parse_float32, parse_float64, parse_sint16, parse_sint32,
     parse_sint64, parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32,
     parse_uint32z, parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
+    parse_fit_file_header, parse_record_header, parse_definition_message
 };
 use fitparsingstate::FitParsingState;
 use fittypes::{
@@ -60,6 +66,18 @@ pub struct FitNormalRecordHeader {
     local_mesg_num: u16,
 }
 
+impl FitNormalRecordHeader {
+    fn new(message_type: u8, developer_fields_present: bool, local_mesg_num: u16) -> Self {
+        FitNormalRecordHeader {
+            message_type: FitNormalRecordHeaderMessageType::from(message_type),
+            developer_fields_present,
+            local_mesg_num
+        }
+    }
+}
+
+
+/*
 named!(normal_record_header<&[u8], FitRecordHeader>,
     do_parse!(
         first_byte:
@@ -78,6 +96,7 @@ named!(normal_record_header<&[u8], FitRecordHeader>,
             }))
     )
 );
+*/
 
 // these are supposed to come after some message indicating the base time
 // to_which time_offset should be added, so we'll require extra context from
@@ -88,6 +107,9 @@ pub struct FitCompressedTimestampHeader {
     offset_secs: u8,
 }
 
+
+
+/*
 named!(compressed_timestamp_record_header<&[u8], FitRecordHeader>,
     do_parse!(
         first_byte: bits!(
@@ -102,6 +124,7 @@ named!(compressed_timestamp_record_header<&[u8], FitRecordHeader>,
         }))
     )
 );
+*/
 
 #[derive(Debug, PartialEq)]
 pub struct FitFileHeader {
@@ -113,16 +136,16 @@ pub struct FitFileHeader {
 }
 
 impl FitFileHeader {
-    pub fn parse(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
-        let (ffh, o) = parse_fit_file_header(input)?;
-        return Ok((ffh, o));
+    pub fn parse(input: &[u8]) -> Result<(&[u8], FitFileHeader)> {
+        parse_fit_file_header(input)
     }
 }
 
-fn parse_fit_file_header(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
-    nom_returning_internal_parser!(parse_fit_file_header_internal, input)
-}
+//fn parse_fit_file_header(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
+//    nom_returning_internal_parser!(parse_fit_file_header_internal, input)
+//}
 
+/*
 named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
     do_parse!(
         header_size: take!(1) >>
@@ -142,6 +165,7 @@ named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
         })
     )
 );
+*/
 
 trait FitRecord {
     fn message_name(&self) -> &'static str;
@@ -180,8 +204,8 @@ pub fn parse_fit_message<'a>(
 ) -> Result<(FitMessage, &'a [u8])> {
 
     // failing to parse the header is unrecoverable
-    let (header, o) = match parse_record_header(input) {
-        Ok((header, o)) => (header, o),
+    let (o, header) = match parse_record_header(input) {
+        Ok(res) => res,
         Err(e) => {
             //return Err(errors::parse_error(format!("error parsing header: {}", e)));
             return Err(errors::FitParseError::ParseError(e.to_string()))
@@ -578,7 +602,7 @@ impl<T: fmt::Display + FitFieldParseable + FitF64Convertible + Clone> fmt::Displ
 #[derive(Debug, PartialEq, Clone)]
 pub struct FitParseConfig {
     field_definition: Option<FitFieldDefinition>,
-    endianness: Option<nom::Endianness>,
+    endianness: Option<Endianness>,
     tz_offset_secs: Option<f64>,
     bytes_to_parse: Option<Vec<u8>>,
     bit_range: Option<(usize, usize)>,
@@ -625,7 +649,7 @@ macro_rules! fit_parse_config {
 impl FitParseConfig {
     pub fn new(
         field: FitFieldDefinition,
-        endianness: nom::Endianness,
+        endianness: Endianness,
         tz_offset: f64,
     ) -> FitParseConfig {
         FitParseConfig {
@@ -657,7 +681,7 @@ impl FitParseConfig {
         definition_number: u8,
         field_size: usize,
         base_type: u8,
-        endianness: nom::Endianness,
+        endianness: Endianness,
         bit_start: usize,
         num_bits: usize,
         scale_and_offset: Option<(f64, f64)>,
@@ -735,7 +759,7 @@ impl FitParseConfig {
         }
     }
 
-    pub fn endianness(&self) -> nom::Endianness {
+    pub fn endianness(&self) -> Endianness {
         match self.endianness {
             None => panic!("used empty FitParseConfig.endianness"),
             Some(v) => v,
@@ -846,10 +870,15 @@ impl FitMessageUnknownToSdk {
         let o = match FitMessageUnknownToSdk::parse_internal(&mut message, input, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from("Error parsing FitMessageUnknownToSdk:");
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string = String::from("Error parsing FitMessageUnknownToSdk:");
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                return Err(errors::message_parse_failed(
+                    "FitMessageUnknownToSdk".to_string(),
+                    definition_message,
+                    input[..(message.definition_message.message_size)].to_vec(),
+                    e));
             }
         };
 
@@ -1059,7 +1088,7 @@ impl FitFieldDefinition {
 }
 
 #[derive(Debug, PartialEq)]
-struct FitDeveloperFieldDefinition {
+pub struct FitDeveloperFieldDefinition {
     definition_number: u8,
     field_size: usize,
     developer_data_index: u8,
@@ -1075,7 +1104,7 @@ struct FitDeveloperFieldDefinition {
 #[derive(Debug, PartialEq)]
 pub struct FitDefinitionMessage {
     header: FitNormalRecordHeader,
-    endianness: nom::Endianness,
+    endianness: Endianness,
     global_mesg_num: FitGlobalMesgNum,
     num_fields: u8,
     message_size: usize,
@@ -1124,10 +1153,8 @@ impl FitDefinitionMessage {
         input: &[u8],
         header: FitNormalRecordHeader,
     ) -> Result<(Rc<FitDefinitionMessage>, &[u8])> {
-        match parse_definition_message(input, header) {
-            Ok((fdm, o)) => Ok((Rc::new(fdm), o)),
-            Err(e) => Err(e),
-        }
+        let (o, fdm) = parse_definition_message(input, header)?;
+        Ok((Rc::new(fdm), o))
     }
 }
 
@@ -1146,10 +1173,15 @@ impl FitRecordHeader {
     }
 }
 
+/*
 fn parse_record_header(input: &[u8]) -> Result<(FitRecordHeader, &[u8])> {
     nom_returning_internal_parser!(parse_record_header_internal, input)
 }
+*/
 
+
+
+/*
 named!(parse_record_header_internal<&[u8], FitRecordHeader>,
     do_parse!(
         header: alt!(
@@ -1158,7 +1190,11 @@ named!(parse_record_header_internal<&[u8], FitRecordHeader>,
         (header)
     )
 );
+*/
 
+
+
+/*
 named!(field_definition<&[u8], FitFieldDefinition>,
     do_parse!(
         definition_number: take!(1) >>
@@ -1178,7 +1214,11 @@ named!(field_definition<&[u8], FitFieldDefinition>,
         */
     )
 );
+*/
 
+
+
+/*
 named!(developer_field_definition<&[u8], FitDeveloperFieldDefinition>,
     do_parse!(
         field_number: take!(1) >>
@@ -1191,14 +1231,19 @@ named!(developer_field_definition<&[u8], FitDeveloperFieldDefinition>,
         })
     )
 );
+*/
 
+/*
 fn parse_definition_message(
     input: &[u8],
     header: FitNormalRecordHeader,
 ) -> Result<(FitDefinitionMessage, &[u8])> {
     nom_returning_internal_parser!(parse_definition_message_internal, input, header)
 }
+*/
 
+
+/*
 named_args!(parse_definition_message_internal(header: FitNormalRecordHeader)<FitDefinitionMessage>,
     do_parse!(
         tag!([0u8]) >>
@@ -1236,6 +1281,7 @@ named_args!(developer_fields_are_present(yesorno: bool)<bool>,
         (yesorno)
     )
 );
+*/
 
 #[derive(Debug)]
 pub struct FitDeveloperDataDefinition {
@@ -1845,7 +1891,7 @@ mod tests {
             local_mesg_num: 0,
         };
 
-        let (_, rh) = normal_record_header(&record_header_data).unwrap();
+        let (_, rh) = fitparsers::parse_normal_record_header(&record_header_data).unwrap();
 
         assert_eq!(rh, FitRecordHeader::Normal(expected));
     }
@@ -1879,33 +1925,17 @@ mod tests {
             global_mesg_num: FitGlobalMesgNum::Known(FitFieldMesgNum::FileId),
             num_fields: 4,
             field_definitions: vec![
-                FitFieldDefinition {
-                    definition_number: 3,
-                    field_size: 4,
-                    base_type: 140,
-                },
-                FitFieldDefinition {
-                    definition_number: 4,
-                    field_size: 4,
-                    base_type: 134,
-                },
-                FitFieldDefinition {
-                    definition_number: 1,
-                    field_size: 2,
-                    base_type: 132,
-                },
-                FitFieldDefinition {
-                    definition_number: 0,
-                    field_size: 1,
-                    base_type: 0,
-                },
+                FitFieldDefinition::new(3, 4, 140).unwrap(),
+                FitFieldDefinition::new(4, 4, 134).unwrap(),
+                FitFieldDefinition::new(1, 2, 132).unwrap(),
+                FitFieldDefinition::new(0, 1, 0).unwrap(),
             ],
             developer_field_definitions: vec![],
             num_developer_fields: 0,
             message_size: 11,
         };
 
-        let (res, _) = parse_definition_message(&defintion_message_data, rh).unwrap();
+        let (_, res) = parse_definition_message(&defintion_message_data, rh).unwrap();
         assert_eq!(res, expected);
     }
 }

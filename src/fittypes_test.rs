@@ -2,7 +2,7 @@ use super::*;
 
 use std::rc::Rc;
 
-use nom::Endianness;
+use nom::number::Endianness;
 
 use FitBaseValue;
 use FitDeveloperFieldDefinition;
@@ -67,11 +67,10 @@ fn make_field_definitions(definitions: Vec<(u8, usize, u8)>) -> Vec<FitFieldDefi
     definitions
         .iter()
         .map(
-            |(definition_number, field_size, base_type)| FitFieldDefinition {
-                definition_number: *definition_number,
-                field_size: *field_size,
-                base_type: *base_type,
-            },
+            |(definition_number, field_size, base_type)| {
+                println!("dn: {}, fs: {}, bt: {}", definition_number, field_size, base_type);
+                FitFieldDefinition::new(*definition_number, *field_size, *base_type).unwrap()
+            }
         )
         .collect()
 }
@@ -372,6 +371,7 @@ fn fit_message_record_with_developer_fields() {
     ];
 
     for dfd_spec in developer_field_descriptions {
+        println!("dfd_spec: {:?}", dfd_spec);
         let fd = make_field_description(
             dfd_spec.0, dfd_spec.1, dfd_spec.2, dfd_spec.3, dfd_spec.4, dfd_spec.5,
         );

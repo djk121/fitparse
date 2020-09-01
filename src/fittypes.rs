@@ -1,3 +1,4 @@
+use std::backtrace::Backtrace;
 use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
@@ -20,6 +21,7 @@ use FitRecordHeader;
 use {FitFieldAdjustedValue, FitFieldBasicValue};
 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
+use BasicValue;
 use {
     fmt_developer_fields, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields,
     vec_fit_field_parseable,
@@ -28,8 +30,6 @@ use {
     FitBool, FitByte, FitFloat32, FitFloat64, FitSint16, FitSint32, FitSint8, FitString, FitUint16,
     FitUint16z, FitUint32, FitUint32z, FitUint8, FitUint8z,
 };
-
-use BasicValue;
 
 use errors;
 use errors::{FitParseError, Result};
@@ -19926,21 +19926,19 @@ impl FitMessageAccelerometerData {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageAccelerometerData),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageAccelerometerData).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageAccelerometerData), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -20241,21 +20239,19 @@ impl FitMessageActivity {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageActivity),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageActivity).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageActivity), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -20525,21 +20521,19 @@ impl FitMessageAntChannelId {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageAntChannelId),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageAntChannelId).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageAntChannelId), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -20880,18 +20874,19 @@ impl FitMessageAntRx {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageAntRx), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageAntRx).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageAntRx), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -21248,18 +21243,19 @@ impl FitMessageAntTx {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageAntTx), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageAntTx).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageAntTx), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -21549,21 +21545,19 @@ impl FitMessageAviationAttitude {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageAviationAttitude),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageAviationAttitude).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageAviationAttitude), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -21846,21 +21840,19 @@ impl FitMessageBarometerData {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageBarometerData),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageBarometerData).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageBarometerData), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -22238,21 +22230,19 @@ impl FitMessageBikeProfile {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageBikeProfile),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageBikeProfile).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageBikeProfile), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -22634,21 +22624,19 @@ impl FitMessageBloodPressure {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageBloodPressure),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageBloodPressure).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageBloodPressure), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -22923,21 +22911,19 @@ impl FitMessageCadenceZone {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageCadenceZone),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageCadenceZone).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageCadenceZone), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -23175,21 +23161,19 @@ impl FitMessageCameraEvent {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageCameraEvent),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageCameraEvent).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageCameraEvent), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -23443,21 +23427,19 @@ impl FitMessageCapabilities {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageCapabilities),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageCapabilities).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageCapabilities), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -23708,21 +23690,19 @@ impl FitMessageClimbPro {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageClimbPro),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageClimbPro).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageClimbPro), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -24036,21 +24016,19 @@ impl FitMessageConnectivity {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageConnectivity),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageConnectivity).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageConnectivity), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -24332,18 +24310,19 @@ impl FitMessageCourse {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageCourse), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageCourse).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageCourse), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -24597,21 +24576,19 @@ impl FitMessageCoursePoint {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageCoursePoint),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageCoursePoint).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageCoursePoint), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -24881,21 +24858,19 @@ impl FitMessageDeveloperDataId {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDeveloperDataId),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDeveloperDataId).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDeveloperDataId), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -24997,8 +24972,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntDeviceType(FitUint8),
     AntplusDeviceType(FitFieldAntplusDeviceType),
+    AntDeviceType(FitUint8),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -25372,21 +25347,19 @@ impl FitMessageDeviceInfo {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDeviceInfo),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDeviceInfo).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDeviceInfo), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -25847,21 +25820,19 @@ impl FitMessageDeviceSettings {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDeviceSettings),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDeviceSettings).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDeviceSettings), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -26195,21 +26166,19 @@ impl FitMessageDiveAlarm {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDiveAlarm),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDiveAlarm).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDiveAlarm), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -26459,21 +26428,19 @@ impl FitMessageDiveGas {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDiveGas),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDiveGas).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDiveGas), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -26571,8 +26538,8 @@ impl FitRecord for FitMessageDiveGas {
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
-    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
     HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
+    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
 }
 
 impl FitMessageDiveSettingsSubfieldHeartRateSource {
@@ -26869,21 +26836,19 @@ impl FitMessageDiveSettings {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDiveSettings),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDiveSettings).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDiveSettings), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -27287,21 +27252,19 @@ impl FitMessageDiveSummary {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageDiveSummary),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageDiveSummary).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageDiveSummary), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -27447,27 +27410,27 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    RiderPosition(FitFieldRiderPositionType),
+    CalorieDurationAlert(FitUint32),
     SpeedLowAlert(FitFloat64),
-    SpeedHighAlert(FitFloat64),
-    CadLowAlert(FitUint16),
-    DistanceDurationAlert(FitFloat64),
+    VirtualPartnerSpeed(FitFloat64),
+    HrHighAlert(FitUint8),
     CoursePointIndex(FitFieldMessageIndex),
-    PowerHighAlert(FitUint16),
-    CadHighAlert(FitUint16),
+    RiderPosition(FitFieldRiderPositionType),
+    DistanceDurationAlert(FitFloat64),
     HrLowAlert(FitUint8),
+    CadLowAlert(FitUint16),
+    GearChangeData(FitUint32),
+    CommTimeout(FitFieldCommTimeoutType),
+    PowerLowAlert(FitUint16),
+    PowerHighAlert(FitUint16),
+    SportPoint(FitUint32),
+    TimeDurationAlert(FitFloat64),
     BatteryLevel(FitFloat64),
     TimerTrigger(FitFieldTimerTrigger),
-    TimeDurationAlert(FitFloat64),
-    HrHighAlert(FitUint8),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    CalorieDurationAlert(FitUint32),
-    SportPoint(FitUint32),
+    CadHighAlert(FitUint16),
+    SpeedHighAlert(FitFloat64),
     RadarThreatAlert(FitUint32),
-    PowerLowAlert(FitUint16),
-    CommTimeout(FitFieldCommTimeoutType),
-    VirtualPartnerSpeed(FitFloat64),
-    GearChangeData(FitUint32),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
 }
 
 impl FitMessageEventSubfieldData {
@@ -28195,18 +28158,19 @@ impl FitMessageEvent {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageEvent), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageEvent).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageEvent), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -28605,21 +28569,19 @@ impl FitMessageExdDataConceptConfiguration {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageExdDataConceptConfiguration),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageExdDataConceptConfiguration).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageExdDataConceptConfiguration), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -28914,21 +28876,19 @@ impl FitMessageExdDataFieldConfiguration {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageExdDataFieldConfiguration),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageExdDataFieldConfiguration).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageExdDataFieldConfiguration), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -29174,21 +29134,19 @@ impl FitMessageExdScreenConfiguration {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageExdScreenConfiguration),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageExdScreenConfiguration).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageExdScreenConfiguration), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -29426,21 +29384,19 @@ impl FitMessageExerciseTitle {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageExerciseTitle),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageExerciseTitle).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageExerciseTitle), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -29682,21 +29638,19 @@ impl FitMessageFieldCapabilities {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageFieldCapabilities),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageFieldCapabilities).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageFieldCapabilities), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -29978,21 +29932,19 @@ impl FitMessageFieldDescription {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageFieldDescription),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageFieldDescription).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageFieldDescription), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -30279,21 +30231,19 @@ impl FitMessageFileCapabilities {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageFileCapabilities),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageFileCapabilities).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageFileCapabilities), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -30531,21 +30481,19 @@ impl FitMessageFileCreator {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageFileCreator),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageFileCreator).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageFileCreator), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -30895,18 +30843,19 @@ impl FitMessageFileId {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageFileId), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageFileId).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageFileId), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -31244,18 +31193,19 @@ impl FitMessageGoal {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageGoal), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageGoal).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageGoal), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -31549,21 +31499,19 @@ impl FitMessageGpsMetadata {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageGpsMetadata),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageGpsMetadata).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageGpsMetadata), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -31853,21 +31801,19 @@ impl FitMessageGyroscopeData {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageGyroscopeData),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageGyroscopeData).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageGyroscopeData), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -32256,18 +32202,19 @@ impl FitMessageHr {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageHr), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHr).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageHr), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -32521,18 +32468,19 @@ impl FitMessageHrZone {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageHrZone), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHrZone).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageHrZone), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -32770,21 +32718,19 @@ impl FitMessageHrmProfile {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageHrmProfile),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHrmProfile).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageHrmProfile), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -33012,18 +32958,19 @@ impl FitMessageHrv {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageHrv), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHrv).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageHrv), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -33280,18 +33227,19 @@ impl FitMessageJump {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageJump), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageJump).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageJump), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -34377,18 +34325,19 @@ impl FitMessageLap {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageLap), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageLap).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageLap), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -35228,18 +35177,19 @@ impl FitMessageLength {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageLength), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageLength).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageLength), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -35565,21 +35515,19 @@ impl FitMessageMagnetometerData {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageMagnetometerData),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageMagnetometerData).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageMagnetometerData), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -35849,21 +35797,19 @@ impl FitMessageMemoGlob {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageMemoGlob),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageMemoGlob).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageMemoGlob), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -35961,9 +35907,9 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    MaxPerFile(FitUint16),
     NumPerFile(FitUint16),
     MaxPerFileType(FitUint16),
+    MaxPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -36196,21 +36142,19 @@ impl FitMessageMesgCapabilities {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageMesgCapabilities),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageMesgCapabilities).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageMesgCapabilities), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -36507,21 +36451,19 @@ impl FitMessageMetZone {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageMetZone),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageMetZone).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageMetZone), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -37007,21 +36949,19 @@ impl FitMessageMonitoring {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageMonitoring),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageMonitoring).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageMonitoring), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -37441,21 +37381,19 @@ impl FitMessageMonitoringInfo {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageMonitoringInfo),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageMonitoringInfo).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageMonitoringInfo), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -37710,21 +37648,19 @@ impl FitMessageNmeaSentence {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageNmeaSentence),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageNmeaSentence).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageNmeaSentence), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -37990,21 +37926,19 @@ impl FitMessageObdiiData {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageObdiiData),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageObdiiData).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageObdiiData), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -38266,21 +38200,19 @@ impl FitMessageOhrSettings {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageOhrSettings),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageOhrSettings).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageOhrSettings), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -38595,21 +38527,19 @@ impl FitMessageOneDSensorCalibration {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageOneDSensorCalibration),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageOneDSensorCalibration).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageOneDSensorCalibration), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -38920,21 +38850,19 @@ impl FitMessagePowerZone {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessagePowerZone),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessagePowerZone).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessagePowerZone), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -39615,18 +39543,19 @@ impl FitMessageRecord {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageRecord), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageRecord).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageRecord), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -40288,21 +40217,19 @@ impl FitMessageSchedule {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSchedule),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSchedule).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSchedule), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -40623,21 +40550,19 @@ impl FitMessageSdmProfile {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSdmProfile),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSdmProfile).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSdmProfile), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -40916,21 +40841,19 @@ impl FitMessageSegmentFile {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSegmentFile),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSegmentFile).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSegmentFile), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -41211,21 +41134,19 @@ impl FitMessageSegmentId {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSegmentId),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSegmentId).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSegmentId), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -41976,21 +41897,19 @@ impl FitMessageSegmentLap {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSegmentLap),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSegmentLap).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSegmentLap), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -42669,21 +42588,19 @@ impl FitMessageSegmentLeaderboardEntry {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSegmentLeaderboardEntry),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSegmentLeaderboardEntry).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSegmentLeaderboardEntry), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -42941,21 +42858,19 @@ impl FitMessageSegmentPoint {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSegmentPoint),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSegmentPoint).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSegmentPoint), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -44080,21 +43995,19 @@ impl FitMessageSession {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSession),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSession).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSession), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -44958,18 +44871,19 @@ impl FitMessageSet {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageSet), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSet).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSet), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -45347,21 +45261,19 @@ impl FitMessageSlaveDevice {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSlaveDevice),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSlaveDevice).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSlaveDevice), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -45642,21 +45554,19 @@ impl FitMessageSoftware {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSoftware),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSoftware).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSoftware), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -45886,21 +45796,19 @@ impl FitMessageSpeedZone {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageSpeedZone),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSpeedZone).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSpeedZone), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -46130,18 +46038,19 @@ impl FitMessageSport {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageSport), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSport).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageSport), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -46367,21 +46276,19 @@ impl FitMessageStressLevel {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageStressLevel),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageStressLevel).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageStressLevel), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -46709,21 +46616,19 @@ impl FitMessageThreeDSensorCalibration {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageThreeDSensorCalibration),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageThreeDSensorCalibration).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageThreeDSensorCalibration), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -47062,21 +46967,19 @@ impl FitMessageTimestampCorrelation {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageTimestampCorrelation),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageTimestampCorrelation).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageTimestampCorrelation), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -47363,18 +47266,19 @@ impl FitMessageTotals {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageTotals), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageTotals).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageTotals), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -47764,21 +47668,19 @@ impl FitMessageTrainingFile {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageTrainingFile),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageTrainingFile).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageTrainingFile), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -48207,21 +48109,19 @@ impl FitMessageUserProfile {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageUserProfile),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageUserProfile).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageUserProfile), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -48560,18 +48460,19 @@ impl FitMessageVideo {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!(FitMessageVideo), ":"));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageVideo).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageVideo), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -48817,21 +48718,19 @@ impl FitMessageVideoClip {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageVideoClip),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageVideoClip).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageVideoClip), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -49077,21 +48976,19 @@ impl FitMessageVideoDescription {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageVideoDescription),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageVideoDescription).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageVideoDescription), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -49321,21 +49218,19 @@ impl FitMessageVideoFrame {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageVideoFrame),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageVideoFrame).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageVideoFrame), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -49577,21 +49472,19 @@ impl FitMessageVideoTitle {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageVideoTitle),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageVideoTitle).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageVideoTitle), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -49685,8 +49578,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    AnalogLayout(FitFieldAnalogWatchfaceLayout),
     DigitalLayout(FitFieldDigitalWatchfaceLayout),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -49903,21 +49796,19 @@ impl FitMessageWatchfaceSettings {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWatchfaceSettings),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWatchfaceSettings).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWatchfaceSettings), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -50214,21 +50105,19 @@ impl FitMessageWeatherAlert {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWeatherAlert),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWeatherAlert).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWeatherAlert), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -50538,21 +50427,19 @@ impl FitMessageWeatherConditions {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWeatherConditions),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWeatherConditions).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWeatherConditions), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -50890,21 +50777,19 @@ impl FitMessageWeightScale {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWeightScale),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWeightScale).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWeightScale), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -51202,21 +51087,19 @@ impl FitMessageWorkout {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWorkout),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWorkout).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWorkout), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -51478,21 +51361,19 @@ impl FitMessageWorkoutSession {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWorkoutSession),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWorkoutSession).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWorkoutSession), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -51603,12 +51484,12 @@ pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
     DurationDistance(FitFloat64),
-    DurationTime(FitFloat64),
-    DurationReps(FitUint32),
     DurationPower(FitFieldWorkoutPower),
+    DurationReps(FitUint32),
+    DurationTime(FitFloat64),
+    DurationStep(FitUint32),
     DurationCalories(FitUint32),
     DurationHr(FitFieldWorkoutHr),
-    DurationStep(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -51947,17 +51828,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatTime(FitFloat64),
-    TargetSpeedZone(FitUint32),
-    TargetPowerZone(FitUint32),
-    RepeatSteps(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    RepeatCalories(FitUint32),
     RepeatPower(FitFieldWorkoutPower),
-    RepeatDistance(FitFloat64),
-    TargetCadenceZone(FitUint32),
-    TargetStrokeType(FitFieldSwimStroke),
+    TargetPowerZone(FitUint32),
     TargetHrZone(FitUint32),
+    RepeatDistance(FitFloat64),
+    RepeatHr(FitFieldWorkoutHr),
+    TargetSpeedZone(FitUint32),
+    RepeatCalories(FitUint32),
+    TargetStrokeType(FitFieldSwimStroke),
+    RepeatSteps(FitUint32),
+    TargetCadenceZone(FitUint32),
+    RepeatTime(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -52232,9 +52113,9 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
     CustomTargetCadenceLow(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -52352,8 +52233,8 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
-    CustomTargetCadenceHigh(FitUint32),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetCadenceHigh(FitUint32),
     CustomTargetSpeedHigh(FitFloat64),
 }
 
@@ -52688,21 +52569,19 @@ impl FitMessageWorkoutStep {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageWorkoutStep),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageWorkoutStep).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageWorkoutStep), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;
@@ -53084,21 +52963,19 @@ impl FitMessageZonesTarget {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string = String::from(concat!(
-                    "Error parsing ",
-                    stringify!(FitMessageZonesTarget),
-                    ":"
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageZonesTarget).to_string(),
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e,
                 ));
-                err_string.push_str(&format!(
-                    "  parsing these bytes: '{:x?}'",
-                    &inp[..self.definition_message.message_size]
-                ));
-                err_string.push_str(&format!(
-                    "  with this definition message: '{:?}'",
-                    self.definition_message
-                ));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!(FitMessageZonesTarget), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;

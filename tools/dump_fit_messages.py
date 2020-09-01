@@ -242,6 +242,7 @@ def output_types(types):
 use std::fmt;
 use std::rc::Rc;
 use std::collections::HashMap;
+use std::backtrace::Backtrace;
 
 use {FitFieldBasicValue, FitFieldAdjustedValue};
 use FitRecord;
@@ -263,7 +264,6 @@ use {FitBool, FitUint8, FitUint8z, FitSint8, FitUint16,
      FitUint16z, FitSint16, FitUint32, FitUint32z, FitSint32,
      FitFloat32, FitFloat64,
      FitByte, FitString};
-
 use BasicValue;
 
 use errors;
@@ -631,12 +631,19 @@ impl {{ message_name }} {
         let outp = match self.parse_internal(inp, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!({{ message_name }}), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
-                err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(
+                    stringify!({{ message_name }}).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                    ))
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!({{ message_name }}), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", &inp[..self.definition_message.message_size]));
+                //err_string.push_str(&format!("  with this definition message: '{:?}'", self.definition_message));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
             }
         };
         inp = outp;

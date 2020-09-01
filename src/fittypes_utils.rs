@@ -3,7 +3,8 @@ use errors;
 use errors::Result;
 use fitparsers::{parse_date_time, parse_uint32};
 use fitparsingstate::FitParsingState;
-use nom::Endianness;
+use nom::number::Endianness;
+use std::backtrace::Backtrace;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fmt;
@@ -276,11 +277,18 @@ macro_rules! main_parse_message {
         let o = match <$output_type>::parse_internal(&mut $message, $input, tz_offset) {
             Ok(o) => o,
             Err(e) => {
-                let mut err_string =
-                    String::from(concat!("Error parsing ", stringify!($output_type), ":"));
-                err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
-                err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                //let bt = Backtrace::force_capture();
+                //let mut err_string =
+                //    String::from(concat!("Error parsing ", stringify!($output_type), ":"));
+                //err_string.push_str(&format!("  parsing these bytes: '{:x?}'", inp));
+                //err_string.push_str(&format!("  specific error: {:?}", e));
+                //return Err(errors::message_parse_failed(err_string, bt));
+                return Err(errors::message_parse_failed(
+                    stringify!($output_type).to_string(),
+                    $message.definition_message.clone(),
+                    $input[..($message.definition_message.message_size)].to_vec(),
+                    e
+                ))
             }
         };
 
@@ -288,23 +296,27 @@ macro_rules! main_parse_message {
     }};
 }
 
+
+/*
 #[macro_export]
 macro_rules! parse_subfields {
     ($message:expr, $parsing_state:expr, $output_type:ty) => {
         match <$output_type>::parse_subfields(&mut $message, $parsing_state.get_timezone_offset()) {
             Err(e) => {
+                let bt = Backtrace::force_capture();
                 let mut err_string = String::from(concat!(
                     "Error parsing subfields for ",
                     stringify!($output_type),
                     ":"
                 ));
                 err_string.push_str(&format!("  specific error: {:?}", e));
-                return Err(errors::message_parse_failed(err_string));
+                return Err(errors::message_parse_failed(err_string, bt));
             }
             Ok(_) => (),
         }
     };
 }
+*/
 
 #[macro_export]
 macro_rules! parse_developer_fields {

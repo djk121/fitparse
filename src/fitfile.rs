@@ -45,7 +45,7 @@ impl FitFile {
         //println!("{:?}", &header_bytes);
 
         let file_header = match FitFileHeader::parse(&header_bytes) {
-            Ok((ffh, _)) => ffh,
+            Ok((_, ffh)) => ffh,
             Err(e) => panic!("unable to parse header: {:?}", e),
         };
 
