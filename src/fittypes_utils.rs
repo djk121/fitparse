@@ -409,12 +409,9 @@ macro_rules! fmt_developer_fields {
             for developer_field in &$s.developer_fields {
                 let field_names = &developer_field.field_description.field_name;
                 let name = &field_names.get_vec()?[0];
-                write!($f, "  {: >28}: ", name)?;
-                write!($f, "{}", developer_field.value)?;
                 let field_units = &developer_field.field_description.units;
                 let units = &field_units.get_vec()?[0];
-                write!($f, " [{}]", units)?;
-                writeln!($f)?;
+                writeln!($f, "  {:>28}: {} [{}]", format!("{}", name), developer_field.value, units)?; 
             }
         }
     };
