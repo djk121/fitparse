@@ -1,6 +1,5 @@
 #![feature(backtrace)]
 
-use std::backtrace::Backtrace;
 use std::collections::HashMap;
 use std::convert::From;
 use std::ops::Deref;
@@ -14,10 +13,7 @@ use bitvec::order as bitvec_order;
 
 extern crate chrono;
 
-#[macro_use]
 extern crate nom;
-//use nom::{IResult, Err, Needed, error::ErrorKind, bytes, character};
-//use nom;
 use nom::number::Endianness;
 
 extern crate conv;

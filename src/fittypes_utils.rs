@@ -4,7 +4,6 @@ use errors::Result;
 use fitparsers::{parse_date_time, parse_uint32};
 use fitparsingstate::FitParsingState;
 use nom::number::Endianness;
-use std::backtrace::Backtrace;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fmt;
