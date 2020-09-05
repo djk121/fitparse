@@ -513,7 +513,6 @@ fn fit_message_record_with_developer_fields() {
 
     let mut rec = FitMessageRecord::new(header, &mut parsing_state).unwrap();
     rec.parse(&data_with_developer_fields, &mut parsing_state, None).unwrap();
-    //let (rec, _) = FitMessageRecord::parse(&data, header, &mut parsing_state, None).unwrap();
     assert_eq!(
         rec.position_lat,
         ffav!(
@@ -555,6 +554,5 @@ fn fit_message_record_with_developer_fields() {
             _ => (),
         }
     }
-    assert_eq!(1, 2);
 }
 
