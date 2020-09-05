@@ -7,7 +7,6 @@ use nom::number::Endianness;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fmt;
-use std::mem::transmute;
 use std::rc::Rc;
 use bit_subset;
 use FitBaseValue;
@@ -474,7 +473,7 @@ impl FitFieldDateTime {
     #[allow(dead_code)]
     pub fn new_from_compressed_timestamp(&self, offset_secs: u8) -> Result<FitFieldDateTime> {
         let last_5_existing = {
-            let bytes: [u8; 4] = unsafe { transmute(self.seconds_since_garmin_epoch.to_be()) };
+            let bytes = self.seconds_since_garmin_epoch.to_be_bytes();
             bytes[3] & 0x0000001F
         };
         let last_5_offset = offset_secs & 0x0000001F;
@@ -492,7 +491,7 @@ impl FitFieldDateTime {
             }
         };
 
-        let bytes: [u8; 4] = unsafe { transmute(new_epoch_offset.to_be()) };
+        let bytes = new_epoch_offset.to_be_bytes();
         let parse_config = fit_parse_config!(Endianness::Big);
         let result = FitFieldDateTime::parse(&bytes, &parse_config)?;
         Ok(result)

@@ -592,11 +592,6 @@ impl {{ message_name }} {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0
             );

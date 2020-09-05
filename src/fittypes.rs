@@ -19883,11 +19883,6 @@ impl FitMessageAccelerometerData {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -20189,11 +20184,6 @@ impl FitMessageActivity {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -20464,11 +20454,6 @@ impl FitMessageAntChannelId {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -20810,11 +20795,6 @@ impl FitMessageAntRx {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -21172,11 +21152,6 @@ impl FitMessageAntTx {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -21467,11 +21442,6 @@ impl FitMessageAviationAttitude {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -21755,11 +21725,6 @@ impl FitMessageBarometerData {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -22138,11 +22103,6 @@ impl FitMessageBikeProfile {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -22525,11 +22485,6 @@ impl FitMessageBloodPressure {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -22805,11 +22760,6 @@ impl FitMessageCadenceZone {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -23048,11 +22998,6 @@ impl FitMessageCameraEvent {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -23307,11 +23252,6 @@ impl FitMessageCapabilities {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -23563,11 +23503,6 @@ impl FitMessageClimbPro {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -23882,11 +23817,6 @@ impl FitMessageConnectivity {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -24169,11 +24099,6 @@ impl FitMessageCourse {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -24428,11 +24353,6 @@ impl FitMessageCoursePoint {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -24703,11 +24623,6 @@ impl FitMessageDeveloperDataId {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -24852,8 +24767,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntDeviceType(FitUint8),
     AntplusDeviceType(FitFieldAntplusDeviceType),
+    AntDeviceType(FitUint8),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -24916,8 +24831,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -25185,11 +25100,6 @@ impl FitMessageDeviceInfo {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -25651,11 +25561,6 @@ impl FitMessageDeviceSettings {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -25990,11 +25895,6 @@ impl FitMessageDiveAlarm {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -26245,11 +26145,6 @@ impl FitMessageDiveGas {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -26390,8 +26285,8 @@ impl FitRecord for FitMessageDiveGas {
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
-    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
     HeartRateAntplusDeviceType(FitFieldAntplusDeviceType),
+    HeartRateLocalDeviceType(FitFieldLocalDeviceType),
 }
 
 impl FitMessageDiveSettingsSubfieldHeartRateSource {
@@ -26646,11 +26541,6 @@ impl FitMessageDiveSettings {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -27055,11 +26945,6 @@ impl FitMessageDiveSummary {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -27248,26 +27133,26 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
+    SpeedLowAlert(FitFloat64),
+    HrLowAlert(FitUint8),
+    SpeedHighAlert(FitFloat64),
+    TimeDurationAlert(FitFloat64),
+    CoursePointIndex(FitFieldMessageIndex),
+    PowerLowAlert(FitUint16),
+    CadHighAlert(FitUint16),
+    SportPoint(FitUint32),
+    CalorieDurationAlert(FitUint32),
     BatteryLevel(FitFloat64),
+    HrHighAlert(FitUint8),
+    RadarThreatAlert(FitUint32),
     TimerTrigger(FitFieldTimerTrigger),
     CommTimeout(FitFieldCommTimeoutType),
-    TimeDurationAlert(FitFloat64),
     DistanceDurationAlert(FitFloat64),
-    SportPoint(FitUint32),
-    CoursePointIndex(FitFieldMessageIndex),
-    SpeedHighAlert(FitFloat64),
-    GearChangeData(FitUint32),
-    CadHighAlert(FitUint16),
-    RadarThreatAlert(FitUint32),
-    HrHighAlert(FitUint8),
-    VirtualPartnerSpeed(FitFloat64),
     PowerHighAlert(FitUint16),
-    RiderPosition(FitFieldRiderPositionType),
-    HrLowAlert(FitUint8),
-    PowerLowAlert(FitUint16),
+    GearChangeData(FitUint32),
     CadLowAlert(FitUint16),
-    CalorieDurationAlert(FitUint32),
-    SpeedLowAlert(FitFloat64),
+    VirtualPartnerSpeed(FitFloat64),
+    RiderPosition(FitFieldRiderPositionType),
     FitnessEquipmentState(FitFieldFitnessEquipmentState),
 }
 
@@ -27954,11 +27839,6 @@ impl FitMessageEvent {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -28358,11 +28238,6 @@ impl FitMessageExdDataConceptConfiguration {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -28658,11 +28533,6 @@ impl FitMessageExdDataFieldConfiguration {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -28909,11 +28779,6 @@ impl FitMessageExdScreenConfiguration {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -29152,11 +29017,6 @@ impl FitMessageExerciseTitle {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -29399,11 +29259,6 @@ impl FitMessageFieldCapabilities {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -29686,11 +29541,6 @@ impl FitMessageFieldDescription {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -29978,11 +29828,6 @@ impl FitMessageFileCapabilities {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -30221,11 +30066,6 @@ impl FitMessageFileCreator {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -30358,8 +30198,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -30576,11 +30416,6 @@ impl FitMessageFileId {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -30919,11 +30754,6 @@ impl FitMessageGoal {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -31218,11 +31048,6 @@ impl FitMessageGpsMetadata {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -31513,11 +31338,6 @@ impl FitMessageGyroscopeData {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -31907,11 +31727,6 @@ impl FitMessageHr {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -32166,11 +31981,6 @@ impl FitMessageHrZone {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -32409,11 +32219,6 @@ impl FitMessageHrmProfile {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -32642,11 +32447,6 @@ impl FitMessageHrv {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -32904,11 +32704,6 @@ impl FitMessageJump {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -33995,11 +33790,6 @@ impl FitMessageLap {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -34840,11 +34630,6 @@ impl FitMessageLength {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -35171,11 +34956,6 @@ impl FitMessageMagnetometerData {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -35446,11 +35226,6 @@ impl FitMessageMemoGlob {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -35784,11 +35559,6 @@ impl FitMessageMesgCapabilities {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -36086,11 +35856,6 @@ impl FitMessageMetZone {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -36231,8 +35996,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Steps(FitFloat64),
     Strokes(FitFloat64),
+    Steps(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -36577,11 +36342,6 @@ impl FitMessageMonitoring {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -37002,11 +36762,6 @@ impl FitMessageMonitoringInfo {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -37262,11 +37017,6 @@ impl FitMessageNmeaSentence {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -37533,11 +37283,6 @@ impl FitMessageObdiiData {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -37800,11 +37545,6 @@ impl FitMessageOhrSettings {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -38120,11 +37860,6 @@ impl FitMessageOneDSensorCalibration {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -38436,11 +38171,6 @@ impl FitMessagePowerZone {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -39122,11 +38852,6 @@ impl FitMessageRecord {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -39571,8 +39296,8 @@ impl FitRecord for FitMessageRecord {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -39789,11 +39514,6 @@ impl FitMessageSchedule {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -40115,11 +39835,6 @@ impl FitMessageSdmProfile {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -40399,11 +40114,6 @@ impl FitMessageSegmentFile {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -40685,11 +40395,6 @@ impl FitMessageSegmentId {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -41441,11 +41146,6 @@ impl FitMessageSegmentLap {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -42125,11 +41825,6 @@ impl FitMessageSegmentLeaderboardEntry {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -42388,11 +42083,6 @@ impl FitMessageSegmentPoint {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -43518,11 +43208,6 @@ impl FitMessageSession {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -44387,11 +44072,6 @@ impl FitMessageSet {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -44572,8 +44252,8 @@ impl FitRecord for FitMessageSet {
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -44770,11 +44450,6 @@ impl FitMessageSlaveDevice {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -45056,11 +44731,6 @@ impl FitMessageSoftware {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -45291,11 +44961,6 @@ impl FitMessageSpeedZone {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -45526,11 +45191,6 @@ impl FitMessageSport {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -45757,11 +45417,6 @@ impl FitMessageStressLevel {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -46090,11 +45745,6 @@ impl FitMessageThreeDSensorCalibration {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -46434,11 +46084,6 @@ impl FitMessageTimestampCorrelation {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -46726,11 +46371,6 @@ impl FitMessageTotals {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -46907,8 +46547,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -47121,11 +46761,6 @@ impl FitMessageTrainingFile {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -47555,11 +47190,6 @@ impl FitMessageUserProfile {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -47899,11 +47529,6 @@ impl FitMessageVideo {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -48150,11 +47775,6 @@ impl FitMessageVideoClip {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -48401,11 +48021,6 @@ impl FitMessageVideoDescription {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -48636,11 +48251,6 @@ impl FitMessageVideoFrame {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -48883,11 +48493,6 @@ impl FitMessageVideoTitle {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -49024,8 +48629,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    DigitalLayout(FitFieldDigitalWatchfaceLayout),
     AnalogLayout(FitFieldAnalogWatchfaceLayout),
+    DigitalLayout(FitFieldDigitalWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -49200,11 +48805,6 @@ impl FitMessageWatchfaceSettings {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -49502,11 +49102,6 @@ impl FitMessageWeatherAlert {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -49817,11 +49412,6 @@ impl FitMessageWeatherConditions {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -50160,11 +49750,6 @@ impl FitMessageWeightScale {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -50463,11 +50048,6 @@ impl FitMessageWorkout {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -50730,11 +50310,6 @@ impl FitMessageWorkoutSession {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -50887,13 +50462,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationCalories(FitUint32),
-    DurationTime(FitFloat64),
-    DurationHr(FitFieldWorkoutHr),
-    DurationReps(FitUint32),
-    DurationDistance(FitFloat64),
-    DurationPower(FitFieldWorkoutPower),
     DurationStep(FitUint32),
+    DurationTime(FitFloat64),
+    DurationReps(FitUint32),
+    DurationHr(FitFieldWorkoutHr),
+    DurationCalories(FitUint32),
+    DurationPower(FitFieldWorkoutPower),
+    DurationDistance(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -51232,17 +50807,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetPowerZone(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    RepeatDistance(FitFloat64),
-    TargetHrZone(FitUint32),
-    TargetStrokeType(FitFieldSwimStroke),
-    RepeatTime(FitFloat64),
-    RepeatPower(FitFieldWorkoutPower),
-    RepeatSteps(FitUint32),
-    TargetCadenceZone(FitUint32),
-    TargetSpeedZone(FitUint32),
     RepeatCalories(FitUint32),
+    TargetSpeedZone(FitUint32),
+    TargetPowerZone(FitUint32),
+    TargetStrokeType(FitFieldSwimStroke),
+    TargetCadenceZone(FitUint32),
+    TargetHrZone(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
+    RepeatPower(FitFieldWorkoutPower),
+    RepeatDistance(FitFloat64),
+    RepeatSteps(FitUint32),
+    RepeatTime(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -51254,98 +50829,6 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
-        if message.target_type.is_parsed() {
-            match message.target_type.get_single()? {
-                FitFieldWktStepTarget::Speed => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::HeartRate => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::Cadence => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::Power => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::SwimStroke => {
-                    let mut parser =
-                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                        new_actions,
-                    ));
-                }
-
-                _ => (),
-            }
-        }
-
         if message.duration_type.is_parsed() {
             match message.duration_type.get_single()? {
                 FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
@@ -51500,6 +50983,98 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
         }
 
+        if message.target_type.is_parsed() {
+            match message.target_type.get_single()? {
+                FitFieldWktStepTarget::Speed => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::HeartRate => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Cadence => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Power => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::SwimStroke => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
+            }
+        }
+
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
         parser.parse(inp, parse_config)?;
 
@@ -51517,9 +51092,9 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetCadenceLow(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetCadenceLow(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -51636,10 +51211,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetSpeedHigh(FitFloat64),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
-    CustomTargetCadenceHigh(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetCadenceHigh(FitUint32),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetSpeedHigh(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -51931,11 +51506,6 @@ impl FitMessageWorkoutStep {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );
@@ -52318,11 +51888,6 @@ impl FitMessageZonesTarget {
 
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
-                //FitFieldDefinition {
-                //        definition_number: def_num,
-                //        field_size: dev_field.field_size,
-                //        base_type: base_type_num,
-                //},
                 self.definition_message.endianness,
                 0.0,
             );

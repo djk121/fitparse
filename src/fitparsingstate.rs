@@ -4,7 +4,6 @@ use std::rc::Rc;
 use FitDefinitionMessage;
 use FitDeveloperDataDefinition;
 
-//use anyhow::Result;
 use errors;
 use errors::Result;
 use fittypes::FitDataMessage;

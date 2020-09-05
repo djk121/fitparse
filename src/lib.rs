@@ -21,7 +21,6 @@ use conv::*;
 
 extern crate thiserror;
 extern crate anyhow;
-//use anyhow::Result;
 
 use errors::Result;
 
@@ -72,28 +71,6 @@ impl FitNormalRecordHeader {
     }
 }
 
-
-/*
-named!(normal_record_header<&[u8], FitRecordHeader>,
-    do_parse!(
-        first_byte:
-            bits!(
-                tuple!(
-                    tag_bits!(u8, 1, 0x0), // should be 0 for Normal
-                    take_bits!(u8, 1), // data or definition flag
-                    take_bits!(u8, 1), // developer data flag
-                    tag_bits!(u8, 1, 0x0), // reserved
-                    take_bits!(u8, 4) // local message type
-            )) >>
-            (FitRecordHeader::Normal(FitNormalRecordHeader {
-                message_type: FitNormalRecordHeaderMessageType::from(first_byte.1),
-                developer_fields_present: first_byte.2 == 1,
-                local_mesg_num: first_byte.4 as u16,
-            }))
-    )
-);
-*/
-
 // these are supposed to come after some message indicating the base time
 // to_which time_offset should be added, so we'll require extra context from
 // the parser to figure out the absolute timestmap
@@ -102,25 +79,6 @@ pub struct FitCompressedTimestampHeader {
     local_mesg_num: u16,
     offset_secs: u8,
 }
-
-
-
-/*
-named!(compressed_timestamp_record_header<&[u8], FitRecordHeader>,
-    do_parse!(
-        first_byte: bits!(
-                        tuple!(
-                            tag_bits!(u8, 1, 0x1), // should be 1 for Compressed
-                            take_bits!(u8, 2), // local_mesg_num
-                            take_bits!(u8, 5) // offset in seconds
-                    )) >>
-        (FitRecordHeader::CompressedTimestamp(FitCompressedTimestampHeader {
-            local_mesg_num: first_byte.1.into(),
-            offset_secs: first_byte.2,
-        }))
-    )
-);
-*/
 
 #[derive(Debug, PartialEq)]
 pub struct FitFileHeader {
@@ -136,32 +94,6 @@ impl FitFileHeader {
         parse_fit_file_header(input)
     }
 }
-
-//fn parse_fit_file_header(input: &[u8]) -> Result<(FitFileHeader, &[u8])> {
-//    nom_returning_internal_parser!(parse_fit_file_header_internal, input)
-//}
-
-/*
-named!(parse_fit_file_header_internal<&[u8], FitFileHeader>,
-    do_parse!(
-        header_size: take!(1) >>
-        protocol_version: take!(1) >>
-        profile_version: u16!(Endianness::Little) >>
-        data_size: u32!(Endianness::Little) >>
-        tag!(".FIT") >>
-        crc: switch!(value!(header_size[0] == 14),
-            true => map!(take!(2), |x| x.to_vec()) |
-            _ => value!(Vec::new())) >>
-        (FitFileHeader {
-            header_size: header_size[0],
-            protocol_version: protocol_version[0],
-            profile_version: profile_version,
-            data_size: data_size,
-            crc: crc.into(),
-        })
-    )
-);
-*/
 
 trait FitRecord {
     fn message_name(&self) -> &'static str;
@@ -1010,28 +942,6 @@ impl FitFieldDefinition {
 
     pub fn base_type_name(&self) -> String { 
         self.base_type.to_string()
-        /*
-        match self.base_type {
-            0 => "enum",
-            1 => "sint8",
-            2 => "uint8",
-            131 => "sint16",
-            132 => "uint16",
-            133 => "sint32",
-            134 => "uint32",
-            7 => "string",
-            136 => "float32",
-            137 => "float64",
-            10 => "uint8z",
-            139 => "uint16z",
-            140 => "uint32z",
-            13 => "byte",
-            142 => "sint64",
-            143 => "uint64",
-            144 => "uint64z",
-            _ => "unknown",
-        }
-        */
     }
 
     pub fn base_type_size(&self) -> usize {
@@ -1058,28 +968,6 @@ impl FitFieldDefinition {
             }
         };
         sz
-        /*
-        match self.base_type {
-            0 => 1,                    // enum
-            1 => 1,                    // sint8
-            2 => 1,                    // uint8
-            131 => 2,                  // sint16
-            132 => 2,                  // uint16
-            133 => 4,                  // sint32
-            134 => 4,                  // uint32
-            7 => 1 * self.field_size,  // String
-            136 => 4,                  // float32
-            137 => 8,                  // float64
-            10 => 1,                   // uint8z
-            139 => 2,                  // uint16z
-            140 => 4,                  // uint32z
-            13 => 1 * self.field_size, // byte
-            142 => 8,                  // sint64
-            143 => 8,                  // uint64
-            144 => 8,                  // uint64z
-            _ => panic!("unexpected FitField base_type"),
-        }
-        */
     }
 }
 
@@ -1168,116 +1056,6 @@ impl FitRecordHeader {
         }
     }
 }
-
-/*
-fn parse_record_header(input: &[u8]) -> Result<(FitRecordHeader, &[u8])> {
-    nom_returning_internal_parser!(parse_record_header_internal, input)
-}
-*/
-
-
-
-/*
-named!(parse_record_header_internal<&[u8], FitRecordHeader>,
-    do_parse!(
-        header: alt!(
-                    compressed_timestamp_record_header |
-                    normal_record_header) >>
-        (header)
-    )
-);
-*/
-
-
-
-/*
-named!(field_definition<&[u8], FitFieldDefinition>,
-    do_parse!(
-        definition_number: take!(1) >>
-        field_size: take!(1) >>
-        base_type_byte: take!(1) >>
-        (FitFieldDefinition::new(
-            definition_number[0],
-            field_size[0] as usize,
-            base_type_byte[0]
-        ).unwrap())
-        /*
-        (FitFieldDefinition{
-            definition_number: definition_number[0],
-            field_size: field_size[0] as usize,
-            base_type: base_type_byte[0]
-        })
-        */
-    )
-);
-*/
-
-
-
-/*
-named!(developer_field_definition<&[u8], FitDeveloperFieldDefinition>,
-    do_parse!(
-        field_number: take!(1) >>
-        field_size: take!(1) >>
-        developer_data_index: take!(1) >>
-        (FitDeveloperFieldDefinition{
-            definition_number: field_number[0],
-            field_size: field_size[0] as usize,
-            developer_data_index: developer_data_index[0]
-        })
-    )
-);
-*/
-
-/*
-fn parse_definition_message(
-    input: &[u8],
-    header: FitNormalRecordHeader,
-) -> Result<(FitDefinitionMessage, &[u8])> {
-    nom_returning_internal_parser!(parse_definition_message_internal, input, header)
-}
-*/
-
-
-/*
-named_args!(parse_definition_message_internal(header: FitNormalRecordHeader)<FitDefinitionMessage>,
-    do_parse!(
-        tag!([0u8]) >>
-        endianness_raw: take!(1) >>
-        endianness: value!(match endianness_raw[0] {
-            0 => nom::Endianness::Little,
-            _ => nom::Endianness::Big,
-        }) >>
-        global_message_number: take!(2) >>
-        num_fields: take!(1) >>
-        field_definitions: many_m_n!(num_fields[0] as usize, num_fields[0] as usize, field_definition) >>
-        num_developer_fields: switch!(call!(developer_fields_are_present, header.developer_fields_present),
-            true => map!(take!(1), |x| x[0] as usize) |
-            _ => value!(0)) >>
-        developer_field_definitions: many_m_n!(num_developer_fields as usize, num_developer_fields as usize, developer_field_definition) >>
-
-
-        (FitDefinitionMessage{
-            header: header,
-            endianness: endianness,
-            global_mesg_num: FitGlobalMesgNum::parse(global_message_number, endianness).unwrap().0,
-            num_fields: num_fields[0],
-            message_size: (field_definitions.iter().fold(
-                0, |sum, val| sum + (val.base_type_size() as usize)) +
-                developer_field_definitions.iter().fold(0, |sum, val| sum + val.field_size)),
-            field_definitions: field_definitions,
-            num_developer_fields: num_developer_fields,
-            developer_field_definitions: developer_field_definitions,
-        })
-    )
-);
-
-named_args!(developer_fields_are_present(yesorno: bool)<bool>,
-    do_parse!(
-        (yesorno)
-    )
-);
-*/
 
 #[derive(Debug)]
 pub struct FitDeveloperDataDefinition {
@@ -1721,86 +1499,6 @@ fn format_bits(input: &Vec<u8>) -> String {
 
     s
 }
-
-// pub fn bit_subset(inp: &[u8], start: usize, num_bits: usize, big_endian: bool) -> Result<Vec<u8>> {
-//     println!("inp: {:?}, start: {}, num_bits: {}", inp, start, num_bits);
-    
-//     // 1. Figure out how many bytes we need from the input, get rid of excess
-//     let mut desired_byte_length = num_bits / 8;
-//     println!("desired_byte_length: {}", desired_byte_length);
-//     let remainder = num_bits % 8;
-//     if remainder != 0 {
-//         desired_byte_length = desired_byte_length + 1;
-//     }
-
-//     let mut raw_input = inp.to_vec();
-
-//     // [39, 1, 14, 8]   
-//     //while raw_input.len() > desired_byte_length {
-//     //    raw_input.remove(raw_input.len() - 1);
-//     //}
-
-//     // 2. flip endianness if need be
-//     if big_endian == false {
-//         raw_input.reverse();
-//     }
-
-//     // 3. make the bit vector, shift as needed
-//     let mut bv = bv::BitVec::<bitvec_order::Msb0, u8>::from_vec(raw_input);
-//     if start > 0 {
-//         bv.rotate_right(start);
-//     }
-
-//     println!("bv, post-rotate: {:?}", bv);
-
-//     // 4. zero out any higher bits
-//     let mut clear_pos = 0;    
-//     while clear_pos < (bv.len() - num_bits) {
-//         bv.set(clear_pos, false);
-//         clear_pos = clear_pos + 1;
-//     }
-
-//     let mut ret = bv.as_slice().to_vec();
-//     println!("ret: {:?}", ret);
-
-//     // 5. if little-endian, reverse
-//     if big_endian == false {
-//         ret.reverse();
-//     }
-
-//     return Ok(ret);
-// }
-
-// pub fn subset_with_pad(
-//     inp: &[u8],
-//     start: usize,
-//     num_bits: usize,
-//     endianness: Endianness,
-// ) -> Result<Vec<u8>> {
-//     // we're passed however many bytes the output should end up being
-//     let output_size = inp.len();
-//     // bit_subset should return us an even number of bytes
-//     let mut subset_bytes = num_bits / 8;
-//     if subset_bytes == 0 {
-//         subset_bytes = 1;
-//     }
-
-//     println!("subset_with_pad inp: {:?}", inp);
-//     let mut bytes: Vec<u8> = bit_subset(inp, start, num_bits, endianness == nom::Endianness::Big)?;
-
-//     while subset_bytes < output_size {
-//         subset_bytes = subset_bytes + 1;
-//         match endianness {
-//             nom::Endianness::Big => bytes.insert(0, 0),
-//             nom::Endianness::Little => bytes.push(0),
-//         }
-//     }
-
-//     println!("subset_with_pad ret: {:?}", bytes);
-
-
-//     Ok(bytes)
-// }
 
 pub fn bit_subset(
     inp: &[u8],

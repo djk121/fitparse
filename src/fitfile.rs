@@ -1,8 +1,4 @@
 use std::io;
-
-//extern crate backtrace;
-//use backtrace::Backtrace;
-
 use errors;
 use errors::Result;
 
@@ -14,13 +10,6 @@ pub struct FitFile {
     retain_bytes: bool,
     pub messages: Vec<FitMessage>,
 }
-
-/*
-enum FitMessageParseResult {
-    Message(FitMessage),
-    Error(Error)
-}
-*/
 
 impl FitFile {
     pub fn new(max_file_size: usize, retain_bytes: bool) -> Self {
