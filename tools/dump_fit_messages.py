@@ -241,6 +241,7 @@ def output_types(types):
     special_types = r"""
 use std::fmt;
 use std::rc::Rc;
+use std::sync::Arc;
 use std::collections::HashMap;
 
 use {FitFieldBasicValue, FitFieldAdjustedValue};
@@ -489,7 +490,7 @@ class Message(object):
 #[derive(Debug)]
 pub struct {{ message_name }} {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -541,7 +542,7 @@ impl {{ message_name }} {
         {% if has_components %}let endianness = definition_message.endianness;{% endif %}
         let message = {{ message_name }} {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),

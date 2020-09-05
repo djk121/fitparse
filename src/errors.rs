@@ -2,7 +2,7 @@
 use thiserror::Error;
 use std::backtrace::Backtrace;
 use std::boxed::Box;
-use std::rc::Rc;
+use std::sync::Arc;
 
 use fmt::Debug;
 
@@ -48,7 +48,7 @@ pub enum FitParseError {
     #[error("MessageParseFailed: {message_name}\n definition: {definition_message:?}\n bytes: {bytes:?}\n source: {source:#?}")]
     MessageParseFailed {
         message_name: String,
-        definition_message: Rc<FitDefinitionMessage>,
+        definition_message: Arc<FitDefinitionMessage>,
         bytes: Vec<u8>,
         source: Box<FitParseError>,
     },
@@ -185,7 +185,7 @@ pub(crate) fn invalid_field_number(ifn: u8) -> FitParseError {
 }
 
 #[allow(dead_code)]
-pub fn message_parse_failed(message_name: String, definition_message: Rc<FitDefinitionMessage>, bytes: Vec<u8>, source: FitParseError) -> FitParseError {
+pub fn message_parse_failed(message_name: String, definition_message: Arc<FitDefinitionMessage>, bytes: Vec<u8>, source: FitParseError) -> FitParseError {
     FitParseError::MessageParseFailed {
         message_name,
         definition_message,

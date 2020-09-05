@@ -1,6 +1,7 @@
 use super::*;
 
 use std::rc::Rc;
+use std::sync::Arc;
 
 use nom::number::Endianness;
 
@@ -204,7 +205,7 @@ fn make_field_description(
             developer_fields_present: false,
             local_mesg_num: 0,
         }),
-        definition_message: Rc::new(FitDefinitionMessage {
+        definition_message: Arc::new(FitDefinitionMessage {
             header: FitNormalRecordHeader {
                 message_type: FitNormalRecordHeaderMessageType::Definition,
                 developer_fields_present: false,
@@ -245,7 +246,7 @@ fn make_field_description(
 
 #[test]
 fn fit_message_record() {
-    let definition_message = Rc::new(make_definition_message_record());
+    let definition_message = Arc::new(make_definition_message_record());
     
     let data_without_developer_fields = [
             0b10010000,0b11000000,0b00111010,0b00111000,0b10100111,0b00110000,0b11100110,0b00100001,
@@ -346,7 +347,7 @@ fn fit_message_record_with_developer_fields() {
         },
     ];
 
-    let definition_message_final = Rc::new(definition_message);
+    let definition_message_final = Arc::new(definition_message);
     let data_with_developer_fields = [
         0b10010000,0b11000000,0b00111010,0b00111000,0b10100111,0b00110000,0b11100110,0b00100001,
         0b11011000,0b01100001,0b11111111,0b10101000,0b00100011,0b00110101,0b00010001,0b00000000,

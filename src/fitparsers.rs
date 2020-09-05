@@ -277,6 +277,7 @@ pub fn parse_uint8z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
     Ok(vec![val])
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_sint16(input: &[u8], parse_config: &FitParseConfig) -> Result<i16> {
     let v = match input.len() < 2 {
@@ -297,6 +298,40 @@ pub fn parse_sint16(input: &[u8], parse_config: &FitParseConfig) -> Result<i16> 
         valid_val => Ok(valid_val)
     }
 }
+*/
+
+#[allow(dead_code)]
+pub fn parse_sint16<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<i16> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 2 {
+        true => {
+            buf = buffer(input, 2, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i16> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_i16(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_i16(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val) = parser(inp)?;
+    match val {
+        0x7FFF => Err(errors::parse_invalid_field_value()),
+        valid_val => Ok(valid_val)
+    }  
+}  
 
 #[allow(dead_code)]
 pub fn parse_sint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
@@ -309,23 +344,35 @@ pub fn parse_sint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Endianness::Little => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec())
     }
-}
+} 
 
 #[allow(dead_code)]
-pub fn parse_uint16(input: &[u8], parse_config: &FitParseConfig) -> Result<u16> {
-    let v = match input.len() < 2 {
-        true => buffer(input, 2, parse_config.endianness()),
-        false => input.to_vec()
-    };
+pub fn parse_uint16<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<u16> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 2 {
+        true => {
+            buf = buffer(input, 2, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
 
-    let parser = || -> nom::IResult<&[u8], u16> {
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u16> {
+
         match parse_config.endianness() {
-            Endianness::Little => nom::number::complete::le_u16(&v),
-            Endianness::Big => nom::number::complete::be_u16(&v)
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_u16(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_u16(i)?;
+                nom::IResult::Ok((&[], o))
+            },
         }
     };
 
-    let (_, val) = parser()?;
+    let (_, val) = parser(inp)?;
     match val {
         0xFFFF => Err(errors::parse_invalid_field_value()),
         valid_val => Ok(valid_val)
@@ -371,6 +418,7 @@ pub fn parse_uint16z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     }
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_sint32(input: &[u8], parse_config: &FitParseConfig) -> Result<i32> {
     let v = match input.len() < 4 {
@@ -391,6 +439,40 @@ pub fn parse_sint32(input: &[u8], parse_config: &FitParseConfig) -> Result<i32> 
         valid_val => Ok(valid_val)
     }
 }
+*/
+
+#[allow(dead_code)]
+pub fn parse_sint32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<i32> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 4 {
+        true => {
+            buf = buffer(input, 4, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i32> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_i32(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_i32(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val) = parser(inp)?;
+    match val {
+        0x7FFFFFFF => Err(errors::parse_invalid_field_value()),
+        valid_val => Ok(valid_val)
+    }  
+}  
 
 #[allow(dead_code)]
 pub fn parse_sint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
@@ -405,6 +487,7 @@ pub fn parse_sint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
     }
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_uint32(input: &[u8], parse_config: &FitParseConfig) -> Result<u32> {
     let v = match input.len() < 4 {
@@ -424,7 +507,42 @@ pub fn parse_uint32(input: &[u8], parse_config: &FitParseConfig) -> Result<u32> 
         0xFFFFFFFF => Err(errors::parse_invalid_field_value()),
         valid_val => Ok(valid_val)
     }  
+} 
+*/ 
+
+#[allow(dead_code)]
+pub fn parse_uint32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<u32> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 4 {
+        true => {
+            buf = buffer(input, 4, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u32> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_u32(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_u32(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val) = parser(inp)?;
+    match val {
+        0xFFFFFFFF => Err(errors::parse_invalid_field_value()),
+        valid_val => Ok(valid_val)
+    }  
 }  
+
 
 #[allow(dead_code)]
 pub fn parse_uint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
@@ -465,6 +583,7 @@ pub fn parse_uint32z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     }
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_float32(input: &[u8], parse_config: &FitParseConfig) -> Result<f32> {
     let v = match input.len() < 4 {
@@ -482,6 +601,37 @@ pub fn parse_float32(input: &[u8], parse_config: &FitParseConfig) -> Result<f32>
     let (_, val) = parser()?;
     Ok(val)
 }  
+*/
+
+#[allow(dead_code)]
+pub fn parse_float32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<f32> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 4 {
+        true => {
+            buf = buffer(input, 4, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], f32> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_f32(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_f32(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val)= parser(inp)?;
+    Ok(val)
+}  
 
 #[allow(dead_code)]
 pub fn parse_float32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
@@ -496,6 +646,7 @@ pub fn parse_float32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     }
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_sint64(input: &[u8], parse_config: &FitParseConfig) -> Result<i64> {    
     let v = match input.len() < 8 {
@@ -513,6 +664,37 @@ pub fn parse_sint64(input: &[u8], parse_config: &FitParseConfig) -> Result<i64> 
     let (_, val) = parser()?;
     Ok(val)
 }
+*/
+
+#[allow(dead_code)]
+pub fn parse_sint64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<i64> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 8 {
+        true => {
+            buf = buffer(input, 8, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i64> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_i64(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_i64(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val)= parser(inp)?;
+    Ok(val)
+}  
 
 #[allow(dead_code)]
 pub fn parse_sint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
@@ -527,6 +709,7 @@ pub fn parse_sint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
     }
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_uint64(input: &[u8], parse_config: &FitParseConfig) -> Result<u64> {
     let v = match input.len() < 8 {
@@ -542,6 +725,37 @@ pub fn parse_uint64(input: &[u8], parse_config: &FitParseConfig) -> Result<u64> 
     };
 
     let (_, val) = parser()?;
+    Ok(val)
+}  
+*/
+
+#[allow(dead_code)]
+pub fn parse_uint64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<u64> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 8 {
+        true => {
+            buf = buffer(input, 8, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u64> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_u64(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_u64(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val)= parser(inp)?;
     Ok(val)
 }  
 
@@ -584,6 +798,7 @@ pub fn parse_uint64z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     }
 }
 
+/*
 #[allow(dead_code)]
 pub fn parse_float64(input: &[u8], parse_config: &FitParseConfig) -> Result<f64> { 
     let v = match input.len() < 8 {
@@ -601,6 +816,37 @@ pub fn parse_float64(input: &[u8], parse_config: &FitParseConfig) -> Result<f64>
     let (_, val) = parser()?;
     Ok(val)
 }  
+*/
+
+#[allow(dead_code)]
+pub fn parse_float64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<f64> {
+    let buf: Vec<u8>;
+    let inp: &[u8];
+    match input.len() < 8 {
+        true => {
+            buf = buffer(input, 8, parse_config.endianness());
+            inp = &buf;
+        },
+        false => inp = &input,
+    }
+
+    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], f64> {
+
+        match parse_config.endianness() {
+            Endianness::Little => {
+                let (_, o) = nom::number::complete::le_f64(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+            Endianness::Big => {
+                let (_, o) = nom::number::complete::be_f64(i)?;
+                nom::IResult::Ok((&[], o))
+            },
+        }
+    };
+
+    let (_, val)= parser(inp)?;
+    Ok(val)
+} 
 
 #[allow(dead_code)]
 pub fn parse_float64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {

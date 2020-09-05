@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use std::convert::From;
 use std::ops::Deref;
 use std::rc::Rc;
+use std::sync::Arc;
 
 use std::fmt;
 
@@ -102,7 +103,7 @@ trait FitRecord {
 #[derive(Debug)]
 pub enum FitMessage {
     Data(FitDataMessage),
-    Definition(Rc<FitDefinitionMessage>),
+    Definition(Arc<FitDefinitionMessage>),
 }
 
 impl fmt::Display for FitMessage {
@@ -753,7 +754,7 @@ impl FitParseConfig {
 pub struct FitMessageUnknownToSdk {
     number: u16,
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -781,7 +782,7 @@ impl FitMessageUnknownToSdk {
         let mut message = FitMessageUnknownToSdk {
             number: number,
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -1036,9 +1037,9 @@ impl FitDefinitionMessage {
     fn parse(
         input: &[u8],
         header: FitNormalRecordHeader,
-    ) -> Result<(Rc<FitDefinitionMessage>, &[u8])> {
+    ) -> Result<(Arc<FitDefinitionMessage>, &[u8])> {
         let (o, fdm) = parse_definition_message(input, header)?;
-        Ok((Rc::new(fdm), o))
+        Ok((Arc::new(fdm), o))
     }
 }
 

@@ -8,6 +8,7 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
+use std::sync::Arc;
 use bit_subset;
 use FitBaseValue;
 use FitDefinitionMessage;
@@ -543,7 +544,7 @@ impl FitFieldParseable for FitFieldLocalDateTime {
 #[derive(Debug)]
 pub struct FitMessageHr {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -596,7 +597,7 @@ impl FitMessageHr {
         let definition_message = parsing_state.get(header.local_mesg_num())?;
         let mut message = FitMessageHr {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),

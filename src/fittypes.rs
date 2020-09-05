@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
+use std::sync::Arc;
 
 use fitparsers::{
     parse_byte_as_bytes, parse_enum, parse_uint16, parse_uint16_as_bytes, parse_uint32,
@@ -19740,7 +19741,7 @@ impl From<u8> for FitFieldRadarThreatLevelType {
 #[derive(Debug)]
 pub struct FitMessageAccelerometerData {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -19822,7 +19823,7 @@ impl FitMessageAccelerometerData {
 
         let message = FitMessageAccelerometerData {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -20069,7 +20070,7 @@ impl FitRecord for FitMessageAccelerometerData {
 #[derive(Debug)]
 pub struct FitMessageActivity {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -20127,7 +20128,7 @@ impl FitMessageActivity {
 
         let message = FitMessageActivity {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -20351,7 +20352,7 @@ impl FitRecord for FitMessageActivity {
 #[derive(Debug)]
 pub struct FitMessageAntChannelId {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -20400,7 +20401,7 @@ impl FitMessageAntChannelId {
 
         let message = FitMessageAntChannelId {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -20597,7 +20598,7 @@ impl FitRecord for FitMessageAntChannelId {
 #[derive(Debug)]
 pub struct FitMessageAntRx {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -20649,7 +20650,7 @@ impl FitMessageAntRx {
         let endianness = definition_message.endianness;
         let message = FitMessageAntRx {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -20954,7 +20955,7 @@ impl FitRecord for FitMessageAntRx {
 #[derive(Debug)]
 pub struct FitMessageAntTx {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -21006,7 +21007,7 @@ impl FitMessageAntTx {
         let endianness = definition_message.endianness;
         let message = FitMessageAntTx {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -21311,7 +21312,7 @@ impl FitRecord for FitMessageAntTx {
 #[derive(Debug)]
 pub struct FitMessageAviationAttitude {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -21381,7 +21382,7 @@ impl FitMessageAviationAttitude {
 
         let message = FitMessageAviationAttitude {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -21626,7 +21627,7 @@ impl FitRecord for FitMessageAviationAttitude {
 #[derive(Debug)]
 pub struct FitMessageBarometerData {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -21672,7 +21673,7 @@ impl FitMessageBarometerData {
 
         let message = FitMessageBarometerData {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -21876,7 +21877,7 @@ impl FitRecord for FitMessageBarometerData {
 #[derive(Debug)]
 pub struct FitMessageBikeProfile {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -22022,7 +22023,7 @@ impl FitMessageBikeProfile {
 
         let message = FitMessageBikeProfile {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -22358,7 +22359,7 @@ impl FitRecord for FitMessageBikeProfile {
 #[derive(Debug)]
 pub struct FitMessageBloodPressure {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -22425,7 +22426,7 @@ impl FitMessageBloodPressure {
 
         let message = FitMessageBloodPressure {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -22665,7 +22666,7 @@ impl FitRecord for FitMessageBloodPressure {
 #[derive(Debug)]
 pub struct FitMessageCadenceZone {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -22708,7 +22709,7 @@ impl FitMessageCadenceZone {
 
         let message = FitMessageCadenceZone {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -22895,7 +22896,7 @@ impl FitRecord for FitMessageCadenceZone {
 #[derive(Debug)]
 pub struct FitMessageCameraEvent {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -22944,7 +22945,7 @@ impl FitMessageCameraEvent {
 
         let message = FitMessageCameraEvent {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -23153,7 +23154,7 @@ impl FitRecord for FitMessageCameraEvent {
 #[derive(Debug)]
 pub struct FitMessageCapabilities {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -23199,7 +23200,7 @@ impl FitMessageCapabilities {
 
         let message = FitMessageCapabilities {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -23392,7 +23393,7 @@ impl FitRecord for FitMessageCapabilities {
 #[derive(Debug)]
 pub struct FitMessageClimbPro {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -23447,7 +23448,7 @@ impl FitMessageClimbPro {
 
         let message = FitMessageClimbPro {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -23666,7 +23667,7 @@ impl FitRecord for FitMessageClimbPro {
 #[derive(Debug)]
 pub struct FitMessageConnectivity {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -23755,7 +23756,7 @@ impl FitMessageConnectivity {
 
         let message = FitMessageConnectivity {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -24000,7 +24001,7 @@ impl FitRecord for FitMessageConnectivity {
 #[derive(Debug)]
 pub struct FitMessageCourse {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -24046,7 +24047,7 @@ impl FitMessageCourse {
 
         let message = FitMessageCourse {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -24238,7 +24239,7 @@ impl FitRecord for FitMessageCourse {
 #[derive(Debug)]
 pub struct FitMessageCoursePoint {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -24296,7 +24297,7 @@ impl FitMessageCoursePoint {
 
         let message = FitMessageCoursePoint {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -24520,7 +24521,7 @@ impl FitRecord for FitMessageCoursePoint {
 #[derive(Debug)]
 pub struct FitMessageDeveloperDataId {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -24569,7 +24570,7 @@ impl FitMessageDeveloperDataId {
 
         let message = FitMessageDeveloperDataId {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -24767,8 +24768,8 @@ impl FitRecord for FitMessageDeveloperDataId {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
-    AntplusDeviceType(FitFieldAntplusDeviceType),
     AntDeviceType(FitUint8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
 }
 
 impl FitMessageDeviceInfoSubfieldDeviceType {
@@ -24931,7 +24932,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
 #[derive(Debug)]
 pub struct FitMessageDeviceInfo {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -25031,7 +25032,7 @@ impl FitMessageDeviceInfo {
 
         let message = FitMessageDeviceInfo {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -25374,7 +25375,7 @@ impl FitRecord for FitMessageDeviceInfo {
 #[derive(Debug)]
 pub struct FitMessageDeviceSettings {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -25488,7 +25489,7 @@ impl FitMessageDeviceSettings {
 
         let message = FitMessageDeviceSettings {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -25784,7 +25785,7 @@ impl FitRecord for FitMessageDeviceSettings {
 #[derive(Debug)]
 pub struct FitMessageDiveAlarm {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -25839,7 +25840,7 @@ impl FitMessageDiveAlarm {
 
         let message = FitMessageDiveAlarm {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -26046,7 +26047,7 @@ impl FitRecord for FitMessageDiveAlarm {
 #[derive(Debug)]
 pub struct FitMessageDiveGas {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -26092,7 +26093,7 @@ impl FitMessageDiveGas {
 
         let message = FitMessageDiveGas {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -26359,7 +26360,7 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
 #[derive(Debug)]
 pub struct FitMessageDiveSettings {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -26469,7 +26470,7 @@ impl FitMessageDiveSettings {
 
         let message = FitMessageDiveSettings {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -26810,7 +26811,7 @@ impl FitRecord for FitMessageDiveSettings {
 #[derive(Debug)]
 pub struct FitMessageDiveSummary {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -26883,7 +26884,7 @@ impl FitMessageDiveSummary {
 
         let message = FitMessageDiveSummary {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -27133,27 +27134,27 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    SpeedLowAlert(FitFloat64),
-    HrLowAlert(FitUint8),
-    SpeedHighAlert(FitFloat64),
-    TimeDurationAlert(FitFloat64),
-    CoursePointIndex(FitFieldMessageIndex),
-    PowerLowAlert(FitUint16),
-    CadHighAlert(FitUint16),
+    CadLowAlert(FitUint16),
     SportPoint(FitUint32),
+    GearChangeData(FitUint32),
+    HrHighAlert(FitUint8),
+    CommTimeout(FitFieldCommTimeoutType),
+    TimerTrigger(FitFieldTimerTrigger),
+    SpeedLowAlert(FitFloat64),
+    TimeDurationAlert(FitFloat64),
     CalorieDurationAlert(FitUint32),
     BatteryLevel(FitFloat64),
-    HrHighAlert(FitUint8),
-    RadarThreatAlert(FitUint32),
-    TimerTrigger(FitFieldTimerTrigger),
-    CommTimeout(FitFieldCommTimeoutType),
-    DistanceDurationAlert(FitFloat64),
-    PowerHighAlert(FitUint16),
-    GearChangeData(FitUint32),
-    CadLowAlert(FitUint16),
     VirtualPartnerSpeed(FitFloat64),
+    SpeedHighAlert(FitFloat64),
     RiderPosition(FitFieldRiderPositionType),
+    PowerLowAlert(FitUint16),
+    PowerHighAlert(FitUint16),
+    RadarThreatAlert(FitUint32),
+    CadHighAlert(FitUint16),
     FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    HrLowAlert(FitUint8),
+    DistanceDurationAlert(FitFloat64),
+    CoursePointIndex(FitFieldMessageIndex),
 }
 
 impl FitMessageEventSubfieldData {
@@ -27678,7 +27679,7 @@ impl FitMessageEventSubfieldData {
 #[derive(Debug)]
 pub struct FitMessageEvent {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -27763,7 +27764,7 @@ impl FitMessageEvent {
         let endianness = definition_message.endianness;
         let message = FitMessageEvent {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -28090,7 +28091,7 @@ impl FitRecord for FitMessageEvent {
 #[derive(Debug)]
 pub struct FitMessageExdDataConceptConfiguration {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -28157,7 +28158,7 @@ impl FitMessageExdDataConceptConfiguration {
         let endianness = definition_message.endianness;
         let message = FitMessageExdDataConceptConfiguration {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -28405,7 +28406,7 @@ impl FitRecord for FitMessageExdDataConceptConfiguration {
 #[derive(Debug)]
 pub struct FitMessageExdDataFieldConfiguration {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -28457,7 +28458,7 @@ impl FitMessageExdDataFieldConfiguration {
         let endianness = definition_message.endianness;
         let message = FitMessageExdDataFieldConfiguration {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -28680,7 +28681,7 @@ impl FitRecord for FitMessageExdDataFieldConfiguration {
 #[derive(Debug)]
 pub struct FitMessageExdScreenConfiguration {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -28726,7 +28727,7 @@ impl FitMessageExdScreenConfiguration {
 
         let message = FitMessageExdScreenConfiguration {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -28918,7 +28919,7 @@ impl FitRecord for FitMessageExdScreenConfiguration {
 #[derive(Debug)]
 pub struct FitMessageExerciseTitle {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -28964,7 +28965,7 @@ impl FitMessageExerciseTitle {
 
         let message = FitMessageExerciseTitle {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -29156,7 +29157,7 @@ impl FitRecord for FitMessageExerciseTitle {
 #[derive(Debug)]
 pub struct FitMessageFieldCapabilities {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -29205,7 +29206,7 @@ impl FitMessageFieldCapabilities {
 
         let message = FitMessageFieldCapabilities {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -29402,7 +29403,7 @@ impl FitRecord for FitMessageFieldCapabilities {
 #[derive(Debug)]
 pub struct FitMessageFieldDescription {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -29478,7 +29479,7 @@ impl FitMessageFieldDescription {
 
         let message = FitMessageFieldDescription {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -29721,7 +29722,7 @@ impl FitRecord for FitMessageFieldDescription {
 #[derive(Debug)]
 pub struct FitMessageFileCapabilities {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -29773,7 +29774,7 @@ impl FitMessageFileCapabilities {
 
         let message = FitMessageFileCapabilities {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -29975,7 +29976,7 @@ impl FitRecord for FitMessageFileCapabilities {
 #[derive(Debug)]
 pub struct FitMessageFileCreator {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -30015,7 +30016,7 @@ impl FitMessageFileCreator {
 
         let message = FitMessageFileCreator {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -30298,7 +30299,7 @@ impl FitMessageFileIdSubfieldProduct {
 #[derive(Debug)]
 pub struct FitMessageFileId {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -30359,7 +30360,7 @@ impl FitMessageFileId {
 
         let message = FitMessageFileId {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -30622,7 +30623,7 @@ impl FitRecord for FitMessageFileId {
 #[derive(Debug)]
 pub struct FitMessageGoal {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -30692,7 +30693,7 @@ impl FitMessageGoal {
 
         let message = FitMessageGoal {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -30929,7 +30930,7 @@ impl FitRecord for FitMessageGoal {
 #[derive(Debug)]
 pub struct FitMessageGpsMetadata {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -30990,7 +30991,7 @@ impl FitMessageGpsMetadata {
 
         let message = FitMessageGpsMetadata {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -31219,7 +31220,7 @@ impl FitRecord for FitMessageGpsMetadata {
 #[derive(Debug)]
 pub struct FitMessageGyroscopeData {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -31280,7 +31281,7 @@ impl FitMessageGyroscopeData {
 
         let message = FitMessageGyroscopeData {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -31509,7 +31510,7 @@ impl FitRecord for FitMessageGyroscopeData {
 #[derive(Debug)]
 pub struct FitMessageHr {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -31558,7 +31559,7 @@ impl FitMessageHr {
         let endianness = definition_message.endianness;
         let message = FitMessageHr {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -31886,7 +31887,7 @@ impl FitRecord for FitMessageHr {
 #[derive(Debug)]
 pub struct FitMessageHrZone {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -31929,7 +31930,7 @@ impl FitMessageHrZone {
 
         let message = FitMessageHrZone {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -32116,7 +32117,7 @@ impl FitRecord for FitMessageHrZone {
 #[derive(Debug)]
 pub struct FitMessageHrmProfile {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -32165,7 +32166,7 @@ impl FitMessageHrmProfile {
 
         let message = FitMessageHrmProfile {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -32363,7 +32364,7 @@ impl FitRecord for FitMessageHrmProfile {
 #[derive(Debug)]
 pub struct FitMessageHrv {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -32397,7 +32398,7 @@ impl FitMessageHrv {
 
         let message = FitMessageHrv {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -32574,7 +32575,7 @@ impl FitRecord for FitMessageHrv {
 #[derive(Debug)]
 pub struct FitMessageJump {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -32635,7 +32636,7 @@ impl FitMessageJump {
         let endianness = definition_message.endianness;
         let message = FitMessageJump {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -33035,7 +33036,7 @@ impl FitMessageLapSubfieldMaxCadence {
 #[derive(Debug)]
 pub struct FitMessageLap {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -33469,7 +33470,7 @@ impl FitMessageLap {
         let endianness = definition_message.endianness;
         let message = FitMessageLap {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -34475,7 +34476,7 @@ impl FitRecord for FitMessageLap {
 #[derive(Debug)]
 pub struct FitMessageLength {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -34563,7 +34564,7 @@ impl FitMessageLength {
 
         let message = FitMessageLength {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -34837,7 +34838,7 @@ impl FitRecord for FitMessageLength {
 #[derive(Debug)]
 pub struct FitMessageMagnetometerData {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -34898,7 +34899,7 @@ impl FitMessageMagnetometerData {
 
         let message = FitMessageMagnetometerData {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -35127,7 +35128,7 @@ impl FitRecord for FitMessageMagnetometerData {
 #[derive(Debug)]
 pub struct FitMessageMemoGlob {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -35173,7 +35174,7 @@ impl FitMessageMemoGlob {
 
         let message = FitMessageMemoGlob {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -35449,7 +35450,7 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
 #[derive(Debug)]
 pub struct FitMessageMesgCapabilities {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -35504,7 +35505,7 @@ impl FitMessageMesgCapabilities {
 
         let message = FitMessageMesgCapabilities {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -35757,7 +35758,7 @@ impl FitRecord for FitMessageMesgCapabilities {
 #[derive(Debug)]
 pub struct FitMessageMetZone {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -35803,7 +35804,7 @@ impl FitMessageMetZone {
 
         let message = FitMessageMetZone {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -35996,8 +35997,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Strokes(FitFloat64),
     Steps(FitFloat64),
+    Strokes(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -36102,7 +36103,7 @@ impl FitMessageMonitoringSubfieldCycles {
 #[derive(Debug)]
 pub struct FitMessageMonitoring {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -36241,7 +36242,7 @@ impl FitMessageMonitoring {
         let endianness = definition_message.endianness;
         let message = FitMessageMonitoring {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -36651,7 +36652,7 @@ impl FitRecord for FitMessageMonitoring {
 #[derive(Debug)]
 pub struct FitMessageMonitoringInfo {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -36703,7 +36704,7 @@ impl FitMessageMonitoringInfo {
 
         let message = FitMessageMonitoringInfo {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -36922,7 +36923,7 @@ impl FitRecord for FitMessageMonitoringInfo {
 #[derive(Debug)]
 pub struct FitMessageNmeaSentence {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -36965,7 +36966,7 @@ impl FitMessageNmeaSentence {
 
         let message = FitMessageNmeaSentence {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -37164,7 +37165,7 @@ impl FitRecord for FitMessageNmeaSentence {
 #[derive(Debug)]
 pub struct FitMessageObdiiData {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -37225,7 +37226,7 @@ impl FitMessageObdiiData {
 
         let message = FitMessageObdiiData {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -37454,7 +37455,7 @@ impl FitRecord for FitMessageObdiiData {
 #[derive(Debug)]
 pub struct FitMessageOhrSettings {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -37494,7 +37495,7 @@ impl FitMessageOhrSettings {
 
         let message = FitMessageOhrSettings {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -37741,7 +37742,7 @@ impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
 #[derive(Debug)]
 pub struct FitMessageOneDSensorCalibration {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -37803,7 +37804,7 @@ impl FitMessageOneDSensorCalibration {
 
         let message = FitMessageOneDSensorCalibration {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -38076,7 +38077,7 @@ impl FitRecord for FitMessageOneDSensorCalibration {
 #[derive(Debug)]
 pub struct FitMessagePowerZone {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -38119,7 +38120,7 @@ impl FitMessagePowerZone {
 
         let message = FitMessagePowerZone {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -38306,7 +38307,7 @@ impl FitRecord for FitMessagePowerZone {
 #[derive(Debug)]
 pub struct FitMessageRecord {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -38603,7 +38604,7 @@ impl FitMessageRecord {
         let endianness = definition_message.endianness;
         let message = FitMessageRecord {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -39396,7 +39397,7 @@ impl FitMessageScheduleSubfieldProduct {
 #[derive(Debug)]
 pub struct FitMessageSchedule {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -39457,7 +39458,7 @@ impl FitMessageSchedule {
 
         let message = FitMessageSchedule {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -39720,7 +39721,7 @@ impl FitRecord for FitMessageSchedule {
 #[derive(Debug)]
 pub struct FitMessageSdmProfile {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -39778,7 +39779,7 @@ impl FitMessageSdmProfile {
 
         let message = FitMessageSdmProfile {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -39991,7 +39992,7 @@ impl FitRecord for FitMessageSdmProfile {
 #[derive(Debug)]
 pub struct FitMessageSegmentFile {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -40056,7 +40057,7 @@ impl FitMessageSegmentFile {
 
         let message = FitMessageSegmentFile {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -40276,7 +40277,7 @@ impl FitRecord for FitMessageSegmentFile {
 #[derive(Debug)]
 pub struct FitMessageSegmentId {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -40337,7 +40338,7 @@ impl FitMessageSegmentId {
 
         let message = FitMessageSegmentId {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -40604,7 +40605,7 @@ impl FitMessageSegmentLapSubfieldTotalCycles {
 #[derive(Debug)]
 pub struct FitMessageSegmentLap {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -40942,7 +40943,7 @@ impl FitMessageSegmentLap {
 
         let message = FitMessageSegmentLap {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -41714,7 +41715,7 @@ impl FitRecord for FitMessageSegmentLap {
 #[derive(Debug)]
 pub struct FitMessageSegmentLeaderboardEntry {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -41769,7 +41770,7 @@ impl FitMessageSegmentLeaderboardEntry {
 
         let message = FitMessageSegmentLeaderboardEntry {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -41976,7 +41977,7 @@ impl FitRecord for FitMessageSegmentLeaderboardEntry {
 #[derive(Debug)]
 pub struct FitMessageSegmentPoint {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -42028,7 +42029,7 @@ impl FitMessageSegmentPoint {
 
         let message = FitMessageSegmentPoint {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -42386,7 +42387,7 @@ impl FitMessageSessionSubfieldMaxCadence {
 #[derive(Debug)]
 pub struct FitMessageSession {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -42866,7 +42867,7 @@ impl FitMessageSession {
         let endianness = definition_message.endianness;
         let message = FitMessageSession {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -43948,7 +43949,7 @@ impl FitRecord for FitMessageSession {
 #[derive(Debug)]
 pub struct FitMessageSet {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -44012,7 +44013,7 @@ impl FitMessageSet {
 
         let message = FitMessageSet {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -44352,7 +44353,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
 #[derive(Debug)]
 pub struct FitMessageSlaveDevice {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -44398,7 +44399,7 @@ impl FitMessageSlaveDevice {
 
         let message = FitMessageSlaveDevice {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -44636,7 +44637,7 @@ impl FitRecord for FitMessageSlaveDevice {
 #[derive(Debug)]
 pub struct FitMessageSoftware {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -44679,7 +44680,7 @@ impl FitMessageSoftware {
 
         let message = FitMessageSoftware {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -44866,7 +44867,7 @@ impl FitRecord for FitMessageSoftware {
 #[derive(Debug)]
 pub struct FitMessageSpeedZone {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -44909,7 +44910,7 @@ impl FitMessageSpeedZone {
 
         let message = FitMessageSpeedZone {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -45096,7 +45097,7 @@ impl FitRecord for FitMessageSpeedZone {
 #[derive(Debug)]
 pub struct FitMessageSport {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -45139,7 +45140,7 @@ impl FitMessageSport {
 
         let message = FitMessageSport {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -45326,7 +45327,7 @@ impl FitRecord for FitMessageSport {
 #[derive(Debug)]
 pub struct FitMessageStressLevel {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -45366,7 +45367,7 @@ impl FitMessageStressLevel {
 
         let message = FitMessageStressLevel {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -45622,7 +45623,7 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
 #[derive(Debug)]
 pub struct FitMessageThreeDSensorCalibration {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -45687,7 +45688,7 @@ impl FitMessageThreeDSensorCalibration {
 
         let message = FitMessageThreeDSensorCalibration {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -45965,7 +45966,7 @@ impl FitRecord for FitMessageThreeDSensorCalibration {
 #[derive(Debug)]
 pub struct FitMessageTimestampCorrelation {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -46024,7 +46025,7 @@ impl FitMessageTimestampCorrelation {
 
         let message = FitMessageTimestampCorrelation {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -46248,7 +46249,7 @@ impl FitRecord for FitMessageTimestampCorrelation {
 #[derive(Debug)]
 pub struct FitMessageTotals {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -46312,7 +46313,7 @@ impl FitMessageTotals {
 
         let message = FitMessageTotals {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -46647,7 +46648,7 @@ impl FitMessageTrainingFileSubfieldProduct {
 #[derive(Debug)]
 pub struct FitMessageTrainingFile {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -46705,7 +46706,7 @@ impl FitMessageTrainingFile {
 
         let message = FitMessageTrainingFile {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -46975,7 +46976,7 @@ impl FitRecord for FitMessageTrainingFile {
 #[derive(Debug)]
 pub struct FitMessageUserProfile {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -47104,7 +47105,7 @@ impl FitMessageUserProfile {
 
         let message = FitMessageUserProfile {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -47434,7 +47435,7 @@ impl FitRecord for FitMessageUserProfile {
 #[derive(Debug)]
 pub struct FitMessageVideo {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -47477,7 +47478,7 @@ impl FitMessageVideo {
 
         let message = FitMessageVideo {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -47664,7 +47665,7 @@ impl FitRecord for FitMessageVideo {
 #[derive(Debug)]
 pub struct FitMessageVideoClip {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -47719,7 +47720,7 @@ impl FitMessageVideoClip {
 
         let message = FitMessageVideoClip {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -47926,7 +47927,7 @@ impl FitRecord for FitMessageVideoClip {
 #[derive(Debug)]
 pub struct FitMessageVideoDescription {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -47969,7 +47970,7 @@ impl FitMessageVideoDescription {
 
         let message = FitMessageVideoDescription {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -48156,7 +48157,7 @@ impl FitRecord for FitMessageVideoDescription {
 #[derive(Debug)]
 pub struct FitMessageVideoFrame {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -48199,7 +48200,7 @@ impl FitMessageVideoFrame {
 
         let message = FitMessageVideoFrame {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -48398,7 +48399,7 @@ impl FitRecord for FitMessageVideoFrame {
 #[derive(Debug)]
 pub struct FitMessageVideoTitle {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -48441,7 +48442,7 @@ impl FitMessageVideoTitle {
 
         let message = FitMessageVideoTitle {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -48629,8 +48630,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    AnalogLayout(FitFieldAnalogWatchfaceLayout),
     DigitalLayout(FitFieldDigitalWatchfaceLayout),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -48703,7 +48704,7 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
 #[derive(Debug)]
 pub struct FitMessageWatchfaceSettings {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -48752,7 +48753,7 @@ impl FitMessageWatchfaceSettings {
 
         let message = FitMessageWatchfaceSettings {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -48995,7 +48996,7 @@ impl FitRecord for FitMessageWatchfaceSettings {
 #[derive(Debug)]
 pub struct FitMessageWeatherAlert {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -49047,7 +49048,7 @@ impl FitMessageWeatherAlert {
 
         let message = FitMessageWeatherAlert {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -49261,7 +49262,7 @@ impl FitRecord for FitMessageWeatherAlert {
 #[derive(Debug)]
 pub struct FitMessageWeatherConditions {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -49347,7 +49348,7 @@ impl FitMessageWeatherConditions {
 
         let message = FitMessageWeatherConditions {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -49615,7 +49616,7 @@ impl FitRecord for FitMessageWeatherConditions {
 #[derive(Debug)]
 pub struct FitMessageWeightScale {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -49688,7 +49689,7 @@ impl FitMessageWeightScale {
 
         let message = FitMessageWeightScale {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -49937,7 +49938,7 @@ impl FitRecord for FitMessageWeightScale {
 #[derive(Debug)]
 pub struct FitMessageWorkout {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -49992,7 +49993,7 @@ impl FitMessageWorkout {
 
         let message = FitMessageWorkout {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -50199,7 +50200,7 @@ impl FitRecord for FitMessageWorkout {
 #[derive(Debug)]
 pub struct FitMessageWorkoutSession {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -50254,7 +50255,7 @@ impl FitMessageWorkoutSession {
 
         let message = FitMessageWorkoutSession {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -50462,13 +50463,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationStep(FitUint32),
     DurationTime(FitFloat64),
+    DurationStep(FitUint32),
     DurationReps(FitUint32),
     DurationHr(FitFieldWorkoutHr),
-    DurationCalories(FitUint32),
     DurationPower(FitFieldWorkoutPower),
     DurationDistance(FitFloat64),
+    DurationCalories(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -50807,17 +50808,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatCalories(FitUint32),
+    TargetHrZone(FitUint32),
+    RepeatSteps(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
+    RepeatHr(FitFieldWorkoutHr),
+    TargetStrokeType(FitFieldSwimStroke),
+    RepeatDistance(FitFloat64),
+    TargetCadenceZone(FitUint32),
+    RepeatTime(FitFloat64),
     TargetSpeedZone(FitUint32),
     TargetPowerZone(FitUint32),
-    TargetStrokeType(FitFieldSwimStroke),
-    TargetCadenceZone(FitUint32),
-    TargetHrZone(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    RepeatPower(FitFieldWorkoutPower),
-    RepeatDistance(FitFloat64),
-    RepeatSteps(FitUint32),
-    RepeatTime(FitFloat64),
+    RepeatCalories(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -51093,8 +51094,8 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     Default(FitUint32),
     CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetSpeedLow(FitFloat64),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -51211,10 +51212,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerHigh(FitFieldWorkoutPower),
-    CustomTargetCadenceHigh(FitUint32),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetSpeedHigh(FitFloat64),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetCadenceHigh(FitUint32),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -51325,7 +51326,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
 #[derive(Debug)]
 pub struct FitMessageWorkoutStep {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -51436,7 +51437,7 @@ impl FitMessageWorkoutStep {
 
         let message = FitMessageWorkoutStep {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
@@ -51781,7 +51782,7 @@ impl FitRecord for FitMessageWorkoutStep {
 #[derive(Debug)]
 pub struct FitMessageZonesTarget {
     header: FitRecordHeader,
-    definition_message: Rc<FitDefinitionMessage>,
+    definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
     unknown_fields: HashMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
@@ -51834,7 +51835,7 @@ impl FitMessageZonesTarget {
 
         let message = FitMessageZonesTarget {
             header: header,
-            definition_message: Rc::clone(&definition_message),
+            definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
             unknown_fields: HashMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),

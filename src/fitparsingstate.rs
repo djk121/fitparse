@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::rc::Rc;
+use std::sync::Arc;
 
 use FitDefinitionMessage;
 use FitDeveloperDataDefinition;
@@ -10,7 +10,7 @@ use fittypes::FitDataMessage;
 use fittypes_utils::FitFieldDateTime;
 
 pub struct FitParsingState {
-    map: HashMap<u16, Rc<FitDefinitionMessage>>,
+    map: HashMap<u16, Arc<FitDefinitionMessage>>,
     pub retain_bytes: bool,
     last_timestamp: Option<FitFieldDateTime>,
     timezone_offset_secs: Option<f64>,
@@ -28,14 +28,14 @@ impl FitParsingState {
         }
     }
 
-    pub fn add(&mut self, local_num: u16, def: Rc<FitDefinitionMessage>) {
+    pub fn add(&mut self, local_num: u16, def: Arc<FitDefinitionMessage>) {
         //println!("adding local_mesg_num {}", local_num);
         self.map.insert(local_num, def);
     }
 
-    pub fn get(&self, local_num: u16) -> Result<Rc<FitDefinitionMessage>> {
+    pub fn get(&self, local_num: u16) -> Result<Arc<FitDefinitionMessage>> {
         match self.map.get(&local_num) {
-            Some(def) => Ok(Rc::clone(def)),
+            Some(def) => Ok(Arc::clone(def)),
             None => Err(errors::invalid_local_mesg_num(local_num.to_string())),
         }
     }
