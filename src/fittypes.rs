@@ -27410,27 +27410,27 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    CalorieDurationAlert(FitUint32),
-    SpeedLowAlert(FitFloat64),
-    VirtualPartnerSpeed(FitFloat64),
-    HrHighAlert(FitUint8),
-    CoursePointIndex(FitFieldMessageIndex),
-    RiderPosition(FitFieldRiderPositionType),
-    DistanceDurationAlert(FitFloat64),
-    HrLowAlert(FitUint8),
-    CadLowAlert(FitUint16),
-    GearChangeData(FitUint32),
-    CommTimeout(FitFieldCommTimeoutType),
     PowerLowAlert(FitUint16),
-    PowerHighAlert(FitUint16),
-    SportPoint(FitUint32),
-    TimeDurationAlert(FitFloat64),
-    BatteryLevel(FitFloat64),
-    TimerTrigger(FitFieldTimerTrigger),
-    CadHighAlert(FitUint16),
+    HrHighAlert(FitUint8),
     SpeedHighAlert(FitFloat64),
-    RadarThreatAlert(FitUint32),
+    CadLowAlert(FitUint16),
+    SportPoint(FitUint32),
+    BatteryLevel(FitFloat64),
+    VirtualPartnerSpeed(FitFloat64),
+    TimeDurationAlert(FitFloat64),
     FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    SpeedLowAlert(FitFloat64),
+    DistanceDurationAlert(FitFloat64),
+    RiderPosition(FitFieldRiderPositionType),
+    CoursePointIndex(FitFieldMessageIndex),
+    GearChangeData(FitUint32),
+    HrLowAlert(FitUint8),
+    PowerHighAlert(FitUint16),
+    CommTimeout(FitFieldCommTimeoutType),
+    CalorieDurationAlert(FitUint32),
+    CadHighAlert(FitUint16),
+    RadarThreatAlert(FitUint32),
+    TimerTrigger(FitFieldTimerTrigger),
 }
 
 impl FitMessageEventSubfieldData {
@@ -35907,8 +35907,8 @@ impl FitRecord for FitMessageMemoGlob {
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    NumPerFile(FitUint16),
     MaxPerFileType(FitUint16),
+    NumPerFile(FitUint16),
     MaxPerFile(FitUint16),
 }
 
@@ -36561,8 +36561,8 @@ impl FitRecord for FitMessageMetZone {
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
-    Strokes(FitFloat64),
     Steps(FitFloat64),
+    Strokes(FitFloat64),
 }
 
 impl FitMessageMonitoringSubfieldCycles {
@@ -49578,8 +49578,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    DigitalLayout(FitFieldDigitalWatchfaceLayout),
     AnalogLayout(FitFieldAnalogWatchfaceLayout),
+    DigitalLayout(FitFieldDigitalWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -51483,13 +51483,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationDistance(FitFloat64),
-    DurationPower(FitFieldWorkoutPower),
-    DurationReps(FitUint32),
-    DurationTime(FitFloat64),
     DurationStep(FitUint32),
     DurationCalories(FitUint32),
+    DurationReps(FitUint32),
+    DurationTime(FitFloat64),
+    DurationDistance(FitFloat64),
     DurationHr(FitFieldWorkoutHr),
+    DurationPower(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -51828,17 +51828,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    TargetPowerZone(FitUint32),
-    TargetHrZone(FitUint32),
-    RepeatDistance(FitFloat64),
     RepeatHr(FitFieldWorkoutHr),
-    TargetSpeedZone(FitUint32),
     RepeatCalories(FitUint32),
     TargetStrokeType(FitFieldSwimStroke),
+    TargetHrZone(FitUint32),
+    TargetPowerZone(FitUint32),
+    RepeatDistance(FitFloat64),
     RepeatSteps(FitUint32),
-    TargetCadenceZone(FitUint32),
+    TargetSpeedZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
     RepeatTime(FitFloat64),
+    TargetCadenceZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -51850,98 +51850,6 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         FitMessageWorkoutStepSubfieldTargetValue,
         Vec<FitParseConfig>,
     )> {
-        if message.target_type.is_parsed() {
-            match message.target_type.get_single()? {
-                FitFieldWktStepTarget::Speed => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::HeartRate => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::Cadence => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::Power => {
-                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
-                        new_actions,
-                    ));
-                }
-
-                FitFieldWktStepTarget::SwimStroke => {
-                    let mut parser =
-                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
-                    parser.parse(inp, parse_config)?;
-
-                    let val = parser.get_single()?;
-
-                    let new_actions: Vec<FitParseConfig> = vec![]
-                        .iter()
-                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
-                        .collect();
-
-                    return Ok((
-                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
-                        new_actions,
-                    ));
-                }
-
-                _ => (),
-            }
-        }
-
         if message.duration_type.is_parsed() {
             match message.duration_type.get_single()? {
                 FitFieldWktStepDuration::RepeatUntilStepsCmplt => {
@@ -52096,6 +52004,98 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
             }
         }
 
+        if message.target_type.is_parsed() {
+            match message.target_type.get_single()? {
+                FitFieldWktStepTarget::Speed => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetSpeedZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::HeartRate => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetHrZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Cadence => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetCadenceZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::Power => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetPowerZone(val),
+                        new_actions,
+                    ));
+                }
+
+                FitFieldWktStepTarget::SwimStroke => {
+                    let mut parser =
+                        FitFieldBasicValue::<FitFieldSwimStroke>::new_single("".to_string());
+                    parser.parse(inp, parse_config)?;
+
+                    let val = parser.get_single()?;
+
+                    let new_actions: Vec<FitParseConfig> = vec![]
+                        .iter()
+                        .map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp))
+                        .collect();
+
+                    return Ok((
+                        FitMessageWorkoutStepSubfieldTargetValue::TargetStrokeType(val),
+                        new_actions,
+                    ));
+                }
+
+                _ => (),
+            }
+        }
+
         let mut parser = FitFieldBasicValue::<FitUint32>::new_single("".to_string());
         parser.parse(inp, parse_config)?;
 
@@ -52113,9 +52113,9 @@ pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetSpeedLow(FitFloat64),
+    CustomTargetCadenceLow(FitUint32),
     CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
-    CustomTargetCadenceLow(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -52232,9 +52232,9 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerHigh(FitFieldWorkoutPower),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
     CustomTargetCadenceHigh(FitUint32),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
     CustomTargetSpeedHigh(FitFloat64),
 }
 
@@ -55493,5 +55493,5 @@ impl FitDataMessage {
 }
 
 #[cfg(test)]
-#[path = "./fittypes_test.rs"]
-mod fittypes_test;
+#[path = "./fitmessagerecord_test.rs"]
+mod fitmessagerecord_test;

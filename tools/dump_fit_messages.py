@@ -468,8 +468,8 @@ impl FitDataMessage {
 }
 
 #[cfg(test)]
-#[path = "./fittypes_test.rs"]
-mod fittypes_test;
+#[path = "./fitmessagerecord_test.rs"]
+mod fitmessagerecord_test;
 """
 
 def output_messages(messages, types):
