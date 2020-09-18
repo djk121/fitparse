@@ -1,4 +1,4 @@
-use chrono::{DateTime, Duration, TimeZone, UTC};
+use chrono::{DateTime, Duration, TimeZone, Utc};
 
 use std::collections::HashMap;
 
@@ -16,12 +16,12 @@ use {
 fn parse_date_time_internal(
     input: &[u8],
     parse_config: &FitParseConfig,
-) -> Result<(DateTime<UTC>, u32)> {
+) -> Result<(DateTime<Utc>, u32)> {
     // if the value is < 0x10000000, it's relative to device power on, else
     // it's a normal unix timestamp, relative to the garmin epoch time
     match parse_uint32(input, parse_config) {
         Ok(garmin_epoch_offset) => {
-            let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
+            let garmin_epoch = Utc.ymd(1989, 12, 31).and_hms(0, 0, 0);
             match garmin_epoch_offset < 0x10000000 {
                 true => Err(errors::unsupported_relative_timestamp()),
                 false => {
@@ -721,7 +721,7 @@ pub fn parse_byte_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Resul
 pub fn parse_date_time(
     input: &[u8],
     parse_config: &FitParseConfig,
-) -> Result<(DateTime<UTC>, u32)> {
+) -> Result<(DateTime<Utc>, u32)> {
     parse_date_time_internal(input, parse_config)
 }
 

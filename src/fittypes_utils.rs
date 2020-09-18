@@ -1,5 +1,5 @@
 use bit_subset;
-use chrono::{DateTime, Duration, FixedOffset, TimeZone, UTC};
+use chrono::{DateTime, Duration, FixedOffset, TimeZone, Utc};
 use errors;
 use errors::Result;
 use fitparsers::{parse_date_time, parse_uint32};
@@ -459,7 +459,7 @@ macro_rules! fmt_message_subfield {
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct FitFieldDateTime {
     seconds_since_garmin_epoch: u32,
-    rust_time: DateTime<UTC>,
+    rust_time: DateTime<Utc>,
 }
 
 impl fmt::Display for FitFieldDateTime {
@@ -510,7 +510,7 @@ impl FitFieldDateTime {
         Ok(result)
     }
 
-    pub fn as_datetime(&self) -> DateTime<UTC> {
+    pub fn as_datetime(&self) -> DateTime<Utc> {
         self.rust_time
     }
 }
@@ -533,7 +533,7 @@ impl fmt::Display for FitFieldLocalDateTime {
 
 impl FitFieldParseable for FitFieldLocalDateTime {
     fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldLocalDateTime> {
-        let garmin_epoch = UTC.ymd(1989, 12, 31).and_hms(0, 0, 0);
+        let garmin_epoch = Utc.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let garmin_epoch_offset = parse_uint32(input, parse_config)?;
         let local_dt = FixedOffset::east(parse_config.tz_offset_secs() as i32).timestamp(
             (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
