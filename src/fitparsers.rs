@@ -1,5 +1,7 @@
 use chrono::{DateTime, Duration, TimeZone, UTC};
 
+use std::collections::HashMap;
+
 use nom;
 use nom::number::Endianness;
 use errors;
@@ -1022,6 +1024,8 @@ pub fn parse_definition_message(i: &[u8], header: FitNormalRecordHeader) -> Resu
             field_definitions,
             num_developer_fields: num_developer_fields.into(),
             developer_field_definitions,
+            developer_field_descriptions: HashMap::new(),
+            developer_data_ids: HashMap::new(),
         }
     ))   
 }

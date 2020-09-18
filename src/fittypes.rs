@@ -1,6 +1,6 @@
+use std::boxed::Box;
 use std::collections::HashMap;
 use std::fmt;
-use std::rc::Rc;
 use std::sync::Arc;
 
 use fitparsers::{
@@ -19738,7 +19738,7 @@ impl From<u8> for FitFieldRadarThreatLevelType {
         }
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageAccelerometerData {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -19818,8 +19818,8 @@ impl FitMessageAccelerometerData {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageAccelerometerData> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageAccelerometerData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageAccelerometerData {
             header: header,
@@ -19843,7 +19843,7 @@ impl FitMessageAccelerometerData {
             compressed_calibrated_accel_z: FitFieldBasicValue::new_vec("mG".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -19854,10 +19854,10 @@ impl FitMessageAccelerometerData {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -20067,7 +20067,7 @@ impl FitRecord for FitMessageAccelerometerData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageActivity {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -20123,8 +20123,8 @@ impl FitMessageActivity {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageActivity> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageActivity>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageActivity {
             header: header,
@@ -20144,7 +20144,7 @@ impl FitMessageActivity {
             event_group: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -20155,10 +20155,10 @@ impl FitMessageActivity {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -20349,7 +20349,7 @@ impl FitRecord for FitMessageActivity {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageAntChannelId {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -20396,8 +20396,8 @@ impl FitMessageAntChannelId {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageAntChannelId> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageAntChannelId>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageAntChannelId {
             header: header,
@@ -20414,7 +20414,7 @@ impl FitMessageAntChannelId {
             device_index: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -20425,10 +20425,10 @@ impl FitMessageAntChannelId {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -20595,7 +20595,7 @@ impl FitRecord for FitMessageAntChannelId {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageAntRx {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -20645,8 +20645,8 @@ impl FitMessageAntRx {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageAntRx> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageAntRx>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageAntRx {
             header: header,
@@ -20755,7 +20755,7 @@ impl FitMessageAntRx {
             data: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -20766,10 +20766,10 @@ impl FitMessageAntRx {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -20952,7 +20952,7 @@ impl FitRecord for FitMessageAntRx {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageAntTx {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -21002,8 +21002,8 @@ impl FitMessageAntTx {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageAntTx> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageAntTx>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageAntTx {
             header: header,
@@ -21112,7 +21112,7 @@ impl FitMessageAntTx {
             data: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -21123,10 +21123,10 @@ impl FitMessageAntTx {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -21309,7 +21309,7 @@ impl FitRecord for FitMessageAntTx {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageAviationAttitude {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -21377,8 +21377,8 @@ impl FitMessageAviationAttitude {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageAviationAttitude> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageAviationAttitude>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageAviationAttitude {
             header: header,
@@ -21402,7 +21402,7 @@ impl FitMessageAviationAttitude {
             validity: FitFieldBasicValue::new_vec("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -21413,10 +21413,10 @@ impl FitMessageAviationAttitude {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -21624,7 +21624,7 @@ impl FitRecord for FitMessageAviationAttitude {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageBarometerData {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -21668,8 +21668,8 @@ impl FitMessageBarometerData {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageBarometerData> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageBarometerData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageBarometerData {
             header: header,
@@ -21685,7 +21685,7 @@ impl FitMessageBarometerData {
             baro_pres: FitFieldBasicValue::new_vec("Pa".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -21696,10 +21696,10 @@ impl FitMessageBarometerData {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -21874,7 +21874,7 @@ impl FitRecord for FitMessageBarometerData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageBikeProfile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -22018,8 +22018,8 @@ impl FitMessageBikeProfile {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageBikeProfile> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageBikeProfile>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageBikeProfile {
             header: header,
@@ -22063,7 +22063,7 @@ impl FitMessageBikeProfile {
             shimano_di2_enabled: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -22074,10 +22074,10 @@ impl FitMessageBikeProfile {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -22356,7 +22356,7 @@ impl FitRecord for FitMessageBikeProfile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageBloodPressure {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -22421,8 +22421,8 @@ impl FitMessageBloodPressure {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageBloodPressure> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageBloodPressure>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageBloodPressure {
             header: header,
@@ -22445,7 +22445,7 @@ impl FitMessageBloodPressure {
             user_profile_index: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -22456,10 +22456,10 @@ impl FitMessageBloodPressure {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -22663,7 +22663,7 @@ impl FitRecord for FitMessageBloodPressure {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageCadenceZone {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -22704,8 +22704,8 @@ impl FitMessageCadenceZone {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageCadenceZone> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageCadenceZone>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageCadenceZone {
             header: header,
@@ -22720,7 +22720,7 @@ impl FitMessageCadenceZone {
             name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -22731,10 +22731,10 @@ impl FitMessageCadenceZone {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -22893,7 +22893,7 @@ impl FitRecord for FitMessageCadenceZone {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageCameraEvent {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -22940,8 +22940,8 @@ impl FitMessageCameraEvent {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageCameraEvent> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageCameraEvent>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageCameraEvent {
             header: header,
@@ -22958,7 +22958,7 @@ impl FitMessageCameraEvent {
             camera_orientation: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -22969,10 +22969,10 @@ impl FitMessageCameraEvent {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -23151,7 +23151,7 @@ impl FitRecord for FitMessageCameraEvent {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageCapabilities {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -23195,8 +23195,8 @@ impl FitMessageCapabilities {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageCapabilities> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageCapabilities>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageCapabilities {
             header: header,
@@ -23212,7 +23212,7 @@ impl FitMessageCapabilities {
             connectivity_supported: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -23223,10 +23223,10 @@ impl FitMessageCapabilities {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -23390,7 +23390,7 @@ impl FitRecord for FitMessageCapabilities {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageClimbPro {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -23443,8 +23443,8 @@ impl FitMessageClimbPro {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageClimbPro> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageClimbPro>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageClimbPro {
             header: header,
@@ -23463,7 +23463,7 @@ impl FitMessageClimbPro {
             current_dist: FitFieldBasicValue::new_single("m".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -23474,10 +23474,10 @@ impl FitMessageClimbPro {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -23664,7 +23664,7 @@ impl FitRecord for FitMessageClimbPro {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageConnectivity {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -23751,8 +23751,8 @@ impl FitMessageConnectivity {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageConnectivity> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageConnectivity>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageConnectivity {
             header: header,
@@ -23777,7 +23777,7 @@ impl FitMessageConnectivity {
             grouptrack_enabled: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -23788,10 +23788,10 @@ impl FitMessageConnectivity {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -23998,7 +23998,7 @@ impl FitRecord for FitMessageConnectivity {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageCourse {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -24042,8 +24042,8 @@ impl FitMessageCourse {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageCourse> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageCourse>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageCourse {
             header: header,
@@ -24059,7 +24059,7 @@ impl FitMessageCourse {
             sub_sport: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -24070,10 +24070,10 @@ impl FitMessageCourse {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -24236,7 +24236,7 @@ impl FitRecord for FitMessageCourse {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageCoursePoint {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -24292,8 +24292,8 @@ impl FitMessageCoursePoint {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageCoursePoint> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageCoursePoint>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageCoursePoint {
             header: header,
@@ -24313,7 +24313,7 @@ impl FitMessageCoursePoint {
             favorite: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -24324,10 +24324,10 @@ impl FitMessageCoursePoint {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -24518,7 +24518,7 @@ impl FitRecord for FitMessageCoursePoint {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDeveloperDataId {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -24565,8 +24565,8 @@ impl FitMessageDeveloperDataId {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDeveloperDataId> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDeveloperDataId>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDeveloperDataId {
             header: header,
@@ -24583,7 +24583,7 @@ impl FitMessageDeveloperDataId {
             application_version: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -24594,10 +24594,10 @@ impl FitMessageDeveloperDataId {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -24764,7 +24764,7 @@ impl FitRecord for FitMessageDeveloperDataId {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
@@ -24828,7 +24828,7 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
         Ok((FitMessageDeviceInfoSubfieldDeviceType::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
@@ -24929,7 +24929,7 @@ impl FitMessageDeviceInfoSubfieldProduct {
         Ok((FitMessageDeviceInfoSubfieldProduct::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDeviceInfo {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -25027,8 +25027,8 @@ impl FitMessageDeviceInfo {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDeviceInfo> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDeviceInfo>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDeviceInfo {
             header: header,
@@ -25060,7 +25060,7 @@ impl FitMessageDeviceInfo {
             product_name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -25071,10 +25071,10 @@ impl FitMessageDeviceInfo {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -25372,7 +25372,7 @@ impl FitRecord for FitMessageDeviceInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDeviceSettings {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -25484,8 +25484,8 @@ impl FitMessageDeviceSettings {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDeviceSettings> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDeviceSettings>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDeviceSettings {
             header: header,
@@ -25521,7 +25521,7 @@ impl FitMessageDeviceSettings {
             tap_sensitivity: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -25532,10 +25532,10 @@ impl FitMessageDeviceSettings {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -25782,7 +25782,7 @@ impl FitRecord for FitMessageDeviceSettings {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDiveAlarm {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -25835,8 +25835,8 @@ impl FitMessageDiveAlarm {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDiveAlarm> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDiveAlarm>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDiveAlarm {
             header: header,
@@ -25855,7 +25855,7 @@ impl FitMessageDiveAlarm {
             dive_types: FitFieldBasicValue::new_vec("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -25866,10 +25866,10 @@ impl FitMessageDiveAlarm {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -26044,7 +26044,7 @@ impl FitRecord for FitMessageDiveAlarm {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDiveGas {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -26088,8 +26088,8 @@ impl FitMessageDiveGas {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDiveGas> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDiveGas>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDiveGas {
             header: header,
@@ -26105,7 +26105,7 @@ impl FitMessageDiveGas {
             status: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -26116,10 +26116,10 @@ impl FitMessageDiveGas {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -26282,7 +26282,7 @@ impl FitRecord for FitMessageDiveGas {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageDiveSettingsSubfieldHeartRateSource {
     NotYetParsed,
     Default(FitUint8),
@@ -26357,7 +26357,7 @@ impl FitMessageDiveSettingsSubfieldHeartRateSource {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDiveSettings {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -26465,8 +26465,8 @@ impl FitMessageDiveSettings {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDiveSettings> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDiveSettings>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDiveSettings {
             header: header,
@@ -26501,7 +26501,7 @@ impl FitMessageDiveSettings {
             heart_rate_source: FitMessageDiveSettingsSubfieldHeartRateSource::NotYetParsed,
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -26512,10 +26512,10 @@ impl FitMessageDiveSettings {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -26808,7 +26808,7 @@ impl FitRecord for FitMessageDiveSettings {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageDiveSummary {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -26879,8 +26879,8 @@ impl FitMessageDiveSummary {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageDiveSummary> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageDiveSummary>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageDiveSummary {
             header: header,
@@ -26905,7 +26905,7 @@ impl FitMessageDiveSummary {
             bottom_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -26916,10 +26916,10 @@ impl FitMessageDiveSummary {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -27130,31 +27130,31 @@ impl FitRecord for FitMessageDiveSummary {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    CadLowAlert(FitUint16),
-    SportPoint(FitUint32),
     GearChangeData(FitUint32),
-    HrHighAlert(FitUint8),
-    CommTimeout(FitFieldCommTimeoutType),
-    TimerTrigger(FitFieldTimerTrigger),
+    PowerHighAlert(FitUint16),
     SpeedLowAlert(FitFloat64),
-    TimeDurationAlert(FitFloat64),
     CalorieDurationAlert(FitUint32),
-    BatteryLevel(FitFloat64),
+    CoursePointIndex(FitFieldMessageIndex),
+    CommTimeout(FitFieldCommTimeoutType),
+    TimeDurationAlert(FitFloat64),
     VirtualPartnerSpeed(FitFloat64),
-    SpeedHighAlert(FitFloat64),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    SportPoint(FitUint32),
+    BatteryLevel(FitFloat64),
     RiderPosition(FitFieldRiderPositionType),
     PowerLowAlert(FitUint16),
-    PowerHighAlert(FitUint16),
-    RadarThreatAlert(FitUint32),
     CadHighAlert(FitUint16),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    HrLowAlert(FitUint8),
     DistanceDurationAlert(FitFloat64),
-    CoursePointIndex(FitFieldMessageIndex),
+    RadarThreatAlert(FitUint32),
+    HrLowAlert(FitUint8),
+    TimerTrigger(FitFieldTimerTrigger),
+    CadLowAlert(FitUint16),
+    HrHighAlert(FitUint8),
+    SpeedHighAlert(FitFloat64),
 }
 
 impl FitMessageEventSubfieldData {
@@ -27676,7 +27676,7 @@ impl FitMessageEventSubfieldData {
         Ok((FitMessageEventSubfieldData::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageEvent {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -27759,8 +27759,8 @@ impl FitMessageEvent {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageEvent> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageEvent>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageEvent {
             header: header,
@@ -27799,7 +27799,7 @@ impl FitMessageEvent {
             radar_threat_count: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -27810,10 +27810,10 @@ impl FitMessageEvent {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -28088,7 +28088,7 @@ impl FitRecord for FitMessageEvent {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageExdDataConceptConfiguration {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -28153,8 +28153,8 @@ impl FitMessageExdDataConceptConfiguration {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageExdDataConceptConfiguration> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageExdDataConceptConfiguration>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageExdDataConceptConfiguration {
             header: header,
@@ -28198,7 +28198,7 @@ impl FitMessageExdDataConceptConfiguration {
             is_signed: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -28209,10 +28209,10 @@ impl FitMessageExdDataConceptConfiguration {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -28403,7 +28403,7 @@ impl FitRecord for FitMessageExdDataConceptConfiguration {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageExdDataFieldConfiguration {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -28453,8 +28453,8 @@ impl FitMessageExdDataFieldConfiguration {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageExdDataFieldConfiguration> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageExdDataFieldConfiguration>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageExdDataFieldConfiguration {
             header: header,
@@ -28493,7 +28493,7 @@ impl FitMessageExdDataFieldConfiguration {
             title: FitFieldBasicValue::new_vec("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -28504,10 +28504,10 @@ impl FitMessageExdDataFieldConfiguration {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -28678,7 +28678,7 @@ impl FitRecord for FitMessageExdDataFieldConfiguration {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageExdScreenConfiguration {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -28722,8 +28722,8 @@ impl FitMessageExdScreenConfiguration {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageExdScreenConfiguration> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageExdScreenConfiguration>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageExdScreenConfiguration {
             header: header,
@@ -28739,7 +28739,7 @@ impl FitMessageExdScreenConfiguration {
             screen_enabled: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -28750,10 +28750,10 @@ impl FitMessageExdScreenConfiguration {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -28916,7 +28916,7 @@ impl FitRecord for FitMessageExdScreenConfiguration {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageExerciseTitle {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -28960,8 +28960,8 @@ impl FitMessageExerciseTitle {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageExerciseTitle> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageExerciseTitle>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageExerciseTitle {
             header: header,
@@ -28977,7 +28977,7 @@ impl FitMessageExerciseTitle {
             wkt_step_name: FitFieldBasicValue::new_vec("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -28988,10 +28988,10 @@ impl FitMessageExerciseTitle {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -29154,7 +29154,7 @@ impl FitRecord for FitMessageExerciseTitle {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageFieldCapabilities {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -29201,8 +29201,8 @@ impl FitMessageFieldCapabilities {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageFieldCapabilities> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageFieldCapabilities>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageFieldCapabilities {
             header: header,
@@ -29219,7 +29219,7 @@ impl FitMessageFieldCapabilities {
             count: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -29230,10 +29230,10 @@ impl FitMessageFieldCapabilities {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -29400,7 +29400,7 @@ impl FitRecord for FitMessageFieldCapabilities {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageFieldDescription {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -29474,8 +29474,8 @@ impl FitMessageFieldDescription {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageFieldDescription> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageFieldDescription>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageFieldDescription {
             header: header,
@@ -29501,7 +29501,7 @@ impl FitMessageFieldDescription {
             native_field_num: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -29512,10 +29512,10 @@ impl FitMessageFieldDescription {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -29719,7 +29719,7 @@ impl FitRecord for FitMessageFieldDescription {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageFileCapabilities {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -29769,8 +29769,8 @@ impl FitMessageFileCapabilities {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageFileCapabilities> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageFileCapabilities>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageFileCapabilities {
             header: header,
@@ -29788,7 +29788,7 @@ impl FitMessageFileCapabilities {
             max_size: FitFieldBasicValue::new_single("bytes".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -29799,10 +29799,10 @@ impl FitMessageFileCapabilities {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -29973,7 +29973,7 @@ impl FitRecord for FitMessageFileCapabilities {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageFileCreator {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -30011,8 +30011,8 @@ impl FitMessageFileCreator {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageFileCreator> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageFileCreator>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageFileCreator {
             header: header,
@@ -30026,7 +30026,7 @@ impl FitMessageFileCreator {
             hardware_version: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -30037,10 +30037,10 @@ impl FitMessageFileCreator {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -30195,7 +30195,7 @@ impl FitRecord for FitMessageFileCreator {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
@@ -30296,7 +30296,7 @@ impl FitMessageFileIdSubfieldProduct {
         Ok((FitMessageFileIdSubfieldProduct::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageFileId {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -30355,8 +30355,8 @@ impl FitMessageFileId {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageFileId> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageFileId>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageFileId {
             header: header,
@@ -30376,7 +30376,7 @@ impl FitMessageFileId {
             product_name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -30387,10 +30387,10 @@ impl FitMessageFileId {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -30620,7 +30620,7 @@ impl FitRecord for FitMessageFileId {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageGoal {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -30688,8 +30688,11 @@ impl FitMessageGoal {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageGoal> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<Box<FitMessageGoal>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageGoal {
             header: header,
@@ -30714,7 +30717,7 @@ impl FitMessageGoal {
             source: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -30725,10 +30728,10 @@ impl FitMessageGoal {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -30927,7 +30930,7 @@ impl FitRecord for FitMessageGoal {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageGpsMetadata {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -30986,8 +30989,8 @@ impl FitMessageGpsMetadata {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageGpsMetadata> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageGpsMetadata>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageGpsMetadata {
             header: header,
@@ -31008,7 +31011,7 @@ impl FitMessageGpsMetadata {
             velocity: FitFieldAdjustedValue::new_vec("m/s".to_string(), 100.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -31019,10 +31022,10 @@ impl FitMessageGpsMetadata {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -31217,7 +31220,7 @@ impl FitRecord for FitMessageGpsMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageGyroscopeData {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -31276,8 +31279,8 @@ impl FitMessageGyroscopeData {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageGyroscopeData> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageGyroscopeData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageGyroscopeData {
             header: header,
@@ -31298,7 +31301,7 @@ impl FitMessageGyroscopeData {
             calibrated_gyro_z: FitFieldBasicValue::new_vec("deg/s".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -31309,10 +31312,10 @@ impl FitMessageGyroscopeData {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -31507,7 +31510,7 @@ impl FitRecord for FitMessageGyroscopeData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageHr {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -31554,8 +31557,11 @@ impl FitMessageHr {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageHr> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<Box<FitMessageHr>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageHr {
             header: header,
@@ -31687,7 +31693,7 @@ impl FitMessageHr {
             ),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -31698,10 +31704,10 @@ impl FitMessageHr {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -31884,7 +31890,7 @@ impl FitRecord for FitMessageHr {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageHrZone {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -31925,8 +31931,8 @@ impl FitMessageHrZone {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageHrZone> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageHrZone>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageHrZone {
             header: header,
@@ -31941,7 +31947,7 @@ impl FitMessageHrZone {
             name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -31952,10 +31958,10 @@ impl FitMessageHrZone {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -32114,7 +32120,7 @@ impl FitRecord for FitMessageHrZone {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageHrmProfile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -32161,8 +32167,8 @@ impl FitMessageHrmProfile {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageHrmProfile> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageHrmProfile>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageHrmProfile {
             header: header,
@@ -32179,7 +32185,7 @@ impl FitMessageHrmProfile {
             hrm_ant_id_trans_type: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -32190,10 +32196,10 @@ impl FitMessageHrmProfile {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -32361,7 +32367,7 @@ impl FitRecord for FitMessageHrmProfile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageHrv {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -32393,8 +32399,11 @@ impl FitMessageHrv {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageHrv> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<Box<FitMessageHrv>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageHrv {
             header: header,
@@ -32407,7 +32416,7 @@ impl FitMessageHrv {
             time: FitFieldAdjustedValue::new_vec("s".to_string(), 1000.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -32418,10 +32427,10 @@ impl FitMessageHrv {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -32572,7 +32581,7 @@ impl FitRecord for FitMessageHrv {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageJump {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -32631,8 +32640,11 @@ impl FitMessageJump {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageJump> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<Box<FitMessageJump>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageJump {
             header: header,
@@ -32664,7 +32676,7 @@ impl FitMessageJump {
             enhanced_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -32675,10 +32687,10 @@ impl FitMessageJump {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -32877,7 +32889,7 @@ impl FitRecord for FitMessageJump {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageLapSubfieldTotalCycles {
     NotYetParsed,
     Default(FitUint32),
@@ -32941,7 +32953,7 @@ impl FitMessageLapSubfieldTotalCycles {
         Ok((FitMessageLapSubfieldTotalCycles::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageLapSubfieldAvgCadence {
     NotYetParsed,
     Default(FitUint8),
@@ -32987,7 +32999,7 @@ impl FitMessageLapSubfieldAvgCadence {
         Ok((FitMessageLapSubfieldAvgCadence::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageLapSubfieldMaxCadence {
     NotYetParsed,
     Default(FitUint8),
@@ -33033,7 +33045,7 @@ impl FitMessageLapSubfieldMaxCadence {
         Ok((FitMessageLapSubfieldMaxCadence::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageLap {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -33465,8 +33477,11 @@ impl FitMessageLap {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageLap> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<Box<FitMessageLap>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageLap {
             header: header,
@@ -33750,7 +33765,7 @@ impl FitMessageLap {
             avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -33761,10 +33776,10 @@ impl FitMessageLap {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -34473,7 +34488,7 @@ impl FitRecord for FitMessageLap {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageLength {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -34559,8 +34574,8 @@ impl FitMessageLength {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageLength> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageLength>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageLength {
             header: header,
@@ -34590,7 +34605,7 @@ impl FitMessageLength {
             zone_count: FitFieldBasicValue::new_vec("counts".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -34601,10 +34616,10 @@ impl FitMessageLength {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -34835,7 +34850,7 @@ impl FitRecord for FitMessageLength {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageMagnetometerData {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -34894,8 +34909,8 @@ impl FitMessageMagnetometerData {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageMagnetometerData> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageMagnetometerData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageMagnetometerData {
             header: header,
@@ -34916,7 +34931,7 @@ impl FitMessageMagnetometerData {
             calibrated_mag_z: FitFieldBasicValue::new_vec("G".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -34927,10 +34942,10 @@ impl FitMessageMagnetometerData {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -35125,7 +35140,7 @@ impl FitRecord for FitMessageMagnetometerData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageMemoGlob {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -35169,8 +35184,8 @@ impl FitMessageMemoGlob {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageMemoGlob> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageMemoGlob>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageMemoGlob {
             header: header,
@@ -35186,7 +35201,7 @@ impl FitMessageMemoGlob {
             message_index: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -35197,10 +35212,10 @@ impl FitMessageMemoGlob {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -35363,13 +35378,13 @@ impl FitRecord for FitMessageMemoGlob {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageMesgCapabilitiesSubfieldCount {
     NotYetParsed,
     Default(FitUint16),
-    NumPerFile(FitUint16),
     MaxPerFileType(FitUint16),
     MaxPerFile(FitUint16),
+    NumPerFile(FitUint16),
 }
 
 impl FitMessageMesgCapabilitiesSubfieldCount {
@@ -35447,7 +35462,7 @@ impl FitMessageMesgCapabilitiesSubfieldCount {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageMesgCapabilities {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -35500,8 +35515,8 @@ impl FitMessageMesgCapabilities {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageMesgCapabilities> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageMesgCapabilities>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageMesgCapabilities {
             header: header,
@@ -35519,7 +35534,7 @@ impl FitMessageMesgCapabilities {
             count: FitMessageMesgCapabilitiesSubfieldCount::NotYetParsed,
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -35530,10 +35545,10 @@ impl FitMessageMesgCapabilities {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -35755,7 +35770,7 @@ impl FitRecord for FitMessageMesgCapabilities {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageMetZone {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -35799,8 +35814,8 @@ impl FitMessageMetZone {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageMetZone> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageMetZone>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageMetZone {
             header: header,
@@ -35816,7 +35831,7 @@ impl FitMessageMetZone {
             fat_calories: FitFieldAdjustedValue::new_single("kcal / min".to_string(), 10.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -35827,10 +35842,10 @@ impl FitMessageMetZone {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -35993,7 +36008,7 @@ impl FitRecord for FitMessageMetZone {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageMonitoringSubfieldCycles {
     NotYetParsed,
     Default(FitFloat64),
@@ -36100,7 +36115,7 @@ impl FitMessageMonitoringSubfieldCycles {
         Ok((FitMessageMonitoringSubfieldCycles::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageMonitoring {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -36237,8 +36252,8 @@ impl FitMessageMonitoring {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageMonitoring> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageMonitoring>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageMonitoring {
             header: header,
@@ -36302,7 +36317,7 @@ impl FitMessageMonitoring {
             vigorous_activity_minutes: FitFieldBasicValue::new_single("minutes".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -36313,10 +36328,10 @@ impl FitMessageMonitoring {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -36649,7 +36664,7 @@ impl FitRecord for FitMessageMonitoring {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageMonitoringInfo {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -36699,8 +36714,8 @@ impl FitMessageMonitoringInfo {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageMonitoringInfo> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageMonitoringInfo>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageMonitoringInfo {
             header: header,
@@ -36722,7 +36737,7 @@ impl FitMessageMonitoringInfo {
             resting_metabolic_rate: FitFieldBasicValue::new_single("kcal / day".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -36733,10 +36748,10 @@ impl FitMessageMonitoringInfo {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -36920,7 +36935,7 @@ impl FitRecord for FitMessageMonitoringInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageNmeaSentence {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -36961,8 +36976,8 @@ impl FitMessageNmeaSentence {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageNmeaSentence> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageNmeaSentence>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageNmeaSentence {
             header: header,
@@ -36977,7 +36992,7 @@ impl FitMessageNmeaSentence {
             sentence: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -36988,10 +37003,10 @@ impl FitMessageNmeaSentence {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -37162,7 +37177,7 @@ impl FitRecord for FitMessageNmeaSentence {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageObdiiData {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -37221,8 +37236,8 @@ impl FitMessageObdiiData {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageObdiiData> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageObdiiData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageObdiiData {
             header: header,
@@ -37243,7 +37258,7 @@ impl FitMessageObdiiData {
             start_timestamp_ms: FitFieldBasicValue::new_single("ms".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -37254,10 +37269,10 @@ impl FitMessageObdiiData {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -37452,7 +37467,7 @@ impl FitRecord for FitMessageObdiiData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageOhrSettings {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -37490,8 +37505,8 @@ impl FitMessageOhrSettings {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageOhrSettings> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageOhrSettings>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageOhrSettings {
             header: header,
@@ -37505,7 +37520,7 @@ impl FitMessageOhrSettings {
             enabled: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -37516,10 +37531,10 @@ impl FitMessageOhrSettings {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -37686,7 +37701,7 @@ impl FitRecord for FitMessageOhrSettings {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
@@ -37739,7 +37754,7 @@ impl FitMessageOneDSensorCalibrationSubfieldCalibrationFactor {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageOneDSensorCalibration {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -37799,8 +37814,8 @@ impl FitMessageOneDSensorCalibration {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageOneDSensorCalibration> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageOneDSensorCalibration>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageOneDSensorCalibration {
             header: header,
@@ -37820,7 +37835,7 @@ impl FitMessageOneDSensorCalibration {
             offset_cal: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -37831,10 +37846,10 @@ impl FitMessageOneDSensorCalibration {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -38074,7 +38089,7 @@ impl FitRecord for FitMessageOneDSensorCalibration {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessagePowerZone {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -38115,8 +38130,8 @@ impl FitMessagePowerZone {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessagePowerZone> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessagePowerZone>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessagePowerZone {
             header: header,
@@ -38131,7 +38146,7 @@ impl FitMessagePowerZone {
             name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -38142,10 +38157,10 @@ impl FitMessagePowerZone {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -38304,7 +38319,7 @@ impl FitRecord for FitMessagePowerZone {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageRecord {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -38599,8 +38614,8 @@ impl FitMessageRecord {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageRecord> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageRecord>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageRecord {
             header: header,
@@ -38812,7 +38827,7 @@ impl FitMessageRecord {
             ebike_assist_level_percent: FitFieldBasicValue::new_single("percent".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -38823,10 +38838,10 @@ impl FitMessageRecord {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -39293,7 +39308,7 @@ impl FitRecord for FitMessageRecord {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
@@ -39394,7 +39409,7 @@ impl FitMessageScheduleSubfieldProduct {
         Ok((FitMessageScheduleSubfieldProduct::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSchedule {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -39453,8 +39468,8 @@ impl FitMessageSchedule {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSchedule> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSchedule>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSchedule {
             header: header,
@@ -39474,7 +39489,7 @@ impl FitMessageSchedule {
             scheduled_time: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -39485,10 +39500,10 @@ impl FitMessageSchedule {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -39718,7 +39733,7 @@ impl FitRecord for FitMessageSchedule {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSdmProfile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -39774,8 +39789,8 @@ impl FitMessageSdmProfile {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSdmProfile> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSdmProfile>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSdmProfile {
             header: header,
@@ -39795,7 +39810,7 @@ impl FitMessageSdmProfile {
             odometer_rollover: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -39806,10 +39821,10 @@ impl FitMessageSdmProfile {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -39989,7 +40004,7 @@ impl FitRecord for FitMessageSdmProfile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSegmentFile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -40052,8 +40067,8 @@ impl FitMessageSegmentFile {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSegmentFile> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSegmentFile>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSegmentFile {
             header: header,
@@ -40074,7 +40089,7 @@ impl FitMessageSegmentFile {
             default_race_leader: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -40085,10 +40100,10 @@ impl FitMessageSegmentFile {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -40274,7 +40289,7 @@ impl FitRecord for FitMessageSegmentFile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSegmentId {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -40333,8 +40348,8 @@ impl FitMessageSegmentId {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSegmentId> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSegmentId>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSegmentId {
             header: header,
@@ -40355,7 +40370,7 @@ impl FitMessageSegmentId {
             selection_type: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -40366,10 +40381,10 @@ impl FitMessageSegmentId {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -40553,7 +40568,7 @@ impl FitRecord for FitMessageSegmentId {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageSegmentLapSubfieldTotalCycles {
     NotYetParsed,
     Default(FitUint32),
@@ -40602,7 +40617,7 @@ impl FitMessageSegmentLapSubfieldTotalCycles {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSegmentLap {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -40938,8 +40953,8 @@ impl FitMessageSegmentLap {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSegmentLap> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSegmentLap>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSegmentLap {
             header: header,
@@ -41106,7 +41121,7 @@ impl FitMessageSegmentLap {
             avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -41117,10 +41132,10 @@ impl FitMessageSegmentLap {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -41712,7 +41727,7 @@ impl FitRecord for FitMessageSegmentLap {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSegmentLeaderboardEntry {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -41765,8 +41780,8 @@ impl FitMessageSegmentLeaderboardEntry {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSegmentLeaderboardEntry> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSegmentLeaderboardEntry>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSegmentLeaderboardEntry {
             header: header,
@@ -41785,7 +41800,7 @@ impl FitMessageSegmentLeaderboardEntry {
             activity_id_string: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -41796,10 +41811,10 @@ impl FitMessageSegmentLeaderboardEntry {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -41974,7 +41989,7 @@ impl FitRecord for FitMessageSegmentLeaderboardEntry {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSegmentPoint {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -42024,8 +42039,8 @@ impl FitMessageSegmentPoint {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSegmentPoint> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSegmentPoint>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSegmentPoint {
             header: header,
@@ -42043,7 +42058,7 @@ impl FitMessageSegmentPoint {
             leader_time: FitFieldAdjustedValue::new_vec("s".to_string(), 1000.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -42054,10 +42069,10 @@ impl FitMessageSegmentPoint {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -42228,7 +42243,7 @@ impl FitRecord for FitMessageSegmentPoint {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageSessionSubfieldTotalCycles {
     NotYetParsed,
     Default(FitUint32),
@@ -42292,7 +42307,7 @@ impl FitMessageSessionSubfieldTotalCycles {
         Ok((FitMessageSessionSubfieldTotalCycles::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageSessionSubfieldAvgCadence {
     NotYetParsed,
     Default(FitUint8),
@@ -42338,7 +42353,7 @@ impl FitMessageSessionSubfieldAvgCadence {
         Ok((FitMessageSessionSubfieldAvgCadence::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageSessionSubfieldMaxCadence {
     NotYetParsed,
     Default(FitUint8),
@@ -42384,7 +42399,7 @@ impl FitMessageSessionSubfieldMaxCadence {
         Ok((FitMessageSessionSubfieldMaxCadence::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSession {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -42862,8 +42877,8 @@ impl FitMessageSession {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSession> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSession>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let endianness = definition_message.endianness;
         let message = FitMessageSession {
             header: header,
@@ -43168,7 +43183,7 @@ impl FitMessageSession {
             avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -43179,10 +43194,10 @@ impl FitMessageSession {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -43946,7 +43961,7 @@ impl FitRecord for FitMessageSession {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSet {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -44008,8 +44023,11 @@ impl FitMessageSet {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<FitMessageSet> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(
+        header: FitRecordHeader,
+        parsing_state: &FitParsingState,
+    ) -> Result<Box<FitMessageSet>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSet {
             header: header,
@@ -44032,7 +44050,7 @@ impl FitMessageSet {
             wkt_step_index: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -44043,10 +44061,10 @@ impl FitMessageSet {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -44249,7 +44267,7 @@ impl FitRecord for FitMessageSet {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
@@ -44350,7 +44368,7 @@ impl FitMessageSlaveDeviceSubfieldProduct {
         Ok((FitMessageSlaveDeviceSubfieldProduct::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSlaveDevice {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -44394,8 +44412,8 @@ impl FitMessageSlaveDevice {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSlaveDevice> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSlaveDevice>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSlaveDevice {
             header: header,
@@ -44410,7 +44428,7 @@ impl FitMessageSlaveDevice {
             product: FitMessageSlaveDeviceSubfieldProduct::NotYetParsed,
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -44421,10 +44439,10 @@ impl FitMessageSlaveDevice {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -44634,7 +44652,7 @@ impl FitRecord for FitMessageSlaveDevice {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSoftware {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -44675,8 +44693,8 @@ impl FitMessageSoftware {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSoftware> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSoftware>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSoftware {
             header: header,
@@ -44691,7 +44709,7 @@ impl FitMessageSoftware {
             part_number: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -44702,10 +44720,10 @@ impl FitMessageSoftware {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -44864,7 +44882,7 @@ impl FitRecord for FitMessageSoftware {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSpeedZone {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -44905,8 +44923,8 @@ impl FitMessageSpeedZone {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSpeedZone> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSpeedZone>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSpeedZone {
             header: header,
@@ -44921,7 +44939,7 @@ impl FitMessageSpeedZone {
             name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -44932,10 +44950,10 @@ impl FitMessageSpeedZone {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -45094,7 +45112,7 @@ impl FitRecord for FitMessageSpeedZone {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageSport {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -45135,8 +45153,8 @@ impl FitMessageSport {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageSport> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageSport>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageSport {
             header: header,
@@ -45151,7 +45169,7 @@ impl FitMessageSport {
             name: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -45162,10 +45180,10 @@ impl FitMessageSport {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -45324,7 +45342,7 @@ impl FitRecord for FitMessageSport {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageStressLevel {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -45362,8 +45380,8 @@ impl FitMessageStressLevel {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageStressLevel> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageStressLevel>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageStressLevel {
             header: header,
@@ -45377,7 +45395,7 @@ impl FitMessageStressLevel {
             stress_level_time: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -45388,10 +45406,10 @@ impl FitMessageStressLevel {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -45546,12 +45564,12 @@ impl FitRecord for FitMessageStressLevel {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    GyroCalFactor(FitUint32),
     AccelCalFactor(FitUint32),
+    GyroCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -45620,7 +45638,7 @@ impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageThreeDSensorCalibration {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -45683,8 +45701,8 @@ impl FitMessageThreeDSensorCalibration {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageThreeDSensorCalibration> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageThreeDSensorCalibration>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageThreeDSensorCalibration {
             header: header,
@@ -45705,7 +45723,7 @@ impl FitMessageThreeDSensorCalibration {
             orientation_matrix: FitFieldAdjustedValue::new_vec("".to_string(), 65535.0, 0.0),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -45716,10 +45734,10 @@ impl FitMessageThreeDSensorCalibration {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -45963,7 +45981,7 @@ impl FitRecord for FitMessageThreeDSensorCalibration {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageTimestampCorrelation {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -46020,8 +46038,8 @@ impl FitMessageTimestampCorrelation {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageTimestampCorrelation> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageTimestampCorrelation>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageTimestampCorrelation {
             header: header,
@@ -46044,7 +46062,7 @@ impl FitMessageTimestampCorrelation {
             system_timestamp_ms: FitFieldBasicValue::new_single("ms".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -46055,10 +46073,10 @@ impl FitMessageTimestampCorrelation {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -46246,7 +46264,7 @@ impl FitRecord for FitMessageTimestampCorrelation {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageTotals {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -46308,8 +46326,8 @@ impl FitMessageTotals {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageTotals> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageTotals>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageTotals {
             header: header,
@@ -46331,7 +46349,7 @@ impl FitMessageTotals {
             sport_index: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -46342,10 +46360,10 @@ impl FitMessageTotals {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -46544,7 +46562,7 @@ impl FitRecord for FitMessageTotals {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
@@ -46645,7 +46663,7 @@ impl FitMessageTrainingFileSubfieldProduct {
         Ok((FitMessageTrainingFileSubfieldProduct::Default(val), vec![]))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageTrainingFile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -46701,8 +46719,8 @@ impl FitMessageTrainingFile {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageTrainingFile> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageTrainingFile>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageTrainingFile {
             header: header,
@@ -46721,7 +46739,7 @@ impl FitMessageTrainingFile {
             time_created: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -46732,10 +46750,10 @@ impl FitMessageTrainingFile {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -46973,7 +46991,7 @@ impl FitRecord for FitMessageTrainingFile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageUserProfile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -47100,8 +47118,8 @@ impl FitMessageUserProfile {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageUserProfile> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageUserProfile>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageUserProfile {
             header: header,
@@ -47150,7 +47168,7 @@ impl FitMessageUserProfile {
             dive_count: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -47161,10 +47179,10 @@ impl FitMessageUserProfile {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -47432,7 +47450,7 @@ impl FitRecord for FitMessageUserProfile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageVideo {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -47473,8 +47491,8 @@ impl FitMessageVideo {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageVideo> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageVideo>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageVideo {
             header: header,
@@ -47489,7 +47507,7 @@ impl FitMessageVideo {
             duration: FitFieldBasicValue::new_single("ms".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -47500,10 +47518,10 @@ impl FitMessageVideo {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -47662,7 +47680,7 @@ impl FitRecord for FitMessageVideo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageVideoClip {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -47715,8 +47733,8 @@ impl FitMessageVideoClip {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageVideoClip> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageVideoClip>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageVideoClip {
             header: header,
@@ -47735,7 +47753,7 @@ impl FitMessageVideoClip {
             clip_end: FitFieldBasicValue::new_single("ms".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -47746,10 +47764,10 @@ impl FitMessageVideoClip {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -47924,7 +47942,7 @@ impl FitRecord for FitMessageVideoClip {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageVideoDescription {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -47965,8 +47983,8 @@ impl FitMessageVideoDescription {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageVideoDescription> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageVideoDescription>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageVideoDescription {
             header: header,
@@ -47981,7 +47999,7 @@ impl FitMessageVideoDescription {
             text: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -47992,10 +48010,10 @@ impl FitMessageVideoDescription {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -48154,7 +48172,7 @@ impl FitRecord for FitMessageVideoDescription {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageVideoFrame {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -48195,8 +48213,8 @@ impl FitMessageVideoFrame {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageVideoFrame> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageVideoFrame>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageVideoFrame {
             header: header,
@@ -48211,7 +48229,7 @@ impl FitMessageVideoFrame {
             frame_number: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -48222,10 +48240,10 @@ impl FitMessageVideoFrame {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -48396,7 +48414,7 @@ impl FitRecord for FitMessageVideoFrame {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageVideoTitle {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -48437,8 +48455,8 @@ impl FitMessageVideoTitle {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageVideoTitle> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageVideoTitle>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageVideoTitle {
             header: header,
@@ -48453,7 +48471,7 @@ impl FitMessageVideoTitle {
             text: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -48464,10 +48482,10 @@ impl FitMessageVideoTitle {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -48626,7 +48644,7 @@ impl FitRecord for FitMessageVideoTitle {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
@@ -48701,7 +48719,7 @@ impl FitMessageWatchfaceSettingsSubfieldLayout {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWatchfaceSettings {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -48748,8 +48766,8 @@ impl FitMessageWatchfaceSettings {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWatchfaceSettings> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWatchfaceSettings>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWatchfaceSettings {
             header: header,
@@ -48765,7 +48783,7 @@ impl FitMessageWatchfaceSettings {
             layout: FitMessageWatchfaceSettingsSubfieldLayout::NotYetParsed,
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -48776,10 +48794,10 @@ impl FitMessageWatchfaceSettings {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -48993,7 +49011,7 @@ impl FitRecord for FitMessageWatchfaceSettings {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWeatherAlert {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -49043,8 +49061,8 @@ impl FitMessageWeatherAlert {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWeatherAlert> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWeatherAlert>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWeatherAlert {
             header: header,
@@ -49062,7 +49080,7 @@ impl FitMessageWeatherAlert {
             ftype: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -49073,10 +49091,10 @@ impl FitMessageWeatherAlert {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -49259,7 +49277,7 @@ impl FitRecord for FitMessageWeatherAlert {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWeatherConditions {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -49343,8 +49361,8 @@ impl FitMessageWeatherConditions {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWeatherConditions> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWeatherConditions>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWeatherConditions {
             header: header,
@@ -49372,7 +49390,7 @@ impl FitMessageWeatherConditions {
             low_temperature: FitFieldBasicValue::new_single("C".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -49383,10 +49401,10 @@ impl FitMessageWeatherConditions {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -49613,7 +49631,7 @@ impl FitRecord for FitMessageWeatherConditions {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWeightScale {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -49684,8 +49702,8 @@ impl FitMessageWeightScale {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWeightScale> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWeightScale>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWeightScale {
             header: header,
@@ -49710,7 +49728,7 @@ impl FitMessageWeightScale {
             user_profile_index: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -49721,10 +49739,10 @@ impl FitMessageWeightScale {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -49935,7 +49953,7 @@ impl FitRecord for FitMessageWeightScale {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWorkout {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -49988,8 +50006,8 @@ impl FitMessageWorkout {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWorkout> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWorkout>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWorkout {
             header: header,
@@ -50008,7 +50026,7 @@ impl FitMessageWorkout {
             pool_length_unit: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -50019,10 +50037,10 @@ impl FitMessageWorkout {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -50197,7 +50215,7 @@ impl FitRecord for FitMessageWorkout {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWorkoutSession {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -50250,8 +50268,8 @@ impl FitMessageWorkoutSession {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWorkoutSession> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWorkoutSession>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWorkoutSession {
             header: header,
@@ -50270,7 +50288,7 @@ impl FitMessageWorkoutSession {
             pool_length_unit: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -50281,10 +50299,10 @@ impl FitMessageWorkoutSession {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -50459,17 +50477,17 @@ impl FitRecord for FitMessageWorkoutSession {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationTime(FitFloat64),
-    DurationStep(FitUint32),
     DurationReps(FitUint32),
     DurationHr(FitFieldWorkoutHr),
+    DurationTime(FitFloat64),
     DurationPower(FitFieldWorkoutPower),
     DurationDistance(FitFloat64),
     DurationCalories(FitUint32),
+    DurationStep(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -50804,21 +50822,21 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    TargetHrZone(FitUint32),
-    RepeatSteps(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    RepeatHr(FitFieldWorkoutHr),
-    TargetStrokeType(FitFieldSwimStroke),
-    RepeatDistance(FitFloat64),
-    TargetCadenceZone(FitUint32),
     RepeatTime(FitFloat64),
+    RepeatDistance(FitFloat64),
+    RepeatHr(FitFieldWorkoutHr),
+    TargetHrZone(FitUint32),
     TargetSpeedZone(FitUint32),
+    RepeatSteps(FitUint32),
     TargetPowerZone(FitUint32),
     RepeatCalories(FitUint32),
+    TargetStrokeType(FitFieldSwimStroke),
+    TargetCadenceZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -51088,14 +51106,14 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
-    CustomTargetSpeedLow(FitFloat64),
     CustomTargetCadenceLow(FitUint32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetSpeedLow(FitFloat64),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -51208,14 +51226,14 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
     CustomTargetSpeedHigh(FitFloat64),
-    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
-    CustomTargetCadenceHigh(FitUint32),
     CustomTargetPowerHigh(FitFieldWorkoutPower),
+    CustomTargetCadenceHigh(FitUint32),
+    CustomTargetHeartRateHigh(FitFieldWorkoutHr),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -51323,7 +51341,7 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
         ))
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageWorkoutStep {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -51432,8 +51450,8 @@ impl FitMessageWorkoutStep {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageWorkoutStep> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageWorkoutStep>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageWorkoutStep {
             header: header,
@@ -51466,7 +51484,7 @@ impl FitMessageWorkoutStep {
             weight_display_unit: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -51477,10 +51495,10 @@ impl FitMessageWorkoutStep {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -51779,7 +51797,7 @@ impl FitRecord for FitMessageWorkoutStep {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageZonesTarget {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -51830,8 +51848,8 @@ impl FitMessageZonesTarget {
     pub fn new(
         header: FitRecordHeader,
         parsing_state: &FitParsingState,
-    ) -> Result<FitMessageZonesTarget> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<Box<FitMessageZonesTarget>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
 
         let message = FitMessageZonesTarget {
             header: header,
@@ -51848,7 +51866,7 @@ impl FitMessageZonesTarget {
             pwr_calc_type: FitFieldBasicValue::new_single("".to_string()),
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(
@@ -51859,10 +51877,10 @@ impl FitMessageZonesTarget {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -52032,94 +52050,94 @@ impl FitRecord for FitMessageZonesTarget {
 
 #[derive(Debug)]
 pub enum FitDataMessage {
-    AccelerometerData(Rc<FitMessageAccelerometerData>),
-    Activity(Rc<FitMessageActivity>),
-    AntChannelId(Rc<FitMessageAntChannelId>),
-    AntRx(Rc<FitMessageAntRx>),
-    AntTx(Rc<FitMessageAntTx>),
-    AviationAttitude(Rc<FitMessageAviationAttitude>),
-    BarometerData(Rc<FitMessageBarometerData>),
-    BikeProfile(Rc<FitMessageBikeProfile>),
-    BloodPressure(Rc<FitMessageBloodPressure>),
-    CadenceZone(Rc<FitMessageCadenceZone>),
-    CameraEvent(Rc<FitMessageCameraEvent>),
-    Capabilities(Rc<FitMessageCapabilities>),
-    ClimbPro(Rc<FitMessageClimbPro>),
-    Connectivity(Rc<FitMessageConnectivity>),
-    Course(Rc<FitMessageCourse>),
-    CoursePoint(Rc<FitMessageCoursePoint>),
-    DeveloperDataId(Rc<FitMessageDeveloperDataId>),
-    DeviceInfo(Rc<FitMessageDeviceInfo>),
-    DeviceSettings(Rc<FitMessageDeviceSettings>),
-    DiveAlarm(Rc<FitMessageDiveAlarm>),
-    DiveGas(Rc<FitMessageDiveGas>),
-    DiveSettings(Rc<FitMessageDiveSettings>),
-    DiveSummary(Rc<FitMessageDiveSummary>),
-    Event(Rc<FitMessageEvent>),
-    ExdDataConceptConfiguration(Rc<FitMessageExdDataConceptConfiguration>),
-    ExdDataFieldConfiguration(Rc<FitMessageExdDataFieldConfiguration>),
-    ExdScreenConfiguration(Rc<FitMessageExdScreenConfiguration>),
-    ExerciseTitle(Rc<FitMessageExerciseTitle>),
-    FieldCapabilities(Rc<FitMessageFieldCapabilities>),
-    FieldDescription(Rc<FitMessageFieldDescription>),
-    FileCapabilities(Rc<FitMessageFileCapabilities>),
-    FileCreator(Rc<FitMessageFileCreator>),
-    FileId(Rc<FitMessageFileId>),
-    Goal(Rc<FitMessageGoal>),
-    GpsMetadata(Rc<FitMessageGpsMetadata>),
-    GyroscopeData(Rc<FitMessageGyroscopeData>),
-    Hr(Rc<FitMessageHr>),
-    HrZone(Rc<FitMessageHrZone>),
-    HrmProfile(Rc<FitMessageHrmProfile>),
-    Hrv(Rc<FitMessageHrv>),
-    Jump(Rc<FitMessageJump>),
-    Lap(Rc<FitMessageLap>),
-    Length(Rc<FitMessageLength>),
-    MagnetometerData(Rc<FitMessageMagnetometerData>),
-    MemoGlob(Rc<FitMessageMemoGlob>),
-    MesgCapabilities(Rc<FitMessageMesgCapabilities>),
-    MetZone(Rc<FitMessageMetZone>),
-    Monitoring(Rc<FitMessageMonitoring>),
-    MonitoringInfo(Rc<FitMessageMonitoringInfo>),
-    NmeaSentence(Rc<FitMessageNmeaSentence>),
-    ObdiiData(Rc<FitMessageObdiiData>),
-    OhrSettings(Rc<FitMessageOhrSettings>),
-    OneDSensorCalibration(Rc<FitMessageOneDSensorCalibration>),
-    PowerZone(Rc<FitMessagePowerZone>),
-    Record(Rc<FitMessageRecord>),
-    Schedule(Rc<FitMessageSchedule>),
-    SdmProfile(Rc<FitMessageSdmProfile>),
-    SegmentFile(Rc<FitMessageSegmentFile>),
-    SegmentId(Rc<FitMessageSegmentId>),
-    SegmentLap(Rc<FitMessageSegmentLap>),
-    SegmentLeaderboardEntry(Rc<FitMessageSegmentLeaderboardEntry>),
-    SegmentPoint(Rc<FitMessageSegmentPoint>),
-    Session(Rc<FitMessageSession>),
-    Set(Rc<FitMessageSet>),
-    SlaveDevice(Rc<FitMessageSlaveDevice>),
-    Software(Rc<FitMessageSoftware>),
-    SpeedZone(Rc<FitMessageSpeedZone>),
-    Sport(Rc<FitMessageSport>),
-    StressLevel(Rc<FitMessageStressLevel>),
-    ThreeDSensorCalibration(Rc<FitMessageThreeDSensorCalibration>),
-    TimestampCorrelation(Rc<FitMessageTimestampCorrelation>),
-    Totals(Rc<FitMessageTotals>),
-    TrainingFile(Rc<FitMessageTrainingFile>),
-    UserProfile(Rc<FitMessageUserProfile>),
-    Video(Rc<FitMessageVideo>),
-    VideoClip(Rc<FitMessageVideoClip>),
-    VideoDescription(Rc<FitMessageVideoDescription>),
-    VideoFrame(Rc<FitMessageVideoFrame>),
-    VideoTitle(Rc<FitMessageVideoTitle>),
-    WatchfaceSettings(Rc<FitMessageWatchfaceSettings>),
-    WeatherAlert(Rc<FitMessageWeatherAlert>),
-    WeatherConditions(Rc<FitMessageWeatherConditions>),
-    WeightScale(Rc<FitMessageWeightScale>),
-    Workout(Rc<FitMessageWorkout>),
-    WorkoutSession(Rc<FitMessageWorkoutSession>),
-    WorkoutStep(Rc<FitMessageWorkoutStep>),
-    ZonesTarget(Rc<FitMessageZonesTarget>),
-    UnknownToSdk(Rc<FitMessageUnknownToSdk>),
+    AccelerometerData(Box<FitMessageAccelerometerData>),
+    Activity(Box<FitMessageActivity>),
+    AntChannelId(Box<FitMessageAntChannelId>),
+    AntRx(Box<FitMessageAntRx>),
+    AntTx(Box<FitMessageAntTx>),
+    AviationAttitude(Box<FitMessageAviationAttitude>),
+    BarometerData(Box<FitMessageBarometerData>),
+    BikeProfile(Box<FitMessageBikeProfile>),
+    BloodPressure(Box<FitMessageBloodPressure>),
+    CadenceZone(Box<FitMessageCadenceZone>),
+    CameraEvent(Box<FitMessageCameraEvent>),
+    Capabilities(Box<FitMessageCapabilities>),
+    ClimbPro(Box<FitMessageClimbPro>),
+    Connectivity(Box<FitMessageConnectivity>),
+    Course(Box<FitMessageCourse>),
+    CoursePoint(Box<FitMessageCoursePoint>),
+    DeveloperDataId(Box<FitMessageDeveloperDataId>),
+    DeviceInfo(Box<FitMessageDeviceInfo>),
+    DeviceSettings(Box<FitMessageDeviceSettings>),
+    DiveAlarm(Box<FitMessageDiveAlarm>),
+    DiveGas(Box<FitMessageDiveGas>),
+    DiveSettings(Box<FitMessageDiveSettings>),
+    DiveSummary(Box<FitMessageDiveSummary>),
+    Event(Box<FitMessageEvent>),
+    ExdDataConceptConfiguration(Box<FitMessageExdDataConceptConfiguration>),
+    ExdDataFieldConfiguration(Box<FitMessageExdDataFieldConfiguration>),
+    ExdScreenConfiguration(Box<FitMessageExdScreenConfiguration>),
+    ExerciseTitle(Box<FitMessageExerciseTitle>),
+    FieldCapabilities(Box<FitMessageFieldCapabilities>),
+    FieldDescription(Box<FitMessageFieldDescription>),
+    FileCapabilities(Box<FitMessageFileCapabilities>),
+    FileCreator(Box<FitMessageFileCreator>),
+    FileId(Box<FitMessageFileId>),
+    Goal(Box<FitMessageGoal>),
+    GpsMetadata(Box<FitMessageGpsMetadata>),
+    GyroscopeData(Box<FitMessageGyroscopeData>),
+    Hr(Box<FitMessageHr>),
+    HrZone(Box<FitMessageHrZone>),
+    HrmProfile(Box<FitMessageHrmProfile>),
+    Hrv(Box<FitMessageHrv>),
+    Jump(Box<FitMessageJump>),
+    Lap(Box<FitMessageLap>),
+    Length(Box<FitMessageLength>),
+    MagnetometerData(Box<FitMessageMagnetometerData>),
+    MemoGlob(Box<FitMessageMemoGlob>),
+    MesgCapabilities(Box<FitMessageMesgCapabilities>),
+    MetZone(Box<FitMessageMetZone>),
+    Monitoring(Box<FitMessageMonitoring>),
+    MonitoringInfo(Box<FitMessageMonitoringInfo>),
+    NmeaSentence(Box<FitMessageNmeaSentence>),
+    ObdiiData(Box<FitMessageObdiiData>),
+    OhrSettings(Box<FitMessageOhrSettings>),
+    OneDSensorCalibration(Box<FitMessageOneDSensorCalibration>),
+    PowerZone(Box<FitMessagePowerZone>),
+    Record(Box<FitMessageRecord>),
+    Schedule(Box<FitMessageSchedule>),
+    SdmProfile(Box<FitMessageSdmProfile>),
+    SegmentFile(Box<FitMessageSegmentFile>),
+    SegmentId(Box<FitMessageSegmentId>),
+    SegmentLap(Box<FitMessageSegmentLap>),
+    SegmentLeaderboardEntry(Box<FitMessageSegmentLeaderboardEntry>),
+    SegmentPoint(Box<FitMessageSegmentPoint>),
+    Session(Box<FitMessageSession>),
+    Set(Box<FitMessageSet>),
+    SlaveDevice(Box<FitMessageSlaveDevice>),
+    Software(Box<FitMessageSoftware>),
+    SpeedZone(Box<FitMessageSpeedZone>),
+    Sport(Box<FitMessageSport>),
+    StressLevel(Box<FitMessageStressLevel>),
+    ThreeDSensorCalibration(Box<FitMessageThreeDSensorCalibration>),
+    TimestampCorrelation(Box<FitMessageTimestampCorrelation>),
+    Totals(Box<FitMessageTotals>),
+    TrainingFile(Box<FitMessageTrainingFile>),
+    UserProfile(Box<FitMessageUserProfile>),
+    Video(Box<FitMessageVideo>),
+    VideoClip(Box<FitMessageVideoClip>),
+    VideoDescription(Box<FitMessageVideoDescription>),
+    VideoFrame(Box<FitMessageVideoFrame>),
+    VideoTitle(Box<FitMessageVideoTitle>),
+    WatchfaceSettings(Box<FitMessageWatchfaceSettings>),
+    WeatherAlert(Box<FitMessageWeatherAlert>),
+    WeatherConditions(Box<FitMessageWeatherConditions>),
+    WeightScale(Box<FitMessageWeightScale>),
+    Workout(Box<FitMessageWorkout>),
+    WorkoutSession(Box<FitMessageWorkoutSession>),
+    WorkoutStep(Box<FitMessageWorkoutStep>),
+    ZonesTarget(Box<FitMessageZonesTarget>),
+    UnknownToSdk(FitMessageUnknownToSdk),
     ParseError(FitParseError),
 }
 
@@ -52579,7 +52597,7 @@ impl FitDataMessage {
         parsing_state: &mut FitParsingState,
         timestamp: Option<FitFieldDateTime>,
     ) -> Result<(FitDataMessage, &'a [u8])> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
                 let mut m = FitMessageAccelerometerData::new(header, parsing_state)?;
@@ -52588,10 +52606,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::AccelerometerData(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::AccelerometerData(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::AccelerometerData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Activity) => {
@@ -52601,10 +52617,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Activity(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Activity(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Activity(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntChannelId) => {
@@ -52614,10 +52628,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::AntChannelId(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::AntChannelId(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::AntChannelId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntRx) => {
@@ -52627,10 +52639,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::AntRx(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::AntRx(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::AntRx(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AntTx) => {
@@ -52640,10 +52650,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::AntTx(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::AntTx(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::AntTx(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::AviationAttitude) => {
@@ -52653,10 +52661,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::AviationAttitude(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::AviationAttitude(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::AviationAttitude(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::BarometerData) => {
@@ -52666,10 +52672,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::BarometerData(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::BarometerData(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::BarometerData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::BikeProfile) => {
@@ -52679,10 +52683,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::BikeProfile(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::BikeProfile(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::BikeProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::BloodPressure) => {
@@ -52692,10 +52694,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::BloodPressure(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::BloodPressure(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::BloodPressure(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::CadenceZone) => {
@@ -52705,10 +52705,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::CadenceZone(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::CadenceZone(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::CadenceZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::CameraEvent) => {
@@ -52718,10 +52716,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::CameraEvent(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::CameraEvent(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::CameraEvent(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
@@ -52731,10 +52727,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Capabilities(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Capabilities(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Capabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ClimbPro) => {
@@ -52744,10 +52738,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ClimbPro(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ClimbPro(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ClimbPro(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Connectivity) => {
@@ -52757,10 +52749,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Connectivity(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Connectivity(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Connectivity(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Course) => {
@@ -52770,10 +52760,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Course(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Course(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Course(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::CoursePoint) => {
@@ -52783,10 +52771,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::CoursePoint(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::CoursePoint(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::CoursePoint(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeveloperDataId) => {
@@ -52796,10 +52782,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DeveloperDataId(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DeveloperDataId(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DeveloperDataId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceInfo) => {
@@ -52809,10 +52793,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DeviceInfo(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DeviceInfo(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DeviceInfo(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DeviceSettings) => {
@@ -52822,10 +52804,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DeviceSettings(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DeviceSettings(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DeviceSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveAlarm) => {
@@ -52835,10 +52815,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DiveAlarm(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DiveAlarm(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DiveAlarm(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveGas) => {
@@ -52848,10 +52826,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DiveGas(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DiveGas(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DiveGas(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSettings) => {
@@ -52861,10 +52837,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DiveSettings(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DiveSettings(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DiveSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::DiveSummary) => {
@@ -52874,10 +52848,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::DiveSummary(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::DiveSummary(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::DiveSummary(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Event) => {
@@ -52887,10 +52859,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Event(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Event(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Event(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataConceptConfiguration) => {
@@ -52900,10 +52870,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ExdDataConceptConfiguration(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ExdDataConceptConfiguration(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ExdDataConceptConfiguration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdDataFieldConfiguration) => {
@@ -52913,10 +52881,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ExdDataFieldConfiguration(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ExdDataFieldConfiguration(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ExdDataFieldConfiguration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExdScreenConfiguration) => {
@@ -52926,10 +52892,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ExdScreenConfiguration(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ExdScreenConfiguration(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ExdScreenConfiguration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ExerciseTitle) => {
@@ -52939,10 +52903,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ExerciseTitle(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ExerciseTitle(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ExerciseTitle(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FieldCapabilities) => {
@@ -52952,10 +52914,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::FieldCapabilities(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::FieldCapabilities(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::FieldCapabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FieldDescription) => {
@@ -52965,10 +52925,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::FieldDescription(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::FieldDescription(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::FieldDescription(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileCapabilities) => {
@@ -52978,10 +52936,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::FileCapabilities(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::FileCapabilities(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::FileCapabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileCreator) => {
@@ -52991,10 +52947,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::FileCreator(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::FileCreator(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::FileCreator(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::FileId) => {
@@ -53004,10 +52958,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::FileId(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::FileId(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::FileId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Goal) => {
@@ -53017,10 +52969,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Goal(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Goal(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Goal(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::GpsMetadata) => {
@@ -53030,10 +52980,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::GpsMetadata(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::GpsMetadata(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::GpsMetadata(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::GyroscopeData) => {
@@ -53043,10 +52991,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::GyroscopeData(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::GyroscopeData(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::GyroscopeData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hr) => {
@@ -53056,10 +53002,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Hr(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Hr(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Hr(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::HrZone) => {
@@ -53069,10 +53013,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::HrZone(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::HrZone(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::HrZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::HrmProfile) => {
@@ -53082,10 +53024,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::HrmProfile(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::HrmProfile(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::HrmProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Hrv) => {
@@ -53095,10 +53035,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Hrv(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Hrv(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Hrv(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Jump) => {
@@ -53108,10 +53046,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Jump(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Jump(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Jump(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Lap) => {
@@ -53121,10 +53057,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Lap(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Lap(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Lap(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Length) => {
@@ -53134,10 +53068,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Length(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Length(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Length(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MagnetometerData) => {
@@ -53147,10 +53079,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::MagnetometerData(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::MagnetometerData(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::MagnetometerData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MemoGlob) => {
@@ -53160,10 +53090,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::MemoGlob(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::MemoGlob(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::MemoGlob(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MesgCapabilities) => {
@@ -53173,10 +53101,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::MesgCapabilities(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::MesgCapabilities(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::MesgCapabilities(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MetZone) => {
@@ -53186,10 +53112,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::MetZone(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::MetZone(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::MetZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Monitoring) => {
@@ -53199,10 +53123,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Monitoring(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Monitoring(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Monitoring(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MonitoringInfo) => {
@@ -53212,10 +53134,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::MonitoringInfo(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::MonitoringInfo(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::MonitoringInfo(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
@@ -53225,10 +53145,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::NmeaSentence(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::NmeaSentence(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::NmeaSentence(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ObdiiData) => {
@@ -53238,10 +53156,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ObdiiData(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ObdiiData(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ObdiiData(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::OhrSettings) => {
@@ -53251,10 +53167,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::OhrSettings(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::OhrSettings(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::OhrSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::OneDSensorCalibration) => {
@@ -53264,10 +53178,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::OneDSensorCalibration(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::OneDSensorCalibration(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::OneDSensorCalibration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::PowerZone) => {
@@ -53277,10 +53189,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::PowerZone(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::PowerZone(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::PowerZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Record) => {
@@ -53290,10 +53200,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Record(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Record(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Record(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Schedule) => {
@@ -53303,10 +53211,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Schedule(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Schedule(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Schedule(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SdmProfile) => {
@@ -53316,10 +53222,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SdmProfile(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SdmProfile(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SdmProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentFile) => {
@@ -53329,10 +53233,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SegmentFile(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SegmentFile(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SegmentFile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentId) => {
@@ -53342,10 +53244,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SegmentId(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SegmentId(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SegmentId(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLap) => {
@@ -53355,10 +53255,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SegmentLap(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SegmentLap(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SegmentLap(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentLeaderboardEntry) => {
@@ -53368,10 +53266,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SegmentLeaderboardEntry(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SegmentLeaderboardEntry(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SegmentLeaderboardEntry(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SegmentPoint) => {
@@ -53381,10 +53277,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SegmentPoint(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SegmentPoint(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SegmentPoint(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Session) => {
@@ -53394,10 +53288,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Session(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Session(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Session(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Set) => {
@@ -53407,10 +53299,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Set(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Set(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Set(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
@@ -53420,10 +53310,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SlaveDevice(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SlaveDevice(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SlaveDevice(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Software) => {
@@ -53433,10 +53321,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Software(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Software(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Software(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::SpeedZone) => {
@@ -53446,10 +53332,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::SpeedZone(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::SpeedZone(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::SpeedZone(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Sport) => {
@@ -53459,10 +53343,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Sport(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Sport(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Sport(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::StressLevel) => {
@@ -53472,10 +53354,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::StressLevel(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::StressLevel(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::StressLevel(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ThreeDSensorCalibration) => {
@@ -53485,10 +53365,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ThreeDSensorCalibration(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ThreeDSensorCalibration(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ThreeDSensorCalibration(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::TimestampCorrelation) => {
@@ -53498,10 +53376,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::TimestampCorrelation(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::TimestampCorrelation(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::TimestampCorrelation(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Totals) => {
@@ -53511,10 +53387,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Totals(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Totals(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Totals(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingFile) => {
@@ -53524,10 +53398,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::TrainingFile(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::TrainingFile(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::TrainingFile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::UserProfile) => {
@@ -53537,10 +53409,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::UserProfile(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::UserProfile(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::UserProfile(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Video) => {
@@ -53550,10 +53420,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Video(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Video(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Video(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoClip) => {
@@ -53563,10 +53431,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::VideoClip(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::VideoClip(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::VideoClip(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoDescription) => {
@@ -53576,10 +53442,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::VideoDescription(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::VideoDescription(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::VideoDescription(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoFrame) => {
@@ -53589,10 +53453,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::VideoFrame(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::VideoFrame(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::VideoFrame(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::VideoTitle) => {
@@ -53602,10 +53464,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::VideoTitle(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::VideoTitle(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::VideoTitle(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WatchfaceSettings) => {
@@ -53615,10 +53475,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::WatchfaceSettings(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::WatchfaceSettings(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::WatchfaceSettings(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherAlert) => {
@@ -53628,10 +53486,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::WeatherAlert(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::WeatherAlert(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::WeatherAlert(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeatherConditions) => {
@@ -53641,10 +53497,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::WeatherConditions(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::WeatherConditions(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::WeatherConditions(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WeightScale) => {
@@ -53654,10 +53508,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::WeightScale(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::WeightScale(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::WeightScale(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::Workout) => {
@@ -53667,10 +53519,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::Workout(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::Workout(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::Workout(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutSession) => {
@@ -53680,10 +53530,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::WorkoutSession(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::WorkoutSession(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::WorkoutSession(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::WorkoutStep) => {
@@ -53693,10 +53541,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::WorkoutStep(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::WorkoutStep(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::WorkoutStep(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::ZonesTarget) => {
@@ -53706,10 +53552,8 @@ impl FitDataMessage {
                         FitDataMessage::ParseError(e),
                         &input[definition_message.message_size..],
                     )),
-                    Ok(o) => Ok((FitDataMessage::ZonesTarget(Rc::new(m)), o)),
+                    Ok(o) => Ok((FitDataMessage::ZonesTarget(m), o)),
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::ZonesTarget(Rc::new(m)), o))
             }
 
             FitGlobalMesgNum::Known(FitFieldMesgNum::MesgNum(number)) => {

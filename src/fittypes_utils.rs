@@ -321,10 +321,12 @@ macro_rules! parse_subfields {
 macro_rules! parse_developer_fields {
     ($inp2:expr, $message:expr, $parsing_state:expr) => {
         for dev_field in &$message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                $parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = $parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            //let dev_data_definition =
+            //    $parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            //let field_description =
+            //    dev_data_definition.get_field_description(dev_field.definition_number)?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -444,7 +446,7 @@ macro_rules! fmt_message_subfield {
     };
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct FitFieldDateTime {
     seconds_since_garmin_epoch: u32,
     rust_time: DateTime<UTC>,
@@ -503,7 +505,7 @@ impl FitFieldDateTime {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FitFieldLocalDateTime {
     seconds_since_garmin_epoch: u32,
     rust_time: DateTime<FixedOffset>,
@@ -541,7 +543,7 @@ impl FitFieldParseable for FitFieldLocalDateTime {
 // how to automate the creation of that logic, so for now, FitMessageHr is
 // manually defined here instead of generated.
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FitMessageHr {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -594,7 +596,7 @@ impl FitMessageHr {
         parsing_state: &mut FitParsingState,
         _timestamp: Option<FitFieldDateTime>,
     ) -> Result<(Rc<FitMessageHr>, &'a [u8])> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let mut message = FitMessageHr {
             header: header,
             definition_message: Arc::clone(&definition_message),

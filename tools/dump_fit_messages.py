@@ -240,7 +240,7 @@ def output_types(types):
 
     special_types = r"""
 use std::fmt;
-use std::rc::Rc;
+use std::boxed::Box;
 use std::sync::Arc;
 use std::collections::HashMap;
 
@@ -359,9 +359,9 @@ FDM_TEMPLATE = """
 #[derive(Debug)]
 pub enum FitDataMessage {
     {% for message in messages %}
-    {{ message.short_name }}(Rc<{{ message.full_name }}>),
+    {{ message.short_name }}(Box<{{ message.full_name }}>),
     {%- endfor %}
-    UnknownToSdk(Rc<FitMessageUnknownToSdk>),
+    UnknownToSdk(FitMessageUnknownToSdk),
     ParseError(FitParseError)
 }
 
@@ -392,7 +392,7 @@ impl FitDataMessage {
     }
 
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(FitDataMessage, &'a [u8])> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
             {% for message in messages %}
             FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
@@ -402,11 +402,9 @@ impl FitDataMessage {
                         Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
                     }
                     Ok(o) => {
-                        Ok((FitDataMessage::{{ message.short_name }}(Rc::new(m)), o))
+                        Ok((FitDataMessage::{{ message.short_name }}(m), o))
                     }
                 }
-                //let o = m.parse(input, parsing_state, timestamp)?;
-                //Ok((FitDataMessage::{{ message.short_name }}(Rc::new(m)), o))
             }
             {#
             FitGlobalMesgNum::Known(FitFieldMesgNum::{{ message.short_name }}) => {
@@ -487,7 +485,7 @@ def output_messages(messages, types):
 
 class Message(object):
     STRUCT_TEMPLATE = """
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct {{ message_name }} {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -537,8 +535,8 @@ impl {{ message_name }} {
         }
     }
 
-    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<{{ message_name }}> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<{{ message_name }}>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         {% if has_components %}let endianness = definition_message.endianness;{% endif %}
         let message = {{ message_name }} {
             header: header,
@@ -556,17 +554,14 @@ impl {{ message_name }} {
             {% endfor %}
         };
 
-        Ok(message)
+        Ok(Box::new(message))
     }
 
     fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
         let mut inp = input;
 
         for dev_field in &self.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
 
             let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
                 FitFieldFitBaseType::Enum => 0,
@@ -1182,7 +1177,7 @@ class Field(object):
 
 
     SUBFIELD_TEMPLATE = """
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum {{ subfield_name }} {
     NotYetParsed,
     Default({{ subfield_default_option }}),

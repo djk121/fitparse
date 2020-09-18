@@ -2,11 +2,10 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use FitDefinitionMessage;
-use FitDeveloperDataDefinition;
 
 use errors;
 use errors::Result;
-use fittypes::FitDataMessage;
+use fittypes::{FitMessageFieldDescription, FitMessageDeveloperDataId};
 use fittypes_utils::FitFieldDateTime;
 
 pub struct FitParsingState {
@@ -14,7 +13,8 @@ pub struct FitParsingState {
     pub retain_bytes: bool,
     last_timestamp: Option<FitFieldDateTime>,
     timezone_offset_secs: Option<f64>,
-    developer_data_definitions: HashMap<u8, FitDeveloperDataDefinition>,
+    developer_data_ids: HashMap<u8, Arc<FitMessageDeveloperDataId>>,
+    developer_field_descriptions: HashMap<u8, HashMap<u8, Arc<FitMessageFieldDescription>>>,
 }
 
 impl FitParsingState {
@@ -24,16 +24,16 @@ impl FitParsingState {
             retain_bytes: false,
             last_timestamp: None,
             timezone_offset_secs: None,
-            developer_data_definitions: HashMap::new(),
+            developer_data_ids: HashMap::new(),
+            developer_field_descriptions: HashMap::new(),
         }
     }
 
-    pub fn add(&mut self, local_num: u16, def: Arc<FitDefinitionMessage>) {
-        //println!("adding local_mesg_num {}", local_num);
+    pub fn add_definition(&mut self, local_num: u16, def: Arc<FitDefinitionMessage>) {
         self.map.insert(local_num, def);
     }
 
-    pub fn get(&self, local_num: u16) -> Result<Arc<FitDefinitionMessage>> {
+    pub fn get_definition(&self, local_num: u16) -> Result<Arc<FitDefinitionMessage>> {
         match self.map.get(&local_num) {
             Some(def) => Ok(Arc::clone(def)),
             None => Err(errors::invalid_local_mesg_num(local_num.to_string())),
@@ -63,23 +63,35 @@ impl FitParsingState {
         }
     }
 
-    pub fn set_developer_data_definition(&mut self, developer_data_index: u8, dd: FitDataMessage) {
-        let p = self
-            .developer_data_definitions
-            .entry(developer_data_index)
-            .or_insert(FitDeveloperDataDefinition::new());
-        p.add(dd);
+    pub fn add_developer_data_id(&mut self, developer_data_index: u8, ddi: Arc<FitMessageDeveloperDataId>) {
+        self.developer_data_ids.insert(developer_data_index, ddi);
     }
 
-    pub fn get_developer_data_definition(
-        &self,
-        developer_data_index: u8,
-    ) -> Result<&FitDeveloperDataDefinition> {
-        match self.developer_data_definitions.get(&developer_data_index) {
-            Some(ddd) => Ok(ddd),
-            None => Err(errors::developer_data_definition_not_found(
-                developer_data_index,
-            )),
+    pub fn get_developer_data_id(&self, developer_data_index: u8) -> Result<Arc<FitMessageDeveloperDataId>> {
+        match self.developer_data_ids.get(&developer_data_index) {
+            Some(ddi) => Ok(Arc::clone(ddi)),
+            None => Err(errors::developer_data_definition_not_found(developer_data_index))
+        }
+    }
+
+    pub fn add_developer_field_description(&mut self, developer_data_index: u8, field_number: u8, fd: Arc<FitMessageFieldDescription>) {
+        let p = self
+            .developer_field_descriptions
+            .entry(developer_data_index)
+            .or_insert(HashMap::new());
+        p.insert(field_number, Arc::clone(&fd));
+    }
+
+
+    pub fn get_developer_field_description(&self, developer_data_index: u8, field_number: u8) -> Result<Arc<FitMessageFieldDescription>> {
+        match self.developer_field_descriptions.get(&developer_data_index) {
+            Some(fd_map) => {
+                match fd_map.get(&field_number) {
+                    Some(fd) => Ok(Arc::clone(fd)),
+                    None => Err(errors::developer_data_definition_not_found(developer_data_index))
+                }
+            },
+            None => Err(errors::developer_data_definition_not_found(developer_data_index))
         }
     }
 }

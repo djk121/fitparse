@@ -1,6 +1,5 @@
 use super::*;
 
-use std::rc::Rc;
 use std::sync::Arc;
 
 use nom::number::Endianness;
@@ -84,6 +83,8 @@ fn make_definition_message_record() -> FitDefinitionMessage {
         ]),
         num_developer_fields: 0,
         developer_field_definitions: vec![],
+        developer_data_ids: HashMap::new(),
+        developer_field_descriptions: HashMap::new()
     }
 }
 
@@ -193,13 +194,13 @@ fn make_field_description(
     native_mesg_num: Option<FitFieldMesgNum>,
     fit_base_type_id: FitFieldFitBaseType,
     field_definitions: Vec<(u8, usize, u8)>,
-) -> Rc<FitMessageFieldDescription> {
+) -> FitMessageFieldDescription {
     let nmn = match native_mesg_num {
         None => ffbv!("unparsed", FitFieldMesgNum, "single"),
         Some(x) => ffbv!(x, FitFieldMesgNum, "single"),
     };
 
-    Rc::new(FitMessageFieldDescription {
+    FitMessageFieldDescription {
         header: FitRecordHeader::Normal(FitNormalRecordHeader {
             message_type: FitNormalRecordHeaderMessageType::Data,
             developer_fields_present: false,
@@ -221,6 +222,8 @@ fn make_field_description(
             field_definitions: make_field_definitions(field_definitions),
             num_developer_fields: 0,
             developer_field_definitions: vec![],
+            developer_data_ids: HashMap::new(),
+            developer_field_descriptions: HashMap::new(),
         }),
         developer_fields: vec![],
         unknown_fields: HashMap::new(),
@@ -241,7 +244,7 @@ fn make_field_description(
         fit_base_unit_id: ffbv!("unparsed", FitFieldFitBaseUnit, "single"),
         native_mesg_num: nmn,
         native_field_num: ffbv!("unparsed", FitUint8, "single"),
-    })
+    }
 }
 
 #[test]
@@ -257,7 +260,7 @@ fn fit_message_record() {
             0b10010101,0b01011001,0b00001001,0b00000001,0b00000000,0b11111110];
 
     let mut parsing_state = FitParsingState::new();
-    parsing_state.add(0, definition_message.clone());
+    parsing_state.add_definition(0, definition_message.clone());
 
     let header = FitRecordHeader::Normal(FitNormalRecordHeader {
         message_type: FitNormalRecordHeaderMessageType::Data,
@@ -360,7 +363,7 @@ fn fit_message_record_with_developer_fields() {
     ];
 
     let mut parsing_state = FitParsingState::new();
-    parsing_state.add(0, definition_message_final.clone());
+    parsing_state.add_definition(0, definition_message_final.clone());
     
     let developer_field_descriptions = vec![
         (
@@ -500,10 +503,11 @@ fn fit_message_record_with_developer_fields() {
 
     for dfd_spec in developer_field_descriptions {
         println!("dfd_spec: {:?}", dfd_spec);
+        let field_number = u8::from(dfd_spec.2.clone());
         let fd = make_field_description(
             dfd_spec.0, dfd_spec.1, dfd_spec.2, dfd_spec.3, dfd_spec.4, dfd_spec.5,
         );
-        parsing_state.set_developer_data_definition(0, FitDataMessage::FieldDescription(fd));
+        parsing_state.add_developer_field_description(0, field_number, Arc::new(fd));
     }
 
     let header = FitRecordHeader::Normal(FitNormalRecordHeader {

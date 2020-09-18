@@ -1,6 +1,7 @@
 use std::io;
 use errors;
 use errors::Result;
+use std::mem::size_of;
 
 use fitparsingstate::FitParsingState;
 use {parse_fit_message, FitFileHeader, FitMessage, FitDataMessage};
@@ -38,6 +39,7 @@ impl FitFile {
             Err(e) => panic!("unable to parse header: {:?}", e),
         };
 
+
         if file_header.data_size as usize > self.max_file_size {
             return Err(errors::fit_file_too_large(
                 self.max_file_size,
@@ -69,7 +71,6 @@ impl FitFile {
         while inp.len() > 2 {
             match parse_fit_message(inp, ps) {
                 Ok((fm, out)) => {
-                    //println!("{}", fm);
                     self.messages.push(fm);
                     inp = out;
                 },

@@ -3,7 +3,6 @@
 use std::collections::HashMap;
 use std::convert::From;
 use std::ops::Deref;
-use std::rc::Rc;
 use std::sync::Arc;
 
 use std::fmt;
@@ -33,13 +32,14 @@ use fitparsers::{
 };
 use fitparsingstate::FitParsingState;
 use fittypes::{
-    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum, FitMessageDeveloperDataId,
+    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum,
     FitMessageDeviceSettings, FitMessageFieldDescription,
+    FitMessageDeveloperDataId
 };
 
 use fittypes_utils::FitFieldDateTime;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 enum FitNormalRecordHeaderMessageType {
     Data,
     Definition,
@@ -55,7 +55,7 @@ impl From<u8> for FitNormalRecordHeaderMessageType {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitNormalRecordHeader {
     message_type: FitNormalRecordHeaderMessageType,
     developer_fields_present: bool,
@@ -75,13 +75,13 @@ impl FitNormalRecordHeader {
 // these are supposed to come after some message indicating the base time
 // to_which time_offset should be added, so we'll require extra context from
 // the parser to figure out the absolute timestmap
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitCompressedTimestampHeader {
     local_mesg_num: u16,
     offset_secs: u8,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitFileHeader {
     header_size: u8,
     protocol_version: u8,
@@ -154,12 +154,12 @@ pub fn parse_fit_message<'a>(
             }
             FitNormalRecordHeaderMessageType::Definition => {
 
-                let (definition_message, o) = FitDefinitionMessage::parse(o, normal_header)?;
-                parsing_state.add(
+                let (definition_message, o) = FitDefinitionMessage::parse(o, normal_header, parsing_state)?;
+                parsing_state.add_definition(
                     definition_message.header.local_mesg_num,
-                    definition_message.clone(),
+                    Arc::clone(&definition_message),
                 );
-                (FitMessage::Definition(definition_message.clone()), o)
+                (FitMessage::Definition(Arc::clone(&definition_message)), o)
             }
         },
         FitRecordHeader::CompressedTimestamp(compressed_timestamp_header) => {
@@ -198,15 +198,18 @@ pub fn parse_fit_message<'a>(
                             }
                         }
                     }
-                }
+                },
                 FitDataMessage::FieldDescription(fd) => {
-                    if let BasicValue::Single(ref ddi) = fd.developer_data_index.value {
-                        parsing_state.set_developer_data_definition(
-                            u8::from(ddi),
-                            FitDataMessage::FieldDescription(fd.clone()),
-                        );
-                    }
-                }
+
+                    let developer_data_index = u8::from(fd.developer_data_index.value.get_single()?);
+                    let field_definition_number = u8::from(fd.field_definition_number.value.get_single()?);
+                    parsing_state.add_developer_field_description(developer_data_index, field_definition_number, Arc::<FitMessageFieldDescription>::from(fd.clone()));              
+                },
+                FitDataMessage::DeveloperDataId(ddi) => {
+                    let developer_data_index = u8::from(ddi.developer_data_index.value.get_single()?);
+                    parsing_state.add_developer_data_id(developer_data_index, Arc::<FitMessageDeveloperDataId>::from(ddi.clone()));
+
+                },
                 _ => {}
             }
         }
@@ -246,7 +249,7 @@ impl<T: FitFieldParseable + Clone> BasicValue<T> {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitFieldBasicValue<T: FitFieldParseable + Clone> {
     pub value: BasicValue<T>,
     pub units: String,
@@ -368,7 +371,7 @@ pub enum PreAdjustedValue<T: FitFieldParseable + FitF64Convertible + Clone> {
     Vec(Vec<T>),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitFieldAdjustedValue<T: FitFieldParseable + FitF64Convertible + Clone> {
     pub value: AdjustedValue,
     pub parsed_value: PreAdjustedValue<T>,
@@ -750,7 +753,7 @@ impl FitParseConfig {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FitMessageUnknownToSdk {
     number: u16,
     header: FitRecordHeader,
@@ -777,8 +780,8 @@ impl FitMessageUnknownToSdk {
         header: FitRecordHeader,
         parsing_state: &mut FitParsingState,
         _timestamp: Option<FitFieldDateTime>,
-    ) -> Result<(Rc<FitMessageUnknownToSdk>, &'a [u8])> {
-        let definition_message = parsing_state.get(header.local_mesg_num())?;
+    ) -> Result<(FitMessageUnknownToSdk, &'a [u8])> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         let mut message = FitMessageUnknownToSdk {
             number: number,
             header: header,
@@ -813,10 +816,13 @@ impl FitMessageUnknownToSdk {
 
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
-            let dev_data_definition =
-                parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
-            let field_description =
-                dev_data_definition.get_field_description(dev_field.definition_number)?;
+            let field_description = parsing_state
+                .get_developer_field_description(dev_field.developer_data_index,
+                    dev_field.definition_number)?;
+            //let dev_data_definition =
+            //    parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
+            //let field_description =
+            //    dev_data_definition.get_field_description(dev_field.definition_number)?;
 
             let base_type_num = u8::from(field_description.fit_base_type_id.get_single()?);
 
@@ -838,7 +844,7 @@ impl FitMessageUnknownToSdk {
             }
         }
 
-        Ok((Rc::new(message), inp2))
+        Ok((message, inp2))
     }
 
     fn parse_internal<'a>(
@@ -858,7 +864,7 @@ impl FitMessageUnknownToSdk {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum FitGlobalMesgNum {
     Known(FitFieldMesgNum),
     Unknown(u16),
@@ -972,7 +978,7 @@ impl FitFieldDefinition {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitDeveloperFieldDefinition {
     definition_number: u8,
     field_size: usize,
@@ -986,7 +992,7 @@ pub struct FitDeveloperFieldDefinition {
 // The definition message will be a companion to the parser for
 // the actual message type.
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitDefinitionMessage {
     header: FitNormalRecordHeader,
     endianness: Endianness,
@@ -996,7 +1002,30 @@ pub struct FitDefinitionMessage {
     field_definitions: Vec<FitFieldDefinition>,
     num_developer_fields: usize,
     developer_field_definitions: Vec<FitDeveloperFieldDefinition>,
+    developer_field_descriptions: HashMap<u8, HashMap<u8, Arc<FitMessageFieldDescription>>>,
+    developer_data_ids: HashMap<u8, Arc<FitMessageDeveloperDataId>>,
 }
+
+/*
+// because deriving doesn't work for the HashMap members
+impl PartialEq for FitDefinitionMessage {
+    fn eq(&self, other: &Self) -> bool {
+        if self.header != other.header { return false; }
+        if self.endianness != other.endianness { return false; }
+        if self.global_mesg_num != other.global_mesg_num { return false; }
+        if self.num_fields != other.num_fields { return false; }
+        if self.message_size != other.message_size { return false; }
+        if self.field_definitions != other.field_definitions { return false; }
+        if self.num_developer_fields != other.num_developer_fields { return false; }
+        if self.developer_field_definitions != other.developer_field_definitions { return false; }
+        for (k, v) in self.developer_field_descriptions {
+            if other.developer_field_descriptions[&k] != v { return false; }
+        }
+
+        return true;
+    }
+}
+*/
 
 impl fmt::Display for FitDefinitionMessage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -1029,21 +1058,49 @@ impl fmt::Display for FitDefinitionMessage {
         for developer_field_definition in &self.developer_field_definitions {
             writeln!(f, "  {: >30}{:?}", " ", developer_field_definition)?;
         }
+        writeln!(f, "  {: >28}:", "developer_field_descriptions")?;
+        for developer_field_description in &self.developer_field_descriptions {
+            writeln!(f, "  {: >30}{:?}", " ", developer_field_description)?;
+        }
+        writeln!(f, "  {: >28}: {:?}", "developer_data_ids", self.developer_data_ids)?;
         Ok(())
     }
 }
 
 impl FitDefinitionMessage {
-    fn parse(
-        input: &[u8],
+    fn parse<'a, 'b>(
+        input: &'a [u8],
         header: FitNormalRecordHeader,
-    ) -> Result<(Arc<FitDefinitionMessage>, &[u8])> {
-        let (o, fdm) = parse_definition_message(input, header)?;
+        parsing_state: &'b FitParsingState
+    ) -> Result<(Arc<FitDefinitionMessage>, &'a [u8])> {
+        let (o, mut fdm) = parse_definition_message(input, header)?;
+        
+        // if there are developer fields, find their field descriptions and add them
+        if fdm.num_developer_fields > 0 {
+            let mut ddis: Vec<u8> = fdm.developer_field_definitions.iter().map(|ffd| ffd.developer_data_index).collect::<Vec<u8>>();
+            ddis.sort();
+            ddis.dedup();
+           
+            for dfd in &fdm.developer_field_definitions {
+                let fd = parsing_state.get_developer_field_description(dfd.developer_data_index, dfd.definition_number)?;
+                let p = fdm
+                    .developer_field_descriptions
+                    .entry(dfd.developer_data_index)
+                    .or_insert(HashMap::new());
+                p.insert(dfd.definition_number, Arc::clone(&fd));
+            }
+
+            for developer_data_index in ddis {
+                let developer_data_id = parsing_state.get_developer_data_id(developer_data_index)?;
+                fdm.developer_data_ids.insert(developer_data_index, developer_data_id);
+            }
+        }
+        
         Ok((Arc::new(fdm), o))
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum FitRecordHeader {
     Normal(FitNormalRecordHeader),
     CompressedTimestamp(FitCompressedTimestampHeader),
@@ -1054,44 +1111,6 @@ impl FitRecordHeader {
         match self {
             FitRecordHeader::Normal(nrh) => nrh.local_mesg_num,
             FitRecordHeader::CompressedTimestamp(ctrh) => ctrh.local_mesg_num,
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct FitDeveloperDataDefinition {
-    developer_data_id: Option<Rc<FitMessageDeveloperDataId>>,
-    field_descriptions: HashMap<u8, Rc<FitMessageFieldDescription>>,
-}
-
-impl FitDeveloperDataDefinition {
-    fn new() -> FitDeveloperDataDefinition {
-        FitDeveloperDataDefinition {
-            developer_data_id: None,
-            field_descriptions: HashMap::new(),
-        }
-    }
-
-    fn add(&mut self, message: FitDataMessage) -> &Self {
-        match message {
-            FitDataMessage::FieldDescription(fd) => {
-                if let BasicValue::Single(ref fdn) = fd.field_definition_number.value {
-                    self.field_descriptions.insert(<u8>::from(fdn), fd.clone());
-                }
-                self
-            }
-            FitDataMessage::DeveloperDataId(ddi) => {
-                self.developer_data_id = Some(ddi.clone());
-                self
-            }
-            _ => self,
-        }
-    }
-
-    fn get_field_description(&self, field_number: u8) -> Result<Rc<FitMessageFieldDescription>> {
-        match self.field_descriptions.get(&field_number) {
-            Some(fd) => Ok(fd.clone()),
-            None => Err(errors::developer_field_description_not_found(field_number)),
         }
     }
 }
@@ -1306,7 +1325,7 @@ impl fmt::Display for FitString {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 enum FitBaseValue {
     Enum(FitEnum),
     EnumVec(FitEnumVec),
@@ -1471,21 +1490,21 @@ impl FitBaseValue {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 struct FitFieldDeveloperData {
-    field_description: Rc<FitMessageFieldDescription>,
+    field_description: Arc<FitMessageFieldDescription>,
     value: FitBaseValue,
 }
 
 impl FitFieldDeveloperData {
     fn parse<'a>(
         input: &'a [u8],
-        field_description: Rc<FitMessageFieldDescription>,
+        field_description: Arc<FitMessageFieldDescription>,
         parse_config: &FitParseConfig,
     ) -> Result<FitFieldDeveloperData> {
         let val = FitBaseValue::parse(input, parse_config)?;
         Ok(FitFieldDeveloperData {
-            field_description: field_description.clone(),
+            field_description: field_description,
             value: val,
         })
     }
@@ -1628,6 +1647,8 @@ mod tests {
             developer_field_definitions: vec![],
             num_developer_fields: 0,
             message_size: 11,
+            developer_data_ids: HashMap::new(),
+            developer_field_descriptions: HashMap::new(),
         };
 
         let (_, res) = parse_definition_message(&defintion_message_data, rh).unwrap();

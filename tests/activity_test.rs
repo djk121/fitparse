@@ -8,11 +8,6 @@ use fitparse::{FitFieldAdjustedValue, FitFieldBasicValue, FitMessage, FitParseCo
 extern crate nom;
 use nom::number::Endianness;
 
-#[test]
-fn smoke() {
-    assert_eq!(1, 1);
-}
-
 macro_rules! ffbv {
     ("unparsed", $ty:ty, "single") => {
         FitFieldBasicValue {
@@ -220,11 +215,14 @@ fn activity_test() {
     let mut ff = FitFile::new(1024 * 1024 * 10, true);
     let slice: &mut &[u8] = &mut data.as_ref();
 
+    println!("pre parse");
+
     match ff.parse(slice) {
         Err(e) => panic!("failed to parse file: {:?}", e),
         _ => (),
     }
 
+    println!("post parse");
     assert_eq!(32, ff.messages.len());
 
     match ff.messages[29] {

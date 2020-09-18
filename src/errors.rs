@@ -62,8 +62,11 @@ pub enum FitParseError {
     MissingFitBaseType,
     #[error("attempt to parse uncovered base value variant")]
     ParseUnknownBaseValue,
-    #[error("developer data definition number not found: {0}")]
-    DeveloperDataDefinitionNotFound(u8),
+    #[error("developer data definition number not found: {developer_data_id}, source: {backtrace}")]
+    DeveloperDataDefinitionNotFound {
+        developer_data_id: u8,
+        backtrace: Backtrace
+    },
     #[error("developer field number not found: {0}")]
     DeveloperFieldDescriptionNotFound(u8),
     #[error("insufficient data for shift")]
@@ -221,7 +224,8 @@ pub(crate) fn parse_unknown_base_value() -> FitParseError {
 
 #[allow(dead_code)]
 pub(crate) fn developer_data_definition_not_found(dddn: u8) -> FitParseError {
-    FitParseError::DeveloperDataDefinitionNotFound(dddn)
+    let bt = Backtrace::force_capture();
+    FitParseError::DeveloperDataDefinitionNotFound { developer_data_id: dddn, backtrace: bt }
 }
 
 #[allow(dead_code)]
