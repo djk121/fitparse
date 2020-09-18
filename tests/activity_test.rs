@@ -240,9 +240,17 @@ fn activity_test() {
                     1000.0,
                     0.0,
                     "m/s".to_string(),
-                    vec![
-                        FitParseConfig::new_from_component(124, 4, 134, Endianness::Big, 0, 16, Some((1000.0, 0.0)), Some("m/s".to_string())).unwrap(),
-                    ],
+                    vec![FitParseConfig::new_from_component(
+                        124,
+                        4,
+                        134,
+                        Endianness::Big,
+                        0,
+                        16,
+                        Some((1000.0, 0.0)),
+                        Some("m/s".to_string())
+                    )
+                    .unwrap(),],
                     "single"
                 )
             );
@@ -255,9 +263,17 @@ fn activity_test() {
                     1000.0,
                     0.0,
                     "m/s".to_string(),
-                    vec![
-                        FitParseConfig::new_from_component(125, 4, 134, Endianness::Big, 0, 16, Some((1000.0, 0.0)), Some("m/s".to_string())).unwrap(),
-                    ],
+                    vec![FitParseConfig::new_from_component(
+                        125,
+                        4,
+                        134,
+                        Endianness::Big,
+                        0,
+                        16,
+                        Some((1000.0, 0.0)),
+                        Some("m/s".to_string())
+                    )
+                    .unwrap(),],
                     "single"
                 )
             );

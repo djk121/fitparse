@@ -1,9 +1,9 @@
-use std::io;
 use errors;
 use errors::Result;
+use std::io;
 
 use fitparsingstate::FitParsingState;
-use {parse_fit_message, FitFileHeader, FitMessage, FitDataMessage};
+use {parse_fit_message, FitDataMessage, FitFileHeader, FitMessage};
 
 pub struct FitFile {
     max_file_size: usize,
@@ -38,7 +38,6 @@ impl FitFile {
             Err(e) => panic!("unable to parse header: {:?}", e),
         };
 
-
         if file_header.data_size as usize > self.max_file_size {
             return Err(errors::fit_file_too_large(
                 self.max_file_size,
@@ -72,7 +71,7 @@ impl FitFile {
                 Ok((fm, out)) => {
                     self.messages.push(fm);
                     inp = out;
-                },
+                }
                 Err(e) => {
                     panic!("error: {}", e);
                 }

@@ -5,7 +5,7 @@ use FitDefinitionMessage;
 
 use errors;
 use errors::Result;
-use fittypes::{FitMessageFieldDescription, FitMessageDeveloperDataId};
+use fittypes::{FitMessageDeveloperDataId, FitMessageFieldDescription};
 use fittypes_utils::FitFieldDateTime;
 
 pub struct FitParsingState {
@@ -63,18 +63,32 @@ impl FitParsingState {
         }
     }
 
-    pub fn add_developer_data_id(&mut self, developer_data_index: u8, ddi: Arc<FitMessageDeveloperDataId>) {
+    pub fn add_developer_data_id(
+        &mut self,
+        developer_data_index: u8,
+        ddi: Arc<FitMessageDeveloperDataId>,
+    ) {
         self.developer_data_ids.insert(developer_data_index, ddi);
     }
 
-    pub fn get_developer_data_id(&self, developer_data_index: u8) -> Result<Arc<FitMessageDeveloperDataId>> {
+    pub fn get_developer_data_id(
+        &self,
+        developer_data_index: u8,
+    ) -> Result<Arc<FitMessageDeveloperDataId>> {
         match self.developer_data_ids.get(&developer_data_index) {
             Some(ddi) => Ok(Arc::clone(ddi)),
-            None => Err(errors::developer_data_definition_not_found(developer_data_index))
+            None => Err(errors::developer_data_definition_not_found(
+                developer_data_index,
+            )),
         }
     }
 
-    pub fn add_developer_field_description(&mut self, developer_data_index: u8, field_number: u8, fd: Arc<FitMessageFieldDescription>) {
+    pub fn add_developer_field_description(
+        &mut self,
+        developer_data_index: u8,
+        field_number: u8,
+        fd: Arc<FitMessageFieldDescription>,
+    ) {
         let p = self
             .developer_field_descriptions
             .entry(developer_data_index)
@@ -82,16 +96,21 @@ impl FitParsingState {
         p.insert(field_number, Arc::clone(&fd));
     }
 
-
-    pub fn get_developer_field_description(&self, developer_data_index: u8, field_number: u8) -> Result<Arc<FitMessageFieldDescription>> {
+    pub fn get_developer_field_description(
+        &self,
+        developer_data_index: u8,
+        field_number: u8,
+    ) -> Result<Arc<FitMessageFieldDescription>> {
         match self.developer_field_descriptions.get(&developer_data_index) {
-            Some(fd_map) => {
-                match fd_map.get(&field_number) {
-                    Some(fd) => Ok(Arc::clone(fd)),
-                    None => Err(errors::developer_data_definition_not_found(developer_data_index))
-                }
+            Some(fd_map) => match fd_map.get(&field_number) {
+                Some(fd) => Ok(Arc::clone(fd)),
+                None => Err(errors::developer_data_definition_not_found(
+                    developer_data_index,
+                )),
             },
-            None => Err(errors::developer_data_definition_not_found(developer_data_index))
+            None => Err(errors::developer_data_definition_not_found(
+                developer_data_index,
+            )),
         }
     }
 }

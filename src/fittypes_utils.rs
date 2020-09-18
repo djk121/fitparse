@@ -1,3 +1,4 @@
+use bit_subset;
 use chrono::{DateTime, Duration, FixedOffset, TimeZone, UTC};
 use errors;
 use errors::Result;
@@ -9,7 +10,6 @@ use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
 use std::sync::Arc;
-use bit_subset;
 use FitBaseValue;
 use FitDefinitionMessage;
 use FitFieldDefinition;
@@ -286,15 +286,14 @@ macro_rules! main_parse_message {
                     stringify!($output_type).to_string(),
                     $message.definition_message.clone(),
                     $input[..($message.definition_message.message_size)].to_vec(),
-                    e
-                ))
+                    e,
+                ));
             }
         };
 
         o
     }};
 }
-
 
 /*
 #[macro_export]
@@ -321,7 +320,10 @@ macro_rules! parse_subfields {
 macro_rules! parse_developer_fields {
     ($inp2:expr, $message:expr, $parsing_state:expr) => {
         for dev_field in &$message.definition_message.developer_field_definitions {
-            let field_description = $parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+            let field_description = $parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
 
             //let dev_data_definition =
             //    $parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
@@ -354,7 +356,7 @@ macro_rules! parse_developer_fields {
             let parse_config = FitParseConfig::new(
                 FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
                 $message.definition_message.endianness,
-                0.0
+                0.0,
             );
 
             let dd = FitFieldDeveloperData::parse($inp2, field_description.clone(), &parse_config)?;
@@ -412,7 +414,13 @@ macro_rules! fmt_developer_fields {
                 let name = &field_names.get_vec()?[0];
                 let field_units = &developer_field.field_description.units;
                 let units = &field_units.get_vec()?[0];
-                writeln!($f, "  {:>28}: {} [{}]", format!("{}", name), developer_field.value, units)?; 
+                writeln!(
+                    $f,
+                    "  {:>28}: {} [{}]",
+                    format!("{}", name),
+                    developer_field.value,
+                    units
+                )?;
             }
         }
     };
@@ -435,7 +443,9 @@ macro_rules! fmt_raw_bytes {
 #[macro_export]
 macro_rules! fmt_message_field {
     ($thing:expr, $thingname:expr, $f:ident) => {
-        if $thing.is_parsed() { writeln!($f, "  {: >28}: {}", $thingname, $thing)?; }
+        if $thing.is_parsed() {
+            writeln!($f, "  {: >28}: {}", $thingname, $thing)?;
+        }
     };
 }
 
@@ -674,7 +684,16 @@ impl FitMessageHr {
                         let _components = message.time256.parse(parse_input, &parse_config)?;
                         saved_outp = &inp[parse_config.field_size()..];
 
-                        let action = FitParseConfig::new_from_component(0, 2, 0, parse_config.endianness(), 0, 0, Some((1.0, 0.0)), None)?;
+                        let action = FitParseConfig::new_from_component(
+                            0,
+                            2,
+                            0,
+                            parse_config.endianness(),
+                            0,
+                            0,
+                            Some((1.0, 0.0)),
+                            None,
+                        )?;
                         actions.push(action);
                     }
 
@@ -722,7 +741,7 @@ impl FitMessageHr {
                             9, // definition_number
                             4, // field_size
                             0, // base_type
-                        )?; 
+                        )?;
 
                         for i in 0..range.len() {
                             let bytes = bit_subset(

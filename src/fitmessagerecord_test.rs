@@ -60,42 +60,40 @@ fn make_definition_message_record() -> FitDefinitionMessage {
         num_fields: 20,
         message_size: 46,
         field_definitions: make_field_definitions(vec![
-            (253, 4, 134),    // timestamp, uint32
-            (0, 4, 133),      // position_lat, sint32
-            (1, 4, 133),      // position_long, sint32
-            (5, 4, 134),      // distance, uint32
-            (73, 4, 134),     // enhanced_speed, uint32
-            (78, 4, 134),     // enhanced_altitude, uint32
-            (39, 2, 131),     // vertical_oscillation, uint16
-            (40, 2, 131),     // stance_time_percent, uint16
-            (41, 2, 131),     // stance_time, uint16
-            (83, 2, 131),     // vertical_ratio, uint16
-            (84, 2, 131),     // stance_time_balance, uint16
-            (85, 2, 131),     // step_length, uint16
-            (87, 2, 131),     // unknown_87, uint16
-            (88, 2, 131),     // unknown_88, uint16
-            (3, 1, 2),        // heart_rate, uint8
-            (4, 1, 2),        // cadence, uint8
-            (13, 1, 1),       // temperature, sint8
-            (42, 1, 0),       // activity_type, activity_type
-            (53, 1, 2),       // fractional_cadence, uint8
-            (90, 1, 1),       // unknown_90, sint8
+            (253, 4, 134), // timestamp, uint32
+            (0, 4, 133),   // position_lat, sint32
+            (1, 4, 133),   // position_long, sint32
+            (5, 4, 134),   // distance, uint32
+            (73, 4, 134),  // enhanced_speed, uint32
+            (78, 4, 134),  // enhanced_altitude, uint32
+            (39, 2, 131),  // vertical_oscillation, uint16
+            (40, 2, 131),  // stance_time_percent, uint16
+            (41, 2, 131),  // stance_time, uint16
+            (83, 2, 131),  // vertical_ratio, uint16
+            (84, 2, 131),  // stance_time_balance, uint16
+            (85, 2, 131),  // step_length, uint16
+            (87, 2, 131),  // unknown_87, uint16
+            (88, 2, 131),  // unknown_88, uint16
+            (3, 1, 2),     // heart_rate, uint8
+            (4, 1, 2),     // cadence, uint8
+            (13, 1, 1),    // temperature, sint8
+            (42, 1, 0),    // activity_type, activity_type
+            (53, 1, 2),    // fractional_cadence, uint8
+            (90, 1, 1),    // unknown_90, sint8
         ]),
         num_developer_fields: 0,
         developer_field_definitions: vec![],
         developer_data_ids: HashMap::new(),
-        developer_field_descriptions: HashMap::new()
+        developer_field_descriptions: HashMap::new(),
     }
 }
 
 fn make_field_definitions(definitions: Vec<(u8, usize, u8)>) -> Vec<FitFieldDefinition> {
     definitions
         .iter()
-        .map(
-            |(definition_number, field_size, base_type)| {
-                FitFieldDefinition::new(*definition_number, *field_size, *base_type).unwrap()
-            }
-        )
+        .map(|(definition_number, field_size, base_type)| {
+            FitFieldDefinition::new(*definition_number, *field_size, *base_type).unwrap()
+        })
         .collect()
 }
 
@@ -250,14 +248,16 @@ fn make_field_description(
 #[test]
 fn fit_message_record() {
     let definition_message = Arc::new(make_definition_message_record());
-    
+
     let data_without_developer_fields = [
-            0b10010000,0b11000000,0b00111010,0b00111000,0b10100111,0b00110000,0b11100110,0b00100001,
-            0b11011000,0b01100001,0b11111111,0b10101000,0b00100011,0b00110101,0b00010001,0b00000000,
-            0b11001011,0b00001100,0b00000000,0b00000000,0b10111001,0b00001010,0b00000000,0b00000000,
-            0b00101010,0b00000011,0b11011000,0b00001110,0b11110110,0b00001001,0b11011011,0b00000010,
-            0b00010001,0b00010011,0b11100000,0b00101001,0b00000000,0b00000000,0b00101100,0b00000001,
-            0b10010101,0b01011001,0b00001001,0b00000001,0b00000000,0b11111110];
+        0b10010000, 0b11000000, 0b00111010, 0b00111000, 0b10100111, 0b00110000, 0b11100110,
+        0b00100001, 0b11011000, 0b01100001, 0b11111111, 0b10101000, 0b00100011, 0b00110101,
+        0b00010001, 0b00000000, 0b11001011, 0b00001100, 0b00000000, 0b00000000, 0b10111001,
+        0b00001010, 0b00000000, 0b00000000, 0b00101010, 0b00000011, 0b11011000, 0b00001110,
+        0b11110110, 0b00001001, 0b11011011, 0b00000010, 0b00010001, 0b00010011, 0b11100000,
+        0b00101001, 0b00000000, 0b00000000, 0b00101100, 0b00000001, 0b10010101, 0b01011001,
+        0b00001001, 0b00000001, 0b00000000, 0b11111110,
+    ];
 
     let mut parsing_state = FitParsingState::new();
     parsing_state.add_definition(0, definition_message.clone());
@@ -269,7 +269,8 @@ fn fit_message_record() {
     });
 
     let mut rec = FitMessageRecord::new(header, &mut parsing_state).unwrap();
-    rec.parse(&data_without_developer_fields, &mut parsing_state, None).unwrap();
+    rec.parse(&data_without_developer_fields, &mut parsing_state, None)
+        .unwrap();
 
     assert_eq!(
         rec.position_lat,
@@ -352,19 +353,20 @@ fn fit_message_record_with_developer_fields() {
 
     let definition_message_final = Arc::new(definition_message);
     let data_with_developer_fields = [
-        0b10010000,0b11000000,0b00111010,0b00111000,0b10100111,0b00110000,0b11100110,0b00100001,
-        0b11011000,0b01100001,0b11111111,0b10101000,0b00100011,0b00110101,0b00010001,0b00000000,
-        0b11001011,0b00001100,0b00000000,0b00000000,0b10111001,0b00001010,0b00000000,0b00000000,
-        0b00101010,0b00000011,0b11011000,0b00001110,0b11110110,0b00001001,0b11011011,0b00000010,
-        0b00010001,0b00010011,0b11100000,0b00101001,0b00000000,0b00000000,0b00101100,0b00000001,
-        0b10010101,0b01011001,0b00001001,0b00000001,0b00000000,0b11111110,0b00010000,0b00000001,
-        0b01011000,0b11100100,0b00000000,0b00000000,0b00000000,0b11100000,0b01000000,0b00000100,
-        0b00000000,0b01000110,0b00000000,0b00000000,0b00000000,0b00111010,0b01000001
+        0b10010000, 0b11000000, 0b00111010, 0b00111000, 0b10100111, 0b00110000, 0b11100110,
+        0b00100001, 0b11011000, 0b01100001, 0b11111111, 0b10101000, 0b00100011, 0b00110101,
+        0b00010001, 0b00000000, 0b11001011, 0b00001100, 0b00000000, 0b00000000, 0b10111001,
+        0b00001010, 0b00000000, 0b00000000, 0b00101010, 0b00000011, 0b11011000, 0b00001110,
+        0b11110110, 0b00001001, 0b11011011, 0b00000010, 0b00010001, 0b00010011, 0b11100000,
+        0b00101001, 0b00000000, 0b00000000, 0b00101100, 0b00000001, 0b10010101, 0b01011001,
+        0b00001001, 0b00000001, 0b00000000, 0b11111110, 0b00010000, 0b00000001, 0b01011000,
+        0b11100100, 0b00000000, 0b00000000, 0b00000000, 0b11100000, 0b01000000, 0b00000100,
+        0b00000000, 0b01000110, 0b00000000, 0b00000000, 0b00000000, 0b00111010, 0b01000001,
     ];
 
     let mut parsing_state = FitParsingState::new();
     parsing_state.add_definition(0, definition_message_final.clone());
-    
+
     let developer_field_descriptions = vec![
         (
             vec![FitString::new("Power".to_string())],
@@ -382,7 +384,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)
+                (15, 1, 2),
             ],
         ),
         (
@@ -401,7 +403,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)  
+                (15, 1, 2),
             ],
         ),
         (
@@ -420,7 +422,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)  
+                (15, 1, 2),
             ],
         ),
         (
@@ -439,7 +441,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)  
+                (15, 1, 2),
             ],
         ),
         (
@@ -458,7 +460,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)  
+                (15, 1, 2),
             ],
         ),
         (
@@ -477,7 +479,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)  
+                (15, 1, 2),
             ],
         ),
         (
@@ -496,7 +498,7 @@ fn fit_message_record_with_developer_fields() {
                 (2, 1, 2),
                 (6, 1, 2),
                 (7, 1, 1),
-                (15, 1, 2)  
+                (15, 1, 2),
             ],
         ),
     ];
@@ -517,7 +519,8 @@ fn fit_message_record_with_developer_fields() {
     });
 
     let mut rec = FitMessageRecord::new(header, &mut parsing_state).unwrap();
-    rec.parse(&data_with_developer_fields, &mut parsing_state, None).unwrap();
+    rec.parse(&data_with_developer_fields, &mut parsing_state, None)
+        .unwrap();
     assert_eq!(
         rec.position_lat,
         ffav!(
@@ -560,4 +563,3 @@ fn fit_message_record_with_developer_fields() {
         }
     }
 }
-

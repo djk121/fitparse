@@ -8,8 +8,8 @@ use std::sync::Arc;
 use std::fmt;
 
 extern crate bitvec;
-use bitvec::prelude as bv;
 use bitvec::order as bitvec_order;
+use bitvec::prelude as bv;
 
 extern crate chrono;
 
@@ -19,22 +19,21 @@ use nom::number::Endianness;
 extern crate conv;
 use conv::*;
 
-extern crate thiserror;
 extern crate anyhow;
+extern crate thiserror;
 
 use errors::Result;
 
 use fitparsers::{
-    parse_bool, parse_byte, parse_enum, parse_float32, parse_float64, parse_sint16, parse_sint32,
-    parse_sint64, parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32,
-    parse_uint32z, parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
-    parse_fit_file_header, parse_record_header, parse_definition_message
+    parse_bool, parse_byte, parse_definition_message, parse_enum, parse_fit_file_header,
+    parse_float32, parse_float64, parse_record_header, parse_sint16, parse_sint32, parse_sint64,
+    parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z,
+    parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
 };
 use fitparsingstate::FitParsingState;
 use fittypes::{
-    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum,
+    FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum, FitMessageDeveloperDataId,
     FitMessageDeviceSettings, FitMessageFieldDescription,
-    FitMessageDeveloperDataId
 };
 
 use fittypes_utils::FitFieldDateTime;
@@ -67,7 +66,7 @@ impl FitNormalRecordHeader {
         FitNormalRecordHeader {
             message_type: FitNormalRecordHeaderMessageType::from(message_type),
             developer_fields_present,
-            local_mesg_num
+            local_mesg_num,
         }
     }
 }
@@ -131,19 +130,18 @@ pub fn parse_fit_message<'a>(
     input: &'a [u8],
     parsing_state: &mut FitParsingState,
 ) -> Result<(FitMessage, &'a [u8])> {
-
     // failing to parse the header is unrecoverable
     let (o, header) = match parse_record_header(input) {
         Ok(res) => res,
         Err(e) => {
             //return Err(errors::parse_error(format!("error parsing header: {}", e)));
-            return Err(errors::FitParseError::ParseError(e.to_string()))
+            return Err(errors::FitParseError::ParseError(e.to_string()));
         }
     };
 
     let (fit_message, out) = match header {
         FitRecordHeader::Normal(normal_header) => match normal_header.message_type {
-            FitNormalRecordHeaderMessageType::Data => {                
+            FitNormalRecordHeaderMessageType::Data => {
                 let (data_message, o) = FitDataMessage::parse(
                     o,
                     FitRecordHeader::Normal(normal_header),
@@ -153,8 +151,8 @@ pub fn parse_fit_message<'a>(
                 (FitMessage::Data(data_message), o)
             }
             FitNormalRecordHeaderMessageType::Definition => {
-
-                let (definition_message, o) = FitDefinitionMessage::parse(o, normal_header, parsing_state)?;
+                let (definition_message, o) =
+                    FitDefinitionMessage::parse(o, normal_header, parsing_state)?;
                 parsing_state.add_definition(
                     definition_message.header.local_mesg_num,
                     Arc::clone(&definition_message),
@@ -169,7 +167,7 @@ pub fn parse_fit_message<'a>(
             let last_full_timestamp = parsing_state.get_last_timestamp()?;
             let new_from_offset = last_full_timestamp
                 .new_from_compressed_timestamp(compressed_timestamp_header.offset_secs)?;
-            
+
             let (data_message, o) = FitDataMessage::parse(
                 o,
                 FitRecordHeader::CompressedTimestamp(compressed_timestamp_header),
@@ -198,18 +196,26 @@ pub fn parse_fit_message<'a>(
                             }
                         }
                     }
-                },
+                }
                 FitDataMessage::FieldDescription(fd) => {
-
-                    let developer_data_index = u8::from(fd.developer_data_index.value.get_single()?);
-                    let field_definition_number = u8::from(fd.field_definition_number.value.get_single()?);
-                    parsing_state.add_developer_field_description(developer_data_index, field_definition_number, Arc::<FitMessageFieldDescription>::from(fd.clone()));              
-                },
+                    let developer_data_index =
+                        u8::from(fd.developer_data_index.value.get_single()?);
+                    let field_definition_number =
+                        u8::from(fd.field_definition_number.value.get_single()?);
+                    parsing_state.add_developer_field_description(
+                        developer_data_index,
+                        field_definition_number,
+                        Arc::<FitMessageFieldDescription>::from(fd.clone()),
+                    );
+                }
                 FitDataMessage::DeveloperDataId(ddi) => {
-                    let developer_data_index = u8::from(ddi.developer_data_index.value.get_single()?);
-                    parsing_state.add_developer_data_id(developer_data_index, Arc::<FitMessageDeveloperDataId>::from(ddi.clone()));
-
-                },
+                    let developer_data_index =
+                        u8::from(ddi.developer_data_index.value.get_single()?);
+                    parsing_state.add_developer_data_id(
+                        developer_data_index,
+                        Arc::<FitMessageDeveloperDataId>::from(ddi.clone()),
+                    );
+                }
                 _ => {}
             }
         }
@@ -261,7 +267,7 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
         FitFieldBasicValue {
             value: BasicValue::<T>::NotYetParsedSingle,
             units: units,
-            components: vec![]
+            components: vec![],
         }
     }
 
@@ -284,11 +290,15 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
     fn is_parsed(&self) -> bool {
         match self.value {
             BasicValue::NotYetParsedSingle | BasicValue::NotYetParsedVec => false,
-            _ => true
+            _ => true,
         }
     }
 
-    fn parse(&mut self, input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+    fn parse(
+        &mut self,
+        input: &[u8],
+        parse_config: &FitParseConfig,
+    ) -> Result<Vec<FitParseConfig>> {
         match self.value {
             BasicValue::NotYetParsedSingle | BasicValue::Single(_) => {
                 self.value = BasicValue::Single(T::parse(input, parse_config)?);
@@ -378,7 +388,7 @@ pub struct FitFieldAdjustedValue<T: FitFieldParseable + FitF64Convertible + Clon
     pub units: String,
     pub scale: f64,
     pub offset: f64,
-    pub components: Vec<FitParseConfig>
+    pub components: Vec<FitParseConfig>,
 }
 
 impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> {
@@ -419,11 +429,15 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
     fn is_parsed(&self) -> bool {
         match self.value {
             AdjustedValue::NotYetParsedSingle | AdjustedValue::NotYetParsedVec => false,
-            _ => true
+            _ => true,
         }
     }
 
-    fn parse(&mut self, input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+    fn parse(
+        &mut self,
+        input: &[u8],
+        parse_config: &FitParseConfig,
+    ) -> Result<Vec<FitParseConfig>> {
         match self.value {
             AdjustedValue::NotYetParsedSingle | AdjustedValue::Single(_) => {
                 let x = T::parse(input, parse_config)?;
@@ -441,7 +455,8 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
                     outp = &outp[parse_config.base_type_size()..];
                     num_to_parse = num_to_parse - 1;
                 }
-                self.value = AdjustedValue::Vec(v.iter().map(|x| self.adjust(x, parse_config)).collect());
+                self.value =
+                    AdjustedValue::Vec(v.iter().map(|x| self.adjust(x, parse_config)).collect());
             }
         }
         let mut actions = vec![];
@@ -461,19 +476,19 @@ impl<T: FitFieldParseable + FitF64Convertible + Clone> FitFieldAdjustedValue<T> 
 
         // FIXME: there should be a cleaner way to configure this, but if
         // this is a component, and scale/offset are in the Fit Profile
-        // for the target field, but not for the component definition, 
+        // for the target field, but not for the component definition,
         // we don't want to adjust the field at all.
         if parse_config.use_stored_input() && parse_config.scale_and_offset.is_none() {
-            return FitFloat64::new(adjusted)
+            return FitFloat64::new(adjusted);
         }
 
         // if scale/offset are present in a component definition, they are
         // carried through the parse_config to here. If they are present on the
-        // parse_config, use them instead of scale/offset as defined in 
+        // parse_config, use them instead of scale/offset as defined in
         // the field definition row.
         let (scale, offset) = match parse_config.scale_and_offset {
             Some(scale_and_offset) => scale_and_offset,
-            None => (self.scale, self.offset)
+            None => (self.scale, self.offset),
         };
 
         if scale != 1.0 {
@@ -605,7 +620,7 @@ impl FitParseConfig {
             bit_range: None,
             bytes_to_parse: None,
             scale_and_offset: None,
-            units: None
+            units: None,
         }
     }
 
@@ -617,16 +632,14 @@ impl FitParseConfig {
         bit_start: usize,
         num_bits: usize,
         scale_and_offset: Option<(f64, f64)>,
-        units: Option<String>
+        units: Option<String>,
     ) -> Result<FitParseConfig> {
         Ok(FitParseConfig {
-            field_definition: Some(
-                FitFieldDefinition::new(
-                    definition_number,
-                    field_size,
-                    base_type
-                )?    
-            ),
+            field_definition: Some(FitFieldDefinition::new(
+                definition_number,
+                field_size,
+                base_type,
+            )?),
             endianness: Some(endianness),
             tz_offset_secs: None,
             bit_range: Some((bit_start, num_bits)),
@@ -657,7 +670,6 @@ impl FitParseConfig {
     }
 
     pub fn get_stored_input(&self) -> Result<Vec<u8>> {
-        
         if self.bit_range.is_none() {
             panic!("FitParseConfig::get_stored_input without bit_range set")
         }
@@ -669,12 +681,17 @@ impl FitParseConfig {
         let (start, num_bits) = self.bit_range.unwrap();
 
         if let Some(ref bytes) = self.bytes_to_parse {
-            let o = bit_subset(bytes, start, num_bits, self.endianness.unwrap(), self.field_size())?;
+            let o = bit_subset(
+                bytes,
+                start,
+                num_bits,
+                self.endianness.unwrap(),
+                self.field_size(),
+            )?;
             Ok(o)
         } else {
             panic!("FitParseConfig::get_stored_input without bytes_to_parse set")
         }
-        
     }
 
     pub fn field_definition_number(&self) -> u8 {
@@ -810,15 +827,17 @@ impl FitMessageUnknownToSdk {
                     "FitMessageUnknownToSdk".to_string(),
                     definition_message,
                     input[..(message.definition_message.message_size)].to_vec(),
-                    e));
+                    e,
+                ));
             }
         };
 
         let mut inp2 = o;
         for dev_field in &message.definition_message.developer_field_definitions {
-            let field_description = parsing_state
-                .get_developer_field_description(dev_field.developer_data_index,
-                    dev_field.definition_number)?;
+            let field_description = parsing_state.get_developer_field_description(
+                dev_field.developer_data_index,
+                dev_field.definition_number,
+            )?;
             //let dev_data_definition =
             //    parsing_state.get_developer_data_definition(dev_field.developer_data_index)?;
             //let field_description =
@@ -829,7 +848,7 @@ impl FitMessageUnknownToSdk {
             let field_def = FitFieldDefinition::new(
                 dev_field.definition_number,
                 dev_field.field_size,
-                base_type_num
+                base_type_num,
             )?;
             let parse_config =
                 FitParseConfig::new(field_def, message.definition_message.endianness, 0.0);
@@ -879,7 +898,6 @@ impl fmt::Display for FitGlobalMesgNum {
     }
 }
 
-
 impl FitGlobalMesgNum {
     // can I just parse FitFieldMesgNum directly?
     fn parse(input: &[u8], endianness: Endianness) -> Result<(FitGlobalMesgNum, &[u8])> {
@@ -904,19 +922,24 @@ pub struct FitFieldDefinition {
 }
 
 impl FitFieldDefinition {
-
-    pub fn new(definition_number: u8, field_size: usize, base_type: u8) -> Result<FitFieldDefinition> {
+    pub fn new(
+        definition_number: u8,
+        field_size: usize,
+        base_type: u8,
+    ) -> Result<FitFieldDefinition> {
         let bt = match FitFieldFitBaseType::from(base_type) {
             FitFieldFitBaseType::UnknownToSdk => {
-                return Err(errors::unexpected_fit_field_base_type(FitFieldFitBaseType::UnknownToSdk))
-            },
+                return Err(errors::unexpected_fit_field_base_type(
+                    FitFieldFitBaseType::UnknownToSdk,
+                ))
+            }
             t => t,
         };
 
         Ok(FitFieldDefinition {
             definition_number: definition_number,
             field_size: field_size,
-            base_type: bt
+            base_type: bt,
         })
     }
 
@@ -947,7 +970,7 @@ impl FitFieldDefinition {
         self.field_size / self.base_type_size()
     }
 
-    pub fn base_type_name(&self) -> String { 
+    pub fn base_type_name(&self) -> String {
         self.base_type.to_string()
     }
 
@@ -970,9 +993,10 @@ impl FitFieldDefinition {
             FitFieldFitBaseType::Sint64 => 8,
             FitFieldFitBaseType::Uint64 => 8,
             FitFieldFitBaseType::Uint64z => 8,
-            other => {
-                panic!("should be impossible: bad base_type ({:?}) after construction", other)
-            }
+            other => panic!(
+                "should be impossible: bad base_type ({:?}) after construction",
+                other
+            ),
         };
         sz
     }
@@ -1062,7 +1086,11 @@ impl fmt::Display for FitDefinitionMessage {
         for developer_field_description in &self.developer_field_descriptions {
             writeln!(f, "  {: >30}{:?}", " ", developer_field_description)?;
         }
-        writeln!(f, "  {: >28}: {:?}", "developer_data_ids", self.developer_data_ids)?;
+        writeln!(
+            f,
+            "  {: >28}: {:?}",
+            "developer_data_ids", self.developer_data_ids
+        )?;
         Ok(())
     }
 }
@@ -1071,18 +1099,25 @@ impl FitDefinitionMessage {
     fn parse<'a, 'b>(
         input: &'a [u8],
         header: FitNormalRecordHeader,
-        parsing_state: &'b FitParsingState
+        parsing_state: &'b FitParsingState,
     ) -> Result<(Arc<FitDefinitionMessage>, &'a [u8])> {
         let (o, mut fdm) = parse_definition_message(input, header)?;
-        
+
         // if there are developer fields, find their field descriptions and add them
         if fdm.num_developer_fields > 0 {
-            let mut ddis: Vec<u8> = fdm.developer_field_definitions.iter().map(|ffd| ffd.developer_data_index).collect::<Vec<u8>>();
+            let mut ddis: Vec<u8> = fdm
+                .developer_field_definitions
+                .iter()
+                .map(|ffd| ffd.developer_data_index)
+                .collect::<Vec<u8>>();
             ddis.sort();
             ddis.dedup();
-           
+
             for dfd in &fdm.developer_field_definitions {
-                let fd = parsing_state.get_developer_field_description(dfd.developer_data_index, dfd.definition_number)?;
+                let fd = parsing_state.get_developer_field_description(
+                    dfd.developer_data_index,
+                    dfd.definition_number,
+                )?;
                 let p = fdm
                     .developer_field_descriptions
                     .entry(dfd.developer_data_index)
@@ -1091,11 +1126,13 @@ impl FitDefinitionMessage {
             }
 
             for developer_data_index in ddis {
-                let developer_data_id = parsing_state.get_developer_data_id(developer_data_index)?;
-                fdm.developer_data_ids.insert(developer_data_index, developer_data_id);
+                let developer_data_id =
+                    parsing_state.get_developer_data_id(developer_data_index)?;
+                fdm.developer_data_ids
+                    .insert(developer_data_index, developer_data_id);
             }
         }
-        
+
         Ok((Arc::new(fdm), o))
     }
 }
@@ -1525,9 +1562,8 @@ pub fn bit_subset(
     start: usize,
     num_bits: usize,
     endianness: Endianness,
-    output_size: usize
+    output_size: usize,
 ) -> Result<Vec<u8>> {
-
     let mut raw_input = inp.to_vec();
 
     // flip endianness if need be
@@ -1542,7 +1578,7 @@ pub fn bit_subset(
     }
 
     // zero out any higher bits
-    let mut clear_pos = 0;    
+    let mut clear_pos = 0;
     while clear_pos < (bv.len() - num_bits) {
         bv.set(clear_pos, false);
         clear_pos = clear_pos + 1;
@@ -1571,29 +1607,30 @@ mod tests {
     fn bit_subset_test() {
         // input = 72
         // 0,5 and 5,3 should decode into 8 and 2
-        
-        let data= vec![0b01001000];
+
+        let data = vec![0b01001000];
 
         let output1 = bit_subset(
             &data, // input
-            0, // start
-            5, // num_bits
+            0,     // start
+            5,     // num_bits
             Endianness::Big,
             1, // output_size
-        ).unwrap();
-        
+        )
+        .unwrap();
+
         assert_eq!(output1[0], 0b00001000);
 
         let output2 = bit_subset(
             &data, // input
-            5, // start
-            3, // num_bits
+            5,     // start
+            3,     // num_bits
             Endianness::Big,
             1, // output_size
-        ).unwrap();
-        
-        assert_eq!(output2[0], 0b00000010);
+        )
+        .unwrap();
 
+        assert_eq!(output2[0], 0b00000010);
     }
 
     #[test]

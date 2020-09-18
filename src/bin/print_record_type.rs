@@ -74,7 +74,7 @@ fn main() {
                         println!("{}", message);
                     }
                 }
-            },
+            }
             FitMessage::Definition(_d) => {
                 if record_name == "Definition" {
                     if expanded == true {

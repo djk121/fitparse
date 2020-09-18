@@ -1,13 +1,12 @@
-
-use thiserror::Error;
 use std::backtrace::Backtrace;
 use std::boxed::Box;
 use std::sync::Arc;
+use thiserror::Error;
 
 use fmt::Debug;
 
-use FitFieldFitBaseType;
 use FitDefinitionMessage;
+use FitFieldFitBaseType;
 
 pub type Result<T> = anyhow::Result<T, FitParseError>;
 
@@ -18,9 +17,7 @@ pub enum FitParseError {
     #[error("insufficient data to finish parse, unknown amount needed")]
     ParseIncompleteUnknown,
     #[error("invalid field value for field\n bt:\n{backtrace}")]
-    ParseInvalidFieldValue{
-        backtrace: Backtrace,
-    },
+    ParseInvalidFieldValue { backtrace: Backtrace },
     #[error("error during parse: {0:?}")]
     ParseError(String),
     #[error("zero value found for type requiring non-zero")]
@@ -62,10 +59,12 @@ pub enum FitParseError {
     MissingFitBaseType,
     #[error("attempt to parse uncovered base value variant")]
     ParseUnknownBaseValue,
-    #[error("developer data definition number not found: {developer_data_id}, source: {backtrace}")]
+    #[error(
+        "developer data definition number not found: {developer_data_id}, source: {backtrace}"
+    )]
     DeveloperDataDefinitionNotFound {
         developer_data_id: u8,
-        backtrace: Backtrace
+        backtrace: Backtrace,
     },
     #[error("developer field number not found: {0}")]
     DeveloperFieldDescriptionNotFound(u8),
@@ -96,20 +95,23 @@ pub enum FitParseError {
     #[error("unexpected FitField base_type {0}")]
     UnexpectedFitFieldBaseType(FitFieldFitBaseType),
     #[error("nom parsing error: {0}")]
-    NomParsingError(String)
+    NomParsingError(String),
 }
 
-impl<T> From<nom::Err<T>> for FitParseError where T: Debug {
+impl<T> From<nom::Err<T>> for FitParseError
+where
+    T: Debug,
+{
     fn from(ne: nom::Err<T>) -> FitParseError {
         FitParseError::NomParsingError(format!("{:?}", ne))
     }
-} 
+}
 
 impl From<FitParseError> for std::fmt::Error {
     fn from(_t: FitParseError) -> Self {
         panic!("lol")
     }
-} 
+}
 
 #[allow(dead_code)]
 pub(crate) fn parse_incomplete<E>(pi: usize) -> FitParseError {
@@ -124,7 +126,7 @@ pub(crate) fn parse_incomplete_unknown() -> FitParseError {
 #[allow(dead_code)]
 pub(crate) fn parse_invalid_field_value() -> FitParseError {
     let bt = Backtrace::force_capture();
-    FitParseError::ParseInvalidFieldValue{ backtrace: bt }
+    FitParseError::ParseInvalidFieldValue { backtrace: bt }
 }
 
 #[allow(dead_code)]
@@ -188,12 +190,17 @@ pub(crate) fn invalid_field_number(ifn: u8) -> FitParseError {
 }
 
 #[allow(dead_code)]
-pub fn message_parse_failed(message_name: String, definition_message: Arc<FitDefinitionMessage>, bytes: Vec<u8>, source: FitParseError) -> FitParseError {
+pub fn message_parse_failed(
+    message_name: String,
+    definition_message: Arc<FitDefinitionMessage>,
+    bytes: Vec<u8>,
+    source: FitParseError,
+) -> FitParseError {
     FitParseError::MessageParseFailed {
         message_name,
         definition_message,
         bytes,
-        source: Box::new(source)
+        source: Box::new(source),
     }
 }
 
@@ -225,7 +232,10 @@ pub(crate) fn parse_unknown_base_value() -> FitParseError {
 #[allow(dead_code)]
 pub(crate) fn developer_data_definition_not_found(dddn: u8) -> FitParseError {
     let bt = Backtrace::force_capture();
-    FitParseError::DeveloperDataDefinitionNotFound { developer_data_id: dddn, backtrace: bt }
+    FitParseError::DeveloperDataDefinitionNotFound {
+        developer_data_id: dddn,
+        backtrace: bt,
+    }
 }
 
 #[allow(dead_code)]
