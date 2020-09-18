@@ -1,7 +1,6 @@
 use std::io;
 use errors;
 use errors::Result;
-use std::mem::size_of;
 
 use fitparsingstate::FitParsingState;
 use {parse_fit_message, FitFileHeader, FitMessage, FitDataMessage};
