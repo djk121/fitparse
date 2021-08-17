@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use errors;
 use errors::Result;
-use nom;
+use nom::{self, sequence};
 use nom::number::Endianness;
 
 use {
@@ -226,7 +226,7 @@ pub fn parse_sint8_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Resu
     };
     match parse_config.endianness() {
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
     }
 }
 
@@ -254,7 +254,7 @@ pub fn parse_uint8_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Resu
 
     match parse_config.endianness() {
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
     }
 }
 
@@ -291,7 +291,7 @@ pub fn parse_sint16<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) 
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i16> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_i16(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -317,7 +317,7 @@ pub fn parse_sint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -336,7 +336,7 @@ pub fn parse_uint16<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) 
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u16> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_u16(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -362,7 +362,7 @@ pub fn parse_uint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -385,7 +385,7 @@ pub fn parse_uint16z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     };
     match parse_config.endianness() {
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
     }
 }
 
@@ -403,7 +403,7 @@ pub fn parse_sint32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) 
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i32> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_i32(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -429,7 +429,7 @@ pub fn parse_sint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -448,7 +448,7 @@ pub fn parse_uint32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) 
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u32> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_u32(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -474,7 +474,7 @@ pub fn parse_uint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -497,7 +497,7 @@ pub fn parse_uint32z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     };
     match parse_config.endianness() {
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
     }
 }
 
@@ -515,7 +515,7 @@ pub fn parse_float32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig)
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], f32> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_f32(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -538,7 +538,7 @@ pub fn parse_float32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -557,7 +557,7 @@ pub fn parse_sint64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) 
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i64> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_i64(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -580,7 +580,7 @@ pub fn parse_sint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -599,7 +599,7 @@ pub fn parse_uint64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) 
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u64> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_u64(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -622,7 +622,7 @@ pub fn parse_uint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Res
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -645,7 +645,7 @@ pub fn parse_uint64z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
     };
     match parse_config.endianness() {
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
     }
 }
 
@@ -663,7 +663,7 @@ pub fn parse_float64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig)
 
     let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], f64> {
         match parse_config.endianness() {
-            Endianness::Little => {
+            Endianness::Little | Endianness::Native => {
                 let (_, o) = nom::number::complete::le_f64(i)?;
                 nom::IResult::Ok((&[], o))
             }
@@ -686,7 +686,7 @@ pub fn parse_float64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Re
         Err(o_e) => return Err(o_e),
     };
     match parse_config.endianness() {
-        Endianness::Little => Ok(val.to_le_bytes().to_vec()),
+        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
         Endianness::Big => Ok(val.to_be_bytes().to_vec()),
     }
 }
@@ -738,7 +738,8 @@ pub fn parse_record_header(input: &[u8]) -> Result<(&[u8], FitRecordHeader)> {
 
 pub fn parse_normal_record_header(i: &[u8]) -> nom::IResult<&[u8], FitRecordHeader> {
     let (o, res): (&[u8], (u8, u8, u8, u8, u8)) =
-        nom::bits::bits(nom::sequence::tuple::<_, _, (_, _), _>((
+        //nom::bits::bits(nom::sequence::tuple::<_, _, (_, _), _>((
+        nom::bits::bits::<_, _, nom::error::Error<(&[u8], usize)>, _, _>(nom::sequence::tuple((
             nom::bits::complete::tag(0x0, 1_usize),
             nom::bits::complete::take(1_usize),
             nom::bits::complete::take(1_usize),
@@ -762,7 +763,8 @@ pub fn parse_normal_record_header(i: &[u8]) -> nom::IResult<&[u8], FitRecordHead
 
 pub fn parse_compressed_timestamp_record_header(i: &[u8]) -> nom::IResult<&[u8], FitRecordHeader> {
     let (o, res): (&[u8], (u8, u8, u8)) =
-        nom::bits::bits(nom::sequence::tuple::<_, _, (_, _), _>((
+        //nom::bits::bits(nom::sequence::tuple::<_, _, (_, _), _>((
+        nom::bits::bits::<_, _, nom::error::Error<(&[u8], usize)>, _, _>(nom::sequence::tuple((
             nom::bits::complete::tag(0x1, 1_usize),
             nom::bits::complete::take(2_usize),
             nom::bits::complete::take(5_usize),
@@ -789,7 +791,7 @@ pub fn parse_field_definition<'a>(input: &'a [u8]) -> nom::IResult<&'a [u8], Fit
         nom::IResult::Ok((i, (definition_number[0], field_size[0], base_type[0])))
     };
 
-    let fd_parser = nom::combinator::map_res(base_parser, |field_components: (u8, u8, u8)| {
+    let mut fd_parser = nom::combinator::map_res(base_parser, |field_components: (u8, u8, u8)| {
         FitFieldDefinition::new(
             field_components.0,
             field_components.1.into(),
@@ -820,7 +822,7 @@ pub fn parse_definition_message(
 
         //let (i, num_fields) = nom::bytes::complete::take(1)(i)?;
         let (i, num_fields) = match endianness {
-            Endianness::Little => nom::number::complete::le_u8(i)?,
+            Endianness::Little | Endianness::Native => nom::number::complete::le_u8(i)?,
             Endianness::Big => nom::number::complete::be_u8(i)?
         };
 
@@ -828,7 +830,7 @@ pub fn parse_definition_message(
         let (i, num_developer_fields) = match header.developer_fields_present {
             true => {
                 match endianness {
-                    Endianness::Little => nom::number::complete::le_u8(i)?,
+                    Endianness::Little | Endianness::Native => nom::number::complete::le_u8(i)?,
                     Endianness::Big => nom::number::complete::be_u8(i)?
                 }
             },
