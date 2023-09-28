@@ -76,7 +76,7 @@ impl FitFile {
                     panic!("error: {}", e);
                 }
             }
-            num = num + 1;
+            num += 1;
         }
 
         Ok(())

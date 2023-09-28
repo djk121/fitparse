@@ -89,7 +89,7 @@ macro_rules! parse_internal_field {
                     false => {
                         saved_outp = &$inp[$field.field_size..];
 
-                        let val = field_parser_base_type!($field.base_type_name(), $inp, $field, $message)?;
+                        let val = field_parser_base_type!($field.base_type_name(), $inp, $field, $message)?
 
                         match $is_degrees {
                             true => deg_parse_assignment!(val, $message_field),
@@ -116,7 +116,7 @@ macro_rules! parse_internal_field {
                     false => {
                         saved_outp = &$inp[$field.field_size..];
 
-                        let val = field_parser_base_type!($field.base_type_name(), $inp, $field, $message)?;
+                        let val = field_parser_base_type!($field.base_type_name(), $inp, $field, $message)?
 
                         match $is_degrees {
                             true => deg_parse_assignment!(val, $message_field),
@@ -164,7 +164,7 @@ macro_rules! field_parser_base_type {
         parse_sint16(&$bytes[0..$parse_config.field_size()], $parse_config);
     };
     ("uint32", $bytes:expr, $parse_config:expr) => {
-        parse_uint32(&$bytes[0..$parse_config.field_size()], $parse_config);
+        parse_uint32(&$bytes[0..$parse_config.field_size()], $parse_config)
     };
     ("uint32z", $bytes:expr, $parse_config:expr) => {
         parse_uint32z(&$bytes[0..$parse_config.field_size()], $parse_config);
@@ -647,7 +647,7 @@ impl FitMessageHr {
                 tz_offset,
             )];
 
-            while actions.len() > 0 {
+            while !actions.is_empty() {
                 let parse_config = actions.remove(0);
 
                 let alternate_input: Vec<u8>;
@@ -727,7 +727,7 @@ impl FitMessageHr {
                                 offset: _,
                                 components: _,
                             } => {
-                                if cts.len() == 0 {
+                                if cts.is_empty() {
                                     return Err(errors::hr_message_timestamp());
                                 } else {
                                     (<f64>::from(cts[cts.len() - 1].clone()), s)
@@ -736,18 +736,18 @@ impl FitMessageHr {
                             _ => return Err(errors::hr_message_timestamp()),
                         };
 
-                        let range = vec![0, 12, 24, 36, 48, 60, 72, 84, 96, 108];
+                        let range = [0, 12, 24, 36, 48, 60, 72, 84, 96, 108];
                         let f = FitFieldDefinition::new(
                             9, // definition_number
                             4, // field_size
                             0, // base_type
                         )?;
 
-                        for i in 0..range.len() {
+                        for r in &range {
                             let bytes = bit_subset(
                                 &inp[0..f.field_size],
-                                range[i],
-                                range[i] + 12,
+                                *r,
+                                *r + 12,
                                 message.definition_message.endianness,
                                 f.field_size,
                             )?;
@@ -783,7 +783,7 @@ impl FitMessageHr {
 
 impl FitRecord for FitMessageHr {
     fn message_name(&self) -> &'static str {
-        return "FitMessageHr";
+        "FitMessageHr"
     }
 }
 

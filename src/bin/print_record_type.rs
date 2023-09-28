@@ -51,14 +51,11 @@ fn main() {
     };
 
     let mut ff = FitFile::new(1024 * 1024 * 10, true);
-    match ff.parse(&mut f) {
-        Err(e) => panic!("failed to parse file: {:?}", e),
-        _ => (),
-    }
+    if let Err(e) = ff.parse(&mut f) { panic!("failed to parse file: {:?}", e) }
 
     println!("Parsed num messages: {}", ff.messages.len());
     for message in ff.iter() {
-        if unknowns == true {
+        if unknowns {
             //if message.message_name() == "Unknown" {
             //    println!("{:#?}", message);
             //}
@@ -68,7 +65,7 @@ fn main() {
         match message {
             FitMessage::Data(ref dm) => {
                 if dm.message_name() == record_name {
-                    if expanded == true {
+                    if expanded {
                         println!("{:#?}", message);
                     } else {
                         println!("{}", message);
@@ -77,7 +74,7 @@ fn main() {
             }
             FitMessage::Definition(_d) => {
                 if record_name == "Definition" {
-                    if expanded == true {
+                    if expanded {
                         println!("{:#?}", message);
                     } else {
                         println!("{}", message);

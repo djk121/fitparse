@@ -256,7 +256,7 @@ use FitBaseValue;
 use FitParseConfig;
 use FitFieldParseable;
 use fitparsingstate::FitParsingState;
-use fitparsers::{parse_enum, parse_uint8, parse_uint8_as_bytes, parse_uint8z, parse_uint16, parse_uint16_as_bytes, parse_uint32, parse_uint32_as_bytes, parse_uint32z, parse_byte_as_bytes};
+use fitparsers::{parse_enum, parse_uint8, parse_uint8_as_bytes, parse_uint8z, parse_uint16, parse_uint16_as_bytes, parse_uint32, parse_uint32_as_bytes, parse_uint32z, parse_byte_as_bytes, parse_date_time_as_bytes};
 
 use {vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields}; 
 use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
@@ -1260,7 +1260,8 @@ impl {{ subfield_name }} {
             else:
                 subfield_default_option = "{}".format(self.field_type_name)
         else:
-            subfield_default_option = "FitField{}".format(self.field_type_name)
+            #print("^^^^^^^^^^ SUBFIELD DEFAULT OPTION ^^^^^^^: {}".format(self.field_type_name))
+            subfield_default_option = "{}".format(self.field_type_name)
 
         #if self.is_adjusted:
         #    subfield_default_option = "FitFieldAdjustedValue<{}>".format(subfield_default_option)
@@ -1543,9 +1544,12 @@ def parse_messages_file(messages_file_name, types):
             messages[current_message] = Message(current_message, message_comment)
 
         else:
+            #print(line)
             _, field_number, field_name, field_type, array, \
             components, scale, offset, units, bits, _, \
-            ref_field_name, ref_field_value, comment, _, _, _, _, _ = line
+            ref_field_name, ref_field_value, comment, _, _ = line            
+            #ref_field_name, ref_field_value, comment, _, _, _, _, _ = line
+
 
             parsed_components = []
             parsed_bits = []

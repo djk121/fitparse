@@ -37,14 +37,11 @@ fn main() {
     };
 
     let mut ff = FitFile::new(1024 * 1024 * 10, true);
-    match ff.parse(&mut f) {
-        Err(e) => panic!("failed to parse file: {:?}", e),
-        _ => (),
-    }
+    if let Err(e) = ff.parse(&mut f) { panic!("failed to parse file: {:?}", e) }
 
     for rec in ff.iter_message_names(vec!["Record"]) {
         if let FitMessage::Data(FitDataMessage::Record(ref r)) = *rec {
-            if silent == false {
+            if !silent {
                 println!("distance: {:?}", r.distance);
             }
         }

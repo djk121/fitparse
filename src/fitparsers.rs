@@ -4,8 +4,11 @@ use std::collections::HashMap;
 
 use errors;
 use errors::Result;
-use nom::{self, sequence};
+use nom::{self};
 use nom::number::Endianness;
+//use nom::error::VerboseError;
+
+use paste::paste;
 
 use {
     FitCompressedTimestampHeader, FitDefinitionMessage, FitDeveloperFieldDefinition,
@@ -170,6 +173,142 @@ macro_rules! nom_internal_nonzero_parser {
     };
 }
 
+/*
+Necessary because otherwise the closure loses the type info.
+*/
+fn constrain<F, T>(f: F) -> F
+where
+    F: for<'a> Fn(&'a [u8]) -> nom::IResult<&'a [u8], T>,
+{
+    f
+}
+
+macro_rules! create_base_parser {
+    ($input:expr, $parse_config:expr, $return_type:ty, $buffer_size:expr, $nom_le_parser:expr, $nom_be_parser:expr) => {
+        {
+            let buf: Vec<u8>;
+            let inp: &[u8];
+            match $input.len() < $buffer_size {
+                true => {
+                    buf = buffer($input, $buffer_size, $parse_config.endianness());
+                    inp = &buf;
+                }
+                false => {
+                    inp = &$input;
+                }
+            }
+
+            let parser = constrain(|i: &[u8]| -> nom::IResult<&[u8], $return_type> {
+                match $parse_config.endianness() {
+                    Endianness::Little | Endianness::Native => {
+                        let (_, o) = $nom_le_parser(i)?;
+                        nom::IResult::Ok((&[], o.clone()))
+                    }
+                    Endianness::Big => {
+                        let (_, o) = $nom_be_parser(i)?;
+                        nom::IResult::Ok((&[], o.clone()))
+                    }
+                }
+            });
+            let (_, val) = parser(inp)?;
+            //(parser, inp)
+            val
+        }
+    }
+}
+
+macro_rules! create_base_parser_return {
+    ($val:expr, $invalid_val:expr) => {
+        match $val {
+            $invalid_val => Err(errors::parse_invalid_field_value()),
+            valid_val => Ok(valid_val),
+        }
+    };
+    ($val:expr) => {
+        Ok($val)
+    }
+}
+
+macro_rules! create_as_bytes_variant {
+    ($parser_fn_name:ident) => {
+        paste! {
+
+            #[allow(dead_code)]
+            pub fn [<$parser_fn_name _as_bytes>](input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
+                let val = match $parser_fn_name(input, parse_config) {
+                    Ok(v) => v,
+                    Err(o_e) => return Err(o_e),
+                };
+                match parse_config.endianness() {
+                    Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
+                    Endianness::Big => Ok(val.to_be_bytes().to_vec()),
+                }
+            }
+        }
+    }
+}
+
+macro_rules! create_z_variant {
+    ($parser_fn_name:ident, $return_type:ty) => {
+        paste! {
+            #[allow(dead_code)]
+            pub fn [<$parser_fn_name z>](input: &[u8], parse_config: &FitParseConfig) -> Result<$return_type> {
+                let val = $parser_fn_name(input, parse_config)?;
+                match val {
+                    0x0000 => Err(errors::parse_invalid_field_value()),
+                    valid_val => Ok(valid_val),
+                }
+            }
+        }
+    }
+}
+
+macro_rules! create_z_as_bytes_variant {
+    ($parser_fn_name:ident) => {
+        paste! {
+            #[allow(dead_code)]
+            pub fn [<$parser_fn_name z_as_bytes>](input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
+                let val = match [<$parser_fn_name z>](input, parse_config) {
+                    Ok(v) => v,
+                    Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
+                    Err(o_e) => return Err(o_e),
+                };
+                match parse_config.endianness() {
+                    Endianness::Big => Ok(val.to_be_bytes().to_vec()),
+                    Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
+                }
+            }
+        }
+    }
+}
+
+
+
+macro_rules! create_parsers {
+    ($parser_fn_name:ident, $return_type:ty, $buffer_size:expr, $nom_le_parser:expr, $nom_be_parser:expr, $invalid_val:expr) => {
+        pub fn $parser_fn_name<'a>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<$return_type> {
+            let val = create_base_parser!(input, parse_config, $return_type, $buffer_size, $nom_le_parser, $nom_be_parser);
+            create_base_parser_return!(val, $invalid_val)
+            //create_invalid_val_section!(val, $invalid_val)
+        }
+
+        create_as_bytes_variant!($parser_fn_name);
+        //create_z_variant!($parser_fn_name, $return_type);
+        //create_z_as_bytes_variant!($parser_fn_name);
+    };
+    ($parser_fn_name:ident, $return_type:ty, $buffer_size:expr, $nom_le_parser:expr, $nom_be_parser:expr) => {
+        pub fn $parser_fn_name<'a>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<$return_type> {
+            let val = create_base_parser!(input, parse_config, $return_type, $buffer_size, $nom_le_parser, $nom_be_parser);
+            create_base_parser_return!(val)
+        }
+
+        create_as_bytes_variant!($parser_fn_name);
+        //create_z_variant!($parser_fn_name, $return_type);
+        //create_z_as_bytes_variant!($parser_fn_name);
+    }
+}
+
+
 pub fn parse_bool(input: &[u8], parse_config: &FitParseConfig) -> Result<bool> {
     let (_, res) = parse_bool_inner(input, parse_config)
         .map_err(|e| errors::nom_parsing_error(e.to_string()))?;
@@ -206,490 +345,33 @@ pub fn parse_enum_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Resul
     Ok(vec![val])
 }
 
-#[allow(dead_code)]
-pub fn parse_sint8<'a>(input: &'a [u8], _parse_config: &FitParseConfig) -> Result<i8> {
-    let parser = || -> nom::IResult<&'a [u8], i8> { nom::number::complete::le_i8(input) };
+create_parsers!(parse_sint8, i8, 1, nom::number::complete::le_i8, nom::number::complete::le_i8, 0x7F);
 
-    let (_, res) = parser()?;
-    match res {
-        0x7F => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
+create_parsers!(parse_uint8, u8, 1, nom::number::complete::le_u8, nom::number::complete::le_u8, 0xFF);
+create_z_variant!(parse_uint8, u8);
+create_z_as_bytes_variant!(parse_uint8);
 
-#[allow(dead_code)]
-pub fn parse_sint8_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_sint8(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-    }
-}
+create_parsers!(parse_sint16, i16, 2, nom::number::complete::le_i16, nom::number::complete::be_i16, 0x7FFF);
 
-#[allow(dead_code)]
-pub fn parse_uint8<'a>(input: &'a [u8], _parse_config: &FitParseConfig) -> Result<u8> {
-    let parser = || -> nom::IResult<&'a [u8], u8> {
-        //nom::bytes::complete::take(1_usize)(input)
-        nom::number::complete::le_u8(input)
-    };
+create_parsers!(parse_uint16, u16, 2, nom::number::complete::le_u16, nom::number::complete::be_u16, 0xFFFF);
+create_z_variant!(parse_uint16, u16);
+create_z_as_bytes_variant!(parse_uint16);
 
-    let (_, val) = parser()?;
-    match val {
-        0xFF => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
+create_parsers!(parse_sint32, i32, 4, nom::number::complete::le_i32, nom::number::complete::be_i32, 0x7FFFFFFF);
 
-#[allow(dead_code)]
-pub fn parse_uint8_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint8(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
+create_parsers!(parse_uint32, u32, 4, nom::number::complete::le_u32, nom::number::complete::be_u32, 0xFFFFFFFF);
+create_z_variant!(parse_uint32, u32);
+create_z_as_bytes_variant!(parse_uint32);
 
-    match parse_config.endianness() {
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-    }
-}
+create_parsers!(parse_float32, f32, 4, nom::number::complete::le_f32, nom::number::complete::be_f32);
 
-#[allow(dead_code)]
-pub fn parse_uint8z(input: &[u8], parse_config: &FitParseConfig) -> Result<u8> {
-    let val = parse_uint8(input, parse_config)?;
-    match val {
-        0x00 => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
+create_parsers!(parse_sint64, i64, 8, nom::number::complete::le_i64, nom::number::complete::be_i64);
 
-#[allow(dead_code)]
-pub fn parse_uint8z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint8z(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    Ok(vec![val])
-}
+create_parsers!(parse_uint64, u64, 8, nom::number::complete::le_u64, nom::number::complete::be_u64);
+create_z_variant!(parse_uint64, u64);
+create_z_as_bytes_variant!(parse_uint64);
 
-#[allow(dead_code)]
-pub fn parse_sint16<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<i16> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 2 {
-        true => {
-            buf = buffer(input, 2, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i16> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_i16(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_i16(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    match val {
-        0x7FFF => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_sint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_sint16(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint16<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<u16> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 2 {
-        true => {
-            buf = buffer(input, 2, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u16> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_u16(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_u16(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    match val {
-        0xFFFF => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint16_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint16(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint16z(input: &[u8], parse_config: &FitParseConfig) -> Result<u16> {
-    let val = parse_uint16(input, parse_config)?;
-    match val {
-        0x0000 => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint16z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint16z(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_sint32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<i32> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 4 {
-        true => {
-            buf = buffer(input, 4, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i32> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_i32(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_i32(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    match val {
-        0x7FFFFFFF => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_sint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_sint32(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<u32> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 4 {
-        true => {
-            buf = buffer(input, 4, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u32> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_u32(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_u32(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    match val {
-        0xFFFFFFFF => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint32(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint32z(input: &[u8], parse_config: &FitParseConfig) -> Result<u32> {
-    let val = parse_uint32(input, parse_config)?;
-    match val {
-        0x00000000 => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint32z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint32z(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_float32<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<f32> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 4 {
-        true => {
-            buf = buffer(input, 4, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], f32> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_f32(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_f32(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    Ok(val)
-}
-
-#[allow(dead_code)]
-pub fn parse_float32_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_float32(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0.0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_sint64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<i64> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 8 {
-        true => {
-            buf = buffer(input, 8, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], i64> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_i64(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_i64(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    Ok(val)
-}
-
-#[allow(dead_code)]
-pub fn parse_sint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_sint64(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<u64> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 8 {
-        true => {
-            buf = buffer(input, 8, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], u64> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_u64(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_u64(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    Ok(val)
-}
-
-#[allow(dead_code)]
-pub fn parse_uint64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint64(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint64z(input: &[u8], parse_config: &FitParseConfig) -> Result<u64> {
-    let val = parse_uint64(input, parse_config)?;
-    match val {
-        0x0000000000000000 => Err(errors::parse_invalid_field_value()),
-        valid_val => Ok(valid_val),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_uint64z_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_uint64z(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-    }
-}
-
-#[allow(dead_code)]
-pub fn parse_float64<'a: 'b, 'b>(input: &'a [u8], parse_config: &FitParseConfig) -> Result<f64> {
-    let buf: Vec<u8>;
-    let inp: &[u8];
-    match input.len() < 8 {
-        true => {
-            buf = buffer(input, 8, parse_config.endianness());
-            inp = &buf;
-        }
-        false => inp = &input,
-    }
-
-    let parser = |i: &'b [u8]| -> nom::IResult<&'b [u8], f64> {
-        match parse_config.endianness() {
-            Endianness::Little | Endianness::Native => {
-                let (_, o) = nom::number::complete::le_f64(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-            Endianness::Big => {
-                let (_, o) = nom::number::complete::be_f64(i)?;
-                nom::IResult::Ok((&[], o))
-            }
-        }
-    };
-
-    let (_, val) = parser(inp)?;
-    Ok(val)
-}
-
-#[allow(dead_code)]
-pub fn parse_float64_as_bytes(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<u8>> {
-    let val = match parse_float64(input, parse_config) {
-        Ok(v) => v,
-        Err(errors::FitParseError::ParseInvalidFieldValue { backtrace: _ }) => 0.0,
-        Err(o_e) => return Err(o_e),
-    };
-    match parse_config.endianness() {
-        Endianness::Little | Endianness::Native => Ok(val.to_le_bytes().to_vec()),
-        Endianness::Big => Ok(val.to_be_bytes().to_vec()),
-    }
-}
+create_parsers!(parse_float64, f64, 8, nom::number::complete::le_f64, nom::number::complete::be_f64);
 
 #[allow(dead_code)]
 pub fn parse_string(input: &[u8], parse_config: &FitParseConfig) -> Result<String> {
@@ -723,6 +405,14 @@ pub fn parse_date_time(
     parse_config: &FitParseConfig,
 ) -> Result<(DateTime<Utc>, u32)> {
     parse_date_time_internal(input, parse_config)
+}
+
+#[allow(dead_code)]
+pub fn parse_date_time_as_bytes(
+    input: &[u8],
+    parse_config: &FitParseConfig,
+) -> Result<Vec<u8>> {
+    parse_byte(input, parse_config)
 }
 
 pub fn parse_record_header(input: &[u8]) -> Result<(&[u8], FitRecordHeader)> {

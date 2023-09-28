@@ -56,11 +56,7 @@ impl FitParsingState {
     }
 
     pub fn get_timezone_offset(&self) -> f64 {
-        match self.timezone_offset_secs {
-            Some(tzos) => tzos,
-            //None => Err(errors::timezone_offset_not_set())
-            None => 0.0,
-        }
+        self.timezone_offset_secs.unwrap_or(0.0)
     }
 
     pub fn add_developer_data_id(
@@ -92,7 +88,7 @@ impl FitParsingState {
         let p = self
             .developer_field_descriptions
             .entry(developer_data_index)
-            .or_insert(HashMap::new());
+            .or_default();
         p.insert(field_number, Arc::clone(&fd));
     }
 

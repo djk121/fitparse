@@ -1,4 +1,4 @@
-#![feature(backtrace)]
+#![feature(error_generic_member_access)]
 
 use std::collections::HashMap;
 use std::convert::From;
@@ -21,6 +21,7 @@ use conv::*;
 
 extern crate anyhow;
 extern crate thiserror;
+extern crate paste;
 
 use errors::Result;
 
@@ -770,6 +771,7 @@ impl FitParseConfig {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct FitMessageUnknownToSdk {
     number: u16,
@@ -795,7 +797,7 @@ impl FitMessageUnknownToSdk {
         number: u16,
         input: &'a [u8],
         header: FitRecordHeader,
-        parsing_state: &mut FitParsingState,
+        parsing_state: &FitParsingState,
         _timestamp: Option<FitFieldDateTime>,
     ) -> Result<(FitMessageUnknownToSdk, &'a [u8])> {
         let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
