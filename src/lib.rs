@@ -920,7 +920,7 @@ impl FitFieldDefinition {
         field_size: usize,
         base_type: u8,
     ) -> Result<FitFieldDefinition> {
-        let bt = match FitFieldFitBaseType::from(base_type) {
+        let bt = match Self::base_type_from_byte(base_type) {
             FitFieldFitBaseType::UnknownToSdk => {
                 return Err(errors::unexpected_fit_field_base_type(
                     FitFieldFitBaseType::UnknownToSdk,
@@ -934,6 +934,19 @@ impl FitFieldDefinition {
             field_size: field_size,
             base_type: bt,
         })
+    }
+
+    // Only bits 0-4 of the base type byte are the type number; bit 7 is the
+    // endian ability flag and bits 5-6 are reserved. The profile spells each
+    // type out as a whole byte with endian ability already set on the
+    // multi-byte types, so a device that leaves bit 7 clear misses the table.
+    // Look the type number up bare, then with the flag set.
+    fn base_type_from_byte(base_type: u8) -> FitFieldFitBaseType {
+        let type_number = base_type & 0x1f;
+        match FitFieldFitBaseType::from(type_number) {
+            FitFieldFitBaseType::UnknownToSdk => FitFieldFitBaseType::from(type_number | 0x80),
+            known => known,
+        }
     }
 
     pub fn field_name(&self, mesg_num: &FitGlobalMesgNum) -> &'static str {
@@ -1683,6 +1696,43 @@ mod tests {
 
         let (_, res) = parse_definition_message(&defintion_message_data, rh).unwrap();
         assert_eq!(res, expected);
+    }
+
+    #[test]
+    fn definition_message_endian_ability_bit_clear_test() {
+        // Some devices write the multi-byte base types with the endian
+        // ability bit clear - uint32z as 0x0c rather than the profile's 0x8c.
+        // The type number in the low five bits is what names the type, so
+        // this is the same definition as definition_message_test parses.
+        let defintion_message_data = [
+            0b00000000, // reserved, 1 byte
+            0b00000000, // architecture, 1 byte
+            0b00000000, 0b00000000, // global mseg num, 2 bytes
+            0b00000100, // num_fields, 1 bytes, 4 here
+            0b00000011, 0b00000100, 0b00001100, // uint32z, endian bit clear
+            0b00000100, 0b00000100, 0b00000110, // uint32, endian bit clear
+            0b00000001, 0b00000010, 0b00000100, // uint16, endian bit clear
+            0b00000000, 0b00000001, 0b00000000, // enum, no endian bit to clear
+        ];
+
+        let rh = FitNormalRecordHeader {
+            message_type: FitNormalRecordHeaderMessageType::Definition,
+            developer_fields_present: false,
+            local_mesg_num: 0,
+        };
+
+        let (_, res) = parse_definition_message(&defintion_message_data, rh).unwrap();
+
+        assert_eq!(
+            res.field_definitions,
+            vec![
+                FitFieldDefinition::new(3, 4, 140).unwrap(),
+                FitFieldDefinition::new(4, 4, 134).unwrap(),
+                FitFieldDefinition::new(1, 2, 132).unwrap(),
+                FitFieldDefinition::new(0, 1, 0).unwrap(),
+            ]
+        );
+        assert_eq!(res.message_size, 11);
     }
 }
 
