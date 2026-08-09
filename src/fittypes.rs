@@ -147,6 +147,7 @@ pub enum FitFieldMesgNum { // fit base type: uint16
     PowerZone, // 9
     MetZone, // 10
     Sport, // 12
+    TrainingSettings, // 13
     Goal, // 15
     Session, // 18
     Lap, // 19
@@ -226,17 +227,37 @@ pub enum FitFieldMesgNum { // fit base type: uint16
     Spo2Data, // 269
     SleepLevel, // 275
     Jump, // 285
+    AadAccelFeatures, // 289
     BeatIntervals, // 290
     RespirationRate, // 297
+    HsaAccelerometerData, // 302
+    HsaStepData, // 304
+    HsaSpo2Data, // 305
+    HsaStressData, // 306
+    HsaRespirationData, // 307
+    HsaHeartRateData, // 308
     Split, // 312
+    SplitSummary, // 313
+    HsaBodyBatteryData, // 314
+    HsaEvent, // 315
     ClimbPro, // 317
     TankUpdate, // 319
     TankSummary, // 323
     SleepAssessment, // 346
     HrvStatusSummary, // 370
     HrvValue, // 371
+    RawBbi, // 372
     DeviceAuxBatteryInfo, // 375
+    HsaGyroscopeData, // 376
+    ChronoShotSession, // 387
+    ChronoShotData, // 388
+    HsaConfigurationData, // 389
     DiveApneaAlarm, // 393
+    SkinTempOvernight, // 398
+    HsaWristTemperatureData, // 409  Message number for the HSA wrist temperature data message
+    NapEvent, // 412
+    SleepDisruptionSeverityPeriod, // 470
+    SleepDisruptionOvernightSeverity, // 471
     MfgRangeMin, // 65280  0xFF00 - 0xFFFE reserved for manufacturer specific messages
     MfgRangeMax, // 65534  0xFF00 - 0xFFFE reserved for manufacturer specific messages
     MesgNum(u16),
@@ -259,6 +280,7 @@ impl fmt::Display for FitFieldMesgNum {
             FitFieldMesgNum::PowerZone => write!(f, "{}", "PowerZone"),
             FitFieldMesgNum::MetZone => write!(f, "{}", "MetZone"),
             FitFieldMesgNum::Sport => write!(f, "{}", "Sport"),
+            FitFieldMesgNum::TrainingSettings => write!(f, "{}", "TrainingSettings"),
             FitFieldMesgNum::Goal => write!(f, "{}", "Goal"),
             FitFieldMesgNum::Session => write!(f, "{}", "Session"),
             FitFieldMesgNum::Lap => write!(f, "{}", "Lap"),
@@ -338,17 +360,37 @@ impl fmt::Display for FitFieldMesgNum {
             FitFieldMesgNum::Spo2Data => write!(f, "{}", "Spo2Data"),
             FitFieldMesgNum::SleepLevel => write!(f, "{}", "SleepLevel"),
             FitFieldMesgNum::Jump => write!(f, "{}", "Jump"),
+            FitFieldMesgNum::AadAccelFeatures => write!(f, "{}", "AadAccelFeatures"),
             FitFieldMesgNum::BeatIntervals => write!(f, "{}", "BeatIntervals"),
             FitFieldMesgNum::RespirationRate => write!(f, "{}", "RespirationRate"),
+            FitFieldMesgNum::HsaAccelerometerData => write!(f, "{}", "HsaAccelerometerData"),
+            FitFieldMesgNum::HsaStepData => write!(f, "{}", "HsaStepData"),
+            FitFieldMesgNum::HsaSpo2Data => write!(f, "{}", "HsaSpo2Data"),
+            FitFieldMesgNum::HsaStressData => write!(f, "{}", "HsaStressData"),
+            FitFieldMesgNum::HsaRespirationData => write!(f, "{}", "HsaRespirationData"),
+            FitFieldMesgNum::HsaHeartRateData => write!(f, "{}", "HsaHeartRateData"),
             FitFieldMesgNum::Split => write!(f, "{}", "Split"),
+            FitFieldMesgNum::SplitSummary => write!(f, "{}", "SplitSummary"),
+            FitFieldMesgNum::HsaBodyBatteryData => write!(f, "{}", "HsaBodyBatteryData"),
+            FitFieldMesgNum::HsaEvent => write!(f, "{}", "HsaEvent"),
             FitFieldMesgNum::ClimbPro => write!(f, "{}", "ClimbPro"),
             FitFieldMesgNum::TankUpdate => write!(f, "{}", "TankUpdate"),
             FitFieldMesgNum::TankSummary => write!(f, "{}", "TankSummary"),
             FitFieldMesgNum::SleepAssessment => write!(f, "{}", "SleepAssessment"),
             FitFieldMesgNum::HrvStatusSummary => write!(f, "{}", "HrvStatusSummary"),
             FitFieldMesgNum::HrvValue => write!(f, "{}", "HrvValue"),
+            FitFieldMesgNum::RawBbi => write!(f, "{}", "RawBbi"),
             FitFieldMesgNum::DeviceAuxBatteryInfo => write!(f, "{}", "DeviceAuxBatteryInfo"),
+            FitFieldMesgNum::HsaGyroscopeData => write!(f, "{}", "HsaGyroscopeData"),
+            FitFieldMesgNum::ChronoShotSession => write!(f, "{}", "ChronoShotSession"),
+            FitFieldMesgNum::ChronoShotData => write!(f, "{}", "ChronoShotData"),
+            FitFieldMesgNum::HsaConfigurationData => write!(f, "{}", "HsaConfigurationData"),
             FitFieldMesgNum::DiveApneaAlarm => write!(f, "{}", "DiveApneaAlarm"),
+            FitFieldMesgNum::SkinTempOvernight => write!(f, "{}", "SkinTempOvernight"),
+            FitFieldMesgNum::HsaWristTemperatureData => write!(f, "{}", "HsaWristTemperatureData"),
+            FitFieldMesgNum::NapEvent => write!(f, "{}", "NapEvent"),
+            FitFieldMesgNum::SleepDisruptionSeverityPeriod => write!(f, "{}", "SleepDisruptionSeverityPeriod"),
+            FitFieldMesgNum::SleepDisruptionOvernightSeverity => write!(f, "{}", "SleepDisruptionOvernightSeverity"),
             FitFieldMesgNum::MfgRangeMin => write!(f, "{}", "MfgRangeMin"),
             FitFieldMesgNum::MfgRangeMax => write!(f, "{}", "MfgRangeMax"),
             FitFieldMesgNum::MesgNum(x) => write!(f, "{}({})", "MesgNum", x),
@@ -377,6 +419,7 @@ impl FitFieldParseable for FitFieldMesgNum {
                 9 => Ok(FitFieldMesgNum::from(v)),
                 10 => Ok(FitFieldMesgNum::from(v)),
                 12 => Ok(FitFieldMesgNum::from(v)),
+                13 => Ok(FitFieldMesgNum::from(v)),
                 15 => Ok(FitFieldMesgNum::from(v)),
                 18 => Ok(FitFieldMesgNum::from(v)),
                 19 => Ok(FitFieldMesgNum::from(v)),
@@ -456,17 +499,37 @@ impl FitFieldParseable for FitFieldMesgNum {
                 269 => Ok(FitFieldMesgNum::from(v)),
                 275 => Ok(FitFieldMesgNum::from(v)),
                 285 => Ok(FitFieldMesgNum::from(v)),
+                289 => Ok(FitFieldMesgNum::from(v)),
                 290 => Ok(FitFieldMesgNum::from(v)),
                 297 => Ok(FitFieldMesgNum::from(v)),
+                302 => Ok(FitFieldMesgNum::from(v)),
+                304 => Ok(FitFieldMesgNum::from(v)),
+                305 => Ok(FitFieldMesgNum::from(v)),
+                306 => Ok(FitFieldMesgNum::from(v)),
+                307 => Ok(FitFieldMesgNum::from(v)),
+                308 => Ok(FitFieldMesgNum::from(v)),
                 312 => Ok(FitFieldMesgNum::from(v)),
+                313 => Ok(FitFieldMesgNum::from(v)),
+                314 => Ok(FitFieldMesgNum::from(v)),
+                315 => Ok(FitFieldMesgNum::from(v)),
                 317 => Ok(FitFieldMesgNum::from(v)),
                 319 => Ok(FitFieldMesgNum::from(v)),
                 323 => Ok(FitFieldMesgNum::from(v)),
                 346 => Ok(FitFieldMesgNum::from(v)),
                 370 => Ok(FitFieldMesgNum::from(v)),
                 371 => Ok(FitFieldMesgNum::from(v)),
+                372 => Ok(FitFieldMesgNum::from(v)),
                 375 => Ok(FitFieldMesgNum::from(v)),
+                376 => Ok(FitFieldMesgNum::from(v)),
+                387 => Ok(FitFieldMesgNum::from(v)),
+                388 => Ok(FitFieldMesgNum::from(v)),
+                389 => Ok(FitFieldMesgNum::from(v)),
                 393 => Ok(FitFieldMesgNum::from(v)),
+                398 => Ok(FitFieldMesgNum::from(v)),
+                409 => Ok(FitFieldMesgNum::from(v)),
+                412 => Ok(FitFieldMesgNum::from(v)),
+                470 => Ok(FitFieldMesgNum::from(v)),
+                471 => Ok(FitFieldMesgNum::from(v)),
                 65280 => Ok(FitFieldMesgNum::from(v)),
                 65534 => Ok(FitFieldMesgNum::from(v)),
                 v => Ok(FitFieldMesgNum::MesgNum(v)),
@@ -492,6 +555,7 @@ impl From<u16> for FitFieldMesgNum {
             9 => FitFieldMesgNum::PowerZone,
             10 => FitFieldMesgNum::MetZone,
             12 => FitFieldMesgNum::Sport,
+            13 => FitFieldMesgNum::TrainingSettings,
             15 => FitFieldMesgNum::Goal,
             18 => FitFieldMesgNum::Session,
             19 => FitFieldMesgNum::Lap,
@@ -571,17 +635,37 @@ impl From<u16> for FitFieldMesgNum {
             269 => FitFieldMesgNum::Spo2Data,
             275 => FitFieldMesgNum::SleepLevel,
             285 => FitFieldMesgNum::Jump,
+            289 => FitFieldMesgNum::AadAccelFeatures,
             290 => FitFieldMesgNum::BeatIntervals,
             297 => FitFieldMesgNum::RespirationRate,
+            302 => FitFieldMesgNum::HsaAccelerometerData,
+            304 => FitFieldMesgNum::HsaStepData,
+            305 => FitFieldMesgNum::HsaSpo2Data,
+            306 => FitFieldMesgNum::HsaStressData,
+            307 => FitFieldMesgNum::HsaRespirationData,
+            308 => FitFieldMesgNum::HsaHeartRateData,
             312 => FitFieldMesgNum::Split,
+            313 => FitFieldMesgNum::SplitSummary,
+            314 => FitFieldMesgNum::HsaBodyBatteryData,
+            315 => FitFieldMesgNum::HsaEvent,
             317 => FitFieldMesgNum::ClimbPro,
             319 => FitFieldMesgNum::TankUpdate,
             323 => FitFieldMesgNum::TankSummary,
             346 => FitFieldMesgNum::SleepAssessment,
             370 => FitFieldMesgNum::HrvStatusSummary,
             371 => FitFieldMesgNum::HrvValue,
+            372 => FitFieldMesgNum::RawBbi,
             375 => FitFieldMesgNum::DeviceAuxBatteryInfo,
+            376 => FitFieldMesgNum::HsaGyroscopeData,
+            387 => FitFieldMesgNum::ChronoShotSession,
+            388 => FitFieldMesgNum::ChronoShotData,
+            389 => FitFieldMesgNum::HsaConfigurationData,
             393 => FitFieldMesgNum::DiveApneaAlarm,
+            398 => FitFieldMesgNum::SkinTempOvernight,
+            409 => FitFieldMesgNum::HsaWristTemperatureData,
+            412 => FitFieldMesgNum::NapEvent,
+            470 => FitFieldMesgNum::SleepDisruptionSeverityPeriod,
+            471 => FitFieldMesgNum::SleepDisruptionOvernightSeverity,
             65280 => FitFieldMesgNum::MfgRangeMin,
             65534 => FitFieldMesgNum::MfgRangeMax,
             _ => FitFieldMesgNum::UnknownToSdk,
@@ -2178,11 +2262,38 @@ pub enum FitFieldSport { // fit base type: enum
     Jumpmaster = 46,
     Boxing = 47,
     FloorClimbing = 48,
+    Baseball = 49,
     Diving = 53,
+    Shooting = 56,  // Sport Shooting bits, set here for sport_bits alignment
+    WinterSport = 58,
+    Grinding = 59,  // Sailing position, operating manual winches to power boat controls
     Hiit = 62,
+    VideoGaming = 63,
     Racket = 64,
+    WheelchairPushWalk = 65,
+    WheelchairPushRun = 66,
+    Meditation = 67,
+    ParaSport = 68,
+    DiscGolf = 69,
+    TeamSport = 70,
+    Cricket = 71,
+    Rugby = 72,
+    Hockey = 73,
+    Lacrosse = 74,
+    Volleyball = 75,
     WaterTubing = 76,
     Wakesurfing = 77,
+    WaterSport = 78,
+    Archery = 79,
+    MixedMartialArts = 80,
+    MotorSports = 81,
+    Snorkeling = 82,
+    Dance = 83,
+    JumpRope = 84,
+    PoolApnea = 85,
+    Mobility = 86,
+    Geocaching = 87,
+    Canoeing = 88,
     All = 254,  // All is for goals only to include all sports.
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
@@ -2240,11 +2351,38 @@ impl fmt::Display for FitFieldSport {
             FitFieldSport::Jumpmaster => write!(f, "{}", "Jumpmaster"),
             FitFieldSport::Boxing => write!(f, "{}", "Boxing"),
             FitFieldSport::FloorClimbing => write!(f, "{}", "FloorClimbing"),
+            FitFieldSport::Baseball => write!(f, "{}", "Baseball"),
             FitFieldSport::Diving => write!(f, "{}", "Diving"),
+            FitFieldSport::Shooting => write!(f, "{}", "Shooting"),
+            FitFieldSport::WinterSport => write!(f, "{}", "WinterSport"),
+            FitFieldSport::Grinding => write!(f, "{}", "Grinding"),
             FitFieldSport::Hiit => write!(f, "{}", "Hiit"),
+            FitFieldSport::VideoGaming => write!(f, "{}", "VideoGaming"),
             FitFieldSport::Racket => write!(f, "{}", "Racket"),
+            FitFieldSport::WheelchairPushWalk => write!(f, "{}", "WheelchairPushWalk"),
+            FitFieldSport::WheelchairPushRun => write!(f, "{}", "WheelchairPushRun"),
+            FitFieldSport::Meditation => write!(f, "{}", "Meditation"),
+            FitFieldSport::ParaSport => write!(f, "{}", "ParaSport"),
+            FitFieldSport::DiscGolf => write!(f, "{}", "DiscGolf"),
+            FitFieldSport::TeamSport => write!(f, "{}", "TeamSport"),
+            FitFieldSport::Cricket => write!(f, "{}", "Cricket"),
+            FitFieldSport::Rugby => write!(f, "{}", "Rugby"),
+            FitFieldSport::Hockey => write!(f, "{}", "Hockey"),
+            FitFieldSport::Lacrosse => write!(f, "{}", "Lacrosse"),
+            FitFieldSport::Volleyball => write!(f, "{}", "Volleyball"),
             FitFieldSport::WaterTubing => write!(f, "{}", "WaterTubing"),
             FitFieldSport::Wakesurfing => write!(f, "{}", "Wakesurfing"),
+            FitFieldSport::WaterSport => write!(f, "{}", "WaterSport"),
+            FitFieldSport::Archery => write!(f, "{}", "Archery"),
+            FitFieldSport::MixedMartialArts => write!(f, "{}", "MixedMartialArts"),
+            FitFieldSport::MotorSports => write!(f, "{}", "MotorSports"),
+            FitFieldSport::Snorkeling => write!(f, "{}", "Snorkeling"),
+            FitFieldSport::Dance => write!(f, "{}", "Dance"),
+            FitFieldSport::JumpRope => write!(f, "{}", "JumpRope"),
+            FitFieldSport::PoolApnea => write!(f, "{}", "PoolApnea"),
+            FitFieldSport::Mobility => write!(f, "{}", "Mobility"),
+            FitFieldSport::Geocaching => write!(f, "{}", "Geocaching"),
+            FitFieldSport::Canoeing => write!(f, "{}", "Canoeing"),
             FitFieldSport::All => write!(f, "{}", "All"),
             FitFieldSport::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldSport::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -2317,11 +2455,38 @@ impl From<u8> for FitFieldSport {
             46 => FitFieldSport::Jumpmaster,
             47 => FitFieldSport::Boxing,
             48 => FitFieldSport::FloorClimbing,
+            49 => FitFieldSport::Baseball,
             53 => FitFieldSport::Diving,
+            56 => FitFieldSport::Shooting,
+            58 => FitFieldSport::WinterSport,
+            59 => FitFieldSport::Grinding,
             62 => FitFieldSport::Hiit,
+            63 => FitFieldSport::VideoGaming,
             64 => FitFieldSport::Racket,
+            65 => FitFieldSport::WheelchairPushWalk,
+            66 => FitFieldSport::WheelchairPushRun,
+            67 => FitFieldSport::Meditation,
+            68 => FitFieldSport::ParaSport,
+            69 => FitFieldSport::DiscGolf,
+            70 => FitFieldSport::TeamSport,
+            71 => FitFieldSport::Cricket,
+            72 => FitFieldSport::Rugby,
+            73 => FitFieldSport::Hockey,
+            74 => FitFieldSport::Lacrosse,
+            75 => FitFieldSport::Volleyball,
             76 => FitFieldSport::WaterTubing,
             77 => FitFieldSport::Wakesurfing,
+            78 => FitFieldSport::WaterSport,
+            79 => FitFieldSport::Archery,
+            80 => FitFieldSport::MixedMartialArts,
+            81 => FitFieldSport::MotorSports,
+            82 => FitFieldSport::Snorkeling,
+            83 => FitFieldSport::Dance,
+            84 => FitFieldSport::JumpRope,
+            85 => FitFieldSport::PoolApnea,
+            86 => FitFieldSport::Mobility,
+            87 => FitFieldSport::Geocaching,
+            88 => FitFieldSport::Canoeing,
             254 => FitFieldSport::All,
             _ => FitFieldSport::UnknownToSdk,
         }
@@ -2891,16 +3056,40 @@ pub enum FitFieldSubSport { // fit base type: enum
     VirtualActivity = 58,
     Obstacle = 59,  // Used for events where participants run, crawl through mud, climb over walls, etc.
     Breathing = 62,
+    CcrDiving = 63,  // Diving w/ closed circuit rebreather
     SailRace = 65,  // Sailing
+    Expedition = 66,  // Generic
     Ultra = 67,  // Ultramarathon
     IndoorClimbing = 68,  // Climbing
     Bouldering = 69,  // Climbing
     Hiit = 70,  // High Intensity Interval Training
+    IndoorGrinding = 71,  // Sailing position, operating manual winches to power boat controls
+    HuntingWithDogs = 72,  // Hunting
     Amrap = 73,  // HIIT
     Emom = 74,  // HIIT
     Tabata = 75,  // HIIT
+    Esport = 77,  // Video Gaming, Cycling, etc.
+    Triathlon = 78,  // Multisport
+    Duathlon = 79,  // Multisport
+    Brick = 80,  // Multisport
+    SwimRun = 81,  // Multisport
+    AdventureRace = 82,  // Multisport/Running
+    TruckerWorkout = 83,  // DEZL trucker workout training sport
     Pickleball = 84,  // Racket
     Padel = 85,  // Racket
+    IndoorWheelchairWalk = 86,
+    IndoorWheelchairRun = 87,
+    IndoorHandCycling = 88,
+    Field = 90,  // Hockey
+    Ice = 91,  // Hockey
+    Ultimate = 92,  // Disc
+    Platform = 93,  // Racket
+    Squash = 94,  // Racket
+    Badminton = 95,  // Racket
+    Racquetball = 96,  // Racket
+    TableTennis = 97,  // Racket
+    Overland = 98,
+    TrollingMotor = 99,  // Generic
     FlyCanopy = 110,  // Flying
     FlyParaglide = 111,  // Flying
     FlyParamotor = 112,  // Flying
@@ -2911,6 +3100,12 @@ pub enum FitFieldSubSport { // fit base type: enum
     FlyWx = 117,  // Flying
     FlyVfr = 118,  // Flying
     FlyIfr = 119,  // Flying
+    DynamicApnea = 121,
+    Enduro = 123,  // Cycling
+    Rucking = 124,  // Hiking
+    Rally = 125,  // Motor sports
+    PoolTriathlon = 126,  // Multisport
+    EBikeEnduro = 127,  // Cycling
     All = 254,
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
@@ -2980,16 +3175,40 @@ impl fmt::Display for FitFieldSubSport {
             FitFieldSubSport::VirtualActivity => write!(f, "{}", "VirtualActivity"),
             FitFieldSubSport::Obstacle => write!(f, "{}", "Obstacle"),
             FitFieldSubSport::Breathing => write!(f, "{}", "Breathing"),
+            FitFieldSubSport::CcrDiving => write!(f, "{}", "CcrDiving"),
             FitFieldSubSport::SailRace => write!(f, "{}", "SailRace"),
+            FitFieldSubSport::Expedition => write!(f, "{}", "Expedition"),
             FitFieldSubSport::Ultra => write!(f, "{}", "Ultra"),
             FitFieldSubSport::IndoorClimbing => write!(f, "{}", "IndoorClimbing"),
             FitFieldSubSport::Bouldering => write!(f, "{}", "Bouldering"),
             FitFieldSubSport::Hiit => write!(f, "{}", "Hiit"),
+            FitFieldSubSport::IndoorGrinding => write!(f, "{}", "IndoorGrinding"),
+            FitFieldSubSport::HuntingWithDogs => write!(f, "{}", "HuntingWithDogs"),
             FitFieldSubSport::Amrap => write!(f, "{}", "Amrap"),
             FitFieldSubSport::Emom => write!(f, "{}", "Emom"),
             FitFieldSubSport::Tabata => write!(f, "{}", "Tabata"),
+            FitFieldSubSport::Esport => write!(f, "{}", "Esport"),
+            FitFieldSubSport::Triathlon => write!(f, "{}", "Triathlon"),
+            FitFieldSubSport::Duathlon => write!(f, "{}", "Duathlon"),
+            FitFieldSubSport::Brick => write!(f, "{}", "Brick"),
+            FitFieldSubSport::SwimRun => write!(f, "{}", "SwimRun"),
+            FitFieldSubSport::AdventureRace => write!(f, "{}", "AdventureRace"),
+            FitFieldSubSport::TruckerWorkout => write!(f, "{}", "TruckerWorkout"),
             FitFieldSubSport::Pickleball => write!(f, "{}", "Pickleball"),
             FitFieldSubSport::Padel => write!(f, "{}", "Padel"),
+            FitFieldSubSport::IndoorWheelchairWalk => write!(f, "{}", "IndoorWheelchairWalk"),
+            FitFieldSubSport::IndoorWheelchairRun => write!(f, "{}", "IndoorWheelchairRun"),
+            FitFieldSubSport::IndoorHandCycling => write!(f, "{}", "IndoorHandCycling"),
+            FitFieldSubSport::Field => write!(f, "{}", "Field"),
+            FitFieldSubSport::Ice => write!(f, "{}", "Ice"),
+            FitFieldSubSport::Ultimate => write!(f, "{}", "Ultimate"),
+            FitFieldSubSport::Platform => write!(f, "{}", "Platform"),
+            FitFieldSubSport::Squash => write!(f, "{}", "Squash"),
+            FitFieldSubSport::Badminton => write!(f, "{}", "Badminton"),
+            FitFieldSubSport::Racquetball => write!(f, "{}", "Racquetball"),
+            FitFieldSubSport::TableTennis => write!(f, "{}", "TableTennis"),
+            FitFieldSubSport::Overland => write!(f, "{}", "Overland"),
+            FitFieldSubSport::TrollingMotor => write!(f, "{}", "TrollingMotor"),
             FitFieldSubSport::FlyCanopy => write!(f, "{}", "FlyCanopy"),
             FitFieldSubSport::FlyParaglide => write!(f, "{}", "FlyParaglide"),
             FitFieldSubSport::FlyParamotor => write!(f, "{}", "FlyParamotor"),
@@ -3000,6 +3219,12 @@ impl fmt::Display for FitFieldSubSport {
             FitFieldSubSport::FlyWx => write!(f, "{}", "FlyWx"),
             FitFieldSubSport::FlyVfr => write!(f, "{}", "FlyVfr"),
             FitFieldSubSport::FlyIfr => write!(f, "{}", "FlyIfr"),
+            FitFieldSubSport::DynamicApnea => write!(f, "{}", "DynamicApnea"),
+            FitFieldSubSport::Enduro => write!(f, "{}", "Enduro"),
+            FitFieldSubSport::Rucking => write!(f, "{}", "Rucking"),
+            FitFieldSubSport::Rally => write!(f, "{}", "Rally"),
+            FitFieldSubSport::PoolTriathlon => write!(f, "{}", "PoolTriathlon"),
+            FitFieldSubSport::EBikeEnduro => write!(f, "{}", "EBikeEnduro"),
             FitFieldSubSport::All => write!(f, "{}", "All"),
             FitFieldSubSport::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldSubSport::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -3084,16 +3309,40 @@ impl From<u8> for FitFieldSubSport {
             58 => FitFieldSubSport::VirtualActivity,
             59 => FitFieldSubSport::Obstacle,
             62 => FitFieldSubSport::Breathing,
+            63 => FitFieldSubSport::CcrDiving,
             65 => FitFieldSubSport::SailRace,
+            66 => FitFieldSubSport::Expedition,
             67 => FitFieldSubSport::Ultra,
             68 => FitFieldSubSport::IndoorClimbing,
             69 => FitFieldSubSport::Bouldering,
             70 => FitFieldSubSport::Hiit,
+            71 => FitFieldSubSport::IndoorGrinding,
+            72 => FitFieldSubSport::HuntingWithDogs,
             73 => FitFieldSubSport::Amrap,
             74 => FitFieldSubSport::Emom,
             75 => FitFieldSubSport::Tabata,
+            77 => FitFieldSubSport::Esport,
+            78 => FitFieldSubSport::Triathlon,
+            79 => FitFieldSubSport::Duathlon,
+            80 => FitFieldSubSport::Brick,
+            81 => FitFieldSubSport::SwimRun,
+            82 => FitFieldSubSport::AdventureRace,
+            83 => FitFieldSubSport::TruckerWorkout,
             84 => FitFieldSubSport::Pickleball,
             85 => FitFieldSubSport::Padel,
+            86 => FitFieldSubSport::IndoorWheelchairWalk,
+            87 => FitFieldSubSport::IndoorWheelchairRun,
+            88 => FitFieldSubSport::IndoorHandCycling,
+            90 => FitFieldSubSport::Field,
+            91 => FitFieldSubSport::Ice,
+            92 => FitFieldSubSport::Ultimate,
+            93 => FitFieldSubSport::Platform,
+            94 => FitFieldSubSport::Squash,
+            95 => FitFieldSubSport::Badminton,
+            96 => FitFieldSubSport::Racquetball,
+            97 => FitFieldSubSport::TableTennis,
+            98 => FitFieldSubSport::Overland,
+            99 => FitFieldSubSport::TrollingMotor,
             110 => FitFieldSubSport::FlyCanopy,
             111 => FitFieldSubSport::FlyParaglide,
             112 => FitFieldSubSport::FlyParamotor,
@@ -3104,6 +3353,12 @@ impl From<u8> for FitFieldSubSport {
             117 => FitFieldSubSport::FlyWx,
             118 => FitFieldSubSport::FlyVfr,
             119 => FitFieldSubSport::FlyIfr,
+            121 => FitFieldSubSport::DynamicApnea,
+            123 => FitFieldSubSport::Enduro,
+            124 => FitFieldSubSport::Rucking,
+            125 => FitFieldSubSport::Rally,
+            126 => FitFieldSubSport::PoolTriathlon,
+            127 => FitFieldSubSport::EBikeEnduro,
             254 => FitFieldSubSport::All,
             _ => FitFieldSubSport::UnknownToSdk,
         }
@@ -3344,6 +3599,7 @@ pub enum FitFieldAutolapTrigger { // fit base type: enum
     PositionWaypoint = 4,
     PositionMarked = 5,
     Off = 6,
+    AutoSelect = 13,
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
 }
@@ -3358,6 +3614,7 @@ impl fmt::Display for FitFieldAutolapTrigger {
             FitFieldAutolapTrigger::PositionWaypoint => write!(f, "{}", "PositionWaypoint"),
             FitFieldAutolapTrigger::PositionMarked => write!(f, "{}", "PositionMarked"),
             FitFieldAutolapTrigger::Off => write!(f, "{}", "Off"),
+            FitFieldAutolapTrigger::AutoSelect => write!(f, "{}", "AutoSelect"),
             FitFieldAutolapTrigger::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldAutolapTrigger::UnknownToSdk => write!(f, "UnknownToSdk")
         }
@@ -3387,6 +3644,7 @@ impl From<u8> for FitFieldAutolapTrigger {
             4 => FitFieldAutolapTrigger::PositionWaypoint,
             5 => FitFieldAutolapTrigger::PositionMarked,
             6 => FitFieldAutolapTrigger::Off,
+            13 => FitFieldAutolapTrigger::AutoSelect,
             _ => FitFieldAutolapTrigger::UnknownToSdk,
         }
     }
@@ -5028,6 +5286,11 @@ pub enum FitFieldManufacturer { // fit base type: uint16
     Blackbird, // 146
     MeilanByte, // 147
     Ezon, // 148
+    Laisi, // 149
+    Myzone, // 150
+    Abawo, // 151
+    Bafang, // 152
+    LuhongTechnology, // 153
     Development, // 255
     Healthandlife, // 257
     Lezyne, // 258
@@ -5097,6 +5360,29 @@ pub enum FitFieldManufacturer { // fit base type: uint16
     Shanyue, // 322
     SpinningMda, // 323
     Hilldating, // 324
+    AeroSensor, // 325
+    Nike, // 326
+    Magicshine, // 327
+    Ictrainer, // 328
+    AbsoluteCycling, // 329
+    EoSwimbetter, // 330
+    Mywhoosh, // 331
+    Ravemen, // 332
+    TektroRacingProducts, // 333
+    DaradInnovationCorporation, // 334
+    Cycloptim, // 335
+    Runna, // 337
+    Zepp, // 339
+    Peloton, // 340
+    Carv, // 341
+    Tissot, // 342
+    RealVelo, // 345
+    Wetech, // 346
+    Jespr, // 347
+    Huawei, // 348
+    Gotoes, // 349
+    CadenceApp, // 350
+    UnaWatch, // 351
     Actigraphcorp, // 5759
     Manufacturer(u16),
     InvalidFieldValue,
@@ -5250,6 +5536,11 @@ impl fmt::Display for FitFieldManufacturer {
             FitFieldManufacturer::Blackbird => write!(f, "{}", "Blackbird"),
             FitFieldManufacturer::MeilanByte => write!(f, "{}", "MeilanByte"),
             FitFieldManufacturer::Ezon => write!(f, "{}", "Ezon"),
+            FitFieldManufacturer::Laisi => write!(f, "{}", "Laisi"),
+            FitFieldManufacturer::Myzone => write!(f, "{}", "Myzone"),
+            FitFieldManufacturer::Abawo => write!(f, "{}", "Abawo"),
+            FitFieldManufacturer::Bafang => write!(f, "{}", "Bafang"),
+            FitFieldManufacturer::LuhongTechnology => write!(f, "{}", "LuhongTechnology"),
             FitFieldManufacturer::Development => write!(f, "{}", "Development"),
             FitFieldManufacturer::Healthandlife => write!(f, "{}", "Healthandlife"),
             FitFieldManufacturer::Lezyne => write!(f, "{}", "Lezyne"),
@@ -5319,6 +5610,29 @@ impl fmt::Display for FitFieldManufacturer {
             FitFieldManufacturer::Shanyue => write!(f, "{}", "Shanyue"),
             FitFieldManufacturer::SpinningMda => write!(f, "{}", "SpinningMda"),
             FitFieldManufacturer::Hilldating => write!(f, "{}", "Hilldating"),
+            FitFieldManufacturer::AeroSensor => write!(f, "{}", "AeroSensor"),
+            FitFieldManufacturer::Nike => write!(f, "{}", "Nike"),
+            FitFieldManufacturer::Magicshine => write!(f, "{}", "Magicshine"),
+            FitFieldManufacturer::Ictrainer => write!(f, "{}", "Ictrainer"),
+            FitFieldManufacturer::AbsoluteCycling => write!(f, "{}", "AbsoluteCycling"),
+            FitFieldManufacturer::EoSwimbetter => write!(f, "{}", "EoSwimbetter"),
+            FitFieldManufacturer::Mywhoosh => write!(f, "{}", "Mywhoosh"),
+            FitFieldManufacturer::Ravemen => write!(f, "{}", "Ravemen"),
+            FitFieldManufacturer::TektroRacingProducts => write!(f, "{}", "TektroRacingProducts"),
+            FitFieldManufacturer::DaradInnovationCorporation => write!(f, "{}", "DaradInnovationCorporation"),
+            FitFieldManufacturer::Cycloptim => write!(f, "{}", "Cycloptim"),
+            FitFieldManufacturer::Runna => write!(f, "{}", "Runna"),
+            FitFieldManufacturer::Zepp => write!(f, "{}", "Zepp"),
+            FitFieldManufacturer::Peloton => write!(f, "{}", "Peloton"),
+            FitFieldManufacturer::Carv => write!(f, "{}", "Carv"),
+            FitFieldManufacturer::Tissot => write!(f, "{}", "Tissot"),
+            FitFieldManufacturer::RealVelo => write!(f, "{}", "RealVelo"),
+            FitFieldManufacturer::Wetech => write!(f, "{}", "Wetech"),
+            FitFieldManufacturer::Jespr => write!(f, "{}", "Jespr"),
+            FitFieldManufacturer::Huawei => write!(f, "{}", "Huawei"),
+            FitFieldManufacturer::Gotoes => write!(f, "{}", "Gotoes"),
+            FitFieldManufacturer::CadenceApp => write!(f, "{}", "CadenceApp"),
+            FitFieldManufacturer::UnaWatch => write!(f, "{}", "UnaWatch"),
             FitFieldManufacturer::Actigraphcorp => write!(f, "{}", "Actigraphcorp"),
             FitFieldManufacturer::Manufacturer(x) => write!(f, "{}({})", "Manufacturer", x),
             FitFieldManufacturer::InvalidFieldValue => write!(f, "InvalidFieldValue"),
@@ -5478,6 +5792,11 @@ impl FitFieldParseable for FitFieldManufacturer {
                 146 => Ok(FitFieldManufacturer::from(v)),
                 147 => Ok(FitFieldManufacturer::from(v)),
                 148 => Ok(FitFieldManufacturer::from(v)),
+                149 => Ok(FitFieldManufacturer::from(v)),
+                150 => Ok(FitFieldManufacturer::from(v)),
+                151 => Ok(FitFieldManufacturer::from(v)),
+                152 => Ok(FitFieldManufacturer::from(v)),
+                153 => Ok(FitFieldManufacturer::from(v)),
                 255 => Ok(FitFieldManufacturer::from(v)),
                 257 => Ok(FitFieldManufacturer::from(v)),
                 258 => Ok(FitFieldManufacturer::from(v)),
@@ -5547,6 +5866,29 @@ impl FitFieldParseable for FitFieldManufacturer {
                 322 => Ok(FitFieldManufacturer::from(v)),
                 323 => Ok(FitFieldManufacturer::from(v)),
                 324 => Ok(FitFieldManufacturer::from(v)),
+                325 => Ok(FitFieldManufacturer::from(v)),
+                326 => Ok(FitFieldManufacturer::from(v)),
+                327 => Ok(FitFieldManufacturer::from(v)),
+                328 => Ok(FitFieldManufacturer::from(v)),
+                329 => Ok(FitFieldManufacturer::from(v)),
+                330 => Ok(FitFieldManufacturer::from(v)),
+                331 => Ok(FitFieldManufacturer::from(v)),
+                332 => Ok(FitFieldManufacturer::from(v)),
+                333 => Ok(FitFieldManufacturer::from(v)),
+                334 => Ok(FitFieldManufacturer::from(v)),
+                335 => Ok(FitFieldManufacturer::from(v)),
+                337 => Ok(FitFieldManufacturer::from(v)),
+                339 => Ok(FitFieldManufacturer::from(v)),
+                340 => Ok(FitFieldManufacturer::from(v)),
+                341 => Ok(FitFieldManufacturer::from(v)),
+                342 => Ok(FitFieldManufacturer::from(v)),
+                345 => Ok(FitFieldManufacturer::from(v)),
+                346 => Ok(FitFieldManufacturer::from(v)),
+                347 => Ok(FitFieldManufacturer::from(v)),
+                348 => Ok(FitFieldManufacturer::from(v)),
+                349 => Ok(FitFieldManufacturer::from(v)),
+                350 => Ok(FitFieldManufacturer::from(v)),
+                351 => Ok(FitFieldManufacturer::from(v)),
                 5759 => Ok(FitFieldManufacturer::from(v)),
                 v => Ok(FitFieldManufacturer::Manufacturer(v)),
             }
@@ -5703,6 +6045,11 @@ impl From<u16> for FitFieldManufacturer {
             146 => FitFieldManufacturer::Blackbird,
             147 => FitFieldManufacturer::MeilanByte,
             148 => FitFieldManufacturer::Ezon,
+            149 => FitFieldManufacturer::Laisi,
+            150 => FitFieldManufacturer::Myzone,
+            151 => FitFieldManufacturer::Abawo,
+            152 => FitFieldManufacturer::Bafang,
+            153 => FitFieldManufacturer::LuhongTechnology,
             255 => FitFieldManufacturer::Development,
             257 => FitFieldManufacturer::Healthandlife,
             258 => FitFieldManufacturer::Lezyne,
@@ -5772,6 +6119,29 @@ impl From<u16> for FitFieldManufacturer {
             322 => FitFieldManufacturer::Shanyue,
             323 => FitFieldManufacturer::SpinningMda,
             324 => FitFieldManufacturer::Hilldating,
+            325 => FitFieldManufacturer::AeroSensor,
+            326 => FitFieldManufacturer::Nike,
+            327 => FitFieldManufacturer::Magicshine,
+            328 => FitFieldManufacturer::Ictrainer,
+            329 => FitFieldManufacturer::AbsoluteCycling,
+            330 => FitFieldManufacturer::EoSwimbetter,
+            331 => FitFieldManufacturer::Mywhoosh,
+            332 => FitFieldManufacturer::Ravemen,
+            333 => FitFieldManufacturer::TektroRacingProducts,
+            334 => FitFieldManufacturer::DaradInnovationCorporation,
+            335 => FitFieldManufacturer::Cycloptim,
+            337 => FitFieldManufacturer::Runna,
+            339 => FitFieldManufacturer::Zepp,
+            340 => FitFieldManufacturer::Peloton,
+            341 => FitFieldManufacturer::Carv,
+            342 => FitFieldManufacturer::Tissot,
+            345 => FitFieldManufacturer::RealVelo,
+            346 => FitFieldManufacturer::Wetech,
+            347 => FitFieldManufacturer::Jespr,
+            348 => FitFieldManufacturer::Huawei,
+            349 => FitFieldManufacturer::Gotoes,
+            350 => FitFieldManufacturer::CadenceApp,
+            351 => FitFieldManufacturer::UnaWatch,
             5759 => FitFieldManufacturer::Actigraphcorp,
             _ => FitFieldManufacturer::UnknownToSdk,
         }
@@ -5799,6 +6169,7 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     Fr225SingleByteProductId, // 14  fr225 model for HRM ANT+ messaging
     Gen3BsmSingleByteProductId, // 15  gen3_bsm model for Bike Speed ANT+ messaging
     Gen3BcmSingleByteProductId, // 16  gen3_bcm model for Bike Cadence ANT+ messaging
+    HrmFitSingleByteProductId, // 22
     OHR, // 255  Garmin Wearable Optical Heart Rate Sensor for ANT+ HR Profile Broadcasting
     Fr301China, // 473
     Fr301Japan, // 474
@@ -6021,6 +6392,8 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     Gpsmap66, // 3028
     ApproachS10, // 3049
     Vivoactive3mL, // 3066
+    Fr245, // 3076
+    Fr245Music, // 3077
     ApproachG80, // 3085
     Edge130Asia, // 3092
     Edge1030Bontrager, // 3095
@@ -6051,6 +6424,7 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     MarqExpedition, // 3250
     MarqAthlete, // 3251
     DescentMk2, // 3258
+    Fr45, // 3282
     Gpsmap66i, // 3284
     Fenix6SSport, // 3287
     Fenix6S, // 3288
@@ -6078,6 +6452,7 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     MarqCommanderAsia, // 3449
     MarqExpeditionAsia, // 3450
     MarqAthleteAsia, // 3451
+    IndexSmartScale2, // 3461
     InstinctSolar, // 3466
     Fr45Asia, // 3469
     Vivoactive3Daimler, // 3473
@@ -6099,6 +6474,8 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     Edge1030Plus, // 3570
     Rally200, // 3578  Rally 100/200 Power Meter Series
     Fr745, // 3589
+    VenusqMusic, // 3596
+    VenusqMusicV2, // 3599
     Venusq, // 3600
     Lily, // 3615
     MarqAdventurer, // 3624
@@ -6113,6 +6490,7 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     MarqGolfer, // 3739
     VenuDaimler, // 3740
     Fr745Asia, // 3794
+    VariaRct715, // 3808
     LilyAsia, // 3809
     Edge1030PlusAsia, // 3812
     Edge130PlusAsia, // 3813
@@ -6122,9 +6500,10 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     Edge1040, // 3843
     MarqGolferAsia, // 3850
     Venu2Plus, // 3851
-    Gnss, // 3865
+    Gnss, // 3865  Airoha AG3335M Family
     Fr55, // 3869
     Instinct2, // 3888
+    Instinct2s, // 3889
     Fenix7s, // 3905
     Fenix7, // 3906
     Fenix7x, // 3907
@@ -6166,9 +6545,13 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     Tactix7, // 4135
     InstinctCrossover, // 4155
     EdgeExplore2, // 4169
+    DescentMk3, // 4222
+    DescentMk3i, // 4223
     ApproachS70, // 4233
     Fr265Large, // 4257
     Fr265Small, // 4258
+    Venu3, // 4260
+    Venu3s, // 4261
     TacxNeoSmart, // 4265  Neo Smart, Tacx
     TacxNeo2Smart, // 4266  Neo 2 Smart, Tacx
     TacxNeo2TSmart, // 4267  Neo 2T Smart, Tacx
@@ -6187,9 +6570,58 @@ pub enum FitFieldGarminProduct { // fit base type: uint16
     EpixGen2Pro51, // 4314
     Fr965, // 4315
     Enduro2, // 4341
+    Fenix7sProSolar, // 4374
     Fenix7ProSolar, // 4375
+    Fenix7xProSolar, // 4376
+    Lily2, // 4380
     Instinct2x, // 4394
+    Vivoactive5, // 4426
+    Fr165, // 4432
+    Fr165Music, // 4433
+    Edge1050, // 4440
     DescentT2, // 4442
+    HrmFit, // 4446
+    MarqGen2Commander, // 4472
+    LilyAthlete, // 4477  aka the Lily 2 Active
+    RallyX10, // 4525  Rally 110/210
+    Fenix8Solar, // 4532
+    Fenix8SolarLarge, // 4533
+    Fenix8Small, // 4534
+    Fenix8, // 4536
+    D2Mach1Pro, // 4556
+    Enduro3, // 4575
+    InstinctE40mm, // 4583
+    InstinctE45mm, // 4584
+    Instinct3Solar45mm, // 4585
+    Instinct3Amoled45mm, // 4586
+    Instinct3Amoled50mm, // 4587
+    DescentG2, // 4588
+    Fenix7ProSolarNoWifi, // 4595
+    VenuX1, // 4603
+    Hrm200, // 4606
+    Vivoactive6, // 4625
+    Fenix8Pro, // 4631
+    Edge550, // 4633
+    Edge850, // 4634
+    Venu4, // 4643
+    Venu4s, // 4644
+    ApproachS44, // 4647
+    EdgeMtb, // 4655
+    ApproachS50, // 4656
+    FenixE, // 4666
+    Bounce2, // 4745
+    Instinct3Solar50mm, // 4759
+    Tactix8Amoled, // 4775
+    Tactix8Solar, // 4776
+    Fr170Music, // 4814
+    Fr170, // 4815
+    ApproachJ1, // 4825
+    D2Mach2, // 4879
+    Fr702026, // 4916
+    InstinctCrossoverAmoled, // 4678
+    D2AirX15, // 4944
+    CirqaSmartBand, // 5019
+    D2Mach2Pro, // 5056
     Sdm4, // 10007  SDM4 footpod
     EdgeRemote, // 10014
     TacxTrainingAppWin, // 20533
@@ -6226,6 +6658,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Fr225SingleByteProductId => write!(f, "{}", "Fr225SingleByteProductId"),
             FitFieldGarminProduct::Gen3BsmSingleByteProductId => write!(f, "{}", "Gen3BsmSingleByteProductId"),
             FitFieldGarminProduct::Gen3BcmSingleByteProductId => write!(f, "{}", "Gen3BcmSingleByteProductId"),
+            FitFieldGarminProduct::HrmFitSingleByteProductId => write!(f, "{}", "HrmFitSingleByteProductId"),
             FitFieldGarminProduct::OHR => write!(f, "{}", "OHR"),
             FitFieldGarminProduct::Fr301China => write!(f, "{}", "Fr301China"),
             FitFieldGarminProduct::Fr301Japan => write!(f, "{}", "Fr301Japan"),
@@ -6448,6 +6881,8 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Gpsmap66 => write!(f, "{}", "Gpsmap66"),
             FitFieldGarminProduct::ApproachS10 => write!(f, "{}", "ApproachS10"),
             FitFieldGarminProduct::Vivoactive3mL => write!(f, "{}", "Vivoactive3mL"),
+            FitFieldGarminProduct::Fr245 => write!(f, "{}", "Fr245"),
+            FitFieldGarminProduct::Fr245Music => write!(f, "{}", "Fr245Music"),
             FitFieldGarminProduct::ApproachG80 => write!(f, "{}", "ApproachG80"),
             FitFieldGarminProduct::Edge130Asia => write!(f, "{}", "Edge130Asia"),
             FitFieldGarminProduct::Edge1030Bontrager => write!(f, "{}", "Edge1030Bontrager"),
@@ -6478,6 +6913,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::MarqExpedition => write!(f, "{}", "MarqExpedition"),
             FitFieldGarminProduct::MarqAthlete => write!(f, "{}", "MarqAthlete"),
             FitFieldGarminProduct::DescentMk2 => write!(f, "{}", "DescentMk2"),
+            FitFieldGarminProduct::Fr45 => write!(f, "{}", "Fr45"),
             FitFieldGarminProduct::Gpsmap66i => write!(f, "{}", "Gpsmap66i"),
             FitFieldGarminProduct::Fenix6SSport => write!(f, "{}", "Fenix6SSport"),
             FitFieldGarminProduct::Fenix6S => write!(f, "{}", "Fenix6S"),
@@ -6505,6 +6941,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::MarqCommanderAsia => write!(f, "{}", "MarqCommanderAsia"),
             FitFieldGarminProduct::MarqExpeditionAsia => write!(f, "{}", "MarqExpeditionAsia"),
             FitFieldGarminProduct::MarqAthleteAsia => write!(f, "{}", "MarqAthleteAsia"),
+            FitFieldGarminProduct::IndexSmartScale2 => write!(f, "{}", "IndexSmartScale2"),
             FitFieldGarminProduct::InstinctSolar => write!(f, "{}", "InstinctSolar"),
             FitFieldGarminProduct::Fr45Asia => write!(f, "{}", "Fr45Asia"),
             FitFieldGarminProduct::Vivoactive3Daimler => write!(f, "{}", "Vivoactive3Daimler"),
@@ -6526,6 +6963,8 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Edge1030Plus => write!(f, "{}", "Edge1030Plus"),
             FitFieldGarminProduct::Rally200 => write!(f, "{}", "Rally200"),
             FitFieldGarminProduct::Fr745 => write!(f, "{}", "Fr745"),
+            FitFieldGarminProduct::VenusqMusic => write!(f, "{}", "VenusqMusic"),
+            FitFieldGarminProduct::VenusqMusicV2 => write!(f, "{}", "VenusqMusicV2"),
             FitFieldGarminProduct::Venusq => write!(f, "{}", "Venusq"),
             FitFieldGarminProduct::Lily => write!(f, "{}", "Lily"),
             FitFieldGarminProduct::MarqAdventurer => write!(f, "{}", "MarqAdventurer"),
@@ -6540,6 +6979,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::MarqGolfer => write!(f, "{}", "MarqGolfer"),
             FitFieldGarminProduct::VenuDaimler => write!(f, "{}", "VenuDaimler"),
             FitFieldGarminProduct::Fr745Asia => write!(f, "{}", "Fr745Asia"),
+            FitFieldGarminProduct::VariaRct715 => write!(f, "{}", "VariaRct715"),
             FitFieldGarminProduct::LilyAsia => write!(f, "{}", "LilyAsia"),
             FitFieldGarminProduct::Edge1030PlusAsia => write!(f, "{}", "Edge1030PlusAsia"),
             FitFieldGarminProduct::Edge130PlusAsia => write!(f, "{}", "Edge130PlusAsia"),
@@ -6552,6 +6992,7 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Gnss => write!(f, "{}", "Gnss"),
             FitFieldGarminProduct::Fr55 => write!(f, "{}", "Fr55"),
             FitFieldGarminProduct::Instinct2 => write!(f, "{}", "Instinct2"),
+            FitFieldGarminProduct::Instinct2s => write!(f, "{}", "Instinct2s"),
             FitFieldGarminProduct::Fenix7s => write!(f, "{}", "Fenix7s"),
             FitFieldGarminProduct::Fenix7 => write!(f, "{}", "Fenix7"),
             FitFieldGarminProduct::Fenix7x => write!(f, "{}", "Fenix7x"),
@@ -6593,9 +7034,13 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::Tactix7 => write!(f, "{}", "Tactix7"),
             FitFieldGarminProduct::InstinctCrossover => write!(f, "{}", "InstinctCrossover"),
             FitFieldGarminProduct::EdgeExplore2 => write!(f, "{}", "EdgeExplore2"),
+            FitFieldGarminProduct::DescentMk3 => write!(f, "{}", "DescentMk3"),
+            FitFieldGarminProduct::DescentMk3i => write!(f, "{}", "DescentMk3i"),
             FitFieldGarminProduct::ApproachS70 => write!(f, "{}", "ApproachS70"),
             FitFieldGarminProduct::Fr265Large => write!(f, "{}", "Fr265Large"),
             FitFieldGarminProduct::Fr265Small => write!(f, "{}", "Fr265Small"),
+            FitFieldGarminProduct::Venu3 => write!(f, "{}", "Venu3"),
+            FitFieldGarminProduct::Venu3s => write!(f, "{}", "Venu3s"),
             FitFieldGarminProduct::TacxNeoSmart => write!(f, "{}", "TacxNeoSmart"),
             FitFieldGarminProduct::TacxNeo2Smart => write!(f, "{}", "TacxNeo2Smart"),
             FitFieldGarminProduct::TacxNeo2TSmart => write!(f, "{}", "TacxNeo2TSmart"),
@@ -6614,9 +7059,58 @@ impl fmt::Display for FitFieldGarminProduct {
             FitFieldGarminProduct::EpixGen2Pro51 => write!(f, "{}", "EpixGen2Pro51"),
             FitFieldGarminProduct::Fr965 => write!(f, "{}", "Fr965"),
             FitFieldGarminProduct::Enduro2 => write!(f, "{}", "Enduro2"),
+            FitFieldGarminProduct::Fenix7sProSolar => write!(f, "{}", "Fenix7sProSolar"),
             FitFieldGarminProduct::Fenix7ProSolar => write!(f, "{}", "Fenix7ProSolar"),
+            FitFieldGarminProduct::Fenix7xProSolar => write!(f, "{}", "Fenix7xProSolar"),
+            FitFieldGarminProduct::Lily2 => write!(f, "{}", "Lily2"),
             FitFieldGarminProduct::Instinct2x => write!(f, "{}", "Instinct2x"),
+            FitFieldGarminProduct::Vivoactive5 => write!(f, "{}", "Vivoactive5"),
+            FitFieldGarminProduct::Fr165 => write!(f, "{}", "Fr165"),
+            FitFieldGarminProduct::Fr165Music => write!(f, "{}", "Fr165Music"),
+            FitFieldGarminProduct::Edge1050 => write!(f, "{}", "Edge1050"),
             FitFieldGarminProduct::DescentT2 => write!(f, "{}", "DescentT2"),
+            FitFieldGarminProduct::HrmFit => write!(f, "{}", "HrmFit"),
+            FitFieldGarminProduct::MarqGen2Commander => write!(f, "{}", "MarqGen2Commander"),
+            FitFieldGarminProduct::LilyAthlete => write!(f, "{}", "LilyAthlete"),
+            FitFieldGarminProduct::RallyX10 => write!(f, "{}", "RallyX10"),
+            FitFieldGarminProduct::Fenix8Solar => write!(f, "{}", "Fenix8Solar"),
+            FitFieldGarminProduct::Fenix8SolarLarge => write!(f, "{}", "Fenix8SolarLarge"),
+            FitFieldGarminProduct::Fenix8Small => write!(f, "{}", "Fenix8Small"),
+            FitFieldGarminProduct::Fenix8 => write!(f, "{}", "Fenix8"),
+            FitFieldGarminProduct::D2Mach1Pro => write!(f, "{}", "D2Mach1Pro"),
+            FitFieldGarminProduct::Enduro3 => write!(f, "{}", "Enduro3"),
+            FitFieldGarminProduct::InstinctE40mm => write!(f, "{}", "InstinctE40mm"),
+            FitFieldGarminProduct::InstinctE45mm => write!(f, "{}", "InstinctE45mm"),
+            FitFieldGarminProduct::Instinct3Solar45mm => write!(f, "{}", "Instinct3Solar45mm"),
+            FitFieldGarminProduct::Instinct3Amoled45mm => write!(f, "{}", "Instinct3Amoled45mm"),
+            FitFieldGarminProduct::Instinct3Amoled50mm => write!(f, "{}", "Instinct3Amoled50mm"),
+            FitFieldGarminProduct::DescentG2 => write!(f, "{}", "DescentG2"),
+            FitFieldGarminProduct::Fenix7ProSolarNoWifi => write!(f, "{}", "Fenix7ProSolarNoWifi"),
+            FitFieldGarminProduct::VenuX1 => write!(f, "{}", "VenuX1"),
+            FitFieldGarminProduct::Hrm200 => write!(f, "{}", "Hrm200"),
+            FitFieldGarminProduct::Vivoactive6 => write!(f, "{}", "Vivoactive6"),
+            FitFieldGarminProduct::Fenix8Pro => write!(f, "{}", "Fenix8Pro"),
+            FitFieldGarminProduct::Edge550 => write!(f, "{}", "Edge550"),
+            FitFieldGarminProduct::Edge850 => write!(f, "{}", "Edge850"),
+            FitFieldGarminProduct::Venu4 => write!(f, "{}", "Venu4"),
+            FitFieldGarminProduct::Venu4s => write!(f, "{}", "Venu4s"),
+            FitFieldGarminProduct::ApproachS44 => write!(f, "{}", "ApproachS44"),
+            FitFieldGarminProduct::EdgeMtb => write!(f, "{}", "EdgeMtb"),
+            FitFieldGarminProduct::ApproachS50 => write!(f, "{}", "ApproachS50"),
+            FitFieldGarminProduct::FenixE => write!(f, "{}", "FenixE"),
+            FitFieldGarminProduct::Bounce2 => write!(f, "{}", "Bounce2"),
+            FitFieldGarminProduct::Instinct3Solar50mm => write!(f, "{}", "Instinct3Solar50mm"),
+            FitFieldGarminProduct::Tactix8Amoled => write!(f, "{}", "Tactix8Amoled"),
+            FitFieldGarminProduct::Tactix8Solar => write!(f, "{}", "Tactix8Solar"),
+            FitFieldGarminProduct::Fr170Music => write!(f, "{}", "Fr170Music"),
+            FitFieldGarminProduct::Fr170 => write!(f, "{}", "Fr170"),
+            FitFieldGarminProduct::ApproachJ1 => write!(f, "{}", "ApproachJ1"),
+            FitFieldGarminProduct::D2Mach2 => write!(f, "{}", "D2Mach2"),
+            FitFieldGarminProduct::Fr702026 => write!(f, "{}", "Fr702026"),
+            FitFieldGarminProduct::InstinctCrossoverAmoled => write!(f, "{}", "InstinctCrossoverAmoled"),
+            FitFieldGarminProduct::D2AirX15 => write!(f, "{}", "D2AirX15"),
+            FitFieldGarminProduct::CirqaSmartBand => write!(f, "{}", "CirqaSmartBand"),
+            FitFieldGarminProduct::D2Mach2Pro => write!(f, "{}", "D2Mach2Pro"),
             FitFieldGarminProduct::Sdm4 => write!(f, "{}", "Sdm4"),
             FitFieldGarminProduct::EdgeRemote => write!(f, "{}", "EdgeRemote"),
             FitFieldGarminProduct::TacxTrainingAppWin => write!(f, "{}", "TacxTrainingAppWin"),
@@ -6659,6 +7153,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 14 => Ok(FitFieldGarminProduct::from(v)),
                 15 => Ok(FitFieldGarminProduct::from(v)),
                 16 => Ok(FitFieldGarminProduct::from(v)),
+                22 => Ok(FitFieldGarminProduct::from(v)),
                 255 => Ok(FitFieldGarminProduct::from(v)),
                 473 => Ok(FitFieldGarminProduct::from(v)),
                 474 => Ok(FitFieldGarminProduct::from(v)),
@@ -6881,6 +7376,8 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 3028 => Ok(FitFieldGarminProduct::from(v)),
                 3049 => Ok(FitFieldGarminProduct::from(v)),
                 3066 => Ok(FitFieldGarminProduct::from(v)),
+                3076 => Ok(FitFieldGarminProduct::from(v)),
+                3077 => Ok(FitFieldGarminProduct::from(v)),
                 3085 => Ok(FitFieldGarminProduct::from(v)),
                 3092 => Ok(FitFieldGarminProduct::from(v)),
                 3095 => Ok(FitFieldGarminProduct::from(v)),
@@ -6911,6 +7408,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 3250 => Ok(FitFieldGarminProduct::from(v)),
                 3251 => Ok(FitFieldGarminProduct::from(v)),
                 3258 => Ok(FitFieldGarminProduct::from(v)),
+                3282 => Ok(FitFieldGarminProduct::from(v)),
                 3284 => Ok(FitFieldGarminProduct::from(v)),
                 3287 => Ok(FitFieldGarminProduct::from(v)),
                 3288 => Ok(FitFieldGarminProduct::from(v)),
@@ -6938,6 +7436,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 3449 => Ok(FitFieldGarminProduct::from(v)),
                 3450 => Ok(FitFieldGarminProduct::from(v)),
                 3451 => Ok(FitFieldGarminProduct::from(v)),
+                3461 => Ok(FitFieldGarminProduct::from(v)),
                 3466 => Ok(FitFieldGarminProduct::from(v)),
                 3469 => Ok(FitFieldGarminProduct::from(v)),
                 3473 => Ok(FitFieldGarminProduct::from(v)),
@@ -6959,6 +7458,8 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 3570 => Ok(FitFieldGarminProduct::from(v)),
                 3578 => Ok(FitFieldGarminProduct::from(v)),
                 3589 => Ok(FitFieldGarminProduct::from(v)),
+                3596 => Ok(FitFieldGarminProduct::from(v)),
+                3599 => Ok(FitFieldGarminProduct::from(v)),
                 3600 => Ok(FitFieldGarminProduct::from(v)),
                 3615 => Ok(FitFieldGarminProduct::from(v)),
                 3624 => Ok(FitFieldGarminProduct::from(v)),
@@ -6973,6 +7474,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 3739 => Ok(FitFieldGarminProduct::from(v)),
                 3740 => Ok(FitFieldGarminProduct::from(v)),
                 3794 => Ok(FitFieldGarminProduct::from(v)),
+                3808 => Ok(FitFieldGarminProduct::from(v)),
                 3809 => Ok(FitFieldGarminProduct::from(v)),
                 3812 => Ok(FitFieldGarminProduct::from(v)),
                 3813 => Ok(FitFieldGarminProduct::from(v)),
@@ -6985,6 +7487,7 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 3865 => Ok(FitFieldGarminProduct::from(v)),
                 3869 => Ok(FitFieldGarminProduct::from(v)),
                 3888 => Ok(FitFieldGarminProduct::from(v)),
+                3889 => Ok(FitFieldGarminProduct::from(v)),
                 3905 => Ok(FitFieldGarminProduct::from(v)),
                 3906 => Ok(FitFieldGarminProduct::from(v)),
                 3907 => Ok(FitFieldGarminProduct::from(v)),
@@ -7026,9 +7529,13 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 4135 => Ok(FitFieldGarminProduct::from(v)),
                 4155 => Ok(FitFieldGarminProduct::from(v)),
                 4169 => Ok(FitFieldGarminProduct::from(v)),
+                4222 => Ok(FitFieldGarminProduct::from(v)),
+                4223 => Ok(FitFieldGarminProduct::from(v)),
                 4233 => Ok(FitFieldGarminProduct::from(v)),
                 4257 => Ok(FitFieldGarminProduct::from(v)),
                 4258 => Ok(FitFieldGarminProduct::from(v)),
+                4260 => Ok(FitFieldGarminProduct::from(v)),
+                4261 => Ok(FitFieldGarminProduct::from(v)),
                 4265 => Ok(FitFieldGarminProduct::from(v)),
                 4266 => Ok(FitFieldGarminProduct::from(v)),
                 4267 => Ok(FitFieldGarminProduct::from(v)),
@@ -7047,9 +7554,58 @@ impl FitFieldParseable for FitFieldGarminProduct {
                 4314 => Ok(FitFieldGarminProduct::from(v)),
                 4315 => Ok(FitFieldGarminProduct::from(v)),
                 4341 => Ok(FitFieldGarminProduct::from(v)),
+                4374 => Ok(FitFieldGarminProduct::from(v)),
                 4375 => Ok(FitFieldGarminProduct::from(v)),
+                4376 => Ok(FitFieldGarminProduct::from(v)),
+                4380 => Ok(FitFieldGarminProduct::from(v)),
                 4394 => Ok(FitFieldGarminProduct::from(v)),
+                4426 => Ok(FitFieldGarminProduct::from(v)),
+                4432 => Ok(FitFieldGarminProduct::from(v)),
+                4433 => Ok(FitFieldGarminProduct::from(v)),
+                4440 => Ok(FitFieldGarminProduct::from(v)),
                 4442 => Ok(FitFieldGarminProduct::from(v)),
+                4446 => Ok(FitFieldGarminProduct::from(v)),
+                4472 => Ok(FitFieldGarminProduct::from(v)),
+                4477 => Ok(FitFieldGarminProduct::from(v)),
+                4525 => Ok(FitFieldGarminProduct::from(v)),
+                4532 => Ok(FitFieldGarminProduct::from(v)),
+                4533 => Ok(FitFieldGarminProduct::from(v)),
+                4534 => Ok(FitFieldGarminProduct::from(v)),
+                4536 => Ok(FitFieldGarminProduct::from(v)),
+                4556 => Ok(FitFieldGarminProduct::from(v)),
+                4575 => Ok(FitFieldGarminProduct::from(v)),
+                4583 => Ok(FitFieldGarminProduct::from(v)),
+                4584 => Ok(FitFieldGarminProduct::from(v)),
+                4585 => Ok(FitFieldGarminProduct::from(v)),
+                4586 => Ok(FitFieldGarminProduct::from(v)),
+                4587 => Ok(FitFieldGarminProduct::from(v)),
+                4588 => Ok(FitFieldGarminProduct::from(v)),
+                4595 => Ok(FitFieldGarminProduct::from(v)),
+                4603 => Ok(FitFieldGarminProduct::from(v)),
+                4606 => Ok(FitFieldGarminProduct::from(v)),
+                4625 => Ok(FitFieldGarminProduct::from(v)),
+                4631 => Ok(FitFieldGarminProduct::from(v)),
+                4633 => Ok(FitFieldGarminProduct::from(v)),
+                4634 => Ok(FitFieldGarminProduct::from(v)),
+                4643 => Ok(FitFieldGarminProduct::from(v)),
+                4644 => Ok(FitFieldGarminProduct::from(v)),
+                4647 => Ok(FitFieldGarminProduct::from(v)),
+                4655 => Ok(FitFieldGarminProduct::from(v)),
+                4656 => Ok(FitFieldGarminProduct::from(v)),
+                4666 => Ok(FitFieldGarminProduct::from(v)),
+                4745 => Ok(FitFieldGarminProduct::from(v)),
+                4759 => Ok(FitFieldGarminProduct::from(v)),
+                4775 => Ok(FitFieldGarminProduct::from(v)),
+                4776 => Ok(FitFieldGarminProduct::from(v)),
+                4814 => Ok(FitFieldGarminProduct::from(v)),
+                4815 => Ok(FitFieldGarminProduct::from(v)),
+                4825 => Ok(FitFieldGarminProduct::from(v)),
+                4879 => Ok(FitFieldGarminProduct::from(v)),
+                4916 => Ok(FitFieldGarminProduct::from(v)),
+                4678 => Ok(FitFieldGarminProduct::from(v)),
+                4944 => Ok(FitFieldGarminProduct::from(v)),
+                5019 => Ok(FitFieldGarminProduct::from(v)),
+                5056 => Ok(FitFieldGarminProduct::from(v)),
                 10007 => Ok(FitFieldGarminProduct::from(v)),
                 10014 => Ok(FitFieldGarminProduct::from(v)),
                 20533 => Ok(FitFieldGarminProduct::from(v)),
@@ -7089,6 +7645,7 @@ impl From<u16> for FitFieldGarminProduct {
             14 => FitFieldGarminProduct::Fr225SingleByteProductId,
             15 => FitFieldGarminProduct::Gen3BsmSingleByteProductId,
             16 => FitFieldGarminProduct::Gen3BcmSingleByteProductId,
+            22 => FitFieldGarminProduct::HrmFitSingleByteProductId,
             255 => FitFieldGarminProduct::OHR,
             473 => FitFieldGarminProduct::Fr301China,
             474 => FitFieldGarminProduct::Fr301Japan,
@@ -7311,6 +7868,8 @@ impl From<u16> for FitFieldGarminProduct {
             3028 => FitFieldGarminProduct::Gpsmap66,
             3049 => FitFieldGarminProduct::ApproachS10,
             3066 => FitFieldGarminProduct::Vivoactive3mL,
+            3076 => FitFieldGarminProduct::Fr245,
+            3077 => FitFieldGarminProduct::Fr245Music,
             3085 => FitFieldGarminProduct::ApproachG80,
             3092 => FitFieldGarminProduct::Edge130Asia,
             3095 => FitFieldGarminProduct::Edge1030Bontrager,
@@ -7341,6 +7900,7 @@ impl From<u16> for FitFieldGarminProduct {
             3250 => FitFieldGarminProduct::MarqExpedition,
             3251 => FitFieldGarminProduct::MarqAthlete,
             3258 => FitFieldGarminProduct::DescentMk2,
+            3282 => FitFieldGarminProduct::Fr45,
             3284 => FitFieldGarminProduct::Gpsmap66i,
             3287 => FitFieldGarminProduct::Fenix6SSport,
             3288 => FitFieldGarminProduct::Fenix6S,
@@ -7368,6 +7928,7 @@ impl From<u16> for FitFieldGarminProduct {
             3449 => FitFieldGarminProduct::MarqCommanderAsia,
             3450 => FitFieldGarminProduct::MarqExpeditionAsia,
             3451 => FitFieldGarminProduct::MarqAthleteAsia,
+            3461 => FitFieldGarminProduct::IndexSmartScale2,
             3466 => FitFieldGarminProduct::InstinctSolar,
             3469 => FitFieldGarminProduct::Fr45Asia,
             3473 => FitFieldGarminProduct::Vivoactive3Daimler,
@@ -7389,6 +7950,8 @@ impl From<u16> for FitFieldGarminProduct {
             3570 => FitFieldGarminProduct::Edge1030Plus,
             3578 => FitFieldGarminProduct::Rally200,
             3589 => FitFieldGarminProduct::Fr745,
+            3596 => FitFieldGarminProduct::VenusqMusic,
+            3599 => FitFieldGarminProduct::VenusqMusicV2,
             3600 => FitFieldGarminProduct::Venusq,
             3615 => FitFieldGarminProduct::Lily,
             3624 => FitFieldGarminProduct::MarqAdventurer,
@@ -7403,6 +7966,7 @@ impl From<u16> for FitFieldGarminProduct {
             3739 => FitFieldGarminProduct::MarqGolfer,
             3740 => FitFieldGarminProduct::VenuDaimler,
             3794 => FitFieldGarminProduct::Fr745Asia,
+            3808 => FitFieldGarminProduct::VariaRct715,
             3809 => FitFieldGarminProduct::LilyAsia,
             3812 => FitFieldGarminProduct::Edge1030PlusAsia,
             3813 => FitFieldGarminProduct::Edge130PlusAsia,
@@ -7415,6 +7979,7 @@ impl From<u16> for FitFieldGarminProduct {
             3865 => FitFieldGarminProduct::Gnss,
             3869 => FitFieldGarminProduct::Fr55,
             3888 => FitFieldGarminProduct::Instinct2,
+            3889 => FitFieldGarminProduct::Instinct2s,
             3905 => FitFieldGarminProduct::Fenix7s,
             3906 => FitFieldGarminProduct::Fenix7,
             3907 => FitFieldGarminProduct::Fenix7x,
@@ -7456,9 +8021,13 @@ impl From<u16> for FitFieldGarminProduct {
             4135 => FitFieldGarminProduct::Tactix7,
             4155 => FitFieldGarminProduct::InstinctCrossover,
             4169 => FitFieldGarminProduct::EdgeExplore2,
+            4222 => FitFieldGarminProduct::DescentMk3,
+            4223 => FitFieldGarminProduct::DescentMk3i,
             4233 => FitFieldGarminProduct::ApproachS70,
             4257 => FitFieldGarminProduct::Fr265Large,
             4258 => FitFieldGarminProduct::Fr265Small,
+            4260 => FitFieldGarminProduct::Venu3,
+            4261 => FitFieldGarminProduct::Venu3s,
             4265 => FitFieldGarminProduct::TacxNeoSmart,
             4266 => FitFieldGarminProduct::TacxNeo2Smart,
             4267 => FitFieldGarminProduct::TacxNeo2TSmart,
@@ -7477,9 +8046,58 @@ impl From<u16> for FitFieldGarminProduct {
             4314 => FitFieldGarminProduct::EpixGen2Pro51,
             4315 => FitFieldGarminProduct::Fr965,
             4341 => FitFieldGarminProduct::Enduro2,
+            4374 => FitFieldGarminProduct::Fenix7sProSolar,
             4375 => FitFieldGarminProduct::Fenix7ProSolar,
+            4376 => FitFieldGarminProduct::Fenix7xProSolar,
+            4380 => FitFieldGarminProduct::Lily2,
             4394 => FitFieldGarminProduct::Instinct2x,
+            4426 => FitFieldGarminProduct::Vivoactive5,
+            4432 => FitFieldGarminProduct::Fr165,
+            4433 => FitFieldGarminProduct::Fr165Music,
+            4440 => FitFieldGarminProduct::Edge1050,
             4442 => FitFieldGarminProduct::DescentT2,
+            4446 => FitFieldGarminProduct::HrmFit,
+            4472 => FitFieldGarminProduct::MarqGen2Commander,
+            4477 => FitFieldGarminProduct::LilyAthlete,
+            4525 => FitFieldGarminProduct::RallyX10,
+            4532 => FitFieldGarminProduct::Fenix8Solar,
+            4533 => FitFieldGarminProduct::Fenix8SolarLarge,
+            4534 => FitFieldGarminProduct::Fenix8Small,
+            4536 => FitFieldGarminProduct::Fenix8,
+            4556 => FitFieldGarminProduct::D2Mach1Pro,
+            4575 => FitFieldGarminProduct::Enduro3,
+            4583 => FitFieldGarminProduct::InstinctE40mm,
+            4584 => FitFieldGarminProduct::InstinctE45mm,
+            4585 => FitFieldGarminProduct::Instinct3Solar45mm,
+            4586 => FitFieldGarminProduct::Instinct3Amoled45mm,
+            4587 => FitFieldGarminProduct::Instinct3Amoled50mm,
+            4588 => FitFieldGarminProduct::DescentG2,
+            4595 => FitFieldGarminProduct::Fenix7ProSolarNoWifi,
+            4603 => FitFieldGarminProduct::VenuX1,
+            4606 => FitFieldGarminProduct::Hrm200,
+            4625 => FitFieldGarminProduct::Vivoactive6,
+            4631 => FitFieldGarminProduct::Fenix8Pro,
+            4633 => FitFieldGarminProduct::Edge550,
+            4634 => FitFieldGarminProduct::Edge850,
+            4643 => FitFieldGarminProduct::Venu4,
+            4644 => FitFieldGarminProduct::Venu4s,
+            4647 => FitFieldGarminProduct::ApproachS44,
+            4655 => FitFieldGarminProduct::EdgeMtb,
+            4656 => FitFieldGarminProduct::ApproachS50,
+            4666 => FitFieldGarminProduct::FenixE,
+            4745 => FitFieldGarminProduct::Bounce2,
+            4759 => FitFieldGarminProduct::Instinct3Solar50mm,
+            4775 => FitFieldGarminProduct::Tactix8Amoled,
+            4776 => FitFieldGarminProduct::Tactix8Solar,
+            4814 => FitFieldGarminProduct::Fr170Music,
+            4815 => FitFieldGarminProduct::Fr170,
+            4825 => FitFieldGarminProduct::ApproachJ1,
+            4879 => FitFieldGarminProduct::D2Mach2,
+            4916 => FitFieldGarminProduct::Fr702026,
+            4678 => FitFieldGarminProduct::InstinctCrossoverAmoled,
+            4944 => FitFieldGarminProduct::D2AirX15,
+            5019 => FitFieldGarminProduct::CirqaSmartBand,
+            5056 => FitFieldGarminProduct::D2Mach2Pro,
             10007 => FitFieldGarminProduct::Sdm4,
             10014 => FitFieldGarminProduct::EdgeRemote,
             20533 => FitFieldGarminProduct::TacxTrainingAppWin,
@@ -8271,6 +8889,8 @@ pub enum FitFieldSwimStroke { // fit base type: enum
     Drill = 4,
     Mixed = 5,
     Im = 6,  // IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order.
+    ImByRound = 7,  // For repeated workout steps, a new individual medly stroke is used for each round.
+    Rimo = 8,  // Reverse IM Order
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
 }
@@ -8285,6 +8905,8 @@ impl fmt::Display for FitFieldSwimStroke {
             FitFieldSwimStroke::Drill => write!(f, "{}", "Drill"),
             FitFieldSwimStroke::Mixed => write!(f, "{}", "Mixed"),
             FitFieldSwimStroke::Im => write!(f, "{}", "Im"),
+            FitFieldSwimStroke::ImByRound => write!(f, "{}", "ImByRound"),
+            FitFieldSwimStroke::Rimo => write!(f, "{}", "Rimo"),
             FitFieldSwimStroke::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldSwimStroke::UnknownToSdk => write!(f, "UnknownToSdk")
         }
@@ -8314,6 +8936,8 @@ impl From<u8> for FitFieldSwimStroke {
             4 => FitFieldSwimStroke::Drill,
             5 => FitFieldSwimStroke::Mixed,
             6 => FitFieldSwimStroke::Im,
+            7 => FitFieldSwimStroke::ImByRound,
+            8 => FitFieldSwimStroke::Rimo,
             _ => FitFieldSwimStroke::UnknownToSdk,
         }
     }
@@ -8332,6 +8956,7 @@ pub enum FitFieldActivityType { // fit base type: enum
     Swimming = 5,
     Walking = 6,
     Sedentary = 8,
+    WheelchairPushing = 13,
     All = 254,  // All is for goals only to include all sports.
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
@@ -8348,6 +8973,7 @@ impl fmt::Display for FitFieldActivityType {
             FitFieldActivityType::Swimming => write!(f, "{}", "Swimming"),
             FitFieldActivityType::Walking => write!(f, "{}", "Walking"),
             FitFieldActivityType::Sedentary => write!(f, "{}", "Sedentary"),
+            FitFieldActivityType::WheelchairPushing => write!(f, "{}", "WheelchairPushing"),
             FitFieldActivityType::All => write!(f, "{}", "All"),
             FitFieldActivityType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldActivityType::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -8379,6 +9005,7 @@ impl From<u8> for FitFieldActivityType {
             5 => FitFieldActivityType::Swimming,
             6 => FitFieldActivityType::Walking,
             8 => FitFieldActivityType::Sedentary,
+            13 => FitFieldActivityType::WheelchairPushing,
             254 => FitFieldActivityType::All,
             _ => FitFieldActivityType::UnknownToSdk,
         }
@@ -9814,8 +10441,12 @@ pub enum FitFieldSegmentLeaderboardType { // fit base type: enum
     Qom = 6,
     Pr = 7,
     Goal = 8,
-    Rival = 9,
+    Carrot = 9,
     ClubLeader = 10,
+    Rival = 11,
+    Last = 12,
+    RecentBest = 13,
+    CourseRecord = 14,
     InvalidFieldValue = -1,
     UnknownToSdk = -2,
 }
@@ -9832,8 +10463,12 @@ impl fmt::Display for FitFieldSegmentLeaderboardType {
             FitFieldSegmentLeaderboardType::Qom => write!(f, "{}", "Qom"),
             FitFieldSegmentLeaderboardType::Pr => write!(f, "{}", "Pr"),
             FitFieldSegmentLeaderboardType::Goal => write!(f, "{}", "Goal"),
-            FitFieldSegmentLeaderboardType::Rival => write!(f, "{}", "Rival"),
+            FitFieldSegmentLeaderboardType::Carrot => write!(f, "{}", "Carrot"),
             FitFieldSegmentLeaderboardType::ClubLeader => write!(f, "{}", "ClubLeader"),
+            FitFieldSegmentLeaderboardType::Rival => write!(f, "{}", "Rival"),
+            FitFieldSegmentLeaderboardType::Last => write!(f, "{}", "Last"),
+            FitFieldSegmentLeaderboardType::RecentBest => write!(f, "{}", "RecentBest"),
+            FitFieldSegmentLeaderboardType::CourseRecord => write!(f, "{}", "CourseRecord"),
             FitFieldSegmentLeaderboardType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldSegmentLeaderboardType::UnknownToSdk => write!(f, "UnknownToSdk")
         }
@@ -9865,8 +10500,12 @@ impl From<u8> for FitFieldSegmentLeaderboardType {
             6 => FitFieldSegmentLeaderboardType::Qom,
             7 => FitFieldSegmentLeaderboardType::Pr,
             8 => FitFieldSegmentLeaderboardType::Goal,
-            9 => FitFieldSegmentLeaderboardType::Rival,
+            9 => FitFieldSegmentLeaderboardType::Carrot,
             10 => FitFieldSegmentLeaderboardType::ClubLeader,
+            11 => FitFieldSegmentLeaderboardType::Rival,
+            12 => FitFieldSegmentLeaderboardType::Last,
+            13 => FitFieldSegmentLeaderboardType::RecentBest,
+            14 => FitFieldSegmentLeaderboardType::CourseRecord,
             _ => FitFieldSegmentLeaderboardType::UnknownToSdk,
         }
     }
@@ -12559,6 +13198,25 @@ pub enum FitFieldExerciseCategory { // fit base type: uint16
     TricepsExtension, // 30
     WarmUp, // 31
     Run, // 32
+    Bike, // 33
+    CardioSensors, // 34  Exercises within workouts that use GPS/sensors rather than rep counting
+    Move, // 35
+    Pose, // 36
+    BandedExercises, // 37
+    BattleRope, // 38
+    Elliptical, // 39
+    FloorClimb, // 40
+    IndoorBike, // 41
+    IndoorRow, // 42
+    Ladder, // 43
+    Sandbag, // 44
+    Sled, // 45
+    SledgeHammer, // 46
+    StairStepper, // 47
+    Suspension, // 49
+    Tire, // 50
+    RunIndoor, // 52
+    BikeOutdoor, // 53
     Unknown, // 65534
     ExerciseCategory(u16),
     InvalidFieldValue,
@@ -12601,6 +13259,25 @@ impl fmt::Display for FitFieldExerciseCategory {
             FitFieldExerciseCategory::TricepsExtension => write!(f, "{}", "TricepsExtension"),
             FitFieldExerciseCategory::WarmUp => write!(f, "{}", "WarmUp"),
             FitFieldExerciseCategory::Run => write!(f, "{}", "Run"),
+            FitFieldExerciseCategory::Bike => write!(f, "{}", "Bike"),
+            FitFieldExerciseCategory::CardioSensors => write!(f, "{}", "CardioSensors"),
+            FitFieldExerciseCategory::Move => write!(f, "{}", "Move"),
+            FitFieldExerciseCategory::Pose => write!(f, "{}", "Pose"),
+            FitFieldExerciseCategory::BandedExercises => write!(f, "{}", "BandedExercises"),
+            FitFieldExerciseCategory::BattleRope => write!(f, "{}", "BattleRope"),
+            FitFieldExerciseCategory::Elliptical => write!(f, "{}", "Elliptical"),
+            FitFieldExerciseCategory::FloorClimb => write!(f, "{}", "FloorClimb"),
+            FitFieldExerciseCategory::IndoorBike => write!(f, "{}", "IndoorBike"),
+            FitFieldExerciseCategory::IndoorRow => write!(f, "{}", "IndoorRow"),
+            FitFieldExerciseCategory::Ladder => write!(f, "{}", "Ladder"),
+            FitFieldExerciseCategory::Sandbag => write!(f, "{}", "Sandbag"),
+            FitFieldExerciseCategory::Sled => write!(f, "{}", "Sled"),
+            FitFieldExerciseCategory::SledgeHammer => write!(f, "{}", "SledgeHammer"),
+            FitFieldExerciseCategory::StairStepper => write!(f, "{}", "StairStepper"),
+            FitFieldExerciseCategory::Suspension => write!(f, "{}", "Suspension"),
+            FitFieldExerciseCategory::Tire => write!(f, "{}", "Tire"),
+            FitFieldExerciseCategory::RunIndoor => write!(f, "{}", "RunIndoor"),
+            FitFieldExerciseCategory::BikeOutdoor => write!(f, "{}", "BikeOutdoor"),
             FitFieldExerciseCategory::Unknown => write!(f, "{}", "Unknown"),
             FitFieldExerciseCategory::ExerciseCategory(x) => write!(f, "{}({})", "ExerciseCategory", x),
             FitFieldExerciseCategory::InvalidFieldValue => write!(f, "InvalidFieldValue"),
@@ -12649,6 +13326,25 @@ impl FitFieldParseable for FitFieldExerciseCategory {
                 30 => Ok(FitFieldExerciseCategory::from(v)),
                 31 => Ok(FitFieldExerciseCategory::from(v)),
                 32 => Ok(FitFieldExerciseCategory::from(v)),
+                33 => Ok(FitFieldExerciseCategory::from(v)),
+                34 => Ok(FitFieldExerciseCategory::from(v)),
+                35 => Ok(FitFieldExerciseCategory::from(v)),
+                36 => Ok(FitFieldExerciseCategory::from(v)),
+                37 => Ok(FitFieldExerciseCategory::from(v)),
+                38 => Ok(FitFieldExerciseCategory::from(v)),
+                39 => Ok(FitFieldExerciseCategory::from(v)),
+                40 => Ok(FitFieldExerciseCategory::from(v)),
+                41 => Ok(FitFieldExerciseCategory::from(v)),
+                42 => Ok(FitFieldExerciseCategory::from(v)),
+                43 => Ok(FitFieldExerciseCategory::from(v)),
+                44 => Ok(FitFieldExerciseCategory::from(v)),
+                45 => Ok(FitFieldExerciseCategory::from(v)),
+                46 => Ok(FitFieldExerciseCategory::from(v)),
+                47 => Ok(FitFieldExerciseCategory::from(v)),
+                49 => Ok(FitFieldExerciseCategory::from(v)),
+                50 => Ok(FitFieldExerciseCategory::from(v)),
+                52 => Ok(FitFieldExerciseCategory::from(v)),
+                53 => Ok(FitFieldExerciseCategory::from(v)),
                 65534 => Ok(FitFieldExerciseCategory::from(v)),
                 v => Ok(FitFieldExerciseCategory::ExerciseCategory(v)),
             }
@@ -12694,6 +13390,25 @@ impl From<u16> for FitFieldExerciseCategory {
             30 => FitFieldExerciseCategory::TricepsExtension,
             31 => FitFieldExerciseCategory::WarmUp,
             32 => FitFieldExerciseCategory::Run,
+            33 => FitFieldExerciseCategory::Bike,
+            34 => FitFieldExerciseCategory::CardioSensors,
+            35 => FitFieldExerciseCategory::Move,
+            36 => FitFieldExerciseCategory::Pose,
+            37 => FitFieldExerciseCategory::BandedExercises,
+            38 => FitFieldExerciseCategory::BattleRope,
+            39 => FitFieldExerciseCategory::Elliptical,
+            40 => FitFieldExerciseCategory::FloorClimb,
+            41 => FitFieldExerciseCategory::IndoorBike,
+            42 => FitFieldExerciseCategory::IndoorRow,
+            43 => FitFieldExerciseCategory::Ladder,
+            44 => FitFieldExerciseCategory::Sandbag,
+            45 => FitFieldExerciseCategory::Sled,
+            46 => FitFieldExerciseCategory::SledgeHammer,
+            47 => FitFieldExerciseCategory::StairStepper,
+            49 => FitFieldExerciseCategory::Suspension,
+            50 => FitFieldExerciseCategory::Tire,
+            52 => FitFieldExerciseCategory::RunIndoor,
+            53 => FitFieldExerciseCategory::BikeOutdoor,
             65534 => FitFieldExerciseCategory::Unknown,
             _ => FitFieldExerciseCategory::UnknownToSdk,
         }
@@ -13005,6 +13720,27 @@ pub enum FitFieldCardioExerciseName { // fit base type: uint16
     WeightedSquatJacks, // 19
     TripleUnder, // 20
     WeightedTripleUnder, // 21
+    Elliptical, // 22
+    Spinning, // 23
+    PolePaddleForwardWheelchair, // 24
+    PolePaddleBackwardWheelchair, // 25
+    PoleHandcycleForwardWheelchair, // 26
+    PoleHandcycleBackwardWheelchair, // 27
+    PoleRainbowWheelchair, // 28
+    DoublePunchForwardWheelchair, // 29
+    DoublePunchDownWheelchair, // 30
+    DoublePunchSidewaysWheelchair, // 31
+    DoublePunchUpWheelchair, // 32
+    SitSkiWheelchair, // 33
+    SittingJacksWheelchair, // 34
+    PunchForwardWheelchair, // 35
+    PunchDownWheelchair, // 36
+    PunchSidewaysWheelchair, // 37
+    PunchUpWheelchair, // 38
+    PunchBagWheelchair, // 39
+    PoleDdFfUuWheelchair, // 40
+    ButterflyArmsWheelchair, // 41
+    Punch, // 42
     CardioExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -13035,6 +13771,27 @@ impl fmt::Display for FitFieldCardioExerciseName {
             FitFieldCardioExerciseName::WeightedSquatJacks => write!(f, "{}", "WeightedSquatJacks"),
             FitFieldCardioExerciseName::TripleUnder => write!(f, "{}", "TripleUnder"),
             FitFieldCardioExerciseName::WeightedTripleUnder => write!(f, "{}", "WeightedTripleUnder"),
+            FitFieldCardioExerciseName::Elliptical => write!(f, "{}", "Elliptical"),
+            FitFieldCardioExerciseName::Spinning => write!(f, "{}", "Spinning"),
+            FitFieldCardioExerciseName::PolePaddleForwardWheelchair => write!(f, "{}", "PolePaddleForwardWheelchair"),
+            FitFieldCardioExerciseName::PolePaddleBackwardWheelchair => write!(f, "{}", "PolePaddleBackwardWheelchair"),
+            FitFieldCardioExerciseName::PoleHandcycleForwardWheelchair => write!(f, "{}", "PoleHandcycleForwardWheelchair"),
+            FitFieldCardioExerciseName::PoleHandcycleBackwardWheelchair => write!(f, "{}", "PoleHandcycleBackwardWheelchair"),
+            FitFieldCardioExerciseName::PoleRainbowWheelchair => write!(f, "{}", "PoleRainbowWheelchair"),
+            FitFieldCardioExerciseName::DoublePunchForwardWheelchair => write!(f, "{}", "DoublePunchForwardWheelchair"),
+            FitFieldCardioExerciseName::DoublePunchDownWheelchair => write!(f, "{}", "DoublePunchDownWheelchair"),
+            FitFieldCardioExerciseName::DoublePunchSidewaysWheelchair => write!(f, "{}", "DoublePunchSidewaysWheelchair"),
+            FitFieldCardioExerciseName::DoublePunchUpWheelchair => write!(f, "{}", "DoublePunchUpWheelchair"),
+            FitFieldCardioExerciseName::SitSkiWheelchair => write!(f, "{}", "SitSkiWheelchair"),
+            FitFieldCardioExerciseName::SittingJacksWheelchair => write!(f, "{}", "SittingJacksWheelchair"),
+            FitFieldCardioExerciseName::PunchForwardWheelchair => write!(f, "{}", "PunchForwardWheelchair"),
+            FitFieldCardioExerciseName::PunchDownWheelchair => write!(f, "{}", "PunchDownWheelchair"),
+            FitFieldCardioExerciseName::PunchSidewaysWheelchair => write!(f, "{}", "PunchSidewaysWheelchair"),
+            FitFieldCardioExerciseName::PunchUpWheelchair => write!(f, "{}", "PunchUpWheelchair"),
+            FitFieldCardioExerciseName::PunchBagWheelchair => write!(f, "{}", "PunchBagWheelchair"),
+            FitFieldCardioExerciseName::PoleDdFfUuWheelchair => write!(f, "{}", "PoleDdFfUuWheelchair"),
+            FitFieldCardioExerciseName::ButterflyArmsWheelchair => write!(f, "{}", "ButterflyArmsWheelchair"),
+            FitFieldCardioExerciseName::Punch => write!(f, "{}", "Punch"),
             FitFieldCardioExerciseName::CardioExerciseName(x) => write!(f, "{}({})", "CardioExerciseName", x),
             FitFieldCardioExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldCardioExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -13071,6 +13828,27 @@ impl FitFieldParseable for FitFieldCardioExerciseName {
                 19 => Ok(FitFieldCardioExerciseName::from(v)),
                 20 => Ok(FitFieldCardioExerciseName::from(v)),
                 21 => Ok(FitFieldCardioExerciseName::from(v)),
+                22 => Ok(FitFieldCardioExerciseName::from(v)),
+                23 => Ok(FitFieldCardioExerciseName::from(v)),
+                24 => Ok(FitFieldCardioExerciseName::from(v)),
+                25 => Ok(FitFieldCardioExerciseName::from(v)),
+                26 => Ok(FitFieldCardioExerciseName::from(v)),
+                27 => Ok(FitFieldCardioExerciseName::from(v)),
+                28 => Ok(FitFieldCardioExerciseName::from(v)),
+                29 => Ok(FitFieldCardioExerciseName::from(v)),
+                30 => Ok(FitFieldCardioExerciseName::from(v)),
+                31 => Ok(FitFieldCardioExerciseName::from(v)),
+                32 => Ok(FitFieldCardioExerciseName::from(v)),
+                33 => Ok(FitFieldCardioExerciseName::from(v)),
+                34 => Ok(FitFieldCardioExerciseName::from(v)),
+                35 => Ok(FitFieldCardioExerciseName::from(v)),
+                36 => Ok(FitFieldCardioExerciseName::from(v)),
+                37 => Ok(FitFieldCardioExerciseName::from(v)),
+                38 => Ok(FitFieldCardioExerciseName::from(v)),
+                39 => Ok(FitFieldCardioExerciseName::from(v)),
+                40 => Ok(FitFieldCardioExerciseName::from(v)),
+                41 => Ok(FitFieldCardioExerciseName::from(v)),
+                42 => Ok(FitFieldCardioExerciseName::from(v)),
                 v => Ok(FitFieldCardioExerciseName::CardioExerciseName(v)),
             }
         }
@@ -13104,6 +13882,27 @@ impl From<u16> for FitFieldCardioExerciseName {
             19 => FitFieldCardioExerciseName::WeightedSquatJacks,
             20 => FitFieldCardioExerciseName::TripleUnder,
             21 => FitFieldCardioExerciseName::WeightedTripleUnder,
+            22 => FitFieldCardioExerciseName::Elliptical,
+            23 => FitFieldCardioExerciseName::Spinning,
+            24 => FitFieldCardioExerciseName::PolePaddleForwardWheelchair,
+            25 => FitFieldCardioExerciseName::PolePaddleBackwardWheelchair,
+            26 => FitFieldCardioExerciseName::PoleHandcycleForwardWheelchair,
+            27 => FitFieldCardioExerciseName::PoleHandcycleBackwardWheelchair,
+            28 => FitFieldCardioExerciseName::PoleRainbowWheelchair,
+            29 => FitFieldCardioExerciseName::DoublePunchForwardWheelchair,
+            30 => FitFieldCardioExerciseName::DoublePunchDownWheelchair,
+            31 => FitFieldCardioExerciseName::DoublePunchSidewaysWheelchair,
+            32 => FitFieldCardioExerciseName::DoublePunchUpWheelchair,
+            33 => FitFieldCardioExerciseName::SitSkiWheelchair,
+            34 => FitFieldCardioExerciseName::SittingJacksWheelchair,
+            35 => FitFieldCardioExerciseName::PunchForwardWheelchair,
+            36 => FitFieldCardioExerciseName::PunchDownWheelchair,
+            37 => FitFieldCardioExerciseName::PunchSidewaysWheelchair,
+            38 => FitFieldCardioExerciseName::PunchUpWheelchair,
+            39 => FitFieldCardioExerciseName::PunchBagWheelchair,
+            40 => FitFieldCardioExerciseName::PoleDdFfUuWheelchair,
+            41 => FitFieldCardioExerciseName::ButterflyArmsWheelchair,
+            42 => FitFieldCardioExerciseName::Punch,
             _ => FitFieldCardioExerciseName::UnknownToSdk,
         }
     }
@@ -13119,6 +13918,10 @@ pub enum FitFieldCarryExerciseName { // fit base type: uint16
     FarmersWalkOnToes, // 2
     HexDumbbellHold, // 3
     OverheadCarry, // 4
+    DumbbellWaiterCarry, // 5
+    FarmersCarryWalkLunge, // 6
+    FarmersCarry, // 7
+    FarmersCarryOnToes, // 8
     CarryExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -13132,6 +13935,10 @@ impl fmt::Display for FitFieldCarryExerciseName {
             FitFieldCarryExerciseName::FarmersWalkOnToes => write!(f, "{}", "FarmersWalkOnToes"),
             FitFieldCarryExerciseName::HexDumbbellHold => write!(f, "{}", "HexDumbbellHold"),
             FitFieldCarryExerciseName::OverheadCarry => write!(f, "{}", "OverheadCarry"),
+            FitFieldCarryExerciseName::DumbbellWaiterCarry => write!(f, "{}", "DumbbellWaiterCarry"),
+            FitFieldCarryExerciseName::FarmersCarryWalkLunge => write!(f, "{}", "FarmersCarryWalkLunge"),
+            FitFieldCarryExerciseName::FarmersCarry => write!(f, "{}", "FarmersCarry"),
+            FitFieldCarryExerciseName::FarmersCarryOnToes => write!(f, "{}", "FarmersCarryOnToes"),
             FitFieldCarryExerciseName::CarryExerciseName(x) => write!(f, "{}({})", "CarryExerciseName", x),
             FitFieldCarryExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldCarryExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -13151,6 +13958,10 @@ impl FitFieldParseable for FitFieldCarryExerciseName {
                 2 => Ok(FitFieldCarryExerciseName::from(v)),
                 3 => Ok(FitFieldCarryExerciseName::from(v)),
                 4 => Ok(FitFieldCarryExerciseName::from(v)),
+                5 => Ok(FitFieldCarryExerciseName::from(v)),
+                6 => Ok(FitFieldCarryExerciseName::from(v)),
+                7 => Ok(FitFieldCarryExerciseName::from(v)),
+                8 => Ok(FitFieldCarryExerciseName::from(v)),
                 v => Ok(FitFieldCarryExerciseName::CarryExerciseName(v)),
             }
         }
@@ -13167,6 +13978,10 @@ impl From<u16> for FitFieldCarryExerciseName {
             2 => FitFieldCarryExerciseName::FarmersWalkOnToes,
             3 => FitFieldCarryExerciseName::HexDumbbellHold,
             4 => FitFieldCarryExerciseName::OverheadCarry,
+            5 => FitFieldCarryExerciseName::DumbbellWaiterCarry,
+            6 => FitFieldCarryExerciseName::FarmersCarryWalkLunge,
+            7 => FitFieldCarryExerciseName::FarmersCarry,
+            8 => FitFieldCarryExerciseName::FarmersCarryOnToes,
             _ => FitFieldCarryExerciseName::UnknownToSdk,
         }
     }
@@ -13385,6 +14200,27 @@ pub enum FitFieldCoreExerciseName { // fit base type: uint16
     Swimming, // 70
     Teaser, // 71
     TheHundred, // 72
+    BicepCurlWithLegExtensionWithWeights, // 73
+    HangingLSit, // 75
+    LowerLiftWithWeights, // 77
+    RingLSit, // 79
+    Rowing1WithWeights, // 80
+    Rowing2WithWeights, // 81
+    ScissorsWithWeights, // 82
+    SingleLegStretchWithWeights, // 83
+    ToesToElbows, // 84
+    WeightedCrissCross, // 85
+    WeightedDoubleLegStretch, // 86
+    WeightedTheHundred, // 87
+    LSit, // 88
+    TurkishGetUp, // 89
+    WeightedRingLSit, // 90
+    WeightedHangingLSit, // 91
+    WeightedLSit, // 92
+    SideBendLowWheelchair, // 93
+    SideBendMidWheelchair, // 94
+    SideBendHighWheelchair, // 95
+    SeatedSideBend, // 96
     CoreExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -13466,6 +14302,27 @@ impl fmt::Display for FitFieldCoreExerciseName {
             FitFieldCoreExerciseName::Swimming => write!(f, "{}", "Swimming"),
             FitFieldCoreExerciseName::Teaser => write!(f, "{}", "Teaser"),
             FitFieldCoreExerciseName::TheHundred => write!(f, "{}", "TheHundred"),
+            FitFieldCoreExerciseName::BicepCurlWithLegExtensionWithWeights => write!(f, "{}", "BicepCurlWithLegExtensionWithWeights"),
+            FitFieldCoreExerciseName::HangingLSit => write!(f, "{}", "HangingLSit"),
+            FitFieldCoreExerciseName::LowerLiftWithWeights => write!(f, "{}", "LowerLiftWithWeights"),
+            FitFieldCoreExerciseName::RingLSit => write!(f, "{}", "RingLSit"),
+            FitFieldCoreExerciseName::Rowing1WithWeights => write!(f, "{}", "Rowing1WithWeights"),
+            FitFieldCoreExerciseName::Rowing2WithWeights => write!(f, "{}", "Rowing2WithWeights"),
+            FitFieldCoreExerciseName::ScissorsWithWeights => write!(f, "{}", "ScissorsWithWeights"),
+            FitFieldCoreExerciseName::SingleLegStretchWithWeights => write!(f, "{}", "SingleLegStretchWithWeights"),
+            FitFieldCoreExerciseName::ToesToElbows => write!(f, "{}", "ToesToElbows"),
+            FitFieldCoreExerciseName::WeightedCrissCross => write!(f, "{}", "WeightedCrissCross"),
+            FitFieldCoreExerciseName::WeightedDoubleLegStretch => write!(f, "{}", "WeightedDoubleLegStretch"),
+            FitFieldCoreExerciseName::WeightedTheHundred => write!(f, "{}", "WeightedTheHundred"),
+            FitFieldCoreExerciseName::LSit => write!(f, "{}", "LSit"),
+            FitFieldCoreExerciseName::TurkishGetUp => write!(f, "{}", "TurkishGetUp"),
+            FitFieldCoreExerciseName::WeightedRingLSit => write!(f, "{}", "WeightedRingLSit"),
+            FitFieldCoreExerciseName::WeightedHangingLSit => write!(f, "{}", "WeightedHangingLSit"),
+            FitFieldCoreExerciseName::WeightedLSit => write!(f, "{}", "WeightedLSit"),
+            FitFieldCoreExerciseName::SideBendLowWheelchair => write!(f, "{}", "SideBendLowWheelchair"),
+            FitFieldCoreExerciseName::SideBendMidWheelchair => write!(f, "{}", "SideBendMidWheelchair"),
+            FitFieldCoreExerciseName::SideBendHighWheelchair => write!(f, "{}", "SideBendHighWheelchair"),
+            FitFieldCoreExerciseName::SeatedSideBend => write!(f, "{}", "SeatedSideBend"),
             FitFieldCoreExerciseName::CoreExerciseName(x) => write!(f, "{}({})", "CoreExerciseName", x),
             FitFieldCoreExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldCoreExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -13553,6 +14410,27 @@ impl FitFieldParseable for FitFieldCoreExerciseName {
                 70 => Ok(FitFieldCoreExerciseName::from(v)),
                 71 => Ok(FitFieldCoreExerciseName::from(v)),
                 72 => Ok(FitFieldCoreExerciseName::from(v)),
+                73 => Ok(FitFieldCoreExerciseName::from(v)),
+                75 => Ok(FitFieldCoreExerciseName::from(v)),
+                77 => Ok(FitFieldCoreExerciseName::from(v)),
+                79 => Ok(FitFieldCoreExerciseName::from(v)),
+                80 => Ok(FitFieldCoreExerciseName::from(v)),
+                81 => Ok(FitFieldCoreExerciseName::from(v)),
+                82 => Ok(FitFieldCoreExerciseName::from(v)),
+                83 => Ok(FitFieldCoreExerciseName::from(v)),
+                84 => Ok(FitFieldCoreExerciseName::from(v)),
+                85 => Ok(FitFieldCoreExerciseName::from(v)),
+                86 => Ok(FitFieldCoreExerciseName::from(v)),
+                87 => Ok(FitFieldCoreExerciseName::from(v)),
+                88 => Ok(FitFieldCoreExerciseName::from(v)),
+                89 => Ok(FitFieldCoreExerciseName::from(v)),
+                90 => Ok(FitFieldCoreExerciseName::from(v)),
+                91 => Ok(FitFieldCoreExerciseName::from(v)),
+                92 => Ok(FitFieldCoreExerciseName::from(v)),
+                93 => Ok(FitFieldCoreExerciseName::from(v)),
+                94 => Ok(FitFieldCoreExerciseName::from(v)),
+                95 => Ok(FitFieldCoreExerciseName::from(v)),
+                96 => Ok(FitFieldCoreExerciseName::from(v)),
                 v => Ok(FitFieldCoreExerciseName::CoreExerciseName(v)),
             }
         }
@@ -13637,6 +14515,27 @@ impl From<u16> for FitFieldCoreExerciseName {
             70 => FitFieldCoreExerciseName::Swimming,
             71 => FitFieldCoreExerciseName::Teaser,
             72 => FitFieldCoreExerciseName::TheHundred,
+            73 => FitFieldCoreExerciseName::BicepCurlWithLegExtensionWithWeights,
+            75 => FitFieldCoreExerciseName::HangingLSit,
+            77 => FitFieldCoreExerciseName::LowerLiftWithWeights,
+            79 => FitFieldCoreExerciseName::RingLSit,
+            80 => FitFieldCoreExerciseName::Rowing1WithWeights,
+            81 => FitFieldCoreExerciseName::Rowing2WithWeights,
+            82 => FitFieldCoreExerciseName::ScissorsWithWeights,
+            83 => FitFieldCoreExerciseName::SingleLegStretchWithWeights,
+            84 => FitFieldCoreExerciseName::ToesToElbows,
+            85 => FitFieldCoreExerciseName::WeightedCrissCross,
+            86 => FitFieldCoreExerciseName::WeightedDoubleLegStretch,
+            87 => FitFieldCoreExerciseName::WeightedTheHundred,
+            88 => FitFieldCoreExerciseName::LSit,
+            89 => FitFieldCoreExerciseName::TurkishGetUp,
+            90 => FitFieldCoreExerciseName::WeightedRingLSit,
+            91 => FitFieldCoreExerciseName::WeightedHangingLSit,
+            92 => FitFieldCoreExerciseName::WeightedLSit,
+            93 => FitFieldCoreExerciseName::SideBendLowWheelchair,
+            94 => FitFieldCoreExerciseName::SideBendMidWheelchair,
+            95 => FitFieldCoreExerciseName::SideBendHighWheelchair,
+            96 => FitFieldCoreExerciseName::SeatedSideBend,
             _ => FitFieldCoreExerciseName::UnknownToSdk,
         }
     }
@@ -13732,6 +14631,7 @@ pub enum FitFieldCrunchExerciseName { // fit base type: uint16
     WeightedToesToBar, // 82
     Crunch, // 83
     StraightLegCrunchWithBall, // 84
+    LegClimbCrunch, // 86
     CrunchExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -13825,6 +14725,7 @@ impl fmt::Display for FitFieldCrunchExerciseName {
             FitFieldCrunchExerciseName::WeightedToesToBar => write!(f, "{}", "WeightedToesToBar"),
             FitFieldCrunchExerciseName::Crunch => write!(f, "{}", "Crunch"),
             FitFieldCrunchExerciseName::StraightLegCrunchWithBall => write!(f, "{}", "StraightLegCrunchWithBall"),
+            FitFieldCrunchExerciseName::LegClimbCrunch => write!(f, "{}", "LegClimbCrunch"),
             FitFieldCrunchExerciseName::CrunchExerciseName(x) => write!(f, "{}({})", "CrunchExerciseName", x),
             FitFieldCrunchExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldCrunchExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -13924,6 +14825,7 @@ impl FitFieldParseable for FitFieldCrunchExerciseName {
                 82 => Ok(FitFieldCrunchExerciseName::from(v)),
                 83 => Ok(FitFieldCrunchExerciseName::from(v)),
                 84 => Ok(FitFieldCrunchExerciseName::from(v)),
+                86 => Ok(FitFieldCrunchExerciseName::from(v)),
                 v => Ok(FitFieldCrunchExerciseName::CrunchExerciseName(v)),
             }
         }
@@ -14020,6 +14922,7 @@ impl From<u16> for FitFieldCrunchExerciseName {
             82 => FitFieldCrunchExerciseName::WeightedToesToBar,
             83 => FitFieldCrunchExerciseName::Crunch,
             84 => FitFieldCrunchExerciseName::StraightLegCrunchWithBall,
+            86 => FitFieldCrunchExerciseName::LegClimbCrunch,
             _ => FitFieldCrunchExerciseName::UnknownToSdk,
         }
     }
@@ -14074,6 +14977,13 @@ pub enum FitFieldCurlExerciseName { // fit base type: uint16
     SwissBallEzBarPreacherCurl, // 41
     TwistingStandingDumbbellBicepsCurl, // 42
     WideGripEzBarBicepsCurl, // 43
+    OneArmConcentrationCurl, // 44
+    StandingZottmanBicepsCurl, // 45
+    DumbbellBicepsCurl, // 46
+    DragCurlWheelchair, // 47
+    DumbbellBicepsCurlWheelchair, // 48
+    BottleCurl, // 49
+    SeatedBottleCurl, // 50
     CurlExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -14126,6 +15036,13 @@ impl fmt::Display for FitFieldCurlExerciseName {
             FitFieldCurlExerciseName::SwissBallEzBarPreacherCurl => write!(f, "{}", "SwissBallEzBarPreacherCurl"),
             FitFieldCurlExerciseName::TwistingStandingDumbbellBicepsCurl => write!(f, "{}", "TwistingStandingDumbbellBicepsCurl"),
             FitFieldCurlExerciseName::WideGripEzBarBicepsCurl => write!(f, "{}", "WideGripEzBarBicepsCurl"),
+            FitFieldCurlExerciseName::OneArmConcentrationCurl => write!(f, "{}", "OneArmConcentrationCurl"),
+            FitFieldCurlExerciseName::StandingZottmanBicepsCurl => write!(f, "{}", "StandingZottmanBicepsCurl"),
+            FitFieldCurlExerciseName::DumbbellBicepsCurl => write!(f, "{}", "DumbbellBicepsCurl"),
+            FitFieldCurlExerciseName::DragCurlWheelchair => write!(f, "{}", "DragCurlWheelchair"),
+            FitFieldCurlExerciseName::DumbbellBicepsCurlWheelchair => write!(f, "{}", "DumbbellBicepsCurlWheelchair"),
+            FitFieldCurlExerciseName::BottleCurl => write!(f, "{}", "BottleCurl"),
+            FitFieldCurlExerciseName::SeatedBottleCurl => write!(f, "{}", "SeatedBottleCurl"),
             FitFieldCurlExerciseName::CurlExerciseName(x) => write!(f, "{}({})", "CurlExerciseName", x),
             FitFieldCurlExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldCurlExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -14184,6 +15101,13 @@ impl FitFieldParseable for FitFieldCurlExerciseName {
                 41 => Ok(FitFieldCurlExerciseName::from(v)),
                 42 => Ok(FitFieldCurlExerciseName::from(v)),
                 43 => Ok(FitFieldCurlExerciseName::from(v)),
+                44 => Ok(FitFieldCurlExerciseName::from(v)),
+                45 => Ok(FitFieldCurlExerciseName::from(v)),
+                46 => Ok(FitFieldCurlExerciseName::from(v)),
+                47 => Ok(FitFieldCurlExerciseName::from(v)),
+                48 => Ok(FitFieldCurlExerciseName::from(v)),
+                49 => Ok(FitFieldCurlExerciseName::from(v)),
+                50 => Ok(FitFieldCurlExerciseName::from(v)),
                 v => Ok(FitFieldCurlExerciseName::CurlExerciseName(v)),
             }
         }
@@ -14239,6 +15163,13 @@ impl From<u16> for FitFieldCurlExerciseName {
             41 => FitFieldCurlExerciseName::SwissBallEzBarPreacherCurl,
             42 => FitFieldCurlExerciseName::TwistingStandingDumbbellBicepsCurl,
             43 => FitFieldCurlExerciseName::WideGripEzBarBicepsCurl,
+            44 => FitFieldCurlExerciseName::OneArmConcentrationCurl,
+            45 => FitFieldCurlExerciseName::StandingZottmanBicepsCurl,
+            46 => FitFieldCurlExerciseName::DumbbellBicepsCurl,
+            47 => FitFieldCurlExerciseName::DragCurlWheelchair,
+            48 => FitFieldCurlExerciseName::DumbbellBicepsCurlWheelchair,
+            49 => FitFieldCurlExerciseName::BottleCurl,
+            50 => FitFieldCurlExerciseName::SeatedBottleCurl,
             _ => FitFieldCurlExerciseName::UnknownToSdk,
         }
     }
@@ -14268,6 +15199,11 @@ pub enum FitFieldDeadliftExerciseName { // fit base type: uint16
     SumoDeadliftHighPull, // 16
     TrapBarDeadlift, // 17
     WideGripBarbellDeadlift, // 18
+    KettlebellDeadlift, // 20
+    KettlebellSumoDeadlift, // 21
+    RomanianDeadlift, // 23
+    SingleLegRomanianDeadliftCircuit, // 24
+    StraightLegDeadlift, // 25
     DeadliftExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -14295,6 +15231,11 @@ impl fmt::Display for FitFieldDeadliftExerciseName {
             FitFieldDeadliftExerciseName::SumoDeadliftHighPull => write!(f, "{}", "SumoDeadliftHighPull"),
             FitFieldDeadliftExerciseName::TrapBarDeadlift => write!(f, "{}", "TrapBarDeadlift"),
             FitFieldDeadliftExerciseName::WideGripBarbellDeadlift => write!(f, "{}", "WideGripBarbellDeadlift"),
+            FitFieldDeadliftExerciseName::KettlebellDeadlift => write!(f, "{}", "KettlebellDeadlift"),
+            FitFieldDeadliftExerciseName::KettlebellSumoDeadlift => write!(f, "{}", "KettlebellSumoDeadlift"),
+            FitFieldDeadliftExerciseName::RomanianDeadlift => write!(f, "{}", "RomanianDeadlift"),
+            FitFieldDeadliftExerciseName::SingleLegRomanianDeadliftCircuit => write!(f, "{}", "SingleLegRomanianDeadliftCircuit"),
+            FitFieldDeadliftExerciseName::StraightLegDeadlift => write!(f, "{}", "StraightLegDeadlift"),
             FitFieldDeadliftExerciseName::DeadliftExerciseName(x) => write!(f, "{}({})", "DeadliftExerciseName", x),
             FitFieldDeadliftExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldDeadliftExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -14328,6 +15269,11 @@ impl FitFieldParseable for FitFieldDeadliftExerciseName {
                 16 => Ok(FitFieldDeadliftExerciseName::from(v)),
                 17 => Ok(FitFieldDeadliftExerciseName::from(v)),
                 18 => Ok(FitFieldDeadliftExerciseName::from(v)),
+                20 => Ok(FitFieldDeadliftExerciseName::from(v)),
+                21 => Ok(FitFieldDeadliftExerciseName::from(v)),
+                23 => Ok(FitFieldDeadliftExerciseName::from(v)),
+                24 => Ok(FitFieldDeadliftExerciseName::from(v)),
+                25 => Ok(FitFieldDeadliftExerciseName::from(v)),
                 v => Ok(FitFieldDeadliftExerciseName::DeadliftExerciseName(v)),
             }
         }
@@ -14358,6 +15304,11 @@ impl From<u16> for FitFieldDeadliftExerciseName {
             16 => FitFieldDeadliftExerciseName::SumoDeadliftHighPull,
             17 => FitFieldDeadliftExerciseName::TrapBarDeadlift,
             18 => FitFieldDeadliftExerciseName::WideGripBarbellDeadlift,
+            20 => FitFieldDeadliftExerciseName::KettlebellDeadlift,
+            21 => FitFieldDeadliftExerciseName::KettlebellSumoDeadlift,
+            23 => FitFieldDeadliftExerciseName::RomanianDeadlift,
+            24 => FitFieldDeadliftExerciseName::SingleLegRomanianDeadliftCircuit,
+            25 => FitFieldDeadliftExerciseName::StraightLegDeadlift,
             _ => FitFieldDeadliftExerciseName::UnknownToSdk,
         }
     }
@@ -14378,6 +15329,9 @@ pub enum FitFieldFlyeExerciseName { // fit base type: uint16
     SwissBallDumbbellFlye, // 7
     ArmRotations, // 8
     HugATree, // 9
+    FaceDownInclineReverseFlye, // 10
+    InclineReverseFlye, // 11
+    RearDeltFlyWheelchair, // 12
     FlyeExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -14396,6 +15350,9 @@ impl fmt::Display for FitFieldFlyeExerciseName {
             FitFieldFlyeExerciseName::SwissBallDumbbellFlye => write!(f, "{}", "SwissBallDumbbellFlye"),
             FitFieldFlyeExerciseName::ArmRotations => write!(f, "{}", "ArmRotations"),
             FitFieldFlyeExerciseName::HugATree => write!(f, "{}", "HugATree"),
+            FitFieldFlyeExerciseName::FaceDownInclineReverseFlye => write!(f, "{}", "FaceDownInclineReverseFlye"),
+            FitFieldFlyeExerciseName::InclineReverseFlye => write!(f, "{}", "InclineReverseFlye"),
+            FitFieldFlyeExerciseName::RearDeltFlyWheelchair => write!(f, "{}", "RearDeltFlyWheelchair"),
             FitFieldFlyeExerciseName::FlyeExerciseName(x) => write!(f, "{}({})", "FlyeExerciseName", x),
             FitFieldFlyeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldFlyeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -14420,6 +15377,9 @@ impl FitFieldParseable for FitFieldFlyeExerciseName {
                 7 => Ok(FitFieldFlyeExerciseName::from(v)),
                 8 => Ok(FitFieldFlyeExerciseName::from(v)),
                 9 => Ok(FitFieldFlyeExerciseName::from(v)),
+                10 => Ok(FitFieldFlyeExerciseName::from(v)),
+                11 => Ok(FitFieldFlyeExerciseName::from(v)),
+                12 => Ok(FitFieldFlyeExerciseName::from(v)),
                 v => Ok(FitFieldFlyeExerciseName::FlyeExerciseName(v)),
             }
         }
@@ -14441,6 +15401,9 @@ impl From<u16> for FitFieldFlyeExerciseName {
             7 => FitFieldFlyeExerciseName::SwissBallDumbbellFlye,
             8 => FitFieldFlyeExerciseName::ArmRotations,
             9 => FitFieldFlyeExerciseName::HugATree,
+            10 => FitFieldFlyeExerciseName::FaceDownInclineReverseFlye,
+            11 => FitFieldFlyeExerciseName::InclineReverseFlye,
+            12 => FitFieldFlyeExerciseName::RearDeltFlyWheelchair,
             _ => FitFieldFlyeExerciseName::UnknownToSdk,
         }
     }
@@ -14728,6 +15691,7 @@ pub enum FitFieldHipStabilityExerciseName { // fit base type: uint16
     WeightedStandingRearLegRaise, // 31
     SupineHipInternalRotation, // 32
     WeightedSupineHipInternalRotation, // 33
+    LyingAbductionStretch, // 34
     HipStabilityExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -14770,6 +15734,7 @@ impl fmt::Display for FitFieldHipStabilityExerciseName {
             FitFieldHipStabilityExerciseName::WeightedStandingRearLegRaise => write!(f, "{}", "WeightedStandingRearLegRaise"),
             FitFieldHipStabilityExerciseName::SupineHipInternalRotation => write!(f, "{}", "SupineHipInternalRotation"),
             FitFieldHipStabilityExerciseName::WeightedSupineHipInternalRotation => write!(f, "{}", "WeightedSupineHipInternalRotation"),
+            FitFieldHipStabilityExerciseName::LyingAbductionStretch => write!(f, "{}", "LyingAbductionStretch"),
             FitFieldHipStabilityExerciseName::HipStabilityExerciseName(x) => write!(f, "{}({})", "HipStabilityExerciseName", x),
             FitFieldHipStabilityExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldHipStabilityExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -14818,6 +15783,7 @@ impl FitFieldParseable for FitFieldHipStabilityExerciseName {
                 31 => Ok(FitFieldHipStabilityExerciseName::from(v)),
                 32 => Ok(FitFieldHipStabilityExerciseName::from(v)),
                 33 => Ok(FitFieldHipStabilityExerciseName::from(v)),
+                34 => Ok(FitFieldHipStabilityExerciseName::from(v)),
                 v => Ok(FitFieldHipStabilityExerciseName::HipStabilityExerciseName(v)),
             }
         }
@@ -14863,6 +15829,7 @@ impl From<u16> for FitFieldHipStabilityExerciseName {
             31 => FitFieldHipStabilityExerciseName::WeightedStandingRearLegRaise,
             32 => FitFieldHipStabilityExerciseName::SupineHipInternalRotation,
             33 => FitFieldHipStabilityExerciseName::WeightedSupineHipInternalRotation,
+            34 => FitFieldHipStabilityExerciseName::LyingAbductionStretch,
             _ => FitFieldHipStabilityExerciseName::UnknownToSdk,
         }
     }
@@ -14876,6 +15843,7 @@ pub enum FitFieldHipSwingExerciseName { // fit base type: uint16
     SingleArmKettlebellSwing, // 0
     SingleArmDumbbellSwing, // 1
     StepOutSwing, // 2
+    OneArmSwing, // 3
     HipSwingExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -14887,6 +15855,7 @@ impl fmt::Display for FitFieldHipSwingExerciseName {
             FitFieldHipSwingExerciseName::SingleArmKettlebellSwing => write!(f, "{}", "SingleArmKettlebellSwing"),
             FitFieldHipSwingExerciseName::SingleArmDumbbellSwing => write!(f, "{}", "SingleArmDumbbellSwing"),
             FitFieldHipSwingExerciseName::StepOutSwing => write!(f, "{}", "StepOutSwing"),
+            FitFieldHipSwingExerciseName::OneArmSwing => write!(f, "{}", "OneArmSwing"),
             FitFieldHipSwingExerciseName::HipSwingExerciseName(x) => write!(f, "{}({})", "HipSwingExerciseName", x),
             FitFieldHipSwingExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldHipSwingExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -14904,6 +15873,7 @@ impl FitFieldParseable for FitFieldHipSwingExerciseName {
                 0 => Ok(FitFieldHipSwingExerciseName::from(v)),
                 1 => Ok(FitFieldHipSwingExerciseName::from(v)),
                 2 => Ok(FitFieldHipSwingExerciseName::from(v)),
+                3 => Ok(FitFieldHipSwingExerciseName::from(v)),
                 v => Ok(FitFieldHipSwingExerciseName::HipSwingExerciseName(v)),
             }
         }
@@ -14918,6 +15888,7 @@ impl From<u16> for FitFieldHipSwingExerciseName {
             0 => FitFieldHipSwingExerciseName::SingleArmKettlebellSwing,
             1 => FitFieldHipSwingExerciseName::SingleArmDumbbellSwing,
             2 => FitFieldHipSwingExerciseName::StepOutSwing,
+            3 => FitFieldHipSwingExerciseName::OneArmSwing,
             _ => FitFieldHipSwingExerciseName::UnknownToSdk,
         }
     }
@@ -15165,6 +16136,13 @@ pub enum FitFieldLateralRaiseExerciseName { // fit base type: uint16
     WeightedWallSlide, // 31
     ArmCircles, // 32
     ShavingTheHead, // 33
+    DumbbellLateralRaise, // 34
+    RingDipKipping, // 36
+    WallWalk, // 37
+    DumbbellFrontRaiseWheelchair, // 38
+    DumbbellLateralRaiseWheelchair, // 39
+    PoleDoubleArmOverheadAndForwardWheelchair, // 40
+    PoleStraightArmOverheadWheelchair, // 41
     LateralRaiseExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -15207,6 +16185,13 @@ impl fmt::Display for FitFieldLateralRaiseExerciseName {
             FitFieldLateralRaiseExerciseName::WeightedWallSlide => write!(f, "{}", "WeightedWallSlide"),
             FitFieldLateralRaiseExerciseName::ArmCircles => write!(f, "{}", "ArmCircles"),
             FitFieldLateralRaiseExerciseName::ShavingTheHead => write!(f, "{}", "ShavingTheHead"),
+            FitFieldLateralRaiseExerciseName::DumbbellLateralRaise => write!(f, "{}", "DumbbellLateralRaise"),
+            FitFieldLateralRaiseExerciseName::RingDipKipping => write!(f, "{}", "RingDipKipping"),
+            FitFieldLateralRaiseExerciseName::WallWalk => write!(f, "{}", "WallWalk"),
+            FitFieldLateralRaiseExerciseName::DumbbellFrontRaiseWheelchair => write!(f, "{}", "DumbbellFrontRaiseWheelchair"),
+            FitFieldLateralRaiseExerciseName::DumbbellLateralRaiseWheelchair => write!(f, "{}", "DumbbellLateralRaiseWheelchair"),
+            FitFieldLateralRaiseExerciseName::PoleDoubleArmOverheadAndForwardWheelchair => write!(f, "{}", "PoleDoubleArmOverheadAndForwardWheelchair"),
+            FitFieldLateralRaiseExerciseName::PoleStraightArmOverheadWheelchair => write!(f, "{}", "PoleStraightArmOverheadWheelchair"),
             FitFieldLateralRaiseExerciseName::LateralRaiseExerciseName(x) => write!(f, "{}({})", "LateralRaiseExerciseName", x),
             FitFieldLateralRaiseExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldLateralRaiseExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -15255,6 +16240,13 @@ impl FitFieldParseable for FitFieldLateralRaiseExerciseName {
                 31 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
                 32 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
                 33 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                34 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                36 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                37 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                38 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                39 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                40 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
+                41 => Ok(FitFieldLateralRaiseExerciseName::from(v)),
                 v => Ok(FitFieldLateralRaiseExerciseName::LateralRaiseExerciseName(v)),
             }
         }
@@ -15300,6 +16292,13 @@ impl From<u16> for FitFieldLateralRaiseExerciseName {
             31 => FitFieldLateralRaiseExerciseName::WeightedWallSlide,
             32 => FitFieldLateralRaiseExerciseName::ArmCircles,
             33 => FitFieldLateralRaiseExerciseName::ShavingTheHead,
+            34 => FitFieldLateralRaiseExerciseName::DumbbellLateralRaise,
+            36 => FitFieldLateralRaiseExerciseName::RingDipKipping,
+            37 => FitFieldLateralRaiseExerciseName::WallWalk,
+            38 => FitFieldLateralRaiseExerciseName::DumbbellFrontRaiseWheelchair,
+            39 => FitFieldLateralRaiseExerciseName::DumbbellLateralRaiseWheelchair,
+            40 => FitFieldLateralRaiseExerciseName::PoleDoubleArmOverheadAndForwardWheelchair,
+            41 => FitFieldLateralRaiseExerciseName::PoleStraightArmOverheadWheelchair,
             _ => FitFieldLateralRaiseExerciseName::UnknownToSdk,
         }
     }
@@ -15322,6 +16321,8 @@ pub enum FitFieldLegCurlExerciseName { // fit base type: uint16
     StaggeredStanceGoodMorning, // 9
     SwissBallHipRaiseAndLegCurl, // 10
     ZercherGoodMorning, // 11
+    BandGoodMorning, // 12
+    BarGoodMorning, // 13
     LegCurlExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -15342,6 +16343,8 @@ impl fmt::Display for FitFieldLegCurlExerciseName {
             FitFieldLegCurlExerciseName::StaggeredStanceGoodMorning => write!(f, "{}", "StaggeredStanceGoodMorning"),
             FitFieldLegCurlExerciseName::SwissBallHipRaiseAndLegCurl => write!(f, "{}", "SwissBallHipRaiseAndLegCurl"),
             FitFieldLegCurlExerciseName::ZercherGoodMorning => write!(f, "{}", "ZercherGoodMorning"),
+            FitFieldLegCurlExerciseName::BandGoodMorning => write!(f, "{}", "BandGoodMorning"),
+            FitFieldLegCurlExerciseName::BarGoodMorning => write!(f, "{}", "BarGoodMorning"),
             FitFieldLegCurlExerciseName::LegCurlExerciseName(x) => write!(f, "{}({})", "LegCurlExerciseName", x),
             FitFieldLegCurlExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldLegCurlExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -15368,6 +16371,8 @@ impl FitFieldParseable for FitFieldLegCurlExerciseName {
                 9 => Ok(FitFieldLegCurlExerciseName::from(v)),
                 10 => Ok(FitFieldLegCurlExerciseName::from(v)),
                 11 => Ok(FitFieldLegCurlExerciseName::from(v)),
+                12 => Ok(FitFieldLegCurlExerciseName::from(v)),
+                13 => Ok(FitFieldLegCurlExerciseName::from(v)),
                 v => Ok(FitFieldLegCurlExerciseName::LegCurlExerciseName(v)),
             }
         }
@@ -15391,6 +16396,8 @@ impl From<u16> for FitFieldLegCurlExerciseName {
             9 => FitFieldLegCurlExerciseName::StaggeredStanceGoodMorning,
             10 => FitFieldLegCurlExerciseName::SwissBallHipRaiseAndLegCurl,
             11 => FitFieldLegCurlExerciseName::ZercherGoodMorning,
+            12 => FitFieldLegCurlExerciseName::BandGoodMorning,
+            13 => FitFieldLegCurlExerciseName::BarGoodMorning,
             _ => FitFieldLegCurlExerciseName::UnknownToSdk,
         }
     }
@@ -15613,6 +16620,16 @@ pub enum FitFieldLungeExerciseName { // fit base type: uint16
     WalkingLunge, // 78
     WeightedWalkingLunge, // 79
     WideGripOverheadBarbellSplitSquat, // 80
+    AlternatingDumbbellLunge, // 81
+    DumbbellReverseLunge, // 82
+    OverheadDumbbellLunge, // 83
+    ScissorPowerSwitch, // 84
+    DumbbellOverheadWalkingLunge, // 85
+    CurtsyLunge, // 86
+    WeightedCurtsyLunge, // 87
+    WeightedShiftingSideLunge, // 88
+    WeightedSideLungeAndPress, // 89
+    WeightedSideLungeJumpOff, // 90
     LungeExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -15702,6 +16719,16 @@ impl fmt::Display for FitFieldLungeExerciseName {
             FitFieldLungeExerciseName::WalkingLunge => write!(f, "{}", "WalkingLunge"),
             FitFieldLungeExerciseName::WeightedWalkingLunge => write!(f, "{}", "WeightedWalkingLunge"),
             FitFieldLungeExerciseName::WideGripOverheadBarbellSplitSquat => write!(f, "{}", "WideGripOverheadBarbellSplitSquat"),
+            FitFieldLungeExerciseName::AlternatingDumbbellLunge => write!(f, "{}", "AlternatingDumbbellLunge"),
+            FitFieldLungeExerciseName::DumbbellReverseLunge => write!(f, "{}", "DumbbellReverseLunge"),
+            FitFieldLungeExerciseName::OverheadDumbbellLunge => write!(f, "{}", "OverheadDumbbellLunge"),
+            FitFieldLungeExerciseName::ScissorPowerSwitch => write!(f, "{}", "ScissorPowerSwitch"),
+            FitFieldLungeExerciseName::DumbbellOverheadWalkingLunge => write!(f, "{}", "DumbbellOverheadWalkingLunge"),
+            FitFieldLungeExerciseName::CurtsyLunge => write!(f, "{}", "CurtsyLunge"),
+            FitFieldLungeExerciseName::WeightedCurtsyLunge => write!(f, "{}", "WeightedCurtsyLunge"),
+            FitFieldLungeExerciseName::WeightedShiftingSideLunge => write!(f, "{}", "WeightedShiftingSideLunge"),
+            FitFieldLungeExerciseName::WeightedSideLungeAndPress => write!(f, "{}", "WeightedSideLungeAndPress"),
+            FitFieldLungeExerciseName::WeightedSideLungeJumpOff => write!(f, "{}", "WeightedSideLungeJumpOff"),
             FitFieldLungeExerciseName::LungeExerciseName(x) => write!(f, "{}({})", "LungeExerciseName", x),
             FitFieldLungeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldLungeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -15797,6 +16824,16 @@ impl FitFieldParseable for FitFieldLungeExerciseName {
                 78 => Ok(FitFieldLungeExerciseName::from(v)),
                 79 => Ok(FitFieldLungeExerciseName::from(v)),
                 80 => Ok(FitFieldLungeExerciseName::from(v)),
+                81 => Ok(FitFieldLungeExerciseName::from(v)),
+                82 => Ok(FitFieldLungeExerciseName::from(v)),
+                83 => Ok(FitFieldLungeExerciseName::from(v)),
+                84 => Ok(FitFieldLungeExerciseName::from(v)),
+                85 => Ok(FitFieldLungeExerciseName::from(v)),
+                86 => Ok(FitFieldLungeExerciseName::from(v)),
+                87 => Ok(FitFieldLungeExerciseName::from(v)),
+                88 => Ok(FitFieldLungeExerciseName::from(v)),
+                89 => Ok(FitFieldLungeExerciseName::from(v)),
+                90 => Ok(FitFieldLungeExerciseName::from(v)),
                 v => Ok(FitFieldLungeExerciseName::LungeExerciseName(v)),
             }
         }
@@ -15889,6 +16926,16 @@ impl From<u16> for FitFieldLungeExerciseName {
             78 => FitFieldLungeExerciseName::WalkingLunge,
             79 => FitFieldLungeExerciseName::WeightedWalkingLunge,
             80 => FitFieldLungeExerciseName::WideGripOverheadBarbellSplitSquat,
+            81 => FitFieldLungeExerciseName::AlternatingDumbbellLunge,
+            82 => FitFieldLungeExerciseName::DumbbellReverseLunge,
+            83 => FitFieldLungeExerciseName::OverheadDumbbellLunge,
+            84 => FitFieldLungeExerciseName::ScissorPowerSwitch,
+            85 => FitFieldLungeExerciseName::DumbbellOverheadWalkingLunge,
+            86 => FitFieldLungeExerciseName::CurtsyLunge,
+            87 => FitFieldLungeExerciseName::WeightedCurtsyLunge,
+            88 => FitFieldLungeExerciseName::WeightedShiftingSideLunge,
+            89 => FitFieldLungeExerciseName::WeightedSideLungeAndPress,
+            90 => FitFieldLungeExerciseName::WeightedSideLungeJumpOff,
             _ => FitFieldLungeExerciseName::UnknownToSdk,
         }
     }
@@ -15920,6 +16967,14 @@ pub enum FitFieldOlympicLiftExerciseName { // fit base type: uint16
     SingleArmKettlebellSnatch, // 18
     SplitJerk, // 19
     SquatCleanAndJerk, // 20
+    DumbbellHangSnatch, // 21
+    DumbbellPowerCleanAndJerk, // 22
+    DumbbellPowerCleanAndPushPress, // 23
+    DumbbellPowerCleanAndStrictPress, // 24
+    DumbbellSnatch, // 25
+    MedicineBallClean, // 26
+    CleanAndPress, // 27
+    Snatch, // 28
     OlympicLiftExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -15949,6 +17004,14 @@ impl fmt::Display for FitFieldOlympicLiftExerciseName {
             FitFieldOlympicLiftExerciseName::SingleArmKettlebellSnatch => write!(f, "{}", "SingleArmKettlebellSnatch"),
             FitFieldOlympicLiftExerciseName::SplitJerk => write!(f, "{}", "SplitJerk"),
             FitFieldOlympicLiftExerciseName::SquatCleanAndJerk => write!(f, "{}", "SquatCleanAndJerk"),
+            FitFieldOlympicLiftExerciseName::DumbbellHangSnatch => write!(f, "{}", "DumbbellHangSnatch"),
+            FitFieldOlympicLiftExerciseName::DumbbellPowerCleanAndJerk => write!(f, "{}", "DumbbellPowerCleanAndJerk"),
+            FitFieldOlympicLiftExerciseName::DumbbellPowerCleanAndPushPress => write!(f, "{}", "DumbbellPowerCleanAndPushPress"),
+            FitFieldOlympicLiftExerciseName::DumbbellPowerCleanAndStrictPress => write!(f, "{}", "DumbbellPowerCleanAndStrictPress"),
+            FitFieldOlympicLiftExerciseName::DumbbellSnatch => write!(f, "{}", "DumbbellSnatch"),
+            FitFieldOlympicLiftExerciseName::MedicineBallClean => write!(f, "{}", "MedicineBallClean"),
+            FitFieldOlympicLiftExerciseName::CleanAndPress => write!(f, "{}", "CleanAndPress"),
+            FitFieldOlympicLiftExerciseName::Snatch => write!(f, "{}", "Snatch"),
             FitFieldOlympicLiftExerciseName::OlympicLiftExerciseName(x) => write!(f, "{}({})", "OlympicLiftExerciseName", x),
             FitFieldOlympicLiftExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldOlympicLiftExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -15984,6 +17047,14 @@ impl FitFieldParseable for FitFieldOlympicLiftExerciseName {
                 18 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
                 19 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
                 20 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                21 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                22 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                23 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                24 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                25 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                26 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                27 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
+                28 => Ok(FitFieldOlympicLiftExerciseName::from(v)),
                 v => Ok(FitFieldOlympicLiftExerciseName::OlympicLiftExerciseName(v)),
             }
         }
@@ -16016,6 +17087,14 @@ impl From<u16> for FitFieldOlympicLiftExerciseName {
             18 => FitFieldOlympicLiftExerciseName::SingleArmKettlebellSnatch,
             19 => FitFieldOlympicLiftExerciseName::SplitJerk,
             20 => FitFieldOlympicLiftExerciseName::SquatCleanAndJerk,
+            21 => FitFieldOlympicLiftExerciseName::DumbbellHangSnatch,
+            22 => FitFieldOlympicLiftExerciseName::DumbbellPowerCleanAndJerk,
+            23 => FitFieldOlympicLiftExerciseName::DumbbellPowerCleanAndPushPress,
+            24 => FitFieldOlympicLiftExerciseName::DumbbellPowerCleanAndStrictPress,
+            25 => FitFieldOlympicLiftExerciseName::DumbbellSnatch,
+            26 => FitFieldOlympicLiftExerciseName::MedicineBallClean,
+            27 => FitFieldOlympicLiftExerciseName::CleanAndPress,
+            28 => FitFieldOlympicLiftExerciseName::Snatch,
             _ => FitFieldOlympicLiftExerciseName::UnknownToSdk,
         }
     }
@@ -16161,6 +17240,7 @@ pub enum FitFieldPlankExerciseName { // fit base type: uint16
     PlankWithArmVariations, // 132
     PlankWithLegLift, // 133
     ReversePlankWithLegPull, // 134
+    RingPlankSprawls, // 135
     PlankExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -16304,6 +17384,7 @@ impl fmt::Display for FitFieldPlankExerciseName {
             FitFieldPlankExerciseName::PlankWithArmVariations => write!(f, "{}", "PlankWithArmVariations"),
             FitFieldPlankExerciseName::PlankWithLegLift => write!(f, "{}", "PlankWithLegLift"),
             FitFieldPlankExerciseName::ReversePlankWithLegPull => write!(f, "{}", "ReversePlankWithLegPull"),
+            FitFieldPlankExerciseName::RingPlankSprawls => write!(f, "{}", "RingPlankSprawls"),
             FitFieldPlankExerciseName::PlankExerciseName(x) => write!(f, "{}({})", "PlankExerciseName", x),
             FitFieldPlankExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldPlankExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -16453,6 +17534,7 @@ impl FitFieldParseable for FitFieldPlankExerciseName {
                 132 => Ok(FitFieldPlankExerciseName::from(v)),
                 133 => Ok(FitFieldPlankExerciseName::from(v)),
                 134 => Ok(FitFieldPlankExerciseName::from(v)),
+                135 => Ok(FitFieldPlankExerciseName::from(v)),
                 v => Ok(FitFieldPlankExerciseName::PlankExerciseName(v)),
             }
         }
@@ -16599,6 +17681,7 @@ impl From<u16> for FitFieldPlankExerciseName {
             132 => FitFieldPlankExerciseName::PlankWithArmVariations,
             133 => FitFieldPlankExerciseName::PlankWithLegLift,
             134 => FitFieldPlankExerciseName::ReversePlankWithLegPull,
+            135 => FitFieldPlankExerciseName::RingPlankSprawls,
             _ => FitFieldPlankExerciseName::UnknownToSdk,
         }
     }
@@ -16642,6 +17725,11 @@ pub enum FitFieldPlyoExerciseName { // fit base type: uint16
     WeightedSquatJumpOntoBox, // 30
     SquatJumpsInAndOut, // 31
     WeightedSquatJumpsInAndOut, // 32
+    BoxJump, // 33
+    BoxJumpOvers, // 34
+    BoxJumpOversOverTheBox, // 35
+    StarJumpSquats, // 36
+    JumpSquat, // 37
     PlyoExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -16683,6 +17771,11 @@ impl fmt::Display for FitFieldPlyoExerciseName {
             FitFieldPlyoExerciseName::WeightedSquatJumpOntoBox => write!(f, "{}", "WeightedSquatJumpOntoBox"),
             FitFieldPlyoExerciseName::SquatJumpsInAndOut => write!(f, "{}", "SquatJumpsInAndOut"),
             FitFieldPlyoExerciseName::WeightedSquatJumpsInAndOut => write!(f, "{}", "WeightedSquatJumpsInAndOut"),
+            FitFieldPlyoExerciseName::BoxJump => write!(f, "{}", "BoxJump"),
+            FitFieldPlyoExerciseName::BoxJumpOvers => write!(f, "{}", "BoxJumpOvers"),
+            FitFieldPlyoExerciseName::BoxJumpOversOverTheBox => write!(f, "{}", "BoxJumpOversOverTheBox"),
+            FitFieldPlyoExerciseName::StarJumpSquats => write!(f, "{}", "StarJumpSquats"),
+            FitFieldPlyoExerciseName::JumpSquat => write!(f, "{}", "JumpSquat"),
             FitFieldPlyoExerciseName::PlyoExerciseName(x) => write!(f, "{}({})", "PlyoExerciseName", x),
             FitFieldPlyoExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldPlyoExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -16730,6 +17823,11 @@ impl FitFieldParseable for FitFieldPlyoExerciseName {
                 30 => Ok(FitFieldPlyoExerciseName::from(v)),
                 31 => Ok(FitFieldPlyoExerciseName::from(v)),
                 32 => Ok(FitFieldPlyoExerciseName::from(v)),
+                33 => Ok(FitFieldPlyoExerciseName::from(v)),
+                34 => Ok(FitFieldPlyoExerciseName::from(v)),
+                35 => Ok(FitFieldPlyoExerciseName::from(v)),
+                36 => Ok(FitFieldPlyoExerciseName::from(v)),
+                37 => Ok(FitFieldPlyoExerciseName::from(v)),
                 v => Ok(FitFieldPlyoExerciseName::PlyoExerciseName(v)),
             }
         }
@@ -16774,6 +17872,11 @@ impl From<u16> for FitFieldPlyoExerciseName {
             30 => FitFieldPlyoExerciseName::WeightedSquatJumpOntoBox,
             31 => FitFieldPlyoExerciseName::SquatJumpsInAndOut,
             32 => FitFieldPlyoExerciseName::WeightedSquatJumpsInAndOut,
+            33 => FitFieldPlyoExerciseName::BoxJump,
+            34 => FitFieldPlyoExerciseName::BoxJumpOvers,
+            35 => FitFieldPlyoExerciseName::BoxJumpOversOverTheBox,
+            36 => FitFieldPlyoExerciseName::StarJumpSquats,
+            37 => FitFieldPlyoExerciseName::JumpSquat,
             _ => FitFieldPlyoExerciseName::UnknownToSdk,
         }
     }
@@ -16823,6 +17926,13 @@ pub enum FitFieldPullUpExerciseName { // fit base type: uint16
     SuspendedChinUp, // 36
     WeightedSuspendedChinUp, // 37
     PullUp, // 38
+    ChinUp, // 39
+    NeutralGripChinUp, // 40
+    WeightedChinUp, // 41
+    BandAssistedPullUp, // 42
+    NeutralGripPullUp, // 43
+    WeightedNeutralGripChinUp, // 44
+    WeightedNeutralGripPullUp, // 45
     PullUpExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -16870,6 +17980,13 @@ impl fmt::Display for FitFieldPullUpExerciseName {
             FitFieldPullUpExerciseName::SuspendedChinUp => write!(f, "{}", "SuspendedChinUp"),
             FitFieldPullUpExerciseName::WeightedSuspendedChinUp => write!(f, "{}", "WeightedSuspendedChinUp"),
             FitFieldPullUpExerciseName::PullUp => write!(f, "{}", "PullUp"),
+            FitFieldPullUpExerciseName::ChinUp => write!(f, "{}", "ChinUp"),
+            FitFieldPullUpExerciseName::NeutralGripChinUp => write!(f, "{}", "NeutralGripChinUp"),
+            FitFieldPullUpExerciseName::WeightedChinUp => write!(f, "{}", "WeightedChinUp"),
+            FitFieldPullUpExerciseName::BandAssistedPullUp => write!(f, "{}", "BandAssistedPullUp"),
+            FitFieldPullUpExerciseName::NeutralGripPullUp => write!(f, "{}", "NeutralGripPullUp"),
+            FitFieldPullUpExerciseName::WeightedNeutralGripChinUp => write!(f, "{}", "WeightedNeutralGripChinUp"),
+            FitFieldPullUpExerciseName::WeightedNeutralGripPullUp => write!(f, "{}", "WeightedNeutralGripPullUp"),
             FitFieldPullUpExerciseName::PullUpExerciseName(x) => write!(f, "{}({})", "PullUpExerciseName", x),
             FitFieldPullUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldPullUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -16923,6 +18040,13 @@ impl FitFieldParseable for FitFieldPullUpExerciseName {
                 36 => Ok(FitFieldPullUpExerciseName::from(v)),
                 37 => Ok(FitFieldPullUpExerciseName::from(v)),
                 38 => Ok(FitFieldPullUpExerciseName::from(v)),
+                39 => Ok(FitFieldPullUpExerciseName::from(v)),
+                40 => Ok(FitFieldPullUpExerciseName::from(v)),
+                41 => Ok(FitFieldPullUpExerciseName::from(v)),
+                42 => Ok(FitFieldPullUpExerciseName::from(v)),
+                43 => Ok(FitFieldPullUpExerciseName::from(v)),
+                44 => Ok(FitFieldPullUpExerciseName::from(v)),
+                45 => Ok(FitFieldPullUpExerciseName::from(v)),
                 v => Ok(FitFieldPullUpExerciseName::PullUpExerciseName(v)),
             }
         }
@@ -16973,6 +18097,13 @@ impl From<u16> for FitFieldPullUpExerciseName {
             36 => FitFieldPullUpExerciseName::SuspendedChinUp,
             37 => FitFieldPullUpExerciseName::WeightedSuspendedChinUp,
             38 => FitFieldPullUpExerciseName::PullUp,
+            39 => FitFieldPullUpExerciseName::ChinUp,
+            40 => FitFieldPullUpExerciseName::NeutralGripChinUp,
+            41 => FitFieldPullUpExerciseName::WeightedChinUp,
+            42 => FitFieldPullUpExerciseName::BandAssistedPullUp,
+            43 => FitFieldPullUpExerciseName::NeutralGripPullUp,
+            44 => FitFieldPullUpExerciseName::WeightedNeutralGripChinUp,
+            45 => FitFieldPullUpExerciseName::WeightedNeutralGripPullUp,
             _ => FitFieldPullUpExerciseName::UnknownToSdk,
         }
     }
@@ -17062,6 +18193,18 @@ pub enum FitFieldPushUpExerciseName { // fit base type: uint16
     WeightedRingPushUp, // 76
     PushUp, // 77
     PilatesPushup, // 78
+    DynamicPushUp, // 79
+    KippingHandstandPushUp, // 80
+    ShoulderTappingPushUp, // 81
+    BicepsPushUp, // 82
+    HinduPushUp, // 83
+    PikePushUp, // 84
+    WideGripPushUp, // 85
+    WeightedBicepsPushUp, // 86
+    WeightedHinduPushUp, // 87
+    WeightedPikePushUp, // 88
+    KippingParalletteHandstandPushUp, // 89
+    WallPushUp, // 90
     PushUpExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -17149,6 +18292,18 @@ impl fmt::Display for FitFieldPushUpExerciseName {
             FitFieldPushUpExerciseName::WeightedRingPushUp => write!(f, "{}", "WeightedRingPushUp"),
             FitFieldPushUpExerciseName::PushUp => write!(f, "{}", "PushUp"),
             FitFieldPushUpExerciseName::PilatesPushup => write!(f, "{}", "PilatesPushup"),
+            FitFieldPushUpExerciseName::DynamicPushUp => write!(f, "{}", "DynamicPushUp"),
+            FitFieldPushUpExerciseName::KippingHandstandPushUp => write!(f, "{}", "KippingHandstandPushUp"),
+            FitFieldPushUpExerciseName::ShoulderTappingPushUp => write!(f, "{}", "ShoulderTappingPushUp"),
+            FitFieldPushUpExerciseName::BicepsPushUp => write!(f, "{}", "BicepsPushUp"),
+            FitFieldPushUpExerciseName::HinduPushUp => write!(f, "{}", "HinduPushUp"),
+            FitFieldPushUpExerciseName::PikePushUp => write!(f, "{}", "PikePushUp"),
+            FitFieldPushUpExerciseName::WideGripPushUp => write!(f, "{}", "WideGripPushUp"),
+            FitFieldPushUpExerciseName::WeightedBicepsPushUp => write!(f, "{}", "WeightedBicepsPushUp"),
+            FitFieldPushUpExerciseName::WeightedHinduPushUp => write!(f, "{}", "WeightedHinduPushUp"),
+            FitFieldPushUpExerciseName::WeightedPikePushUp => write!(f, "{}", "WeightedPikePushUp"),
+            FitFieldPushUpExerciseName::KippingParalletteHandstandPushUp => write!(f, "{}", "KippingParalletteHandstandPushUp"),
+            FitFieldPushUpExerciseName::WallPushUp => write!(f, "{}", "WallPushUp"),
             FitFieldPushUpExerciseName::PushUpExerciseName(x) => write!(f, "{}({})", "PushUpExerciseName", x),
             FitFieldPushUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldPushUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -17242,6 +18397,18 @@ impl FitFieldParseable for FitFieldPushUpExerciseName {
                 76 => Ok(FitFieldPushUpExerciseName::from(v)),
                 77 => Ok(FitFieldPushUpExerciseName::from(v)),
                 78 => Ok(FitFieldPushUpExerciseName::from(v)),
+                79 => Ok(FitFieldPushUpExerciseName::from(v)),
+                80 => Ok(FitFieldPushUpExerciseName::from(v)),
+                81 => Ok(FitFieldPushUpExerciseName::from(v)),
+                82 => Ok(FitFieldPushUpExerciseName::from(v)),
+                83 => Ok(FitFieldPushUpExerciseName::from(v)),
+                84 => Ok(FitFieldPushUpExerciseName::from(v)),
+                85 => Ok(FitFieldPushUpExerciseName::from(v)),
+                86 => Ok(FitFieldPushUpExerciseName::from(v)),
+                87 => Ok(FitFieldPushUpExerciseName::from(v)),
+                88 => Ok(FitFieldPushUpExerciseName::from(v)),
+                89 => Ok(FitFieldPushUpExerciseName::from(v)),
+                90 => Ok(FitFieldPushUpExerciseName::from(v)),
                 v => Ok(FitFieldPushUpExerciseName::PushUpExerciseName(v)),
             }
         }
@@ -17332,6 +18499,18 @@ impl From<u16> for FitFieldPushUpExerciseName {
             76 => FitFieldPushUpExerciseName::WeightedRingPushUp,
             77 => FitFieldPushUpExerciseName::PushUp,
             78 => FitFieldPushUpExerciseName::PilatesPushup,
+            79 => FitFieldPushUpExerciseName::DynamicPushUp,
+            80 => FitFieldPushUpExerciseName::KippingHandstandPushUp,
+            81 => FitFieldPushUpExerciseName::ShoulderTappingPushUp,
+            82 => FitFieldPushUpExerciseName::BicepsPushUp,
+            83 => FitFieldPushUpExerciseName::HinduPushUp,
+            84 => FitFieldPushUpExerciseName::PikePushUp,
+            85 => FitFieldPushUpExerciseName::WideGripPushUp,
+            86 => FitFieldPushUpExerciseName::WeightedBicepsPushUp,
+            87 => FitFieldPushUpExerciseName::WeightedHinduPushUp,
+            88 => FitFieldPushUpExerciseName::WeightedPikePushUp,
+            89 => FitFieldPushUpExerciseName::KippingParalletteHandstandPushUp,
+            90 => FitFieldPushUpExerciseName::WallPushUp,
             _ => FitFieldPushUpExerciseName::UnknownToSdk,
         }
     }
@@ -17376,6 +18555,25 @@ pub enum FitFieldRowExerciseName { // fit base type: uint16
     UnderhandGripCableRow, // 31
     VGripCableRow, // 32
     WideGripSeatedCableRow, // 33
+    AlternatingDumbbellRow, // 34
+    InvertedRow, // 35
+    Row, // 36
+    WeightedRow, // 37
+    IndoorRow, // 38
+    BandedFacePulls, // 39
+    ChestSupportedDumbbellRow, // 40
+    DeclineRingRow, // 41
+    ElevatedRingRow, // 42
+    RdlBentOverRowWithBarbellDumbbell, // 43
+    RingRow, // 44
+    BarbellRow, // 45
+    BentOverRowWithBarbell, // 46
+    BentOverRowWithDumbell, // 47
+    SeatedUnderhandGripCableRow, // 48
+    TrxInvertedRow, // 49
+    WeightedInvertedRow, // 50
+    WeightedTrxInvertedRow, // 51
+    DumbbellRowWheelchair, // 52
     RowExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -17418,6 +18616,25 @@ impl fmt::Display for FitFieldRowExerciseName {
             FitFieldRowExerciseName::UnderhandGripCableRow => write!(f, "{}", "UnderhandGripCableRow"),
             FitFieldRowExerciseName::VGripCableRow => write!(f, "{}", "VGripCableRow"),
             FitFieldRowExerciseName::WideGripSeatedCableRow => write!(f, "{}", "WideGripSeatedCableRow"),
+            FitFieldRowExerciseName::AlternatingDumbbellRow => write!(f, "{}", "AlternatingDumbbellRow"),
+            FitFieldRowExerciseName::InvertedRow => write!(f, "{}", "InvertedRow"),
+            FitFieldRowExerciseName::Row => write!(f, "{}", "Row"),
+            FitFieldRowExerciseName::WeightedRow => write!(f, "{}", "WeightedRow"),
+            FitFieldRowExerciseName::IndoorRow => write!(f, "{}", "IndoorRow"),
+            FitFieldRowExerciseName::BandedFacePulls => write!(f, "{}", "BandedFacePulls"),
+            FitFieldRowExerciseName::ChestSupportedDumbbellRow => write!(f, "{}", "ChestSupportedDumbbellRow"),
+            FitFieldRowExerciseName::DeclineRingRow => write!(f, "{}", "DeclineRingRow"),
+            FitFieldRowExerciseName::ElevatedRingRow => write!(f, "{}", "ElevatedRingRow"),
+            FitFieldRowExerciseName::RdlBentOverRowWithBarbellDumbbell => write!(f, "{}", "RdlBentOverRowWithBarbellDumbbell"),
+            FitFieldRowExerciseName::RingRow => write!(f, "{}", "RingRow"),
+            FitFieldRowExerciseName::BarbellRow => write!(f, "{}", "BarbellRow"),
+            FitFieldRowExerciseName::BentOverRowWithBarbell => write!(f, "{}", "BentOverRowWithBarbell"),
+            FitFieldRowExerciseName::BentOverRowWithDumbell => write!(f, "{}", "BentOverRowWithDumbell"),
+            FitFieldRowExerciseName::SeatedUnderhandGripCableRow => write!(f, "{}", "SeatedUnderhandGripCableRow"),
+            FitFieldRowExerciseName::TrxInvertedRow => write!(f, "{}", "TrxInvertedRow"),
+            FitFieldRowExerciseName::WeightedInvertedRow => write!(f, "{}", "WeightedInvertedRow"),
+            FitFieldRowExerciseName::WeightedTrxInvertedRow => write!(f, "{}", "WeightedTrxInvertedRow"),
+            FitFieldRowExerciseName::DumbbellRowWheelchair => write!(f, "{}", "DumbbellRowWheelchair"),
             FitFieldRowExerciseName::RowExerciseName(x) => write!(f, "{}({})", "RowExerciseName", x),
             FitFieldRowExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldRowExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -17466,6 +18683,25 @@ impl FitFieldParseable for FitFieldRowExerciseName {
                 31 => Ok(FitFieldRowExerciseName::from(v)),
                 32 => Ok(FitFieldRowExerciseName::from(v)),
                 33 => Ok(FitFieldRowExerciseName::from(v)),
+                34 => Ok(FitFieldRowExerciseName::from(v)),
+                35 => Ok(FitFieldRowExerciseName::from(v)),
+                36 => Ok(FitFieldRowExerciseName::from(v)),
+                37 => Ok(FitFieldRowExerciseName::from(v)),
+                38 => Ok(FitFieldRowExerciseName::from(v)),
+                39 => Ok(FitFieldRowExerciseName::from(v)),
+                40 => Ok(FitFieldRowExerciseName::from(v)),
+                41 => Ok(FitFieldRowExerciseName::from(v)),
+                42 => Ok(FitFieldRowExerciseName::from(v)),
+                43 => Ok(FitFieldRowExerciseName::from(v)),
+                44 => Ok(FitFieldRowExerciseName::from(v)),
+                45 => Ok(FitFieldRowExerciseName::from(v)),
+                46 => Ok(FitFieldRowExerciseName::from(v)),
+                47 => Ok(FitFieldRowExerciseName::from(v)),
+                48 => Ok(FitFieldRowExerciseName::from(v)),
+                49 => Ok(FitFieldRowExerciseName::from(v)),
+                50 => Ok(FitFieldRowExerciseName::from(v)),
+                51 => Ok(FitFieldRowExerciseName::from(v)),
+                52 => Ok(FitFieldRowExerciseName::from(v)),
                 v => Ok(FitFieldRowExerciseName::RowExerciseName(v)),
             }
         }
@@ -17511,6 +18747,25 @@ impl From<u16> for FitFieldRowExerciseName {
             31 => FitFieldRowExerciseName::UnderhandGripCableRow,
             32 => FitFieldRowExerciseName::VGripCableRow,
             33 => FitFieldRowExerciseName::WideGripSeatedCableRow,
+            34 => FitFieldRowExerciseName::AlternatingDumbbellRow,
+            35 => FitFieldRowExerciseName::InvertedRow,
+            36 => FitFieldRowExerciseName::Row,
+            37 => FitFieldRowExerciseName::WeightedRow,
+            38 => FitFieldRowExerciseName::IndoorRow,
+            39 => FitFieldRowExerciseName::BandedFacePulls,
+            40 => FitFieldRowExerciseName::ChestSupportedDumbbellRow,
+            41 => FitFieldRowExerciseName::DeclineRingRow,
+            42 => FitFieldRowExerciseName::ElevatedRingRow,
+            43 => FitFieldRowExerciseName::RdlBentOverRowWithBarbellDumbbell,
+            44 => FitFieldRowExerciseName::RingRow,
+            45 => FitFieldRowExerciseName::BarbellRow,
+            46 => FitFieldRowExerciseName::BentOverRowWithBarbell,
+            47 => FitFieldRowExerciseName::BentOverRowWithDumbell,
+            48 => FitFieldRowExerciseName::SeatedUnderhandGripCableRow,
+            49 => FitFieldRowExerciseName::TrxInvertedRow,
+            50 => FitFieldRowExerciseName::WeightedInvertedRow,
+            51 => FitFieldRowExerciseName::WeightedTrxInvertedRow,
+            52 => FitFieldRowExerciseName::DumbbellRowWheelchair,
             _ => FitFieldRowExerciseName::UnknownToSdk,
         }
     }
@@ -17545,6 +18800,13 @@ pub enum FitFieldShoulderPressExerciseName { // fit base type: uint16
     SplitStanceHammerCurlToPress, // 21
     SwissBallDumbbellShoulderPress, // 22
     WeightPlateFrontRaise, // 23
+    DumbbellShoulderPress, // 24
+    MilitaryPress, // 25
+    StrictPress, // 27
+    DumbbellFrontRaise, // 28
+    DumbbellCurlToOverheadPressWheelchair, // 29
+    ArnoldPressWheelchair, // 30
+    OverheadDumbbellPressWheelchair, // 31
     ShoulderPressExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -17577,6 +18839,13 @@ impl fmt::Display for FitFieldShoulderPressExerciseName {
             FitFieldShoulderPressExerciseName::SplitStanceHammerCurlToPress => write!(f, "{}", "SplitStanceHammerCurlToPress"),
             FitFieldShoulderPressExerciseName::SwissBallDumbbellShoulderPress => write!(f, "{}", "SwissBallDumbbellShoulderPress"),
             FitFieldShoulderPressExerciseName::WeightPlateFrontRaise => write!(f, "{}", "WeightPlateFrontRaise"),
+            FitFieldShoulderPressExerciseName::DumbbellShoulderPress => write!(f, "{}", "DumbbellShoulderPress"),
+            FitFieldShoulderPressExerciseName::MilitaryPress => write!(f, "{}", "MilitaryPress"),
+            FitFieldShoulderPressExerciseName::StrictPress => write!(f, "{}", "StrictPress"),
+            FitFieldShoulderPressExerciseName::DumbbellFrontRaise => write!(f, "{}", "DumbbellFrontRaise"),
+            FitFieldShoulderPressExerciseName::DumbbellCurlToOverheadPressWheelchair => write!(f, "{}", "DumbbellCurlToOverheadPressWheelchair"),
+            FitFieldShoulderPressExerciseName::ArnoldPressWheelchair => write!(f, "{}", "ArnoldPressWheelchair"),
+            FitFieldShoulderPressExerciseName::OverheadDumbbellPressWheelchair => write!(f, "{}", "OverheadDumbbellPressWheelchair"),
             FitFieldShoulderPressExerciseName::ShoulderPressExerciseName(x) => write!(f, "{}({})", "ShoulderPressExerciseName", x),
             FitFieldShoulderPressExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldShoulderPressExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -17615,6 +18884,13 @@ impl FitFieldParseable for FitFieldShoulderPressExerciseName {
                 21 => Ok(FitFieldShoulderPressExerciseName::from(v)),
                 22 => Ok(FitFieldShoulderPressExerciseName::from(v)),
                 23 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                24 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                25 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                27 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                28 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                29 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                30 => Ok(FitFieldShoulderPressExerciseName::from(v)),
+                31 => Ok(FitFieldShoulderPressExerciseName::from(v)),
                 v => Ok(FitFieldShoulderPressExerciseName::ShoulderPressExerciseName(v)),
             }
         }
@@ -17650,6 +18926,13 @@ impl From<u16> for FitFieldShoulderPressExerciseName {
             21 => FitFieldShoulderPressExerciseName::SplitStanceHammerCurlToPress,
             22 => FitFieldShoulderPressExerciseName::SwissBallDumbbellShoulderPress,
             23 => FitFieldShoulderPressExerciseName::WeightPlateFrontRaise,
+            24 => FitFieldShoulderPressExerciseName::DumbbellShoulderPress,
+            25 => FitFieldShoulderPressExerciseName::MilitaryPress,
+            27 => FitFieldShoulderPressExerciseName::StrictPress,
+            28 => FitFieldShoulderPressExerciseName::DumbbellFrontRaise,
+            29 => FitFieldShoulderPressExerciseName::DumbbellCurlToOverheadPressWheelchair,
+            30 => FitFieldShoulderPressExerciseName::ArnoldPressWheelchair,
+            31 => FitFieldShoulderPressExerciseName::OverheadDumbbellPressWheelchair,
             _ => FitFieldShoulderPressExerciseName::UnknownToSdk,
         }
     }
@@ -17693,6 +18976,9 @@ pub enum FitFieldShoulderStabilityExerciseName { // fit base type: uint16
     WeightedSwissBallWRaise, // 30
     SwissBallYRaise, // 31
     WeightedSwissBallYRaise, // 32
+    CableInternalRotation, // 33
+    LyingInternalRotation, // 34
+    SeatedDumbbellInternalRotation, // 35
     ShoulderStabilityExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -17734,6 +19020,9 @@ impl fmt::Display for FitFieldShoulderStabilityExerciseName {
             FitFieldShoulderStabilityExerciseName::WeightedSwissBallWRaise => write!(f, "{}", "WeightedSwissBallWRaise"),
             FitFieldShoulderStabilityExerciseName::SwissBallYRaise => write!(f, "{}", "SwissBallYRaise"),
             FitFieldShoulderStabilityExerciseName::WeightedSwissBallYRaise => write!(f, "{}", "WeightedSwissBallYRaise"),
+            FitFieldShoulderStabilityExerciseName::CableInternalRotation => write!(f, "{}", "CableInternalRotation"),
+            FitFieldShoulderStabilityExerciseName::LyingInternalRotation => write!(f, "{}", "LyingInternalRotation"),
+            FitFieldShoulderStabilityExerciseName::SeatedDumbbellInternalRotation => write!(f, "{}", "SeatedDumbbellInternalRotation"),
             FitFieldShoulderStabilityExerciseName::ShoulderStabilityExerciseName(x) => write!(f, "{}({})", "ShoulderStabilityExerciseName", x),
             FitFieldShoulderStabilityExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldShoulderStabilityExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -17781,6 +19070,9 @@ impl FitFieldParseable for FitFieldShoulderStabilityExerciseName {
                 30 => Ok(FitFieldShoulderStabilityExerciseName::from(v)),
                 31 => Ok(FitFieldShoulderStabilityExerciseName::from(v)),
                 32 => Ok(FitFieldShoulderStabilityExerciseName::from(v)),
+                33 => Ok(FitFieldShoulderStabilityExerciseName::from(v)),
+                34 => Ok(FitFieldShoulderStabilityExerciseName::from(v)),
+                35 => Ok(FitFieldShoulderStabilityExerciseName::from(v)),
                 v => Ok(FitFieldShoulderStabilityExerciseName::ShoulderStabilityExerciseName(v)),
             }
         }
@@ -17825,6 +19117,9 @@ impl From<u16> for FitFieldShoulderStabilityExerciseName {
             30 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallWRaise,
             31 => FitFieldShoulderStabilityExerciseName::SwissBallYRaise,
             32 => FitFieldShoulderStabilityExerciseName::WeightedSwissBallYRaise,
+            33 => FitFieldShoulderStabilityExerciseName::CableInternalRotation,
+            34 => FitFieldShoulderStabilityExerciseName::LyingInternalRotation,
+            35 => FitFieldShoulderStabilityExerciseName::SeatedDumbbellInternalRotation,
             _ => FitFieldShoulderStabilityExerciseName::UnknownToSdk,
         }
     }
@@ -17852,6 +19147,14 @@ pub enum FitFieldShrugExerciseName { // fit base type: uint16
     SerratusShrug, // 14
     WeightedSerratusShrug, // 15
     WideGripJumpShrug, // 16
+    WideGripBarbellShrug, // 17
+    BehindTheBackShrug, // 18
+    DumbbellShrugWheelchair, // 19
+    ShrugWheelchair, // 20
+    ShrugArmDownWheelchair, // 21
+    ShrugArmMidWheelchair, // 22
+    ShrugArmUpWheelchair, // 23
+    UprightRow, // 24
     ShrugExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -17877,6 +19180,14 @@ impl fmt::Display for FitFieldShrugExerciseName {
             FitFieldShrugExerciseName::SerratusShrug => write!(f, "{}", "SerratusShrug"),
             FitFieldShrugExerciseName::WeightedSerratusShrug => write!(f, "{}", "WeightedSerratusShrug"),
             FitFieldShrugExerciseName::WideGripJumpShrug => write!(f, "{}", "WideGripJumpShrug"),
+            FitFieldShrugExerciseName::WideGripBarbellShrug => write!(f, "{}", "WideGripBarbellShrug"),
+            FitFieldShrugExerciseName::BehindTheBackShrug => write!(f, "{}", "BehindTheBackShrug"),
+            FitFieldShrugExerciseName::DumbbellShrugWheelchair => write!(f, "{}", "DumbbellShrugWheelchair"),
+            FitFieldShrugExerciseName::ShrugWheelchair => write!(f, "{}", "ShrugWheelchair"),
+            FitFieldShrugExerciseName::ShrugArmDownWheelchair => write!(f, "{}", "ShrugArmDownWheelchair"),
+            FitFieldShrugExerciseName::ShrugArmMidWheelchair => write!(f, "{}", "ShrugArmMidWheelchair"),
+            FitFieldShrugExerciseName::ShrugArmUpWheelchair => write!(f, "{}", "ShrugArmUpWheelchair"),
+            FitFieldShrugExerciseName::UprightRow => write!(f, "{}", "UprightRow"),
             FitFieldShrugExerciseName::ShrugExerciseName(x) => write!(f, "{}({})", "ShrugExerciseName", x),
             FitFieldShrugExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldShrugExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -17908,6 +19219,14 @@ impl FitFieldParseable for FitFieldShrugExerciseName {
                 14 => Ok(FitFieldShrugExerciseName::from(v)),
                 15 => Ok(FitFieldShrugExerciseName::from(v)),
                 16 => Ok(FitFieldShrugExerciseName::from(v)),
+                17 => Ok(FitFieldShrugExerciseName::from(v)),
+                18 => Ok(FitFieldShrugExerciseName::from(v)),
+                19 => Ok(FitFieldShrugExerciseName::from(v)),
+                20 => Ok(FitFieldShrugExerciseName::from(v)),
+                21 => Ok(FitFieldShrugExerciseName::from(v)),
+                22 => Ok(FitFieldShrugExerciseName::from(v)),
+                23 => Ok(FitFieldShrugExerciseName::from(v)),
+                24 => Ok(FitFieldShrugExerciseName::from(v)),
                 v => Ok(FitFieldShrugExerciseName::ShrugExerciseName(v)),
             }
         }
@@ -17936,6 +19255,14 @@ impl From<u16> for FitFieldShrugExerciseName {
             14 => FitFieldShrugExerciseName::SerratusShrug,
             15 => FitFieldShrugExerciseName::WeightedSerratusShrug,
             16 => FitFieldShrugExerciseName::WideGripJumpShrug,
+            17 => FitFieldShrugExerciseName::WideGripBarbellShrug,
+            18 => FitFieldShrugExerciseName::BehindTheBackShrug,
+            19 => FitFieldShrugExerciseName::DumbbellShrugWheelchair,
+            20 => FitFieldShrugExerciseName::ShrugWheelchair,
+            21 => FitFieldShrugExerciseName::ShrugArmDownWheelchair,
+            22 => FitFieldShrugExerciseName::ShrugArmMidWheelchair,
+            23 => FitFieldShrugExerciseName::ShrugArmUpWheelchair,
+            24 => FitFieldShrugExerciseName::UprightRow,
             _ => FitFieldShrugExerciseName::UnknownToSdk,
         }
     }
@@ -17984,6 +19311,9 @@ pub enum FitFieldSitUpExerciseName { // fit base type: uint16
     XAbs, // 35
     WeightedXAbs, // 36
     SitUp, // 37
+    GhdSitUps, // 38
+    SitUpTurkishGetUp, // 39
+    RussianTwistOnSwissBall, // 40
     SitUpExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -18030,6 +19360,9 @@ impl fmt::Display for FitFieldSitUpExerciseName {
             FitFieldSitUpExerciseName::XAbs => write!(f, "{}", "XAbs"),
             FitFieldSitUpExerciseName::WeightedXAbs => write!(f, "{}", "WeightedXAbs"),
             FitFieldSitUpExerciseName::SitUp => write!(f, "{}", "SitUp"),
+            FitFieldSitUpExerciseName::GhdSitUps => write!(f, "{}", "GhdSitUps"),
+            FitFieldSitUpExerciseName::SitUpTurkishGetUp => write!(f, "{}", "SitUpTurkishGetUp"),
+            FitFieldSitUpExerciseName::RussianTwistOnSwissBall => write!(f, "{}", "RussianTwistOnSwissBall"),
             FitFieldSitUpExerciseName::SitUpExerciseName(x) => write!(f, "{}({})", "SitUpExerciseName", x),
             FitFieldSitUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldSitUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -18082,6 +19415,9 @@ impl FitFieldParseable for FitFieldSitUpExerciseName {
                 35 => Ok(FitFieldSitUpExerciseName::from(v)),
                 36 => Ok(FitFieldSitUpExerciseName::from(v)),
                 37 => Ok(FitFieldSitUpExerciseName::from(v)),
+                38 => Ok(FitFieldSitUpExerciseName::from(v)),
+                39 => Ok(FitFieldSitUpExerciseName::from(v)),
+                40 => Ok(FitFieldSitUpExerciseName::from(v)),
                 v => Ok(FitFieldSitUpExerciseName::SitUpExerciseName(v)),
             }
         }
@@ -18131,6 +19467,9 @@ impl From<u16> for FitFieldSitUpExerciseName {
             35 => FitFieldSitUpExerciseName::XAbs,
             36 => FitFieldSitUpExerciseName::WeightedXAbs,
             37 => FitFieldSitUpExerciseName::SitUp,
+            38 => FitFieldSitUpExerciseName::GhdSitUps,
+            39 => FitFieldSitUpExerciseName::SitUpTurkishGetUp,
+            40 => FitFieldSitUpExerciseName::RussianTwistOnSwissBall,
             _ => FitFieldSitUpExerciseName::UnknownToSdk,
         }
     }
@@ -18233,6 +19572,15 @@ pub enum FitFieldSquatExerciseName { // fit base type: uint16
     SquatJumpsInNOut, // 89
     PilatesPlieSquatsParallelTurnedOutFlatAndHeels, // 90
     ReleveStraightLegAndKneeBentWithOneLegVariation, // 91
+    AlternatingBoxDumbbellStepUps, // 92
+    DumbbellOverheadSquatSingleArm, // 93
+    DumbbellSquatSnatch, // 94
+    MedicineBallSquat, // 95
+    WallBallSquatAndPress, // 97
+    SquatAmericanSwing, // 98
+    AirSquat, // 100
+    DumbbellThrusters, // 101
+    OverheadBarbellSquat, // 102
     SquatExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -18333,6 +19681,15 @@ impl fmt::Display for FitFieldSquatExerciseName {
             FitFieldSquatExerciseName::SquatJumpsInNOut => write!(f, "{}", "SquatJumpsInNOut"),
             FitFieldSquatExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeels => write!(f, "{}", "PilatesPlieSquatsParallelTurnedOutFlatAndHeels"),
             FitFieldSquatExerciseName::ReleveStraightLegAndKneeBentWithOneLegVariation => write!(f, "{}", "ReleveStraightLegAndKneeBentWithOneLegVariation"),
+            FitFieldSquatExerciseName::AlternatingBoxDumbbellStepUps => write!(f, "{}", "AlternatingBoxDumbbellStepUps"),
+            FitFieldSquatExerciseName::DumbbellOverheadSquatSingleArm => write!(f, "{}", "DumbbellOverheadSquatSingleArm"),
+            FitFieldSquatExerciseName::DumbbellSquatSnatch => write!(f, "{}", "DumbbellSquatSnatch"),
+            FitFieldSquatExerciseName::MedicineBallSquat => write!(f, "{}", "MedicineBallSquat"),
+            FitFieldSquatExerciseName::WallBallSquatAndPress => write!(f, "{}", "WallBallSquatAndPress"),
+            FitFieldSquatExerciseName::SquatAmericanSwing => write!(f, "{}", "SquatAmericanSwing"),
+            FitFieldSquatExerciseName::AirSquat => write!(f, "{}", "AirSquat"),
+            FitFieldSquatExerciseName::DumbbellThrusters => write!(f, "{}", "DumbbellThrusters"),
+            FitFieldSquatExerciseName::OverheadBarbellSquat => write!(f, "{}", "OverheadBarbellSquat"),
             FitFieldSquatExerciseName::SquatExerciseName(x) => write!(f, "{}({})", "SquatExerciseName", x),
             FitFieldSquatExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldSquatExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -18439,6 +19796,15 @@ impl FitFieldParseable for FitFieldSquatExerciseName {
                 89 => Ok(FitFieldSquatExerciseName::from(v)),
                 90 => Ok(FitFieldSquatExerciseName::from(v)),
                 91 => Ok(FitFieldSquatExerciseName::from(v)),
+                92 => Ok(FitFieldSquatExerciseName::from(v)),
+                93 => Ok(FitFieldSquatExerciseName::from(v)),
+                94 => Ok(FitFieldSquatExerciseName::from(v)),
+                95 => Ok(FitFieldSquatExerciseName::from(v)),
+                97 => Ok(FitFieldSquatExerciseName::from(v)),
+                98 => Ok(FitFieldSquatExerciseName::from(v)),
+                100 => Ok(FitFieldSquatExerciseName::from(v)),
+                101 => Ok(FitFieldSquatExerciseName::from(v)),
+                102 => Ok(FitFieldSquatExerciseName::from(v)),
                 v => Ok(FitFieldSquatExerciseName::SquatExerciseName(v)),
             }
         }
@@ -18542,6 +19908,15 @@ impl From<u16> for FitFieldSquatExerciseName {
             89 => FitFieldSquatExerciseName::SquatJumpsInNOut,
             90 => FitFieldSquatExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeels,
             91 => FitFieldSquatExerciseName::ReleveStraightLegAndKneeBentWithOneLegVariation,
+            92 => FitFieldSquatExerciseName::AlternatingBoxDumbbellStepUps,
+            93 => FitFieldSquatExerciseName::DumbbellOverheadSquatSingleArm,
+            94 => FitFieldSquatExerciseName::DumbbellSquatSnatch,
+            95 => FitFieldSquatExerciseName::MedicineBallSquat,
+            97 => FitFieldSquatExerciseName::WallBallSquatAndPress,
+            98 => FitFieldSquatExerciseName::SquatAmericanSwing,
+            100 => FitFieldSquatExerciseName::AirSquat,
+            101 => FitFieldSquatExerciseName::DumbbellThrusters,
+            102 => FitFieldSquatExerciseName::OverheadBarbellSquat,
             _ => FitFieldSquatExerciseName::UnknownToSdk,
         }
     }
@@ -18565,6 +19940,13 @@ pub enum FitFieldTotalBodyExerciseName { // fit base type: uint16
     WeightedSquatPlankPushUp, // 10
     StandingTRotationBalance, // 11
     WeightedStandingTRotationBalance, // 12
+    BarbellBurpee, // 13
+    BurpeeBoxJumpOverYesLiterallyJumpingOverTheBox, // 15
+    BurpeeBoxJumpStepUpOver, // 16
+    LateralBarbellBurpee, // 17
+    TotalBodyBurpeeOverBar, // 18
+    BurpeeBoxJumpOver, // 19
+    BurpeeWheelchair, // 20
     TotalBodyExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -18586,6 +19968,13 @@ impl fmt::Display for FitFieldTotalBodyExerciseName {
             FitFieldTotalBodyExerciseName::WeightedSquatPlankPushUp => write!(f, "{}", "WeightedSquatPlankPushUp"),
             FitFieldTotalBodyExerciseName::StandingTRotationBalance => write!(f, "{}", "StandingTRotationBalance"),
             FitFieldTotalBodyExerciseName::WeightedStandingTRotationBalance => write!(f, "{}", "WeightedStandingTRotationBalance"),
+            FitFieldTotalBodyExerciseName::BarbellBurpee => write!(f, "{}", "BarbellBurpee"),
+            FitFieldTotalBodyExerciseName::BurpeeBoxJumpOverYesLiterallyJumpingOverTheBox => write!(f, "{}", "BurpeeBoxJumpOverYesLiterallyJumpingOverTheBox"),
+            FitFieldTotalBodyExerciseName::BurpeeBoxJumpStepUpOver => write!(f, "{}", "BurpeeBoxJumpStepUpOver"),
+            FitFieldTotalBodyExerciseName::LateralBarbellBurpee => write!(f, "{}", "LateralBarbellBurpee"),
+            FitFieldTotalBodyExerciseName::TotalBodyBurpeeOverBar => write!(f, "{}", "TotalBodyBurpeeOverBar"),
+            FitFieldTotalBodyExerciseName::BurpeeBoxJumpOver => write!(f, "{}", "BurpeeBoxJumpOver"),
+            FitFieldTotalBodyExerciseName::BurpeeWheelchair => write!(f, "{}", "BurpeeWheelchair"),
             FitFieldTotalBodyExerciseName::TotalBodyExerciseName(x) => write!(f, "{}({})", "TotalBodyExerciseName", x),
             FitFieldTotalBodyExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldTotalBodyExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -18613,6 +20002,13 @@ impl FitFieldParseable for FitFieldTotalBodyExerciseName {
                 10 => Ok(FitFieldTotalBodyExerciseName::from(v)),
                 11 => Ok(FitFieldTotalBodyExerciseName::from(v)),
                 12 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                13 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                15 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                16 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                17 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                18 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                19 => Ok(FitFieldTotalBodyExerciseName::from(v)),
+                20 => Ok(FitFieldTotalBodyExerciseName::from(v)),
                 v => Ok(FitFieldTotalBodyExerciseName::TotalBodyExerciseName(v)),
             }
         }
@@ -18637,7 +20033,904 @@ impl From<u16> for FitFieldTotalBodyExerciseName {
             10 => FitFieldTotalBodyExerciseName::WeightedSquatPlankPushUp,
             11 => FitFieldTotalBodyExerciseName::StandingTRotationBalance,
             12 => FitFieldTotalBodyExerciseName::WeightedStandingTRotationBalance,
+            13 => FitFieldTotalBodyExerciseName::BarbellBurpee,
+            15 => FitFieldTotalBodyExerciseName::BurpeeBoxJumpOverYesLiterallyJumpingOverTheBox,
+            16 => FitFieldTotalBodyExerciseName::BurpeeBoxJumpStepUpOver,
+            17 => FitFieldTotalBodyExerciseName::LateralBarbellBurpee,
+            18 => FitFieldTotalBodyExerciseName::TotalBodyBurpeeOverBar,
+            19 => FitFieldTotalBodyExerciseName::BurpeeBoxJumpOver,
+            20 => FitFieldTotalBodyExerciseName::BurpeeWheelchair,
             _ => FitFieldTotalBodyExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldMoveExerciseName { // fit base type: uint16
+    ArchAndCurl, // 0
+    ArmCirclesWithBallBandAndWeight, // 1
+    ArmStretch, // 2
+    BackMassage, // 3
+    BellyBreathing, // 4
+    BridgeWithBall, // 5
+    DiamondLegCrunch, // 6
+    DiamondLegLift, // 7
+    EightPointShoulderOpener, // 8
+    FootRolling, // 9
+    Footwork, // 10
+    FootworkOnDisc, // 11
+    ForwardFold, // 12
+    FrogWithBand, // 13
+    HalfRollUp, // 14
+    HamstringCurl, // 15
+    HamstringStretch, // 16
+    HipStretch, // 17
+    HugATreeWithBallBandAndWeight, // 18
+    KneeCircles, // 19
+    KneeFoldsOnDisc, // 20
+    LateralFlexion, // 21
+    LegStretchWithBand, // 22
+    LegStretchWithLegCircles, // 23
+    LowerLiftOnDisc, // 24
+    LungeSquat, // 25
+    LungesWithKneeLift, // 26
+    MermaidStretch, // 27
+    NeutralPelvicPosition, // 28
+    PelvicClocksOnDisc, // 29
+    PilatesPlieSquatsParallelTurnedOutFlatAndHeelsWithChair, // 30
+    PiriformisStretch, // 31
+    PlankKneeCrosses, // 32
+    PlankKneePulls, // 33
+    PlankUpDowns, // 34
+    PrayerMudra, // 35
+    PsoasLungeStretch, // 36
+    RibcageBreathing, // 37
+    RollDown, // 38
+    RollUpWithWeightAndBand, // 39
+    Saw, // 40
+    ScapularStabilization, // 41
+    ScissorsOnDisc, // 42
+    SeatedHipStretchup, // 43
+    SeatedTwist, // 44
+    ShavingTheHeadWithBallBandAndWeight, // 45
+    SpinalTwist, // 46
+    SpinalTwistStretch, // 47
+    SpineStretchForward, // 48
+    SquatOpenArmTwistPose, // 49
+    SquatsWithBall, // 50
+    StandAndHang, // 51
+    StandingSideStretch, // 52
+    StandingSingleLegForwardBendWithItBandOpener, // 53
+    StraightLegCrunchWithLegLift, // 54
+    StraightLegCrunchWithLegLiftWithBall, // 55
+    StraightLegCrunchWithLegsCrossed, // 56
+    StraightLegCrunchWithLegsCrossedWithBall, // 57
+    StraightLegDiagonalCrunch, // 58
+    StraightLegDiagonalCrunchWithBall, // 59
+    TailboneCurl, // 60
+    ThroatLock, // 61
+    TickTockSideRoll, // 62
+    Twist, // 63
+    VLegCrunches, // 64
+    VSit, // 65
+    ForwardFoldWheelchair, // 66
+    ForwardFoldPlusWheelchair, // 67
+    ArmCirclesLowForwardWheelchair, // 68
+    ArmCirclesMidForwardWheelchair, // 69
+    ArmCirclesHighForwardWheelchair, // 70
+    ArmCirclesLowBackwardWheelchair, // 71
+    ArmCirclesMidBackwardWheelchair, // 72
+    ArmCirclesHighBackwardWheelchair, // 73
+    CoreTwistsWheelchair, // 74
+    ArmRaiseWheelchair, // 75
+    ChestExpandWheelchair, // 76
+    ArmExtendWheelchair, // 77
+    ForwardBendWheelchair, // 78
+    ToeTouchWheelchair, // 79
+    ExtendedToeTouchWheelchair, // 80
+    SeatedArmCircles, // 81
+    TrunkRotations, // 82
+    SeatedTrunkRotations, // 83
+    ToeTouch, // 84
+    MoveExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldMoveExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldMoveExerciseName::ArchAndCurl => write!(f, "{}", "ArchAndCurl"),
+            FitFieldMoveExerciseName::ArmCirclesWithBallBandAndWeight => write!(f, "{}", "ArmCirclesWithBallBandAndWeight"),
+            FitFieldMoveExerciseName::ArmStretch => write!(f, "{}", "ArmStretch"),
+            FitFieldMoveExerciseName::BackMassage => write!(f, "{}", "BackMassage"),
+            FitFieldMoveExerciseName::BellyBreathing => write!(f, "{}", "BellyBreathing"),
+            FitFieldMoveExerciseName::BridgeWithBall => write!(f, "{}", "BridgeWithBall"),
+            FitFieldMoveExerciseName::DiamondLegCrunch => write!(f, "{}", "DiamondLegCrunch"),
+            FitFieldMoveExerciseName::DiamondLegLift => write!(f, "{}", "DiamondLegLift"),
+            FitFieldMoveExerciseName::EightPointShoulderOpener => write!(f, "{}", "EightPointShoulderOpener"),
+            FitFieldMoveExerciseName::FootRolling => write!(f, "{}", "FootRolling"),
+            FitFieldMoveExerciseName::Footwork => write!(f, "{}", "Footwork"),
+            FitFieldMoveExerciseName::FootworkOnDisc => write!(f, "{}", "FootworkOnDisc"),
+            FitFieldMoveExerciseName::ForwardFold => write!(f, "{}", "ForwardFold"),
+            FitFieldMoveExerciseName::FrogWithBand => write!(f, "{}", "FrogWithBand"),
+            FitFieldMoveExerciseName::HalfRollUp => write!(f, "{}", "HalfRollUp"),
+            FitFieldMoveExerciseName::HamstringCurl => write!(f, "{}", "HamstringCurl"),
+            FitFieldMoveExerciseName::HamstringStretch => write!(f, "{}", "HamstringStretch"),
+            FitFieldMoveExerciseName::HipStretch => write!(f, "{}", "HipStretch"),
+            FitFieldMoveExerciseName::HugATreeWithBallBandAndWeight => write!(f, "{}", "HugATreeWithBallBandAndWeight"),
+            FitFieldMoveExerciseName::KneeCircles => write!(f, "{}", "KneeCircles"),
+            FitFieldMoveExerciseName::KneeFoldsOnDisc => write!(f, "{}", "KneeFoldsOnDisc"),
+            FitFieldMoveExerciseName::LateralFlexion => write!(f, "{}", "LateralFlexion"),
+            FitFieldMoveExerciseName::LegStretchWithBand => write!(f, "{}", "LegStretchWithBand"),
+            FitFieldMoveExerciseName::LegStretchWithLegCircles => write!(f, "{}", "LegStretchWithLegCircles"),
+            FitFieldMoveExerciseName::LowerLiftOnDisc => write!(f, "{}", "LowerLiftOnDisc"),
+            FitFieldMoveExerciseName::LungeSquat => write!(f, "{}", "LungeSquat"),
+            FitFieldMoveExerciseName::LungesWithKneeLift => write!(f, "{}", "LungesWithKneeLift"),
+            FitFieldMoveExerciseName::MermaidStretch => write!(f, "{}", "MermaidStretch"),
+            FitFieldMoveExerciseName::NeutralPelvicPosition => write!(f, "{}", "NeutralPelvicPosition"),
+            FitFieldMoveExerciseName::PelvicClocksOnDisc => write!(f, "{}", "PelvicClocksOnDisc"),
+            FitFieldMoveExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeelsWithChair => write!(f, "{}", "PilatesPlieSquatsParallelTurnedOutFlatAndHeelsWithChair"),
+            FitFieldMoveExerciseName::PiriformisStretch => write!(f, "{}", "PiriformisStretch"),
+            FitFieldMoveExerciseName::PlankKneeCrosses => write!(f, "{}", "PlankKneeCrosses"),
+            FitFieldMoveExerciseName::PlankKneePulls => write!(f, "{}", "PlankKneePulls"),
+            FitFieldMoveExerciseName::PlankUpDowns => write!(f, "{}", "PlankUpDowns"),
+            FitFieldMoveExerciseName::PrayerMudra => write!(f, "{}", "PrayerMudra"),
+            FitFieldMoveExerciseName::PsoasLungeStretch => write!(f, "{}", "PsoasLungeStretch"),
+            FitFieldMoveExerciseName::RibcageBreathing => write!(f, "{}", "RibcageBreathing"),
+            FitFieldMoveExerciseName::RollDown => write!(f, "{}", "RollDown"),
+            FitFieldMoveExerciseName::RollUpWithWeightAndBand => write!(f, "{}", "RollUpWithWeightAndBand"),
+            FitFieldMoveExerciseName::Saw => write!(f, "{}", "Saw"),
+            FitFieldMoveExerciseName::ScapularStabilization => write!(f, "{}", "ScapularStabilization"),
+            FitFieldMoveExerciseName::ScissorsOnDisc => write!(f, "{}", "ScissorsOnDisc"),
+            FitFieldMoveExerciseName::SeatedHipStretchup => write!(f, "{}", "SeatedHipStretchup"),
+            FitFieldMoveExerciseName::SeatedTwist => write!(f, "{}", "SeatedTwist"),
+            FitFieldMoveExerciseName::ShavingTheHeadWithBallBandAndWeight => write!(f, "{}", "ShavingTheHeadWithBallBandAndWeight"),
+            FitFieldMoveExerciseName::SpinalTwist => write!(f, "{}", "SpinalTwist"),
+            FitFieldMoveExerciseName::SpinalTwistStretch => write!(f, "{}", "SpinalTwistStretch"),
+            FitFieldMoveExerciseName::SpineStretchForward => write!(f, "{}", "SpineStretchForward"),
+            FitFieldMoveExerciseName::SquatOpenArmTwistPose => write!(f, "{}", "SquatOpenArmTwistPose"),
+            FitFieldMoveExerciseName::SquatsWithBall => write!(f, "{}", "SquatsWithBall"),
+            FitFieldMoveExerciseName::StandAndHang => write!(f, "{}", "StandAndHang"),
+            FitFieldMoveExerciseName::StandingSideStretch => write!(f, "{}", "StandingSideStretch"),
+            FitFieldMoveExerciseName::StandingSingleLegForwardBendWithItBandOpener => write!(f, "{}", "StandingSingleLegForwardBendWithItBandOpener"),
+            FitFieldMoveExerciseName::StraightLegCrunchWithLegLift => write!(f, "{}", "StraightLegCrunchWithLegLift"),
+            FitFieldMoveExerciseName::StraightLegCrunchWithLegLiftWithBall => write!(f, "{}", "StraightLegCrunchWithLegLiftWithBall"),
+            FitFieldMoveExerciseName::StraightLegCrunchWithLegsCrossed => write!(f, "{}", "StraightLegCrunchWithLegsCrossed"),
+            FitFieldMoveExerciseName::StraightLegCrunchWithLegsCrossedWithBall => write!(f, "{}", "StraightLegCrunchWithLegsCrossedWithBall"),
+            FitFieldMoveExerciseName::StraightLegDiagonalCrunch => write!(f, "{}", "StraightLegDiagonalCrunch"),
+            FitFieldMoveExerciseName::StraightLegDiagonalCrunchWithBall => write!(f, "{}", "StraightLegDiagonalCrunchWithBall"),
+            FitFieldMoveExerciseName::TailboneCurl => write!(f, "{}", "TailboneCurl"),
+            FitFieldMoveExerciseName::ThroatLock => write!(f, "{}", "ThroatLock"),
+            FitFieldMoveExerciseName::TickTockSideRoll => write!(f, "{}", "TickTockSideRoll"),
+            FitFieldMoveExerciseName::Twist => write!(f, "{}", "Twist"),
+            FitFieldMoveExerciseName::VLegCrunches => write!(f, "{}", "VLegCrunches"),
+            FitFieldMoveExerciseName::VSit => write!(f, "{}", "VSit"),
+            FitFieldMoveExerciseName::ForwardFoldWheelchair => write!(f, "{}", "ForwardFoldWheelchair"),
+            FitFieldMoveExerciseName::ForwardFoldPlusWheelchair => write!(f, "{}", "ForwardFoldPlusWheelchair"),
+            FitFieldMoveExerciseName::ArmCirclesLowForwardWheelchair => write!(f, "{}", "ArmCirclesLowForwardWheelchair"),
+            FitFieldMoveExerciseName::ArmCirclesMidForwardWheelchair => write!(f, "{}", "ArmCirclesMidForwardWheelchair"),
+            FitFieldMoveExerciseName::ArmCirclesHighForwardWheelchair => write!(f, "{}", "ArmCirclesHighForwardWheelchair"),
+            FitFieldMoveExerciseName::ArmCirclesLowBackwardWheelchair => write!(f, "{}", "ArmCirclesLowBackwardWheelchair"),
+            FitFieldMoveExerciseName::ArmCirclesMidBackwardWheelchair => write!(f, "{}", "ArmCirclesMidBackwardWheelchair"),
+            FitFieldMoveExerciseName::ArmCirclesHighBackwardWheelchair => write!(f, "{}", "ArmCirclesHighBackwardWheelchair"),
+            FitFieldMoveExerciseName::CoreTwistsWheelchair => write!(f, "{}", "CoreTwistsWheelchair"),
+            FitFieldMoveExerciseName::ArmRaiseWheelchair => write!(f, "{}", "ArmRaiseWheelchair"),
+            FitFieldMoveExerciseName::ChestExpandWheelchair => write!(f, "{}", "ChestExpandWheelchair"),
+            FitFieldMoveExerciseName::ArmExtendWheelchair => write!(f, "{}", "ArmExtendWheelchair"),
+            FitFieldMoveExerciseName::ForwardBendWheelchair => write!(f, "{}", "ForwardBendWheelchair"),
+            FitFieldMoveExerciseName::ToeTouchWheelchair => write!(f, "{}", "ToeTouchWheelchair"),
+            FitFieldMoveExerciseName::ExtendedToeTouchWheelchair => write!(f, "{}", "ExtendedToeTouchWheelchair"),
+            FitFieldMoveExerciseName::SeatedArmCircles => write!(f, "{}", "SeatedArmCircles"),
+            FitFieldMoveExerciseName::TrunkRotations => write!(f, "{}", "TrunkRotations"),
+            FitFieldMoveExerciseName::SeatedTrunkRotations => write!(f, "{}", "SeatedTrunkRotations"),
+            FitFieldMoveExerciseName::ToeTouch => write!(f, "{}", "ToeTouch"),
+            FitFieldMoveExerciseName::MoveExerciseName(x) => write!(f, "{}({})", "MoveExerciseName", x),
+            FitFieldMoveExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldMoveExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldMoveExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldMoveExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldMoveExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldMoveExerciseName::from(v)),
+                1 => Ok(FitFieldMoveExerciseName::from(v)),
+                2 => Ok(FitFieldMoveExerciseName::from(v)),
+                3 => Ok(FitFieldMoveExerciseName::from(v)),
+                4 => Ok(FitFieldMoveExerciseName::from(v)),
+                5 => Ok(FitFieldMoveExerciseName::from(v)),
+                6 => Ok(FitFieldMoveExerciseName::from(v)),
+                7 => Ok(FitFieldMoveExerciseName::from(v)),
+                8 => Ok(FitFieldMoveExerciseName::from(v)),
+                9 => Ok(FitFieldMoveExerciseName::from(v)),
+                10 => Ok(FitFieldMoveExerciseName::from(v)),
+                11 => Ok(FitFieldMoveExerciseName::from(v)),
+                12 => Ok(FitFieldMoveExerciseName::from(v)),
+                13 => Ok(FitFieldMoveExerciseName::from(v)),
+                14 => Ok(FitFieldMoveExerciseName::from(v)),
+                15 => Ok(FitFieldMoveExerciseName::from(v)),
+                16 => Ok(FitFieldMoveExerciseName::from(v)),
+                17 => Ok(FitFieldMoveExerciseName::from(v)),
+                18 => Ok(FitFieldMoveExerciseName::from(v)),
+                19 => Ok(FitFieldMoveExerciseName::from(v)),
+                20 => Ok(FitFieldMoveExerciseName::from(v)),
+                21 => Ok(FitFieldMoveExerciseName::from(v)),
+                22 => Ok(FitFieldMoveExerciseName::from(v)),
+                23 => Ok(FitFieldMoveExerciseName::from(v)),
+                24 => Ok(FitFieldMoveExerciseName::from(v)),
+                25 => Ok(FitFieldMoveExerciseName::from(v)),
+                26 => Ok(FitFieldMoveExerciseName::from(v)),
+                27 => Ok(FitFieldMoveExerciseName::from(v)),
+                28 => Ok(FitFieldMoveExerciseName::from(v)),
+                29 => Ok(FitFieldMoveExerciseName::from(v)),
+                30 => Ok(FitFieldMoveExerciseName::from(v)),
+                31 => Ok(FitFieldMoveExerciseName::from(v)),
+                32 => Ok(FitFieldMoveExerciseName::from(v)),
+                33 => Ok(FitFieldMoveExerciseName::from(v)),
+                34 => Ok(FitFieldMoveExerciseName::from(v)),
+                35 => Ok(FitFieldMoveExerciseName::from(v)),
+                36 => Ok(FitFieldMoveExerciseName::from(v)),
+                37 => Ok(FitFieldMoveExerciseName::from(v)),
+                38 => Ok(FitFieldMoveExerciseName::from(v)),
+                39 => Ok(FitFieldMoveExerciseName::from(v)),
+                40 => Ok(FitFieldMoveExerciseName::from(v)),
+                41 => Ok(FitFieldMoveExerciseName::from(v)),
+                42 => Ok(FitFieldMoveExerciseName::from(v)),
+                43 => Ok(FitFieldMoveExerciseName::from(v)),
+                44 => Ok(FitFieldMoveExerciseName::from(v)),
+                45 => Ok(FitFieldMoveExerciseName::from(v)),
+                46 => Ok(FitFieldMoveExerciseName::from(v)),
+                47 => Ok(FitFieldMoveExerciseName::from(v)),
+                48 => Ok(FitFieldMoveExerciseName::from(v)),
+                49 => Ok(FitFieldMoveExerciseName::from(v)),
+                50 => Ok(FitFieldMoveExerciseName::from(v)),
+                51 => Ok(FitFieldMoveExerciseName::from(v)),
+                52 => Ok(FitFieldMoveExerciseName::from(v)),
+                53 => Ok(FitFieldMoveExerciseName::from(v)),
+                54 => Ok(FitFieldMoveExerciseName::from(v)),
+                55 => Ok(FitFieldMoveExerciseName::from(v)),
+                56 => Ok(FitFieldMoveExerciseName::from(v)),
+                57 => Ok(FitFieldMoveExerciseName::from(v)),
+                58 => Ok(FitFieldMoveExerciseName::from(v)),
+                59 => Ok(FitFieldMoveExerciseName::from(v)),
+                60 => Ok(FitFieldMoveExerciseName::from(v)),
+                61 => Ok(FitFieldMoveExerciseName::from(v)),
+                62 => Ok(FitFieldMoveExerciseName::from(v)),
+                63 => Ok(FitFieldMoveExerciseName::from(v)),
+                64 => Ok(FitFieldMoveExerciseName::from(v)),
+                65 => Ok(FitFieldMoveExerciseName::from(v)),
+                66 => Ok(FitFieldMoveExerciseName::from(v)),
+                67 => Ok(FitFieldMoveExerciseName::from(v)),
+                68 => Ok(FitFieldMoveExerciseName::from(v)),
+                69 => Ok(FitFieldMoveExerciseName::from(v)),
+                70 => Ok(FitFieldMoveExerciseName::from(v)),
+                71 => Ok(FitFieldMoveExerciseName::from(v)),
+                72 => Ok(FitFieldMoveExerciseName::from(v)),
+                73 => Ok(FitFieldMoveExerciseName::from(v)),
+                74 => Ok(FitFieldMoveExerciseName::from(v)),
+                75 => Ok(FitFieldMoveExerciseName::from(v)),
+                76 => Ok(FitFieldMoveExerciseName::from(v)),
+                77 => Ok(FitFieldMoveExerciseName::from(v)),
+                78 => Ok(FitFieldMoveExerciseName::from(v)),
+                79 => Ok(FitFieldMoveExerciseName::from(v)),
+                80 => Ok(FitFieldMoveExerciseName::from(v)),
+                81 => Ok(FitFieldMoveExerciseName::from(v)),
+                82 => Ok(FitFieldMoveExerciseName::from(v)),
+                83 => Ok(FitFieldMoveExerciseName::from(v)),
+                84 => Ok(FitFieldMoveExerciseName::from(v)),
+                v => Ok(FitFieldMoveExerciseName::MoveExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldMoveExerciseName);
+
+impl From<u16> for FitFieldMoveExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldMoveExerciseName::ArchAndCurl,
+            1 => FitFieldMoveExerciseName::ArmCirclesWithBallBandAndWeight,
+            2 => FitFieldMoveExerciseName::ArmStretch,
+            3 => FitFieldMoveExerciseName::BackMassage,
+            4 => FitFieldMoveExerciseName::BellyBreathing,
+            5 => FitFieldMoveExerciseName::BridgeWithBall,
+            6 => FitFieldMoveExerciseName::DiamondLegCrunch,
+            7 => FitFieldMoveExerciseName::DiamondLegLift,
+            8 => FitFieldMoveExerciseName::EightPointShoulderOpener,
+            9 => FitFieldMoveExerciseName::FootRolling,
+            10 => FitFieldMoveExerciseName::Footwork,
+            11 => FitFieldMoveExerciseName::FootworkOnDisc,
+            12 => FitFieldMoveExerciseName::ForwardFold,
+            13 => FitFieldMoveExerciseName::FrogWithBand,
+            14 => FitFieldMoveExerciseName::HalfRollUp,
+            15 => FitFieldMoveExerciseName::HamstringCurl,
+            16 => FitFieldMoveExerciseName::HamstringStretch,
+            17 => FitFieldMoveExerciseName::HipStretch,
+            18 => FitFieldMoveExerciseName::HugATreeWithBallBandAndWeight,
+            19 => FitFieldMoveExerciseName::KneeCircles,
+            20 => FitFieldMoveExerciseName::KneeFoldsOnDisc,
+            21 => FitFieldMoveExerciseName::LateralFlexion,
+            22 => FitFieldMoveExerciseName::LegStretchWithBand,
+            23 => FitFieldMoveExerciseName::LegStretchWithLegCircles,
+            24 => FitFieldMoveExerciseName::LowerLiftOnDisc,
+            25 => FitFieldMoveExerciseName::LungeSquat,
+            26 => FitFieldMoveExerciseName::LungesWithKneeLift,
+            27 => FitFieldMoveExerciseName::MermaidStretch,
+            28 => FitFieldMoveExerciseName::NeutralPelvicPosition,
+            29 => FitFieldMoveExerciseName::PelvicClocksOnDisc,
+            30 => FitFieldMoveExerciseName::PilatesPlieSquatsParallelTurnedOutFlatAndHeelsWithChair,
+            31 => FitFieldMoveExerciseName::PiriformisStretch,
+            32 => FitFieldMoveExerciseName::PlankKneeCrosses,
+            33 => FitFieldMoveExerciseName::PlankKneePulls,
+            34 => FitFieldMoveExerciseName::PlankUpDowns,
+            35 => FitFieldMoveExerciseName::PrayerMudra,
+            36 => FitFieldMoveExerciseName::PsoasLungeStretch,
+            37 => FitFieldMoveExerciseName::RibcageBreathing,
+            38 => FitFieldMoveExerciseName::RollDown,
+            39 => FitFieldMoveExerciseName::RollUpWithWeightAndBand,
+            40 => FitFieldMoveExerciseName::Saw,
+            41 => FitFieldMoveExerciseName::ScapularStabilization,
+            42 => FitFieldMoveExerciseName::ScissorsOnDisc,
+            43 => FitFieldMoveExerciseName::SeatedHipStretchup,
+            44 => FitFieldMoveExerciseName::SeatedTwist,
+            45 => FitFieldMoveExerciseName::ShavingTheHeadWithBallBandAndWeight,
+            46 => FitFieldMoveExerciseName::SpinalTwist,
+            47 => FitFieldMoveExerciseName::SpinalTwistStretch,
+            48 => FitFieldMoveExerciseName::SpineStretchForward,
+            49 => FitFieldMoveExerciseName::SquatOpenArmTwistPose,
+            50 => FitFieldMoveExerciseName::SquatsWithBall,
+            51 => FitFieldMoveExerciseName::StandAndHang,
+            52 => FitFieldMoveExerciseName::StandingSideStretch,
+            53 => FitFieldMoveExerciseName::StandingSingleLegForwardBendWithItBandOpener,
+            54 => FitFieldMoveExerciseName::StraightLegCrunchWithLegLift,
+            55 => FitFieldMoveExerciseName::StraightLegCrunchWithLegLiftWithBall,
+            56 => FitFieldMoveExerciseName::StraightLegCrunchWithLegsCrossed,
+            57 => FitFieldMoveExerciseName::StraightLegCrunchWithLegsCrossedWithBall,
+            58 => FitFieldMoveExerciseName::StraightLegDiagonalCrunch,
+            59 => FitFieldMoveExerciseName::StraightLegDiagonalCrunchWithBall,
+            60 => FitFieldMoveExerciseName::TailboneCurl,
+            61 => FitFieldMoveExerciseName::ThroatLock,
+            62 => FitFieldMoveExerciseName::TickTockSideRoll,
+            63 => FitFieldMoveExerciseName::Twist,
+            64 => FitFieldMoveExerciseName::VLegCrunches,
+            65 => FitFieldMoveExerciseName::VSit,
+            66 => FitFieldMoveExerciseName::ForwardFoldWheelchair,
+            67 => FitFieldMoveExerciseName::ForwardFoldPlusWheelchair,
+            68 => FitFieldMoveExerciseName::ArmCirclesLowForwardWheelchair,
+            69 => FitFieldMoveExerciseName::ArmCirclesMidForwardWheelchair,
+            70 => FitFieldMoveExerciseName::ArmCirclesHighForwardWheelchair,
+            71 => FitFieldMoveExerciseName::ArmCirclesLowBackwardWheelchair,
+            72 => FitFieldMoveExerciseName::ArmCirclesMidBackwardWheelchair,
+            73 => FitFieldMoveExerciseName::ArmCirclesHighBackwardWheelchair,
+            74 => FitFieldMoveExerciseName::CoreTwistsWheelchair,
+            75 => FitFieldMoveExerciseName::ArmRaiseWheelchair,
+            76 => FitFieldMoveExerciseName::ChestExpandWheelchair,
+            77 => FitFieldMoveExerciseName::ArmExtendWheelchair,
+            78 => FitFieldMoveExerciseName::ForwardBendWheelchair,
+            79 => FitFieldMoveExerciseName::ToeTouchWheelchair,
+            80 => FitFieldMoveExerciseName::ExtendedToeTouchWheelchair,
+            81 => FitFieldMoveExerciseName::SeatedArmCircles,
+            82 => FitFieldMoveExerciseName::TrunkRotations,
+            83 => FitFieldMoveExerciseName::SeatedTrunkRotations,
+            84 => FitFieldMoveExerciseName::ToeTouch,
+            _ => FitFieldMoveExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldPoseExerciseName { // fit base type: uint16
+    AllFours, // 0
+    AnkleToKnee, // 1
+    BabyCobra, // 2
+    Boat, // 3
+    BoundAngle, // 4
+    BoundSeatedSingleLegForwardBend, // 5
+    Bow, // 6
+    BowedHalfMoon, // 7
+    Bridge, // 8
+    Cat, // 9
+    Chair, // 10
+    Childs, // 11
+    Corpse, // 12
+    CowFace, // 13
+    Cow, // 14
+    DevotionalWarrior, // 15
+    DolphinPlank, // 16
+    Dolphin, // 17
+    DownDogKneeToNose, // 18
+    DownDogSplit, // 19
+    DownDogSplitOpenHipBentKnee, // 20
+    DownwardFacingDog, // 21
+    Eagle, // 22
+    EasySeated, // 23
+    ExtendedPuppy, // 24
+    ExtendedSideAngle, // 25
+    Fish, // 26
+    FourLimbedStaff, // 27
+    FullSplit, // 28
+    Gate, // 29
+    HalfChairHalfAnkleToKnee, // 30
+    HalfMoon, // 31
+    HeadToKnee, // 32
+    Heron, // 33
+    Heros, // 34
+    HighLunge, // 35
+    KneesChestChin, // 36
+    Lizard, // 37
+    Locust, // 38
+    LowLunge, // 39
+    LowLungeTwist, // 40
+    LowLungeWithKneeDown, // 41
+    Mermaid, // 42
+    Mountain, // 43
+    OneLeggedDownwardFacingPoseOpenHipBentKnee, // 44
+    OneLeggedPigeon, // 45
+    PeacefulWarrior, // 46
+    Plank, // 47
+    Plow, // 48
+    ReclinedHandToFoot, // 49
+    RevolvedHalfMoon, // 50
+    RevolvedHeadToKnee, // 51
+    RevolvedTriangle, // 52
+    RunnersLunge, // 53
+    SeatedEasySideBend, // 54
+    SeatedEasyTwist, // 55
+    SeatedLongLegForwardBend, // 56
+    SeatedWideLegForwardBend, // 57
+    ShoulderStand, // 58
+    SideBoat, // 59
+    SidePlank, // 60
+    Sphinx, // 61
+    SquatOpenArmTwist, // 62
+    SquatPalmPress, // 63
+    Staff, // 64
+    StandingArmsUp, // 65
+    StandingForwardBendHalfwayUp, // 66
+    StandingForwardBend, // 67
+    StandingSideOpener, // 68
+    StandingSingleLegForwardBend, // 69
+    StandingSplit, // 70
+    StandingWideLegForwardBend, // 71
+    StandingWideLegForwardBendWithTwist, // 72
+    SupineSpinalTwist, // 73
+    TableTop, // 74
+    ThreadTheNeedle, // 75
+    Thunderbolt, // 76
+    ThunderboltPoseBothSidesArmStretch, // 77
+    Tree, // 78
+    Triangle, // 79
+    UpDog, // 80
+    UpwardFacingPlank, // 81
+    WarriorOne, // 82
+    WarriorThree, // 83
+    WarriorTwo, // 84
+    Wheel, // 85
+    WideSideLunge, // 86
+    DeepBreathingWheelchair, // 87
+    DeepBreathingLowWheelchair, // 88
+    DeepBreathingMidWheelchair, // 89
+    DeepBreathingHighWheelchair, // 90
+    PrayerWheelchair, // 91
+    OverheadPrayerWheelchair, // 92
+    CactusWheelchair, // 93
+    BreathingPunchesWheelchair, // 94
+    BreathingPunchesExtendedWheelchair, // 95
+    BreathingPunchesOverheadWheelchair, // 96
+    BreathingPunchesOverheadAndDownWheelchair, // 97
+    BreathingPunchesSideWheelchair, // 98
+    BreathingPunchesExtendedSideWheelchair, // 99
+    BreathingPunchesOverheadSideWheelchair, // 100
+    BreathingPunchesOverheadAndDownSideWheelchair, // 101
+    LeftHandBackWheelchair, // 102
+    TriangleWheelchair, // 103
+    ThreadTheNeedleWheelchair, // 104
+    NeckFlexionAndExtensionWheelchair, // 105
+    NeckLateralFlexionWheelchair, // 106
+    SpineFlexionAndExtensionWheelchair, // 107
+    SpineRotationWheelchair, // 108
+    SpineLateralFlexionWheelchair, // 109
+    AlternativeSkiingWheelchair, // 110
+    ReachForwardWheelchair, // 111
+    WarriorWheelchair, // 112
+    ReverseWarriorWheelchair, // 113
+    DownwardFacingDogToCobra, // 114
+    SeatedCatCow, // 115
+    PoseExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldPoseExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldPoseExerciseName::AllFours => write!(f, "{}", "AllFours"),
+            FitFieldPoseExerciseName::AnkleToKnee => write!(f, "{}", "AnkleToKnee"),
+            FitFieldPoseExerciseName::BabyCobra => write!(f, "{}", "BabyCobra"),
+            FitFieldPoseExerciseName::Boat => write!(f, "{}", "Boat"),
+            FitFieldPoseExerciseName::BoundAngle => write!(f, "{}", "BoundAngle"),
+            FitFieldPoseExerciseName::BoundSeatedSingleLegForwardBend => write!(f, "{}", "BoundSeatedSingleLegForwardBend"),
+            FitFieldPoseExerciseName::Bow => write!(f, "{}", "Bow"),
+            FitFieldPoseExerciseName::BowedHalfMoon => write!(f, "{}", "BowedHalfMoon"),
+            FitFieldPoseExerciseName::Bridge => write!(f, "{}", "Bridge"),
+            FitFieldPoseExerciseName::Cat => write!(f, "{}", "Cat"),
+            FitFieldPoseExerciseName::Chair => write!(f, "{}", "Chair"),
+            FitFieldPoseExerciseName::Childs => write!(f, "{}", "Childs"),
+            FitFieldPoseExerciseName::Corpse => write!(f, "{}", "Corpse"),
+            FitFieldPoseExerciseName::CowFace => write!(f, "{}", "CowFace"),
+            FitFieldPoseExerciseName::Cow => write!(f, "{}", "Cow"),
+            FitFieldPoseExerciseName::DevotionalWarrior => write!(f, "{}", "DevotionalWarrior"),
+            FitFieldPoseExerciseName::DolphinPlank => write!(f, "{}", "DolphinPlank"),
+            FitFieldPoseExerciseName::Dolphin => write!(f, "{}", "Dolphin"),
+            FitFieldPoseExerciseName::DownDogKneeToNose => write!(f, "{}", "DownDogKneeToNose"),
+            FitFieldPoseExerciseName::DownDogSplit => write!(f, "{}", "DownDogSplit"),
+            FitFieldPoseExerciseName::DownDogSplitOpenHipBentKnee => write!(f, "{}", "DownDogSplitOpenHipBentKnee"),
+            FitFieldPoseExerciseName::DownwardFacingDog => write!(f, "{}", "DownwardFacingDog"),
+            FitFieldPoseExerciseName::Eagle => write!(f, "{}", "Eagle"),
+            FitFieldPoseExerciseName::EasySeated => write!(f, "{}", "EasySeated"),
+            FitFieldPoseExerciseName::ExtendedPuppy => write!(f, "{}", "ExtendedPuppy"),
+            FitFieldPoseExerciseName::ExtendedSideAngle => write!(f, "{}", "ExtendedSideAngle"),
+            FitFieldPoseExerciseName::Fish => write!(f, "{}", "Fish"),
+            FitFieldPoseExerciseName::FourLimbedStaff => write!(f, "{}", "FourLimbedStaff"),
+            FitFieldPoseExerciseName::FullSplit => write!(f, "{}", "FullSplit"),
+            FitFieldPoseExerciseName::Gate => write!(f, "{}", "Gate"),
+            FitFieldPoseExerciseName::HalfChairHalfAnkleToKnee => write!(f, "{}", "HalfChairHalfAnkleToKnee"),
+            FitFieldPoseExerciseName::HalfMoon => write!(f, "{}", "HalfMoon"),
+            FitFieldPoseExerciseName::HeadToKnee => write!(f, "{}", "HeadToKnee"),
+            FitFieldPoseExerciseName::Heron => write!(f, "{}", "Heron"),
+            FitFieldPoseExerciseName::Heros => write!(f, "{}", "Heros"),
+            FitFieldPoseExerciseName::HighLunge => write!(f, "{}", "HighLunge"),
+            FitFieldPoseExerciseName::KneesChestChin => write!(f, "{}", "KneesChestChin"),
+            FitFieldPoseExerciseName::Lizard => write!(f, "{}", "Lizard"),
+            FitFieldPoseExerciseName::Locust => write!(f, "{}", "Locust"),
+            FitFieldPoseExerciseName::LowLunge => write!(f, "{}", "LowLunge"),
+            FitFieldPoseExerciseName::LowLungeTwist => write!(f, "{}", "LowLungeTwist"),
+            FitFieldPoseExerciseName::LowLungeWithKneeDown => write!(f, "{}", "LowLungeWithKneeDown"),
+            FitFieldPoseExerciseName::Mermaid => write!(f, "{}", "Mermaid"),
+            FitFieldPoseExerciseName::Mountain => write!(f, "{}", "Mountain"),
+            FitFieldPoseExerciseName::OneLeggedDownwardFacingPoseOpenHipBentKnee => write!(f, "{}", "OneLeggedDownwardFacingPoseOpenHipBentKnee"),
+            FitFieldPoseExerciseName::OneLeggedPigeon => write!(f, "{}", "OneLeggedPigeon"),
+            FitFieldPoseExerciseName::PeacefulWarrior => write!(f, "{}", "PeacefulWarrior"),
+            FitFieldPoseExerciseName::Plank => write!(f, "{}", "Plank"),
+            FitFieldPoseExerciseName::Plow => write!(f, "{}", "Plow"),
+            FitFieldPoseExerciseName::ReclinedHandToFoot => write!(f, "{}", "ReclinedHandToFoot"),
+            FitFieldPoseExerciseName::RevolvedHalfMoon => write!(f, "{}", "RevolvedHalfMoon"),
+            FitFieldPoseExerciseName::RevolvedHeadToKnee => write!(f, "{}", "RevolvedHeadToKnee"),
+            FitFieldPoseExerciseName::RevolvedTriangle => write!(f, "{}", "RevolvedTriangle"),
+            FitFieldPoseExerciseName::RunnersLunge => write!(f, "{}", "RunnersLunge"),
+            FitFieldPoseExerciseName::SeatedEasySideBend => write!(f, "{}", "SeatedEasySideBend"),
+            FitFieldPoseExerciseName::SeatedEasyTwist => write!(f, "{}", "SeatedEasyTwist"),
+            FitFieldPoseExerciseName::SeatedLongLegForwardBend => write!(f, "{}", "SeatedLongLegForwardBend"),
+            FitFieldPoseExerciseName::SeatedWideLegForwardBend => write!(f, "{}", "SeatedWideLegForwardBend"),
+            FitFieldPoseExerciseName::ShoulderStand => write!(f, "{}", "ShoulderStand"),
+            FitFieldPoseExerciseName::SideBoat => write!(f, "{}", "SideBoat"),
+            FitFieldPoseExerciseName::SidePlank => write!(f, "{}", "SidePlank"),
+            FitFieldPoseExerciseName::Sphinx => write!(f, "{}", "Sphinx"),
+            FitFieldPoseExerciseName::SquatOpenArmTwist => write!(f, "{}", "SquatOpenArmTwist"),
+            FitFieldPoseExerciseName::SquatPalmPress => write!(f, "{}", "SquatPalmPress"),
+            FitFieldPoseExerciseName::Staff => write!(f, "{}", "Staff"),
+            FitFieldPoseExerciseName::StandingArmsUp => write!(f, "{}", "StandingArmsUp"),
+            FitFieldPoseExerciseName::StandingForwardBendHalfwayUp => write!(f, "{}", "StandingForwardBendHalfwayUp"),
+            FitFieldPoseExerciseName::StandingForwardBend => write!(f, "{}", "StandingForwardBend"),
+            FitFieldPoseExerciseName::StandingSideOpener => write!(f, "{}", "StandingSideOpener"),
+            FitFieldPoseExerciseName::StandingSingleLegForwardBend => write!(f, "{}", "StandingSingleLegForwardBend"),
+            FitFieldPoseExerciseName::StandingSplit => write!(f, "{}", "StandingSplit"),
+            FitFieldPoseExerciseName::StandingWideLegForwardBend => write!(f, "{}", "StandingWideLegForwardBend"),
+            FitFieldPoseExerciseName::StandingWideLegForwardBendWithTwist => write!(f, "{}", "StandingWideLegForwardBendWithTwist"),
+            FitFieldPoseExerciseName::SupineSpinalTwist => write!(f, "{}", "SupineSpinalTwist"),
+            FitFieldPoseExerciseName::TableTop => write!(f, "{}", "TableTop"),
+            FitFieldPoseExerciseName::ThreadTheNeedle => write!(f, "{}", "ThreadTheNeedle"),
+            FitFieldPoseExerciseName::Thunderbolt => write!(f, "{}", "Thunderbolt"),
+            FitFieldPoseExerciseName::ThunderboltPoseBothSidesArmStretch => write!(f, "{}", "ThunderboltPoseBothSidesArmStretch"),
+            FitFieldPoseExerciseName::Tree => write!(f, "{}", "Tree"),
+            FitFieldPoseExerciseName::Triangle => write!(f, "{}", "Triangle"),
+            FitFieldPoseExerciseName::UpDog => write!(f, "{}", "UpDog"),
+            FitFieldPoseExerciseName::UpwardFacingPlank => write!(f, "{}", "UpwardFacingPlank"),
+            FitFieldPoseExerciseName::WarriorOne => write!(f, "{}", "WarriorOne"),
+            FitFieldPoseExerciseName::WarriorThree => write!(f, "{}", "WarriorThree"),
+            FitFieldPoseExerciseName::WarriorTwo => write!(f, "{}", "WarriorTwo"),
+            FitFieldPoseExerciseName::Wheel => write!(f, "{}", "Wheel"),
+            FitFieldPoseExerciseName::WideSideLunge => write!(f, "{}", "WideSideLunge"),
+            FitFieldPoseExerciseName::DeepBreathingWheelchair => write!(f, "{}", "DeepBreathingWheelchair"),
+            FitFieldPoseExerciseName::DeepBreathingLowWheelchair => write!(f, "{}", "DeepBreathingLowWheelchair"),
+            FitFieldPoseExerciseName::DeepBreathingMidWheelchair => write!(f, "{}", "DeepBreathingMidWheelchair"),
+            FitFieldPoseExerciseName::DeepBreathingHighWheelchair => write!(f, "{}", "DeepBreathingHighWheelchair"),
+            FitFieldPoseExerciseName::PrayerWheelchair => write!(f, "{}", "PrayerWheelchair"),
+            FitFieldPoseExerciseName::OverheadPrayerWheelchair => write!(f, "{}", "OverheadPrayerWheelchair"),
+            FitFieldPoseExerciseName::CactusWheelchair => write!(f, "{}", "CactusWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesWheelchair => write!(f, "{}", "BreathingPunchesWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesExtendedWheelchair => write!(f, "{}", "BreathingPunchesExtendedWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesOverheadWheelchair => write!(f, "{}", "BreathingPunchesOverheadWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesOverheadAndDownWheelchair => write!(f, "{}", "BreathingPunchesOverheadAndDownWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesSideWheelchair => write!(f, "{}", "BreathingPunchesSideWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesExtendedSideWheelchair => write!(f, "{}", "BreathingPunchesExtendedSideWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesOverheadSideWheelchair => write!(f, "{}", "BreathingPunchesOverheadSideWheelchair"),
+            FitFieldPoseExerciseName::BreathingPunchesOverheadAndDownSideWheelchair => write!(f, "{}", "BreathingPunchesOverheadAndDownSideWheelchair"),
+            FitFieldPoseExerciseName::LeftHandBackWheelchair => write!(f, "{}", "LeftHandBackWheelchair"),
+            FitFieldPoseExerciseName::TriangleWheelchair => write!(f, "{}", "TriangleWheelchair"),
+            FitFieldPoseExerciseName::ThreadTheNeedleWheelchair => write!(f, "{}", "ThreadTheNeedleWheelchair"),
+            FitFieldPoseExerciseName::NeckFlexionAndExtensionWheelchair => write!(f, "{}", "NeckFlexionAndExtensionWheelchair"),
+            FitFieldPoseExerciseName::NeckLateralFlexionWheelchair => write!(f, "{}", "NeckLateralFlexionWheelchair"),
+            FitFieldPoseExerciseName::SpineFlexionAndExtensionWheelchair => write!(f, "{}", "SpineFlexionAndExtensionWheelchair"),
+            FitFieldPoseExerciseName::SpineRotationWheelchair => write!(f, "{}", "SpineRotationWheelchair"),
+            FitFieldPoseExerciseName::SpineLateralFlexionWheelchair => write!(f, "{}", "SpineLateralFlexionWheelchair"),
+            FitFieldPoseExerciseName::AlternativeSkiingWheelchair => write!(f, "{}", "AlternativeSkiingWheelchair"),
+            FitFieldPoseExerciseName::ReachForwardWheelchair => write!(f, "{}", "ReachForwardWheelchair"),
+            FitFieldPoseExerciseName::WarriorWheelchair => write!(f, "{}", "WarriorWheelchair"),
+            FitFieldPoseExerciseName::ReverseWarriorWheelchair => write!(f, "{}", "ReverseWarriorWheelchair"),
+            FitFieldPoseExerciseName::DownwardFacingDogToCobra => write!(f, "{}", "DownwardFacingDogToCobra"),
+            FitFieldPoseExerciseName::SeatedCatCow => write!(f, "{}", "SeatedCatCow"),
+            FitFieldPoseExerciseName::PoseExerciseName(x) => write!(f, "{}({})", "PoseExerciseName", x),
+            FitFieldPoseExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldPoseExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldPoseExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldPoseExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldPoseExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldPoseExerciseName::from(v)),
+                1 => Ok(FitFieldPoseExerciseName::from(v)),
+                2 => Ok(FitFieldPoseExerciseName::from(v)),
+                3 => Ok(FitFieldPoseExerciseName::from(v)),
+                4 => Ok(FitFieldPoseExerciseName::from(v)),
+                5 => Ok(FitFieldPoseExerciseName::from(v)),
+                6 => Ok(FitFieldPoseExerciseName::from(v)),
+                7 => Ok(FitFieldPoseExerciseName::from(v)),
+                8 => Ok(FitFieldPoseExerciseName::from(v)),
+                9 => Ok(FitFieldPoseExerciseName::from(v)),
+                10 => Ok(FitFieldPoseExerciseName::from(v)),
+                11 => Ok(FitFieldPoseExerciseName::from(v)),
+                12 => Ok(FitFieldPoseExerciseName::from(v)),
+                13 => Ok(FitFieldPoseExerciseName::from(v)),
+                14 => Ok(FitFieldPoseExerciseName::from(v)),
+                15 => Ok(FitFieldPoseExerciseName::from(v)),
+                16 => Ok(FitFieldPoseExerciseName::from(v)),
+                17 => Ok(FitFieldPoseExerciseName::from(v)),
+                18 => Ok(FitFieldPoseExerciseName::from(v)),
+                19 => Ok(FitFieldPoseExerciseName::from(v)),
+                20 => Ok(FitFieldPoseExerciseName::from(v)),
+                21 => Ok(FitFieldPoseExerciseName::from(v)),
+                22 => Ok(FitFieldPoseExerciseName::from(v)),
+                23 => Ok(FitFieldPoseExerciseName::from(v)),
+                24 => Ok(FitFieldPoseExerciseName::from(v)),
+                25 => Ok(FitFieldPoseExerciseName::from(v)),
+                26 => Ok(FitFieldPoseExerciseName::from(v)),
+                27 => Ok(FitFieldPoseExerciseName::from(v)),
+                28 => Ok(FitFieldPoseExerciseName::from(v)),
+                29 => Ok(FitFieldPoseExerciseName::from(v)),
+                30 => Ok(FitFieldPoseExerciseName::from(v)),
+                31 => Ok(FitFieldPoseExerciseName::from(v)),
+                32 => Ok(FitFieldPoseExerciseName::from(v)),
+                33 => Ok(FitFieldPoseExerciseName::from(v)),
+                34 => Ok(FitFieldPoseExerciseName::from(v)),
+                35 => Ok(FitFieldPoseExerciseName::from(v)),
+                36 => Ok(FitFieldPoseExerciseName::from(v)),
+                37 => Ok(FitFieldPoseExerciseName::from(v)),
+                38 => Ok(FitFieldPoseExerciseName::from(v)),
+                39 => Ok(FitFieldPoseExerciseName::from(v)),
+                40 => Ok(FitFieldPoseExerciseName::from(v)),
+                41 => Ok(FitFieldPoseExerciseName::from(v)),
+                42 => Ok(FitFieldPoseExerciseName::from(v)),
+                43 => Ok(FitFieldPoseExerciseName::from(v)),
+                44 => Ok(FitFieldPoseExerciseName::from(v)),
+                45 => Ok(FitFieldPoseExerciseName::from(v)),
+                46 => Ok(FitFieldPoseExerciseName::from(v)),
+                47 => Ok(FitFieldPoseExerciseName::from(v)),
+                48 => Ok(FitFieldPoseExerciseName::from(v)),
+                49 => Ok(FitFieldPoseExerciseName::from(v)),
+                50 => Ok(FitFieldPoseExerciseName::from(v)),
+                51 => Ok(FitFieldPoseExerciseName::from(v)),
+                52 => Ok(FitFieldPoseExerciseName::from(v)),
+                53 => Ok(FitFieldPoseExerciseName::from(v)),
+                54 => Ok(FitFieldPoseExerciseName::from(v)),
+                55 => Ok(FitFieldPoseExerciseName::from(v)),
+                56 => Ok(FitFieldPoseExerciseName::from(v)),
+                57 => Ok(FitFieldPoseExerciseName::from(v)),
+                58 => Ok(FitFieldPoseExerciseName::from(v)),
+                59 => Ok(FitFieldPoseExerciseName::from(v)),
+                60 => Ok(FitFieldPoseExerciseName::from(v)),
+                61 => Ok(FitFieldPoseExerciseName::from(v)),
+                62 => Ok(FitFieldPoseExerciseName::from(v)),
+                63 => Ok(FitFieldPoseExerciseName::from(v)),
+                64 => Ok(FitFieldPoseExerciseName::from(v)),
+                65 => Ok(FitFieldPoseExerciseName::from(v)),
+                66 => Ok(FitFieldPoseExerciseName::from(v)),
+                67 => Ok(FitFieldPoseExerciseName::from(v)),
+                68 => Ok(FitFieldPoseExerciseName::from(v)),
+                69 => Ok(FitFieldPoseExerciseName::from(v)),
+                70 => Ok(FitFieldPoseExerciseName::from(v)),
+                71 => Ok(FitFieldPoseExerciseName::from(v)),
+                72 => Ok(FitFieldPoseExerciseName::from(v)),
+                73 => Ok(FitFieldPoseExerciseName::from(v)),
+                74 => Ok(FitFieldPoseExerciseName::from(v)),
+                75 => Ok(FitFieldPoseExerciseName::from(v)),
+                76 => Ok(FitFieldPoseExerciseName::from(v)),
+                77 => Ok(FitFieldPoseExerciseName::from(v)),
+                78 => Ok(FitFieldPoseExerciseName::from(v)),
+                79 => Ok(FitFieldPoseExerciseName::from(v)),
+                80 => Ok(FitFieldPoseExerciseName::from(v)),
+                81 => Ok(FitFieldPoseExerciseName::from(v)),
+                82 => Ok(FitFieldPoseExerciseName::from(v)),
+                83 => Ok(FitFieldPoseExerciseName::from(v)),
+                84 => Ok(FitFieldPoseExerciseName::from(v)),
+                85 => Ok(FitFieldPoseExerciseName::from(v)),
+                86 => Ok(FitFieldPoseExerciseName::from(v)),
+                87 => Ok(FitFieldPoseExerciseName::from(v)),
+                88 => Ok(FitFieldPoseExerciseName::from(v)),
+                89 => Ok(FitFieldPoseExerciseName::from(v)),
+                90 => Ok(FitFieldPoseExerciseName::from(v)),
+                91 => Ok(FitFieldPoseExerciseName::from(v)),
+                92 => Ok(FitFieldPoseExerciseName::from(v)),
+                93 => Ok(FitFieldPoseExerciseName::from(v)),
+                94 => Ok(FitFieldPoseExerciseName::from(v)),
+                95 => Ok(FitFieldPoseExerciseName::from(v)),
+                96 => Ok(FitFieldPoseExerciseName::from(v)),
+                97 => Ok(FitFieldPoseExerciseName::from(v)),
+                98 => Ok(FitFieldPoseExerciseName::from(v)),
+                99 => Ok(FitFieldPoseExerciseName::from(v)),
+                100 => Ok(FitFieldPoseExerciseName::from(v)),
+                101 => Ok(FitFieldPoseExerciseName::from(v)),
+                102 => Ok(FitFieldPoseExerciseName::from(v)),
+                103 => Ok(FitFieldPoseExerciseName::from(v)),
+                104 => Ok(FitFieldPoseExerciseName::from(v)),
+                105 => Ok(FitFieldPoseExerciseName::from(v)),
+                106 => Ok(FitFieldPoseExerciseName::from(v)),
+                107 => Ok(FitFieldPoseExerciseName::from(v)),
+                108 => Ok(FitFieldPoseExerciseName::from(v)),
+                109 => Ok(FitFieldPoseExerciseName::from(v)),
+                110 => Ok(FitFieldPoseExerciseName::from(v)),
+                111 => Ok(FitFieldPoseExerciseName::from(v)),
+                112 => Ok(FitFieldPoseExerciseName::from(v)),
+                113 => Ok(FitFieldPoseExerciseName::from(v)),
+                114 => Ok(FitFieldPoseExerciseName::from(v)),
+                115 => Ok(FitFieldPoseExerciseName::from(v)),
+                v => Ok(FitFieldPoseExerciseName::PoseExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldPoseExerciseName);
+
+impl From<u16> for FitFieldPoseExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldPoseExerciseName::AllFours,
+            1 => FitFieldPoseExerciseName::AnkleToKnee,
+            2 => FitFieldPoseExerciseName::BabyCobra,
+            3 => FitFieldPoseExerciseName::Boat,
+            4 => FitFieldPoseExerciseName::BoundAngle,
+            5 => FitFieldPoseExerciseName::BoundSeatedSingleLegForwardBend,
+            6 => FitFieldPoseExerciseName::Bow,
+            7 => FitFieldPoseExerciseName::BowedHalfMoon,
+            8 => FitFieldPoseExerciseName::Bridge,
+            9 => FitFieldPoseExerciseName::Cat,
+            10 => FitFieldPoseExerciseName::Chair,
+            11 => FitFieldPoseExerciseName::Childs,
+            12 => FitFieldPoseExerciseName::Corpse,
+            13 => FitFieldPoseExerciseName::CowFace,
+            14 => FitFieldPoseExerciseName::Cow,
+            15 => FitFieldPoseExerciseName::DevotionalWarrior,
+            16 => FitFieldPoseExerciseName::DolphinPlank,
+            17 => FitFieldPoseExerciseName::Dolphin,
+            18 => FitFieldPoseExerciseName::DownDogKneeToNose,
+            19 => FitFieldPoseExerciseName::DownDogSplit,
+            20 => FitFieldPoseExerciseName::DownDogSplitOpenHipBentKnee,
+            21 => FitFieldPoseExerciseName::DownwardFacingDog,
+            22 => FitFieldPoseExerciseName::Eagle,
+            23 => FitFieldPoseExerciseName::EasySeated,
+            24 => FitFieldPoseExerciseName::ExtendedPuppy,
+            25 => FitFieldPoseExerciseName::ExtendedSideAngle,
+            26 => FitFieldPoseExerciseName::Fish,
+            27 => FitFieldPoseExerciseName::FourLimbedStaff,
+            28 => FitFieldPoseExerciseName::FullSplit,
+            29 => FitFieldPoseExerciseName::Gate,
+            30 => FitFieldPoseExerciseName::HalfChairHalfAnkleToKnee,
+            31 => FitFieldPoseExerciseName::HalfMoon,
+            32 => FitFieldPoseExerciseName::HeadToKnee,
+            33 => FitFieldPoseExerciseName::Heron,
+            34 => FitFieldPoseExerciseName::Heros,
+            35 => FitFieldPoseExerciseName::HighLunge,
+            36 => FitFieldPoseExerciseName::KneesChestChin,
+            37 => FitFieldPoseExerciseName::Lizard,
+            38 => FitFieldPoseExerciseName::Locust,
+            39 => FitFieldPoseExerciseName::LowLunge,
+            40 => FitFieldPoseExerciseName::LowLungeTwist,
+            41 => FitFieldPoseExerciseName::LowLungeWithKneeDown,
+            42 => FitFieldPoseExerciseName::Mermaid,
+            43 => FitFieldPoseExerciseName::Mountain,
+            44 => FitFieldPoseExerciseName::OneLeggedDownwardFacingPoseOpenHipBentKnee,
+            45 => FitFieldPoseExerciseName::OneLeggedPigeon,
+            46 => FitFieldPoseExerciseName::PeacefulWarrior,
+            47 => FitFieldPoseExerciseName::Plank,
+            48 => FitFieldPoseExerciseName::Plow,
+            49 => FitFieldPoseExerciseName::ReclinedHandToFoot,
+            50 => FitFieldPoseExerciseName::RevolvedHalfMoon,
+            51 => FitFieldPoseExerciseName::RevolvedHeadToKnee,
+            52 => FitFieldPoseExerciseName::RevolvedTriangle,
+            53 => FitFieldPoseExerciseName::RunnersLunge,
+            54 => FitFieldPoseExerciseName::SeatedEasySideBend,
+            55 => FitFieldPoseExerciseName::SeatedEasyTwist,
+            56 => FitFieldPoseExerciseName::SeatedLongLegForwardBend,
+            57 => FitFieldPoseExerciseName::SeatedWideLegForwardBend,
+            58 => FitFieldPoseExerciseName::ShoulderStand,
+            59 => FitFieldPoseExerciseName::SideBoat,
+            60 => FitFieldPoseExerciseName::SidePlank,
+            61 => FitFieldPoseExerciseName::Sphinx,
+            62 => FitFieldPoseExerciseName::SquatOpenArmTwist,
+            63 => FitFieldPoseExerciseName::SquatPalmPress,
+            64 => FitFieldPoseExerciseName::Staff,
+            65 => FitFieldPoseExerciseName::StandingArmsUp,
+            66 => FitFieldPoseExerciseName::StandingForwardBendHalfwayUp,
+            67 => FitFieldPoseExerciseName::StandingForwardBend,
+            68 => FitFieldPoseExerciseName::StandingSideOpener,
+            69 => FitFieldPoseExerciseName::StandingSingleLegForwardBend,
+            70 => FitFieldPoseExerciseName::StandingSplit,
+            71 => FitFieldPoseExerciseName::StandingWideLegForwardBend,
+            72 => FitFieldPoseExerciseName::StandingWideLegForwardBendWithTwist,
+            73 => FitFieldPoseExerciseName::SupineSpinalTwist,
+            74 => FitFieldPoseExerciseName::TableTop,
+            75 => FitFieldPoseExerciseName::ThreadTheNeedle,
+            76 => FitFieldPoseExerciseName::Thunderbolt,
+            77 => FitFieldPoseExerciseName::ThunderboltPoseBothSidesArmStretch,
+            78 => FitFieldPoseExerciseName::Tree,
+            79 => FitFieldPoseExerciseName::Triangle,
+            80 => FitFieldPoseExerciseName::UpDog,
+            81 => FitFieldPoseExerciseName::UpwardFacingPlank,
+            82 => FitFieldPoseExerciseName::WarriorOne,
+            83 => FitFieldPoseExerciseName::WarriorThree,
+            84 => FitFieldPoseExerciseName::WarriorTwo,
+            85 => FitFieldPoseExerciseName::Wheel,
+            86 => FitFieldPoseExerciseName::WideSideLunge,
+            87 => FitFieldPoseExerciseName::DeepBreathingWheelchair,
+            88 => FitFieldPoseExerciseName::DeepBreathingLowWheelchair,
+            89 => FitFieldPoseExerciseName::DeepBreathingMidWheelchair,
+            90 => FitFieldPoseExerciseName::DeepBreathingHighWheelchair,
+            91 => FitFieldPoseExerciseName::PrayerWheelchair,
+            92 => FitFieldPoseExerciseName::OverheadPrayerWheelchair,
+            93 => FitFieldPoseExerciseName::CactusWheelchair,
+            94 => FitFieldPoseExerciseName::BreathingPunchesWheelchair,
+            95 => FitFieldPoseExerciseName::BreathingPunchesExtendedWheelchair,
+            96 => FitFieldPoseExerciseName::BreathingPunchesOverheadWheelchair,
+            97 => FitFieldPoseExerciseName::BreathingPunchesOverheadAndDownWheelchair,
+            98 => FitFieldPoseExerciseName::BreathingPunchesSideWheelchair,
+            99 => FitFieldPoseExerciseName::BreathingPunchesExtendedSideWheelchair,
+            100 => FitFieldPoseExerciseName::BreathingPunchesOverheadSideWheelchair,
+            101 => FitFieldPoseExerciseName::BreathingPunchesOverheadAndDownSideWheelchair,
+            102 => FitFieldPoseExerciseName::LeftHandBackWheelchair,
+            103 => FitFieldPoseExerciseName::TriangleWheelchair,
+            104 => FitFieldPoseExerciseName::ThreadTheNeedleWheelchair,
+            105 => FitFieldPoseExerciseName::NeckFlexionAndExtensionWheelchair,
+            106 => FitFieldPoseExerciseName::NeckLateralFlexionWheelchair,
+            107 => FitFieldPoseExerciseName::SpineFlexionAndExtensionWheelchair,
+            108 => FitFieldPoseExerciseName::SpineRotationWheelchair,
+            109 => FitFieldPoseExerciseName::SpineLateralFlexionWheelchair,
+            110 => FitFieldPoseExerciseName::AlternativeSkiingWheelchair,
+            111 => FitFieldPoseExerciseName::ReachForwardWheelchair,
+            112 => FitFieldPoseExerciseName::WarriorWheelchair,
+            113 => FitFieldPoseExerciseName::ReverseWarriorWheelchair,
+            114 => FitFieldPoseExerciseName::DownwardFacingDogToCobra,
+            115 => FitFieldPoseExerciseName::SeatedCatCow,
+            _ => FitFieldPoseExerciseName::UnknownToSdk,
         }
     }
 }
@@ -18688,6 +20981,10 @@ pub enum FitFieldTricepsExtensionExerciseName { // fit base type: uint16
     TricepsExtensionOnFloor, // 38
     TricepsPressdown, // 39
     WeightedDip, // 40
+    AlternatingDumbbellLyingTricepsExtension, // 41
+    TricepsPress, // 42
+    DumbbellKickbackWheelchair, // 43
+    OverheadDumbbellTricepsExtensionWheelchair, // 44
     TricepsExtensionExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -18737,6 +21034,10 @@ impl fmt::Display for FitFieldTricepsExtensionExerciseName {
             FitFieldTricepsExtensionExerciseName::TricepsExtensionOnFloor => write!(f, "{}", "TricepsExtensionOnFloor"),
             FitFieldTricepsExtensionExerciseName::TricepsPressdown => write!(f, "{}", "TricepsPressdown"),
             FitFieldTricepsExtensionExerciseName::WeightedDip => write!(f, "{}", "WeightedDip"),
+            FitFieldTricepsExtensionExerciseName::AlternatingDumbbellLyingTricepsExtension => write!(f, "{}", "AlternatingDumbbellLyingTricepsExtension"),
+            FitFieldTricepsExtensionExerciseName::TricepsPress => write!(f, "{}", "TricepsPress"),
+            FitFieldTricepsExtensionExerciseName::DumbbellKickbackWheelchair => write!(f, "{}", "DumbbellKickbackWheelchair"),
+            FitFieldTricepsExtensionExerciseName::OverheadDumbbellTricepsExtensionWheelchair => write!(f, "{}", "OverheadDumbbellTricepsExtensionWheelchair"),
             FitFieldTricepsExtensionExerciseName::TricepsExtensionExerciseName(x) => write!(f, "{}({})", "TricepsExtensionExerciseName", x),
             FitFieldTricepsExtensionExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldTricepsExtensionExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -18792,6 +21093,10 @@ impl FitFieldParseable for FitFieldTricepsExtensionExerciseName {
                 38 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
                 39 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
                 40 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
+                41 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
+                42 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
+                43 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
+                44 => Ok(FitFieldTricepsExtensionExerciseName::from(v)),
                 v => Ok(FitFieldTricepsExtensionExerciseName::TricepsExtensionExerciseName(v)),
             }
         }
@@ -18844,6 +21149,10 @@ impl From<u16> for FitFieldTricepsExtensionExerciseName {
             38 => FitFieldTricepsExtensionExerciseName::TricepsExtensionOnFloor,
             39 => FitFieldTricepsExtensionExerciseName::TricepsPressdown,
             40 => FitFieldTricepsExtensionExerciseName::WeightedDip,
+            41 => FitFieldTricepsExtensionExerciseName::AlternatingDumbbellLyingTricepsExtension,
+            42 => FitFieldTricepsExtensionExerciseName::TricepsPress,
+            43 => FitFieldTricepsExtensionExerciseName::DumbbellKickbackWheelchair,
+            44 => FitFieldTricepsExtensionExerciseName::OverheadDumbbellTricepsExtensionWheelchair,
             _ => FitFieldTricepsExtensionExerciseName::UnknownToSdk,
         }
     }
@@ -18885,6 +21194,66 @@ pub enum FitFieldWarmUpExerciseName { // fit base type: uint16
     WalkingLegCradles, // 28
     Walkout, // 29
     WalkoutFromPushUpPosition, // 30
+    BicepsStretch, // 31
+    GlutesStretch, // 32
+    StandingHamstringStretch, // 33
+    Stretch9090, // 34
+    StretchAbs, // 35
+    StretchButterfly, // 36
+    StretchCalf, // 37
+    StretchCatCow, // 38
+    StretchChildsPose, // 39
+    StretchCobra, // 40
+    StretchForearms, // 41
+    StretchForwardGlutes, // 42
+    StretchFrontSplit, // 43
+    StretchHamstring, // 44
+    StretchHipFlexorAndQuad, // 45
+    StretchLat, // 46
+    StretchLevatorScapulae, // 47
+    StretchLungeWithSpinalTwist, // 48
+    StretchLungingHipFlexor, // 49
+    StretchLyingAbduction, // 50
+    StretchLyingItBand, // 51
+    StretchLyingKneeToChest, // 52
+    StretchLyingPiriformis, // 53
+    StretchLyingSpinalTwist, // 54
+    StretchNeck, // 55
+    StretchObliques, // 56
+    StretchOverUnderShoulder, // 57
+    StretchPectoral, // 58
+    StretchPigeonPose, // 59
+    StretchPiriformis, // 60
+    StretchQuad, // 61
+    StretchScorpion, // 62
+    StretchShoulder, // 63
+    StretchSide, // 64
+    StretchSideLunge, // 65
+    StretchSideSplit, // 66
+    StretchStandingItBand, // 67
+    StretchStraddle, // 68
+    StretchTriceps, // 69
+    StretchWallChestAndShoulder, // 70
+    NeckRotationsWheelchair, // 71
+    HalfKneelingArmRotation, // 72
+    ThreeWayAnkleMobilization, // 73
+    NinetyNinetyHipSwitch, // 74  90_90_hip_switch
+    ActiveFrog, // 75
+    ShoulderSweeps, // 76
+    AnkleLunges, // 77
+    BackRollFoamRoller, // 78
+    BearCrawl, // 79
+    LatissimusDorsiFoamRoll, // 80
+    ReverseTHipOpener, // 81
+    ShoulderRolls, // 82
+    ChestOpeners, // 83
+    TricepsStretch, // 84
+    UpperBackStretch, // 85
+    HipCircles, // 86
+    AnkleStretch, // 87
+    MarchingInPlace, // 88
+    TricepsStretchWheelchair, // 89
+    UpperBackStretchWheelchair, // 90
     WarmUpExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -18924,6 +21293,66 @@ impl fmt::Display for FitFieldWarmUpExerciseName {
             FitFieldWarmUpExerciseName::WalkingLegCradles => write!(f, "{}", "WalkingLegCradles"),
             FitFieldWarmUpExerciseName::Walkout => write!(f, "{}", "Walkout"),
             FitFieldWarmUpExerciseName::WalkoutFromPushUpPosition => write!(f, "{}", "WalkoutFromPushUpPosition"),
+            FitFieldWarmUpExerciseName::BicepsStretch => write!(f, "{}", "BicepsStretch"),
+            FitFieldWarmUpExerciseName::GlutesStretch => write!(f, "{}", "GlutesStretch"),
+            FitFieldWarmUpExerciseName::StandingHamstringStretch => write!(f, "{}", "StandingHamstringStretch"),
+            FitFieldWarmUpExerciseName::Stretch9090 => write!(f, "{}", "Stretch9090"),
+            FitFieldWarmUpExerciseName::StretchAbs => write!(f, "{}", "StretchAbs"),
+            FitFieldWarmUpExerciseName::StretchButterfly => write!(f, "{}", "StretchButterfly"),
+            FitFieldWarmUpExerciseName::StretchCalf => write!(f, "{}", "StretchCalf"),
+            FitFieldWarmUpExerciseName::StretchCatCow => write!(f, "{}", "StretchCatCow"),
+            FitFieldWarmUpExerciseName::StretchChildsPose => write!(f, "{}", "StretchChildsPose"),
+            FitFieldWarmUpExerciseName::StretchCobra => write!(f, "{}", "StretchCobra"),
+            FitFieldWarmUpExerciseName::StretchForearms => write!(f, "{}", "StretchForearms"),
+            FitFieldWarmUpExerciseName::StretchForwardGlutes => write!(f, "{}", "StretchForwardGlutes"),
+            FitFieldWarmUpExerciseName::StretchFrontSplit => write!(f, "{}", "StretchFrontSplit"),
+            FitFieldWarmUpExerciseName::StretchHamstring => write!(f, "{}", "StretchHamstring"),
+            FitFieldWarmUpExerciseName::StretchHipFlexorAndQuad => write!(f, "{}", "StretchHipFlexorAndQuad"),
+            FitFieldWarmUpExerciseName::StretchLat => write!(f, "{}", "StretchLat"),
+            FitFieldWarmUpExerciseName::StretchLevatorScapulae => write!(f, "{}", "StretchLevatorScapulae"),
+            FitFieldWarmUpExerciseName::StretchLungeWithSpinalTwist => write!(f, "{}", "StretchLungeWithSpinalTwist"),
+            FitFieldWarmUpExerciseName::StretchLungingHipFlexor => write!(f, "{}", "StretchLungingHipFlexor"),
+            FitFieldWarmUpExerciseName::StretchLyingAbduction => write!(f, "{}", "StretchLyingAbduction"),
+            FitFieldWarmUpExerciseName::StretchLyingItBand => write!(f, "{}", "StretchLyingItBand"),
+            FitFieldWarmUpExerciseName::StretchLyingKneeToChest => write!(f, "{}", "StretchLyingKneeToChest"),
+            FitFieldWarmUpExerciseName::StretchLyingPiriformis => write!(f, "{}", "StretchLyingPiriformis"),
+            FitFieldWarmUpExerciseName::StretchLyingSpinalTwist => write!(f, "{}", "StretchLyingSpinalTwist"),
+            FitFieldWarmUpExerciseName::StretchNeck => write!(f, "{}", "StretchNeck"),
+            FitFieldWarmUpExerciseName::StretchObliques => write!(f, "{}", "StretchObliques"),
+            FitFieldWarmUpExerciseName::StretchOverUnderShoulder => write!(f, "{}", "StretchOverUnderShoulder"),
+            FitFieldWarmUpExerciseName::StretchPectoral => write!(f, "{}", "StretchPectoral"),
+            FitFieldWarmUpExerciseName::StretchPigeonPose => write!(f, "{}", "StretchPigeonPose"),
+            FitFieldWarmUpExerciseName::StretchPiriformis => write!(f, "{}", "StretchPiriformis"),
+            FitFieldWarmUpExerciseName::StretchQuad => write!(f, "{}", "StretchQuad"),
+            FitFieldWarmUpExerciseName::StretchScorpion => write!(f, "{}", "StretchScorpion"),
+            FitFieldWarmUpExerciseName::StretchShoulder => write!(f, "{}", "StretchShoulder"),
+            FitFieldWarmUpExerciseName::StretchSide => write!(f, "{}", "StretchSide"),
+            FitFieldWarmUpExerciseName::StretchSideLunge => write!(f, "{}", "StretchSideLunge"),
+            FitFieldWarmUpExerciseName::StretchSideSplit => write!(f, "{}", "StretchSideSplit"),
+            FitFieldWarmUpExerciseName::StretchStandingItBand => write!(f, "{}", "StretchStandingItBand"),
+            FitFieldWarmUpExerciseName::StretchStraddle => write!(f, "{}", "StretchStraddle"),
+            FitFieldWarmUpExerciseName::StretchTriceps => write!(f, "{}", "StretchTriceps"),
+            FitFieldWarmUpExerciseName::StretchWallChestAndShoulder => write!(f, "{}", "StretchWallChestAndShoulder"),
+            FitFieldWarmUpExerciseName::NeckRotationsWheelchair => write!(f, "{}", "NeckRotationsWheelchair"),
+            FitFieldWarmUpExerciseName::HalfKneelingArmRotation => write!(f, "{}", "HalfKneelingArmRotation"),
+            FitFieldWarmUpExerciseName::ThreeWayAnkleMobilization => write!(f, "{}", "ThreeWayAnkleMobilization"),
+            FitFieldWarmUpExerciseName::NinetyNinetyHipSwitch => write!(f, "{}", "NinetyNinetyHipSwitch"),
+            FitFieldWarmUpExerciseName::ActiveFrog => write!(f, "{}", "ActiveFrog"),
+            FitFieldWarmUpExerciseName::ShoulderSweeps => write!(f, "{}", "ShoulderSweeps"),
+            FitFieldWarmUpExerciseName::AnkleLunges => write!(f, "{}", "AnkleLunges"),
+            FitFieldWarmUpExerciseName::BackRollFoamRoller => write!(f, "{}", "BackRollFoamRoller"),
+            FitFieldWarmUpExerciseName::BearCrawl => write!(f, "{}", "BearCrawl"),
+            FitFieldWarmUpExerciseName::LatissimusDorsiFoamRoll => write!(f, "{}", "LatissimusDorsiFoamRoll"),
+            FitFieldWarmUpExerciseName::ReverseTHipOpener => write!(f, "{}", "ReverseTHipOpener"),
+            FitFieldWarmUpExerciseName::ShoulderRolls => write!(f, "{}", "ShoulderRolls"),
+            FitFieldWarmUpExerciseName::ChestOpeners => write!(f, "{}", "ChestOpeners"),
+            FitFieldWarmUpExerciseName::TricepsStretch => write!(f, "{}", "TricepsStretch"),
+            FitFieldWarmUpExerciseName::UpperBackStretch => write!(f, "{}", "UpperBackStretch"),
+            FitFieldWarmUpExerciseName::HipCircles => write!(f, "{}", "HipCircles"),
+            FitFieldWarmUpExerciseName::AnkleStretch => write!(f, "{}", "AnkleStretch"),
+            FitFieldWarmUpExerciseName::MarchingInPlace => write!(f, "{}", "MarchingInPlace"),
+            FitFieldWarmUpExerciseName::TricepsStretchWheelchair => write!(f, "{}", "TricepsStretchWheelchair"),
+            FitFieldWarmUpExerciseName::UpperBackStretchWheelchair => write!(f, "{}", "UpperBackStretchWheelchair"),
             FitFieldWarmUpExerciseName::WarmUpExerciseName(x) => write!(f, "{}({})", "WarmUpExerciseName", x),
             FitFieldWarmUpExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldWarmUpExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -18969,6 +21398,66 @@ impl FitFieldParseable for FitFieldWarmUpExerciseName {
                 28 => Ok(FitFieldWarmUpExerciseName::from(v)),
                 29 => Ok(FitFieldWarmUpExerciseName::from(v)),
                 30 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                31 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                32 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                33 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                34 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                35 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                36 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                37 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                38 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                39 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                40 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                41 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                42 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                43 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                44 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                45 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                46 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                47 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                48 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                49 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                50 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                51 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                52 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                53 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                54 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                55 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                56 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                57 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                58 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                59 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                60 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                61 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                62 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                63 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                64 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                65 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                66 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                67 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                68 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                69 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                70 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                71 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                72 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                73 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                74 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                75 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                76 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                77 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                78 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                79 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                80 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                81 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                82 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                83 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                84 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                85 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                86 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                87 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                88 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                89 => Ok(FitFieldWarmUpExerciseName::from(v)),
+                90 => Ok(FitFieldWarmUpExerciseName::from(v)),
                 v => Ok(FitFieldWarmUpExerciseName::WarmUpExerciseName(v)),
             }
         }
@@ -19011,6 +21500,66 @@ impl From<u16> for FitFieldWarmUpExerciseName {
             28 => FitFieldWarmUpExerciseName::WalkingLegCradles,
             29 => FitFieldWarmUpExerciseName::Walkout,
             30 => FitFieldWarmUpExerciseName::WalkoutFromPushUpPosition,
+            31 => FitFieldWarmUpExerciseName::BicepsStretch,
+            32 => FitFieldWarmUpExerciseName::GlutesStretch,
+            33 => FitFieldWarmUpExerciseName::StandingHamstringStretch,
+            34 => FitFieldWarmUpExerciseName::Stretch9090,
+            35 => FitFieldWarmUpExerciseName::StretchAbs,
+            36 => FitFieldWarmUpExerciseName::StretchButterfly,
+            37 => FitFieldWarmUpExerciseName::StretchCalf,
+            38 => FitFieldWarmUpExerciseName::StretchCatCow,
+            39 => FitFieldWarmUpExerciseName::StretchChildsPose,
+            40 => FitFieldWarmUpExerciseName::StretchCobra,
+            41 => FitFieldWarmUpExerciseName::StretchForearms,
+            42 => FitFieldWarmUpExerciseName::StretchForwardGlutes,
+            43 => FitFieldWarmUpExerciseName::StretchFrontSplit,
+            44 => FitFieldWarmUpExerciseName::StretchHamstring,
+            45 => FitFieldWarmUpExerciseName::StretchHipFlexorAndQuad,
+            46 => FitFieldWarmUpExerciseName::StretchLat,
+            47 => FitFieldWarmUpExerciseName::StretchLevatorScapulae,
+            48 => FitFieldWarmUpExerciseName::StretchLungeWithSpinalTwist,
+            49 => FitFieldWarmUpExerciseName::StretchLungingHipFlexor,
+            50 => FitFieldWarmUpExerciseName::StretchLyingAbduction,
+            51 => FitFieldWarmUpExerciseName::StretchLyingItBand,
+            52 => FitFieldWarmUpExerciseName::StretchLyingKneeToChest,
+            53 => FitFieldWarmUpExerciseName::StretchLyingPiriformis,
+            54 => FitFieldWarmUpExerciseName::StretchLyingSpinalTwist,
+            55 => FitFieldWarmUpExerciseName::StretchNeck,
+            56 => FitFieldWarmUpExerciseName::StretchObliques,
+            57 => FitFieldWarmUpExerciseName::StretchOverUnderShoulder,
+            58 => FitFieldWarmUpExerciseName::StretchPectoral,
+            59 => FitFieldWarmUpExerciseName::StretchPigeonPose,
+            60 => FitFieldWarmUpExerciseName::StretchPiriformis,
+            61 => FitFieldWarmUpExerciseName::StretchQuad,
+            62 => FitFieldWarmUpExerciseName::StretchScorpion,
+            63 => FitFieldWarmUpExerciseName::StretchShoulder,
+            64 => FitFieldWarmUpExerciseName::StretchSide,
+            65 => FitFieldWarmUpExerciseName::StretchSideLunge,
+            66 => FitFieldWarmUpExerciseName::StretchSideSplit,
+            67 => FitFieldWarmUpExerciseName::StretchStandingItBand,
+            68 => FitFieldWarmUpExerciseName::StretchStraddle,
+            69 => FitFieldWarmUpExerciseName::StretchTriceps,
+            70 => FitFieldWarmUpExerciseName::StretchWallChestAndShoulder,
+            71 => FitFieldWarmUpExerciseName::NeckRotationsWheelchair,
+            72 => FitFieldWarmUpExerciseName::HalfKneelingArmRotation,
+            73 => FitFieldWarmUpExerciseName::ThreeWayAnkleMobilization,
+            74 => FitFieldWarmUpExerciseName::NinetyNinetyHipSwitch,
+            75 => FitFieldWarmUpExerciseName::ActiveFrog,
+            76 => FitFieldWarmUpExerciseName::ShoulderSweeps,
+            77 => FitFieldWarmUpExerciseName::AnkleLunges,
+            78 => FitFieldWarmUpExerciseName::BackRollFoamRoller,
+            79 => FitFieldWarmUpExerciseName::BearCrawl,
+            80 => FitFieldWarmUpExerciseName::LatissimusDorsiFoamRoll,
+            81 => FitFieldWarmUpExerciseName::ReverseTHipOpener,
+            82 => FitFieldWarmUpExerciseName::ShoulderRolls,
+            83 => FitFieldWarmUpExerciseName::ChestOpeners,
+            84 => FitFieldWarmUpExerciseName::TricepsStretch,
+            85 => FitFieldWarmUpExerciseName::UpperBackStretch,
+            86 => FitFieldWarmUpExerciseName::HipCircles,
+            87 => FitFieldWarmUpExerciseName::AnkleStretch,
+            88 => FitFieldWarmUpExerciseName::MarchingInPlace,
+            89 => FitFieldWarmUpExerciseName::TricepsStretchWheelchair,
+            90 => FitFieldWarmUpExerciseName::UpperBackStretchWheelchair,
             _ => FitFieldWarmUpExerciseName::UnknownToSdk,
         }
     }
@@ -19025,6 +21574,9 @@ pub enum FitFieldRunExerciseName { // fit base type: uint16
     Walk, // 1
     Jog, // 2
     Sprint, // 3
+    RunOrWalk, // 4
+    SpeedWalk, // 5
+    WarmUp, // 6
     RunExerciseName(u16),
     InvalidFieldValue,
     UnknownToSdk,
@@ -19037,6 +21589,9 @@ impl fmt::Display for FitFieldRunExerciseName {
             FitFieldRunExerciseName::Walk => write!(f, "{}", "Walk"),
             FitFieldRunExerciseName::Jog => write!(f, "{}", "Jog"),
             FitFieldRunExerciseName::Sprint => write!(f, "{}", "Sprint"),
+            FitFieldRunExerciseName::RunOrWalk => write!(f, "{}", "RunOrWalk"),
+            FitFieldRunExerciseName::SpeedWalk => write!(f, "{}", "SpeedWalk"),
+            FitFieldRunExerciseName::WarmUp => write!(f, "{}", "WarmUp"),
             FitFieldRunExerciseName::RunExerciseName(x) => write!(f, "{}({})", "RunExerciseName", x),
             FitFieldRunExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
             FitFieldRunExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
@@ -19055,6 +21610,9 @@ impl FitFieldParseable for FitFieldRunExerciseName {
                 1 => Ok(FitFieldRunExerciseName::from(v)),
                 2 => Ok(FitFieldRunExerciseName::from(v)),
                 3 => Ok(FitFieldRunExerciseName::from(v)),
+                4 => Ok(FitFieldRunExerciseName::from(v)),
+                5 => Ok(FitFieldRunExerciseName::from(v)),
+                6 => Ok(FitFieldRunExerciseName::from(v)),
                 v => Ok(FitFieldRunExerciseName::RunExerciseName(v)),
             }
         }
@@ -19070,7 +21628,1366 @@ impl From<u16> for FitFieldRunExerciseName {
             1 => FitFieldRunExerciseName::Walk,
             2 => FitFieldRunExerciseName::Jog,
             3 => FitFieldRunExerciseName::Sprint,
+            4 => FitFieldRunExerciseName::RunOrWalk,
+            5 => FitFieldRunExerciseName::SpeedWalk,
+            6 => FitFieldRunExerciseName::WarmUp,
             _ => FitFieldRunExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldBikeExerciseName { // fit base type: uint16
+    Bike, // 0
+    Ride, // 1
+    Sprint, // 2
+    BikeExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldBikeExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldBikeExerciseName::Bike => write!(f, "{}", "Bike"),
+            FitFieldBikeExerciseName::Ride => write!(f, "{}", "Ride"),
+            FitFieldBikeExerciseName::Sprint => write!(f, "{}", "Sprint"),
+            FitFieldBikeExerciseName::BikeExerciseName(x) => write!(f, "{}({})", "BikeExerciseName", x),
+            FitFieldBikeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBikeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldBikeExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldBikeExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldBikeExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldBikeExerciseName::from(v)),
+                1 => Ok(FitFieldBikeExerciseName::from(v)),
+                2 => Ok(FitFieldBikeExerciseName::from(v)),
+                v => Ok(FitFieldBikeExerciseName::BikeExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldBikeExerciseName);
+
+impl From<u16> for FitFieldBikeExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldBikeExerciseName::Bike,
+            1 => FitFieldBikeExerciseName::Ride,
+            2 => FitFieldBikeExerciseName::Sprint,
+            _ => FitFieldBikeExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldBandedExercisesExerciseName { // fit base type: uint16
+    AbTwist, // 1
+    BackExtension, // 2
+    BicycleCrunch, // 3
+    CalfRaises, // 4
+    ChestPress, // 5
+    ClamShells, // 6
+    Curl, // 7
+    Deadbug, // 8
+    Deadlift, // 9
+    DonkeyKick, // 10
+    ExternalRotation, // 11
+    ExternalRotationAt90DegreeAbduction, // 12
+    FacePull, // 13
+    FireHydrant, // 14
+    Fly, // 15
+    FrontRaise, // 16
+    GluteBridge, // 17
+    HamstringCurls, // 18
+    HighPlankLegLifts, // 19
+    HipExtension, // 20
+    InternalRotation, // 21
+    JumpingJack, // 22
+    KneelingCrunch, // 23
+    LateralBandWalks, // 24
+    LateralRaise, // 25
+    Latpull, // 26
+    LegAbduction, // 27
+    LegAdduction, // 28
+    LegExtension, // 29
+    Lunge, // 30
+    Plank, // 31
+    PullApart, // 32
+    PushUps, // 33
+    ReverseCrunch, // 34
+    Row, // 35
+    ShoulderAbduction, // 36
+    ShoulderExtension, // 37
+    ShoulderExternalRotation, // 38
+    ShoulderFlexionTo90Degrees, // 39
+    SidePlankLegLifts, // 40
+    SideRaise, // 41
+    Squat, // 42
+    SquatToPress, // 43
+    TricepExtension, // 44
+    TricepKickback, // 45
+    UprightRow, // 46
+    WallCrawlWithExternalRotation, // 47
+    LateralRaiseWheelchair, // 49
+    TricepsExtensionWheelchair, // 50
+    ChestFlyInclineWheelchair, // 51
+    ChestFlyDeclineWheelchair, // 52
+    PullDownWheelchair, // 53
+    StraightArmPullDownWheelchair, // 54
+    CurlWheelchair, // 55
+    OverheadCurlWheelchair, // 56
+    FacePullWheelchair, // 57
+    AroundTheWorldWheelchair, // 58
+    PullApartWheelchair, // 59
+    SideCurlWheelchair, // 60
+    OverheadPressWheelchair, // 61
+    BandedExercisesExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldBandedExercisesExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldBandedExercisesExerciseName::AbTwist => write!(f, "{}", "AbTwist"),
+            FitFieldBandedExercisesExerciseName::BackExtension => write!(f, "{}", "BackExtension"),
+            FitFieldBandedExercisesExerciseName::BicycleCrunch => write!(f, "{}", "BicycleCrunch"),
+            FitFieldBandedExercisesExerciseName::CalfRaises => write!(f, "{}", "CalfRaises"),
+            FitFieldBandedExercisesExerciseName::ChestPress => write!(f, "{}", "ChestPress"),
+            FitFieldBandedExercisesExerciseName::ClamShells => write!(f, "{}", "ClamShells"),
+            FitFieldBandedExercisesExerciseName::Curl => write!(f, "{}", "Curl"),
+            FitFieldBandedExercisesExerciseName::Deadbug => write!(f, "{}", "Deadbug"),
+            FitFieldBandedExercisesExerciseName::Deadlift => write!(f, "{}", "Deadlift"),
+            FitFieldBandedExercisesExerciseName::DonkeyKick => write!(f, "{}", "DonkeyKick"),
+            FitFieldBandedExercisesExerciseName::ExternalRotation => write!(f, "{}", "ExternalRotation"),
+            FitFieldBandedExercisesExerciseName::ExternalRotationAt90DegreeAbduction => write!(f, "{}", "ExternalRotationAt90DegreeAbduction"),
+            FitFieldBandedExercisesExerciseName::FacePull => write!(f, "{}", "FacePull"),
+            FitFieldBandedExercisesExerciseName::FireHydrant => write!(f, "{}", "FireHydrant"),
+            FitFieldBandedExercisesExerciseName::Fly => write!(f, "{}", "Fly"),
+            FitFieldBandedExercisesExerciseName::FrontRaise => write!(f, "{}", "FrontRaise"),
+            FitFieldBandedExercisesExerciseName::GluteBridge => write!(f, "{}", "GluteBridge"),
+            FitFieldBandedExercisesExerciseName::HamstringCurls => write!(f, "{}", "HamstringCurls"),
+            FitFieldBandedExercisesExerciseName::HighPlankLegLifts => write!(f, "{}", "HighPlankLegLifts"),
+            FitFieldBandedExercisesExerciseName::HipExtension => write!(f, "{}", "HipExtension"),
+            FitFieldBandedExercisesExerciseName::InternalRotation => write!(f, "{}", "InternalRotation"),
+            FitFieldBandedExercisesExerciseName::JumpingJack => write!(f, "{}", "JumpingJack"),
+            FitFieldBandedExercisesExerciseName::KneelingCrunch => write!(f, "{}", "KneelingCrunch"),
+            FitFieldBandedExercisesExerciseName::LateralBandWalks => write!(f, "{}", "LateralBandWalks"),
+            FitFieldBandedExercisesExerciseName::LateralRaise => write!(f, "{}", "LateralRaise"),
+            FitFieldBandedExercisesExerciseName::Latpull => write!(f, "{}", "Latpull"),
+            FitFieldBandedExercisesExerciseName::LegAbduction => write!(f, "{}", "LegAbduction"),
+            FitFieldBandedExercisesExerciseName::LegAdduction => write!(f, "{}", "LegAdduction"),
+            FitFieldBandedExercisesExerciseName::LegExtension => write!(f, "{}", "LegExtension"),
+            FitFieldBandedExercisesExerciseName::Lunge => write!(f, "{}", "Lunge"),
+            FitFieldBandedExercisesExerciseName::Plank => write!(f, "{}", "Plank"),
+            FitFieldBandedExercisesExerciseName::PullApart => write!(f, "{}", "PullApart"),
+            FitFieldBandedExercisesExerciseName::PushUps => write!(f, "{}", "PushUps"),
+            FitFieldBandedExercisesExerciseName::ReverseCrunch => write!(f, "{}", "ReverseCrunch"),
+            FitFieldBandedExercisesExerciseName::Row => write!(f, "{}", "Row"),
+            FitFieldBandedExercisesExerciseName::ShoulderAbduction => write!(f, "{}", "ShoulderAbduction"),
+            FitFieldBandedExercisesExerciseName::ShoulderExtension => write!(f, "{}", "ShoulderExtension"),
+            FitFieldBandedExercisesExerciseName::ShoulderExternalRotation => write!(f, "{}", "ShoulderExternalRotation"),
+            FitFieldBandedExercisesExerciseName::ShoulderFlexionTo90Degrees => write!(f, "{}", "ShoulderFlexionTo90Degrees"),
+            FitFieldBandedExercisesExerciseName::SidePlankLegLifts => write!(f, "{}", "SidePlankLegLifts"),
+            FitFieldBandedExercisesExerciseName::SideRaise => write!(f, "{}", "SideRaise"),
+            FitFieldBandedExercisesExerciseName::Squat => write!(f, "{}", "Squat"),
+            FitFieldBandedExercisesExerciseName::SquatToPress => write!(f, "{}", "SquatToPress"),
+            FitFieldBandedExercisesExerciseName::TricepExtension => write!(f, "{}", "TricepExtension"),
+            FitFieldBandedExercisesExerciseName::TricepKickback => write!(f, "{}", "TricepKickback"),
+            FitFieldBandedExercisesExerciseName::UprightRow => write!(f, "{}", "UprightRow"),
+            FitFieldBandedExercisesExerciseName::WallCrawlWithExternalRotation => write!(f, "{}", "WallCrawlWithExternalRotation"),
+            FitFieldBandedExercisesExerciseName::LateralRaiseWheelchair => write!(f, "{}", "LateralRaiseWheelchair"),
+            FitFieldBandedExercisesExerciseName::TricepsExtensionWheelchair => write!(f, "{}", "TricepsExtensionWheelchair"),
+            FitFieldBandedExercisesExerciseName::ChestFlyInclineWheelchair => write!(f, "{}", "ChestFlyInclineWheelchair"),
+            FitFieldBandedExercisesExerciseName::ChestFlyDeclineWheelchair => write!(f, "{}", "ChestFlyDeclineWheelchair"),
+            FitFieldBandedExercisesExerciseName::PullDownWheelchair => write!(f, "{}", "PullDownWheelchair"),
+            FitFieldBandedExercisesExerciseName::StraightArmPullDownWheelchair => write!(f, "{}", "StraightArmPullDownWheelchair"),
+            FitFieldBandedExercisesExerciseName::CurlWheelchair => write!(f, "{}", "CurlWheelchair"),
+            FitFieldBandedExercisesExerciseName::OverheadCurlWheelchair => write!(f, "{}", "OverheadCurlWheelchair"),
+            FitFieldBandedExercisesExerciseName::FacePullWheelchair => write!(f, "{}", "FacePullWheelchair"),
+            FitFieldBandedExercisesExerciseName::AroundTheWorldWheelchair => write!(f, "{}", "AroundTheWorldWheelchair"),
+            FitFieldBandedExercisesExerciseName::PullApartWheelchair => write!(f, "{}", "PullApartWheelchair"),
+            FitFieldBandedExercisesExerciseName::SideCurlWheelchair => write!(f, "{}", "SideCurlWheelchair"),
+            FitFieldBandedExercisesExerciseName::OverheadPressWheelchair => write!(f, "{}", "OverheadPressWheelchair"),
+            FitFieldBandedExercisesExerciseName::BandedExercisesExerciseName(x) => write!(f, "{}({})", "BandedExercisesExerciseName", x),
+            FitFieldBandedExercisesExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBandedExercisesExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldBandedExercisesExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldBandedExercisesExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldBandedExercisesExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                1 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                2 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                3 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                4 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                5 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                6 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                7 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                8 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                9 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                10 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                11 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                12 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                13 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                14 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                15 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                16 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                17 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                18 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                19 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                20 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                21 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                22 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                23 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                24 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                25 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                26 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                27 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                28 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                29 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                30 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                31 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                32 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                33 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                34 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                35 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                36 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                37 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                38 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                39 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                40 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                41 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                42 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                43 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                44 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                45 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                46 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                47 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                49 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                50 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                51 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                52 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                53 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                54 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                55 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                56 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                57 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                58 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                59 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                60 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                61 => Ok(FitFieldBandedExercisesExerciseName::from(v)),
+                v => Ok(FitFieldBandedExercisesExerciseName::BandedExercisesExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldBandedExercisesExerciseName);
+
+impl From<u16> for FitFieldBandedExercisesExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            1 => FitFieldBandedExercisesExerciseName::AbTwist,
+            2 => FitFieldBandedExercisesExerciseName::BackExtension,
+            3 => FitFieldBandedExercisesExerciseName::BicycleCrunch,
+            4 => FitFieldBandedExercisesExerciseName::CalfRaises,
+            5 => FitFieldBandedExercisesExerciseName::ChestPress,
+            6 => FitFieldBandedExercisesExerciseName::ClamShells,
+            7 => FitFieldBandedExercisesExerciseName::Curl,
+            8 => FitFieldBandedExercisesExerciseName::Deadbug,
+            9 => FitFieldBandedExercisesExerciseName::Deadlift,
+            10 => FitFieldBandedExercisesExerciseName::DonkeyKick,
+            11 => FitFieldBandedExercisesExerciseName::ExternalRotation,
+            12 => FitFieldBandedExercisesExerciseName::ExternalRotationAt90DegreeAbduction,
+            13 => FitFieldBandedExercisesExerciseName::FacePull,
+            14 => FitFieldBandedExercisesExerciseName::FireHydrant,
+            15 => FitFieldBandedExercisesExerciseName::Fly,
+            16 => FitFieldBandedExercisesExerciseName::FrontRaise,
+            17 => FitFieldBandedExercisesExerciseName::GluteBridge,
+            18 => FitFieldBandedExercisesExerciseName::HamstringCurls,
+            19 => FitFieldBandedExercisesExerciseName::HighPlankLegLifts,
+            20 => FitFieldBandedExercisesExerciseName::HipExtension,
+            21 => FitFieldBandedExercisesExerciseName::InternalRotation,
+            22 => FitFieldBandedExercisesExerciseName::JumpingJack,
+            23 => FitFieldBandedExercisesExerciseName::KneelingCrunch,
+            24 => FitFieldBandedExercisesExerciseName::LateralBandWalks,
+            25 => FitFieldBandedExercisesExerciseName::LateralRaise,
+            26 => FitFieldBandedExercisesExerciseName::Latpull,
+            27 => FitFieldBandedExercisesExerciseName::LegAbduction,
+            28 => FitFieldBandedExercisesExerciseName::LegAdduction,
+            29 => FitFieldBandedExercisesExerciseName::LegExtension,
+            30 => FitFieldBandedExercisesExerciseName::Lunge,
+            31 => FitFieldBandedExercisesExerciseName::Plank,
+            32 => FitFieldBandedExercisesExerciseName::PullApart,
+            33 => FitFieldBandedExercisesExerciseName::PushUps,
+            34 => FitFieldBandedExercisesExerciseName::ReverseCrunch,
+            35 => FitFieldBandedExercisesExerciseName::Row,
+            36 => FitFieldBandedExercisesExerciseName::ShoulderAbduction,
+            37 => FitFieldBandedExercisesExerciseName::ShoulderExtension,
+            38 => FitFieldBandedExercisesExerciseName::ShoulderExternalRotation,
+            39 => FitFieldBandedExercisesExerciseName::ShoulderFlexionTo90Degrees,
+            40 => FitFieldBandedExercisesExerciseName::SidePlankLegLifts,
+            41 => FitFieldBandedExercisesExerciseName::SideRaise,
+            42 => FitFieldBandedExercisesExerciseName::Squat,
+            43 => FitFieldBandedExercisesExerciseName::SquatToPress,
+            44 => FitFieldBandedExercisesExerciseName::TricepExtension,
+            45 => FitFieldBandedExercisesExerciseName::TricepKickback,
+            46 => FitFieldBandedExercisesExerciseName::UprightRow,
+            47 => FitFieldBandedExercisesExerciseName::WallCrawlWithExternalRotation,
+            49 => FitFieldBandedExercisesExerciseName::LateralRaiseWheelchair,
+            50 => FitFieldBandedExercisesExerciseName::TricepsExtensionWheelchair,
+            51 => FitFieldBandedExercisesExerciseName::ChestFlyInclineWheelchair,
+            52 => FitFieldBandedExercisesExerciseName::ChestFlyDeclineWheelchair,
+            53 => FitFieldBandedExercisesExerciseName::PullDownWheelchair,
+            54 => FitFieldBandedExercisesExerciseName::StraightArmPullDownWheelchair,
+            55 => FitFieldBandedExercisesExerciseName::CurlWheelchair,
+            56 => FitFieldBandedExercisesExerciseName::OverheadCurlWheelchair,
+            57 => FitFieldBandedExercisesExerciseName::FacePullWheelchair,
+            58 => FitFieldBandedExercisesExerciseName::AroundTheWorldWheelchair,
+            59 => FitFieldBandedExercisesExerciseName::PullApartWheelchair,
+            60 => FitFieldBandedExercisesExerciseName::SideCurlWheelchair,
+            61 => FitFieldBandedExercisesExerciseName::OverheadPressWheelchair,
+            _ => FitFieldBandedExercisesExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldBattleRopeExerciseName { // fit base type: uint16
+    AlternatingFigureEight, // 0
+    AlternatingJumpWave, // 1
+    AlternatingKneelingToStandingWave, // 2
+    AlternatingLungeWave, // 3
+    AlternatingSquatWave, // 4
+    AlternatingWave, // 5
+    AlternatingWaveWithLateralShuffle, // 6
+    ClapWave, // 7
+    DoubleArmFigureEight, // 8
+    DoubleArmSideToSideSnake, // 9
+    DoubleArmSideWave, // 10
+    DoubleArmSlam, // 11
+    DoubleArmWave, // 12
+    GrapplerToss, // 13
+    HipToss, // 14
+    InAndOutWave, // 15
+    InsideCircle, // 16
+    JumpingJacks, // 17
+    OutsideCircle, // 18
+    Rainbow, // 19
+    SidePlankWave, // 20
+    Sidewinder, // 21
+    SittingRussianTwist, // 22
+    SnakeWave, // 23
+    SplitJack, // 24
+    StageCoach, // 25
+    UltimateWarrior, // 26
+    UpperCuts, // 27
+    BattleRopeExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldBattleRopeExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldBattleRopeExerciseName::AlternatingFigureEight => write!(f, "{}", "AlternatingFigureEight"),
+            FitFieldBattleRopeExerciseName::AlternatingJumpWave => write!(f, "{}", "AlternatingJumpWave"),
+            FitFieldBattleRopeExerciseName::AlternatingKneelingToStandingWave => write!(f, "{}", "AlternatingKneelingToStandingWave"),
+            FitFieldBattleRopeExerciseName::AlternatingLungeWave => write!(f, "{}", "AlternatingLungeWave"),
+            FitFieldBattleRopeExerciseName::AlternatingSquatWave => write!(f, "{}", "AlternatingSquatWave"),
+            FitFieldBattleRopeExerciseName::AlternatingWave => write!(f, "{}", "AlternatingWave"),
+            FitFieldBattleRopeExerciseName::AlternatingWaveWithLateralShuffle => write!(f, "{}", "AlternatingWaveWithLateralShuffle"),
+            FitFieldBattleRopeExerciseName::ClapWave => write!(f, "{}", "ClapWave"),
+            FitFieldBattleRopeExerciseName::DoubleArmFigureEight => write!(f, "{}", "DoubleArmFigureEight"),
+            FitFieldBattleRopeExerciseName::DoubleArmSideToSideSnake => write!(f, "{}", "DoubleArmSideToSideSnake"),
+            FitFieldBattleRopeExerciseName::DoubleArmSideWave => write!(f, "{}", "DoubleArmSideWave"),
+            FitFieldBattleRopeExerciseName::DoubleArmSlam => write!(f, "{}", "DoubleArmSlam"),
+            FitFieldBattleRopeExerciseName::DoubleArmWave => write!(f, "{}", "DoubleArmWave"),
+            FitFieldBattleRopeExerciseName::GrapplerToss => write!(f, "{}", "GrapplerToss"),
+            FitFieldBattleRopeExerciseName::HipToss => write!(f, "{}", "HipToss"),
+            FitFieldBattleRopeExerciseName::InAndOutWave => write!(f, "{}", "InAndOutWave"),
+            FitFieldBattleRopeExerciseName::InsideCircle => write!(f, "{}", "InsideCircle"),
+            FitFieldBattleRopeExerciseName::JumpingJacks => write!(f, "{}", "JumpingJacks"),
+            FitFieldBattleRopeExerciseName::OutsideCircle => write!(f, "{}", "OutsideCircle"),
+            FitFieldBattleRopeExerciseName::Rainbow => write!(f, "{}", "Rainbow"),
+            FitFieldBattleRopeExerciseName::SidePlankWave => write!(f, "{}", "SidePlankWave"),
+            FitFieldBattleRopeExerciseName::Sidewinder => write!(f, "{}", "Sidewinder"),
+            FitFieldBattleRopeExerciseName::SittingRussianTwist => write!(f, "{}", "SittingRussianTwist"),
+            FitFieldBattleRopeExerciseName::SnakeWave => write!(f, "{}", "SnakeWave"),
+            FitFieldBattleRopeExerciseName::SplitJack => write!(f, "{}", "SplitJack"),
+            FitFieldBattleRopeExerciseName::StageCoach => write!(f, "{}", "StageCoach"),
+            FitFieldBattleRopeExerciseName::UltimateWarrior => write!(f, "{}", "UltimateWarrior"),
+            FitFieldBattleRopeExerciseName::UpperCuts => write!(f, "{}", "UpperCuts"),
+            FitFieldBattleRopeExerciseName::BattleRopeExerciseName(x) => write!(f, "{}({})", "BattleRopeExerciseName", x),
+            FitFieldBattleRopeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBattleRopeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldBattleRopeExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldBattleRopeExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldBattleRopeExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                1 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                2 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                3 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                4 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                5 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                6 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                7 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                8 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                9 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                10 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                11 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                12 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                13 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                14 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                15 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                16 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                17 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                18 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                19 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                20 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                21 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                22 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                23 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                24 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                25 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                26 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                27 => Ok(FitFieldBattleRopeExerciseName::from(v)),
+                v => Ok(FitFieldBattleRopeExerciseName::BattleRopeExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldBattleRopeExerciseName);
+
+impl From<u16> for FitFieldBattleRopeExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldBattleRopeExerciseName::AlternatingFigureEight,
+            1 => FitFieldBattleRopeExerciseName::AlternatingJumpWave,
+            2 => FitFieldBattleRopeExerciseName::AlternatingKneelingToStandingWave,
+            3 => FitFieldBattleRopeExerciseName::AlternatingLungeWave,
+            4 => FitFieldBattleRopeExerciseName::AlternatingSquatWave,
+            5 => FitFieldBattleRopeExerciseName::AlternatingWave,
+            6 => FitFieldBattleRopeExerciseName::AlternatingWaveWithLateralShuffle,
+            7 => FitFieldBattleRopeExerciseName::ClapWave,
+            8 => FitFieldBattleRopeExerciseName::DoubleArmFigureEight,
+            9 => FitFieldBattleRopeExerciseName::DoubleArmSideToSideSnake,
+            10 => FitFieldBattleRopeExerciseName::DoubleArmSideWave,
+            11 => FitFieldBattleRopeExerciseName::DoubleArmSlam,
+            12 => FitFieldBattleRopeExerciseName::DoubleArmWave,
+            13 => FitFieldBattleRopeExerciseName::GrapplerToss,
+            14 => FitFieldBattleRopeExerciseName::HipToss,
+            15 => FitFieldBattleRopeExerciseName::InAndOutWave,
+            16 => FitFieldBattleRopeExerciseName::InsideCircle,
+            17 => FitFieldBattleRopeExerciseName::JumpingJacks,
+            18 => FitFieldBattleRopeExerciseName::OutsideCircle,
+            19 => FitFieldBattleRopeExerciseName::Rainbow,
+            20 => FitFieldBattleRopeExerciseName::SidePlankWave,
+            21 => FitFieldBattleRopeExerciseName::Sidewinder,
+            22 => FitFieldBattleRopeExerciseName::SittingRussianTwist,
+            23 => FitFieldBattleRopeExerciseName::SnakeWave,
+            24 => FitFieldBattleRopeExerciseName::SplitJack,
+            25 => FitFieldBattleRopeExerciseName::StageCoach,
+            26 => FitFieldBattleRopeExerciseName::UltimateWarrior,
+            27 => FitFieldBattleRopeExerciseName::UpperCuts,
+            _ => FitFieldBattleRopeExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldEllipticalExerciseName { // fit base type: uint16
+    Elliptical, // 0
+    EllipticalExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldEllipticalExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldEllipticalExerciseName::Elliptical => write!(f, "{}", "Elliptical"),
+            FitFieldEllipticalExerciseName::EllipticalExerciseName(x) => write!(f, "{}({})", "EllipticalExerciseName", x),
+            FitFieldEllipticalExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldEllipticalExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldEllipticalExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldEllipticalExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldEllipticalExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldEllipticalExerciseName::from(v)),
+                v => Ok(FitFieldEllipticalExerciseName::EllipticalExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldEllipticalExerciseName);
+
+impl From<u16> for FitFieldEllipticalExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldEllipticalExerciseName::Elliptical,
+            _ => FitFieldEllipticalExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldFloorClimbExerciseName { // fit base type: uint16
+    FloorClimb, // 0
+    FloorClimbExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldFloorClimbExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldFloorClimbExerciseName::FloorClimb => write!(f, "{}", "FloorClimb"),
+            FitFieldFloorClimbExerciseName::FloorClimbExerciseName(x) => write!(f, "{}({})", "FloorClimbExerciseName", x),
+            FitFieldFloorClimbExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldFloorClimbExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldFloorClimbExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldFloorClimbExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldFloorClimbExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldFloorClimbExerciseName::from(v)),
+                v => Ok(FitFieldFloorClimbExerciseName::FloorClimbExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldFloorClimbExerciseName);
+
+impl From<u16> for FitFieldFloorClimbExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldFloorClimbExerciseName::FloorClimb,
+            _ => FitFieldFloorClimbExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldIndoorBikeExerciseName { // fit base type: uint16
+    AirBike, // 0
+    AssaultBike, // 1
+    StationaryBike, // 3
+    IndoorBikeExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldIndoorBikeExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldIndoorBikeExerciseName::AirBike => write!(f, "{}", "AirBike"),
+            FitFieldIndoorBikeExerciseName::AssaultBike => write!(f, "{}", "AssaultBike"),
+            FitFieldIndoorBikeExerciseName::StationaryBike => write!(f, "{}", "StationaryBike"),
+            FitFieldIndoorBikeExerciseName::IndoorBikeExerciseName(x) => write!(f, "{}({})", "IndoorBikeExerciseName", x),
+            FitFieldIndoorBikeExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldIndoorBikeExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldIndoorBikeExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldIndoorBikeExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldIndoorBikeExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldIndoorBikeExerciseName::from(v)),
+                1 => Ok(FitFieldIndoorBikeExerciseName::from(v)),
+                3 => Ok(FitFieldIndoorBikeExerciseName::from(v)),
+                v => Ok(FitFieldIndoorBikeExerciseName::IndoorBikeExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldIndoorBikeExerciseName);
+
+impl From<u16> for FitFieldIndoorBikeExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldIndoorBikeExerciseName::AirBike,
+            1 => FitFieldIndoorBikeExerciseName::AssaultBike,
+            3 => FitFieldIndoorBikeExerciseName::StationaryBike,
+            _ => FitFieldIndoorBikeExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldIndoorRowExerciseName { // fit base type: uint16
+    RowingMachine, // 0
+    IndoorRowExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldIndoorRowExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldIndoorRowExerciseName::RowingMachine => write!(f, "{}", "RowingMachine"),
+            FitFieldIndoorRowExerciseName::IndoorRowExerciseName(x) => write!(f, "{}({})", "IndoorRowExerciseName", x),
+            FitFieldIndoorRowExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldIndoorRowExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldIndoorRowExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldIndoorRowExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldIndoorRowExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldIndoorRowExerciseName::from(v)),
+                v => Ok(FitFieldIndoorRowExerciseName::IndoorRowExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldIndoorRowExerciseName);
+
+impl From<u16> for FitFieldIndoorRowExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldIndoorRowExerciseName::RowingMachine,
+            _ => FitFieldIndoorRowExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldLadderExerciseName { // fit base type: uint16
+    Agility, // 0
+    Speed, // 1
+    LadderExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldLadderExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldLadderExerciseName::Agility => write!(f, "{}", "Agility"),
+            FitFieldLadderExerciseName::Speed => write!(f, "{}", "Speed"),
+            FitFieldLadderExerciseName::LadderExerciseName(x) => write!(f, "{}({})", "LadderExerciseName", x),
+            FitFieldLadderExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldLadderExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldLadderExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldLadderExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldLadderExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldLadderExerciseName::from(v)),
+                1 => Ok(FitFieldLadderExerciseName::from(v)),
+                v => Ok(FitFieldLadderExerciseName::LadderExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldLadderExerciseName);
+
+impl From<u16> for FitFieldLadderExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldLadderExerciseName::Agility,
+            1 => FitFieldLadderExerciseName::Speed,
+            _ => FitFieldLadderExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldSandbagExerciseName { // fit base type: uint16
+    AroundTheWorld, // 0
+    BackSquat, // 1
+    BearCrawlPullThrough, // 2
+    BearHugSquat, // 3
+    Clean, // 4
+    CleanAndPress, // 5
+    Curl, // 6
+    FrontCarry, // 7
+    FrontSquat, // 8
+    Lunge, // 9
+    OverheadPress, // 10
+    PlankPullThrough, // 11
+    RotationalLunge, // 12
+    Row, // 13
+    RussianTwist, // 14
+    Shouldering, // 15
+    Shoveling, // 16
+    SideLunge, // 17
+    Sprint, // 18
+    ZercherSquat, // 19
+    SandbagExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldSandbagExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldSandbagExerciseName::AroundTheWorld => write!(f, "{}", "AroundTheWorld"),
+            FitFieldSandbagExerciseName::BackSquat => write!(f, "{}", "BackSquat"),
+            FitFieldSandbagExerciseName::BearCrawlPullThrough => write!(f, "{}", "BearCrawlPullThrough"),
+            FitFieldSandbagExerciseName::BearHugSquat => write!(f, "{}", "BearHugSquat"),
+            FitFieldSandbagExerciseName::Clean => write!(f, "{}", "Clean"),
+            FitFieldSandbagExerciseName::CleanAndPress => write!(f, "{}", "CleanAndPress"),
+            FitFieldSandbagExerciseName::Curl => write!(f, "{}", "Curl"),
+            FitFieldSandbagExerciseName::FrontCarry => write!(f, "{}", "FrontCarry"),
+            FitFieldSandbagExerciseName::FrontSquat => write!(f, "{}", "FrontSquat"),
+            FitFieldSandbagExerciseName::Lunge => write!(f, "{}", "Lunge"),
+            FitFieldSandbagExerciseName::OverheadPress => write!(f, "{}", "OverheadPress"),
+            FitFieldSandbagExerciseName::PlankPullThrough => write!(f, "{}", "PlankPullThrough"),
+            FitFieldSandbagExerciseName::RotationalLunge => write!(f, "{}", "RotationalLunge"),
+            FitFieldSandbagExerciseName::Row => write!(f, "{}", "Row"),
+            FitFieldSandbagExerciseName::RussianTwist => write!(f, "{}", "RussianTwist"),
+            FitFieldSandbagExerciseName::Shouldering => write!(f, "{}", "Shouldering"),
+            FitFieldSandbagExerciseName::Shoveling => write!(f, "{}", "Shoveling"),
+            FitFieldSandbagExerciseName::SideLunge => write!(f, "{}", "SideLunge"),
+            FitFieldSandbagExerciseName::Sprint => write!(f, "{}", "Sprint"),
+            FitFieldSandbagExerciseName::ZercherSquat => write!(f, "{}", "ZercherSquat"),
+            FitFieldSandbagExerciseName::SandbagExerciseName(x) => write!(f, "{}({})", "SandbagExerciseName", x),
+            FitFieldSandbagExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSandbagExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldSandbagExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldSandbagExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldSandbagExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldSandbagExerciseName::from(v)),
+                1 => Ok(FitFieldSandbagExerciseName::from(v)),
+                2 => Ok(FitFieldSandbagExerciseName::from(v)),
+                3 => Ok(FitFieldSandbagExerciseName::from(v)),
+                4 => Ok(FitFieldSandbagExerciseName::from(v)),
+                5 => Ok(FitFieldSandbagExerciseName::from(v)),
+                6 => Ok(FitFieldSandbagExerciseName::from(v)),
+                7 => Ok(FitFieldSandbagExerciseName::from(v)),
+                8 => Ok(FitFieldSandbagExerciseName::from(v)),
+                9 => Ok(FitFieldSandbagExerciseName::from(v)),
+                10 => Ok(FitFieldSandbagExerciseName::from(v)),
+                11 => Ok(FitFieldSandbagExerciseName::from(v)),
+                12 => Ok(FitFieldSandbagExerciseName::from(v)),
+                13 => Ok(FitFieldSandbagExerciseName::from(v)),
+                14 => Ok(FitFieldSandbagExerciseName::from(v)),
+                15 => Ok(FitFieldSandbagExerciseName::from(v)),
+                16 => Ok(FitFieldSandbagExerciseName::from(v)),
+                17 => Ok(FitFieldSandbagExerciseName::from(v)),
+                18 => Ok(FitFieldSandbagExerciseName::from(v)),
+                19 => Ok(FitFieldSandbagExerciseName::from(v)),
+                v => Ok(FitFieldSandbagExerciseName::SandbagExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldSandbagExerciseName);
+
+impl From<u16> for FitFieldSandbagExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldSandbagExerciseName::AroundTheWorld,
+            1 => FitFieldSandbagExerciseName::BackSquat,
+            2 => FitFieldSandbagExerciseName::BearCrawlPullThrough,
+            3 => FitFieldSandbagExerciseName::BearHugSquat,
+            4 => FitFieldSandbagExerciseName::Clean,
+            5 => FitFieldSandbagExerciseName::CleanAndPress,
+            6 => FitFieldSandbagExerciseName::Curl,
+            7 => FitFieldSandbagExerciseName::FrontCarry,
+            8 => FitFieldSandbagExerciseName::FrontSquat,
+            9 => FitFieldSandbagExerciseName::Lunge,
+            10 => FitFieldSandbagExerciseName::OverheadPress,
+            11 => FitFieldSandbagExerciseName::PlankPullThrough,
+            12 => FitFieldSandbagExerciseName::RotationalLunge,
+            13 => FitFieldSandbagExerciseName::Row,
+            14 => FitFieldSandbagExerciseName::RussianTwist,
+            15 => FitFieldSandbagExerciseName::Shouldering,
+            16 => FitFieldSandbagExerciseName::Shoveling,
+            17 => FitFieldSandbagExerciseName::SideLunge,
+            18 => FitFieldSandbagExerciseName::Sprint,
+            19 => FitFieldSandbagExerciseName::ZercherSquat,
+            _ => FitFieldSandbagExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldSledExerciseName { // fit base type: uint16
+    BackwardDrag, // 0
+    ChestPress, // 1
+    ForwardDrag, // 2
+    LowPush, // 3
+    Push, // 4
+    Row, // 5
+    SledExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldSledExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldSledExerciseName::BackwardDrag => write!(f, "{}", "BackwardDrag"),
+            FitFieldSledExerciseName::ChestPress => write!(f, "{}", "ChestPress"),
+            FitFieldSledExerciseName::ForwardDrag => write!(f, "{}", "ForwardDrag"),
+            FitFieldSledExerciseName::LowPush => write!(f, "{}", "LowPush"),
+            FitFieldSledExerciseName::Push => write!(f, "{}", "Push"),
+            FitFieldSledExerciseName::Row => write!(f, "{}", "Row"),
+            FitFieldSledExerciseName::SledExerciseName(x) => write!(f, "{}({})", "SledExerciseName", x),
+            FitFieldSledExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSledExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldSledExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldSledExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldSledExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldSledExerciseName::from(v)),
+                1 => Ok(FitFieldSledExerciseName::from(v)),
+                2 => Ok(FitFieldSledExerciseName::from(v)),
+                3 => Ok(FitFieldSledExerciseName::from(v)),
+                4 => Ok(FitFieldSledExerciseName::from(v)),
+                5 => Ok(FitFieldSledExerciseName::from(v)),
+                v => Ok(FitFieldSledExerciseName::SledExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldSledExerciseName);
+
+impl From<u16> for FitFieldSledExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldSledExerciseName::BackwardDrag,
+            1 => FitFieldSledExerciseName::ChestPress,
+            2 => FitFieldSledExerciseName::ForwardDrag,
+            3 => FitFieldSledExerciseName::LowPush,
+            4 => FitFieldSledExerciseName::Push,
+            5 => FitFieldSledExerciseName::Row,
+            _ => FitFieldSledExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldSledgeHammerExerciseName { // fit base type: uint16
+    LateralSwing, // 0
+    HammerSlam, // 1
+    SledgeHammerExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldSledgeHammerExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldSledgeHammerExerciseName::LateralSwing => write!(f, "{}", "LateralSwing"),
+            FitFieldSledgeHammerExerciseName::HammerSlam => write!(f, "{}", "HammerSlam"),
+            FitFieldSledgeHammerExerciseName::SledgeHammerExerciseName(x) => write!(f, "{}({})", "SledgeHammerExerciseName", x),
+            FitFieldSledgeHammerExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSledgeHammerExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldSledgeHammerExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldSledgeHammerExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldSledgeHammerExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldSledgeHammerExerciseName::from(v)),
+                1 => Ok(FitFieldSledgeHammerExerciseName::from(v)),
+                v => Ok(FitFieldSledgeHammerExerciseName::SledgeHammerExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldSledgeHammerExerciseName);
+
+impl From<u16> for FitFieldSledgeHammerExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldSledgeHammerExerciseName::LateralSwing,
+            1 => FitFieldSledgeHammerExerciseName::HammerSlam,
+            _ => FitFieldSledgeHammerExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldStairStepperExerciseName { // fit base type: uint16
+    StairStepper, // 0
+    StairStepperExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldStairStepperExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldStairStepperExerciseName::StairStepper => write!(f, "{}", "StairStepper"),
+            FitFieldStairStepperExerciseName::StairStepperExerciseName(x) => write!(f, "{}({})", "StairStepperExerciseName", x),
+            FitFieldStairStepperExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldStairStepperExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldStairStepperExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldStairStepperExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldStairStepperExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldStairStepperExerciseName::from(v)),
+                v => Ok(FitFieldStairStepperExerciseName::StairStepperExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldStairStepperExerciseName);
+
+impl From<u16> for FitFieldStairStepperExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldStairStepperExerciseName::StairStepper,
+            _ => FitFieldStairStepperExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldSuspensionExerciseName { // fit base type: uint16
+    ChestFly, // 0
+    ChestPress, // 1
+    Crunch, // 2
+    Curl, // 3
+    Dip, // 4
+    FacePull, // 5
+    GluteBridge, // 6
+    HamstringCurl, // 7
+    HipDrop, // 8
+    InvertedRow, // 9
+    KneeDriveJump, // 10
+    KneeToChest, // 11
+    LatPullover, // 12
+    Lunge, // 13
+    MountainClimber, // 14
+    Pendulum, // 15
+    Pike, // 16
+    Plank, // 17
+    PowerPull, // 18
+    PullUp, // 19
+    PushUp, // 20
+    ReverseMountainClimber, // 21
+    ReversePlank, // 22
+    Rollout, // 23
+    Row, // 24
+    SideLunge, // 25
+    SidePlank, // 26
+    SingleLegDeadlift, // 27
+    SingleLegSquat, // 28
+    SitUp, // 29
+    Split, // 30
+    Squat, // 31
+    SquatJump, // 32
+    TricepPress, // 33
+    YFly, // 34
+    SuspensionExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldSuspensionExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldSuspensionExerciseName::ChestFly => write!(f, "{}", "ChestFly"),
+            FitFieldSuspensionExerciseName::ChestPress => write!(f, "{}", "ChestPress"),
+            FitFieldSuspensionExerciseName::Crunch => write!(f, "{}", "Crunch"),
+            FitFieldSuspensionExerciseName::Curl => write!(f, "{}", "Curl"),
+            FitFieldSuspensionExerciseName::Dip => write!(f, "{}", "Dip"),
+            FitFieldSuspensionExerciseName::FacePull => write!(f, "{}", "FacePull"),
+            FitFieldSuspensionExerciseName::GluteBridge => write!(f, "{}", "GluteBridge"),
+            FitFieldSuspensionExerciseName::HamstringCurl => write!(f, "{}", "HamstringCurl"),
+            FitFieldSuspensionExerciseName::HipDrop => write!(f, "{}", "HipDrop"),
+            FitFieldSuspensionExerciseName::InvertedRow => write!(f, "{}", "InvertedRow"),
+            FitFieldSuspensionExerciseName::KneeDriveJump => write!(f, "{}", "KneeDriveJump"),
+            FitFieldSuspensionExerciseName::KneeToChest => write!(f, "{}", "KneeToChest"),
+            FitFieldSuspensionExerciseName::LatPullover => write!(f, "{}", "LatPullover"),
+            FitFieldSuspensionExerciseName::Lunge => write!(f, "{}", "Lunge"),
+            FitFieldSuspensionExerciseName::MountainClimber => write!(f, "{}", "MountainClimber"),
+            FitFieldSuspensionExerciseName::Pendulum => write!(f, "{}", "Pendulum"),
+            FitFieldSuspensionExerciseName::Pike => write!(f, "{}", "Pike"),
+            FitFieldSuspensionExerciseName::Plank => write!(f, "{}", "Plank"),
+            FitFieldSuspensionExerciseName::PowerPull => write!(f, "{}", "PowerPull"),
+            FitFieldSuspensionExerciseName::PullUp => write!(f, "{}", "PullUp"),
+            FitFieldSuspensionExerciseName::PushUp => write!(f, "{}", "PushUp"),
+            FitFieldSuspensionExerciseName::ReverseMountainClimber => write!(f, "{}", "ReverseMountainClimber"),
+            FitFieldSuspensionExerciseName::ReversePlank => write!(f, "{}", "ReversePlank"),
+            FitFieldSuspensionExerciseName::Rollout => write!(f, "{}", "Rollout"),
+            FitFieldSuspensionExerciseName::Row => write!(f, "{}", "Row"),
+            FitFieldSuspensionExerciseName::SideLunge => write!(f, "{}", "SideLunge"),
+            FitFieldSuspensionExerciseName::SidePlank => write!(f, "{}", "SidePlank"),
+            FitFieldSuspensionExerciseName::SingleLegDeadlift => write!(f, "{}", "SingleLegDeadlift"),
+            FitFieldSuspensionExerciseName::SingleLegSquat => write!(f, "{}", "SingleLegSquat"),
+            FitFieldSuspensionExerciseName::SitUp => write!(f, "{}", "SitUp"),
+            FitFieldSuspensionExerciseName::Split => write!(f, "{}", "Split"),
+            FitFieldSuspensionExerciseName::Squat => write!(f, "{}", "Squat"),
+            FitFieldSuspensionExerciseName::SquatJump => write!(f, "{}", "SquatJump"),
+            FitFieldSuspensionExerciseName::TricepPress => write!(f, "{}", "TricepPress"),
+            FitFieldSuspensionExerciseName::YFly => write!(f, "{}", "YFly"),
+            FitFieldSuspensionExerciseName::SuspensionExerciseName(x) => write!(f, "{}({})", "SuspensionExerciseName", x),
+            FitFieldSuspensionExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSuspensionExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldSuspensionExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldSuspensionExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldSuspensionExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                1 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                2 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                3 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                4 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                5 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                6 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                7 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                8 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                9 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                10 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                11 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                12 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                13 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                14 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                15 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                16 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                17 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                18 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                19 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                20 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                21 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                22 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                23 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                24 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                25 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                26 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                27 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                28 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                29 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                30 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                31 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                32 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                33 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                34 => Ok(FitFieldSuspensionExerciseName::from(v)),
+                v => Ok(FitFieldSuspensionExerciseName::SuspensionExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldSuspensionExerciseName);
+
+impl From<u16> for FitFieldSuspensionExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldSuspensionExerciseName::ChestFly,
+            1 => FitFieldSuspensionExerciseName::ChestPress,
+            2 => FitFieldSuspensionExerciseName::Crunch,
+            3 => FitFieldSuspensionExerciseName::Curl,
+            4 => FitFieldSuspensionExerciseName::Dip,
+            5 => FitFieldSuspensionExerciseName::FacePull,
+            6 => FitFieldSuspensionExerciseName::GluteBridge,
+            7 => FitFieldSuspensionExerciseName::HamstringCurl,
+            8 => FitFieldSuspensionExerciseName::HipDrop,
+            9 => FitFieldSuspensionExerciseName::InvertedRow,
+            10 => FitFieldSuspensionExerciseName::KneeDriveJump,
+            11 => FitFieldSuspensionExerciseName::KneeToChest,
+            12 => FitFieldSuspensionExerciseName::LatPullover,
+            13 => FitFieldSuspensionExerciseName::Lunge,
+            14 => FitFieldSuspensionExerciseName::MountainClimber,
+            15 => FitFieldSuspensionExerciseName::Pendulum,
+            16 => FitFieldSuspensionExerciseName::Pike,
+            17 => FitFieldSuspensionExerciseName::Plank,
+            18 => FitFieldSuspensionExerciseName::PowerPull,
+            19 => FitFieldSuspensionExerciseName::PullUp,
+            20 => FitFieldSuspensionExerciseName::PushUp,
+            21 => FitFieldSuspensionExerciseName::ReverseMountainClimber,
+            22 => FitFieldSuspensionExerciseName::ReversePlank,
+            23 => FitFieldSuspensionExerciseName::Rollout,
+            24 => FitFieldSuspensionExerciseName::Row,
+            25 => FitFieldSuspensionExerciseName::SideLunge,
+            26 => FitFieldSuspensionExerciseName::SidePlank,
+            27 => FitFieldSuspensionExerciseName::SingleLegDeadlift,
+            28 => FitFieldSuspensionExerciseName::SingleLegSquat,
+            29 => FitFieldSuspensionExerciseName::SitUp,
+            30 => FitFieldSuspensionExerciseName::Split,
+            31 => FitFieldSuspensionExerciseName::Squat,
+            32 => FitFieldSuspensionExerciseName::SquatJump,
+            33 => FitFieldSuspensionExerciseName::TricepPress,
+            34 => FitFieldSuspensionExerciseName::YFly,
+            _ => FitFieldSuspensionExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldTireExerciseName { // fit base type: uint16
+    Flip, // 0
+    TireExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldTireExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldTireExerciseName::Flip => write!(f, "{}", "Flip"),
+            FitFieldTireExerciseName::TireExerciseName(x) => write!(f, "{}({})", "TireExerciseName", x),
+            FitFieldTireExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldTireExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldTireExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldTireExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldTireExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldTireExerciseName::from(v)),
+                v => Ok(FitFieldTireExerciseName::TireExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldTireExerciseName);
+
+impl From<u16> for FitFieldTireExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldTireExerciseName::Flip,
+            _ => FitFieldTireExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldBikeOutdoorExerciseName { // fit base type: uint16
+    Bike, // 0
+    BikeOutdoorExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldBikeOutdoorExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldBikeOutdoorExerciseName::Bike => write!(f, "{}", "Bike"),
+            FitFieldBikeOutdoorExerciseName::BikeOutdoorExerciseName(x) => write!(f, "{}({})", "BikeOutdoorExerciseName", x),
+            FitFieldBikeOutdoorExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldBikeOutdoorExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldBikeOutdoorExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldBikeOutdoorExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldBikeOutdoorExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldBikeOutdoorExerciseName::from(v)),
+                v => Ok(FitFieldBikeOutdoorExerciseName::BikeOutdoorExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldBikeOutdoorExerciseName);
+
+impl From<u16> for FitFieldBikeOutdoorExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldBikeOutdoorExerciseName::Bike,
+            _ => FitFieldBikeOutdoorExerciseName::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldRunIndoorExerciseName { // fit base type: uint16
+    IndoorTrackRun, // 0
+    Treadmill, // 1
+    RunIndoorExerciseName(u16),
+    InvalidFieldValue,
+    UnknownToSdk,
+}
+
+impl fmt::Display for FitFieldRunIndoorExerciseName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldRunIndoorExerciseName::IndoorTrackRun => write!(f, "{}", "IndoorTrackRun"),
+            FitFieldRunIndoorExerciseName::Treadmill => write!(f, "{}", "Treadmill"),
+            FitFieldRunIndoorExerciseName::RunIndoorExerciseName(x) => write!(f, "{}({})", "RunIndoorExerciseName", x),
+            FitFieldRunIndoorExerciseName::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldRunIndoorExerciseName::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldRunIndoorExerciseName {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldRunIndoorExerciseName> {
+        let val = parse_uint16(input, parse_config);
+        match val {
+            Err(_) => Ok(FitFieldRunIndoorExerciseName::InvalidFieldValue),
+            Ok(v) => match v {
+                
+                0 => Ok(FitFieldRunIndoorExerciseName::from(v)),
+                1 => Ok(FitFieldRunIndoorExerciseName::from(v)),
+                v => Ok(FitFieldRunIndoorExerciseName::RunIndoorExerciseName(v)),
+            }
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldRunIndoorExerciseName);
+
+impl From<u16> for FitFieldRunIndoorExerciseName {
+    fn from(code: u16) -> Self {
+        match code {
+            0 => FitFieldRunIndoorExerciseName::IndoorTrackRun,
+            1 => FitFieldRunIndoorExerciseName::Treadmill,
+            _ => FitFieldRunIndoorExerciseName::UnknownToSdk,
         }
     }
 }
@@ -19664,6 +23581,63 @@ impl From<u8> for FitFieldDiveGasMode {
 
 
 #[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldProjectileType { // fit base type: enum
+    Arrow = 0,  // Arrow projectile type
+    RifleCartridge = 1,  // Rifle cartridge projectile type
+    PistolCartridge = 2,  // Pistol cartridge projectile type
+    Shotshell = 3,  // Shotshell projectile type
+    AirRiflePellet = 4,  // Air rifle pellet projectile type
+    Other = 5,  // Other projectile type
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldProjectileType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldProjectileType::Arrow => write!(f, "{}", "Arrow"),
+            FitFieldProjectileType::RifleCartridge => write!(f, "{}", "RifleCartridge"),
+            FitFieldProjectileType::PistolCartridge => write!(f, "{}", "PistolCartridge"),
+            FitFieldProjectileType::Shotshell => write!(f, "{}", "Shotshell"),
+            FitFieldProjectileType::AirRiflePellet => write!(f, "{}", "AirRiflePellet"),
+            FitFieldProjectileType::Other => write!(f, "{}", "Other"),
+            FitFieldProjectileType::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldProjectileType::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldProjectileType {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldProjectileType> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldProjectileType::from(v)),
+            Err(_) => Ok(FitFieldProjectileType::InvalidFieldValue)
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldProjectileType);
+
+
+impl From<u8> for FitFieldProjectileType {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldProjectileType::Arrow,
+            1 => FitFieldProjectileType::RifleCartridge,
+            2 => FitFieldProjectileType::PistolCartridge,
+            3 => FitFieldProjectileType::Shotshell,
+            4 => FitFieldProjectileType::AirRiflePellet,
+            5 => FitFieldProjectileType::Other,
+            _ => FitFieldProjectileType::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum FitFieldFaveroProduct { // fit base type: uint16
     AssiomaUno, // 10
     AssiomaDuo, // 12
@@ -20012,6 +23986,198 @@ impl From<u8> for FitFieldRadarThreatLevelType {
 
 
 #[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldSleepDisruptionSeverity { // fit base type: enum
+    None = 0,
+    Low = 1,
+    Medium = 2,
+    High = 3,
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldSleepDisruptionSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldSleepDisruptionSeverity::None => write!(f, "{}", "None"),
+            FitFieldSleepDisruptionSeverity::Low => write!(f, "{}", "Low"),
+            FitFieldSleepDisruptionSeverity::Medium => write!(f, "{}", "Medium"),
+            FitFieldSleepDisruptionSeverity::High => write!(f, "{}", "High"),
+            FitFieldSleepDisruptionSeverity::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldSleepDisruptionSeverity::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldSleepDisruptionSeverity {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldSleepDisruptionSeverity> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldSleepDisruptionSeverity::from(v)),
+            Err(_) => Ok(FitFieldSleepDisruptionSeverity::InvalidFieldValue)
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldSleepDisruptionSeverity);
+
+
+impl From<u8> for FitFieldSleepDisruptionSeverity {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldSleepDisruptionSeverity::None,
+            1 => FitFieldSleepDisruptionSeverity::Low,
+            2 => FitFieldSleepDisruptionSeverity::Medium,
+            3 => FitFieldSleepDisruptionSeverity::High,
+            _ => FitFieldSleepDisruptionSeverity::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldNapPeriodFeedback { // fit base type: enum
+    None = 0,
+    MultipleNapsDuringDay = 1,
+    JetlagIdealTimingIdealDuration = 2,
+    JetlagIdealTimingLongDuration = 3,
+    JetlagLateTimingIdealDuration = 4,
+    JetlagLateTimingLongDuration = 5,
+    IdealTimingIdealDurationLowNeed = 6,
+    IdealTimingIdealDurationHighNeed = 7,
+    IdealTimingLongDurationLowNeed = 8,
+    IdealTimingLongDurationHighNeed = 9,
+    LateTimingIdealDurationLowNeed = 10,
+    LateTimingIdealDurationHighNeed = 11,
+    LateTimingLongDurationLowNeed = 12,
+    LateTimingLongDurationHighNeed = 13,
+    IdealDurationLowNeed = 14,
+    IdealDurationHighNeed = 15,
+    LongDurationLowNeed = 16,
+    LongDurationHighNeed = 17,
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldNapPeriodFeedback {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldNapPeriodFeedback::None => write!(f, "{}", "None"),
+            FitFieldNapPeriodFeedback::MultipleNapsDuringDay => write!(f, "{}", "MultipleNapsDuringDay"),
+            FitFieldNapPeriodFeedback::JetlagIdealTimingIdealDuration => write!(f, "{}", "JetlagIdealTimingIdealDuration"),
+            FitFieldNapPeriodFeedback::JetlagIdealTimingLongDuration => write!(f, "{}", "JetlagIdealTimingLongDuration"),
+            FitFieldNapPeriodFeedback::JetlagLateTimingIdealDuration => write!(f, "{}", "JetlagLateTimingIdealDuration"),
+            FitFieldNapPeriodFeedback::JetlagLateTimingLongDuration => write!(f, "{}", "JetlagLateTimingLongDuration"),
+            FitFieldNapPeriodFeedback::IdealTimingIdealDurationLowNeed => write!(f, "{}", "IdealTimingIdealDurationLowNeed"),
+            FitFieldNapPeriodFeedback::IdealTimingIdealDurationHighNeed => write!(f, "{}", "IdealTimingIdealDurationHighNeed"),
+            FitFieldNapPeriodFeedback::IdealTimingLongDurationLowNeed => write!(f, "{}", "IdealTimingLongDurationLowNeed"),
+            FitFieldNapPeriodFeedback::IdealTimingLongDurationHighNeed => write!(f, "{}", "IdealTimingLongDurationHighNeed"),
+            FitFieldNapPeriodFeedback::LateTimingIdealDurationLowNeed => write!(f, "{}", "LateTimingIdealDurationLowNeed"),
+            FitFieldNapPeriodFeedback::LateTimingIdealDurationHighNeed => write!(f, "{}", "LateTimingIdealDurationHighNeed"),
+            FitFieldNapPeriodFeedback::LateTimingLongDurationLowNeed => write!(f, "{}", "LateTimingLongDurationLowNeed"),
+            FitFieldNapPeriodFeedback::LateTimingLongDurationHighNeed => write!(f, "{}", "LateTimingLongDurationHighNeed"),
+            FitFieldNapPeriodFeedback::IdealDurationLowNeed => write!(f, "{}", "IdealDurationLowNeed"),
+            FitFieldNapPeriodFeedback::IdealDurationHighNeed => write!(f, "{}", "IdealDurationHighNeed"),
+            FitFieldNapPeriodFeedback::LongDurationLowNeed => write!(f, "{}", "LongDurationLowNeed"),
+            FitFieldNapPeriodFeedback::LongDurationHighNeed => write!(f, "{}", "LongDurationHighNeed"),
+            FitFieldNapPeriodFeedback::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldNapPeriodFeedback::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldNapPeriodFeedback {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldNapPeriodFeedback> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldNapPeriodFeedback::from(v)),
+            Err(_) => Ok(FitFieldNapPeriodFeedback::InvalidFieldValue)
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldNapPeriodFeedback);
+
+
+impl From<u8> for FitFieldNapPeriodFeedback {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldNapPeriodFeedback::None,
+            1 => FitFieldNapPeriodFeedback::MultipleNapsDuringDay,
+            2 => FitFieldNapPeriodFeedback::JetlagIdealTimingIdealDuration,
+            3 => FitFieldNapPeriodFeedback::JetlagIdealTimingLongDuration,
+            4 => FitFieldNapPeriodFeedback::JetlagLateTimingIdealDuration,
+            5 => FitFieldNapPeriodFeedback::JetlagLateTimingLongDuration,
+            6 => FitFieldNapPeriodFeedback::IdealTimingIdealDurationLowNeed,
+            7 => FitFieldNapPeriodFeedback::IdealTimingIdealDurationHighNeed,
+            8 => FitFieldNapPeriodFeedback::IdealTimingLongDurationLowNeed,
+            9 => FitFieldNapPeriodFeedback::IdealTimingLongDurationHighNeed,
+            10 => FitFieldNapPeriodFeedback::LateTimingIdealDurationLowNeed,
+            11 => FitFieldNapPeriodFeedback::LateTimingIdealDurationHighNeed,
+            12 => FitFieldNapPeriodFeedback::LateTimingLongDurationLowNeed,
+            13 => FitFieldNapPeriodFeedback::LateTimingLongDurationHighNeed,
+            14 => FitFieldNapPeriodFeedback::IdealDurationLowNeed,
+            15 => FitFieldNapPeriodFeedback::IdealDurationHighNeed,
+            16 => FitFieldNapPeriodFeedback::LongDurationLowNeed,
+            17 => FitFieldNapPeriodFeedback::LongDurationHighNeed,
+            _ => FitFieldNapPeriodFeedback::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum FitFieldNapSource { // fit base type: enum
+    Automatic = 0,
+    ManualDevice = 1,
+    ManualGc = 2,
+    InvalidFieldValue = -1,
+    UnknownToSdk = -2,
+}
+
+impl fmt::Display for FitFieldNapSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FitFieldNapSource::Automatic => write!(f, "{}", "Automatic"),
+            FitFieldNapSource::ManualDevice => write!(f, "{}", "ManualDevice"),
+            FitFieldNapSource::ManualGc => write!(f, "{}", "ManualGc"),
+            FitFieldNapSource::InvalidFieldValue => write!(f, "InvalidFieldValue"),
+            FitFieldNapSource::UnknownToSdk => write!(f, "UnknownToSdk")
+        }
+    }
+}
+
+impl FitFieldParseable for FitFieldNapSource {
+    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldNapSource> {
+        let val = parse_enum(input, parse_config);
+        match val {
+            Ok(v) => Ok(FitFieldNapSource::from(v)),
+            Err(_) => Ok(FitFieldNapSource::InvalidFieldValue)
+        }
+    }
+}
+
+vec_fit_field_parseable!(FitFieldNapSource);
+
+
+impl From<u8> for FitFieldNapSource {
+    fn from(code: u8) -> Self {
+        match code {
+            0 => FitFieldNapSource::Automatic,
+            1 => FitFieldNapSource::ManualDevice,
+            2 => FitFieldNapSource::ManualGc,
+            _ => FitFieldNapSource::UnknownToSdk,
+        }
+    }
+}
+
+
+
+
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum FitFieldMaxMetSpeedSource { // fit base type: enum
     OnboardGps = 0,
     ConnectedGps = 1,
@@ -20199,6 +24365,261 @@ impl From<u8> for FitFieldNoFlyTimeMode {
         }
     }
 }
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageAadAccelFeatures {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub time: FitFieldBasicValue<FitUint16>,  // Time interval length in seconds
+    pub energy_total: FitFieldBasicValue<FitUint32>,  // Total accelerometer energy in the interval
+    pub zero_cross_cnt: FitFieldBasicValue<FitUint16>,  // Count of zero crossings
+    pub instance: FitFieldBasicValue<FitUint8>,  // Instance ID of zero crossing algorithm
+    pub time_above_threshold: FitFieldAdjustedValue<FitUint16>,  // Total accelerometer time above threshold in the interval
+    
+}
+
+impl fmt::Display for FitMessageAadAccelFeatures {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageAadAccelFeatures")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.time, "time", f);
+        fmt_message_field!(self.energy_total, "energy_total", f);
+        fmt_message_field!(self.zero_cross_cnt, "zero_cross_cnt", f);
+        fmt_message_field!(self.instance, "instance", f);
+        fmt_message_field!(self.time_above_threshold, "time_above_threshold", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageAadAccelFeatures {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "time",
+            1 => "energy_total",
+            2 => "zero_cross_cnt",
+            3 => "instance",
+            4 => "time_above_threshold",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageAadAccelFeatures>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageAadAccelFeatures {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageAadAccelFeatures",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            time: FitFieldBasicValue::new_single("s".to_string()),
+            energy_total: FitFieldBasicValue::new_single("".to_string()),
+            zero_cross_cnt: FitFieldBasicValue::new_single("".to_string()),
+            instance: FitFieldBasicValue::new_single("".to_string()),
+            time_above_threshold: FitFieldAdjustedValue::new_single("s".to_string(), 25.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageAadAccelFeatures).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // time
+                self.time.parse(parse_input, parse_config)?
+                },
+        1 => {  // energy_total
+                self.energy_total.parse(parse_input, parse_config)?
+                },
+        2 => {  // zero_cross_cnt
+                self.zero_cross_cnt.parse(parse_input, parse_config)?
+                },
+        3 => {  // instance
+                self.instance.parse(parse_input, parse_config)?
+                },
+        4 => {  // time_above_threshold
+                self.time_above_threshold.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageAadAccelFeatures {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageAadAccelFeatures";
+    }
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageAccelerometerData {
     header: FitRecordHeader,
@@ -23698,6 +28119,509 @@ impl FitRecord for FitMessageCapabilities {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageChronoShotData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub shot_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub shot_num: FitFieldBasicValue<FitUint16>,  
+    
+}
+
+impl fmt::Display for FitMessageChronoShotData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageChronoShotData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.shot_speed, "shot_speed", f);
+        fmt_message_field!(self.shot_num, "shot_num", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageChronoShotData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "shot_speed",
+            1 => "shot_num",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageChronoShotData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageChronoShotData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageChronoShotData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            shot_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            shot_num: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageChronoShotData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // shot_speed
+                self.shot_speed.parse(parse_input, parse_config)?
+                },
+        1 => {  // shot_num
+                self.shot_num.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageChronoShotData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageChronoShotData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageChronoShotSession {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub min_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub max_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub avg_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub shot_count: FitFieldBasicValue<FitUint16>,  
+    pub projectile_type: FitFieldBasicValue<FitFieldProjectileType>,  
+    pub grain_weight: FitFieldAdjustedValue<FitUint32>,  
+    pub standard_deviation: FitFieldAdjustedValue<FitUint32>,  
+    
+}
+
+impl fmt::Display for FitMessageChronoShotSession {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageChronoShotSession")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.min_speed, "min_speed", f);
+        fmt_message_field!(self.max_speed, "max_speed", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
+        fmt_message_field!(self.shot_count, "shot_count", f);
+        fmt_message_field!(self.projectile_type, "projectile_type", f);
+        fmt_message_field!(self.grain_weight, "grain_weight", f);
+        fmt_message_field!(self.standard_deviation, "standard_deviation", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageChronoShotSession {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "min_speed",
+            1 => "max_speed",
+            2 => "avg_speed",
+            3 => "shot_count",
+            4 => "projectile_type",
+            5 => "grain_weight",
+            6 => "standard_deviation",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageChronoShotSession>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageChronoShotSession {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageChronoShotSession",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            min_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            max_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            avg_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            shot_count: FitFieldBasicValue::new_single("".to_string()),
+            projectile_type: FitFieldBasicValue::new_single("".to_string()),
+            grain_weight: FitFieldAdjustedValue::new_single("gr".to_string(), 10.0, 0.0),
+            standard_deviation: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageChronoShotSession).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // min_speed
+                self.min_speed.parse(parse_input, parse_config)?
+                },
+        1 => {  // max_speed
+                self.max_speed.parse(parse_input, parse_config)?
+                },
+        2 => {  // avg_speed
+                self.avg_speed.parse(parse_input, parse_config)?
+                },
+        3 => {  // shot_count
+                self.shot_count.parse(parse_input, parse_config)?
+                },
+        4 => {  // projectile_type
+                self.projectile_type.parse(parse_input, parse_config)?
+                },
+        5 => {  // grain_weight
+                self.grain_weight.parse(parse_input, parse_config)?
+                },
+        6 => {  // standard_deviation
+                self.standard_deviation.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageChronoShotSession {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageChronoShotSession";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageClimbPro {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -25237,9 +30161,9 @@ impl FitRecord for FitMessageDeviceAuxBatteryInfo {
 pub enum FitMessageDeviceInfoSubfieldDeviceType {
     NotYetParsed,
     Default(FitUint8),
+    AntplusDeviceType(FitFieldAntplusDeviceType),
     AntDeviceType(FitUint8),
     LocalDeviceType(FitFieldLocalDeviceType),
-    AntplusDeviceType(FitFieldAntplusDeviceType),
     BleDeviceType(FitFieldBleDeviceType),
 }
 
@@ -25311,8 +30235,8 @@ impl FitMessageDeviceInfoSubfieldDeviceType {
 pub enum FitMessageDeviceInfoSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageDeviceInfoSubfieldProduct {
@@ -27905,29 +32829,29 @@ impl FitRecord for FitMessageDiveSummary {
 pub enum FitMessageEventSubfieldData {
     NotYetParsed,
     Default(FitUint32),
-    VirtualPartnerSpeed(FitFloat64),
-    TimerTrigger(FitFieldTimerTrigger),
-    DistanceDurationAlert(FitFloat64),
-    CalorieDurationAlert(FitUint32),
-    PowerHighAlert(FitUint16),
-    CadLowAlert(FitUint16),
-    SpeedHighAlert(FitFloat64),
     SpeedLowAlert(FitFloat64),
-    CoursePointIndex(FitFieldMessageIndex),
-    FitnessEquipmentState(FitFieldFitnessEquipmentState),
-    HrLowAlert(FitUint8),
-    PowerLowAlert(FitUint16),
-    CommTimeout(FitFieldCommTimeoutType),
-    AutoActivityDetectDuration(FitUint16),
-    SportPoint(FitUint32),
-    DiveAlert(FitFieldDiveAlert),
-    RadarThreatAlert(FitUint32),
-    CadHighAlert(FitUint16),
-    TimeDurationAlert(FitFloat64),
-    RiderPosition(FitFieldRiderPositionType),
     HrHighAlert(FitUint8),
-    GearChangeData(FitUint32),
+    DistanceDurationAlert(FitFloat64),
+    PowerHighAlert(FitUint16),
+    VirtualPartnerSpeed(FitFloat64),
+    CadHighAlert(FitUint16),
+    HrLowAlert(FitUint8),
+    CommTimeout(FitFieldCommTimeoutType),
+    RiderPosition(FitFieldRiderPositionType),
+    DiveAlert(FitFieldDiveAlert),
+    FitnessEquipmentState(FitFieldFitnessEquipmentState),
+    SpeedHighAlert(FitFloat64),
+    CalorieDurationAlert(FitUint32),
+    TimeDurationAlert(FitFloat64),
+    SportPoint(FitUint32),
+    TimerTrigger(FitFieldTimerTrigger),
+    RadarThreatAlert(FitUint32),
+    CadLowAlert(FitUint16),
+    AutoActivityDetectDuration(FitUint16),
     BatteryLevel(FitFloat64),
+    PowerLowAlert(FitUint16),
+    GearChangeData(FitUint32),
+    CoursePointIndex(FitFieldMessageIndex),
 }
 
 impl FitMessageEventSubfieldData {
@@ -30626,8 +35550,8 @@ impl FitRecord for FitMessageFileCreator {
 pub enum FitMessageFileIdSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageFileIdSubfieldProduct {
@@ -33259,6 +38183,2657 @@ impl FitRecord for FitMessageHrvValue {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaAccelerometerData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub timestamp_ms: FitFieldBasicValue<FitUint16>,  // Millisecond resolution of the timestamp
+    pub sampling_interval: FitFieldBasicValue<FitUint16>,  // Sampling Interval in Milliseconds
+    pub accel_x: FitFieldAdjustedValue<FitSint16>,  // X-Axis Measurement
+    pub accel_y: FitFieldAdjustedValue<FitSint16>,  // Y-Axis Measurement
+    pub accel_z: FitFieldAdjustedValue<FitSint16>,  // Z-Axis Measurement
+    pub timestamp_32k: FitFieldBasicValue<FitUint32>,  // 32 kHz timestamp
+    
+}
+
+impl fmt::Display for FitMessageHsaAccelerometerData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaAccelerometerData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sampling_interval, "sampling_interval", f);
+        fmt_message_field!(self.accel_x, "accel_x", f);
+        fmt_message_field!(self.accel_y, "accel_y", f);
+        fmt_message_field!(self.accel_z, "accel_z", f);
+        fmt_message_field!(self.timestamp_32k, "timestamp_32k", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaAccelerometerData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sampling_interval",
+            2 => "accel_x",
+            3 => "accel_y",
+            4 => "accel_z",
+            5 => "timestamp_32k",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaAccelerometerData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaAccelerometerData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaAccelerometerData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            timestamp_ms: FitFieldBasicValue::new_single("ms".to_string()),
+            sampling_interval: FitFieldBasicValue::new_single("ms".to_string()),
+            accel_x: FitFieldAdjustedValue::new_vec("mG".to_string(), 1.024, 0.0),
+            accel_y: FitFieldAdjustedValue::new_vec("mG".to_string(), 1.024, 0.0),
+            accel_z: FitFieldAdjustedValue::new_vec("mG".to_string(), 1.024, 0.0),
+            timestamp_32k: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaAccelerometerData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // timestamp_ms
+                self.timestamp_ms.parse(parse_input, parse_config)?
+                },
+        1 => {  // sampling_interval
+                self.sampling_interval.parse(parse_input, parse_config)?
+                },
+        2 => {  // accel_x
+                self.accel_x.parse(parse_input, parse_config)?
+                },
+        3 => {  // accel_y
+                self.accel_y.parse(parse_input, parse_config)?
+                },
+        4 => {  // accel_z
+                self.accel_z.parse(parse_input, parse_config)?
+                },
+        5 => {  // timestamp_32k
+                self.timestamp_32k.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaAccelerometerData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaAccelerometerData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaBodyBatteryData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds
+    pub level: FitFieldBasicValue<FitSint8>,  // Body battery level: [0,100] Blank: -16
+    pub charged: FitFieldBasicValue<FitSint16>,  // Body battery charged value
+    pub uncharged: FitFieldBasicValue<FitSint16>,  // Body battery uncharged value
+    
+}
+
+impl fmt::Display for FitMessageHsaBodyBatteryData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaBodyBatteryData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.level, "level", f);
+        fmt_message_field!(self.charged, "charged", f);
+        fmt_message_field!(self.uncharged, "uncharged", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaBodyBatteryData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "level",
+            2 => "charged",
+            3 => "uncharged",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaBodyBatteryData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaBodyBatteryData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaBodyBatteryData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            level: FitFieldBasicValue::new_vec("percent".to_string()),
+            charged: FitFieldBasicValue::new_vec("".to_string()),
+            uncharged: FitFieldBasicValue::new_vec("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaBodyBatteryData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // level
+                self.level.parse(parse_input, parse_config)?
+                },
+        2 => {  // charged
+                self.charged.parse(parse_input, parse_config)?
+                },
+        3 => {  // uncharged
+                self.uncharged.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaBodyBatteryData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaBodyBatteryData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaConfigurationData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  // Encoded configuration data
+    pub data: FitFieldBasicValue<FitByte>,  // Encoded configuration data. Health SDK use only
+    pub data_size: FitFieldBasicValue<FitUint8>,  // Size in bytes of data field
+    
+}
+
+impl fmt::Display for FitMessageHsaConfigurationData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaConfigurationData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.data, "data", f);
+        fmt_message_field!(self.data_size, "data_size", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaConfigurationData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "data",
+            1 => "data_size",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaConfigurationData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaConfigurationData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaConfigurationData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            data: FitFieldBasicValue::new_single("".to_string()),
+            data_size: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaConfigurationData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // data
+                self.data.parse(parse_input, parse_config)?
+                },
+        1 => {  // data_size
+                self.data_size.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaConfigurationData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaConfigurationData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaEvent {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub event_id: FitFieldBasicValue<FitUint8>,  // Event ID. Health SDK use only
+    
+}
+
+impl fmt::Display for FitMessageHsaEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaEvent")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.event_id, "event_id", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaEvent {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "event_id",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaEvent>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaEvent {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaEvent",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            event_id: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaEvent).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // event_id
+                self.event_id.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaEvent {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaEvent";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaGyroscopeData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub timestamp_ms: FitFieldBasicValue<FitUint16>,  // Millisecond resolution of the timestamp
+    pub sampling_interval: FitFieldBasicValue<FitUint16>,  // Sampling Interval in 32 kHz timescale
+    pub gyro_x: FitFieldAdjustedValue<FitSint16>,  // X-Axis Measurement
+    pub gyro_y: FitFieldAdjustedValue<FitSint16>,  // Y-Axis Measurement
+    pub gyro_z: FitFieldAdjustedValue<FitSint16>,  // Z-Axis Measurement
+    pub timestamp_32k: FitFieldBasicValue<FitUint32>,  // 32 kHz timestamp
+    
+}
+
+impl fmt::Display for FitMessageHsaGyroscopeData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaGyroscopeData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.sampling_interval, "sampling_interval", f);
+        fmt_message_field!(self.gyro_x, "gyro_x", f);
+        fmt_message_field!(self.gyro_y, "gyro_y", f);
+        fmt_message_field!(self.gyro_z, "gyro_z", f);
+        fmt_message_field!(self.timestamp_32k, "timestamp_32k", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaGyroscopeData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "sampling_interval",
+            2 => "gyro_x",
+            3 => "gyro_y",
+            4 => "gyro_z",
+            5 => "timestamp_32k",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaGyroscopeData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaGyroscopeData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaGyroscopeData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            timestamp_ms: FitFieldBasicValue::new_single("ms".to_string()),
+            sampling_interval: FitFieldBasicValue::new_single("1/32768 s".to_string()),
+            gyro_x: FitFieldAdjustedValue::new_vec("deg/s".to_string(), 28.57143, 0.0),
+            gyro_y: FitFieldAdjustedValue::new_vec("deg/s".to_string(), 28.57143, 0.0),
+            gyro_z: FitFieldAdjustedValue::new_vec("deg/s".to_string(), 28.57143, 0.0),
+            timestamp_32k: FitFieldBasicValue::new_single("1/32768 s".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaGyroscopeData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // timestamp_ms
+                self.timestamp_ms.parse(parse_input, parse_config)?
+                },
+        1 => {  // sampling_interval
+                self.sampling_interval.parse(parse_input, parse_config)?
+                },
+        2 => {  // gyro_x
+                self.gyro_x.parse(parse_input, parse_config)?
+                },
+        3 => {  // gyro_y
+                self.gyro_y.parse(parse_input, parse_config)?
+                },
+        4 => {  // gyro_z
+                self.gyro_z.parse(parse_input, parse_config)?
+                },
+        5 => {  // timestamp_32k
+                self.timestamp_32k.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaGyroscopeData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaGyroscopeData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaHeartRateData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds
+    pub status: FitFieldBasicValue<FitUint8>,  // Status of measurements in buffer - 0 indicates SEARCHING 1 indicates LOCKED
+    pub heart_rate: FitFieldAdjustedValue<FitUint8>,  // Beats / min. Blank: 0
+    
+}
+
+impl fmt::Display for FitMessageHsaHeartRateData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaHeartRateData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.status, "status", f);
+        fmt_message_field!(self.heart_rate, "heart_rate", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaHeartRateData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "status",
+            2 => "heart_rate",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaHeartRateData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaHeartRateData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaHeartRateData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            status: FitFieldBasicValue::new_single("".to_string()),
+            heart_rate: FitFieldAdjustedValue::new_vec("bpm".to_string(), 1.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaHeartRateData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // status
+                self.status.parse(parse_input, parse_config)?
+                },
+        2 => {  // heart_rate
+                self.heart_rate.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaHeartRateData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaHeartRateData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaRespirationData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds
+    pub respiration_rate: FitFieldAdjustedValue<FitSint16>,  // Breaths / min: [1,100] Invalid: 255 Excess motion: 254 Off wrist: 253 Not available: 252 Blank: 2.4
+    
+}
+
+impl fmt::Display for FitMessageHsaRespirationData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaRespirationData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.respiration_rate, "respiration_rate", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaRespirationData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "respiration_rate",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaRespirationData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaRespirationData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaRespirationData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            respiration_rate: FitFieldAdjustedValue::new_vec("breaths/min".to_string(), 100.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaRespirationData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // respiration_rate
+                self.respiration_rate.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaRespirationData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaRespirationData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaSpo2Data {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds
+    pub reading_spo2: FitFieldBasicValue<FitUint8>,  // SpO2 Reading: [70,100] Blank: 240
+    pub confidence: FitFieldBasicValue<FitUint8>,  // SpO2 Confidence: [0,254]
+    
+}
+
+impl fmt::Display for FitMessageHsaSpo2Data {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaSpo2Data")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.reading_spo2, "reading_spo2", f);
+        fmt_message_field!(self.confidence, "confidence", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaSpo2Data {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "reading_spo2",
+            2 => "confidence",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaSpo2Data>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaSpo2Data {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaSpo2Data",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            reading_spo2: FitFieldBasicValue::new_vec("percent".to_string()),
+            confidence: FitFieldBasicValue::new_vec("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaSpo2Data).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // reading_spo2
+                self.reading_spo2.parse(parse_input, parse_config)?
+                },
+        2 => {  // confidence
+                self.confidence.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaSpo2Data {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaSpo2Data";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaStepData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds. File start: 0xFFFFFFEF File stop: 0xFFFFFFEE
+    pub steps: FitFieldAdjustedValue<FitUint32>,  // Total step sum
+    
+}
+
+impl fmt::Display for FitMessageHsaStepData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaStepData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.steps, "steps", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaStepData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "steps",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaStepData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaStepData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaStepData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            steps: FitFieldAdjustedValue::new_vec("steps".to_string(), 1.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaStepData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // steps
+                self.steps.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaStepData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaStepData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaStressData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds
+    pub stress_level: FitFieldAdjustedValue<FitSint8>,  // Stress Level: [0,100] Off wrist: -1 Excess motion: -2 Not enough data: -3 Recovering from exercise: -4 Unidentified: -5 Blank: -16
+    
+}
+
+impl fmt::Display for FitMessageHsaStressData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaStressData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.stress_level, "stress_level", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaStressData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "stress_level",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaStressData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaStressData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaStressData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            stress_level: FitFieldAdjustedValue::new_vec("s".to_string(), 1.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaStressData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // stress_level
+                self.stress_level.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaStressData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaStressData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageHsaWristTemperatureData {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub processing_interval: FitFieldBasicValue<FitUint16>,  // Processing interval length in seconds
+    pub value: FitFieldAdjustedValue<FitUint16>,  // Wrist temperature reading
+    
+}
+
+impl fmt::Display for FitMessageHsaWristTemperatureData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageHsaWristTemperatureData")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.processing_interval, "processing_interval", f);
+        fmt_message_field!(self.value, "value", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageHsaWristTemperatureData {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "processing_interval",
+            1 => "value",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageHsaWristTemperatureData>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageHsaWristTemperatureData {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageHsaWristTemperatureData",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            processing_interval: FitFieldBasicValue::new_single("s".to_string()),
+            value: FitFieldAdjustedValue::new_vec("C".to_string(), 1000.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageHsaWristTemperatureData).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // processing_interval
+                self.processing_interval.parse(parse_input, parse_config)?
+                },
+        1 => {  // value
+                self.value.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageHsaWristTemperatureData {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageHsaWristTemperatureData";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageJump {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -33721,7 +41296,7 @@ pub struct FitMessageLap {
     pub subfield_field_numbers: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
-    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  // Lap end time.
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
     pub event: FitFieldBasicValue<FitFieldEvent>,  
     pub event_type: FitFieldBasicValue<FitFieldEventType>,  
     pub start_time: FitFieldBasicValue<FitFieldDateTime>,  
@@ -33783,6 +41358,7 @@ pub struct FitMessageLap {
     pub repetition_num: FitFieldBasicValue<FitUint16>,  
     pub min_altitude: FitFieldAdjustedValue<FitUint16>,  
     pub min_heart_rate: FitFieldBasicValue<FitUint8>,  
+    pub active_time: FitFieldAdjustedValue<FitUint32>,  
     pub wkt_step_index: FitFieldBasicValue<FitFieldMessageIndex>,  
     pub opponent_score: FitFieldBasicValue<FitUint16>,  
     pub stroke_count: FitFieldBasicValue<FitUint16>,  // stroke_type enum used as the index
@@ -33915,6 +41491,7 @@ impl fmt::Display for FitMessageLap {
         fmt_message_field!(self.repetition_num, "repetition_num", f);
         fmt_message_field!(self.min_altitude, "min_altitude", f);
         fmt_message_field!(self.min_heart_rate, "min_heart_rate", f);
+        fmt_message_field!(self.active_time, "active_time", f);
         fmt_message_field!(self.wkt_step_index, "wkt_step_index", f);
         fmt_message_field!(self.opponent_score, "opponent_score", f);
         fmt_message_field!(self.stroke_count, "stroke_count", f);
@@ -34051,6 +41628,7 @@ impl FitMessageLap {
             61 => "repetition_num",
             62 => "min_altitude",
             63 => "min_heart_rate",
+            70 => "active_time",
             71 => "wkt_step_index",
             74 => "opponent_score",
             75 => "stroke_count",
@@ -34192,6 +41770,7 @@ impl FitMessageLap {
             repetition_num: FitFieldBasicValue::new_single("".to_string()),
             min_altitude: FitFieldAdjustedValue::new_single("m".to_string(), 5.0, 500.0).add_components(vec![FitParseConfig::new_from_component(113, 4, 134, endianness, 0, 16, Some((5.0, 500.0)), Some("m".to_string()))?]),
             min_heart_rate: FitFieldBasicValue::new_single("bpm".to_string()),
+            active_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
             wkt_step_index: FitFieldBasicValue::new_single("".to_string()),
             opponent_score: FitFieldBasicValue::new_single("".to_string()),
             stroke_count: FitFieldBasicValue::new_vec("counts".to_string()),
@@ -34546,6 +42125,9 @@ impl FitMessageLap {
                 },
         63 => {  // min_heart_rate
                 self.min_heart_rate.parse(parse_input, parse_config)?
+                },
+        70 => {  // active_time
+                self.active_time.parse(parse_input, parse_config)?
                 },
         71 => {  // wkt_step_index
                 self.wkt_step_index.parse(parse_input, parse_config)?
@@ -36670,6 +44252,7 @@ pub struct FitMessageMonitoring {
     pub descent: FitFieldAdjustedValue<FitUint32>,  
     pub moderate_activity_minutes: FitFieldBasicValue<FitUint16>,  
     pub vigorous_activity_minutes: FitFieldBasicValue<FitUint16>,  
+    pub pushes: FitFieldBasicValue<FitUint32>,  // Wheelchair Pushes
     
 }
 
@@ -36706,6 +44289,7 @@ impl fmt::Display for FitMessageMonitoring {
         fmt_message_field!(self.descent, "descent", f);
         fmt_message_field!(self.moderate_activity_minutes, "moderate_activity_minutes", f);
         fmt_message_field!(self.vigorous_activity_minutes, "vigorous_activity_minutes", f);
+        fmt_message_field!(self.pushes, "pushes", f);
         
             
         fmt_unknown_fields!(self, f);
@@ -36748,6 +44332,7 @@ impl FitMessageMonitoring {
             32 => "descent",
             33 => "moderate_activity_minutes",
             34 => "vigorous_activity_minutes",
+            41 => "pushes",
             _ => "unknown"
         }
     }
@@ -36793,6 +44378,7 @@ impl FitMessageMonitoring {
             descent: FitFieldAdjustedValue::new_single("m".to_string(), 1000.0, 0.0),
             moderate_activity_minutes: FitFieldBasicValue::new_single("minutes".to_string()),
             vigorous_activity_minutes: FitFieldBasicValue::new_single("minutes".to_string()),
+            pushes: FitFieldBasicValue::new_single("".to_string()),
             
         };
 
@@ -36989,6 +44575,9 @@ impl FitMessageMonitoring {
                 },
         34 => {  // vigorous_activity_minutes
                 self.vigorous_activity_minutes.parse(parse_input, parse_config)?
+                },
+        41 => {  // pushes
+                self.pushes.parse(parse_input, parse_config)?
                 },
         
             unknown_field_num => {
@@ -37575,6 +45164,289 @@ impl FitMessageMonitoringInfo {
 impl FitRecord for FitMessageMonitoringInfo {
     fn message_name(&self) -> &'static str {
         return "FitMessageMonitoringInfo";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageNapEvent {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub start_time: FitFieldBasicValue<FitFieldDateTime>,  
+    pub start_timezone_offset: FitFieldBasicValue<FitSint16>,  
+    pub end_time: FitFieldBasicValue<FitFieldDateTime>,  
+    pub end_timezone_offset: FitFieldBasicValue<FitSint16>,  
+    pub feedback: FitFieldBasicValue<FitFieldNapPeriodFeedback>,  
+    pub is_deleted: FitFieldBasicValue<FitBool>,  
+    pub source: FitFieldBasicValue<FitFieldNapSource>,  
+    pub update_timestamp: FitFieldBasicValue<FitFieldDateTime>,  // The timestamp representing when this nap event was last updated
+    
+}
+
+impl fmt::Display for FitMessageNapEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageNapEvent")?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.start_timezone_offset, "start_timezone_offset", f);
+        fmt_message_field!(self.end_time, "end_time", f);
+        fmt_message_field!(self.end_timezone_offset, "end_timezone_offset", f);
+        fmt_message_field!(self.feedback, "feedback", f);
+        fmt_message_field!(self.is_deleted, "is_deleted", f);
+        fmt_message_field!(self.source, "source", f);
+        fmt_message_field!(self.update_timestamp, "update_timestamp", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageNapEvent {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "start_time",
+            1 => "start_timezone_offset",
+            2 => "end_time",
+            3 => "end_timezone_offset",
+            4 => "feedback",
+            5 => "is_deleted",
+            6 => "source",
+            7 => "update_timestamp",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageNapEvent>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageNapEvent {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageNapEvent",
+            message_index: FitFieldBasicValue::new_single("".to_string()),
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            start_time: FitFieldBasicValue::new_single("".to_string()),
+            start_timezone_offset: FitFieldBasicValue::new_single("minutes".to_string()),
+            end_time: FitFieldBasicValue::new_single("".to_string()),
+            end_timezone_offset: FitFieldBasicValue::new_single("minutes".to_string()),
+            feedback: FitFieldBasicValue::new_single("".to_string()),
+            is_deleted: FitFieldBasicValue::new_single("".to_string()),
+            source: FitFieldBasicValue::new_single("".to_string()),
+            update_timestamp: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageNapEvent).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        254 => {  // message_index
+                self.message_index.parse(parse_input, parse_config)?
+                },
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // start_time
+                self.start_time.parse(parse_input, parse_config)?
+                },
+        1 => {  // start_timezone_offset
+                self.start_timezone_offset.parse(parse_input, parse_config)?
+                },
+        2 => {  // end_time
+                self.end_time.parse(parse_input, parse_config)?
+                },
+        3 => {  // end_timezone_offset
+                self.end_timezone_offset.parse(parse_input, parse_config)?
+                },
+        4 => {  // feedback
+                self.feedback.parse(parse_input, parse_config)?
+                },
+        5 => {  // is_deleted
+                self.is_deleted.parse(parse_input, parse_config)?
+                },
+        6 => {  // source
+                self.source.parse(parse_input, parse_config)?
+                },
+        7 => {  // update_timestamp
+                self.update_timestamp.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageNapEvent {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageNapEvent";
     }
 }
 
@@ -38873,6 +46745,261 @@ impl FitRecord for FitMessagePowerZone {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageRawBbi {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub timestamp_ms: FitFieldBasicValue<FitUint16>,  // Millisecond resolution of the timestamp
+    pub data: FitFieldBasicValue<FitUint16>,  // 1 bit for gap indicator, 1 bit for quality indicator, and 14 bits for Beat-to-Beat interval values in whole-integer millisecond resolution
+    pub time: FitFieldBasicValue<FitUint16>,  // Array of millisecond times between beats
+    pub quality: FitFieldBasicValue<FitUint8>,  // 1 = high confidence. 0 = low confidence. N/A when gap = 1
+    pub gap: FitFieldBasicValue<FitUint8>,  // 1 = gap (time represents ms gap length). 0 = BBI data
+    
+}
+
+impl fmt::Display for FitMessageRawBbi {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageRawBbi")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.timestamp_ms, "timestamp_ms", f);
+        fmt_message_field!(self.data, "data", f);
+        fmt_message_field!(self.time, "time", f);
+        fmt_message_field!(self.quality, "quality", f);
+        fmt_message_field!(self.gap, "gap", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageRawBbi {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "timestamp_ms",
+            1 => "data",
+            2 => "time",
+            3 => "quality",
+            4 => "gap",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageRawBbi>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        let endianness = definition_message.endianness;
+        let message = FitMessageRawBbi {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageRawBbi",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            timestamp_ms: FitFieldBasicValue::new_single("ms".to_string()),
+            data: FitFieldBasicValue::new_vec("".to_string()).add_components(vec![FitParseConfig::new_from_component(2, 2, 132, endianness, 0, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 14, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 15, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 16, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 30, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 31, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 32, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 46, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 47, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 48, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 62, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 63, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 64, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 78, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 79, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 80, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 94, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 95, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 96, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 110, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 111, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 112, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 126, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 127, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 128, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 142, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 143, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 144, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 158, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 159, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 160, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 174, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 175, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 176, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 190, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 191, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 192, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 206, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 207, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 208, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 222, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 223, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(2, 2, 132, endianness, 224, 14, None, Some("".to_string()))?,FitParseConfig::new_from_component(3, 1, 2, endianness, 238, 1, None, Some("".to_string()))?,FitParseConfig::new_from_component(4, 1, 2, endianness, 239, 1, None, Some("".to_string()))?]),
+            time: FitFieldBasicValue::new_vec("ms".to_string()),
+            quality: FitFieldBasicValue::new_vec("".to_string()),
+            gap: FitFieldBasicValue::new_vec("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageRawBbi).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // timestamp_ms
+                self.timestamp_ms.parse(parse_input, parse_config)?
+                },
+        1 => {  // data
+                self.data.parse(parse_input, parse_config)?
+                },
+        2 => {  // time
+                self.time.parse(parse_input, parse_config)?
+                },
+        3 => {  // quality
+                self.quality.parse(parse_input, parse_config)?
+                },
+        4 => {  // gap
+                self.gap.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageRawBbi {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageRawBbi";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageRecord {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -39904,8 +48031,8 @@ impl FitRecord for FitMessageRespirationRate {
 pub enum FitMessageScheduleSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageScheduleSubfieldProduct {
@@ -41108,7 +49235,7 @@ pub struct FitMessageSegmentLap {
     pub subfield_field_numbers: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
-    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  // Lap end time.
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
     pub event: FitFieldBasicValue<FitFieldEvent>,  
     pub event_type: FitFieldBasicValue<FitFieldEventType>,  
     pub start_time: FitFieldBasicValue<FitFieldDateTime>,  
@@ -42523,6 +50650,8 @@ pub enum FitMessageSessionSubfieldTotalCycles {
     NotYetParsed,
     Default(FitUint32),
     TotalStrokes(FitUint32),
+    TotalPushes(FitUint32),
+    TotalReps(FitUint32),
     TotalStrides(FitUint32),
 }
 
@@ -42532,6 +50661,17 @@ impl FitMessageSessionSubfieldTotalCycles {
         
         if message.sport.is_parsed() {
             match message.sport.get_single()? {
+            
+                FitFieldSport::Hiit => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("reps".to_string());
+                    parser.parse(inp, parse_config)?;
+                    
+                    let val = parser.get_single()?;
+                    
+                    let new_actions: Vec<FitParseConfig> = vec![].iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
+                    
+                    return Ok((FitMessageSessionSubfieldTotalCycles::TotalReps(val), new_actions))
+                },
             
                 FitFieldSport::Running => {
                     let mut parser = FitFieldBasicValue::<FitUint32>::new_single("strides".to_string());
@@ -42597,6 +50737,46 @@ impl FitMessageSessionSubfieldTotalCycles {
                     let new_actions: Vec<FitParseConfig> = vec![].iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
                     
                     return Ok((FitMessageSessionSubfieldTotalCycles::TotalStrokes(val), new_actions))
+                },
+            
+                FitFieldSport::WheelchairPushRun => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("pushes".to_string());
+                    parser.parse(inp, parse_config)?;
+                    
+                    let val = parser.get_single()?;
+                    
+                    let new_actions: Vec<FitParseConfig> = vec![].iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
+                    
+                    return Ok((FitMessageSessionSubfieldTotalCycles::TotalPushes(val), new_actions))
+                },
+            
+                FitFieldSport::WheelchairPushWalk => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("pushes".to_string());
+                    parser.parse(inp, parse_config)?;
+                    
+                    let val = parser.get_single()?;
+                    
+                    let new_actions: Vec<FitParseConfig> = vec![].iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
+                    
+                    return Ok((FitMessageSessionSubfieldTotalCycles::TotalPushes(val), new_actions))
+                },
+            
+                _ => (),
+            }
+        } 
+        
+        if message.sub_sport.is_parsed() {
+            match message.sub_sport.get_single()? {
+            
+                FitFieldSubSport::StrengthTraining => {
+                    let mut parser = FitFieldBasicValue::<FitUint32>::new_single("reps".to_string());
+                    parser.parse(inp, parse_config)?;
+                    
+                    let val = parser.get_single()?;
+                    
+                    let new_actions: Vec<FitParseConfig> = vec![].iter().map(|action: &FitParseConfig| action.add_bytes_to_parse(&inp)).collect();
+                    
+                    return Ok((FitMessageSessionSubfieldTotalCycles::TotalReps(val), new_actions))
                 },
             
                 _ => (),
@@ -42698,7 +50878,7 @@ pub struct FitMessageSession {
     pub subfield_field_numbers: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  // Selected bit is set for the current session.
-    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  // Sesson end time.
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
     pub event: FitFieldBasicValue<FitFieldEvent>,  // session
     pub event_type: FitFieldBasicValue<FitFieldEventType>,  // stop
     pub start_time: FitFieldBasicValue<FitFieldDateTime>,  
@@ -42772,6 +50952,7 @@ pub struct FitMessageSession {
     pub avg_lap_time: FitFieldAdjustedValue<FitUint32>,  
     pub best_lap_index: FitFieldBasicValue<FitUint16>,  
     pub min_altitude: FitFieldAdjustedValue<FitUint16>,  
+    pub active_time: FitFieldAdjustedValue<FitUint32>,  
     pub player_score: FitFieldBasicValue<FitUint16>,  
     pub opponent_score: FitFieldBasicValue<FitUint16>,  
     pub opponent_name: FitFieldBasicValue<FitString>,  
@@ -42845,8 +51026,11 @@ pub struct FitMessageSession {
     pub jump_count: FitFieldBasicValue<FitUint16>,  
     pub avg_grit: FitFieldBasicValue<FitFloat32>,  // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.
     pub avg_flow: FitFieldBasicValue<FitFloat32>,  // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.
+    pub workout_feel: FitFieldBasicValue<FitUint8>,  // A 0-100 scale representing how a user felt while performing a workout. Low values are considered feeling bad, while high values are good.
+    pub workout_rpe: FitFieldBasicValue<FitUint8>,  // Common Borg CR10 / 0-10 RPE scale, multiplied 10x.. Aggregate score for all workouts in a single session.
     pub avg_spo2: FitFieldBasicValue<FitUint8>,  // Average SPO2 for the monitoring session
     pub avg_stress: FitFieldBasicValue<FitUint8>,  // Average stress for the monitoring session
+    pub metabolic_calories: FitFieldBasicValue<FitUint16>,  
     pub sdrr_hrv: FitFieldBasicValue<FitUint8>,  // Standard deviation of R-R interval (SDRR) - Heart rate variability measure most useful for wellness users.
     pub rmssd_hrv: FitFieldBasicValue<FitUint8>,  // Root mean square successive difference (RMSSD) - Heart rate variability measure most useful for athletes
     pub total_fractional_ascent: FitFieldAdjustedValue<FitUint8>,  // fractional part of total_ascent
@@ -42935,6 +51119,7 @@ impl fmt::Display for FitMessageSession {
         fmt_message_field!(self.avg_lap_time, "avg_lap_time", f);
         fmt_message_field!(self.best_lap_index, "best_lap_index", f);
         fmt_message_field!(self.min_altitude, "min_altitude", f);
+        fmt_message_field!(self.active_time, "active_time", f);
         fmt_message_field!(self.player_score, "player_score", f);
         fmt_message_field!(self.opponent_score, "opponent_score", f);
         fmt_message_field!(self.opponent_name, "opponent_name", f);
@@ -43008,8 +51193,11 @@ impl fmt::Display for FitMessageSession {
         fmt_message_field!(self.jump_count, "jump_count", f);
         fmt_message_field!(self.avg_grit, "avg_grit", f);
         fmt_message_field!(self.avg_flow, "avg_flow", f);
+        fmt_message_field!(self.workout_feel, "workout_feel", f);
+        fmt_message_field!(self.workout_rpe, "workout_rpe", f);
         fmt_message_field!(self.avg_spo2, "avg_spo2", f);
         fmt_message_field!(self.avg_stress, "avg_stress", f);
+        fmt_message_field!(self.metabolic_calories, "metabolic_calories", f);
         fmt_message_field!(self.sdrr_hrv, "sdrr_hrv", f);
         fmt_message_field!(self.rmssd_hrv, "rmssd_hrv", f);
         fmt_message_field!(self.total_fractional_ascent, "total_fractional_ascent", f);
@@ -43102,6 +51290,7 @@ impl FitMessageSession {
             69 => "avg_lap_time",
             70 => "best_lap_index",
             71 => "min_altitude",
+            78 => "active_time",
             82 => "player_score",
             83 => "opponent_score",
             84 => "opponent_name",
@@ -43175,8 +51364,11 @@ impl FitMessageSession {
             183 => "jump_count",
             186 => "avg_grit",
             187 => "avg_flow",
+            192 => "workout_feel",
+            193 => "workout_rpe",
             194 => "avg_spo2",
             195 => "avg_stress",
+            196 => "metabolic_calories",
             197 => "sdrr_hrv",
             198 => "rmssd_hrv",
             199 => "total_fractional_ascent",
@@ -43274,6 +51466,7 @@ impl FitMessageSession {
             avg_lap_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
             best_lap_index: FitFieldBasicValue::new_single("".to_string()),
             min_altitude: FitFieldAdjustedValue::new_single("m".to_string(), 5.0, 500.0).add_components(vec![FitParseConfig::new_from_component(127, 4, 134, endianness, 0, 16, Some((5.0, 500.0)), Some("m".to_string()))?]),
+            active_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
             player_score: FitFieldBasicValue::new_single("".to_string()),
             opponent_score: FitFieldBasicValue::new_single("".to_string()),
             opponent_name: FitFieldBasicValue::new_single("".to_string()),
@@ -43347,8 +51540,11 @@ impl FitMessageSession {
             jump_count: FitFieldBasicValue::new_single("".to_string()),
             avg_grit: FitFieldBasicValue::new_single("kGrit".to_string()),
             avg_flow: FitFieldBasicValue::new_single("Flow".to_string()),
+            workout_feel: FitFieldBasicValue::new_single("".to_string()),
+            workout_rpe: FitFieldBasicValue::new_single("".to_string()),
             avg_spo2: FitFieldBasicValue::new_single("percent".to_string()),
             avg_stress: FitFieldBasicValue::new_single("percent".to_string()),
+            metabolic_calories: FitFieldBasicValue::new_single("kcal".to_string()),
             sdrr_hrv: FitFieldBasicValue::new_single("mS".to_string()),
             rmssd_hrv: FitFieldBasicValue::new_single("mS".to_string()),
             total_fractional_ascent: FitFieldAdjustedValue::new_single("m".to_string(), 100.0, 0.0),
@@ -43684,6 +51880,9 @@ impl FitMessageSession {
         71 => {  // min_altitude
                 self.min_altitude.parse(parse_input, parse_config)?
                 },
+        78 => {  // active_time
+                self.active_time.parse(parse_input, parse_config)?
+                },
         82 => {  // player_score
                 self.player_score.parse(parse_input, parse_config)?
                 },
@@ -43903,11 +52102,20 @@ impl FitMessageSession {
         187 => {  // avg_flow
                 self.avg_flow.parse(parse_input, parse_config)?
                 },
+        192 => {  // workout_feel
+                self.workout_feel.parse(parse_input, parse_config)?
+                },
+        193 => {  // workout_rpe
+                self.workout_rpe.parse(parse_input, parse_config)?
+                },
         194 => {  // avg_spo2
                 self.avg_spo2.parse(parse_input, parse_config)?
                 },
         195 => {  // avg_stress
                 self.avg_stress.parse(parse_input, parse_config)?
+                },
+        196 => {  // metabolic_calories
+                self.metabolic_calories.parse(parse_input, parse_config)?
                 },
         197 => {  // sdrr_hrv
                 self.sdrr_hrv.parse(parse_input, parse_config)?
@@ -44331,12 +52539,260 @@ impl FitRecord for FitMessageSet {
     }
 }
 
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageSkinTempOvernight {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub local_timestamp: FitFieldBasicValue<FitFieldLocalDateTime>,  
+    pub average_deviation: FitFieldBasicValue<FitFloat32>,  // The average overnight deviation from baseline temperature in degrees C
+    pub average_7_day_deviation: FitFieldBasicValue<FitFloat32>,  // The average 7 day overnight deviation from baseline temperature in degrees C
+    pub nightly_value: FitFieldBasicValue<FitFloat32>,  // Final overnight temperature value
+    
+}
+
+impl fmt::Display for FitMessageSkinTempOvernight {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSkinTempOvernight")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.local_timestamp, "local_timestamp", f);
+        fmt_message_field!(self.average_deviation, "average_deviation", f);
+        fmt_message_field!(self.average_7_day_deviation, "average_7_day_deviation", f);
+        fmt_message_field!(self.nightly_value, "nightly_value", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageSkinTempOvernight {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "local_timestamp",
+            1 => "average_deviation",
+            2 => "average_7_day_deviation",
+            4 => "nightly_value",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageSkinTempOvernight>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageSkinTempOvernight {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageSkinTempOvernight",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            local_timestamp: FitFieldBasicValue::new_single("".to_string()),
+            average_deviation: FitFieldBasicValue::new_single("".to_string()),
+            average_7_day_deviation: FitFieldBasicValue::new_single("".to_string()),
+            nightly_value: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSkinTempOvernight).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // local_timestamp
+                self.local_timestamp.parse(parse_input, parse_config)?
+                },
+        1 => {  // average_deviation
+                self.average_deviation.parse(parse_input, parse_config)?
+                },
+        2 => {  // average_7_day_deviation
+                self.average_7_day_deviation.parse(parse_input, parse_config)?
+                },
+        4 => {  // nightly_value
+                self.nightly_value.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageSkinTempOvernight {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSkinTempOvernight";
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum FitMessageSlaveDeviceSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageSlaveDeviceSubfieldProduct {
@@ -44967,6 +53423,467 @@ impl FitMessageSleepAssessment {
 impl FitRecord for FitMessageSleepAssessment {
     fn message_name(&self) -> &'static str {
         return "FitMessageSleepAssessment";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageSleepDisruptionOvernightSeverity {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub severity: FitFieldBasicValue<FitFieldSleepDisruptionSeverity>,  
+    
+}
+
+impl fmt::Display for FitMessageSleepDisruptionOvernightSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSleepDisruptionOvernightSeverity")?;
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.severity, "severity", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageSleepDisruptionOvernightSeverity {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            253 => "timestamp",
+            0 => "severity",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageSleepDisruptionOvernightSeverity>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageSleepDisruptionOvernightSeverity {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageSleepDisruptionOvernightSeverity",
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            severity: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSleepDisruptionOvernightSeverity).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // severity
+                self.severity.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageSleepDisruptionOvernightSeverity {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSleepDisruptionOvernightSeverity";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageSleepDisruptionSeverityPeriod {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
+    pub timestamp: FitFieldBasicValue<FitFieldDateTime>,  
+    pub severity: FitFieldBasicValue<FitFieldSleepDisruptionSeverity>,  
+    
+}
+
+impl fmt::Display for FitMessageSleepDisruptionSeverityPeriod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSleepDisruptionSeverityPeriod")?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.timestamp, "timestamp", f);
+        fmt_message_field!(self.severity, "severity", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageSleepDisruptionSeverityPeriod {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            253 => "timestamp",
+            0 => "severity",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageSleepDisruptionSeverityPeriod>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageSleepDisruptionSeverityPeriod {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageSleepDisruptionSeverityPeriod",
+            message_index: FitFieldBasicValue::new_single("".to_string()),
+            timestamp: FitFieldBasicValue::new_single("".to_string()),
+            severity: FitFieldBasicValue::new_single("".to_string()),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSleepDisruptionSeverityPeriod).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+        match _timestamp {
+            Some(ts) => {
+                self.timestamp.value = BasicValue::Single(ts);
+            }
+            None => {
+                if self.timestamp.is_parsed() {
+                    let ts = self.timestamp.get_single()?;
+                    parsing_state.set_last_timestamp(ts);
+                }
+            }
+        }
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        254 => {  // message_index
+                self.message_index.parse(parse_input, parse_config)?
+                },
+        253 => {  // timestamp
+                self.timestamp.parse(parse_input, parse_config)?
+                },
+        0 => {  // severity
+                self.severity.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageSleepDisruptionSeverityPeriod {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSleepDisruptionSeverityPeriod";
     }
 }
 
@@ -45650,22 +54567,52 @@ pub struct FitMessageSplit {
     pub raw_bytes: Vec<u8>,
     pub subfield_field_numbers: Vec<u8>,
     pub message_name: &'static str,
+    pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
     pub split_type: FitFieldBasicValue<FitFieldSplitType>,  
     pub total_elapsed_time: FitFieldAdjustedValue<FitUint32>,  
     pub total_timer_time: FitFieldAdjustedValue<FitUint32>,  
     pub total_distance: FitFieldAdjustedValue<FitUint32>,  
+    pub avg_speed: FitFieldAdjustedValue<FitUint32>,  
     pub start_time: FitFieldBasicValue<FitFieldDateTime>,  
+    pub total_ascent: FitFieldBasicValue<FitUint16>,  
+    pub total_descent: FitFieldBasicValue<FitUint16>,  
+    pub start_position_lat: FitFieldAdjustedValue<FitSint32>,  
+    pub start_position_long: FitFieldAdjustedValue<FitSint32>,  
+    pub end_position_lat: FitFieldAdjustedValue<FitSint32>,  
+    pub end_position_long: FitFieldAdjustedValue<FitSint32>,  
+    pub max_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub avg_vert_speed: FitFieldAdjustedValue<FitSint32>,  
+    pub end_time: FitFieldBasicValue<FitFieldDateTime>,  
+    pub total_calories: FitFieldBasicValue<FitUint32>,  
+    pub start_elevation: FitFieldAdjustedValue<FitUint32>,  
+    pub active_time: FitFieldAdjustedValue<FitUint32>,  // Active time of split rounds
+    pub total_moving_time: FitFieldAdjustedValue<FitUint32>,  
     
 }
 
 impl fmt::Display for FitMessageSplit {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "FitMessageSplit")?;
+        fmt_message_field!(self.message_index, "message_index", f);
         fmt_message_field!(self.split_type, "split_type", f);
         fmt_message_field!(self.total_elapsed_time, "total_elapsed_time", f);
         fmt_message_field!(self.total_timer_time, "total_timer_time", f);
         fmt_message_field!(self.total_distance, "total_distance", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
         fmt_message_field!(self.start_time, "start_time", f);
+        fmt_message_field!(self.total_ascent, "total_ascent", f);
+        fmt_message_field!(self.total_descent, "total_descent", f);
+        fmt_message_field!(self.start_position_lat, "start_position_lat", f);
+        fmt_message_field!(self.start_position_long, "start_position_long", f);
+        fmt_message_field!(self.end_position_lat, "end_position_lat", f);
+        fmt_message_field!(self.end_position_long, "end_position_long", f);
+        fmt_message_field!(self.max_speed, "max_speed", f);
+        fmt_message_field!(self.avg_vert_speed, "avg_vert_speed", f);
+        fmt_message_field!(self.end_time, "end_time", f);
+        fmt_message_field!(self.total_calories, "total_calories", f);
+        fmt_message_field!(self.start_elevation, "start_elevation", f);
+        fmt_message_field!(self.active_time, "active_time", f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", f);
         
             
         fmt_unknown_fields!(self, f);
@@ -45679,11 +54626,26 @@ impl FitMessageSplit {
 
     pub fn field_name(field_number: u8) -> &'static str {
         match field_number {
+            254 => "message_index",
             0 => "split_type",
             1 => "total_elapsed_time",
             2 => "total_timer_time",
             3 => "total_distance",
+            4 => "avg_speed",
             9 => "start_time",
+            13 => "total_ascent",
+            14 => "total_descent",
+            21 => "start_position_lat",
+            22 => "start_position_long",
+            23 => "end_position_lat",
+            24 => "end_position_long",
+            25 => "max_speed",
+            26 => "avg_vert_speed",
+            27 => "end_time",
+            28 => "total_calories",
+            74 => "start_elevation",
+            78 => "active_time",
+            110 => "total_moving_time",
             _ => "unknown"
         }
     }
@@ -45699,11 +54661,26 @@ impl FitMessageSplit {
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             subfield_field_numbers: vec![],
             message_name: "FitMessageSplit",
+            message_index: FitFieldBasicValue::new_single("".to_string()),
             split_type: FitFieldBasicValue::new_single("".to_string()),
             total_elapsed_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
             total_timer_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
             total_distance: FitFieldAdjustedValue::new_single("m".to_string(), 100.0, 0.0),
+            avg_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
             start_time: FitFieldBasicValue::new_single("".to_string()),
+            total_ascent: FitFieldBasicValue::new_single("m".to_string()),
+            total_descent: FitFieldBasicValue::new_single("m".to_string()),
+            start_position_lat: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            start_position_long: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            end_position_lat: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            end_position_long: FitFieldAdjustedValue::new_single("deg".to_string(), 0.0, 0.0),
+            max_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            avg_vert_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            end_time: FitFieldBasicValue::new_single("".to_string()),
+            total_calories: FitFieldBasicValue::new_single("kcal".to_string()),
+            start_elevation: FitFieldAdjustedValue::new_single("m".to_string(), 5.0, 500.0),
+            active_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
+            total_moving_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
             
         };
 
@@ -45801,6 +54778,9 @@ impl FitMessageSplit {
 
         let new_actions = match parse_config.field_definition_number() {
 
+        254 => {  // message_index
+                self.message_index.parse(parse_input, parse_config)?
+                },
         0 => {  // split_type
                 self.split_type.parse(parse_input, parse_config)?
                 },
@@ -45813,8 +54793,50 @@ impl FitMessageSplit {
         3 => {  // total_distance
                 self.total_distance.parse(parse_input, parse_config)?
                 },
+        4 => {  // avg_speed
+                self.avg_speed.parse(parse_input, parse_config)?
+                },
         9 => {  // start_time
                 self.start_time.parse(parse_input, parse_config)?
+                },
+        13 => {  // total_ascent
+                self.total_ascent.parse(parse_input, parse_config)?
+                },
+        14 => {  // total_descent
+                self.total_descent.parse(parse_input, parse_config)?
+                },
+        21 => {  // start_position_lat
+                self.start_position_lat.parse(parse_input, parse_config)?
+                },
+        22 => {  // start_position_long
+                self.start_position_long.parse(parse_input, parse_config)?
+                },
+        23 => {  // end_position_lat
+                self.end_position_lat.parse(parse_input, parse_config)?
+                },
+        24 => {  // end_position_long
+                self.end_position_long.parse(parse_input, parse_config)?
+                },
+        25 => {  // max_speed
+                self.max_speed.parse(parse_input, parse_config)?
+                },
+        26 => {  // avg_vert_speed
+                self.avg_vert_speed.parse(parse_input, parse_config)?
+                },
+        27 => {  // end_time
+                self.end_time.parse(parse_input, parse_config)?
+                },
+        28 => {  // total_calories
+                self.total_calories.parse(parse_input, parse_config)?
+                },
+        74 => {  // start_elevation
+                self.start_elevation.parse(parse_input, parse_config)?
+                },
+        78 => {  // active_time
+                self.active_time.parse(parse_input, parse_config)?
+                },
+        110 => {  // total_moving_time
+                self.total_moving_time.parse(parse_input, parse_config)?
                 },
         
             unknown_field_num => {
@@ -45874,6 +54896,312 @@ impl FitMessageSplit {
 impl FitRecord for FitMessageSplit {
     fn message_name(&self) -> &'static str {
         return "FitMessageSplit";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageSplitSummary {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
+    pub split_type: FitFieldBasicValue<FitFieldSplitType>,  
+    pub num_splits: FitFieldBasicValue<FitUint16>,  
+    pub total_timer_time: FitFieldAdjustedValue<FitUint32>,  
+    pub total_distance: FitFieldAdjustedValue<FitUint32>,  
+    pub avg_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub max_speed: FitFieldAdjustedValue<FitUint32>,  
+    pub total_ascent: FitFieldBasicValue<FitUint16>,  
+    pub total_descent: FitFieldBasicValue<FitUint16>,  
+    pub avg_heart_rate: FitFieldBasicValue<FitUint8>,  
+    pub max_heart_rate: FitFieldBasicValue<FitUint8>,  
+    pub avg_vert_speed: FitFieldAdjustedValue<FitSint32>,  
+    pub total_calories: FitFieldBasicValue<FitUint32>,  
+    pub active_time: FitFieldAdjustedValue<FitUint32>,  // total active time in all split rounds
+    pub total_moving_time: FitFieldAdjustedValue<FitUint32>,  
+    
+}
+
+impl fmt::Display for FitMessageSplitSummary {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageSplitSummary")?;
+        fmt_message_field!(self.message_index, "message_index", f);
+        fmt_message_field!(self.split_type, "split_type", f);
+        fmt_message_field!(self.num_splits, "num_splits", f);
+        fmt_message_field!(self.total_timer_time, "total_timer_time", f);
+        fmt_message_field!(self.total_distance, "total_distance", f);
+        fmt_message_field!(self.avg_speed, "avg_speed", f);
+        fmt_message_field!(self.max_speed, "max_speed", f);
+        fmt_message_field!(self.total_ascent, "total_ascent", f);
+        fmt_message_field!(self.total_descent, "total_descent", f);
+        fmt_message_field!(self.avg_heart_rate, "avg_heart_rate", f);
+        fmt_message_field!(self.max_heart_rate, "max_heart_rate", f);
+        fmt_message_field!(self.avg_vert_speed, "avg_vert_speed", f);
+        fmt_message_field!(self.total_calories, "total_calories", f);
+        fmt_message_field!(self.active_time, "active_time", f);
+        fmt_message_field!(self.total_moving_time, "total_moving_time", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageSplitSummary {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            254 => "message_index",
+            0 => "split_type",
+            3 => "num_splits",
+            4 => "total_timer_time",
+            5 => "total_distance",
+            6 => "avg_speed",
+            7 => "max_speed",
+            8 => "total_ascent",
+            9 => "total_descent",
+            10 => "avg_heart_rate",
+            11 => "max_heart_rate",
+            12 => "avg_vert_speed",
+            13 => "total_calories",
+            65 => "active_time",
+            77 => "total_moving_time",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageSplitSummary>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageSplitSummary {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageSplitSummary",
+            message_index: FitFieldBasicValue::new_single("".to_string()),
+            split_type: FitFieldBasicValue::new_single("".to_string()),
+            num_splits: FitFieldBasicValue::new_single("".to_string()),
+            total_timer_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
+            total_distance: FitFieldAdjustedValue::new_single("m".to_string(), 100.0, 0.0),
+            avg_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            max_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            total_ascent: FitFieldBasicValue::new_single("m".to_string()),
+            total_descent: FitFieldBasicValue::new_single("m".to_string()),
+            avg_heart_rate: FitFieldBasicValue::new_single("bpm".to_string()),
+            max_heart_rate: FitFieldBasicValue::new_single("bpm".to_string()),
+            avg_vert_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            total_calories: FitFieldBasicValue::new_single("kcal".to_string()),
+            active_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
+            total_moving_time: FitFieldAdjustedValue::new_single("s".to_string(), 1000.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageSplitSummary).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        254 => {  // message_index
+                self.message_index.parse(parse_input, parse_config)?
+                },
+        0 => {  // split_type
+                self.split_type.parse(parse_input, parse_config)?
+                },
+        3 => {  // num_splits
+                self.num_splits.parse(parse_input, parse_config)?
+                },
+        4 => {  // total_timer_time
+                self.total_timer_time.parse(parse_input, parse_config)?
+                },
+        5 => {  // total_distance
+                self.total_distance.parse(parse_input, parse_config)?
+                },
+        6 => {  // avg_speed
+                self.avg_speed.parse(parse_input, parse_config)?
+                },
+        7 => {  // max_speed
+                self.max_speed.parse(parse_input, parse_config)?
+                },
+        8 => {  // total_ascent
+                self.total_ascent.parse(parse_input, parse_config)?
+                },
+        9 => {  // total_descent
+                self.total_descent.parse(parse_input, parse_config)?
+                },
+        10 => {  // avg_heart_rate
+                self.avg_heart_rate.parse(parse_input, parse_config)?
+                },
+        11 => {  // max_heart_rate
+                self.max_heart_rate.parse(parse_input, parse_config)?
+                },
+        12 => {  // avg_vert_speed
+                self.avg_vert_speed.parse(parse_input, parse_config)?
+                },
+        13 => {  // total_calories
+                self.total_calories.parse(parse_input, parse_config)?
+                },
+        65 => {  // active_time
+                self.active_time.parse(parse_input, parse_config)?
+                },
+        77 => {  // total_moving_time
+                self.total_moving_time.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageSplitSummary {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageSplitSummary";
     }
 }
 
@@ -47041,8 +56369,8 @@ impl FitRecord for FitMessageTankUpdate {
 pub enum FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
     NotYetParsed,
     Default(FitUint32),
-    AccelCalFactor(FitUint32),
     GyroCalFactor(FitUint32),
+    AccelCalFactor(FitUint32),
 }
 
 impl FitMessageThreeDSensorCalibrationSubfieldCalibrationFactor {
@@ -48272,8 +57600,8 @@ impl FitRecord for FitMessageTotals {
 pub enum FitMessageTrainingFileSubfieldProduct {
     NotYetParsed,
     Default(FitUint16),
-    GarminProduct(FitFieldGarminProduct),
     FaveroProduct(FitFieldFaveroProduct),
+    GarminProduct(FitFieldGarminProduct),
 }
 
 impl FitMessageTrainingFileSubfieldProduct {
@@ -48649,6 +57977,235 @@ impl FitRecord for FitMessageTrainingFile {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct FitMessageTrainingSettings {
+    header: FitRecordHeader,
+    definition_message: Arc<FitDefinitionMessage>,
+    developer_fields: Vec<FitFieldDeveloperData>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
+    pub raw_bytes: Vec<u8>,
+    pub subfield_field_numbers: Vec<u8>,
+    pub message_name: &'static str,
+    pub target_distance: FitFieldAdjustedValue<FitUint32>,  
+    pub target_speed: FitFieldAdjustedValue<FitUint16>,  
+    pub target_time: FitFieldBasicValue<FitUint32>,  
+    pub precise_target_speed: FitFieldAdjustedValue<FitUint32>,  // A more precise target speed field
+    
+}
+
+impl fmt::Display for FitMessageTrainingSettings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "FitMessageTrainingSettings")?;
+        fmt_message_field!(self.target_distance, "target_distance", f);
+        fmt_message_field!(self.target_speed, "target_speed", f);
+        fmt_message_field!(self.target_time, "target_time", f);
+        fmt_message_field!(self.precise_target_speed, "precise_target_speed", f);
+        
+            
+        fmt_unknown_fields!(self, f);
+        fmt_developer_fields!(self, f);
+        fmt_raw_bytes!(self, f);
+        Ok(())
+    }
+}
+
+impl FitMessageTrainingSettings {
+
+    pub fn field_name(field_number: u8) -> &'static str {
+        match field_number {
+            31 => "target_distance",
+            32 => "target_speed",
+            33 => "target_time",
+            153 => "precise_target_speed",
+            _ => "unknown"
+        }
+    }
+
+    pub fn new(header: FitRecordHeader, parsing_state: &FitParsingState) -> Result<Box<FitMessageTrainingSettings>> {
+        let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
+        
+        let message = FitMessageTrainingSettings {
+            header: header,
+            definition_message: Arc::clone(&definition_message),
+            developer_fields: vec![],
+            unknown_fields: BTreeMap::new(),
+            raw_bytes: Vec::with_capacity(definition_message.message_size),
+            subfield_field_numbers: vec![],
+            message_name: "FitMessageTrainingSettings",
+            target_distance: FitFieldAdjustedValue::new_single("m".to_string(), 100.0, 0.0),
+            target_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000.0, 0.0),
+            target_time: FitFieldBasicValue::new_single("s".to_string()),
+            precise_target_speed: FitFieldAdjustedValue::new_single("m/s".to_string(), 1000000.0, 0.0),
+            
+        };
+
+        Ok(Box::new(message))
+    }
+
+    fn parse_developer_fields<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &FitParsingState) -> Result<&'b [u8]> {
+        let mut inp = input;
+
+        for dev_field in &self.definition_message.developer_field_definitions {
+            let field_description = parsing_state.get_developer_field_description(dev_field.developer_data_index, dev_field.definition_number)?;
+
+            let base_type_num: u8 = match field_description.fit_base_type_id.get_single()? {
+                FitFieldFitBaseType::Enum => 0,
+                FitFieldFitBaseType::Sint8 => 1,
+                FitFieldFitBaseType::Uint8 => 2,
+                FitFieldFitBaseType::Sint16 => 131,
+                FitFieldFitBaseType::Uint16 => 132,
+                FitFieldFitBaseType::Sint32 => 133,
+                FitFieldFitBaseType::Uint32 => 134,
+                FitFieldFitBaseType::String => 7,
+                FitFieldFitBaseType::Float32 => 136,
+                FitFieldFitBaseType::Float64 => 137,
+                FitFieldFitBaseType::Uint8z => 10,
+                FitFieldFitBaseType::Uint16z => 139,
+                FitFieldFitBaseType::Uint32z => 140,
+                FitFieldFitBaseType::Byte => 13,
+                FitFieldFitBaseType::Sint64 => 142,
+                FitFieldFitBaseType::Uint64 => 143,
+                FitFieldFitBaseType::Uint64z => 144,
+                _ => return Err(errors::unknown_error()),
+            };
+
+            let def_num = <u8>::from(field_description.field_definition_number.get_single()?);
+
+            let parse_config = FitParseConfig::new(
+                FitFieldDefinition::new(def_num, dev_field.field_size, base_type_num)?,
+                self.definition_message.endianness,
+                0.0
+            );
+
+            let dd = FitFieldDeveloperData::parse(inp, field_description.clone(), &parse_config)?;
+            self.developer_fields.push(dd);
+            
+            // we can run out of input before all fields are consumed. according
+            // to the spec, buffering with zero-padded fields is appropriate
+            
+            if inp.len() < parse_config.field_size() {
+                inp = &inp[inp.len()..];
+            } else {
+                inp = &inp[parse_config.field_size()..];
+            }
+        }
+        Ok(inp)
+    }
+
+    fn parse<'a, 'b>(&'a mut self, input: &'b [u8], parsing_state: &mut FitParsingState, _timestamp: Option<FitFieldDateTime>) -> Result<&'b [u8]> {
+        let to_copy = &input[..self.definition_message.message_size];
+        let mut inp = input;
+
+        if parsing_state.retain_bytes == true {
+            self
+                .raw_bytes
+                .resize(self.definition_message.message_size, 0);
+            self.raw_bytes.copy_from_slice(to_copy);
+        }
+        let tz_offset = parsing_state.get_timezone_offset();
+        let outp = match self.parse_internal(inp, tz_offset) {
+            Ok(o) => o,
+            Err(e) => {
+                return Err(errors::message_parse_failed(
+                    stringify!(FitMessageTrainingSettings).to_string(), 
+                    self.definition_message.clone(),
+                    inp[..self.definition_message.message_size].to_vec(),
+                    e
+                ))
+            }
+        };
+        inp = outp;
+
+        
+
+        let inp = self.parse_developer_fields(inp, parsing_state)?;
+        Ok(inp)
+    }
+
+    fn parse_one_field<'a, 'b>(&'a mut self, input: &'b [u8], parse_config: &FitParseConfig) -> Result<Vec<FitParseConfig>> {
+        let alternate_input: Vec<u8>;
+        let mut parse_input = input;
+
+        if parse_config.use_stored_input() {
+            alternate_input = parse_config.get_stored_input()?;
+            parse_input = &alternate_input;
+        }
+
+        let new_actions = match parse_config.field_definition_number() {
+
+        31 => {  // target_distance
+                self.target_distance.parse(parse_input, parse_config)?
+                },
+        32 => {  // target_speed
+                self.target_speed.parse(parse_input, parse_config)?
+                },
+        33 => {  // target_time
+                self.target_time.parse(parse_input, parse_config)?
+                },
+        153 => {  // precise_target_speed
+                self.precise_target_speed.parse(parse_input, parse_config)?
+                },
+        
+            unknown_field_num => {
+                let val = FitBaseValue::parse(parse_input, parse_config)?;
+                self.unknown_fields.insert(unknown_field_num, val);
+                vec![]
+            }
+        };
+
+        Ok(new_actions)
+    }
+
+    
+
+    fn parse_internal<'a, 'b>(&'a mut self, input: &'b [u8], tz_offset: f64) -> Result<&'b [u8]> {
+        let mut inp = input;
+       
+        // first parse things according to the definitions, don't deep-parse the subfields
+        let mut actions = vec![];
+        for field in &self.definition_message.field_definitions {
+            actions.push(FitParseConfig::new(*field, self.definition_message.endianness, tz_offset));
+        }
+         
+
+        loop {
+            while actions.len() > 0 {
+                let this_action = actions.remove(0);
+                let mut new_actions = self.parse_one_field(inp, &this_action)?;
+                 
+                
+                // new actions here go to the front of the list
+                new_actions.reverse();
+                while new_actions.len() > 0 {
+                    actions.insert(0, new_actions.remove(0))
+                }
+
+                
+
+                if this_action.use_stored_input() == false {
+                    inp = &inp[this_action.field_size()..];
+                }
+                
+
+            }
+
+            
+
+            if actions.len() == 0 {
+                break;
+            }
+        }
+
+        Ok(inp)
+    }
+}
+
+impl FitRecord for FitMessageTrainingSettings {
+    fn message_name(&self) -> &'static str {
+        return "FitMessageTrainingSettings";
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct FitMessageUserProfile {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
@@ -48658,7 +58215,7 @@ pub struct FitMessageUserProfile {
     pub subfield_field_numbers: Vec<u8>,
     pub message_name: &'static str,
     pub message_index: FitFieldBasicValue<FitFieldMessageIndex>,  
-    pub friendly_name: FitFieldBasicValue<FitString>,  
+    pub friendly_name: FitFieldBasicValue<FitString>,  // Used for Morning Report greeting
     pub gender: FitFieldBasicValue<FitFieldGender>,  
     pub age: FitFieldBasicValue<FitUint8>,  
     pub height: FitFieldAdjustedValue<FitUint8>,  
@@ -50206,8 +59763,8 @@ impl FitRecord for FitMessageVideoTitle {
 pub enum FitMessageWatchfaceSettingsSubfieldLayout {
     NotYetParsed,
     Default(FitByte),
-    AnalogLayout(FitFieldAnalogWatchfaceLayout),
     DigitalLayout(FitFieldDigitalWatchfaceLayout),
+    AnalogLayout(FitFieldAnalogWatchfaceLayout),
 }
 
 impl FitMessageWatchfaceSettingsSubfieldLayout {
@@ -51424,6 +60981,7 @@ pub struct FitMessageWorkout {
     pub sub_sport: FitFieldBasicValue<FitFieldSubSport>,  
     pub pool_length: FitFieldAdjustedValue<FitUint16>,  
     pub pool_length_unit: FitFieldBasicValue<FitFieldDisplayMeasure>,  
+    pub wkt_description: FitFieldBasicValue<FitString>,  // Description of the workout
     
 }
 
@@ -51438,6 +60996,7 @@ impl fmt::Display for FitMessageWorkout {
         fmt_message_field!(self.sub_sport, "sub_sport", f);
         fmt_message_field!(self.pool_length, "pool_length", f);
         fmt_message_field!(self.pool_length_unit, "pool_length_unit", f);
+        fmt_message_field!(self.wkt_description, "wkt_description", f);
         
             
         fmt_unknown_fields!(self, f);
@@ -51459,6 +61018,7 @@ impl FitMessageWorkout {
             11 => "sub_sport",
             14 => "pool_length",
             15 => "pool_length_unit",
+            17 => "wkt_description",
             _ => "unknown"
         }
     }
@@ -51482,6 +61042,7 @@ impl FitMessageWorkout {
             sub_sport: FitFieldBasicValue::new_single("".to_string()),
             pool_length: FitFieldAdjustedValue::new_single("m".to_string(), 100.0, 0.0),
             pool_length_unit: FitFieldBasicValue::new_single("".to_string()),
+            wkt_description: FitFieldBasicValue::new_single("".to_string()),
             
         };
 
@@ -51602,6 +61163,9 @@ impl FitMessageWorkout {
                 },
         15 => {  // pool_length_unit
                 self.pool_length_unit.parse(parse_input, parse_config)?
+                },
+        17 => {  // wkt_description
+                self.wkt_description.parse(parse_input, parse_config)?
                 },
         
             unknown_field_num => {
@@ -51918,13 +61482,13 @@ impl FitRecord for FitMessageWorkoutSession {
 pub enum FitMessageWorkoutStepSubfieldDurationValue {
     NotYetParsed,
     Default(FitUint32),
-    DurationTime(FitFloat64),
-    DurationHr(FitFieldWorkoutHr),
+    DurationReps(FitUint32),
+    DurationStep(FitUint32),
     DurationPower(FitFieldWorkoutPower),
     DurationCalories(FitUint32),
-    DurationReps(FitUint32),
+    DurationTime(FitFloat64),
+    DurationHr(FitFieldWorkoutHr),
     DurationDistance(FitFloat64),
-    DurationStep(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldDurationValue {
@@ -52138,17 +61702,17 @@ impl FitMessageWorkoutStepSubfieldDurationValue {
 pub enum FitMessageWorkoutStepSubfieldTargetValue {
     NotYetParsed,
     Default(FitUint32),
-    RepeatDistance(FitFloat64),
+    TargetSpeedZone(FitUint32),
+    RepeatHr(FitFieldWorkoutHr),
     RepeatCalories(FitUint32),
     RepeatSteps(FitUint32),
-    RepeatHr(FitFieldWorkoutHr),
-    TargetSpeedZone(FitUint32),
+    RepeatPower(FitFieldWorkoutPower),
     RepeatTime(FitFloat64),
     TargetStrokeType(FitFieldSwimStroke),
-    TargetPowerZone(FitUint32),
-    RepeatPower(FitFieldWorkoutPower),
-    TargetHrZone(FitUint32),
     TargetCadenceZone(FitUint32),
+    TargetPowerZone(FitUint32),
+    RepeatDistance(FitFloat64),
+    TargetHrZone(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldTargetValue {
@@ -52325,10 +61889,10 @@ impl FitMessageWorkoutStepSubfieldTargetValue {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetCadenceLow(FitUint32),
-    CustomTargetHeartRateLow(FitFieldWorkoutHr),
-    CustomTargetPowerLow(FitFieldWorkoutPower),
     CustomTargetSpeedLow(FitFloat64),
+    CustomTargetHeartRateLow(FitFieldWorkoutHr),
+    CustomTargetCadenceLow(FitUint32),
+    CustomTargetPowerLow(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
@@ -52399,10 +61963,10 @@ impl FitMessageWorkoutStepSubfieldCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
-    CustomTargetPowerHigh(FitFieldWorkoutPower),
-    CustomTargetCadenceHigh(FitUint32),
-    CustomTargetSpeedHigh(FitFloat64),
     CustomTargetHeartRateHigh(FitFieldWorkoutHr),
+    CustomTargetSpeedHigh(FitFloat64),
+    CustomTargetCadenceHigh(FitUint32),
+    CustomTargetPowerHigh(FitFieldWorkoutPower),
 }
 
 impl FitMessageWorkoutStepSubfieldCustomTargetValueHigh {
@@ -52475,8 +62039,8 @@ pub enum FitMessageWorkoutStepSubfieldSecondaryTargetValue {
     Default(FitUint32),
     SecondaryTargetCadenceZone(FitUint32),
     SecondaryTargetHrZone(FitUint32),
-    SecondaryTargetStrokeType(FitFieldSwimStroke),
     SecondaryTargetPowerZone(FitUint32),
+    SecondaryTargetStrokeType(FitFieldSwimStroke),
     SecondaryTargetSpeedZone(FitUint32),
 }
 
@@ -52559,10 +62123,10 @@ impl FitMessageWorkoutStepSubfieldSecondaryTargetValue {
 pub enum FitMessageWorkoutStepSubfieldSecondaryCustomTargetValueLow {
     NotYetParsed,
     Default(FitUint32),
-    SecondaryCustomTargetHeartRateLow(FitFieldWorkoutHr),
-    SecondaryCustomTargetPowerLow(FitFieldWorkoutPower),
-    SecondaryCustomTargetCadenceLow(FitUint32),
     SecondaryCustomTargetSpeedLow(FitFloat64),
+    SecondaryCustomTargetPowerLow(FitFieldWorkoutPower),
+    SecondaryCustomTargetHeartRateLow(FitFieldWorkoutHr),
+    SecondaryCustomTargetCadenceLow(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldSecondaryCustomTargetValueLow {
@@ -52633,10 +62197,10 @@ impl FitMessageWorkoutStepSubfieldSecondaryCustomTargetValueLow {
 pub enum FitMessageWorkoutStepSubfieldSecondaryCustomTargetValueHigh {
     NotYetParsed,
     Default(FitUint32),
+    SecondaryCustomTargetCadenceHigh(FitUint32),
     SecondaryCustomTargetHeartRateHigh(FitFieldWorkoutHr),
     SecondaryCustomTargetSpeedHigh(FitFloat64),
     SecondaryCustomTargetPowerHigh(FitFieldWorkoutPower),
-    SecondaryCustomTargetCadenceHigh(FitUint32),
 }
 
 impl FitMessageWorkoutStepSubfieldSecondaryCustomTargetValueHigh {
@@ -53378,6 +62942,7 @@ impl FitRecord for FitMessageZonesTarget {
 #[derive(Debug)]
 pub enum FitDataMessage {
     
+    AadAccelFeatures(Box<FitMessageAadAccelFeatures>),
     AccelerometerData(Box<FitMessageAccelerometerData>),
     Activity(Box<FitMessageActivity>),
     AntChannelId(Box<FitMessageAntChannelId>),
@@ -53391,6 +62956,8 @@ pub enum FitDataMessage {
     CadenceZone(Box<FitMessageCadenceZone>),
     CameraEvent(Box<FitMessageCameraEvent>),
     Capabilities(Box<FitMessageCapabilities>),
+    ChronoShotData(Box<FitMessageChronoShotData>),
+    ChronoShotSession(Box<FitMessageChronoShotSession>),
     ClimbPro(Box<FitMessageClimbPro>),
     Connectivity(Box<FitMessageConnectivity>),
     Course(Box<FitMessageCourse>),
@@ -53423,6 +62990,17 @@ pub enum FitDataMessage {
     Hrv(Box<FitMessageHrv>),
     HrvStatusSummary(Box<FitMessageHrvStatusSummary>),
     HrvValue(Box<FitMessageHrvValue>),
+    HsaAccelerometerData(Box<FitMessageHsaAccelerometerData>),
+    HsaBodyBatteryData(Box<FitMessageHsaBodyBatteryData>),
+    HsaConfigurationData(Box<FitMessageHsaConfigurationData>),
+    HsaEvent(Box<FitMessageHsaEvent>),
+    HsaGyroscopeData(Box<FitMessageHsaGyroscopeData>),
+    HsaHeartRateData(Box<FitMessageHsaHeartRateData>),
+    HsaRespirationData(Box<FitMessageHsaRespirationData>),
+    HsaSpo2Data(Box<FitMessageHsaSpo2Data>),
+    HsaStepData(Box<FitMessageHsaStepData>),
+    HsaStressData(Box<FitMessageHsaStressData>),
+    HsaWristTemperatureData(Box<FitMessageHsaWristTemperatureData>),
     Jump(Box<FitMessageJump>),
     Lap(Box<FitMessageLap>),
     Length(Box<FitMessageLength>),
@@ -53434,11 +63012,13 @@ pub enum FitDataMessage {
     Monitoring(Box<FitMessageMonitoring>),
     MonitoringHrData(Box<FitMessageMonitoringHrData>),
     MonitoringInfo(Box<FitMessageMonitoringInfo>),
+    NapEvent(Box<FitMessageNapEvent>),
     NmeaSentence(Box<FitMessageNmeaSentence>),
     ObdiiData(Box<FitMessageObdiiData>),
     OhrSettings(Box<FitMessageOhrSettings>),
     OneDSensorCalibration(Box<FitMessageOneDSensorCalibration>),
     PowerZone(Box<FitMessagePowerZone>),
+    RawBbi(Box<FitMessageRawBbi>),
     Record(Box<FitMessageRecord>),
     RespirationRate(Box<FitMessageRespirationRate>),
     Schedule(Box<FitMessageSchedule>),
@@ -53450,12 +63030,16 @@ pub enum FitDataMessage {
     SegmentPoint(Box<FitMessageSegmentPoint>),
     Session(Box<FitMessageSession>),
     Set(Box<FitMessageSet>),
+    SkinTempOvernight(Box<FitMessageSkinTempOvernight>),
     SlaveDevice(Box<FitMessageSlaveDevice>),
     SleepAssessment(Box<FitMessageSleepAssessment>),
+    SleepDisruptionOvernightSeverity(Box<FitMessageSleepDisruptionOvernightSeverity>),
+    SleepDisruptionSeverityPeriod(Box<FitMessageSleepDisruptionSeverityPeriod>),
     SleepLevel(Box<FitMessageSleepLevel>),
     Software(Box<FitMessageSoftware>),
     SpeedZone(Box<FitMessageSpeedZone>),
     Split(Box<FitMessageSplit>),
+    SplitSummary(Box<FitMessageSplitSummary>),
     Spo2Data(Box<FitMessageSpo2Data>),
     Sport(Box<FitMessageSport>),
     StressLevel(Box<FitMessageStressLevel>),
@@ -53466,6 +63050,7 @@ pub enum FitDataMessage {
     TimestampCorrelation(Box<FitMessageTimestampCorrelation>),
     Totals(Box<FitMessageTotals>),
     TrainingFile(Box<FitMessageTrainingFile>),
+    TrainingSettings(Box<FitMessageTrainingSettings>),
     UserProfile(Box<FitMessageUserProfile>),
     Video(Box<FitMessageVideo>),
     VideoClip(Box<FitMessageVideoClip>),
@@ -53486,7 +63071,8 @@ pub enum FitDataMessage {
 
 impl fmt::Display for FitDataMessage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {FitDataMessage::AccelerometerData(m) => write!(f, "{}", m),
+        match self {FitDataMessage::AadAccelFeatures(m) => write!(f, "{}", m),
+            FitDataMessage::AccelerometerData(m) => write!(f, "{}", m),
             FitDataMessage::Activity(m) => write!(f, "{}", m),
             FitDataMessage::AntChannelId(m) => write!(f, "{}", m),
             FitDataMessage::AntRx(m) => write!(f, "{}", m),
@@ -53499,6 +63085,8 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::CadenceZone(m) => write!(f, "{}", m),
             FitDataMessage::CameraEvent(m) => write!(f, "{}", m),
             FitDataMessage::Capabilities(m) => write!(f, "{}", m),
+            FitDataMessage::ChronoShotData(m) => write!(f, "{}", m),
+            FitDataMessage::ChronoShotSession(m) => write!(f, "{}", m),
             FitDataMessage::ClimbPro(m) => write!(f, "{}", m),
             FitDataMessage::Connectivity(m) => write!(f, "{}", m),
             FitDataMessage::Course(m) => write!(f, "{}", m),
@@ -53531,6 +63119,17 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::Hrv(m) => write!(f, "{}", m),
             FitDataMessage::HrvStatusSummary(m) => write!(f, "{}", m),
             FitDataMessage::HrvValue(m) => write!(f, "{}", m),
+            FitDataMessage::HsaAccelerometerData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaBodyBatteryData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaConfigurationData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaEvent(m) => write!(f, "{}", m),
+            FitDataMessage::HsaGyroscopeData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaHeartRateData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaRespirationData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaSpo2Data(m) => write!(f, "{}", m),
+            FitDataMessage::HsaStepData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaStressData(m) => write!(f, "{}", m),
+            FitDataMessage::HsaWristTemperatureData(m) => write!(f, "{}", m),
             FitDataMessage::Jump(m) => write!(f, "{}", m),
             FitDataMessage::Lap(m) => write!(f, "{}", m),
             FitDataMessage::Length(m) => write!(f, "{}", m),
@@ -53542,11 +63141,13 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::Monitoring(m) => write!(f, "{}", m),
             FitDataMessage::MonitoringHrData(m) => write!(f, "{}", m),
             FitDataMessage::MonitoringInfo(m) => write!(f, "{}", m),
+            FitDataMessage::NapEvent(m) => write!(f, "{}", m),
             FitDataMessage::NmeaSentence(m) => write!(f, "{}", m),
             FitDataMessage::ObdiiData(m) => write!(f, "{}", m),
             FitDataMessage::OhrSettings(m) => write!(f, "{}", m),
             FitDataMessage::OneDSensorCalibration(m) => write!(f, "{}", m),
             FitDataMessage::PowerZone(m) => write!(f, "{}", m),
+            FitDataMessage::RawBbi(m) => write!(f, "{}", m),
             FitDataMessage::Record(m) => write!(f, "{}", m),
             FitDataMessage::RespirationRate(m) => write!(f, "{}", m),
             FitDataMessage::Schedule(m) => write!(f, "{}", m),
@@ -53558,12 +63159,16 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::SegmentPoint(m) => write!(f, "{}", m),
             FitDataMessage::Session(m) => write!(f, "{}", m),
             FitDataMessage::Set(m) => write!(f, "{}", m),
+            FitDataMessage::SkinTempOvernight(m) => write!(f, "{}", m),
             FitDataMessage::SlaveDevice(m) => write!(f, "{}", m),
             FitDataMessage::SleepAssessment(m) => write!(f, "{}", m),
+            FitDataMessage::SleepDisruptionOvernightSeverity(m) => write!(f, "{}", m),
+            FitDataMessage::SleepDisruptionSeverityPeriod(m) => write!(f, "{}", m),
             FitDataMessage::SleepLevel(m) => write!(f, "{}", m),
             FitDataMessage::Software(m) => write!(f, "{}", m),
             FitDataMessage::SpeedZone(m) => write!(f, "{}", m),
             FitDataMessage::Split(m) => write!(f, "{}", m),
+            FitDataMessage::SplitSummary(m) => write!(f, "{}", m),
             FitDataMessage::Spo2Data(m) => write!(f, "{}", m),
             FitDataMessage::Sport(m) => write!(f, "{}", m),
             FitDataMessage::StressLevel(m) => write!(f, "{}", m),
@@ -53574,6 +63179,7 @@ impl fmt::Display for FitDataMessage {
             FitDataMessage::TimestampCorrelation(m) => write!(f, "{}", m),
             FitDataMessage::Totals(m) => write!(f, "{}", m),
             FitDataMessage::TrainingFile(m) => write!(f, "{}", m),
+            FitDataMessage::TrainingSettings(m) => write!(f, "{}", m),
             FitDataMessage::UserProfile(m) => write!(f, "{}", m),
             FitDataMessage::Video(m) => write!(f, "{}", m),
             FitDataMessage::VideoClip(m) => write!(f, "{}", m),
@@ -53598,6 +63204,10 @@ impl FitDataMessage {
 
     pub fn field_name(global_mesg_num: &FitGlobalMesgNum, field_number: u8) -> &'static str {
         match *global_mesg_num {
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AadAccelFeatures) => {
+                FitMessageAadAccelFeatures::field_name(field_number)
+            },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
                 FitMessageAccelerometerData::field_name(field_number)
@@ -53649,6 +63259,14 @@ impl FitDataMessage {
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::Capabilities) => {
                 FitMessageCapabilities::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ChronoShotData) => {
+                FitMessageChronoShotData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ChronoShotSession) => {
+                FitMessageChronoShotSession::field_name(field_number)
             },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::ClimbPro) => {
@@ -53779,6 +63397,50 @@ impl FitDataMessage {
                 FitMessageHrvValue::field_name(field_number)
             },
             
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaAccelerometerData) => {
+                FitMessageHsaAccelerometerData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaBodyBatteryData) => {
+                FitMessageHsaBodyBatteryData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaConfigurationData) => {
+                FitMessageHsaConfigurationData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaEvent) => {
+                FitMessageHsaEvent::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaGyroscopeData) => {
+                FitMessageHsaGyroscopeData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaHeartRateData) => {
+                FitMessageHsaHeartRateData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaRespirationData) => {
+                FitMessageHsaRespirationData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaSpo2Data) => {
+                FitMessageHsaSpo2Data::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaStepData) => {
+                FitMessageHsaStepData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaStressData) => {
+                FitMessageHsaStressData::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaWristTemperatureData) => {
+                FitMessageHsaWristTemperatureData::field_name(field_number)
+            },
+            
             FitGlobalMesgNum::Known(FitFieldMesgNum::Jump) => {
                 FitMessageJump::field_name(field_number)
             },
@@ -53823,6 +63485,10 @@ impl FitDataMessage {
                 FitMessageMonitoringInfo::field_name(field_number)
             },
             
+            FitGlobalMesgNum::Known(FitFieldMesgNum::NapEvent) => {
+                FitMessageNapEvent::field_name(field_number)
+            },
+            
             FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
                 FitMessageNmeaSentence::field_name(field_number)
             },
@@ -53841,6 +63507,10 @@ impl FitDataMessage {
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::PowerZone) => {
                 FitMessagePowerZone::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::RawBbi) => {
+                FitMessageRawBbi::field_name(field_number)
             },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::Record) => {
@@ -53887,12 +63557,24 @@ impl FitDataMessage {
                 FitMessageSet::field_name(field_number)
             },
             
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SkinTempOvernight) => {
+                FitMessageSkinTempOvernight::field_name(field_number)
+            },
+            
             FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
                 FitMessageSlaveDevice::field_name(field_number)
             },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::SleepAssessment) => {
                 FitMessageSleepAssessment::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SleepDisruptionOvernightSeverity) => {
+                FitMessageSleepDisruptionOvernightSeverity::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SleepDisruptionSeverityPeriod) => {
+                FitMessageSleepDisruptionSeverityPeriod::field_name(field_number)
             },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::SleepLevel) => {
@@ -53909,6 +63591,10 @@ impl FitDataMessage {
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::Split) => {
                 FitMessageSplit::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SplitSummary) => {
+                FitMessageSplitSummary::field_name(field_number)
             },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::Spo2Data) => {
@@ -53949,6 +63635,10 @@ impl FitDataMessage {
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingFile) => {
                 FitMessageTrainingFile::field_name(field_number)
+            },
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingSettings) => {
+                FitMessageTrainingSettings::field_name(field_number)
             },
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::UserProfile) => {
@@ -54015,6 +63705,18 @@ impl FitDataMessage {
     pub fn parse<'a>(input: &'a [u8], header: FitRecordHeader, parsing_state: &mut FitParsingState, timestamp: Option<FitFieldDateTime>) -> Result<(FitDataMessage, &'a [u8])> {
         let definition_message = parsing_state.get_definition(header.local_mesg_num())?;
         match definition_message.global_mesg_num {
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::AadAccelFeatures) => {
+                let mut m = FitMessageAadAccelFeatures::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::AadAccelFeatures(m), o))
+                    }
+                }
+            }
             
             FitGlobalMesgNum::Known(FitFieldMesgNum::AccelerometerData) => {
                 let mut m = FitMessageAccelerometerData::new(header, parsing_state)?;
@@ -54168,6 +63870,30 @@ impl FitDataMessage {
                     }
                     Ok(o) => {
                         Ok((FitDataMessage::Capabilities(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ChronoShotData) => {
+                let mut m = FitMessageChronoShotData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::ChronoShotData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::ChronoShotSession) => {
+                let mut m = FitMessageChronoShotSession::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::ChronoShotSession(m), o))
                     }
                 }
             }
@@ -54556,6 +64282,138 @@ impl FitDataMessage {
                 }
             }
             
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaAccelerometerData) => {
+                let mut m = FitMessageHsaAccelerometerData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaAccelerometerData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaBodyBatteryData) => {
+                let mut m = FitMessageHsaBodyBatteryData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaBodyBatteryData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaConfigurationData) => {
+                let mut m = FitMessageHsaConfigurationData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaConfigurationData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaEvent) => {
+                let mut m = FitMessageHsaEvent::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaEvent(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaGyroscopeData) => {
+                let mut m = FitMessageHsaGyroscopeData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaGyroscopeData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaHeartRateData) => {
+                let mut m = FitMessageHsaHeartRateData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaHeartRateData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaRespirationData) => {
+                let mut m = FitMessageHsaRespirationData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaRespirationData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaSpo2Data) => {
+                let mut m = FitMessageHsaSpo2Data::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaSpo2Data(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaStepData) => {
+                let mut m = FitMessageHsaStepData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaStepData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaStressData) => {
+                let mut m = FitMessageHsaStressData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaStressData(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::HsaWristTemperatureData) => {
+                let mut m = FitMessageHsaWristTemperatureData::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::HsaWristTemperatureData(m), o))
+                    }
+                }
+            }
+            
             FitGlobalMesgNum::Known(FitFieldMesgNum::Jump) => {
                 let mut m = FitMessageJump::new(header, parsing_state)?;
                 match m.parse(input, parsing_state, timestamp) {
@@ -54688,6 +64546,18 @@ impl FitDataMessage {
                 }
             }
             
+            FitGlobalMesgNum::Known(FitFieldMesgNum::NapEvent) => {
+                let mut m = FitMessageNapEvent::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::NapEvent(m), o))
+                    }
+                }
+            }
+            
             FitGlobalMesgNum::Known(FitFieldMesgNum::NmeaSentence) => {
                 let mut m = FitMessageNmeaSentence::new(header, parsing_state)?;
                 match m.parse(input, parsing_state, timestamp) {
@@ -54744,6 +64614,18 @@ impl FitDataMessage {
                     }
                     Ok(o) => {
                         Ok((FitDataMessage::PowerZone(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::RawBbi) => {
+                let mut m = FitMessageRawBbi::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::RawBbi(m), o))
                     }
                 }
             }
@@ -54880,6 +64762,18 @@ impl FitDataMessage {
                 }
             }
             
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SkinTempOvernight) => {
+                let mut m = FitMessageSkinTempOvernight::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::SkinTempOvernight(m), o))
+                    }
+                }
+            }
+            
             FitGlobalMesgNum::Known(FitFieldMesgNum::SlaveDevice) => {
                 let mut m = FitMessageSlaveDevice::new(header, parsing_state)?;
                 match m.parse(input, parsing_state, timestamp) {
@@ -54900,6 +64794,30 @@ impl FitDataMessage {
                     }
                     Ok(o) => {
                         Ok((FitDataMessage::SleepAssessment(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SleepDisruptionOvernightSeverity) => {
+                let mut m = FitMessageSleepDisruptionOvernightSeverity::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::SleepDisruptionOvernightSeverity(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SleepDisruptionSeverityPeriod) => {
+                let mut m = FitMessageSleepDisruptionSeverityPeriod::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::SleepDisruptionSeverityPeriod(m), o))
                     }
                 }
             }
@@ -54948,6 +64866,18 @@ impl FitDataMessage {
                     }
                     Ok(o) => {
                         Ok((FitDataMessage::Split(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::SplitSummary) => {
+                let mut m = FitMessageSplitSummary::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::SplitSummary(m), o))
                     }
                 }
             }
@@ -55068,6 +64998,18 @@ impl FitDataMessage {
                     }
                     Ok(o) => {
                         Ok((FitDataMessage::TrainingFile(m), o))
+                    }
+                }
+            }
+            
+            FitGlobalMesgNum::Known(FitFieldMesgNum::TrainingSettings) => {
+                let mut m = FitMessageTrainingSettings::new(header, parsing_state)?;
+                match m.parse(input, parsing_state, timestamp) {
+                    Err(e) => {
+                        Ok((FitDataMessage::ParseError(e), &input[definition_message.message_size..]))
+                    }
+                    Ok(o) => {
+                        Ok((FitDataMessage::TrainingSettings(m), o))
                     }
                 }
             }
@@ -55265,7 +65207,8 @@ impl FitDataMessage {
     }
 
     pub fn message_name(&self) -> &'static str {
-        match self {FitDataMessage::AccelerometerData(_) => "AccelerometerData",
+        match self {FitDataMessage::AadAccelFeatures(_) => "AadAccelFeatures",
+            FitDataMessage::AccelerometerData(_) => "AccelerometerData",
             FitDataMessage::Activity(_) => "Activity",
             FitDataMessage::AntChannelId(_) => "AntChannelId",
             FitDataMessage::AntRx(_) => "AntRx",
@@ -55278,6 +65221,8 @@ impl FitDataMessage {
             FitDataMessage::CadenceZone(_) => "CadenceZone",
             FitDataMessage::CameraEvent(_) => "CameraEvent",
             FitDataMessage::Capabilities(_) => "Capabilities",
+            FitDataMessage::ChronoShotData(_) => "ChronoShotData",
+            FitDataMessage::ChronoShotSession(_) => "ChronoShotSession",
             FitDataMessage::ClimbPro(_) => "ClimbPro",
             FitDataMessage::Connectivity(_) => "Connectivity",
             FitDataMessage::Course(_) => "Course",
@@ -55310,6 +65255,17 @@ impl FitDataMessage {
             FitDataMessage::Hrv(_) => "Hrv",
             FitDataMessage::HrvStatusSummary(_) => "HrvStatusSummary",
             FitDataMessage::HrvValue(_) => "HrvValue",
+            FitDataMessage::HsaAccelerometerData(_) => "HsaAccelerometerData",
+            FitDataMessage::HsaBodyBatteryData(_) => "HsaBodyBatteryData",
+            FitDataMessage::HsaConfigurationData(_) => "HsaConfigurationData",
+            FitDataMessage::HsaEvent(_) => "HsaEvent",
+            FitDataMessage::HsaGyroscopeData(_) => "HsaGyroscopeData",
+            FitDataMessage::HsaHeartRateData(_) => "HsaHeartRateData",
+            FitDataMessage::HsaRespirationData(_) => "HsaRespirationData",
+            FitDataMessage::HsaSpo2Data(_) => "HsaSpo2Data",
+            FitDataMessage::HsaStepData(_) => "HsaStepData",
+            FitDataMessage::HsaStressData(_) => "HsaStressData",
+            FitDataMessage::HsaWristTemperatureData(_) => "HsaWristTemperatureData",
             FitDataMessage::Jump(_) => "Jump",
             FitDataMessage::Lap(_) => "Lap",
             FitDataMessage::Length(_) => "Length",
@@ -55321,11 +65277,13 @@ impl FitDataMessage {
             FitDataMessage::Monitoring(_) => "Monitoring",
             FitDataMessage::MonitoringHrData(_) => "MonitoringHrData",
             FitDataMessage::MonitoringInfo(_) => "MonitoringInfo",
+            FitDataMessage::NapEvent(_) => "NapEvent",
             FitDataMessage::NmeaSentence(_) => "NmeaSentence",
             FitDataMessage::ObdiiData(_) => "ObdiiData",
             FitDataMessage::OhrSettings(_) => "OhrSettings",
             FitDataMessage::OneDSensorCalibration(_) => "OneDSensorCalibration",
             FitDataMessage::PowerZone(_) => "PowerZone",
+            FitDataMessage::RawBbi(_) => "RawBbi",
             FitDataMessage::Record(_) => "Record",
             FitDataMessage::RespirationRate(_) => "RespirationRate",
             FitDataMessage::Schedule(_) => "Schedule",
@@ -55337,12 +65295,16 @@ impl FitDataMessage {
             FitDataMessage::SegmentPoint(_) => "SegmentPoint",
             FitDataMessage::Session(_) => "Session",
             FitDataMessage::Set(_) => "Set",
+            FitDataMessage::SkinTempOvernight(_) => "SkinTempOvernight",
             FitDataMessage::SlaveDevice(_) => "SlaveDevice",
             FitDataMessage::SleepAssessment(_) => "SleepAssessment",
+            FitDataMessage::SleepDisruptionOvernightSeverity(_) => "SleepDisruptionOvernightSeverity",
+            FitDataMessage::SleepDisruptionSeverityPeriod(_) => "SleepDisruptionSeverityPeriod",
             FitDataMessage::SleepLevel(_) => "SleepLevel",
             FitDataMessage::Software(_) => "Software",
             FitDataMessage::SpeedZone(_) => "SpeedZone",
             FitDataMessage::Split(_) => "Split",
+            FitDataMessage::SplitSummary(_) => "SplitSummary",
             FitDataMessage::Spo2Data(_) => "Spo2Data",
             FitDataMessage::Sport(_) => "Sport",
             FitDataMessage::StressLevel(_) => "StressLevel",
@@ -55353,6 +65315,7 @@ impl FitDataMessage {
             FitDataMessage::TimestampCorrelation(_) => "TimestampCorrelation",
             FitDataMessage::Totals(_) => "Totals",
             FitDataMessage::TrainingFile(_) => "TrainingFile",
+            FitDataMessage::TrainingSettings(_) => "TrainingSettings",
             FitDataMessage::UserProfile(_) => "UserProfile",
             FitDataMessage::Video(_) => "Video",
             FitDataMessage::VideoClip(_) => "VideoClip",
@@ -55372,6 +65335,13 @@ impl FitDataMessage {
         }
     }
 
+    
+    pub fn is_aad_accel_features(&self) -> bool {
+        match *self {
+            FitDataMessage::AadAccelFeatures(_) => true,
+            _ => false,
+        }
+    }
     
     pub fn is_accelerometer_data(&self) -> bool {
         match *self {
@@ -55460,6 +65430,20 @@ impl FitDataMessage {
     pub fn is_capabilities(&self) -> bool {
         match *self {
             FitDataMessage::Capabilities(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_chrono_shot_data(&self) -> bool {
+        match *self {
+            FitDataMessage::ChronoShotData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_chrono_shot_session(&self) -> bool {
+        match *self {
+            FitDataMessage::ChronoShotSession(_) => true,
             _ => false,
         }
     }
@@ -55688,6 +65672,83 @@ impl FitDataMessage {
         }
     }
     
+    pub fn is_hsa_accelerometer_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaAccelerometerData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_body_battery_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaBodyBatteryData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_configuration_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaConfigurationData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_event(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaEvent(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_gyroscope_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaGyroscopeData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_heart_rate_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaHeartRateData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_respiration_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaRespirationData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_spo2_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaSpo2Data(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_step_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaStepData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_stress_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaStressData(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_hsa_wrist_temperature_data(&self) -> bool {
+        match *self {
+            FitDataMessage::HsaWristTemperatureData(_) => true,
+            _ => false,
+        }
+    }
+    
     pub fn is_jump(&self) -> bool {
         match *self {
             FitDataMessage::Jump(_) => true,
@@ -55765,6 +65826,13 @@ impl FitDataMessage {
         }
     }
     
+    pub fn is_nap_event(&self) -> bool {
+        match *self {
+            FitDataMessage::NapEvent(_) => true,
+            _ => false,
+        }
+    }
+    
     pub fn is_nmea_sentence(&self) -> bool {
         match *self {
             FitDataMessage::NmeaSentence(_) => true,
@@ -55796,6 +65864,13 @@ impl FitDataMessage {
     pub fn is_power_zone(&self) -> bool {
         match *self {
             FitDataMessage::PowerZone(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_raw_bbi(&self) -> bool {
+        match *self {
+            FitDataMessage::RawBbi(_) => true,
             _ => false,
         }
     }
@@ -55877,6 +65952,13 @@ impl FitDataMessage {
         }
     }
     
+    pub fn is_skin_temp_overnight(&self) -> bool {
+        match *self {
+            FitDataMessage::SkinTempOvernight(_) => true,
+            _ => false,
+        }
+    }
+    
     pub fn is_slave_device(&self) -> bool {
         match *self {
             FitDataMessage::SlaveDevice(_) => true,
@@ -55887,6 +65969,20 @@ impl FitDataMessage {
     pub fn is_sleep_assessment(&self) -> bool {
         match *self {
             FitDataMessage::SleepAssessment(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_sleep_disruption_overnight_severity(&self) -> bool {
+        match *self {
+            FitDataMessage::SleepDisruptionOvernightSeverity(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_sleep_disruption_severity_period(&self) -> bool {
+        match *self {
+            FitDataMessage::SleepDisruptionSeverityPeriod(_) => true,
             _ => false,
         }
     }
@@ -55915,6 +66011,13 @@ impl FitDataMessage {
     pub fn is_split(&self) -> bool {
         match *self {
             FitDataMessage::Split(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_split_summary(&self) -> bool {
+        match *self {
+            FitDataMessage::SplitSummary(_) => true,
             _ => false,
         }
     }
@@ -55985,6 +66088,13 @@ impl FitDataMessage {
     pub fn is_training_file(&self) -> bool {
         match *self {
             FitDataMessage::TrainingFile(_) => true,
+            _ => false,
+        }
+    }
+    
+    pub fn is_training_settings(&self) -> bool {
+        match *self {
+            FitDataMessage::TrainingSettings(_) => true,
             _ => false,
         }
     }
