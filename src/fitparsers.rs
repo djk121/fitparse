@@ -16,6 +16,14 @@ use crate::{
     FitRecordHeader,
 };
 
+// FIT timestamps are counted from 1989-12-31T00:00:00Z rather than the unix
+// epoch. The date is a constant, so the only way this can fail is a typo here.
+pub fn garmin_epoch() -> DateTime<Utc> {
+    Utc.with_ymd_and_hms(1989, 12, 31, 0, 0, 0)
+        .single()
+        .expect("the garmin epoch is a valid, unambiguous UTC datetime")
+}
+
 fn parse_date_time_internal(
     input: &[u8],
     parse_config: &FitParseConfig,
@@ -24,7 +32,7 @@ fn parse_date_time_internal(
     // it's a normal unix timestamp, relative to the garmin epoch time
     match parse_uint32(input, parse_config) {
         Ok(garmin_epoch_offset) => {
-            let garmin_epoch = Utc.ymd(1989, 12, 31).and_hms(0, 0, 0);
+            let garmin_epoch = garmin_epoch();
             match garmin_epoch_offset < 0x10000000 {
                 true => Err(errors::unsupported_relative_timestamp()),
                 false => {

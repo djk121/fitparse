@@ -2,7 +2,7 @@ use crate::bit_subset;
 use chrono::{DateTime, Duration, FixedOffset, TimeZone, Utc};
 use crate::errors;
 use crate::errors::Result;
-use crate::fitparsers::{parse_date_time, parse_uint32};
+use crate::fitparsers::{garmin_epoch, parse_date_time, parse_uint32};
 use crate::fitparsingstate::FitParsingState;
 use nom::number::Endianness;
 use std::cmp::Ordering;
@@ -533,12 +533,33 @@ impl fmt::Display for FitFieldLocalDateTime {
 
 impl FitFieldParseable for FitFieldLocalDateTime {
     fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<FitFieldLocalDateTime> {
-        let garmin_epoch = Utc.ymd(1989, 12, 31).and_hms(0, 0, 0);
         let garmin_epoch_offset = parse_uint32(input, parse_config)?;
-        let local_dt = FixedOffset::east(parse_config.tz_offset_secs() as i32).timestamp(
-            (garmin_epoch + Duration::seconds(garmin_epoch_offset.into())).timestamp(),
-            0, // nanosecs
-        );
+        let utc_secs =
+            (garmin_epoch() + Duration::seconds(garmin_epoch_offset.into())).timestamp();
+
+        // the offset comes from device_settings.time_zone_offset, a sint8 of
+        // quarter hour increments, so a file can name an offset a whole day or
+        // more from UTC - further out than a fixed offset can represent
+        let tz_offset_secs = parse_config.tz_offset_secs() as i32;
+        let offset = match FixedOffset::east_opt(tz_offset_secs) {
+            Some(offset) => offset,
+            None => {
+                return Err(errors::invalid_field_value(format!(
+                    "time zone offset of {} seconds is out of range",
+                    tz_offset_secs
+                )));
+            }
+        };
+
+        let local_dt = match offset.timestamp_opt(utc_secs, 0).single() {
+            Some(local_dt) => local_dt,
+            None => {
+                return Err(errors::invalid_field_value(format!(
+                    "timestamp of {} seconds past the unix epoch is out of range",
+                    utc_secs
+                )));
+            }
+        };
 
         Ok(FitFieldLocalDateTime {
             seconds_since_garmin_epoch: garmin_epoch_offset,
