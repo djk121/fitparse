@@ -63,7 +63,6 @@ impl FitFile {
         parsing_state.retain_bytes = self.retain_bytes;
 
         let mut inp = &record_bytes[0..];
-        let mut num = 0;
         let ps = &mut parsing_state;
 
         while inp.len() > 2 {
@@ -76,7 +75,6 @@ impl FitFile {
                     panic!("error: {}", e);
                 }
             }
-            num += 1;
         }
 
         Ok(())

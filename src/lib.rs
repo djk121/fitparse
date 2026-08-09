@@ -87,7 +87,7 @@ impl FitFileHeader {
     }
 }
 
-trait FitRecord {
+pub trait FitRecord {
     fn message_name(&self) -> &'static str;
 }
 
@@ -1165,10 +1165,6 @@ impl FitRecordHeader {
             FitRecordHeader::CompressedTimestamp(ctrh) => ctrh.local_mesg_num,
         }
     }
-}
-
-trait FitVecParser<T> {
-    fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<T>>;
 }
 
 // The declarations every base type shares, regardless of how its arrays are
