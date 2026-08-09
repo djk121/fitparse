@@ -2,15 +2,15 @@ use chrono::{DateTime, Duration, TimeZone, Utc};
 
 use std::collections::HashMap;
 
-use errors;
-use errors::Result;
+use crate::errors;
+use crate::errors::Result;
 use nom::{self};
 use nom::number::Endianness;
 //use nom::error::VerboseError;
 
 use paste::paste;
 
-use {
+use crate::{
     FitCompressedTimestampHeader, FitDefinitionMessage, FitDeveloperFieldDefinition,
     FitFieldDefinition, FitFileHeader, FitGlobalMesgNum, FitNormalRecordHeader, FitParseConfig,
     FitRecordHeader,

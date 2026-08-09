@@ -1,11 +1,9 @@
-extern crate fitparse;
 
 use fitparse::fitfile::FitFile;
 use fitparse::fittypes::FitDataMessage;
 use fitparse::{AdjustedValue, BasicValue, FitFloat64, FitUint16, FitUint32, PreAdjustedValue};
 use fitparse::{FitFieldAdjustedValue, FitFieldBasicValue, FitMessage, FitParseConfig};
 
-extern crate nom;
 use nom::number::Endianness;
 
 macro_rules! ffbv {

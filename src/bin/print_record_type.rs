@@ -1,5 +1,3 @@
-extern crate clap;
-extern crate fitparse;
 
 use clap::{App, Arg};
 use std::fs::File;
@@ -63,7 +61,7 @@ fn main() {
         }
 
         match message {
-            FitMessage::Data(ref dm) => {
+            FitMessage::Data(dm) => {
                 if dm.message_name() == record_name {
                     if expanded {
                         println!("{:#?}", message);

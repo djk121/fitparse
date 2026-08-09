@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use FitDefinitionMessage;
+use crate::FitDefinitionMessage;
 
-use errors;
-use errors::Result;
-use fittypes::{FitMessageDeveloperDataId, FitMessageFieldDescription};
-use fittypes_utils::FitFieldDateTime;
+use crate::errors;
+use crate::errors::Result;
+use crate::fittypes::{FitMessageDeveloperDataId, FitMessageFieldDescription};
+use crate::fittypes_utils::FitFieldDateTime;
 
 pub struct FitParsingState {
     map: HashMap<u16, Arc<FitDefinitionMessage>>,

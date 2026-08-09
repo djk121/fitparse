@@ -1,5 +1,3 @@
-extern crate clap;
-extern crate fitparse;
 
 use clap::{App, Arg};
 use std::fs::File;

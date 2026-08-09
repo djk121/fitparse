@@ -4,14 +4,14 @@ use std::sync::Arc;
 
 use nom::number::Endianness;
 
-use FitBaseValue;
-use FitDeveloperFieldDefinition;
-use FitNormalRecordHeader;
-use FitNormalRecordHeaderMessageType;
+use crate::FitBaseValue;
+use crate::FitDeveloperFieldDefinition;
+use crate::FitNormalRecordHeader;
+use crate::FitNormalRecordHeaderMessageType;
 
-use {AdjustedValue, PreAdjustedValue};
+use crate::{AdjustedValue, PreAdjustedValue};
 
-use FitFloat64;
+use crate::FitFloat64;
 
 // the record in here is from activity 4275096187.fit, record #7831
 

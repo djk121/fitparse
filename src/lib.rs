@@ -5,37 +5,30 @@ use std::sync::Arc;
 
 use std::fmt;
 
-extern crate bitvec;
 use bitvec::order as bitvec_order;
 use bitvec::prelude as bv;
 
-extern crate chrono;
 
-extern crate nom;
 use nom::number::Endianness;
 
-extern crate conv;
 use conv::*;
 
-extern crate anyhow;
-extern crate thiserror;
-extern crate paste;
 
-use errors::Result;
+use crate::errors::Result;
 
-use fitparsers::{
+use crate::fitparsers::{
     parse_bool, parse_byte, parse_definition_message, parse_enum, parse_fit_file_header,
     parse_float32, parse_float64, parse_record_header, parse_sint16, parse_sint32, parse_sint64,
     parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z,
     parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
 };
-use fitparsingstate::FitParsingState;
-use fittypes::{
+use crate::fitparsingstate::FitParsingState;
+use crate::fittypes::{
     FitDataMessage, FitFieldFitBaseType, FitFieldMesgNum, FitMessageDeveloperDataId,
     FitMessageDeviceSettings, FitMessageFieldDescription,
 };
 
-use fittypes_utils::FitFieldDateTime;
+use crate::fittypes_utils::FitFieldDateTime;
 
 #[derive(Debug, PartialEq, Clone)]
 enum FitNormalRecordHeaderMessageType {
@@ -1601,7 +1594,7 @@ pub fn bit_subset(
 
 #[cfg(test)]
 mod tests {
-    use *;
+    use crate::*;
 
     #[test]
     fn bit_subset_test() {

@@ -1,9 +1,9 @@
-use errors;
-use errors::Result;
+use crate::errors;
+use crate::errors::Result;
 use std::io;
 
-use fitparsingstate::FitParsingState;
-use {parse_fit_message, FitDataMessage, FitFileHeader, FitMessage};
+use crate::fitparsingstate::FitParsingState;
+use crate::{parse_fit_message, FitDataMessage, FitFileHeader, FitMessage};
 
 pub struct FitFile {
     max_file_size: usize,
@@ -100,7 +100,7 @@ impl FitFile {
 
     pub fn sport(&self) -> Result<String> {
         for sport_mesg in self.iter_message_names(vec!["Sport"]) {
-            if let FitMessage::Data(FitDataMessage::Sport(ref m)) = sport_mesg {
+            if let FitMessage::Data(FitDataMessage::Sport(m)) = sport_mesg {
                 return Ok(m.sport.get_single()?.to_string());
             }
         }

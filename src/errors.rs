@@ -3,10 +3,10 @@ use std::boxed::Box;
 use std::sync::Arc;
 use thiserror::Error;
 
-use fmt::Debug;
+use crate::fmt::Debug;
 
-use FitDefinitionMessage;
-use FitFieldFitBaseType;
+use crate::FitDefinitionMessage;
+use crate::FitFieldFitBaseType;
 
 pub type Result<T> = anyhow::Result<T, FitParseError>;
 

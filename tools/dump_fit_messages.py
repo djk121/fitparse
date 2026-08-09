@@ -244,30 +244,30 @@ use std::boxed::Box;
 use std::sync::Arc;
 use std::collections::HashMap;
 
-use {FitFieldBasicValue, FitFieldAdjustedValue};
-use FitRecord;
-use FitRecordHeader;
-use FitDefinitionMessage;
-use FitFieldDefinition;
-use FitFieldDeveloperData;
-use FitGlobalMesgNum;
-use FitMessageUnknownToSdk;
-use FitBaseValue;
-use FitParseConfig;
-use FitFieldParseable;
-use fitparsingstate::FitParsingState;
-use fitparsers::{parse_enum, parse_uint8, parse_uint8_as_bytes, parse_uint8z, parse_uint16, parse_uint16_as_bytes, parse_uint32, parse_uint32_as_bytes, parse_uint32z, parse_byte_as_bytes, parse_date_time_as_bytes};
+use crate::{FitFieldBasicValue, FitFieldAdjustedValue};
+use crate::FitRecord;
+use crate::FitRecordHeader;
+use crate::FitDefinitionMessage;
+use crate::FitFieldDefinition;
+use crate::FitFieldDeveloperData;
+use crate::FitGlobalMesgNum;
+use crate::FitMessageUnknownToSdk;
+use crate::FitBaseValue;
+use crate::FitParseConfig;
+use crate::FitFieldParseable;
+use crate::fitparsingstate::FitParsingState;
+use crate::fitparsers::{parse_enum, parse_uint8, parse_uint8_as_bytes, parse_uint8z, parse_uint16, parse_uint16_as_bytes, parse_uint32, parse_uint32_as_bytes, parse_uint32z, parse_byte_as_bytes, parse_date_time_as_bytes};
 
-use {vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields}; 
-use fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
-use {FitBool, FitUint8, FitUint8z, FitSint8, FitUint16, 
+use crate::{vec_fit_field_parseable, fmt_message_field, fmt_raw_bytes, fmt_unknown_fields, fmt_developer_fields};
+use crate::fittypes_utils::{FitFieldDateTime, FitFieldLocalDateTime};
+use crate::{FitBool, FitUint8, FitUint8z, FitSint8, FitUint16,
      FitUint16z, FitSint16, FitUint32, FitUint32z, FitSint32,
      FitFloat32, FitFloat64,
      FitByte, FitString};
-use BasicValue;
+use crate::BasicValue;
 
-use errors;
-use errors::{FitParseError, Result};
+use crate::errors;
+use crate::errors::{FitParseError, Result};
 """
 
     sys.stdout.write(special_types)

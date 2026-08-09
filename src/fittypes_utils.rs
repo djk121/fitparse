@@ -1,27 +1,27 @@
-use bit_subset;
+use crate::bit_subset;
 use chrono::{DateTime, Duration, FixedOffset, TimeZone, Utc};
-use errors;
-use errors::Result;
-use fitparsers::{parse_date_time, parse_uint32};
-use fitparsingstate::FitParsingState;
+use crate::errors;
+use crate::errors::Result;
+use crate::fitparsers::{parse_date_time, parse_uint32};
+use crate::fitparsingstate::FitParsingState;
 use nom::number::Endianness;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
 use std::sync::Arc;
-use FitBaseValue;
-use FitDefinitionMessage;
-use FitFieldDefinition;
-use FitFieldDeveloperData;
-use FitFieldFitBaseType;
-use FitFieldParseable;
-use FitParseConfig;
-use FitRecord;
-use FitRecordHeader;
-use {AdjustedValue, BasicValue};
-use {FitFieldAdjustedValue, FitFieldBasicValue};
-use {FitFloat64, FitUint16, FitUint32, FitUint8};
+use crate::FitBaseValue;
+use crate::FitDefinitionMessage;
+use crate::FitFieldDefinition;
+use crate::FitFieldDeveloperData;
+use crate::FitFieldFitBaseType;
+use crate::FitFieldParseable;
+use crate::FitParseConfig;
+use crate::FitRecord;
+use crate::FitRecordHeader;
+use crate::{AdjustedValue, BasicValue};
+use crate::{FitFieldAdjustedValue, FitFieldBasicValue};
+use crate::{FitFloat64, FitUint16, FitUint32, FitUint8};
 
 #[macro_export]
 macro_rules! vec_fit_field_parseable {
