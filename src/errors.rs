@@ -10,6 +10,30 @@ use FitFieldFitBaseType;
 
 pub type Result<T> = anyhow::Result<T, FitParseError>;
 
+// thiserror special-cases any field whose type is std::backtrace::Backtrace and
+// emits an Error::provide impl, which is still nightly-only
+// (error_generic_member_access). Wrapping the backtrace hides it from that
+// detection so the crate builds on stable; Display/Debug still show the trace.
+pub struct Bt(Backtrace);
+
+impl Bt {
+    pub(crate) fn capture() -> Self {
+        Bt(Backtrace::force_capture())
+    }
+}
+
+impl std::fmt::Display for Bt {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        std::fmt::Display::fmt(&self.0, f)
+    }
+}
+
+impl Debug for Bt {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        Debug::fmt(&self.0, f)
+    }
+}
+
 #[derive(Error, Debug)]
 pub enum FitParseError {
     #[error("insufficient data to finish parse, needed {0} bytes")]
@@ -17,7 +41,7 @@ pub enum FitParseError {
     #[error("insufficient data to finish parse, unknown amount needed")]
     ParseIncompleteUnknown,
     #[error("invalid field value for field\n bt:\n{backtrace}")]
-    ParseInvalidFieldValue { backtrace: Backtrace },
+    ParseInvalidFieldValue { backtrace: Bt },
     #[error("error during parse: {0:?}")]
     ParseError(String),
     #[error("zero value found for type requiring non-zero")]
@@ -64,7 +88,7 @@ pub enum FitParseError {
     )]
     DeveloperDataDefinitionNotFound {
         developer_data_id: u8,
-        backtrace: Backtrace,
+        backtrace: Bt,
     },
     #[error("developer field number not found: {0}")]
     DeveloperFieldDescriptionNotFound(u8),
@@ -125,8 +149,7 @@ pub(crate) fn parse_incomplete_unknown() -> FitParseError {
 
 #[allow(dead_code)]
 pub(crate) fn parse_invalid_field_value() -> FitParseError {
-    let bt = Backtrace::force_capture();
-    FitParseError::ParseInvalidFieldValue { backtrace: bt }
+    FitParseError::ParseInvalidFieldValue { backtrace: Bt::capture() }
 }
 
 #[allow(dead_code)]
@@ -231,10 +254,9 @@ pub(crate) fn parse_unknown_base_value() -> FitParseError {
 
 #[allow(dead_code)]
 pub(crate) fn developer_data_definition_not_found(dddn: u8) -> FitParseError {
-    let bt = Backtrace::force_capture();
     FitParseError::DeveloperDataDefinitionNotFound {
         developer_data_id: dddn,
-        backtrace: bt,
+        backtrace: Bt::capture(),
     }
 }
 

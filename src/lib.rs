@@ -1,5 +1,3 @@
-#![feature(error_generic_member_access)]
-
 use std::collections::HashMap;
 use std::convert::From;
 use std::ops::Deref;
