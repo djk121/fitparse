@@ -6,7 +6,7 @@ use crate::fitparsers::{parse_date_time, parse_uint32};
 use crate::fitparsingstate::FitParsingState;
 use nom::number::Endianness;
 use std::cmp::Ordering;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::fmt;
 use std::rc::Rc;
 use std::sync::Arc;
@@ -558,7 +558,7 @@ pub struct FitMessageHr {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
-    unknown_fields: HashMap<u8, FitBaseValue>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: &'static str,
     pub timestamp: FitFieldBasicValue<FitFieldDateTime>,
@@ -611,7 +611,7 @@ impl FitMessageHr {
             header: header,
             definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
-            unknown_fields: HashMap::new(),
+            unknown_fields: BTreeMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageHr",
             timestamp: FitFieldBasicValue::new_single("".to_string()),

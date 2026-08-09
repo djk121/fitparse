@@ -242,7 +242,7 @@ def output_types(types):
 use std::fmt;
 use std::boxed::Box;
 use std::sync::Arc;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::{FitFieldBasicValue, FitFieldAdjustedValue};
 use crate::FitRecord;
@@ -490,7 +490,7 @@ pub struct {{ message_name }} {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
-    unknown_fields: HashMap<u8, FitBaseValue>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub subfield_field_numbers: Vec<u8>,
     pub message_name: &'static str,
@@ -542,7 +542,7 @@ impl {{ message_name }} {
             header: header,
             definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
-            unknown_fields: HashMap::new(),
+            unknown_fields: BTreeMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             subfield_field_numbers: vec![{{ subfield_field_numbers }}],
             message_name: "{{ message_name }}",

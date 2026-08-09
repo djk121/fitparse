@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::sync::Arc;
 
 use crate::FitDefinitionMessage;
@@ -9,23 +9,23 @@ use crate::fittypes::{FitMessageDeveloperDataId, FitMessageFieldDescription};
 use crate::fittypes_utils::FitFieldDateTime;
 
 pub struct FitParsingState {
-    map: HashMap<u16, Arc<FitDefinitionMessage>>,
+    map: BTreeMap<u16, Arc<FitDefinitionMessage>>,
     pub retain_bytes: bool,
     last_timestamp: Option<FitFieldDateTime>,
     timezone_offset_secs: Option<f64>,
-    developer_data_ids: HashMap<u8, Arc<FitMessageDeveloperDataId>>,
-    developer_field_descriptions: HashMap<u8, HashMap<u8, Arc<FitMessageFieldDescription>>>,
+    developer_data_ids: BTreeMap<u8, Arc<FitMessageDeveloperDataId>>,
+    developer_field_descriptions: BTreeMap<u8, BTreeMap<u8, Arc<FitMessageFieldDescription>>>,
 }
 
 impl FitParsingState {
     pub fn new() -> FitParsingState {
         FitParsingState {
-            map: HashMap::new(),
+            map: BTreeMap::new(),
             retain_bytes: false,
             last_timestamp: None,
             timezone_offset_secs: None,
-            developer_data_ids: HashMap::new(),
-            developer_field_descriptions: HashMap::new(),
+            developer_data_ids: BTreeMap::new(),
+            developer_field_descriptions: BTreeMap::new(),
         }
     }
 

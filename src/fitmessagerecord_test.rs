@@ -83,8 +83,8 @@ fn make_definition_message_record() -> FitDefinitionMessage {
         ]),
         num_developer_fields: 0,
         developer_field_definitions: vec![],
-        developer_data_ids: HashMap::new(),
-        developer_field_descriptions: HashMap::new(),
+        developer_data_ids: BTreeMap::new(),
+        developer_field_descriptions: BTreeMap::new(),
     }
 }
 
@@ -220,11 +220,11 @@ fn make_field_description(
             field_definitions: make_field_definitions(field_definitions),
             num_developer_fields: 0,
             developer_field_definitions: vec![],
-            developer_data_ids: HashMap::new(),
-            developer_field_descriptions: HashMap::new(),
+            developer_data_ids: BTreeMap::new(),
+            developer_field_descriptions: BTreeMap::new(),
         }),
         developer_fields: vec![],
-        unknown_fields: HashMap::new(),
+        unknown_fields: BTreeMap::new(),
         raw_bytes: vec![],
         subfield_field_numbers: vec![],
         message_name: "FitMessageFieldDescription",

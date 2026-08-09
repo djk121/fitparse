@@ -1,6 +1,6 @@
 use chrono::{DateTime, Duration, TimeZone, Utc};
 
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::errors;
 use crate::errors::Result;
@@ -567,8 +567,8 @@ pub fn parse_definition_message(
             field_definitions,
             num_developer_fields: num_developer_fields.into(),
             developer_field_definitions,
-            developer_field_descriptions: HashMap::new(),
-            developer_data_ids: HashMap::new(),
+            developer_field_descriptions: BTreeMap::new(),
+            developer_data_ids: BTreeMap::new(),
         },
     ))
 }

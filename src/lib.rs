@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::convert::From;
 use std::ops::Deref;
 use std::sync::Arc;
@@ -769,7 +769,7 @@ pub struct FitMessageUnknownToSdk {
     header: FitRecordHeader,
     definition_message: Arc<FitDefinitionMessage>,
     developer_fields: Vec<FitFieldDeveloperData>,
-    unknown_fields: HashMap<u8, FitBaseValue>,
+    unknown_fields: BTreeMap<u8, FitBaseValue>,
     pub raw_bytes: Vec<u8>,
     pub message_name: String,
 }
@@ -797,7 +797,7 @@ impl FitMessageUnknownToSdk {
             header: header,
             definition_message: Arc::clone(&definition_message),
             developer_fields: vec![],
-            unknown_fields: HashMap::new(),
+            unknown_fields: BTreeMap::new(),
             raw_bytes: Vec::with_capacity(definition_message.message_size),
             message_name: "FitMessageUnknownToSdk".to_string(),
         };
@@ -1032,8 +1032,8 @@ pub struct FitDefinitionMessage {
     field_definitions: Vec<FitFieldDefinition>,
     num_developer_fields: usize,
     developer_field_definitions: Vec<FitDeveloperFieldDefinition>,
-    developer_field_descriptions: HashMap<u8, HashMap<u8, Arc<FitMessageFieldDescription>>>,
-    developer_data_ids: HashMap<u8, Arc<FitMessageDeveloperDataId>>,
+    developer_field_descriptions: BTreeMap<u8, BTreeMap<u8, Arc<FitMessageFieldDescription>>>,
+    developer_data_ids: BTreeMap<u8, Arc<FitMessageDeveloperDataId>>,
 }
 
 /*
@@ -1127,7 +1127,7 @@ impl FitDefinitionMessage {
                 let p = fdm
                     .developer_field_descriptions
                     .entry(dfd.developer_data_index)
-                    .or_insert(HashMap::new());
+                    .or_insert(BTreeMap::new());
                 p.insert(dfd.definition_number, Arc::clone(&fd));
             }
 
@@ -1690,8 +1690,8 @@ mod tests {
             developer_field_definitions: vec![],
             num_developer_fields: 0,
             message_size: 11,
-            developer_data_ids: HashMap::new(),
-            developer_field_descriptions: HashMap::new(),
+            developer_data_ids: BTreeMap::new(),
+            developer_field_descriptions: BTreeMap::new(),
         };
 
         let (_, res) = parse_definition_message(&defintion_message_data, rh).unwrap();
