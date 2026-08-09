@@ -1,3 +1,5 @@
-./Cargo.lock
-./target/
-./py-venv/
+/target/
+/Cargo.lock
+/py-venv/
+/fit-profile/
+__pycache__/

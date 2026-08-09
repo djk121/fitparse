@@ -13,6 +13,27 @@ Fitparse is a Rust library which implements a parser for [Garmin's FIT file form
     - Chained FIT files
     - File CRC verification
 
+## Regenerating the FIT profile
+
+`src/fittypes.rs` is generated from Garmin's FIT profile by
+`tools/dump_fit_messages.py`. To pick up a newer FIT SDK:
+
+```sh
+tools/regen_fittypes.sh            # latest FIT SDK release
+tools/regen_fittypes.sh 21.212.0   # a specific release
+cargo build && cargo test
+```
+
+The script creates `py-venv/`, downloads `Profile.xlsx` from the
+[fit-sdk-tools](https://github.com/garmin/fit-sdk-tools) releases, converts its
+Types and Messages sheets into `fit-profile/{Types,Messages}.csv`, and runs the
+generator. Both `py-venv/` and `fit-profile/` are ignored - the profile is a
+build input, not source.
+
+Note that the import preamble emitted by `dump_fit_messages.py` is part of the
+generated file, so changes to `src/fittypes.rs`'s imports have to be made in the
+generator's `special_types` template rather than in the generated output.
+
 ## Example
 
 ```rust

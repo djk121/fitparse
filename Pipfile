@@ -9,6 +9,7 @@ verify_ssl = true
 requests = "*"
 inflect = "*"
 jinja2 = "*"
+openpyxl = "*"
 
 [requires]
 python_version = "3.8"
