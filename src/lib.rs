@@ -19,8 +19,8 @@ use crate::errors::Result;
 use crate::fitparsers::{
     parse_bool, parse_byte, parse_definition_message, parse_enum, parse_fit_file_header,
     parse_float32, parse_float64, parse_record_header, parse_sint16, parse_sint32, parse_sint64,
-    parse_sint8, parse_string, parse_uint16, parse_uint16z, parse_uint32, parse_uint32z,
-    parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
+    parse_sint8, parse_string, parse_string_vec, parse_uint16, parse_uint16z, parse_uint32,
+    parse_uint32z, parse_uint64, parse_uint64z, parse_uint8, parse_uint8z,
 };
 use crate::fitparsingstate::FitParsingState;
 use crate::fittypes::{
@@ -219,6 +219,24 @@ pub fn parse_fit_message<'a>(
 
 pub trait FitFieldParseable: Sized {
     fn parse(input: &[u8], parse_config: &FitParseConfig) -> errors::Result<Self>;
+
+    // Nearly every base type is fixed-width, so an array of them is just
+    // num_in_field elements laid out end to end. Strings are the exception:
+    // they're null-delimited rather than fixed-width, so FitString overrides
+    // this.
+    fn parse_vec(input: &[u8], parse_config: &FitParseConfig) -> errors::Result<Vec<Self>> {
+        let mut outp = input;
+        let mut num_to_parse = parse_config.num_in_field();
+        let mut v = vec![];
+
+        while num_to_parse > 0 {
+            v.push(Self::parse(outp, parse_config)?);
+            outp = &outp[parse_config.base_type_size()..];
+            num_to_parse = num_to_parse - 1;
+        }
+
+        Ok(v)
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -296,16 +314,7 @@ impl<T: FitFieldParseable + Clone> FitFieldBasicValue<T> {
                 self.value = BasicValue::Single(T::parse(input, parse_config)?);
             }
             BasicValue::NotYetParsedVec | BasicValue::Vec(_) => {
-                let mut outp = input;
-                let mut num_to_parse = parse_config.num_in_field();
-                let mut v = vec![];
-                while num_to_parse > 0 {
-                    let val = T::parse(outp, parse_config)?;
-                    v.push(val);
-                    outp = &outp[parse_config.base_type_size()..];
-                    num_to_parse = num_to_parse - 1;
-                }
-                self.value = BasicValue::Vec(v);
+                self.value = BasicValue::Vec(T::parse_vec(input, parse_config)?);
             }
         }
 
@@ -1162,8 +1171,10 @@ trait FitVecParser<T> {
     fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<T>>;
 }
 
-macro_rules! fit_base_type_base {
-    ($name:ident, $name_enum:ident, $name_vec:ident, $type:ty, $parser:ident) => {
+// The declarations every base type shares, regardless of how its arrays are
+// laid out. Not meant to be used directly - go through fit_base_type_base!.
+macro_rules! fit_base_type_decl {
+    ($name:ident, $name_enum:ident, $name_vec:ident, $type:ty) => {
         #[derive(Debug, PartialEq, Clone)]
         pub enum $name_enum {
             InvalidValue,
@@ -1181,6 +1192,19 @@ macro_rules! fit_base_type_base {
             }
         }
 
+        impl FitFieldParseable for $name_vec {
+            fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<$name_vec> {
+                $name::parse_vec(input, parse_config)
+            }
+        }
+    };
+}
+
+macro_rules! fit_base_type_base {
+    // fixed-width base types, which get the default array handling
+    ($name:ident, $name_enum:ident, $name_vec:ident, $type:ty, $parser:ident) => {
+        fit_base_type_decl!($name, $name_enum, $name_vec, $type);
+
         impl FitFieldParseable for $name {
             fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<$name> {
                 match $parser(input, parse_config) {
@@ -1193,20 +1217,26 @@ macro_rules! fit_base_type_base {
                 }
             }
         }
+    };
 
-        impl FitFieldParseable for $name_vec {
-            fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<$name_vec> {
-                let mut num_to_parse = parse_config.num_in_field();
+    // base types that lay their arrays out some other way, and so supply a
+    // parser producing the whole vec at once
+    ($name:ident, $name_enum:ident, $name_vec:ident, $type:ty, $parser:ident, $vec_parser:ident) => {
+        fit_base_type_decl!($name, $name_enum, $name_vec, $type);
 
-                let mut outp = input;
-                let mut v: Vec<$name> = vec![];
-
-                while num_to_parse > 0 {
-                    v.push($name::parse(outp, parse_config)?);
-                    outp = &outp[parse_config.base_type_size()..];
-                    num_to_parse = num_to_parse - 1;
+        impl FitFieldParseable for $name {
+            fn parse(input: &[u8], parse_config: &FitParseConfig) -> Result<$name> {
+                match $parser(input, parse_config) {
+                    Ok(val) => Ok($name($name_enum::ValidValue(val))),
+                    Err(_e) => Ok($name($name_enum::InvalidValue)),
                 }
-                Ok(v)
+            }
+
+            fn parse_vec(input: &[u8], parse_config: &FitParseConfig) -> Result<$name_vec> {
+                match $vec_parser(input, parse_config) {
+                    Ok(vals) => Ok(vals.into_iter().map($name::new).collect()),
+                    Err(_e) => Ok(vec![$name($name_enum::InvalidValue)]),
+                }
             }
         }
     };
@@ -1319,7 +1349,8 @@ fit_base_type_base!(
     FitStringOptions,
     FitStringVec,
     String,
-    parse_string
+    parse_string,
+    parse_string_vec
 );
 fit_base_type_base!(FitByte, FitByteOptions, FitByteVec, Vec<u8>, parse_byte);
 
@@ -1401,6 +1432,7 @@ enum FitBaseValue {
     Float64(FitFloat64),
     Float64Vec(FitFloat64Vec),
     String(FitString),
+    StringVec(FitStringVec),
     Byte(FitByte),
 }
 
@@ -1454,6 +1486,7 @@ impl fmt::Display for FitBaseValue {
             &FitBaseValue::Float64(ref val) => base_type_formatter!(val, f)?,
             &FitBaseValue::Float64Vec(ref vals) => base_type_vec_formatter!(vals, f)?,
             &FitBaseValue::String(ref val) => base_type_formatter!(val, f)?,
+            &FitBaseValue::StringVec(ref vals) => base_type_vec_formatter!(vals, f)?,
             &FitBaseValue::Byte(ref val) => write!(f, "{:?}", val)?,
         }
         Ok(())
@@ -1526,7 +1559,16 @@ impl FitBaseValue {
                 Ok(FitBaseValue::Byte(FitByte::parse(input, parse_config)?))
             }
             FitFieldFitBaseType::String => {
-                Ok(FitBaseValue::String(FitString::parse(input, parse_config)?))
+                // is_array() is false for strings: a string field's array-ness
+                // lives in its contents, not in its declared size, so there's
+                // nothing in the field definition to branch on. Decide from
+                // what the field actually turned out to hold.
+                let mut vals = FitString::parse_vec(input, parse_config)?;
+                match vals.len() {
+                    0 => Ok(FitBaseValue::String(FitString::new(String::new()))),
+                    1 => Ok(FitBaseValue::String(vals.remove(0))),
+                    _ => Ok(FitBaseValue::StringVec(vals)),
+                }
             }
             _ => Err(errors::parse_unknown_base_value()),
         }
@@ -1608,6 +1650,89 @@ pub fn bit_subset(
 #[cfg(test)]
 mod tests {
     use crate::*;
+
+    // base type 7 is String
+    fn string_parse_config(field_size: usize) -> FitParseConfig {
+        FitParseConfig::new(
+            FitFieldDefinition::new(0, field_size, 7).unwrap(),
+            Endianness::Little,
+            0.0,
+        )
+    }
+
+    #[test]
+    fn string_stops_at_terminator_test() {
+        // "Run", then padding the device never zeroed out
+        let mut data = vec![0u8; 16];
+        data[..3].copy_from_slice(b"Run");
+        data[8..12].copy_from_slice(&[0xde, 0xad, 0xbe, 0xef]);
+
+        let parse_config = string_parse_config(data.len());
+
+        assert_eq!(
+            fitparsers::parse_string(&data, &parse_config).unwrap(),
+            "Run".to_string()
+        );
+
+        // the stale bytes sit past the empty string that ends the array, so
+        // they're padding, not a second entry
+        assert_eq!(
+            fitparsers::parse_string_vec(&data, &parse_config).unwrap(),
+            vec!["Run".to_string()]
+        );
+    }
+
+    #[test]
+    fn string_vec_test() {
+        // three null-terminated strings back to back, then padding
+        let mut data = vec![0u8; 16];
+        data[..12].copy_from_slice(b"one\0two\0six\0");
+
+        let parse_config = string_parse_config(data.len());
+
+        assert_eq!(
+            fitparsers::parse_string_vec(&data, &parse_config).unwrap(),
+            vec!["one".to_string(), "two".to_string(), "six".to_string()]
+        );
+
+        // a scalar read of the same field sees only the first
+        assert_eq!(
+            fitparsers::parse_string(&data, &parse_config).unwrap(),
+            "one".to_string()
+        );
+    }
+
+    #[test]
+    fn string_fills_field_test() {
+        // exactly full, so there's no room for a terminator
+        let data = b"abcd".to_vec();
+        let parse_config = string_parse_config(data.len());
+
+        assert_eq!(
+            fitparsers::parse_string(&data, &parse_config).unwrap(),
+            "abcd".to_string()
+        );
+        assert_eq!(
+            fitparsers::parse_string_vec(&data, &parse_config).unwrap(),
+            vec!["abcd".to_string()]
+        );
+    }
+
+    #[test]
+    fn empty_string_test() {
+        let data = vec![0u8; 8];
+        let parse_config = string_parse_config(data.len());
+
+        assert_eq!(
+            fitparsers::parse_string(&data, &parse_config).unwrap(),
+            "".to_string()
+        );
+        assert!(
+            fitparsers::parse_string_vec(&data, &parse_config)
+                .unwrap()
+                .is_empty()
+        );
+    }
 
     #[test]
     fn bit_subset_test() {

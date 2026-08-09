@@ -373,6 +373,11 @@ create_z_as_bytes_variant!(parse_uint64);
 
 create_parsers!(parse_float64, f64, 8, nom::number::complete::le_f64, nom::number::complete::be_f64);
 
+// A string field is a fixed-size buffer holding null-terminated UTF-8, so
+// everything past the terminator is padding. Devices don't reliably zero that
+// padding out - a 128-byte Sport.name holding "Run" can have stale bytes from
+// whatever the device last had in the buffer - so the terminator, not the field
+// size, is what bounds the value.
 #[allow(dead_code)]
 pub fn parse_string(input: &[u8], parse_config: &FitParseConfig) -> Result<String> {
     let parser = || -> nom::IResult<&[u8], &[u8]> {
@@ -380,9 +385,41 @@ pub fn parse_string(input: &[u8], parse_config: &FitParseConfig) -> Result<Strin
     };
 
     let (_, bytes) = parser()?;
-    Ok(String::from_utf8_lossy(bytes)
-        .trim_matches(char::from(0))
-        .to_string())
+    let end = bytes.iter().position(|&b| b == 0).unwrap_or(bytes.len());
+    Ok(String::from_utf8_lossy(&bytes[..end]).to_string())
+}
+
+// A string field can also hold several null-terminated strings laid out back to
+// back. An empty string ends the array: the remainder of the field is padding,
+// which is why this can't just split on every null and keep the pieces.
+#[allow(dead_code)]
+pub fn parse_string_vec(input: &[u8], parse_config: &FitParseConfig) -> Result<Vec<String>> {
+    let parser = || -> nom::IResult<&[u8], &[u8]> {
+        nom::bytes::complete::take(parse_config.field_size())(input)
+    };
+
+    let (_, bytes) = parser()?;
+
+    let mut strings = vec![];
+    let mut start = 0;
+
+    while start < bytes.len() {
+        match bytes[start..].iter().position(|&b| b == 0) {
+            // an empty string terminates the array
+            Some(0) => break,
+            Some(offset) => {
+                strings.push(String::from_utf8_lossy(&bytes[start..start + offset]).to_string());
+                start += offset + 1;
+            }
+            // the field is exactly full, leaving no room for a terminator
+            None => {
+                strings.push(String::from_utf8_lossy(&bytes[start..]).to_string());
+                break;
+            }
+        }
+    }
+
+    Ok(strings)
 }
 
 #[allow(dead_code)]
