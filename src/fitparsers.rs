@@ -543,9 +543,13 @@ pub fn parse_definition_message(
         ),
     ) = parser()?;
 
+    // A field's declared size is what the data record actually occupies; it can
+    // be a multiple of the base type size when the field is an array (e.g. a
+    // field_size of 8 on a Uint32 base type is two u32s). Summing base type
+    // sizes here undercounts such fields and desyncs the record stream.
     let message_size = field_definitions
         .iter()
-        .fold(0, |sum, val| sum + (val.base_type_size() as usize))
+        .fold(0, |sum, val| sum + val.field_size)
         + developer_field_definitions
             .iter()
             .fold(0, |sum, val| sum + val.field_size);
